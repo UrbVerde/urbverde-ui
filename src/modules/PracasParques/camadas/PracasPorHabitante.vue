@@ -12,10 +12,10 @@
       @featurehover="featurehover"
     >
       <template v-slot:popupHover="slotProps">
-        <VmPopup color="transparent">
+        <VmPopup color="#8cb369">
           <div
-            class="pa-2 mb-2 d-flex flex-column justify-center align-center"
-            style="background-color: #8cb369; border-radius: 8px"
+            class="d-flex flex-column justify-center align-center"
+            style="border-radius: 8px"
           >
             <label>Praças por habitantes</label>
             <h3>

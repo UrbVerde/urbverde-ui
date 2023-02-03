@@ -2,7 +2,9 @@
   <div class="home__box">
     <header class="row home__box_header">
       <v-col cols="6" md="4" class="d-flex justify-center align-center">
-        <router-link tag="a" :to="{ name: 'Home' }">URBVERDE </router-link>
+        <router-link :to="{ name: 'Home' }"
+          ><img width="45%" src="@/assets/logos/urbverde-logo-white.png"
+        /></router-link>
       </v-col>
       <v-col>
         <router-link tag="a" :to="{ name: 'About' }">A Urbverde </router-link>
@@ -270,9 +272,9 @@
 
       <section style="background-color: #e6f1f2">
         <div class="container">
-          <v-row class="d-flex justify-center align-center">
+          <v-row class="d-flex justify-start align-start">
             <v-col cols="4">
-              <v-card class="mx-auto" max-width="344" color="#d0e3e3" outlined>
+              <v-card class="mx-auto" color="#d0e3e3" outlined>
                 <v-img
                   src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
                   height="200px"
@@ -298,7 +300,7 @@
             </v-col>
 
             <v-col cols="4">
-              <v-card class="mx-auto" max-width="344" color="#d0e3e3" outlined>
+              <v-card class="mx-auto" color="#d0e3e3" outlined>
                 <v-img
                   src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
                   height="200px"
@@ -329,7 +331,7 @@
             </v-col>
 
             <v-col cols="4">
-              <v-card class="mx-auto" max-width="344" color="#d0e3e3" outlined>
+              <v-card class="mx-auto" color="#d0e3e3" outlined>
                 <v-img
                   src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
                   height="200px"
@@ -442,27 +444,12 @@
       </section>
 
       <section style="background-color: #e6f1f2; padding-bottom: 0">
-        <div class="container pb-0">
+        <div class="container-fluid pb-0">
           <v-card class="footerCard" outlined color="#d0e3e3">
-            <v-img
-              height="500px"
-              src="@/assets/home/home-card-06.png"
-              class="justify-center align-center"
-            >
-              <v-card-title
-                class="align-center justify-center white--text"
-                style="font-size: 2.5em; padding: 1em"
-              >
-                Agora é a sua vez de entender mais sobre onde você vive
-              </v-card-title>
-              <div class="mx-auto" style="width: 300px">
-                <SearchMun />
-              </div>
-            </v-img>
             <div class="pl-4 pr-4">
               <v-row>
                 <v-col cols="12" md="6">
-                  <p style="font-size: 32px; color: #003c3c">
+                  <p class="pt-2" style="font-size: 32px; color: #003c3c">
                     <strong
                       >Fique por dentro das atualizações da Urbverde</strong
                     >

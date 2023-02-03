@@ -10,7 +10,7 @@
 
     <YearSelector />
 
-    <div v-if="this.$route.params.escala == 'estadual'">
+    <div class="sidebar__scroll" v-if="this.$route.params.escala == 'estadual'">
       <div v-for="(layer, idx) in getPrincipalVegetacao" :key="idx">
         <div
           v-if="layer._id == selectedLayer"
@@ -18,7 +18,7 @@
         >
           <div
             class="layer_selector_eye"
-            :class="{ itemActive: layer.visible }"
+            :class="{ itemCantToggle: layer.visible }"
           >
             <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
           </div>
@@ -38,7 +38,11 @@
         </div>
       </div>
 
-      <div v-for="(auxLayer, i) in getAuxByVariable" :key="i">
+      <div
+        class="sidebar__scroll"
+        v-for="(auxLayer, i) in getAuxByVariable"
+        :key="i"
+      >
         <div class="layer_selector d-flex align-center">
           <div
             class="layer_selector_eye"
@@ -216,12 +220,12 @@ export default {
         "% Cobertura Vegetal (PCV) por microrregião": 1,
         "Índice de Cobertura Vegetal (ICV) por mesorregião": 1,
         "Índice de Cobertura Vegetal (ICV) por microrregião": 1,
-        "Índice de Desenvolvimento Socioambiental (IDSA) por mesorregião": 1,
-        "Índice de Desenvolvimento Socioambiental (IDSA) por microrregião": 1,
+        "Índice de Desigualdade Socioambiental (IDSA) por mesorregião": 1,
+        "Índice de Desigualdade Socioambiental (IDSA) por microrregião": 1,
         "Anual NDVI": 1,
         "% Cobertura Vegetal (PCV)": 1,
         "Índice de Cobertura Vegetal (ICV)": 1,
-        "Índice de Desenvolvimento Socioambiental (IDSA)": 1,
+        "Índice de Desigualdade Socioambiental (IDSA)": 1,
         ISs: 1,
         ISi: 1,
         ISd: 1,
@@ -341,5 +345,34 @@ input[type="range"] {
   @media (max-width: 950px) {
     max-width: 100%;
   }
+}
+
+.sidebar__scroll {
+  max-height: 350px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #35cc8d;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8bc9af;
+}
+
+.itemCantToggle {
+  background-color: #7777c9 !important;
 }
 </style>

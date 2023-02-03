@@ -14,13 +14,13 @@
       @featurehover="featurehover"
     >
       <template v-slot:popupHover="slotProps">
-        <VmPopup color="transparent">
+        <VmPopup color="#8cb369">
           <div
-            class="pa-2 mb-2 d-flex flex-column justify-center align-center"
-            style="background-color: #8cb369; border-radius: 8px"
+            class="d-flex flex-column justify-center align-center"
+            style="border-radius: 8px"
           >
             <label>Índice de Cobertura Vegetal</label>
-            <h3>{{ slotProps.features[0].properties.b2.toFixed(2) * 100 }}%</h3>
+            <h3>{{ slotProps.features[0].properties.b2.toFixed(2) }} m²/pop</h3>
           </div>
         </VmPopup>
       </template>
@@ -54,8 +54,22 @@ export default {
             ["get", "b2"],
             42,
             "#fdae61",
+            2500,
+            "#020024",
+            5000,
+            "#efb746",
+            7500,
+            "#00d4ff",
+            10000,
+            "#d7c22b",
+            12500,
+            "#fc466b",
+            15000,
+            "#b4cd16",
+            17500,
+            "#833ab4",
             20000,
-            "#a6d96a",
+            "#83d81f",
           ],
         };
       } else if (this.$route.params.escala == "intraurbana") {
@@ -123,7 +137,8 @@ export default {
       if (this.$route.params.escala == "estadual") {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #fdae61, #a6d96a)",
+          color:
+            "linear-gradient(to right, #fdae61, #efb746, #d7c22b, #b4cd16, #83d81f)",
           value: `42 - 20.000 m²/pop`,
         });
       } else if (this.$route.params.escala == "intraurbana") {

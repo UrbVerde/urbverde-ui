@@ -2,7 +2,9 @@
   <div class="home__box">
     <header class="row home__box_header">
       <v-col cols="6" md="4" class="d-flex justify-center align-center">
-        <router-link tag="a" :to="{ name: 'Home' }">URBVERDE </router-link>
+        <router-link :to="{ name: 'Home' }"
+          ><img width="45%" src="@/assets/logos/urbverde-logo-white.png"
+        /></router-link>
       </v-col>
       <v-col>
         <router-link tag="a" :to="{ name: 'About' }">A Urbverde </router-link>
@@ -54,8 +56,13 @@
                     <p>Av. Prof. Lineu Prestes, 338</p>
                     <p>Butantã, São Paulo - SP, +55 12 0000-0000</p>
                     <p>comunica.urbverde@usp.br</p>
-                    <v-btn color="#003C3C" class="pa-3"
-                      ><p class="mb-0 white--text">Chame no Whatsapp</p>
+                    <v-btn
+                      color="#003C3C"
+                      class="pa-3"
+                      href="https://web.whatsapp.com/send?phone=55111111111111&text=Ol%C3%A1%2C%20estou%20entrando%20atrav%C3%A9s%20do%20portal%20UrbVerde.%0A%28https%3A%2F%2Furbverde.iau.usp.br%29"
+                      target="_blank"
+                    >
+                      <p class="mb-0 white--text">Chame no Whatsapp</p>
                     </v-btn>
                   </v-col>
                   <v-col cols="6">
@@ -63,7 +70,6 @@
                     <v-form ref="form" v-model="valid">
                       <v-text-field
                         v-model="Nome"
-                        :rules="NomeRules"
                         label="Nome"
                         required
                       ></v-text-field>
@@ -77,30 +83,23 @@
 
                       <v-text-field
                         v-model="assunto"
-                        :rules="assuntoRules"
                         label="Assunto"
                         required
                       ></v-text-field>
 
                       <v-text-field
                         v-model="telefone"
-                        :rules="telefoneRules"
                         label="Telefone"
                         required
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="Mensagem"
+                        v-model="mensagem"
                         label="Mensagem"
                         required
                       ></v-text-field>
 
-                      <v-btn
-                        :disabled="!valid"
-                        color="success"
-                        class="mr-4"
-                        @click="validate"
-                      >
+                      <v-btn :disabled="!valid" @click="validate">
                         Submeter
                       </v-btn>
                     </v-form>
@@ -113,27 +112,12 @@
       </section>
 
       <section style="background-color: #e6f1f2; padding-bottom: 0">
-        <div class="container pb-0">
+        <div class="container-fluid pb-0">
           <v-card class="footerCard" outlined color="#d0e3e3">
-            <v-img
-              height="500px"
-              src="@/assets/home/home-card-06.png"
-              class="justify-center align-center"
-            >
-              <v-card-title
-                class="align-center justify-center white--text"
-                style="font-size: 2.5em; padding: 1em"
-              >
-                Agora é a sua vez de entender mais sobre onde você vive
-              </v-card-title>
-              <div class="mx-auto" style="width: 300px">
-                <SearchMun />
-              </div>
-            </v-img>
             <div class="pl-4 pr-4">
               <v-row>
                 <v-col cols="12" md="6">
-                  <p style="font-size: 32px; color: #003c3c">
+                  <p class="pt-2" style="font-size: 32px; color: #003c3c">
                     <strong
                       >Fique por dentro das atualizações da Urbverde</strong
                     >
@@ -152,6 +136,7 @@
                     <v-col cols="12" md="8">
                       <v-form v-model="valid" class="mt-4">
                         <v-text-field
+                          disabled
                           dense
                           outlined
                           v-model="email"
@@ -162,7 +147,9 @@
                       </v-form>
                     </v-col>
                     <v-col cols="12" md="3">
-                      <v-btn color="#01DC82" class="mb-3"> Assinar </v-btn>
+                      <v-btn disabled color="#01DC82" class="mb-3">
+                        Assinar
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-col>

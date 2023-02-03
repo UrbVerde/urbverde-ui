@@ -12,30 +12,4 @@ export default [
       },
     ],
   },
-  {
-    name: "About",
-    path: "/:id?/urbverde",
-    component: () => import("@/layout/Default"),
-    children: [
-      {
-        name: "About",
-        path: "",
-        component: () => import("@/views/UrbverdeView"),
-        meta: {},
-      },
-    ],
-  },
-  {
-    name: "contato",
-    path: "/:id?/contato",
-    component: () => import("@/layout/Default"),
-    children: [
-      {
-        name: "About",
-        path: "",
-        component: () => import("@/views/ContatoView"),
-        meta: {},
-      },
-    ],
-  },
 ];

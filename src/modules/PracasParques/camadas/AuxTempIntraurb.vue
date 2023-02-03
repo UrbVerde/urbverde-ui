@@ -21,6 +21,25 @@ export default {
       bbox: "",
     };
   },
+
+  methods: {
+    buildLegend() {
+      const values = [
+        {
+          range: true,
+          color:
+            "linear-gradient(to right, #d53e4f, #f46d43, #fdae61, #fee08b, #e6f598, #abdda4, #66c2a5, #3288bd)",
+          value: `0 - 163 %`,
+        },
+      ];
+
+      this.$store.commit("SET_LAYER_PROPERTIES", {
+        layer: this.layer,
+        prop: "legends",
+        value: values,
+      });
+    },
+  },
   computed: {
     layerSource() {
       return {
@@ -41,6 +60,10 @@ export default {
       deep: true,
       immediate: true,
     },
+  },
+
+  mounted() {
+    this.buildLegend();
   },
 };
 </script>

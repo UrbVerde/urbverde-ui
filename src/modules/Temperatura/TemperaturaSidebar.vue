@@ -10,7 +10,7 @@
 
     <YearSelector />
 
-    <div v-if="this.$route.params.escala == 'estadual'">
+    <div class="sidebar__scroll" v-if="this.$route.params.escala == 'estadual'">
       <div v-for="(layer, idx) in getPrincipalTemperatura" :key="idx">
         <div
           v-if="layer._id == selectedLayer"
@@ -18,7 +18,7 @@
         >
           <div
             class="layer_selector_eye"
-            :class="{ itemActive: layer.visible }"
+            :class="{ itemCantToggle: layer.visible }"
           >
             <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
           </div>
@@ -89,7 +89,10 @@
       </div>
     </div>
 
-    <div v-if="this.$route.params.escala == 'intraurbana'">
+    <div
+      class="sidebar__scroll"
+      v-if="this.$route.params.escala == 'intraurbana'"
+    >
       <div v-for="(layer, idx) in getPrincipalTemperatura" :key="idx">
         <div
           v-if="layer._id == selectedLayer"
@@ -97,7 +100,7 @@
         >
           <div
             class="layer_selector_eye"
-            :class="{ itemActive: layer.visible }"
+            :class="{ itemCantToggle: layer.visible }"
           >
             <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
           </div>
@@ -268,5 +271,34 @@ input[type="range"] {
   @media (max-width: 950px) {
     max-width: 100%;
   }
+}
+
+.sidebar__scroll {
+  max-height: 350px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #35cc8d;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8bc9af;
+}
+
+.itemCantToggle {
+  background-color: #7777c9 !important;
 }
 </style>

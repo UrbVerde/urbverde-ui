@@ -2,7 +2,9 @@
   <div class="home__box">
     <header class="row home__box_header">
       <v-col cols="6" md="4" class="d-flex justify-center align-center">
-        <router-link tag="a" :to="{ name: 'Home' }">URBVERDE</router-link>
+        <router-link :to="{ name: 'Home' }"
+          ><img width="45%" src="@/assets/logos/urbverde-logo-white.png"
+        /></router-link>
       </v-col>
       <v-col>
         <router-link tag="a" :to="{ name: 'About' }">A Urbverde </router-link>
@@ -145,6 +147,7 @@
           "
           class="container-fluid d-flex flex-column justify-center align-center"
         >
+          <!-- GUITODO verificar logos individualmente - alinhamento -->
           <span class="mb-3"><strong>A URBVERDE É APOIADA POR</strong></span>
           <v-row class="d-flex justify-center align-center rowwrap">
             <v-col cols="4" md="2">
@@ -308,6 +311,7 @@
                   height="100%"
                   src="@/assets/home/home-card-02.png"
                 >
+                  // GUITODO - rota p dashboard
                   <v-container>
                     <p style="font-size: 2em; margin: 2em 0 0 2em">
                       <strong
@@ -529,7 +533,7 @@
                 Agora é a sua vez de entender mais sobre onde você vive
               </v-card-title>
               <div class="mx-auto" style="width: 300px">
-                <SearchMun />
+                <SearchMun :goToMap="true" />
               </div>
             </v-img>
             <div class="pl-4 pr-4">

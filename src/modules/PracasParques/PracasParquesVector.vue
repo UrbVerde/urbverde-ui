@@ -43,6 +43,7 @@ export default {
       feature: "",
     };
   },
+  // GUITODO mudar para showOnlyId
   computed: {
     paintLayer() {
       return {

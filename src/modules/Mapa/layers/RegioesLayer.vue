@@ -12,11 +12,8 @@
       :paint-hover="{ 'fill-color': '#7c99f4' }"
     >
       <template v-slot:popupHover="slotProps">
-        <VmPopup color="transparent">
-          <div
-            class="pa-2 mb-2"
-            style="background-color: #f4a259; border-radius: 8px"
-          >
+        <VmPopup color="#f4a259">
+          <div style="border-radius: 8px">
             <label>
               <h3>Nome município:</h3>
               <span style="font-size: 1.2em">{{

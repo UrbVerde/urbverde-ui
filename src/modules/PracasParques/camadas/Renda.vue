@@ -11,10 +11,10 @@
       :paint-hover="{ 'fill-color': '#7c99f4' }"
     >
       <template v-slot:popupHover="slotProps">
-        <VmPopup color="transparent">
+        <VmPopup color="#8cb369">
           <div
-            class="pa-2 mb-2 d-flex flex-column justify-center align-center"
-            style="background-color: #8cb369; border-radius: 8px"
+            class="d-flex flex-column justify-center align-center"
+            style="border-radius: 8px"
           >
             <label>Renda</label>
             <h3>
@@ -145,7 +145,7 @@ export default {
         values.push({
           range: true,
           color: "linear-gradient(to right, #f63939, #fc3f74, #6d93f1, #6c3df2",
-          value: `13 - 450.000 R$`,
+          value: `${this.munPracaData.renda_min} - ${this.munPracaData.renda_max} R$`,
         });
       }
 

@@ -30,7 +30,14 @@ export default {
   computed: {
     layerPaint() {
       return {
-        "fill-color": "transparent",
+        "fill-color": [
+          "match",
+          ["get", "cd_mun"],
+          this.munId,
+          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "#FF6F91"],
+          ["literal", "transparent"],
+        ],
+
         "fill-opacity": 0.3,
         "fill-outline-color": "#000000",
       };

@@ -25,21 +25,15 @@
       </div>
 
       <div class="basemap-list">
-        <v-menu bottom left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-map</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item v-for="(item, i) in basemapList" :key="i">
-              <v-list-item-title @click="changeMapStyle(item.value)">{{
-                item.title
-              }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <div
+          class="basemap-list_item"
+          v-for="(item, i) in basemapList"
+          :key="i"
+        >
+          <div class="basemap-list_title" @click="changeMapStyle(item.value)">
+            {{ item.title }}
+          </div>
+        </div>
       </div>
     </VueMapbox>
     <Legendas />
@@ -76,7 +70,7 @@ export default {
   components: { VueMapbox, VmLayer, VmPopup },
   data() {
     return {
-      testes: "lalala",
+      radioGroup: "",
       ano: 2016,
       featureBbox: [],
       loading: "",
@@ -91,17 +85,17 @@ export default {
       userMun: "",
       basemapList: [
         {
-          title: "Satélite",
+          title: "satétlite",
           value:
             "https://api.maptiler.com/maps/hybrid/style.json?key=XmSZh88cfG77QlyKTuwa",
         },
         {
-          title: "Ruas",
+          title: "ruas",
           value:
             "https://api.maptiler.com/maps/streets-v2/style.json?key=XmSZh88cfG77QlyKTuwa",
         },
         {
-          title: "Padrão",
+          title: "padrão",
           value:
             "https://api.maptiler.com/maps/8fde2eea-8799-479e-8a8d-0989e2c7eb2d/style.json?key=XmSZh88cfG77QlyKTuwa",
         },
@@ -142,10 +136,11 @@ export default {
             easing: (t) => t,
             essential: true,
           });
+          this.$router.push({ params: { id: this.munPracaData.cd_mun } });
         } else {
           console.log("Localização não está presente no estado de São Paulo.");
         }
-        this.$router.push({ params: { id: this.munPracaData.cd_mun } });
+        //
       });
     },
 
@@ -167,7 +162,6 @@ export default {
     },
 
     setBboxFromFeature(feature) {
-      this.testes = feature[0].properties.municipio;
       this.featureBbox = turf.bbox(feature[0].geometry);
     },
   },
@@ -191,21 +185,34 @@ export default {
   border-radius: 25% 0 25% 0;
   display: grid;
   place-items: center;
+  cursor: pointer;
 }
 
 .basemap-list {
   position: absolute;
-  top: 23%;
-  right: 1em;
-  width: 45px;
-  height: 40px;
-  background-color: #01dc82;
+  right: 4em;
+  top: 0.8em;
   color: white;
-  font-size: 24px;
   text-align: center;
   z-index: 2;
-  border-radius: 25% 0 25% 0;
-  display: grid;
-  place-items: center;
+  border: 2px solid #e1e1e1;
+  border-radius: 8px;
+  display: flex;
+  background-color: #e1e1e1;
+
+  &_item {
+    color: black;
+    border: 1px solid #e1e1e1;
+  }
+
+  &_title {
+    background-color: white;
+    padding: 3px;
+    border-radius: 3px;
+    &:hover {
+      background-color: #e1e1e1;
+      cursor: pointer;
+    }
+  }
 }
 </style>

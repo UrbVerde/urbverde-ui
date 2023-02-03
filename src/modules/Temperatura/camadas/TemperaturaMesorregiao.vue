@@ -11,10 +11,10 @@
       :paint-hover="{ 'fill-color': '#7c99f4' }"
     >
       <template v-slot:popupHover="slotProps">
-        <VmPopup color="transparent">
+        <VmPopup color="#8cb369">
           <div
-            class="pa-2 mb-2 d-flex flex-column justify-center align-center"
-            style="background-color: #8cb369; border-radius: 8px"
+            class="d-flex flex-column justify-center align-center"
+            style="border-radius: 8px"
           >
             <label>Coeficiente de Ilha de Calor</label>
             <h3>

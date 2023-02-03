@@ -15,6 +15,12 @@
 import axios from "axios";
 import * as turf from "@turf/turf";
 export default {
+  props: {
+    goToMap: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       municipioSelected: "",
@@ -678,9 +684,23 @@ export default {
           .then((response) => {
             let bboxMun = turf.bbox(response.data.features[0].geometry);
             let massCenterMun = turf.centerOfMass(response.data.features[0]);
-            this.$router.push({
-              params: { id: response.data.features[0].properties.cd_mun },
-            });
+
+            if (!this.goToMap) {
+              this.$router.push({
+                params: { id: response.data.features[0].properties.cd_mun },
+              });
+            } else {
+              this.$router.push({
+                name: "Mapa",
+                params: {
+                  id: response.data.features[0].properties.cd_mun,
+                  ano: 2021,
+                  escala: "intraurbana",
+                  categoria: "pracasparques",
+                },
+              });
+            }
+
             this.$emit("id", response.data.features[0].properties.cd_mun);
             window.maplibregl.flyTo({
               center: massCenterMun.geometry.coordinates,

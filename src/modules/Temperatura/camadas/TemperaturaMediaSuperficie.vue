@@ -12,11 +12,8 @@
       :opacity="layer.opacity"
     >
       <template v-slot:popupHover="slotProps">
-        <VmPopup color="transparent">
-          <div
-            class="pa-2 mb-2"
-            style="background-color: #8cb369; border-radius: 8px"
-          >
+        <VmPopup color="#8cb369">
+          <div style="border-radius: 8px">
             <label>Temperatura Média de Superfície</label>
             <h3>
               {{ slotProps.features[0].properties.c2 }}
