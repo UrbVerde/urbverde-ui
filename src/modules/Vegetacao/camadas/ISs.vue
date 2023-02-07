@@ -18,7 +18,7 @@
           >
             <label>ISs</label>
             <h3>
-              {{ slotProps.features[0].properties.iss }}
+              {{ slotProps.features[0].properties.iss.toFixed(2) }}
             </h3>
           </div>
         </VmPopup>
@@ -49,37 +49,23 @@ export default {
     },
 
     layerPaint() {
-      if (this.$route.params.escala == "estadual") {
-        return {
-          "fill-color": [
-            "interpolate",
-            ["linear"],
-            ["get", "iss"],
-            0,
-            "#d53e4f",
-            0.4,
-            "#3288bd",
-          ],
-        };
-      } else if (this.$route.params.escala == "intraurbana") {
-        return {
-          "fill-color": [
-            "match",
-            ["get", "cd_mun"],
-            Number(this.routeId),
-            [
-              "interpolate",
-              ["linear"],
-              ["get", "iss"],
-              0,
-              "#d53e4f",
-              0.4,
-              "#3288bd",
-            ],
-            ["literal", "transparent"],
-          ],
-        };
-      }
+      return {
+        "fill-color": [
+          "interpolate",
+          ["linear"],
+          ["get", "iss"],
+          0,
+          "#1a9641",
+          0.1,
+          "#a6d96a",
+          0.2,
+          "#ffffbf",
+          0.3,
+          "#fdae61",
+          0.4,
+          "#d7191c",
+        ],
+      };
     },
     sourceLayer() {
       if (this.$route.params.escala == "estadual") {
@@ -117,23 +103,13 @@ export default {
     buildLegend() {
       const values = [];
 
-      if (this.$route.params.escala == "estadual") {
-        values.push({
-          range: true,
-          color: "linear-gradient(to right, #d53e4f, #3288bd)",
-          value: `0.46 - 0.84`,
-          quantity: `${this.munVegData.nm_mun}`,
-        });
-      } else {
-        values.push({
-          range: true,
-          color: "linear-gradient(to right, #d53e4f, #3288bd)",
-          value: `${this.munVegData.iss_min.toFixed(
-            2
-          )} - ${this.munVegData.iss_max.toFixed(2)}`,
-          quantity: `${this.munVegData.nm_mun}`,
-        });
-      }
+      values.push({
+        range: true,
+        color:
+          "linear-gradient(to right, #1a9641, #a6d96a, #ffffbf, #fdae61, #d7191c)",
+        value: `0.46 - 0.84`,
+        quantity: `${this.munVegData.nm_mun}`,
+      });
 
       this.$store.commit("SET_LAYER_PROPERTIES", {
         layer: this.layer,

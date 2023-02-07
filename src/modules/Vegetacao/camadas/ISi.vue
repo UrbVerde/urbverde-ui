@@ -22,7 +22,7 @@
           >
             <label>ISi</label>
             <h3>
-              {{ slotProps.features[0].properties.isi }}
+              {{ slotProps.features[0].properties.isi.toFixed(2) }}
             </h3>
           </div>
         </VmPopup>
@@ -60,27 +60,9 @@ export default {
             ["linear"],
             ["get", "isi"],
             0.5,
-            "#d53e4f",
-            1,
             "#3288bd",
-          ],
-        };
-      } else if (this.escala == "intraurbana") {
-        return {
-          "fill-color": [
-            "match",
-            ["get", "cd_mun"],
-            Number(this.routeId),
-            [
-              "interpolate",
-              ["linear"],
-              ["get", "isi"],
-              0.5,
-              "#d53e4f",
-              1,
-              "#3288bd",
-            ],
-            ["literal", "transparent"],
+            1,
+            "#d53e4f",
           ],
         };
       }

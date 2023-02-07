@@ -9,7 +9,7 @@
             {{ munTempData.nm_mun }}
             <span style="color: grey">em</span> 2021</span
           >
-          <div class="d-flex flex-column justify-center align-center"></div>
+          <div class="d-flex flex-column justify-start align-start"></div>
         </v-row>
       </v-col>
       <v-col cols="12">
@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="container d-flex mx-auto">
+    <v-row class="d-flex mx-auto" style="width: 80%">
       <v-col cols="8">
         <v-row>
           <v-col cols="12" md="4" class="d-flex justify-start align-start">
@@ -43,7 +43,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Coeficiente de Ilhas de Calor</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c1_rank_estado }}
@@ -57,7 +57,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Temperatura Média de Superfície</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c2_rank_estado }}
@@ -71,7 +71,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Temperatura Máxima de Superfície</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c3_rank_estado }}
@@ -89,7 +89,7 @@
           <v-col cols="12" md="4" class="d-flex justify-start align-start">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-img src="@/assets/microreg.png"></v-img>
@@ -107,7 +107,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Coeficiente de Ilhas de Calor</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c1_rank_micro }}
@@ -118,7 +118,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Temperatura Média de Superfície</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c2_rank_micro }}
@@ -129,7 +129,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Temperatura Máxima de Superfície</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c3_rank_micro }}
@@ -144,7 +144,7 @@
           <v-col cols="12" md="4" class="d-flex justify-start align-start"
             ><v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-img src="@/assets/mesoreg.png"></v-img>
@@ -162,7 +162,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Coeficiente de Ilhas de Calor</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c1_rank_meso }}
@@ -173,7 +173,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Temperatura Média de Superfície</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c2_rank_meso }}
@@ -184,7 +184,7 @@
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Temperatura Máxima de Superfície</strong>
                   </p>
-                  <v-row class="d-flex justify-center align-center">
+                  <v-row class="d-flex justify-start align-start">
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c3_rank_meso }}
@@ -232,15 +232,15 @@
     </v-row>
 
     <v-row class="container d-flex mx-auto">
-      <v-col cols="8" class="d-flex flex-column justify-center align-center">
+      <v-col cols="8" class="d-flex flex-column justify-start align-start">
         <p class="align-self-start ml-4">
           PERCENTUAL DE POPULAÇÕES QUE VIVEM NAS ÁREAS MAIS QUENTES
         </p>
-        <v-row class="d-flex justify-center align-start">
+        <v-row class="d-flex justify-start align-start">
           <v-col cols="12" md="6">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>
@@ -276,7 +276,7 @@
           <v-col cols="12" md="6">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>
@@ -308,12 +308,11 @@
               </v-container>
             </v-card>
           </v-col>
-        </v-row>
-        <v-row class="d-flex justify-center align-start">
+
           <v-col cols="12" md="6">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>
@@ -375,7 +374,7 @@
           <v-col cols="12" md="6">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>
@@ -441,12 +440,11 @@
               </v-container>
             </v-card>
           </v-col>
-        </v-row>
-        <v-row class="d-flex justify-center align-start">
+
           <v-col cols="12" md="6">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>
@@ -512,7 +510,7 @@
           <v-col cols="12" md="6">
             <v-card
               outlined
-              class="d-flex flex-column justify-center"
+              class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>

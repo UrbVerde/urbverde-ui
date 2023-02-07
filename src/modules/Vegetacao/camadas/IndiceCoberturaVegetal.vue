@@ -53,23 +53,23 @@ export default {
             ["linear"],
             ["get", "b2"],
             42,
-            "#fdae61",
+            "#f46d43",
             2500,
-            "#020024",
+            "#fdae61",
             5000,
-            "#efb746",
+            "#fee08b",
             7500,
-            "#00d4ff",
+            "#ffffbf",
             10000,
-            "#d7c22b",
+            "#d9ef8b",
             12500,
-            "#fc466b",
+            "#a6d96a",
             15000,
-            "#b4cd16",
+            "#66bd63",
             17500,
-            "#833ab4",
+            "#1a9850",
             20000,
-            "#83d81f",
+            "#006837",
           ],
         };
       } else if (this.$route.params.escala == "intraurbana") {
@@ -138,7 +138,7 @@ export default {
         values.push({
           range: true,
           color:
-            "linear-gradient(to right, #fdae61, #efb746, #d7c22b, #b4cd16, #83d81f)",
+            "linear-gradient(to right, #f46d43, #fdae61, #fee08b, #ffffbf, #d9ef8b, #a6d96a, #66bd63, #1a9850, #006837)",
           value: `42 - 20.000 m²/pop`,
         });
       } else if (this.$route.params.escala == "intraurbana") {

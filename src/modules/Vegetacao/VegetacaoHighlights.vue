@@ -57,7 +57,9 @@
                         :style="`--size: calc(${munVegData.b3} / 1); background-color: #01dc82;`"
                       >
                         <span class="data pa-3 mr-auto" style="color: white">
-                          <strong>{{ munVegData.b3.toFixed(2) }}</strong>
+                          <strong>{{
+                            (munVegData.b3 * 100).toFixed(2)
+                          }}</strong>
                         </span>
                       </td>
                     </tr>

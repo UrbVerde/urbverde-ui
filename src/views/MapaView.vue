@@ -2,58 +2,74 @@
   <section>
     <HeaderMap />
     <v-row class="d-flex">
-      <v-col cols="12" md="3" class="d-flex">
-        <div class="d-flex justify-center align-center flex-column px-3">
-          <img
-            class="my-5 mx-auto"
-            width="25px"
-            src="@/assets/icons/search-icon.png"
-            alt=""
-          />
-          <img
-            class="my-5 mx-auto"
-            width="25px"
-            src="@/assets/icons/field-icon.png"
-            alt=""
-          />
-          <img
-            class="my-5 mx-auto"
-            width="25px"
-            src="@/assets/icons/field2-icon.png"
-            alt=""
-          />
-          <img
-            class="my-5 mx-auto"
-            width="25px"
-            src="@/assets/icons/field3-icon.png"
-            alt=""
-          />
-          <img
-            class="my-5 mx-auto"
-            width="25px"
-            src="@/assets/icons/downloads-icon.png"
-            alt=""
-          />
-          <img
-            class="my-5 mx-auto"
-            width="25px"
-            src="@/assets/icons/field5-icon.png"
-            alt=""
-          />
-          <div
-            style="
-              display: grid;
-              place-items: center;
-              background-color: #01dc82;
-              width: 45px;
-              height: 43px;
-              border-radius: 0px 15px 15px 15px;
-            "
-          >
-            <img class="" width="20px" src="@/assets/home/share-icon.png" />
-          </div>
+      <v-col
+        cols="12"
+        md="1"
+        class="d-flex flex-md-column justify-center fixed"
+      >
+        <router-link
+          tag="a"
+          :to="{
+            name: 'Mapa',
+            params: {
+              id: this.$route.params.id,
+              escala: this.$route.params.escala,
+              ano: this.$route.params.ano,
+              categoria: this.$route.params.categoria,
+            },
+          }"
+          class="my-5 mx-auto"
+        >
+          <img width="25px" src="@/assets/icons/search-icon.png" alt="" />
+        </router-link>
+        <img
+          class="my-5 mx-auto"
+          width="25px"
+          src="@/assets/icons/field-icon.png"
+          alt=""
+        />
+        <img
+          class="my-5 mx-auto"
+          width="25px"
+          src="@/assets/icons/field2-icon.png"
+          alt=""
+        />
+        <img
+          class="my-5 mx-auto"
+          width="25px"
+          src="@/assets/icons/field3-icon.png"
+          alt=""
+        />
+        <a
+          href="https://github.com/UrbVerde/urbverde-ui"
+          target="_blank"
+          class="my-5 mx-auto"
+        >
+          <img width="25px" src="@/assets/icons/downloads-icon.png" alt="" />
+        </a>
+        <img
+          class="my-5 mx-auto"
+          width="25px"
+          src="@/assets/icons/field5-icon.png"
+          alt=""
+        />
+        <div
+          class="mx-auto pointer"
+          @click="share"
+          style="
+            display: grid;
+            place-items: center;
+            background-color: #01dc82;
+            width: 45px;
+            height: 43px;
+            border-radius: 0px 15px 15px 15px;
+          "
+        >
+          <img width="20px" src="@/assets/home/share-icon.png" />
         </div>
+      </v-col>
 
+      <v-col cols="12" md="3" class="d-flex ml-auto">
         <div class="d-flex flex-column" style="width: 100%">
           <div class="aside__toolbar_scale">
             <label>VISUALIZAR ESCALA :</label>
@@ -87,7 +103,7 @@
         </div>
       </v-col>
 
-      <v-col style="height: 89vh" cols="12" md="9" class="d-flex flex-column">
+      <v-col style="height: 89vh" cols="12" md="8" class="d-flex flex-column">
         <MapaBase />
         <div
           v-if="this.$route.params.categoria == 'vegetacao'"
@@ -201,14 +217,25 @@
                   <td
                     :style="`--size: calc(${munPracaData[0].h6} / 100); background-color: #01dc82;`"
                   >
-                    <span class="data pa-3 mr-auto" style="color: white">
+                    <span class="data" style="color: white">
                       <strong>{{ munPracaData[0].h6 }}</strong>
                     </span>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <span><strong>Desigualdade de Renda</strong></span>
+            <div class="d-flex flex-column justify-center align-center">
+
+             <span class="text-center"
+              ><strong
+                >Desigualdade de Renda
+                </strong></span
+            >
+            <span style="color: #01dc82"
+                  ><strong>{{ munPracaData[0].h6 }}</strong></span
+                >
+              </strong>
+            </div>
           </div>
           <div class="d-flex justify-center align-center">
             <DownloadPdf />
@@ -267,7 +294,21 @@
                 </tr>
               </tbody>
             </table>
-            <span><strong>Desigualdade de Renda</strong></span>
+
+            <div class="d-flex flex-column justify-center align-center">
+
+             <span class="text-center"
+              ><strong
+                >Desigualdade de Renda
+                </strong></span
+            >
+            <span style="color: #01dc82"
+                  ><strong>{{ munPracaData[0].h6 }}</strong></span
+                >
+              </strong>
+            </div>
+
+           
           </div>
 
           <div class="d-flex justify-center align-center">
@@ -291,7 +332,7 @@
 
     <div style="background-color: #e6f1f2; padding-bottom: 0">
       <div class="container-fluid pb-0">
-        <v-card class="footerCard" outlined color="#d0e3e3">
+        <v-card class="" outlined color="#d0e3e3">
           <div class="pl-4 pr-4">
             <v-row>
               <v-col cols="12" md="6">
@@ -385,10 +426,7 @@ export default {
     return {
       valid: false,
       email: "",
-      emailRules: [
-        // v => !!v || 'E-mail is required',
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
-      ],
+      emailRules: [(v) => /.+@.+/.test(v) || "E-mail must be valid"],
       selection: "",
       layerOpacity: 1,
       ano: "",
@@ -397,6 +435,25 @@ export default {
   methods: {
     toogleLayerVisibility: function (layer) {
       this.$store.commit("TOGGLE_LAYER", layer);
+    },
+
+    share() {
+      const shareData = {
+        title: "Plataforma Urbverde",
+        text: "Compartilhe a plataforma com amigos/amigas",
+        url: "https://urbverde.iau.usp.br",
+      };
+
+      if (navigator.share) {
+        navigator
+          .share(shareData)
+          .then(() => {
+            console.log("Compartilhado com sucesso");
+          })
+          .catch(console.error);
+      } else {
+        console.log("não tem navigator.share");
+      }
     },
   },
 
@@ -567,5 +624,16 @@ a {
   border: 2px solid #e6f1f2;
   border-radius: 8px;
   padding: 2em;
+}
+
+.fixed {
+  position: fixed;
+  height: 89vh;
+  @media (max-width: 921px) {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>

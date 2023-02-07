@@ -18,7 +18,7 @@
           >
             <label>ISs</label>
             <h3>
-              {{ slotProps.features[0].properties.isd }}
+              {{ slotProps.features[0].properties.isd.toFixed(2) }}
             </h3>
           </div>
         </VmPopup>
@@ -56,9 +56,15 @@ export default {
             ["linear"],
             ["get", "isd"],
             0,
-            "#d53e4f",
+            "#1a9641",
+            0.1,
+            "#a6d96a",
+            0.2,
+            "#ffffbf",
+            0.3,
+            "#fdae61",
             0.4,
-            "#3288bd",
+            "#d7191c",
           ],
         };
       } else if (this.$route.params.escala == "intraurbana") {
@@ -72,9 +78,15 @@ export default {
               ["linear"],
               ["get", "isd"],
               0,
-              "#d53e4f",
+              "#1a9641",
+              0.1,
+              "#a6d96a",
+              0.2,
+              "#ffffbf",
+              0.3,
+              "#fdae61",
               0.4,
-              "#3288bd",
+              "#d7191c",
             ],
             ["literal", "transparent"],
           ],
@@ -117,23 +129,13 @@ export default {
     buildLegend() {
       const values = [];
 
-      if (this.$route.params.escala == "estadual") {
-        values.push({
-          range: true,
-          color: "linear-gradient(to right, #d53e4f, #3288bd)",
-          value: `0.46 - 0.84`,
-          quantity: `${this.munVegData.nm_mun}`,
-        });
-      } else {
-        values.push({
-          range: true,
-          color: "linear-gradient(to right, #d53e4f, #3288bd)",
-          value: `${this.munVegData.isd_min.toFixed(
-            2
-          )} - ${this.munVegData.isd_max.toFixed(2)}`,
-          quantity: `${this.munVegData.nm_mun}`,
-        });
-      }
+      values.push({
+        range: true,
+        color:
+          "linear-gradient(to right, #1a9641, #a6d96a, #ffffbf, #fdae61, #d7191c)",
+        value: `0 - 0.4`,
+        quantity: `${this.munVegData.nm_mun}`,
+      });
 
       this.$store.commit("SET_LAYER_PROPERTIES", {
         layer: this.layer,

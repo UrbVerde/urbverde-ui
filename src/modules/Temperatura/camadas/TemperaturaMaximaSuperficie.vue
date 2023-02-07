@@ -111,7 +111,6 @@ export default {
           type: "vector",
           tiles: [
             `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${this.ano}/{z}/{x}/{y}.pbf?`,
-            // `https://urbverde.iau.usp.br/dados/public.dados_e_geom_temperatura_por_municipio/{z}/{x}/{y}.pbf?`,
           ],
           minzoom: 0,
           maxzoom: 22,
@@ -122,7 +121,6 @@ export default {
           type: "vector",
           tiles: [
             `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_setor_${this.ano}/{z}/{x}/{y}.pbf?`,
-            // `https://urbverde.iau.usp.br/dados/public.geodata_setores_temperatura_${this.ano}/{z}/{x}/{y}.pbf?`,
           ],
           minzoom: 0,
           maxzoom: 22,

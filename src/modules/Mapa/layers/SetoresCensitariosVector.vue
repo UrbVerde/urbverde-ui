@@ -25,6 +25,7 @@ export default {
     return {
       bbox: ``,
       loading: false,
+      munId: "",
     };
   },
   computed: {
@@ -33,13 +34,17 @@ export default {
         "fill-color": [
           "match",
           ["get", "cd_mun"],
-          this.munId,
-          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "#FF6F91"],
+          Number(this.munId),
+          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "transparent"],
           ["literal", "transparent"],
         ],
-
-        "fill-opacity": 0.3,
-        "fill-outline-color": "#000000",
+        "fill-outline-color": [
+          "match",
+          ["get", "cd_mun"],
+          Number(this.munId),
+          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "#000"],
+          ["literal", "transparent"],
+        ],
       };
     },
   },
@@ -73,6 +78,14 @@ export default {
               ]);
             });
         }
+      },
+      deep: true,
+      immediate: true,
+    },
+
+    "$route.params.id": {
+      handler: async function (id) {
+        this.munId = id;
       },
       deep: true,
       immediate: true,

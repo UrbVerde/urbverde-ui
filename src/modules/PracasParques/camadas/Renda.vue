@@ -145,7 +145,9 @@ export default {
         values.push({
           range: true,
           color: "linear-gradient(to right, #f63939, #fc3f74, #6d93f1, #6c3df2",
-          value: `${this.munPracaData.renda_min} - ${this.munPracaData.renda_max} R$`,
+          value: `${this.munPracaData.renda_min.toFixed(
+            2
+          )} - ${this.munPracaData.renda_max.toFixed(2)} R$`,
         });
       }
 

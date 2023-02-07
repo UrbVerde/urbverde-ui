@@ -59,9 +59,9 @@ export default {
             ["linear"],
             ["get", "b3"],
             0.46,
-            "#d53e4f",
-            0.87,
             "#3288bd",
+            0.87,
+            "#d53e4f",
           ],
         };
       } else if (this.escala == "intraurbana") {
@@ -75,9 +75,9 @@ export default {
               ["linear"],
               ["get", "b3"],
               0.46,
-              "#d53e4f",
-              0.87,
               "#3288bd",
+              0.87,
+              "#d53e4f",
             ],
             ["literal", "transparent"],
           ],
@@ -127,13 +127,13 @@ export default {
       if (this.$route.params.escala == "estadual") {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #d53e4f, #3288bd)",
+          color: "linear-gradient(to right, #3288bd, #d53e4f)",
           value: `0.46 - 0.84`,
         });
       } else {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #d53e4f, #3288bd)",
+          color: "linear-gradient(to right, #3288bd, #d53e4f)",
           value: `0.46 - 0.84`,
         });
       }

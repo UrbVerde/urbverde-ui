@@ -20,9 +20,7 @@
         </label>
         <label>
           Área:
-          <h3>
-            {{ slotProps.features[0].properties.areaM2.toFixed() / 100 }} m²
-          </h3>
+          <h3>{{ slotProps.features[0].properties.areaM2.toFixed(2) }} m²</h3>
         </label>
       </template>
     </VmLayer>
@@ -41,15 +39,13 @@ export default {
       bbox: ``,
       loading: false,
       feature: "",
+      munId: "",
     };
   },
-  // GUITODO mudar para showOnlyId
   computed: {
     paintLayer() {
       return {
-        "fill-color": "green",
-        "fill-outline-color": "#7c99f4",
-        "fill-opacity": 0.3,
+        "fill-color": "#40826D",
       };
     },
   },
@@ -86,6 +82,14 @@ export default {
       },
       immediate: true,
       deep: true,
+    },
+
+    "$route.params.id": {
+      handler: async function (id) {
+        this.munId = id;
+      },
+      deep: true,
+      immediate: true,
     },
   },
   created() {},
