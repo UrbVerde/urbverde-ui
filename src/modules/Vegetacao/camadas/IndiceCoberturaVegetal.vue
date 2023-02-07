@@ -83,15 +83,23 @@ export default {
               ["linear"],
               ["get", "b2"],
               42,
+              "#f46d43",
+              2500,
               "#fdae61",
               5000,
-              "#efb746",
+              "#fee08b",
+              7500,
+              "#ffffbf",
               10000,
-              "#d7c22b",
+              "#d9ef8b",
+              12500,
+              "#a6d96a",
               15000,
-              "#b4cd16",
+              "#66bd63",
+              17500,
+              "#1a9850",
               20000,
-              "#83d81f",
+              "#006837",
             ],
             ["literal", "transparent"],
           ],
@@ -134,21 +142,12 @@ export default {
     buildLegend() {
       const values = [];
 
-      if (this.$route.params.escala == "estadual") {
-        values.push({
-          range: true,
-          color:
-            "linear-gradient(to right, #f46d43, #fdae61, #fee08b, #ffffbf, #d9ef8b, #a6d96a, #66bd63, #1a9850, #006837)",
-          value: `42 - 20.000 m²/pop`,
-        });
-      } else if (this.$route.params.escala == "intraurbana") {
-        values.push({
-          range: true,
-          color:
-            "linear-gradient(to right, #fdae61, #efb746, #d7c22b, #b4cd16, #83d81f)",
-          value: `42 - 20.000 m²/pop`,
-        });
-      }
+      values.push({
+        range: true,
+        color:
+          "linear-gradient(to right, #f46d43, #fdae61, #fee08b, #ffffbf, #d9ef8b, #a6d96a, #66bd63, #1a9850, #006837)",
+        value: `42 - 20.000 m²/pop`,
+      });
 
       this.$store.commit("SET_LAYER_PROPERTIES", {
         layer: this.layer,

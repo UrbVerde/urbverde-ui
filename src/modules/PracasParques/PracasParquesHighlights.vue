@@ -261,7 +261,7 @@
                       </table>
                     </div>
                     <strong style="color: #003c3c"
-                      >{{ munPracaData.h9b.toFixed(2) * 100 }}%</strong
+                      >{{ (munPracaData.h9b * 100).toFixed(2) }}%</strong
                     >
                   </div>
                 </v-col>
@@ -288,7 +288,7 @@
                       </table>
                     </div>
                     <strong style="color: #003c3c"
-                      >{{ munPracaData.h9a.toFixed(2) * 100 }}%</strong
+                      >{{ (munPracaData.h9a * 100).toFixed(2) }}%</strong
                     >
                   </div>
                 </v-col>
@@ -331,10 +331,7 @@
                       </table>
                     </div>
                     <strong style="color: #003c3c"
-                      >{{
-                        (munPracaData.h10b.toFixed(2) * 100).toFixed()
-                      }}
-                      %</strong
+                      >{{ (munPracaData.h10b * 100).toFixed(2) }} %</strong
                     >
                   </div>
                 </v-col>

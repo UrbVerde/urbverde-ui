@@ -6,6 +6,7 @@
 
 <script>
 import jsPDF from "jspdf";
+import imageCover from "../assets/urbverde_relcover.png";
 
 export default {
   name: "PdfDownloader",
@@ -33,11 +34,9 @@ export default {
       const headerAlign = (pageWidth - headerLength) / 2;
       doc.text(`Relatório para ${this.munTempData.nm_mun}`, headerAlign, 10);
       doc.setFontSize(24);
-      doc.text(
-        `Relatório para ${this.munTempData.nm_mun} em ${this.$route.params.ano}`,
-        10,
-        pageHeight / 2
-      );
+
+      doc.addImage(imageCover, "png", 50, 100);
+
       doc.setFontSize(10);
       const textWidth = doc.getTextWidth(`${this.$route.params.ano}`);
       const x = (pageWidth - textWidth) / 2;
@@ -233,7 +232,7 @@ export default {
       doc.setTextColor("#000");
       doc.text(linesP2P4, 20, 95);
       doc.text(`Valor para o município de ${this.munVegData.nm_mun}`, 20, 110);
-      doc.text(`${(this.munVegData.b2 * 100).toFixed(2)}`, 20, 120);
+      doc.text(`${this.munVegData.b2.toFixed(2)}`, 20, 120);
 
       doc.setFontSize(16);
       doc.setTextColor("#003c3c");
@@ -247,7 +246,7 @@ export default {
       doc.setTextColor("#000");
       doc.text(linesP3P4, 20, 140);
       doc.text(`Valor para o município de ${this.munVegData.nm_mun}`, 20, 160);
-      doc.text(`${(this.munVegData.b3 * 100).toFixed(2)}`, 20, 170);
+      doc.text(`${this.munVegData.b3.toFixed(2)}`, 20, 170);
 
       // Page 5
       doc.addPage();
@@ -273,12 +272,25 @@ export default {
       doc.setTextColor("#000");
       doc.text(linesP1P5, 20, 50);
       doc.text(`Valor para o município de ${this.munTempData.nm_mun}`, 20, 65);
-      doc.text(`${(this.munTempData.c1 * 100).toFixed(2)} %`, 20, 75);
+      doc.text(`${(this.munTempData.c1 * 100).toFixed(2)}`, 20, 75);
+
       // Save and Download
       doc.save(
         `Relatorio_${this.munTempData.nm_mun}_${this.$route.params.ano}.pdf`
       );
     },
+    // captureGraph(doc) {
+    //   html2canvas(document.querySelector("#line-chart"), {
+    //     backgroundColor: null,
+    //   }).then((canvas) => {
+    //     const imgData = canvas.toDataURL("image/png");
+    //     this.addImageToPdf(imgData, doc);
+    //   });
+    // },
+
+    // addImageToPdf(imgData, doc) {
+    //   doc.addImage(imgData, "PNG", 10, 10, 180, 100);
+    // },
   },
   created() {},
   computed: {
