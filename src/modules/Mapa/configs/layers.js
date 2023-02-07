@@ -831,7 +831,7 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 52,
+    zIndex: 1,
     componentName: "AuxTempIntraurb",
     props: {
       source: {},
@@ -920,7 +920,7 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 51,
+    zIndex: 1,
     componentName: "VegetacaoRaster",
     props: {
       source: {},
@@ -942,7 +942,7 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 52,
+    zIndex: 1,
     componentName: "NdviRaster",
     props: {
       source: {},

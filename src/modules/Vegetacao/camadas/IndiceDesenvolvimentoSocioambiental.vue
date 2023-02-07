@@ -19,7 +19,7 @@
             class="d-flex flex-column justify-center align-center"
             style="border-radius: 8px"
           >
-            <label>Índice de Desenvolvimento Socioambiental</label>
+            <label>Índice de Desigualdade Socioambiental</label>
             <h3>
               {{ slotProps.features[0].properties.b3.toFixed(2) }}
             </h3>
