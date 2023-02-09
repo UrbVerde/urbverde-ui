@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="d-flex mx-auto" style="width: 80%">
+    <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
       <v-col cols="12">
         <v-row class="d-flex flex-column">
           <span>VOCÊ ESTÁ VISUALIZANDO</span>
@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="d-flex mx-auto" style="width: 80%">
+    <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
       <v-col cols="8">
         <v-row>
           <v-col cols="12" md="4" class="d-flex justify-start align-start">

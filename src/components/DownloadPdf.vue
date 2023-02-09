@@ -273,24 +273,11 @@ export default {
       doc.text(linesP1P5, 20, 50);
       doc.text(`Valor para o município de ${this.munTempData.nm_mun}`, 20, 65);
       doc.text(`${(this.munTempData.c1 * 100).toFixed(2)}`, 20, 75);
-
       // Save and Download
       doc.save(
         `Relatorio_${this.munTempData.nm_mun}_${this.$route.params.ano}.pdf`
       );
     },
-    // captureGraph(doc) {
-    //   html2canvas(document.querySelector("#line-chart"), {
-    //     backgroundColor: null,
-    //   }).then((canvas) => {
-    //     const imgData = canvas.toDataURL("image/png");
-    //     this.addImageToPdf(imgData, doc);
-    //   });
-    // },
-
-    // addImageToPdf(imgData, doc) {
-    //   doc.addImage(imgData, "PNG", 10, 10, 180, 100);
-    // },
   },
   created() {},
   computed: {

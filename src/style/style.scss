@@ -67,23 +67,6 @@ a {
   }
 }
 
-// .map-wrap {
-//position: relative;
-//height: 100%;
-// }
-
-// .map {
-// position: absolute;
-// width: 100%;
-// height: 100%;
-// padding: 0 !important;
-// margin: 0 !important;
-
-// top: 50%;
-// right: 50%;
-// transform: translate(50%, -50%);
-// }
-
 main {
   flex: 1 0 auto;
   padding: 0;
@@ -192,4 +175,10 @@ main {
   border-radius: 4px;
   width: 90%;
   margin: auto;
+}
+
+.w100-mobile {
+  @media (max-width: 600px) {
+    width: 100% !important;
+  }
 }

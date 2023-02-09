@@ -53,20 +53,7 @@
           src="@/assets/icons/field5-icon.png"
           alt=""
         />
-        <div
-          class="mx-auto pointer"
-          @click="share"
-          style="
-            display: grid;
-            place-items: center;
-            background-color: #01dc82;
-            width: 45px;
-            height: 43px;
-            border-radius: 0px 15px 15px 15px;
-          "
-        >
-          <img width="20px" src="@/assets/home/share-icon.png" />
-        </div>
+        <ShareModal />
       </v-col>
 
       <v-col cols="12" md="3" class="d-flex ml-auto">
@@ -328,9 +315,10 @@
           v-if="this.$route.params.categoria == 'temperatura'"
         />
       </v-col>
-    </v-row>
 
-    <div style="background-color: #e6f1f2; padding-bottom: 0">
+      <v-col cols="12">
+
+        <div class="ml-md-auto" style="background-color: #e6f1f2; padding-bottom: 0; width: 90%;">
       <div class="container-fluid pb-0">
         <v-card class="" outlined color="#d0e3e3">
           <div class="pl-4 pr-4">
@@ -413,6 +401,11 @@
         </v-card>
       </div>
     </div>
+
+      </v-col>
+    </v-row>
+
+    
   </section>
 </template>
 
@@ -629,11 +622,14 @@ a {
 .fixed {
   position: fixed;
   height: 89vh;
+  z-index: 100;
+  background-color: white;
   @media (max-width: 921px) {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100px;
   }
 }
 </style>

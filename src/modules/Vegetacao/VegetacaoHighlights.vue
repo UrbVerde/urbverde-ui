@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="d-flex mx-auto container" style="width: 80%">
+    <v-row class="d-flex mx-auto container w100-mobile" style="width: 80%">
       <v-col cols="12">
         <v-row class="d-flex flex-column">
           <span>VOCÊ ESTÁ VISUALIZANDO</span>
@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="d-flex mx-auto" style="width: 80%">
+    <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
       <v-col cols="8" class="d-flex justify-center align-center">
         <v-row>
           <v-col cols="6">
@@ -146,7 +146,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="d-flex mx-auto" style="width: 80%">
+    <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
       <v-col cols="4" md="4" class="d-flex">
         <v-card outlined>
           <v-container
@@ -299,7 +299,7 @@
               class="text-h6"
               style="color: #003c3c; font-size: 3em"
             >
-              Evolução temporal do [PCV] no setor clicado vs municipio
+              Evolução temporal do [PCV] (%) no setor clicado vs municipio
             </v-card-title>
             <v-card-actions>
               <v-btn text disabled class="text-p"
@@ -399,7 +399,7 @@
               class="text-h6"
               style="color: #003c3c; font-size: 3em"
             >
-              Evolução temporal do [PCV] no município
+              Evolução temporal do [PCV] (%) no município
             </v-card-title>
 
             <v-card-actions>
@@ -416,14 +416,133 @@
           <v-container
             class="d-flex flex-column justify-space-between align-start"
           >
-            <LineChart />
+            <table id="line-chart" class="charts-css line multiple show-labels">
+              <tbody>
+                <tr>
+                  <th scope="row">2016</th>
+                  <td
+                    :style="`--start: ${lineChartVegData[2016][0].b1.toFixed(
+                      2
+                    )}; --size: ${lineChartVegData[2017][0].b1.toFixed(2)}`"
+                  >
+                    <span class="data">
+                      {{ (lineChartVegData[2016][0].b1 * 100).toFixed() }}
+                    </span>
+                  </td>
+
+                  <td style="--start: 20.1; --size: 23.2">
+                    <span class="data">
+                      {{ tstChartData[2016][0].c2.toFixed(1) }}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">2017</th>
+                  <td
+                    :style="`--start: ${lineChartVegData[2017][0].b1.toFixed(
+                      2
+                    )}; --size: ${lineChartVegData[2018][0].b1.toFixed(2)}`"
+                  >
+                    <span class="data">
+                      {{ (lineChartVegData[2017][0].b1 * 100).toFixed() }}</span
+                    >
+                  </td>
+
+                  <td style="--start: 23.2; --size: 25">
+                    <span class="data">
+                      {{ tstChartData[2017][0].c2.toFixed(1) }}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">2018</th>
+                  <td
+                    :style="`--start: ${lineChartVegData[2018][0].b1.toFixed(
+                      2
+                    )}; --size: ${lineChartVegData[2019][0].b1.toFixed(2)}`"
+                  >
+                    <span class="data">
+                      {{ (lineChartVegData[2018][0].b1 * 100).toFixed() }}</span
+                    >
+                  </td>
+                  <td style="--start: 25; --size: 28">
+                    <span class="data">
+                      {{ tstChartData[2018][0].c2.toFixed(1) }}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">2019</th>
+                  <td
+                    :style="`--start: ${lineChartVegData[2019][0].b1.toFixed(
+                      2
+                    )}; --size: ${lineChartVegData[2020][0].b1.toFixed(2)}`"
+                  >
+                    <span class="data">
+                      {{ (lineChartVegData[2019][0].b1 * 100).toFixed() }}</span
+                    >
+                  </td>
+                  <td style="--start: 28; --size: 32">
+                    <span class="data">
+                      {{ tstChartData[2019][0].c2.toFixed(1) }}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">2020</th>
+                  <td
+                    :style="`--start: ${lineChartVegData[2020][0].b1.toFixed(
+                      2
+                    )}; --size: ${lineChartVegData[2021][0].b1.toFixed(2)}`"
+                  >
+                    <span class="data">
+                      {{ (lineChartVegData[2020][0].b1 * 100).toFixed() }}</span
+                    >
+                  </td>
+                  <td
+                    :style="`--start: ${tstChartData[2020][0].c2.toFixed(
+                      1
+                    )}; --size: ${tstChartData[2021][0].c2.toFixed(1)}`"
+                  >
+                    <span class="data">
+                      {{ tstChartData[2020][0].c2.toFixed(1) }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">2021</th>
+                  <td
+                    :style="`--start: ${lineChartVegData[2021][0].b1.toFixed(
+                      2
+                    )}; --size: ${lineChartVegData[2021][0].b1.toFixed(2)}`"
+                  >
+                    <span class="data">
+                      {{ (lineChartVegData[2021][0].b1 * 100).toFixed() }}</span
+                    >
+                  </td>
+                  <td
+                    :style="`--start: ${tstChartData[2021][0].c2.toFixed(
+                      1
+                    )}; --size: ${tstChartData[2020][0].c2.toFixed(1)}`"
+                  >
+                    <span class="data">
+                      {{ tstChartData[2021][0].c2.toFixed() }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
             <v-card-title
               class="text-h6"
               style="color: #003c3c; font-size: 3em"
             >
-              Gráficos TST x [PCV] (2016-2021) Setores Censitários
-              Urbanos</v-card-title
-            >
+              Evolução temporal do [PCV] (%) e [TMS] (ºC) no município
+            </v-card-title>
             <v-card-actions>
               <v-btn text disabled class="text-p"
                 >Saiba mais ...</v-btn
@@ -453,6 +572,10 @@ export default {
     lineChartVegData() {
       return this.$store.getters.getMunVegData;
     },
+
+    tstChartData() {
+      return this.$store.getters.getMunTempData;
+    },
   },
 
   methods: {},
@@ -460,6 +583,7 @@ export default {
     "$route.params.id": {
       handler: function (id) {
         this.$store.dispatch("getMunicipioVegData", this.$route.params.id);
+        this.$store.dispatch("getMunicipioTempData", this.$route.params.id);
       },
       deep: true,
       immediate: true,

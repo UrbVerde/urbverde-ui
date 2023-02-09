@@ -16,9 +16,7 @@
         <VmPopup color="#8cb369">
           <div style="border-radius: 8px">
             <label>Temperatura Máxima de Superfície</label>
-            <h3>
-              {{ slotProps.features[0].properties.c3.toFixed(2) }}
-            </h3>
+            <h3>{{ slotProps.features[0].properties.c3.toFixed(2) }} ºC</h3>
           </div>
         </VmPopup>
       </template>
