@@ -133,7 +133,7 @@ export default {
         range: true,
         color:
           "linear-gradient(to right, #1a9641, #a6d96a, #ffffbf, #fdae61, #d7191c)",
-        value: `0 - 0.4`,
+        value: `0 - 0.5`,
         quantity: `${this.munVegData.nm_mun}`,
       });
 

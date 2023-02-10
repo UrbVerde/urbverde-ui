@@ -53,7 +53,7 @@ export default {
     },
 
     layerPaint() {
-      if (this.escala == "estadual") {
+      if (this.$route.params.escala == "estadual") {
         return {
           "fill-color": [
             "interpolate",
@@ -63,6 +63,24 @@ export default {
             "#3288bd",
             1,
             "#d53e4f",
+          ],
+        };
+      } else if (this.$route.params.escala == "intraurbana") {
+        return {
+          "fill-color": [
+            "match",
+            ["get", "cd_mun"],
+            Number(this.routeId),
+            [
+              "interpolate",
+              ["linear"],
+              ["get", "isi"],
+              0.5,
+              "#3288bd",
+              1,
+              "#d53e4f",
+            ],
+            ["literal", "transparent"],
           ],
         };
       }

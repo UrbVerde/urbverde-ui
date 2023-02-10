@@ -57,6 +57,7 @@
       </v-col>
 
       <v-col cols="12" md="3" class="d-flex ml-auto">
+
         <div class="d-flex flex-column" style="width: 100%">
           <div class="aside__toolbar_scale">
             <label>VISUALIZAR ESCALA :</label>
@@ -314,95 +315,91 @@
         <TemperaturaHighlights
           v-if="this.$route.params.categoria == 'temperatura'"
         />
-      </v-col>
 
-      <v-col cols="12">
 
-        <div class="ml-md-auto" style="background-color: #e6f1f2; padding-bottom: 0; width: 90%;">
-      <div class="container-fluid pb-0">
-        <v-card class="" outlined color="#d0e3e3">
-          <div class="pl-4 pr-4">
-            <v-row>
-              <v-col cols="12" md="6">
-                <p style="font-size: 32px; color: #003c3c">
-                  <strong>Fique por dentro das atualizações da Urbverde</strong>
-                </p>
-                <p style="font-size: 17px; color: #003c3c">
-                  Assine [em breve] nossa Newsletter para mantermos você
-                  atualizado sobre novos lançamentos.
-                </p>
-              </v-col>
-              <v-col
-                cols="12"
-                md="6"
-                class="footer-flower d-flex justify-center align-center"
-              >
-                <v-row class="d-flex justify-center align-center">
-                  <v-col cols="12" md="8">
-                    <v-form v-model="valid" class="mt-4">
-                      <v-text-field
-                        dense
-                        outlined
-                        disabled
-                        v-model="email"
-                        :rules="emailRules"
-                        label="E-mail"
-                        required
-                      ></v-text-field>
-                    </v-form>
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-btn disabled color="#01DC82" class="mb-3">
-                      Assinar
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-          </div>
-          <div style="background-color: white">
-            <v-row
-              class="d-flex justify-space-between align-center"
-              style="padding: 3em 0 3em 0"
-            >
-              <v-col style="height: 100%">
-                <span class="pl-4"
-                  ><img width="30%" src="@/assets/logos/urbverde-logo.png"
-                /></span>
-              </v-col>
-              <v-col class="d-flex justify-center align-center">
-                <a
-                  href="https://www.facebook.com/profile.php?id=100089182436996"
-                  target="_blank"
+
+        <div class="w100-mobile ml-md-auto" style="background-color: #e6f1f2; padding-bottom: 0; width: 90%">          
+          <v-card class="" outlined color="#d0e3e3">
+            <div class="pl-4 pr-4">
+              <v-row>
+                <v-col cols="12" md="6">
+                  <p style="font-size: 32px; color: #003c3c">
+                    <strong>Fique por dentro das atualizações da Urbverde</strong>
+                  </p>
+                  <p style="font-size: 17px; color: #003c3c">
+                    Assine [em breve] nossa Newsletter para mantermos você
+                    atualizado sobre novos lançamentos.
+                  </p>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="6"
+                  class="footer-flower d-flex justify-center align-center"
                 >
-                  <img
-                    width="30px"
-                    class="ma-3"
-                    src="@/assets/icons/fb-icon.png"
-                  />
-                </a>
-                <a href="https://twitter.com/UrbVerdeSP" target="_blank">
-                  <img
-                    width="30px"
-                    class="ma-3"
-                    src="@/assets/icons/twitter-icon.png"
-                  />
-                </a>
-                <a href="https://www.instagram.com/UrbVerdesp/" target="_blank">
-                  <img
-                    width="30px"
-                    class="ma-3"
-                    src="@/assets/icons/instagram-icon.png"
-                  />
-                </a>
-              </v-col>
-            </v-row>
-          </div>
-        </v-card>
-      </div>
-    </div>
-
-      </v-col>
+                  <v-row class="d-flex justify-center align-center">
+                    <v-col cols="12" md="8">
+                      <v-form v-model="valid" class="mt-4">
+                        <v-text-field
+                          dense
+                          outlined
+                          disabled
+                          v-model="email"
+                          :rules="emailRules"
+                          label="E-mail"
+                          required
+                        ></v-text-field>
+                      </v-form>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                      <v-btn disabled color="#01DC82" class="mb-3">
+                        Assinar
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </div>
+            <div style="background-color: white">
+              <v-row
+                class="d-flex justify-space-between align-center"
+                style="padding: 3em 0 3em 0"
+              >
+                <v-col style="height: 100%">
+                  <span class="pl-4"
+                    ><img width="30%" src="@/assets/logos/urbverde-logo.png"
+                  /></span>
+                </v-col>
+                <v-col class="d-flex justify-center align-center">
+                  <a
+                    href="https://www.facebook.com/profile.php?id=100089182436996"
+                    target="_blank"
+                  >
+                    <img
+                      width="30px"
+                      class="ma-3"
+                      src="@/assets/icons/fb-icon.png"
+                    />
+                  </a>
+                  <a href="https://twitter.com/UrbVerdeSP" target="_blank">
+                    <img
+                      width="30px"
+                      class="ma-3"
+                      src="@/assets/icons/twitter-icon.png"
+                    />
+                  </a>
+                  <a href="https://www.instagram.com/UrbVerdesp/" target="_blank">
+                    <img
+                      width="30px"
+                      class="ma-3"
+                      src="@/assets/icons/instagram-icon.png"
+                    />
+                  </a>
+                </v-col>
+              </v-row>
+            </div>
+          </v-card>          
+        </div>
+      </v-col>     
     </v-row>
 
     

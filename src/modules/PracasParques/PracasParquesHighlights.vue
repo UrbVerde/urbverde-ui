@@ -88,6 +88,9 @@
                         {{ munPracaData.a4_rank_estado }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
+                    </v-col>
                   </v-row>
                 </v-card-text>
               </v-container>
@@ -121,6 +124,11 @@
                         {{ munPracaData.a1_rank_micro }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_micro }}
+                      </p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -130,6 +138,11 @@
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munPracaData.a2_rank_micro }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_micro }}
                       </p>
                     </v-col>
                   </v-row>
@@ -143,6 +156,11 @@
                         {{ munPracaData.a3_rank_micro }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_micro }}
+                      </p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -152,6 +170,11 @@
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munPracaData.a4_rank_micro }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_micro }}
                       </p>
                     </v-col>
                   </v-row>
@@ -187,6 +210,11 @@
                         {{ munPracaData.a1_rank_meso }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_meso }}
+                      </p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -196,6 +224,11 @@
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munPracaData.a2_rank_meso }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_meso }}
                       </p>
                     </v-col>
                   </v-row>
@@ -209,6 +242,11 @@
                         {{ munPracaData.a3_rank_meso }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_meso }}
+                      </p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -218,6 +256,11 @@
                     <v-col>
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munPracaData.a4_rank_meso }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munPracaData.n_rank_meso }}
                       </p>
                     </v-col>
                   </v-row>

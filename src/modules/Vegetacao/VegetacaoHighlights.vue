@@ -15,6 +15,258 @@
     </v-row>
 
     <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
+      <v-col cols="8">
+        <v-row>
+          <v-col cols="12" md="4" class="d-flex justify-start align-start">
+            <v-card
+              outlined
+              class="d-flex flex-column justify-center"
+              style="border-radius: 12px"
+            >
+              <v-img src="@/assets/munsp.png"></v-img>
+              <v-container
+                class="d-flex flex-column justify-space-between align-start"
+              >
+                <v-card-subtitle class="pa-0"
+                  ><strong>Estado de SP</strong></v-card-subtitle
+                >
+                <v-card-text class="pa-0 mb-2"
+                  >A posição do seu município em relação aos 645 municípios do
+                  Estado de São Paulo
+                </v-card-text>
+                <v-card-text class="pa-0">
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>% Cobertura Vegetal (PCV)</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b1_rank_estado }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>Índice de Cobertura Vegetal (ICV)</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b2_rank_estado }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong
+                      >Índice de Desigualdade Socioambiental (IDSA)</strong
+                    >
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b3_rank_estado }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-container>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4" class="d-flex justify-start align-start">
+            <v-card
+              outlined
+              class="d-flex flex-column justify-start"
+              style="border-radius: 12px"
+            >
+              <v-img src="@/assets/microreg.png"></v-img>
+              <v-container
+                class="d-flex flex-column justify-space-between align-start"
+              >
+                <v-card-subtitle class="pa-0"
+                  ><strong>Microrregiões</strong></v-card-subtitle
+                >
+                <v-card-text class="pa-0 mb-2"
+                  >A posição do seu município em relação aos municípios que
+                  compõe a mesma microrregião
+                </v-card-text>
+                <v-card-text class="pa-0">
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>% Cobertura Vegetal (PCV)</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b1_rank_micro }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munVegData.n_rank_micro }}
+                      </p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>Índice de Cobertura Vegetal (ICV)</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b2_rank_micro }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munVegData.n_rank_micro }}
+                      </p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong
+                      >Índice de Desigualdade Socioambiental (IDSA)</strong
+                    >
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b3_rank_micro }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munVegData.n_rank_micro }}
+                      </p>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-container>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4" class="d-flex justify-start align-start"
+            ><v-card
+              outlined
+              class="d-flex flex-column justify-start"
+              style="border-radius: 12px"
+            >
+              <v-img src="@/assets/mesoreg.png"></v-img>
+              <v-container
+                class="d-flex flex-column justify-space-between align-start"
+              >
+                <v-card-subtitle class="pa-0"
+                  ><strong>Mesorregiões</strong></v-card-subtitle
+                >
+                <v-card-text class="pa-0 mb-2"
+                  >A posição do seu município em relação aos municípios que
+                  compõe a mesma mesorregião.
+                </v-card-text>
+                <v-card-text class="pa-0">
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>% Cobertura Vegetal (PCV)</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b1_rank_meso }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munVegData.n_rank_meso }}
+                      </p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>Índice de Cobertura Vegetal (ICV)</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b2_rank_meso }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munVegData.n_rank_meso }}
+                      </p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong
+                      >Índice de Desigualdade Socioambiental (IDSA)</strong
+                    >
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munVegData.b3_rank_meso }}
+                      </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        de {{ munVegData.n_rank_meso }}
+                      </p>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+
+      <v-col cols="4">
+        <v-card
+          width="100%"
+          outlined
+          class="mx-auto"
+          style="border-radius: 12px"
+        >
+          <img
+            style="position: absolute; top: -60px; z-index: 5"
+            width="110px"
+            src="@/assets/satelite.png"
+          />
+          <v-img src="@/assets/card-background.png"></v-img>
+
+          <v-card-title>O que é o PCV ?</v-card-title>
+
+          <v-card-text>
+            <p>
+              O [Percentual de Cobertura Vegetal (PCV)] é um valor calculado
+              usando satélites que mede o quanto as áreas urbanas são cobertas
+              por vegetação, inlcuindo árvores e gramíneas.Você sabia?Você sabia
+              que essas métricas podem ajudar no plano diretor do seu municipio,
+              criando metas e avaliando os resultados ao longo do tempo?
+            </p>
+          </v-card-text>
+
+          <v-card-title>Você sabia ?</v-card-title>
+
+          <v-card-text>
+            <p>
+              Você sabia que essas métricas podem ajudar no plano diretor do seu
+              municipio, criando metas e avaliando os resultados ao longo do
+              tempo?
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
       <v-col cols="8" class="d-flex justify-center align-center">
         <v-row>
           <v-col cols="6">
@@ -105,44 +357,6 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-col>
-
-      <v-col cols="4">
-        <v-card
-          width="100%"
-          outlined
-          class="mx-auto my-12"
-          style="border-radius: 12px"
-        >
-          <img
-            style="position: absolute; top: -60px; z-index: 5"
-            width="110px"
-            src="@/assets/satelite.png"
-          />
-          <v-img src="@/assets/card-background.png"></v-img>
-
-          <v-card-title>O que é o PCV ?</v-card-title>
-
-          <v-card-text>
-            <p>
-              O [Percentual de Cobertura Vegetal (PCV)] é um valor calculado
-              usando satélites que mede o quanto as áreas urbanas são cobertas
-              por vegetação, inlcuindo árvores e gramíneas.Você sabia?Você sabia
-              que essas métricas podem ajudar no plano diretor do seu municipio,
-              criando metas e avaliando os resultados ao longo do tempo?
-            </p>
-          </v-card-text>
-
-          <v-card-title>Você sabia ?</v-card-title>
-
-          <v-card-text>
-            <p>
-              Você sabia que essas métricas podem ajudar no plano diretor do seu
-              municipio, criando metas e avaliando os resultados ao longo do
-              tempo?
-            </p>
-          </v-card-text>
-        </v-card>
       </v-col>
     </v-row>
 
@@ -309,114 +523,16 @@
           </v-container>
         </v-card></v-col
       >
-      <v-col cols="4" md="4" class="d-flex">
-        <v-card outlined>
-          <v-container
-            class="d-flex flex-column justify-space-between align-start"
-          >
-            <table id="line-chart" class="charts-css line multiple show-labels">
-              <tbody>
-                <tr>
-                  <th scope="row">2016</th>
-                  <td
-                    :style="`--start: ${lineChartVegData[2016][0].b1.toFixed(
-                      2
-                    )}; --size: ${lineChartVegData[2017][0].b1.toFixed(2)}`"
-                  >
-                    <span class="data">
-                      {{ (lineChartVegData[2016][0].b1 * 100).toFixed() }}
-                    </span>
-                  </td>
-                </tr>
-
-                <tr>
-                  <th scope="row">2017</th>
-                  <td
-                    :style="`--start: ${lineChartVegData[2017][0].b1.toFixed(
-                      2
-                    )}; --size: ${lineChartVegData[2018][0].b1.toFixed(2)}`"
-                  >
-                    <span class="data">
-                      {{ (lineChartVegData[2017][0].b1 * 100).toFixed() }}</span
-                    >
-                  </td>
-                </tr>
-
-                <tr>
-                  <th scope="row">2018</th>
-                  <td
-                    :style="`--start: ${lineChartVegData[2018][0].b1.toFixed(
-                      2
-                    )}; --size: ${lineChartVegData[2019][0].b1.toFixed(2)}`"
-                  >
-                    <span class="data">
-                      {{ (lineChartVegData[2018][0].b1 * 100).toFixed() }}</span
-                    >
-                  </td>
-                </tr>
-
-                <tr>
-                  <th scope="row">2019</th>
-                  <td
-                    :style="`--start: ${lineChartVegData[2019][0].b1.toFixed(
-                      2
-                    )}; --size: ${lineChartVegData[2020][0].b1.toFixed(2)}`"
-                  >
-                    <span class="data">
-                      {{ (lineChartVegData[2019][0].b1 * 100).toFixed() }}</span
-                    >
-                  </td>
-                </tr>
-
-                <tr>
-                  <th scope="row">2020</th>
-                  <td
-                    :style="`--start: ${lineChartVegData[2020][0].b1.toFixed(
-                      2
-                    )}; --size: ${lineChartVegData[2021][0].b1.toFixed(2)}`"
-                  >
-                    <span class="data">
-                      {{ (lineChartVegData[2020][0].b1 * 100).toFixed() }}</span
-                    >
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2021</th>
-                  <td
-                    :style="`--start: ${lineChartVegData[2021][0].b1.toFixed(
-                      2
-                    )}; --size: ${lineChartVegData[2021][0].b1.toFixed(2)}`"
-                  >
-                    <span class="data">
-                      {{ (lineChartVegData[2021][0].b1 * 100).toFixed() }}</span
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <v-card-title
-              class="text-h6"
-              style="color: #003c3c; font-size: 3em"
-            >
-              Evolução temporal do [PCV] (%) no município
-            </v-card-title>
-
-            <v-card-actions>
-              <v-btn text disabled class="text-p"
-                >Saiba mais ...</v-btn
-              ></v-card-actions
-            >
-          </v-container>
-        </v-card></v-col
-      >
 
       <v-col cols="4" md="4" class="d-flex">
         <v-card outlined>
           <v-container
             class="d-flex flex-column justify-space-between align-start"
           >
-            <table id="line-chart" class="charts-css line multiple show-labels">
+            <table
+              id="line-chart2"
+              class="charts-css line multiple show-labels"
+            >
               <tbody>
                 <tr>
                   <th scope="row">2016</th>
@@ -638,6 +754,13 @@ export default {
 
 <style scoped lang="scss">
 #line-chart {
+  height: 200px;
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: #f6f6f6;
+}
+
+#line-chart2 {
   height: 200px;
   max-width: 400px;
   margin: 0 auto;

@@ -6,6 +6,7 @@
 
 <script>
 import jsPDF from "jspdf";
+import "jspdf-autotable";
 import imageCover from "../assets/urbverde_relcover.png";
 
 export default {
@@ -17,7 +18,10 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      printMode: false,
+      setorDataForChart: false,
+    };
   },
   methods: {
     async downloadPdf() {
@@ -38,9 +42,9 @@ export default {
       doc.addImage(imageCover, "png", 50, 100);
 
       doc.setFontSize(10);
-      const textWidth = doc.getTextWidth(`${this.$route.params.ano}`);
+      const textWidth = doc.getTextWidth(`${this.$route.params.ano || 2021}`);
       const x = (pageWidth - textWidth) / 2;
-      doc.text(`${this.$route.params.ano}`, x, pageHeight - 10);
+      doc.text(`${this.$route.params.ano || 2021}`, x, pageHeight - 10);
       // Page 2
       doc.addPage();
       const title = "A UrbVerde";
@@ -266,29 +270,149 @@ export default {
       doc.setTextColor("#000");
       doc.setFontSize(14);
       const paragraph_page5 =
-        "O que é o PCV? É uma métrica calculada usando satélites que mede o quanto as áreas urbanas são cobertas por vegetação, incluindo árvores e gramíneas.";
+        "As ilhas de calor urbano (ICU) são um fenômeno percebido nas áreas mais quentes da cidade, onde as temperaturas de superficie ficam mais altas pelo excesso de materiais escuros que retêm mais calor, como o asfalto e o concreto, prejudicando a`qualidade de vida da população";
       const widthP1P5 = pageWidth - 20;
       const linesP1P5 = doc.splitTextToSize(paragraph_page5, widthP1P5);
       doc.setTextColor("#000");
       doc.text(linesP1P5, 20, 50);
-      doc.text(`Valor para o município de ${this.munTempData.nm_mun}`, 20, 65);
-      doc.text(`${(this.munTempData.c1 * 100).toFixed(2)}`, 20, 75);
+      doc.text(`Valor para o município de ${this.munTempData.nm_mun}`, 20, 75);
+      doc.text(`${this.munTempData.c1.toFixed(2)}`, 20, 85);
+
+      doc.setFontSize(16);
+      doc.setTextColor("#003c3c");
+      doc.text("Temperatura Média de Superfície (TMS)", 10, 95);
+      doc.setTextColor("#000");
+      doc.setFontSize(14);
+      doc.text(`${this.munTempData.c2.toFixed(2)}`, 20, 105);
+
+      doc.setFontSize(16);
+      doc.setTextColor("#003c3c");
+      doc.text("Temperatura Máxima de Superfície", 10, 115);
+      doc.setTextColor("#000");
+      doc.setFontSize(14);
+      doc.text(`${this.munTempData.c3.toFixed(2)}`, 20, 125);
+
+      if (this.setorDataForChart) {
+        doc.autoTable({
+          startY: 135,
+          head: [
+            [
+              "Ano",
+              "% Cobertura Vegetal do Município",
+              "% Cobertura Vegetal no Setor",
+            ],
+          ],
+          body: [
+            [
+              "2016",
+              `${this.lineChartVegData[2016][0].b1.toFixed(2)} %`,
+              `${this.setorDataForChart[2016][0].b1.toFixed(2)} %`,
+            ],
+            [
+              "2017",
+              `${this.lineChartVegData[2017][0].b1.toFixed(2)} %`,
+              `${this.setorDataForChart[2017][0].b1.toFixed(2)} %`,
+            ],
+            [
+              "2018",
+              `${this.lineChartVegData[2018][0].b1.toFixed(2)} %`,
+              `${this.setorDataForChart[2018][0].b1.toFixed(2)} %`,
+            ],
+            [
+              "2019",
+              `${this.lineChartVegData[2019][0].b1.toFixed(2)} %`,
+              `${this.setorDataForChart[2019][0].b1.toFixed(2)} %`,
+            ],
+            [
+              "2020",
+              `${this.lineChartVegData[2020][0].b1.toFixed(2)} %`,
+              `${this.setorDataForChart[2020][0].b1.toFixed(2)} %`,
+            ],
+            [
+              "2021",
+              `${this.lineChartVegData[2021][0].b1.toFixed(2)} %`,
+              `${this.setorDataForChart[2021][0].b1.toFixed(2)} %`,
+            ],
+          ],
+        });
+      }
+
+      doc.autoTable({
+        head: [
+          [
+            "Ano",
+            "Porcentagem de Cobertura Vegetal",
+            "Temperatura Média de Superfície",
+          ],
+        ],
+        body: [
+          [
+            "2016",
+            `${this.lineChartVegData[2016][0].b1.toFixed(2)} %`,
+            `${this.tstChartData[2016][0].c2.toFixed(2)} ºC`,
+          ],
+          [
+            "2017",
+            `${this.lineChartVegData[2017][0].b1.toFixed(2)} %`,
+            `${this.tstChartData[2017][0].c2.toFixed(2)} ºC`,
+          ],
+          [
+            "2018",
+            `${this.lineChartVegData[2018][0].b1.toFixed(2)} %`,
+            `${this.tstChartData[2018][0].c2.toFixed(2)} ºC`,
+          ],
+          [
+            "2019",
+            `${this.lineChartVegData[2019][0].b1.toFixed(2)} %`,
+            `${this.tstChartData[2019][0].c2.toFixed(2)} ºC`,
+          ],
+          [
+            "2020",
+            `${this.lineChartVegData[2020][0].b1.toFixed(2)} %`,
+            `${this.tstChartData[2020][0].c2.toFixed(2)} ºC`,
+          ],
+          [
+            "2021",
+            `${this.lineChartVegData[2021][0].b1.toFixed(2)} %`,
+            `${this.tstChartData[2021][0].c2.toFixed(2)} ºC`,
+          ],
+        ],
+      });
+
       // Save and Download
       doc.save(
-        `Relatorio_${this.munTempData.nm_mun}_${this.$route.params.ano}.pdf`
+        `Relatorio_${this.munTempData.nm_mun}_${
+          this.$route.params.ano || 2021
+        }.pdf`
       );
     },
   },
   created() {},
   computed: {
     munTempData() {
-      return this.$store.getters.getMunTempData[this.$route.params.ano][0];
+      if (!this.$route.params.ano) {
+        return this.$store.getters.getMunTempData[2021][0];
+      } else {
+        return this.$store.getters.getMunTempData[this.$route.params.ano][0];
+      }
     },
     munVegData() {
-      return this.$store.getters.getMunVegData[this.$route.params.ano][0];
+      if (!this.$route.params.ano) {
+        return this.$store.getters.getMunVegData[2021][0];
+      } else {
+        return this.$store.getters.getMunVegData[this.$route.params.ano][0];
+      }
     },
     munPracaData() {
       return this.$store.getters.getMunPracaData[2021][0];
+    },
+
+    lineChartVegData() {
+      return this.$store.getters.getMunVegData;
+    },
+
+    tstChartData() {
+      return this.$store.getters.getMunTempData;
     },
   },
   watch: {
@@ -300,6 +424,50 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+
+    "$route.params.setorid": {
+      handler: async function (setorid) {
+        if (setorid) {
+          await axios
+            .get(
+              `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Ageodata_vegetacao_por_setor&CQL_FILTER=cd_setor=${setorid}&outputFormat=application%2Fjson`
+            )
+            .then((response) => {
+              let serieHistoricaPorSetor = {
+                2016: [],
+                2017: [],
+                2018: [],
+                2019: [],
+                2020: [],
+                2021: [],
+              };
+              response.data.features.forEach((item) =>
+                serieHistoricaPorSetor[item.properties.ano].push(
+                  item.properties
+                )
+              );
+
+              this.setorDataForChart = serieHistoricaPorSetor;
+
+              let bboxMun = turf.bbox(response.data.features[0].geometry);
+              let massCenterMun = turf.centerOfMass(response.data.features[0]);
+              window.maplibregl.flyTo({
+                center: massCenterMun.geometry.coordinates,
+                zoom: 12,
+                bearing: 3,
+                speed: 0.8,
+                curve: 2,
+                easing: (t) => t,
+                essential: true,
+              });
+              window.maplibregl.fitBounds([
+                [bboxMun[0], bboxMun[1]],
+                [bboxMun[2], bboxMun[3]],
+              ]);
+            });
+        }
+      },
     },
   },
 };

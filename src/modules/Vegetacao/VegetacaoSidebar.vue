@@ -142,6 +142,30 @@
         </div>
       </div>
 
+      <div v-for="(auxLayer, i) in getAuxVegEstadual" :key="i">
+        <div class="layer_selector d-flex align-center">
+          <div
+            class="layer_selector_eye"
+            @click="toggleLayerVisibility(auxLayer)"
+            :class="{ itemActive: auxLayer.visible }"
+          >
+            <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
+          </div>
+          <div class="layer_selector_opacity" style="width: 100%">
+            <span>{{ auxLayer.name }}</span>
+          </div>
+          <input
+            :disabled="!auxLayer.visible || auxLayer.type == 'raster'"
+            type="range"
+            min="0.1"
+            max="1"
+            step="0.1"
+            v-model="opacity[auxLayer.name]"
+            @input="changeOpacity(auxLayer, `${auxLayer.name}`)"
+          />
+        </div>
+      </div>
+
       <div v-for="(layer, idx) in getVegetacaoIntraurbano" :key="idx">
         <div
           v-if="layer._id == selectedLayer"

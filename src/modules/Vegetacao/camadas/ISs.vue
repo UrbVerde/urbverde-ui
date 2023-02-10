@@ -49,23 +49,49 @@ export default {
     },
 
     layerPaint() {
-      return {
-        "fill-color": [
-          "interpolate",
-          ["linear"],
-          ["get", "iss"],
-          0,
-          "#1a9641",
-          0.1,
-          "#a6d96a",
-          0.2,
-          "#ffffbf",
-          0.3,
-          "#fdae61",
-          0.4,
-          "#d7191c",
-        ],
-      };
+      if (this.$route.params.escala == "estadual") {
+        return {
+          "fill-color": [
+            "interpolate",
+            ["linear"],
+            ["get", "iss"],
+            0,
+            "#1a9641",
+            0.1,
+            "#a6d96a",
+            0.2,
+            "#ffffbf",
+            0.3,
+            "#fdae61",
+            0.4,
+            "#d7191c",
+          ],
+        };
+      } else if (this.$route.params.escala == "intraurbana") {
+        return {
+          "fill-color": [
+            "match",
+            ["get", "cd_mun"],
+            Number(this.routeId),
+            [
+              "interpolate",
+              ["linear"],
+              ["get", "iss"],
+              0,
+              "#1a9641",
+              0.1,
+              "#a6d96a",
+              0.2,
+              "#ffffbf",
+              0.3,
+              "#fdae61",
+              0.4,
+              "#d7191c",
+            ],
+            ["literal", "transparent"],
+          ],
+        };
+      }
     },
     sourceLayer() {
       if (this.$route.params.escala == "estadual") {
@@ -107,7 +133,7 @@ export default {
         range: true,
         color:
           "linear-gradient(to right, #1a9641, #a6d96a, #ffffbf, #fdae61, #d7191c)",
-        value: `0.46 - 0.84`,
+        value: `0 - 0.5`,
         quantity: `${this.munVegData.nm_mun}`,
       });
 

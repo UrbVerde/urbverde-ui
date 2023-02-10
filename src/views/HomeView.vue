@@ -150,31 +150,31 @@
           <!-- GUITODO verificar logos individualmente - alinhamento -->
           <span class="mb-3"><strong>A URBVERDE É APOIADA POR</strong></span>
           <v-row class="d-flex justify-center align-center rowwrap">
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/usp_brasao.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/ufba.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/ufscar.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/iau.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/eesc.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/fflch.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/zukk.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/run.png" alt="" />
             </v-col>
-            <v-col cols="4" md="2">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="50%" src="@/assets/logos/ulht.jpg" alt="" />
             </v-col>
           </v-row>
@@ -637,7 +637,7 @@ export default {
       email: "",
       emailRules: [
         // v => !!v || 'E-mail is required',
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
+        (v) => /.+@.+/.test(v) || "E-mail precisa ser válido",
       ],
     };
   },

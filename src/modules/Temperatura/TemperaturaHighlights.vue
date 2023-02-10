@@ -114,6 +114,9 @@
                         {{ munTempData.c1_rank_micro }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 21</p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -125,6 +128,9 @@
                         {{ munTempData.c2_rank_micro }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 21</p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -135,6 +141,9 @@
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c3_rank_micro }}
                       </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 21</p>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -169,6 +178,9 @@
                         {{ munTempData.c1_rank_meso }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 56</p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -180,6 +192,9 @@
                         {{ munTempData.c2_rank_meso }}
                       </p>
                     </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 56</p>
+                    </v-col>
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
@@ -190,6 +205,9 @@
                       <p style="color: #01dc82; font-size: 2em">
                         {{ munTempData.c3_rank_meso }}
                       </p>
+                    </v-col>
+                    <v-col>
+                      <p style="color: #01dc82; font-size: 0.9em">de 56</p>
                     </v-col>
                   </v-row>
                 </v-card-text>
