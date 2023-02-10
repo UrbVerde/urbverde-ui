@@ -88,19 +88,19 @@
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="telefone"
-                        label="Telefone"
-                        required
-                      ></v-text-field>
-
-                      <v-text-field
                         v-model="mensagem"
                         label="Mensagem"
                         required
                       ></v-text-field>
 
-                      <v-btn :disabled="!valid" @click="validate">
-                        Submeter
+                      <v-btn
+                        color="#003C3C"
+                        class="white--text"
+                        :href="`mailto:comunica.urbverde@usp.br?subject=${
+                          assunto + '---' + Nome + '---' + email
+                        }&body=${mensagem}`"
+                      >
+                        Enviar
                       </v-btn>
                     </v-form>
                   </v-col>
