@@ -79,12 +79,6 @@ export default {
   methods: {
     featurehover(e) {},
     buildLegend() {
-      /*
-        GUITODO
-        if estadual:
-        42 - 20000
-        */
-
       const values = [];
 
       if (this.$route.params.escala == "intraurbana") {

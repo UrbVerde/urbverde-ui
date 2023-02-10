@@ -163,7 +163,6 @@
           "
           class="container-fluid d-flex flex-column justify-center align-center"
         >
-          <!-- GUITODO verificar logos individualmente - alinhamento -->
           <span class="mb-3"><strong>A URBVERDE É APOIADA POR</strong></span>
           <v-row class="d-flex justify-center align-center rowwrap">
             <v-col cols="4" md="2" class="d-flex justify-center align-center">
@@ -363,7 +362,6 @@
                   height="100%"
                   src="@/assets/home/home-card-02.png"
                 >
-                  // GUITODO - rota p dashboard
                   <v-container>
                     <p style="font-size: 2em; margin: 2em 0 0 2em">
                       <strong
@@ -376,7 +374,7 @@
                     <v-row class="d-flex justify-start align-start mt-auto">
                       <v-col cols="10" md="7">
                         <div style="margin: 2em 0 0 3em">
-                          <SearchMun />
+                          <SearchMun :goToMap="true" />
                         </div>
                       </v-col> </v-row
                   ></v-container>
