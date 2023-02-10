@@ -351,32 +351,32 @@ export default {
         body: [
           [
             "2016",
-            `${this.lineChartVegData[2016][0].b1.toFixed(2)} %`,
+            `${(this.lineChartVegData[2016][0].b1 * 100).toFixed(2)} %`,
             `${this.tstChartData[2016][0].c2.toFixed(2)} ºC`,
           ],
           [
             "2017",
-            `${this.lineChartVegData[2017][0].b1.toFixed(2)} %`,
+            `${(this.lineChartVegData[2017][0].b1 * 100).toFixed(2)} %`,
             `${this.tstChartData[2017][0].c2.toFixed(2)} ºC`,
           ],
           [
             "2018",
-            `${this.lineChartVegData[2018][0].b1.toFixed(2)} %`,
+            `${(this.lineChartVegData[2018][0].b1 * 100).toFixed(2)} %`,
             `${this.tstChartData[2018][0].c2.toFixed(2)} ºC`,
           ],
           [
             "2019",
-            `${this.lineChartVegData[2019][0].b1.toFixed(2)} %`,
+            `${(this.lineChartVegData[2019][0].b1 * 100).toFixed(2)} %`,
             `${this.tstChartData[2019][0].c2.toFixed(2)} ºC`,
           ],
           [
             "2020",
-            `${this.lineChartVegData[2020][0].b1.toFixed(2)} %`,
+            `${(this.lineChartVegData[2020][0].b1 * 100).toFixed(2)} %`,
             `${this.tstChartData[2020][0].c2.toFixed(2)} ºC`,
           ],
           [
             "2021",
-            `${this.lineChartVegData[2021][0].b1.toFixed(2)} %`,
+            `${(this.lineChartVegData[2021][0].b1 * 100).toFixed(2)} %`,
             `${this.tstChartData[2021][0].c2.toFixed(2)} ºC`,
           ],
         ],

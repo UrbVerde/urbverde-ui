@@ -241,54 +241,78 @@
           <v-row class="d-flex align-center" style="padding-top: 3em">
             <v-col cols="12" md="7">
               <v-card height="400px">
-                <v-img
-                  class="white--text align-start"
-                  height="100%"
-                  src="@/assets/home/home-card-01.png"
+                <router-link
+                  :to="{
+                    name: 'Mapa',
+                    params: {
+                      id: this.munId || 3548906,
+                      ano: 2021,
+                      escala: 'intraurbana',
+                      categoria: 'vegetacao',
+                    },
+                  }"
                 >
-                  <v-card-title>Dados sobre vegetação</v-card-title>
-                  <v-card-subtitle
-                    ><router-link
-                      tag="a"
-                      :to="{
-                        name: 'Mapa',
-                        params: {
-                          id: this.munId ? this.munId : 3548906,
-                          ano: 2021,
-                          escala: 'intraurbana',
-                          categoria: 'vegetacao',
-                        },
-                      }"
-                      >Acesse o Mapa
-                    </router-link></v-card-subtitle
+                  <v-img
+                    class="white--text align-start"
+                    height="100%"
+                    src="@/assets/home/home-card-01.png"
                   >
-                </v-img>
+                    <v-card-title>Dados sobre vegetação</v-card-title>
+                    <v-card-subtitle
+                      ><router-link
+                        tag="a"
+                        :to="{
+                          name: 'Mapa',
+                          params: {
+                            id: this.munId ? this.munId : 3548906,
+                            ano: 2021,
+                            escala: 'intraurbana',
+                            categoria: 'vegetacao',
+                          },
+                        }"
+                        >Acesse o Mapa
+                      </router-link></v-card-subtitle
+                    >
+                  </v-img>
+                </router-link>
               </v-card>
             </v-col>
             <v-col cols="12" md="5">
               <v-card height="400px">
-                <v-img
-                  class="white--text align-start"
-                  height="100%"
-                  src="@/assets/home/home-card-04.png"
+                <router-link
+                  :to="{
+                    name: 'Mapa',
+                    params: {
+                      id: this.munId || 3548906,
+                      ano: 2021,
+                      escala: 'intraurbana',
+                      categoria: 'pracasparques',
+                    },
+                  }"
                 >
-                  <v-card-title>Praças e Parques</v-card-title>
-                  <v-card-subtitle
-                    ><router-link
-                      tag="a"
-                      :to="{
-                        name: 'Mapa',
-                        params: {
-                          id: this.munId || 3548906,
-                          ano: 2021,
-                          escala: 'intraurbana',
-                          categoria: 'pracasparques',
-                        },
-                      }"
-                      >Acesse o Mapa
-                    </router-link></v-card-subtitle
+                  <v-img
+                    class="white--text align-start"
+                    height="100%"
+                    src="@/assets/home/home-card-04.png"
                   >
-                </v-img>
+                    <v-card-title>Praças e Parques</v-card-title>
+                    <v-card-subtitle
+                      ><router-link
+                        tag="a"
+                        :to="{
+                          name: 'Mapa',
+                          params: {
+                            id: this.munId || 3548906,
+                            ano: 2021,
+                            escala: 'intraurbana',
+                            categoria: 'pracasparques',
+                          },
+                        }"
+                        >Acesse o Mapa
+                      </router-link></v-card-subtitle
+                    >
+                  </v-img>
+                </router-link>
               </v-card>
             </v-col>
           </v-row>
@@ -296,28 +320,40 @@
           <v-row class="d-flex align-center" style="padding-bottom: 3em">
             <v-col cols="12" md="5">
               <v-card height="400px">
-                <v-img
-                  class="white--text align-start"
-                  height="100%"
-                  src="@/assets/home/home-card-03.png"
+                <router-link
+                  :to="{
+                    name: 'Mapa',
+                    params: {
+                      id: this.munId || 3548906,
+                      ano: 2021,
+                      escala: 'intraurbana',
+                      categoria: 'temperatura',
+                    },
+                  }"
                 >
-                  <v-card-title>Temperatura na sua região</v-card-title>
-                  <v-card-subtitle
-                    ><router-link
-                      tag="a"
-                      :to="{
-                        name: 'Mapa',
-                        params: {
-                          id: this.munId || 3548906,
-                          ano: 2021,
-                          escala: 'intraurbana',
-                          categoria: 'temperatura',
-                        },
-                      }"
-                      >Acesse o Mapa
-                    </router-link></v-card-subtitle
+                  <v-img
+                    class="white--text align-start"
+                    height="100%"
+                    src="@/assets/home/home-card-03.png"
                   >
-                </v-img>
+                    <v-card-title>Temperatura na sua região</v-card-title>
+                    <v-card-subtitle
+                      ><router-link
+                        tag="a"
+                        :to="{
+                          name: 'Mapa',
+                          params: {
+                            id: this.munId || 3548906,
+                            ano: 2021,
+                            escala: 'intraurbana',
+                            categoria: 'temperatura',
+                          },
+                        }"
+                        >Acesse o Mapa
+                      </router-link></v-card-subtitle
+                    >
+                  </v-img>
+                </router-link>
               </v-card>
             </v-col>
             <v-col cols="12" md="7">
