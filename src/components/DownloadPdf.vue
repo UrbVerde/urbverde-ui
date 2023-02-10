@@ -292,6 +292,9 @@ export default {
       doc.setFontSize(14);
       doc.text(`${this.munTempData.c3.toFixed(2)}`, 20, 125);
 
+      // Page 6
+      doc.addPage();
+
       if (this.setorDataForChart) {
         doc.autoTable({
           startY: 135,

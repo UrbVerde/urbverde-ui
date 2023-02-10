@@ -56,6 +56,22 @@
       <section class="map_section_home">
         <div class="container">
           <div class="wrap-map">
+            <div class="hoverblock d-none justify-center align-center">
+              <v-btn
+                :to="{
+                  name: 'Mapa',
+                  params: {
+                    id: this.munId || 3548906,
+                    ano: 2021,
+                    escala: 'intraurbana',
+                    categoria: 'pracasparques',
+                  },
+                }"
+                class="hoverblock_btn"
+                color="#e4e2de"
+                >Acesse o painel da sua cidade</v-btn
+              >
+            </div>
             <div class="map">
               <VueMapbox
                 mapStyle="https://api.maptiler.com/maps/8fde2eea-8799-479e-8a8d-0989e2c7eb2d/style.json?key=XmSZh88cfG77QlyKTuwa"
@@ -725,6 +741,21 @@ a {
   position: relative;
   height: 450px;
   top: -50px;
+
+  &:hover > .hoverblock {
+    display: flex !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(228, 226, 222, 0.3);
+    z-index: 20;
+  }
+
+  &:hover > .map {
+    z-index: 10;
+  }
 }
 .map {
   position: absolute;
@@ -747,5 +778,9 @@ a {
 
 .rowwrap {
   flex-wrap: wrap;
+}
+
+.hoverblock_btn {
+  color: #01be7e !important;
 }
 </style>
