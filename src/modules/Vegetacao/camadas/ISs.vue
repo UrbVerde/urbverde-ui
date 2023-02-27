@@ -77,16 +77,24 @@ export default {
               "interpolate",
               ["linear"],
               ["get", "iss"],
-              0,
+              this.munVegData.iss_min,
               "#1a9641",
-              0.1,
-              "#a6d96a",
-              0.2,
+              this.munVegData.iss_p5,
+              "#63b05f",
+              this.munVegData.iss_p10,
+              "#98cb7e",
+              this.munVegData.iss_p25,
+              "#cce59e",
+              this.munVegData.iss_mean,
               "#ffffbf",
-              0.3,
-              "#fdae61",
-              0.4,
-              "#d7191c",
+              this.munVegData.iss_p75,
+              "#fda591",
+              this.munVegData.iss_p90,
+              "#f25b4b",
+              this.munVegData.iss_p95,
+              "#cc201c",
+              this.munVegData.iss_max,
+              "#820000",
             ],
             ["literal", "transparent"],
           ],
@@ -129,13 +137,23 @@ export default {
     buildLegend() {
       const values = [];
 
-      values.push({
-        range: true,
-        color:
-          "linear-gradient(to right, #1a9641, #a6d96a, #ffffbf, #fdae61, #d7191c)",
-        value: `0 - 0.5`,
-        quantity: `${this.munVegData.nm_mun}`,
-      });
+      if (this.$route.params.escala == "estadual") {
+        values.push({
+          range: true,
+          color:
+            "linear-gradient(to right, #1a9641, #a6d96a, #ffffbf, #fdae61, #d7191c)",
+          value: `0.46 - 0.84`,
+        });
+      } else if (this.$route.params.escala == "intraurbana") {
+        values.push({
+          range: true,
+          color:
+            "linear-gradient(to right, #1a9641, #63b05f, #98cb7e, #cce59e, #ffffbf, #fda591, #f25b4b, #cc201c, #820000)",
+          value: `${this.munVegData.iss_min.toFixed(
+            2
+          )} - ${this.munVegData.iss_max.toFixed(2)}`,
+        });
+      }
 
       this.$store.commit("SET_LAYER_PROPERTIES", {
         layer: this.layer,

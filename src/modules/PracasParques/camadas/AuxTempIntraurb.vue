@@ -28,7 +28,7 @@ export default {
         {
           range: true,
           color:
-            "linear-gradient(to right, #d53e4f, #f46d43, #fdae61, #fee08b, #e6f598, #abdda4, #66c2a5, #3288bd)",
+            "linear-gradient(to right, #3288bd, #66c2a5, #abdda4, #e6f598, #fee08b, #fdae61, #f46d43, #d53e4f)",
           value: `ºC`,
         },
       ];

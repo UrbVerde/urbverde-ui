@@ -18,7 +18,7 @@
           >
             <label>Acesso população atendida pelas praças</label>
             <h3>
-              {{ slotProps.features[0].properties.b1 }}
+              {{ (slotProps.features[0].properties.b1 * 100).toFixed(2) }} %
             </h3>
           </div>
         </VmPopup>

@@ -13,13 +13,15 @@
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
           <div
-            class="d-flex flex-column justify-center align-center"
+            class="d-flex flex-column justify-center align-start"
             style="border-radius: 8px"
           >
-            <label>Renda</label>
+            <label>Município</label>
             <h3>
               {{ slotProps.features[0].properties.nm_mun }}
             </h3>
+            <label>Renda</label>
+            <h3>R$ {{ slotProps.features[0].properties.pib.toFixed(2) }}</h3>
           </div>
         </VmPopup>
       </template>
@@ -159,7 +161,6 @@ export default {
     },
   },
 
-  watch: {},
   created() {},
   mounted() {
     this.buildLegend();

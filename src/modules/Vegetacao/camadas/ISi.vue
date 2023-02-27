@@ -12,7 +12,6 @@
       }"
       :opacity="layer.opacity"
       :paint-hover="{ 'fill-color': '#7c99f4' }"
-      @featurehover="featurehover"
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cib369">
@@ -75,10 +74,16 @@ export default {
               "interpolate",
               ["linear"],
               ["get", "isi"],
-              0.5,
-              "#3288bd",
-              1,
-              "#d53e4f",
+              this.munVegData.isi_min,
+              "#1a9641",
+              this.munVegData.isi_p5,
+              "#63b05f",
+              this.munVegData.isi_p10,
+              "#98cb7e",
+              this.munVegData.isi_p25,
+              "#cce59e",
+              this.munVegData.isi_max,
+              "#820000",
             ],
             ["literal", "transparent"],
           ],
@@ -118,16 +123,13 @@ export default {
   },
 
   methods: {
-    featurehover(e) {
-      console.log(e);
-    },
-
     buildLegend() {
       const values = [];
 
       values.push({
         range: true,
-        color: "linear-gradient(to right, #d53e4f, #3288bd)",
+        color:
+          "linear-gradient(to right, #1a9641, #63b05f, #cce59e, #ffffbf, #820000)",
         value: `0.5 - 1`,
       });
 

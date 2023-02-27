@@ -13,9 +13,11 @@
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
           <div
-            class="d-flex flex-column justify-center align-center"
+            class="d-flex flex-column justify-center align-start"
             style="border-radius: 8px"
           >
+            <label>Município</label>
+            <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
             <label>Distribuição Espacial</label>
             <h3>
               {{ slotProps.features[0].properties.a4.toFixed(2) }}
@@ -149,7 +151,7 @@ export default {
             "linear-gradient(to right, #1a9850, #66bd63, #a6d96a, #d9ef8b, #ffffbf, #fee08b, #fdae61, #f46d43, #d73027)",
           value: `${this.munPracaData.a4_min.toFixed(
             2
-          )} - ${this.munPracaData.a4_max.toFixed(2)} %`,
+          )} - ${this.munPracaData.a4_max.toFixed(2)} m`,
         });
       }
 

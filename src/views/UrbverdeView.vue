@@ -205,7 +205,7 @@
             <v-col cols="6"><strong>Coordenação Geral</strong> </v-col>
 
             <v-col cols="6"
-              ><p><strong>Marcel Fantin</strong></p>
+              ><p style="color: #003c3c">Marcel Fantin</p>
             </v-col></v-row
           >
           <v-row>

@@ -190,7 +190,7 @@
               <img width="50%" src="@/assets/logos/run.png" alt="" />
             </v-col>
             <v-col cols="4" md="2" class="d-flex justify-center align-center">
-              <img width="50%" src="@/assets/logos/ulht.jpg" alt="" />
+              <img width="100%" src="@/assets/logos/ulht.jpg" alt="" />
             </v-col>
           </v-row>
 
@@ -511,54 +511,54 @@
             ><strong>A URBVERDE É APOIADA POR</strong></span
           >
           <v-row class="d-flex justify-center align-center">
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/usp_brasao-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/ufba-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/ufscar-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/iau-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/eesc-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/fflch-removebg-preview.png"
                 alt=""
               />
             </v-col>
 
-            <v-col cols="1">
-              <img width="100%" src="@/assets/logos/run.png" alt="" />
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="50%" src="@/assets/logos/run.png" alt="" />
             </v-col>
-            <v-col cols="1">
-              <img width="300px" src="@/assets/logos/ulht.jpg" alt="" />
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="100%" src="@/assets/logos/ulht.jpg" alt="" />
             </v-col>
           </v-row>
           <span class="mt-5"><strong>DESENVOLVIMENTO</strong></span>

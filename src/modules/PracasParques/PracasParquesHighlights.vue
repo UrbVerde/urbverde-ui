@@ -234,7 +234,7 @@
                   </v-row>
 
                   <p class="mb-0" style="font-size: 0.9em">
-                    <strong>% de Área Ocupada pelos Buffers</strong>
+                    <strong>% de área Ocupada pelos buffers</strong>
                   </p>
                   <v-row class="d-flex justify-center align-center">
                     <v-col>

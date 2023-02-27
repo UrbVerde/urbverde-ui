@@ -94,7 +94,8 @@ let actions = {
   async getMunicipioVegData({ commit }, id) {
     await axios
       .get(
-        `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Adados_vegetacao_por_municipio&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
+        `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Avegetacao_highlights_data&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
+        // `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Adados_vegetacao_por_municipio&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
       )
       .then((response) => {
         let vegetacaoSerieHistorica = {

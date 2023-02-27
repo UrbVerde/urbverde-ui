@@ -61,9 +61,23 @@ export default {
             ["linear"],
             ["get", "b1"],
             0.04,
-            "#ffffcc",
-            0.45,
+            "#ffffe5",
+            0.14,
+            "#f7fcb9",
+            0.15,
+            "#d9f0a3",
+            0.18,
+            "#addd8e",
+            0.21,
+            "#78c679",
+            0.25,
+            "#41ab5d",
+            0.28,
+            "#238443",
+            0.31,
             "#006837",
+            0.44,
+            "#004529",
           ],
         };
       } else if (this.$route.params.escala == "intraurbana") {
@@ -76,10 +90,24 @@ export default {
               "interpolate",
               ["linear"],
               ["get", "b1"],
-              0.04,
-              "#ffffcc",
-              0.45,
+              this.munVegData.b1_min,
+              "#ffffe5",
+              this.munVegData.b1_p5,
+              "#f7fcb9",
+              this.munVegData.b1_p10,
+              "#d9f0a3",
+              this.munVegData.b1_p25,
+              "#addd8e",
+              this.munVegData.b1_mean,
+              "#78c679",
+              this.munVegData.b1_p75,
+              "#41ab5d",
+              this.munVegData.b1_p90,
+              "#238443",
+              this.munVegData.b1_p95,
               "#006837",
+              this.munVegData.b1_max,
+              "#004529",
             ],
             ["literal", "transparent"],
           ],
@@ -124,14 +152,18 @@ export default {
       if (this.$route.params.escala == "estadual") {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #ffffcc, #006837)",
+          color:
+            "linear-gradient(to right, #ffffe5, #f7fcb9, #d9f0a3, #addd8e, #78c679, #41ab5d, #238443, #006837, #004529)",
           value: `4 - 45 %`,
         });
       } else {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #ffffcc, #006837)",
-          value: `4 - 45 %`,
+          color:
+            "linear-gradient(to right, #ffffe5, #f7fcb9, #d9f0a3, #addd8e, #78c679, #41ab5d, #238443, #006837, #004529)",
+          value: `${(this.munVegData.b1_min * 100).toFixed(2)} - ${(
+            this.munVegData.b1_max * 100
+          ).toFixed(2)} %`,
         });
       }
 
