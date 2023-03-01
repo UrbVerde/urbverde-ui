@@ -1,32 +1,21 @@
 <template>
   <section>
-    <HeaderMap />
+    <HeaderMap :highlightSearch="searchHighlight" />
     <v-row class="d-flex">
       <v-col
         cols="12"
         md="1"
         class="d-flex flex-md-column justify-center fixed"
       >
-        <router-link
-          tag="a"
-          :to="{
-            name: 'Mapa',
-            params: {
-              id: this.$route.params.id,
-              escala: this.$route.params.escala,
-              ano: this.$route.params.ano,
-              categoria: this.$route.params.categoria,
-            },
-          }"
-          class="my-5 mx-auto"
-        >
-          <img width="25px" src="@/assets/icons/search-icon.png" alt="" />
-        </router-link>
+        
+        <img class="my-5 mx-auto" @click="highlightSearch" width="25px" src="@/assets/icons/search-icon.png" alt="" />
+        
         <img
           class="my-5 mx-auto"
           width="25px"
           src="@/assets/icons/field-icon.png"
           alt=""
+          @click="highlightMap"
         />
         <img
           class="my-5 mx-auto"
@@ -39,6 +28,7 @@
           width="25px"
           src="@/assets/icons/field3-icon.png"
           alt=""
+          @click="scrollToStats"
         />
         <a
           href="https://github.com/UrbVerde/urbverde-ui"
@@ -92,7 +82,7 @@
       </v-col>
 
       <v-col style="height: 89vh" cols="12" md="8" class="d-flex flex-column">
-        <MapaBase />
+        <MapaBase :highlightMap="mapHighlight" />
         <div
           v-if="this.$route.params.categoria == 'vegetacao'"
           class="d-flex justify-space-around align-center pa-2"
@@ -414,6 +404,8 @@ export default {
   components: { MapaBase },
   data() {
     return {
+      searchHighlight: '',
+      mapHighlight: '',      
       valid: false,
       email: "",
       emailRules: [(v) => /.+@.+/.test(v) || "E-mail must be valid"],
@@ -423,6 +415,26 @@ export default {
     };
   },
   methods: {
+    highlightSearch () {
+      window.scrollTo(0, 0);
+      this.searchHighlight = true;
+      setTimeout(() => {
+      this.$set(this, 'searchHighlight', false);
+    }, 2000);      
+    },
+    highlightMap () {
+      window.scrollTo(0, 0);
+      this.mapHighlight = true
+      setTimeout(() => {
+      this.$set(this, 'mapHighlight', false);
+    }, 2000);  
+    },
+
+    scrollToStats () {
+      window.scrollTo(950, 950);
+    },
+
+
     toogleLayerVisibility: function (layer) {
       this.$store.commit("TOGGLE_LAYER", layer);
     },

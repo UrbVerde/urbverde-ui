@@ -1,5 +1,10 @@
 <template>
-  <div class="map_container">
+  <div
+    class="map_container"
+    :class="{
+      highlightMapa: highlightMap == true,
+    }"
+  >
     <VueMapbox
       mapStyle="https://api.maptiler.com/maps/8fde2eea-8799-479e-8a8d-0989e2c7eb2d/style.json?key=XmSZh88cfG77QlyKTuwa"
       ref="mapbox"
@@ -68,6 +73,7 @@ import axios from "axios";
 export default {
   name: "",
   components: { VueMapbox, VmLayer, VmPopup },
+  props: ["highlightMap"],
   data() {
     return {
       radioGroup: "",

@@ -10,7 +10,13 @@
         </router-link>
       </v-col>
 
-      <v-col cols="10" md="5">
+      <v-col
+        cols="10"
+        md="5"
+        :class="{
+          highlight: highlightSearch == true,
+        }"
+      >
         <v-autocomplete
           color="#01dc82"
           class="mt-5"
@@ -82,6 +88,7 @@
 import axios from "axios";
 import * as turf from "@turf/turf";
 export default {
+  props: ["highlightSearch"],
   data() {
     return {
       municipioSelected: "",
