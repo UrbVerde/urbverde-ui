@@ -13,12 +13,10 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div style="border-radius: 8px">
-            <label>Coeficiente de Ilha de Calor por Mesorregião</label>
-            <h3>
-              {{ slotProps.features[0].properties.c1.toFixed(2) }}
-            </h3>
-          </div>
+          <label>Coeficiente de Ilha de Calor por Mesorregião</label>
+          <h3>
+            {{ slotProps.features[0].properties.c1.toFixed(2) }}
+          </h3>
         </VmPopup>
       </template>
     </VmLayer>

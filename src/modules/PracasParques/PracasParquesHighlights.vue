@@ -33,8 +33,8 @@
                   ><strong>Estado de SP</strong></v-card-subtitle
                 >
                 <v-card-text class="pa-0 mb-2"
-                  >A posição do seu município em relação aos 645 municípios do
-                  Estado de São Paulo
+                  >A posição do seu município em relação todos os 645 municípios
+                  do Estado de São Paulo
                 </v-card-text>
                 <v-card-text class="pa-0">
                   <p class="mb-0" style="font-size: 0.9em">

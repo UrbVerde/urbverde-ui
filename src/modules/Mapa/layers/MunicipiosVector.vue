@@ -12,12 +12,10 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#f4a259">
-          <div style="border-radius: 8px">
-            <label>
-              Nome município:
-              <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-            </label>
-          </div>
+          <label>
+            Nome município:
+            <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          </label>
         </VmPopup>
       </template>
     </VmLayer>

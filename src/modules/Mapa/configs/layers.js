@@ -775,7 +775,7 @@ export const LAYERS_DEFAULT = [
     visibleUI: true,
     colorUI: "#d4ecd5",
     zIndex: 51,
-    componentName: "Renda",
+    componentName: "Pib",
     opacity: 1,
   },
 

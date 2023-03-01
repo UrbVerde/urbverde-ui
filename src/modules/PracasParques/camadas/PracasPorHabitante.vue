@@ -13,17 +13,12 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div
-            class="d-flex flex-column justify-center align-start"
-            style="border-radius: 8px"
-          >
-            <label>Município</label>
-            <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-            <label>Praças por habitantes</label>
-            <h3>
-              {{ slotProps.features[0].properties.a2 }}
-            </h3>
-          </div>
+          <label>Município</label>
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Praças por habitantes</label>
+          <h3>
+            {{ slotProps.features[0].properties.a2 }}
+          </h3>
         </VmPopup>
       </template>
     </VmLayer>

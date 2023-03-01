@@ -13,12 +13,8 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div style="border-radius: 8px">
-            <label>Temperatura Média de Superfície</label>
-            <h3>
-              {{ slotProps.features[0].properties.c2 }}
-            </h3>
-          </div>
+          <label>Temperatura Média de Superfície</label>
+          <h3>{{ slotProps.features[0].properties.c2.toFixed(2) }} ºC</h3>
         </VmPopup>
       </template>
     </VmLayer>

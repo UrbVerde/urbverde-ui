@@ -74,54 +74,54 @@
             ><strong>A URBVERDE É APOIADA POR</strong></span
           >
           <v-row class="d-flex justify-center align-center">
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/usp_brasao-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/ufba-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/ufscar-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/iau-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/eesc-removebg-preview.png"
                 alt=""
               />
             </v-col>
-            <v-col cols="1">
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img
-                width="100%"
+                width="50%"
                 src="@/assets/logos/fflch-removebg-preview.png"
                 alt=""
               />
             </v-col>
 
-            <v-col cols="1">
-              <img width="100%" src="@/assets/logos/run.png" alt="" />
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="50%" src="@/assets/logos/run.png" alt="" />
             </v-col>
-            <v-col cols="1">
-              <img width="300px" src="@/assets/logos/ulht.jpg" alt="" />
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="100%" src="@/assets/logos/ulht.jpg" alt="" />
             </v-col>
           </v-row>
           <span class="mt-5"><strong>DESENVOLVIMENTO</strong></span>
@@ -197,7 +197,7 @@
 
       <section style="background-color: #e6f1f2">
         <div class="container" style="max-width: 800px">
-          <span style="font-size: 2em; color: #003c3c">
+          <span style="font-size: 2em; color: #003c3c" class="mb-5">
             <strong><p style="margin-left: 12px">Equipe</p></strong>
           </span>
 
@@ -240,7 +240,7 @@
 
       <section style="background-color: #e6f1f2">
         <div class="container" style="max-width: 800px">
-          <span style="font-size: 2em; color: #003c3c">
+          <span style="font-size: 2em; color: #003c3c" class="mb-5">
             <strong><p style="margin-left: 12px">Equipes Temáticas</p></strong>
           </span>
 
@@ -468,6 +468,7 @@
                     <v-col cols="12" md="8">
                       <v-form v-model="valid" class="mt-4">
                         <v-text-field
+                          disabled
                           dense
                           outlined
                           v-model="email"
@@ -478,7 +479,9 @@
                       </v-form>
                     </v-col>
                     <v-col cols="12" md="3">
-                      <v-btn color="#01DC82" class="mb-3"> Assinar </v-btn>
+                      <v-btn disabled color="#01DC82" class="mb-3">
+                        Assinar
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-col>

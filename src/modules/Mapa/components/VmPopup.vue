@@ -203,10 +203,6 @@ export default {
         .setDOMContent(this.$el);
 
       this.popup.on("open", () => {
-        /**
-         * Update event. Can use .sync modifier to make 2 way data bind easer for the open props
-         *  @property {boolean} open true or false
-         */
         this.$emit("update:open", true);
       });
       this.popup.on("close", () => {

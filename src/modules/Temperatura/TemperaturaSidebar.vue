@@ -20,7 +20,7 @@
             class="layer_selector_eye"
             :class="{ itemCantToggle: layer.visible }"
           >
-            <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
+            <v-icon color="white darken-2"> mdi-led-on </v-icon>
           </div>
           <div class="layer_selector_opacity" style="width: 100%">
             <span>{{ layer.name }}</span>
@@ -56,7 +56,7 @@
             min="0.1"
             max="1"
             step="0.1"
-            :key="idx"
+            :key="i"
             v-model="opacity[auxLayer.name]"
             @input="changeOpacity(auxLayer, `${auxLayer.name}`)"
           />
@@ -102,7 +102,7 @@
             class="layer_selector_eye"
             :class="{ itemCantToggle: layer.visible }"
           >
-            <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
+            <v-icon color="white darken-2"> mdi-led-on </v-icon>
           </div>
           <div class="layer_selector_opacity" style="width: 100%">
             <span>{{ layer.name }}</span>

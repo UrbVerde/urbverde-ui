@@ -15,13 +15,8 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div
-            class="d-flex flex-column justify-center align-center"
-            style="border-radius: 8px"
-          >
-            <label>Índice de Cobertura Vegetal</label>
-            <h3>{{ slotProps.features[0].properties.b2.toFixed(2) }} m²/pop</h3>
-          </div>
+          <label>Índice de Cobertura Vegetal</label>
+          <h3>{{ slotProps.features[0].properties.b2.toFixed(2) }} m²/pop</h3>
         </VmPopup>
       </template>
     </VmLayer>

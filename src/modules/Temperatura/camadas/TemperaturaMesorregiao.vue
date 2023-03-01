@@ -12,19 +12,14 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div
-            class="d-flex flex-column justify-center align-center"
-            style="border-radius: 8px"
-          >
-            <label>Coeficiente de Ilha de Calor</label>
-            <h3>
-              {{ slotProps.features[0].properties.c1.toFixed(2) }}
-            </h3>
-            <label>Temperatura Média de Superfície</label>
-            <h3>{{ slotProps.features[0].properties.c2.toFixed(2) }} ºC</h3>
-            <label>Temperatura Máxima de Superfície</label>
-            <h3>{{ slotProps.features[0].properties.c3.toFixed(2) }} ºC</h3>
-          </div>
+          <label>Coeficiente de Ilha de Calor</label>
+          <h3>
+            {{ slotProps.features[0].properties.c1.toFixed(2) }}
+          </h3>
+          <label>Temperatura Média de Superfície</label>
+          <h3>{{ slotProps.features[0].properties.c2.toFixed(2) }} ºC</h3>
+          <label>Temperatura Máxima de Superfície</label>
+          <h3>{{ slotProps.features[0].properties.c3.toFixed(2) }} ºC</h3>
         </VmPopup>
       </template>
     </VmLayer>

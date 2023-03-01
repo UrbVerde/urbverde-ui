@@ -17,7 +17,7 @@
             {{ slotProps.features[0].properties.nm_mun }}
           </h3>
           <label>Renda</label>
-          <h3>R$ {{ slotProps.features[0].properties.renda.toFixed(2) }}</h3>
+          <h3>R$ {{ slotProps.features[0].properties.pib.toFixed(2) }}</h3>
         </VmPopup>
       </template>
     </VmLayer>
@@ -44,33 +44,45 @@ export default {
     layerPaint() {
       return {
         "fill-color": [
-          "match",
-          ["get", "cd_mun"],
-          Number(this.routeId),
-          [
-            "interpolate",
-            ["linear"],
-            ["get", "renda"],
-            this.munPracaData.renda_min,
-            ["to-color", "#f63939"],
-            this.munPracaData.renda_mean,
-            ["to-color", "#ad90e3"],
-            this.munPracaData.renda_max,
-            ["to-color", "#6182f6"],
-          ],
-          ["literal", "transparent"],
+          "interpolate",
+          ["linear"],
+          ["get", "pib"],
+          13,
+          "#f63939",
+          40000,
+          "#fc3f74",
+          80000,
+          "#ee5aa7",
+          120000,
+          "#d177ce",
+          160000,
+          "#ad90e3",
+          200000,
+          "#9c91e9",
+          240000,
+          "#8792ed",
+          280000,
+          "#6d93f1",
+          320000,
+          "#6182f6",
+          360000,
+          "#5c6ff8",
+          400000,
+          "#6159f7",
+          450000,
+          "#6c3df2",
         ],
       };
     },
     sourceLayer() {
-      return `public.geodata_pracas_por_setor_2021`;
+      return `public.geodata_pracas_por_municipio_2021`;
     },
     layerSource() {
       return {
         generateId: true,
         type: "vector",
         tiles: [
-          `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_setor_2021/{z}/{x}/{y}.pbf?`,
+          `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_municipio_2021/{z}/{x}/{y}.pbf?`,
         ],
         minzoom: 0,
         maxzoom: 22,
@@ -85,9 +97,7 @@ export default {
       values.push({
         range: true,
         color: "linear-gradient(to right, #f63939, #fc3f74, #6d93f1, #6c3df2",
-        value: `${this.munPracaData.renda_min.toFixed(
-          2
-        )} - ${this.munPracaData.renda_max.toFixed(2)} R$`,
+        value: `13 - 450.000 R$`,
       });
 
       this.$store.commit("SET_LAYER_PROPERTIES", {

@@ -12,15 +12,10 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div
-            class="d-flex flex-column justify-center align-center"
-            style="border-radius: 8px"
-          >
-            <label>{{ layer.name }}</label>
-            <h3>
-              {{ (slotProps.features[0].properties.b1 * 100).toFixed(2) }} %
-            </h3>
-          </div>
+          <label>{{ layer.name }}</label>
+          <h3>
+            {{ (slotProps.features[0].properties.b1 * 100).toFixed(2) }} %
+          </h3>
         </VmPopup>
       </template>
     </VmLayer>

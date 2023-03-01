@@ -13,32 +13,30 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#f4a259">
-          <div style="border-radius: 8px">
-            <label>
-              <h3>Nome município:</h3>
-              <span style="font-size: 1.2em">{{
-                slotProps.features[0].properties.nm_mun
-              }}</span>
-            </label>
-            <label>
-              <h3>Produto Interno Bruto:</h3>
-              <span style="font-size: 1.2em">{{
-                slotProps.features[0].properties.pib.toFixed(2)
-              }}</span>
-            </label>
-            <label>
-              <h3>Índice de Desenvolvimento Humano:</h3>
-              <span style="font-size: 1.2em">{{
-                slotProps.features[0].properties.idh.toFixed(2)
-              }}</span>
-            </label>
-            <label>
-              <h3>Coeficiente de Gini:</h3>
-              <span style="font-size: 1.2em">{{
-                slotProps.features[0].properties.gini.toFixed(2)
-              }}</span>
-            </label>
-          </div>
+          <label>
+            <h3>Nome município:</h3>
+            <span style="font-size: 1.2em">{{
+              slotProps.features[0].properties.nm_mun
+            }}</span>
+          </label>
+          <label>
+            <h3>Produto Interno Bruto:</h3>
+            <span style="font-size: 1.2em">{{
+              slotProps.features[0].properties.pib.toFixed(2)
+            }}</span>
+          </label>
+          <label>
+            <h3>Índice de Desenvolvimento Humano:</h3>
+            <span style="font-size: 1.2em">{{
+              slotProps.features[0].properties.idh.toFixed(2)
+            }}</span>
+          </label>
+          <label>
+            <h3>Coeficiente de Gini:</h3>
+            <span style="font-size: 1.2em">{{
+              slotProps.features[0].properties.gini.toFixed(2)
+            }}</span>
+          </label>
         </VmPopup>
       </template>
     </VmLayer>

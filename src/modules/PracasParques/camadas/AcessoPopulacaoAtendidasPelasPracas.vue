@@ -12,15 +12,10 @@
     >
       <template v-slot:popupHover="slotProps">
         <VmPopup color="#8cb369">
-          <div
-            class="d-flex flex-column justify-center align-start"
-            style="border-radius: 8px"
-          >
-            <label>Município</label>
-            <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-            <label>Acesso população atendida pelas praças</label>
-            <h3>{{ slotProps.features[0].properties.a1.toFixed(2) }}%</h3>
-          </div>
+          <label>Município</label>
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Acesso população atendida pelas praças</label>
+          <h3>{{ slotProps.features[0].properties.a1.toFixed(2) }}%</h3>
         </VmPopup>
       </template>
     </VmLayer>
@@ -151,7 +146,8 @@ export default {
   watch: {
     "$route.params.id": {
       handler: function () {
-        // this.maplibregl.update();
+        window.maplibregl.repaint();
+        console.log(this.layer);
       },
       deep: true,
       immediate: true,

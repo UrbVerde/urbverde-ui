@@ -20,7 +20,7 @@
             class="layer_selector_eye"
             :class="{ itemCantToggle: layer.visible }"
           >
-            <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
+            <v-icon color="white darken-2"> mdi-led-on </v-icon>
           </div>
           <div class="layer_selector_opacity" style="width: 100%">
             <span>{{ layer.name }}</span>
@@ -123,9 +123,9 @@
         >
           <div
             class="layer_selector_eye"
-            :class="{ itemActive: layer.visible }"
+            :class="{ itemCantToggle: layer.visible }"
           >
-            <v-icon color="white darken-2"> mdi-eye-outline </v-icon>
+            <v-icon color="white darken-2"> mdi-led-on </v-icon>
           </div>
           <div class="layer_selector_opacity" style="width: 100%">
             <span>{{ layer.name }}</span>

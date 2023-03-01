@@ -9,6 +9,7 @@ const router = new Router({
   mode: "hash",
 });
 
-// router.beforeEach(beforeEach);
+import beforeEach from "./beforeEach";
+router.beforeEach(beforeEach);
 
 export default router;

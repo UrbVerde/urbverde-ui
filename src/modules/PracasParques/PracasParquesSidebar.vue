@@ -162,16 +162,12 @@
             class="layer_selector_eye"
             :class="{ itemCantToggle: layer.visible }"
           >
-            <v-icon class="pa-4" color="white darken-2">
-              mdi-eye-outline
-            </v-icon>
+            <v-icon color="white darken-2"> mdi-led-on </v-icon>
           </div>
-          <div
-            class="layer_selector_opacity d-flex flex-column"
-            style="width: 100%"
-          >
+          <div class="layer_selector_opacity" style="width: 100%">
             <span>{{ layer.name }}</span>
           </div>
+
           <input
             :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
