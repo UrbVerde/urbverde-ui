@@ -29,7 +29,7 @@ export default {
           range: true,
           color:
             "linear-gradient(to right, #3288bd, #66c2a5, #abdda4, #e6f598, #fee08b, #fdae61, #f46d43, #d53e4f)",
-          value: `ºC`,
+          value: `20 - 80 ºC`,
         },
       ];
 

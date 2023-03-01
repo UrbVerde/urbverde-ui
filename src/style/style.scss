@@ -62,6 +62,7 @@ a {
 .map_container {
   height: 100%;
   position: relative;
+  margin: 4px;
   @media (max-width: 950px) {
     height: 80vh;
   }

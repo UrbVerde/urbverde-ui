@@ -137,7 +137,7 @@ export default {
             "linear-gradient(to right, #3288bd, #99d594, #e6f598, #ffffbf, #fee08b, #fc8d59, #d53e4f)",
           value: `${this.munTempData.c3_min.toFixed(
             2
-          )} - ${this.munTempData.c3_max.toFixed(2)}`,
+          )} - ${this.munTempData.c3_max.toFixed(2)} ºC`,
         });
       } else if (this.$route.params.escala == "estadual") {
         values.push({
