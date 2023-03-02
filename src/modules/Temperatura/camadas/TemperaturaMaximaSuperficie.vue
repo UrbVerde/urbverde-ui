@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <VmLayer
-      ref="layerTemp"
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="layerPaint"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      @featurehover="featurehover"
-      :opacity="layer.opacity"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Temperatura Máxima de Superfície</label>
-          <h3>{{ slotProps.features[0].properties.c3.toFixed(2) }} ºC</h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    ref="layerTemp"
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="layerPaint"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    @featurehover="featurehover"
+    :opacity="layer.opacity"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Temperatura Máxima de Superfície</label>
+        <h3>{{ slotProps.features[0].properties.c3.toFixed(2) }} ºC</h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

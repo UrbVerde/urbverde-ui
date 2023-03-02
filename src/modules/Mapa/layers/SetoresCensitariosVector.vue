@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <VmLayer
-      v-if="this.$route.params.escala == 'intraurbana'"
-      :name="layer.name"
-      :source="layer.props.source"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="layer.sourceLayer"
-      :paint="layerPaint"
-    >
-    </VmLayer>
-  </div>
+  <VmLayer
+    v-if="this.$route.params.escala == 'intraurbana'"
+    :name="layer.name"
+    :source="layer.props.source"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="layer.sourceLayer"
+    :paint="layerPaint"
+  >
+  </VmLayer>
 </template>
 
 <script>

@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layer.props.source"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :opacity="layer.opacity"
-    >
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layer.props.source"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :opacity="layer.opacity"
+  >
+  </VmLayer>
 </template>
 
 <script>

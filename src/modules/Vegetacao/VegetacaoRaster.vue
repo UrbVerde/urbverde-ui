@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <VmLayer
-      v-if="this.$route.params.categoria == 'vegetacao'"
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :opacity="layer.opacity"
-    >
-    </VmLayer>
-  </div>
+  <VmLayer
+    v-if="this.$route.params.categoria == 'vegetacao'"
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :opacity="layer.opacity"
+  >
+  </VmLayer>
 </template>
 
 <script>

@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :opacity="layer.opacity"
-      :paint="layerPaint"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      @featurehover="featurehover"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Município</label>
-          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-          <label>Praças por habitantes</label>
-          <h3>
-            {{ slotProps.features[0].properties.a2 }}
-          </h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :opacity="layer.opacity"
+    :paint="layerPaint"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    @featurehover="featurehover"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+        <label>Praças por habitantes</label>
+        <h3>
+          {{ slotProps.features[0].properties.a2 }}
+        </h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

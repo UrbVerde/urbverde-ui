@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="{
-        'fill-color': layerPaint['fill-color'],
-        'fill-opacity': layer.opacity,
-      }"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      @featurehover="featurehover"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Índice de Desigualdade Socioambiental</label>
-          <h3>
-            {{ slotProps.features[0].properties.b3.toFixed(2) }}
-          </h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="{
+      'fill-color': layerPaint['fill-color'],
+      'fill-opacity': layer.opacity,
+    }"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    @featurehover="featurehover"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Índice de Desigualdade Socioambiental</label>
+        <h3>
+          {{ slotProps.features[0].properties.b3.toFixed(2) }}
+        </h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

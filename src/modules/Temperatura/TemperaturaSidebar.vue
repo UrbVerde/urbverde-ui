@@ -81,7 +81,7 @@
             min="0.1"
             max="1"
             step="0.1"
-            :key="idx"
+            :key="i"
             v-model="opacity[auxLayer.name]"
             @input="changeOpacity(auxLayer, `${auxLayer.name}`)"
           />
@@ -138,7 +138,7 @@
             min="0.1"
             max="1"
             step="0.1"
-            :key="idx"
+            :key="i"
             v-model="opacity[auxLayer.name]"
             @input="changeOpacity(auxLayer, `${auxLayer.name}`)"
           />
@@ -224,6 +224,7 @@ export default {
     },
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
+        this.$route.meta.activeLayer = layerId;
         if (oldLayerId == undefined) {
           return this.$store.commit("TOGGLE_LAYER", { _id: layerId });
         } else {
@@ -232,14 +233,6 @@ export default {
         }
       },
     },
-  },
-
-  created() {
-    this.$store.getters.layers((item) => {
-      if (item.categoria != "base" && item.visible) {
-        this.$store.commit("TOGGLE_LAYER", { _id: layerId });
-      }
-    });
   },
 };
 </script>

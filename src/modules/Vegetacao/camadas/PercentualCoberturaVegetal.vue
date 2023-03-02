@@ -1,29 +1,25 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="{
-        'fill-color': layerPaint['fill-color'],
-        'fill-opacity': layer.opacity,
-      }"
-      :opacity="layer.opacity"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      @featureclick="featureClicked"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Porcentagem de cobertura Vegetal</label>
-          <h3>
-            {{ (slotProps.features[0].properties.b1 * 100).toFixed(1) }} %
-          </h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="{
+      'fill-color': layerPaint['fill-color'],
+      'fill-opacity': layer.opacity,
+    }"
+    :opacity="layer.opacity"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    @featureclick="featureClicked"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Porcentagem de cobertura Vegetal</label>
+        <h3>{{ (slotProps.features[0].properties.b1 * 100).toFixed(1) }} %</h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

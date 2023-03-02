@@ -1,45 +1,43 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="layer.paint"
-      :opacity="layer.opacity"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label class="mt-2">
-            <h3>Acesso população atendida pelas praças:</h3>
-            <span style="font-size: 1.2em">{{
-              slotProps.features[0].properties.a1.toFixed(2)
-            }}</span>
-          </label>
-          <label class="mt-2">
-            <h3>M² de praças por habitante:</h3>
-            <span style="font-size: 1.2em">{{
-              slotProps.features[0].properties.a2.toFixed(2)
-            }}</span>
-          </label>
-          <label class="mt-2">
-            <h3>% de áreas ocupadas pelos buffers por messoregião:</h3>
-            <span style="font-size: 1.2em"
-              >{{ slotProps.features[0].properties.a3.toFixed(2) }} %</span
-            >
-          </label>
-          <label class="mt-2">
-            <h3>Distribuição Espacial das praças:</h3>
-            <span style="font-size: 1.2em">{{
-              slotProps.features[0].properties.a4.toFixed(2)
-            }}</span>
-          </label>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="layer.paint"
+    :opacity="layer.opacity"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label class="mt-2">
+          <h3>Acesso população atendida pelas praças:</h3>
+          <span style="font-size: 1.2em">{{
+            slotProps.features[0].properties.a1.toFixed(2)
+          }}</span>
+        </label>
+        <label class="mt-2">
+          <h3>M² de praças por habitante:</h3>
+          <span style="font-size: 1.2em">{{
+            slotProps.features[0].properties.a2.toFixed(2)
+          }}</span>
+        </label>
+        <label class="mt-2">
+          <h3>% de áreas ocupadas pelos buffers por messoregião:</h3>
+          <span style="font-size: 1.2em"
+            >{{ slotProps.features[0].properties.a3.toFixed(2) }} %</span
+          >
+        </label>
+        <label class="mt-2">
+          <h3>Distribuição Espacial das praças:</h3>
+          <span style="font-size: 1.2em">{{
+            slotProps.features[0].properties.a4.toFixed(2)
+          }}</span>
+        </label>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

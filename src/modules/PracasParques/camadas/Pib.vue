@@ -1,27 +1,25 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :opacity="layer.opacity"
-      :paint="layerPaint"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Município</label>
-          <h3>
-            {{ slotProps.features[0].properties.nm_mun }}
-          </h3>
-          <label>Renda</label>
-          <h3>R$ {{ slotProps.features[0].properties.pib.toFixed(2) }}</h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :opacity="layer.opacity"
+    :paint="layerPaint"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>
+          {{ slotProps.features[0].properties.nm_mun }}
+        </h3>
+        <label>Renda</label>
+        <h3>R$ {{ slotProps.features[0].properties.pib.toFixed(2) }}</h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

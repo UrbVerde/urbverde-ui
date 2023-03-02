@@ -1,30 +1,28 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layer.props.source"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="layer.sourceLayer"
-      :paint="paintLayer"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      :opacity="layer.opacity"
-      @featurehover="featureHovered"
-    >
-      <template v-slot:popupHover="slotProps">
-        <label>
-          Praça / parque:
-          <h3>
-            {{ slotProps.features[0].properties.nm_praca }}
-          </h3>
-        </label>
-        <label>
-          Área:
-          <h3>{{ slotProps.features[0].properties.areaM2.toFixed(2) }} m²</h3>
-        </label>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layer.props.source"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="layer.sourceLayer"
+    :paint="paintLayer"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    :opacity="layer.opacity"
+    @featurehover="featureHovered"
+  >
+    <template v-slot:popupHover="slotProps">
+      <label>
+        Praça / parque:
+        <h3>
+          {{ slotProps.features[0].properties.nm_praca }}
+        </h3>
+      </label>
+      <label>
+        Área:
+        <h3>{{ slotProps.features[0].properties.areaM2.toFixed(2) }} m²</h3>
+      </label>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

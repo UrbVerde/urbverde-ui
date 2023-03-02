@@ -1,25 +1,21 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="layer.paint"
-      :opacity="layer.opacity"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Acesso população atendida pelas praças</label>
-          <h3>
-            {{ (slotProps.features[0].properties.b1 * 100).toFixed(2) }} %
-          </h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="layer.paint"
+    :opacity="layer.opacity"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Acesso população atendida pelas praças</label>
+        <h3>{{ (slotProps.features[0].properties.b1 * 100).toFixed(2) }} %</h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

@@ -1,33 +1,31 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="{
-        'fill-color': layerPaint['fill-color'],
-        'fill-opacity': layer.opacity,
-      }"
-      :opacity="layer.opacity"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cib369">
-          <div
-            class="d-flex flex-column justify-center align-center"
-            style="border-radius: 8px"
-          >
-            <label>ISi</label>
-            <h3>
-              {{ slotProps.features[0].properties.isi.toFixed(2) }}
-            </h3>
-          </div>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="{
+      'fill-color': layerPaint['fill-color'],
+      'fill-opacity': layer.opacity,
+    }"
+    :opacity="layer.opacity"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cib369">
+        <div
+          class="d-flex flex-column justify-center align-center"
+          style="border-radius: 8px"
+        >
+          <label>ISi</label>
+          <h3>
+            {{ slotProps.features[0].properties.isi.toFixed(2) }}
+          </h3>
+        </div>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

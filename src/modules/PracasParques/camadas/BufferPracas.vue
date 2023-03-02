@@ -1,24 +1,22 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layer.props.source"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="layer.sourceLayer"
-      :paint="layerPaint"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#f4a259">
-          <div style="border-radius: 8px">
-            <label>
-              <h3>Praças de {{ slotProps.features[0].properties.nm_mun }}</h3>
-            </label>
-          </div>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layer.props.source"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="layer.sourceLayer"
+    :paint="layerPaint"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#f4a259">
+        <div style="border-radius: 8px">
+          <label>
+            <h3>Praças de {{ slotProps.features[0].properties.nm_mun }}</h3>
+          </label>
+        </div>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>

@@ -1,26 +1,24 @@
 <template>
-  <div>
-    <VmLayer
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="{
-        'fill-color': layerPaint['fill-color'],
-        'fill-opacity': layer.opacity,
-      }"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      @featurehover="featurehover"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Índice de Cobertura Vegetal</label>
-          <h3>{{ slotProps.features[0].properties.b2.toFixed(2) }} m²/pop</h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="{
+      'fill-color': layerPaint['fill-color'],
+      'fill-opacity': layer.opacity,
+    }"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    @featurehover="featurehover"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Índice de Cobertura Vegetal</label>
+        <h3>{{ slotProps.features[0].properties.b2.toFixed(2) }} m²/pop</h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>
