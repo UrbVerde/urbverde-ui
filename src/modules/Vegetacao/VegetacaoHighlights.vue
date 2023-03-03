@@ -529,24 +529,25 @@
           <v-container
             class="d-flex flex-column justify-space-between align-start"
           >
-            <table
-              id="line-chart2"
-              class="charts-css line multiple show-labels"
-            >
+            <table id="line-chart2" class="charts-css line show-labels">
               <tbody>
                 <tr>
                   <th scope="row">2016</th>
                   <td
                     :style="`--start: ${lineChartVegData[2016][0].b1.toFixed(
                       2
-                    )}; --size: ${lineChartVegData[2017][0].b1.toFixed(2)}`"
+                    )}; --size: ${lineChartVegData[2016][0].b1.toFixed(2)}`"
                   >
                     <span class="data">
                       {{ (lineChartVegData[2016][0].b1 * 100).toFixed() }}
                     </span>
                   </td>
 
-                  <td style="--start: 20.1; --size: 23.2">
+                  <td
+                    :style="`--start: ${
+                      tstChartData[2016][0].c2 / 50
+                    }; --size: ${tstChartData[2016][0].c2 / 50}`"
+                  >
                     <span class="data">
                       {{ tstChartData[2016][0].c2.toFixed(1) }}
                     </span>
@@ -556,16 +557,20 @@
                 <tr>
                   <th scope="row">2017</th>
                   <td
-                    :style="`--start: ${lineChartVegData[2017][0].b1.toFixed(
+                    :style="`--start: ${lineChartVegData[2016][0].b1.toFixed(
                       2
-                    )}; --size: ${lineChartVegData[2018][0].b1.toFixed(2)}`"
+                    )}; --size: ${lineChartVegData[2017][0].b1.toFixed(2)}`"
                   >
                     <span class="data">
                       {{ (lineChartVegData[2017][0].b1 * 100).toFixed() }}</span
                     >
                   </td>
 
-                  <td style="--start: 23.2; --size: 25">
+                  <td
+                    :style="`--start: ${
+                      tstChartData[2016][0].c2 / 50
+                    }; --size: ${tstChartData[2017][0].c2 / 50}`"
+                  >
                     <span class="data">
                       {{ tstChartData[2017][0].c2.toFixed(1) }}
                     </span>
@@ -575,15 +580,19 @@
                 <tr>
                   <th scope="row">2018</th>
                   <td
-                    :style="`--start: ${lineChartVegData[2018][0].b1.toFixed(
+                    :style="`--start: ${lineChartVegData[2017][0].b1.toFixed(
                       2
-                    )}; --size: ${lineChartVegData[2019][0].b1.toFixed(2)}`"
+                    )}; --size: ${lineChartVegData[2018][0].b1.toFixed(2)}`"
                   >
                     <span class="data">
                       {{ (lineChartVegData[2018][0].b1 * 100).toFixed() }}</span
                     >
                   </td>
-                  <td style="--start: 25; --size: 28">
+                  <td
+                    :style="`--start: ${
+                      tstChartData[2017][0].c2 / 50
+                    }; --size: ${tstChartData[2018][0].c2 / 50}`"
+                  >
                     <span class="data">
                       {{ tstChartData[2018][0].c2.toFixed(1) }}
                     </span>
@@ -593,15 +602,19 @@
                 <tr>
                   <th scope="row">2019</th>
                   <td
-                    :style="`--start: ${lineChartVegData[2019][0].b1.toFixed(
+                    :style="`--start: ${lineChartVegData[2018][0].b1.toFixed(
                       2
-                    )}; --size: ${lineChartVegData[2020][0].b1.toFixed(2)}`"
+                    )}; --size: ${lineChartVegData[2019][0].b1.toFixed(2)}`"
                   >
                     <span class="data">
                       {{ (lineChartVegData[2019][0].b1 * 100).toFixed() }}</span
                     >
                   </td>
-                  <td style="--start: 28; --size: 32">
+                  <td
+                    :style="`--start: ${
+                      tstChartData[2018][0].c2 / 50
+                    }; --size: ${tstChartData[2019][0].c2 / 50}`"
+                  >
                     <span class="data">
                       {{ tstChartData[2019][0].c2.toFixed(1) }}
                     </span>
@@ -611,18 +624,18 @@
                 <tr>
                   <th scope="row">2020</th>
                   <td
-                    :style="`--start: ${lineChartVegData[2020][0].b1.toFixed(
+                    :style="`--start: ${lineChartVegData[2019][0].b1.toFixed(
                       2
-                    )}; --size: ${lineChartVegData[2021][0].b1.toFixed(2)}`"
+                    )}; --size: ${lineChartVegData[2020][0].b1.toFixed(2)}`"
                   >
                     <span class="data">
                       {{ (lineChartVegData[2020][0].b1 * 100).toFixed() }}</span
                     >
                   </td>
                   <td
-                    :style="`--start: ${tstChartData[2020][0].c2.toFixed(
-                      1
-                    )}; --size: ${tstChartData[2021][0].c2.toFixed(1)}`"
+                    :style="`--start: ${
+                      tstChartData[2019][0].c2 / 50
+                    }; --size: ${tstChartData[2020][0].c2 / 50}`"
                   >
                     <span class="data">
                       {{ tstChartData[2020][0].c2.toFixed(1) }}
@@ -632,7 +645,7 @@
                 <tr>
                   <th scope="row">2021</th>
                   <td
-                    :style="`--start: ${lineChartVegData[2021][0].b1.toFixed(
+                    :style="`--start: ${lineChartVegData[2020][0].b1.toFixed(
                       2
                     )}; --size: ${lineChartVegData[2021][0].b1.toFixed(2)}`"
                   >
@@ -641,9 +654,9 @@
                     >
                   </td>
                   <td
-                    :style="`--start: ${tstChartData[2021][0].c2.toFixed(
-                      1
-                    )}; --size: ${tstChartData[2020][0].c2.toFixed(1)}`"
+                    :style="`--start: ${
+                      tstChartData[2020][0].c2 / 50
+                    }; --size: ${tstChartData[2021][0].c2 / 50}`"
                   >
                     <span class="data">
                       {{ tstChartData[2021][0].c2.toFixed() }}
