@@ -217,22 +217,33 @@ export default {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        this.selectedLayer = "";
+        let currentActiveLayer = sessionStorage.getItem("selectedLayer");
+        this.selectedLayer = currentActiveLayer;
       },
       deep: true,
       immediate: true,
     },
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
-        this.$route.meta.activeLayer = layerId;
         if (oldLayerId == undefined) {
           return this.$store.commit("TOGGLE_LAYER", { _id: layerId });
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
+          sessionStorage.setItem("selectedLayer", layerId);
         }
       },
+      deep: true,
+      immediate: true,
     },
+  },
+  mounted() {
+    let currentActiveLayer = sessionStorage.getItem("selectedLayer");
+    if (currentActiveLayer) {
+      this.selectedLayer = currentActiveLayer;
+    } else {
+      this.selectedLayer = "/Coeficiente de Ilha de Calor";
+    }
   },
 };
 </script>

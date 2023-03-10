@@ -320,7 +320,8 @@ export default {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        this.selectedLayer = "";
+        let currentActiveLayer = sessionStorage.getItem("selectedPracaLayer");
+        this.selectedLayer = currentActiveLayer;
       },
       deep: true,
       immediate: true,
@@ -332,9 +333,20 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
+          sessionStorage.setItem("selectedPracaLayer", layerId);
         }
       },
+      deep: true,
+      immediate: true,
     },
+  },
+  mounted() {
+    let currentActiveLayer = sessionStorage.getItem("selectedPracaLayer");
+    if (currentActiveLayer) {
+      this.selectedLayer = currentActiveLayer;
+    } else {
+      this.selectedLayer = "/Acesso população atendida pelas praças";
+    }
   },
 };
 </script>
