@@ -69,31 +69,6 @@ export default {
             ["get", "cd_mun"],
             Number(this.routeId),
             [
-              "match",
-              ["get", "ano"],
-              Number(this.year),
-              [
-                "interpolate",
-                ["linear"],
-                ["get", "c1"],
-                this.munTempData.c1_min,
-                "#3288bd",
-                this.munTempData.c1_p5,
-                "#99d594",
-                this.munTempData.c1_p10,
-                "#e6f598",
-                this.munTempData.c1_mean,
-                "#ffffbf",
-                this.munTempData.c1_p90,
-                "#fee08b",
-                this.munTempData.c1_p95,
-                "#fc8d59",
-                this.munTempData.c1_max,
-                "#d53e4f",
-              ],
-              ["literal", "transparent"],
-            ],
-            [
               "interpolate",
               ["linear"],
               ["get", "c1"],
@@ -112,6 +87,7 @@ export default {
               this.munTempData.c1_max,
               "#d53e4f",
             ],
+            ["literal", "transparent"],
           ],
         };
       }
@@ -187,7 +163,6 @@ export default {
     "$route.params.ano": {
       handler: async function (ano) {
         this.ano = ano;
-        console.log("aloaloalo");
       },
       deep: true,
       immediate: true,
