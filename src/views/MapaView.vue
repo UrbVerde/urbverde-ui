@@ -7,9 +7,11 @@
         md="1"
         class="d-flex flex-md-column justify-center fixed"
       >
-        
-        <img class="my-5 mx-auto" @click="highlightSearch" width="25px" src="@/assets/icons/search-icon.png" alt="" />
-        
+        <div class="mx-auto teste">
+        <img  class="my-5 mx-auto" @click="highlightSearch" width="25px" src="@/assets/icons/search-icon.png" alt="" />
+        </div>
+
+        <div class="mx-auto teste">
         <img
           class="my-5 mx-auto"
           width="25px"
@@ -17,12 +19,16 @@
           alt=""
           @click="highlightMap"
         />
+        </div>
+        <div class="mx-auto teste">
         <img
           class="my-5 mx-auto"
           width="25px"
           src="@/assets/icons/field2-icon.png"
           alt=""
-        />
+        /></div>
+
+        <div class="mx-auto teste">
         <img
           class="my-5 mx-auto"
           width="25px"
@@ -30,19 +36,24 @@
           alt=""
           @click="scrollToStats"
         />
+        </div>
+        
         <a
           href="https://github.com/UrbVerde/urbverde-ui"
           target="_blank"
-          class="my-5 mx-auto"
+          class="mx-auto teste"
         >
           <img width="25px" src="@/assets/icons/downloads-icon.png" alt="" />
         </a>
+
+        <div class="mx-auto teste">
         <img
           class="my-5 mx-auto"
           width="25px"
           src="@/assets/icons/field5-icon.png"
           alt=""
         />
+        </div>
         <ShareModal />
       </v-col>
 
@@ -639,6 +650,17 @@ a {
     justify-content: center;
     align-items: center;
     height: 100px;
+  }
+}
+
+.teste {
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: #d3d3d3;
   }
 }
 </style>
