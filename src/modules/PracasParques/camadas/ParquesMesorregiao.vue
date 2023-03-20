@@ -30,10 +30,10 @@
           >
         </label>
         <label class="mt-2">
-          <h3>Distribuição Espacial das praças:</h3>
-          <span style="font-size: 1.2em">{{
-            slotProps.features[0].properties.a4.toFixed(2)
-          }}</span>
+          <h3>Distância Média até praça mais próxima</h3>
+          <span style="font-size: 1.2em"
+            >{{ slotProps.features[0].properties.a4.toFixed(2) }} m</span
+          >
         </label>
       </VmPopup>
     </template>

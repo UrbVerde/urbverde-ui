@@ -23,6 +23,27 @@ let state = {
 };
 
 let mutations = {
+  SET_CURRENT_STATE: function (state, obj) {
+    console.log("obj", obj);
+    Object.entries(obj).forEach((item) => {
+      const key = item[0];
+      const value = item[1];
+      console.log("key", key);
+      console.log("value", value);
+      if (Array.isArray(value)) {
+        state.layers = [...value];
+        console.log("value if is array", value);
+      } else if (typeof value === "object") {
+        state.layers = { ...value };
+        console.log("value if is object", value);
+      } else {
+        state.layers = value;
+        console.log("state[key]", state[key]);
+      }
+      console.log("state[key]", state[key]);
+    });
+  },
+
   SET_MUN_PRACA_DATA: function (state, payload) {
     state.munPracaData = payload;
   },

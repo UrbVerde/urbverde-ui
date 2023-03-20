@@ -332,10 +332,12 @@ export default {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        let currentActiveLayer = sessionStorage.getItem("selectedVegLayer");
-        this.selectedLayer = currentActiveLayer;
+        let activatedLayer = sessionStorage.getItem("selectedVegLayer");
+        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
+        this.selectedLayer = activatedLayer;
       },
       deep: true,
+      immediate: true,
     },
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
@@ -356,6 +358,7 @@ export default {
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
+      sessionStorage.setItem("selectedLayer", "/% Cobertura Vegetal (PCV)");
       this.selectedLayer = "/% Cobertura Vegetal (PCV)";
     }
   },

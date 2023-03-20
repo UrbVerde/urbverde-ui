@@ -314,14 +314,14 @@ export default {
             }
           });
         }
-
         this.getAuxByVariable.forEach((item) => {
           if (item.visible) {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        let currentActiveLayer = sessionStorage.getItem("selectedPracaLayer");
-        this.selectedLayer = currentActiveLayer;
+        let activeLayer = sessionStorage.getItem("selectedPracaLayer");
+        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
+        this.selectedLayer = activeLayer;
       },
       deep: true,
       immediate: true,
@@ -345,6 +345,10 @@ export default {
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
+      sessionStorage.setItem(
+        "selectedLayer",
+        "/Acesso população atendida pelas praças"
+      );
       this.selectedLayer = "/Acesso população atendida pelas praças";
     }
   },

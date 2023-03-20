@@ -1,26 +1,24 @@
 <template>
-  <div>
-    <VmLayer
-      ref="layerTemp"
-      :name="layer.name"
-      :source="layerSource"
-      :type="layer.type"
-      :zIndex="layer.zIndex"
-      :sourceLayer="sourceLayer"
-      :paint="layerPaint"
-      :paint-hover="{ 'fill-color': '#7c99f4' }"
-      :opacity="layer.opacity"
-    >
-      <template v-slot:popupHover="slotProps">
-        <VmPopup color="#8cb369">
-          <label>Coeficiente de Ilha de Calor</label>
-          <h3>
-            {{ slotProps.features[0].properties.c1.toFixed(2) }}
-          </h3>
-        </VmPopup>
-      </template>
-    </VmLayer>
-  </div>
+  <VmLayer
+    ref="layerTemp"
+    :name="layer.name"
+    :source="layerSource"
+    :type="layer.type"
+    :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer"
+    :paint="layerPaint"
+    :paint-hover="{ 'fill-color': '#7c99f4' }"
+    :opacity="layer.opacity"
+  >
+    <template v-slot:popupHover="slotProps">
+      <VmPopup color="#8cb369">
+        <label>Coeficiente de Ilha de Calor</label>
+        <h3>
+          {{ slotProps.features[0].properties.c1.toFixed(2) }}
+        </h3>
+      </VmPopup>
+    </template>
+  </VmLayer>
 </template>
 
 <script>
@@ -163,6 +161,8 @@ export default {
     "$route.params.ano": {
       handler: async function (ano) {
         this.ano = ano;
+        let currentActiveLayer = sessionStorage.getItem("selectedLayer");
+        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
       },
       deep: true,
       immediate: true,

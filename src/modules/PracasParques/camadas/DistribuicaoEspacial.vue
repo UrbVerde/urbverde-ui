@@ -13,10 +13,8 @@
       <VmPopup color="#8cb369">
         <label>Município</label>
         <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Distribuição Espacial</label>
-        <h3>
-          {{ slotProps.features[0].properties.a4.toFixed(2) }}
-        </h3>
+        <label>Distância Média até praça mais próxima</label>
+        <h3>{{ slotProps.features[0].properties.a4.toFixed(2) }} m</h3>
       </VmPopup>
     </template>
   </VmLayer>
@@ -135,7 +133,7 @@ export default {
           range: true,
           color:
             "linear-gradient(to right, #1a9850, #91cf60, #d9ef8b, #ffffbf, #fee08b, #fc8d59, #d73027)",
-          value: `0 - 100 %`,
+          value: `metros (m)`,
         });
       } else if (this.$route.params.escala == "intraurbana") {
         values.push({

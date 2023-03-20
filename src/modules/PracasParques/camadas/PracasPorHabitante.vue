@@ -15,9 +15,7 @@
         <label>Município</label>
         <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>Praças por habitantes</label>
-        <h3>
-          {{ slotProps.features[0].properties.a2 }}
-        </h3>
+        <h3>{{ slotProps.features[0].properties.a2 }} m²</h3>
       </VmPopup>
     </template>
   </VmLayer>

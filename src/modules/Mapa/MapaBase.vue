@@ -151,8 +151,20 @@ export default {
     },
 
     async changeMapStyle(style) {
+      console.log(
+        "layers from maplibre before setstyle",
+        window.maplibregl.getStyle()
+      );
+
       window.maplibregl.setStyle(style, { before: "first" });
-      await this.mapbox.updateLayerOrder();
+
+      let activeLayers = this.layers.filter((item) => item.visible == true);
+      let newStylePosition = window.maplibregl.getStyle().layers.length;
+      console.log("newStylePosition", newStylePosition);
+
+      activeLayers.forEach((layer) => {
+        window.maplibregl.moveLayer(layer.name, 0);
+      });
     },
 
     getUserInfos(longitude, latitude) {

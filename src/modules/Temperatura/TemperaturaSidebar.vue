@@ -218,6 +218,7 @@ export default {
           }
         });
         let currentActiveLayer = sessionStorage.getItem("selectedLayer");
+        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
         this.selectedLayer = currentActiveLayer;
       },
       deep: true,
@@ -242,6 +243,7 @@ export default {
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
+      sessionStorage.setItem("selectedLayer", "/Coeficiente de Ilha de Calor");
       this.selectedLayer = "/Coeficiente de Ilha de Calor";
     }
   },
