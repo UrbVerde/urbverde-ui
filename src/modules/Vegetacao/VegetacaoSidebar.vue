@@ -332,7 +332,7 @@ export default {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        let activatedLayer = sessionStorage.getItem("selectedVegLayer");
+        let activatedLayer = sessionStorage.getItem("vegSelectedLayer");
         this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
         this.selectedLayer = activatedLayer;
       },
@@ -346,7 +346,7 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
-          sessionStorage.setItem("selectedVegLayer", layerId);
+          sessionStorage.setItem("vegSelectedLayer", layerId);
         }
       },
       deep: true,
@@ -354,11 +354,11 @@ export default {
     },
   },
   mounted() {
-    let currentActiveLayer = sessionStorage.getItem("selectedVegLayer");
+    let currentActiveLayer = sessionStorage.getItem("vegSelectedLayer");
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
-      sessionStorage.setItem("selectedLayer", "/% Cobertura Vegetal (PCV)");
+      sessionStorage.setItem("vegSelectedLayer", "/% Cobertura Vegetal (PCV)");
       this.selectedLayer = "/% Cobertura Vegetal (PCV)";
     }
   },

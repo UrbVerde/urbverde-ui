@@ -319,7 +319,7 @@ export default {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        let activeLayer = sessionStorage.getItem("selectedPracaLayer");
+        let activeLayer = sessionStorage.getItem("parquesSelectedLayer");
         this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
         this.selectedLayer = activeLayer;
       },
@@ -333,7 +333,7 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
-          sessionStorage.setItem("selectedPracaLayer", layerId);
+          sessionStorage.setItem("parquesSelectedLayer", layerId);
         }
       },
       deep: true,
@@ -341,12 +341,12 @@ export default {
     },
   },
   mounted() {
-    let currentActiveLayer = sessionStorage.getItem("selectedPracaLayer");
+    let currentActiveLayer = sessionStorage.getItem("parquesSelectedLayer");
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
       sessionStorage.setItem(
-        "selectedLayer",
+        "parquesSelectedLayer",
         "/Acesso população atendida pelas praças"
       );
       this.selectedLayer = "/Acesso população atendida pelas praças";

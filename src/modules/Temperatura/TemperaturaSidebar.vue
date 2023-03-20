@@ -217,12 +217,11 @@ export default {
             this.$store.commit("TOGGLE_LAYER", item);
           }
         });
-        let currentActiveLayer = sessionStorage.getItem("selectedLayer");
+        let currentActiveLayer = sessionStorage.getItem("tempSelectedLayer");
         this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
         this.selectedLayer = currentActiveLayer;
       },
       deep: true,
-      immediate: true,
     },
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
@@ -231,7 +230,7 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
-          sessionStorage.setItem("selectedLayer", layerId);
+          sessionStorage.setItem("tempSelectedLayer", layerId);
         }
       },
       deep: true,
@@ -239,11 +238,14 @@ export default {
     },
   },
   mounted() {
-    let currentActiveLayer = sessionStorage.getItem("selectedLayer");
+    let currentActiveLayer = sessionStorage.getItem("tempSelectedLayer");
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
-      sessionStorage.setItem("selectedLayer", "/Coeficiente de Ilha de Calor");
+      sessionStorage.setItem(
+        "tempSelectedLayer",
+        "/Coeficiente de Ilha de Calor"
+      );
       this.selectedLayer = "/Coeficiente de Ilha de Calor";
     }
   },
