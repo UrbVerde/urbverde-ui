@@ -25,9 +25,16 @@
         </component>
       </template>
 
-      <div @click="goToMyLocation" id="gotToMyLocation">
-        <v-icon color="white darken-2"> mdi-map-marker-radius-outline </v-icon>
-      </div>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <div @click="goToMyLocation" id="gotToMyLocation" v-on="on">
+            <v-icon color="white darken-2">
+              mdi-map-marker-radius-outline
+            </v-icon>
+          </div>
+        </template>
+        <span>Minha localização</span>
+      </v-tooltip>
 
       <div class="basemap-list">
         <div
@@ -40,6 +47,15 @@
           </div>
         </div>
       </div>
+
+      <v-alert
+        v-if="displayAlert"
+        class="alert__box"
+        color="warning"
+        icon="$warning"
+      >
+        Você está fora do estado de São Paulo</v-alert
+      >
     </VueMapbox>
     <Legendas />
   </div>
@@ -76,6 +92,7 @@ export default {
   props: ["highlightMap"],
   data() {
     return {
+      displayAlert: "",
       radioGroup: "",
       ano: 2016,
       featureBbox: [],
@@ -91,7 +108,7 @@ export default {
       userMun: "",
       basemapList: [
         {
-          title: "satétlite",
+          title: "satélite",
           value:
             "https://api.maptiler.com/maps/hybrid/style.json?key=XmSZh88cfG77QlyKTuwa",
         },
@@ -144,27 +161,33 @@ export default {
           });
           this.$router.push({ params: { id: this.munPracaData.cd_mun } });
         } else {
-          console.log("Localização não está presente no estado de São Paulo.");
+          this.displayAlert = true;
+          setTimeout(() => {
+            this.displayAlert = false;
+          }, "2000");
         }
         //
       });
     },
 
-    async changeMapStyle(style) {
-      console.log(
-        "layers from maplibre before setstyle",
-        window.maplibregl.getStyle()
-      );
-
-      window.maplibregl.setStyle(style, { before: "first" });
-
-      let activeLayers = this.layers.filter((item) => item.visible == true);
-      let newStylePosition = window.maplibregl.getStyle().layers.length;
-      console.log("newStylePosition", newStylePosition);
-
-      activeLayers.forEach((layer) => {
-        window.maplibregl.moveLayer(layer.name, 0);
+    changeMapStyle: async function (style) {
+      const activeLayers = this.layers.filter((item) => item.visible === true);
+      await new Promise((resolve) => {
+        window.maplibregl.setStyle(style);
+        window.maplibregl.once("styledata", () => resolve());
       });
+
+      const togglePromises = activeLayers.map((layer) => {
+        return new Promise((resolve) => {
+          this.$store.commit("TOGGLE_LAYER", layer);
+          setTimeout(() => {
+            this.$store.commit("TOGGLE_LAYER", layer);
+            resolve();
+          });
+        });
+      });
+
+      await Promise.all(togglePromises);
     },
 
     getUserInfos(longitude, latitude) {
@@ -232,5 +255,13 @@ export default {
       cursor: pointer;
     }
   }
+}
+
+.alert__box {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  top: 0;
+  margin: auto;
 }
 </style>
