@@ -9,9 +9,12 @@
     :paint="layerPaint"
     :paint-hover="{ 'fill-color': '#7c99f4' }"
     :opacity="layer.opacity"
+    @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>Coeficiente de Ilha de Calor</label>
         <h3>
           {{ slotProps.features[0].properties.c1.toFixed(2) }}
@@ -124,6 +127,13 @@ export default {
   },
 
   methods: {
+    featureclick: function (layer) {
+      this.$router.push({
+        params: {
+          id: layer[0].properties.cd_mun,
+        },
+      });
+    },
     buildLegend() {
       const values = [];
 
@@ -162,7 +172,7 @@ export default {
       handler: async function (ano) {
         this.ano = ano;
         let currentActiveLayer = sessionStorage.getItem("selectedLayer");
-        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
+        this.$store.commit("TOGGLE_LAYER", { _id: currentActiveLayer });
       },
       deep: true,
       immediate: true,

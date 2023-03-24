@@ -43,7 +43,20 @@ export default {
   computed: {
     paintLayer() {
       return {
-        "fill-color": "#40826D",
+        "fill-color": [
+          "match",
+          ["get", "cd_mun"],
+          Number(this.$route.params.id),
+          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "#40826D"],
+          ["literal", "transparent"],
+        ],
+        "fill-outline-color": [
+          "match",
+          ["get", "cd_mun"],
+          Number(this.$route.params.id),
+          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "#c6c6c6"],
+          ["literal", "transparent"],
+        ],
       };
     },
   },

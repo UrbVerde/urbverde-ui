@@ -14,6 +14,8 @@
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>Índice de Desigualdade Socioambiental</label>
         <h3>
           {{ slotProps.features[0].properties.b3.toFixed(2) }}

@@ -25,7 +25,11 @@
         </router-link>
       </v-col>
       <v-col>
-        <router-link tag="a" :to="{ name: 'Home' }">Downloads </router-link>
+        <a
+          href="https://drive.google.com/drive/folders/1NHOxiSqktzRpCTNIN-S7TQIKH72taePk?usp=sharing"
+          target="_blank"
+          >Downloads
+        </a>
       </v-col>
       <v-col>
         <router-link tag="a" :to="{ name: 'Contato' }">

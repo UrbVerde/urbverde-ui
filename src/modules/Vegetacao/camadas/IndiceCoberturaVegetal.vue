@@ -14,6 +14,12 @@
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+
+        <h3>
+          {{ slotProps.features[0].properties.cd_setor }}
+        </h3>
         <label>Índice de Cobertura Vegetal</label>
         <h3>{{ slotProps.features[0].properties.b2.toFixed(2) }} m²/pop</h3>
       </VmPopup>

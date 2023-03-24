@@ -28,7 +28,6 @@
             <span>{{ layer.name }}</span>
           </div>
           <input
-            :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
             min="0.1"
             max="1"
@@ -169,7 +168,6 @@
           </div>
 
           <input
-            :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
             min="0.1"
             max="1"
@@ -194,7 +192,6 @@
             <span>{{ layer.name }}</span>
           </div>
           <input
-            :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
             min="0.1"
             max="1"
@@ -249,6 +246,7 @@ export default {
         prop: "opacity",
         value: Number(this.opacity[val]),
       });
+      this.$store.commit("SET_CURRENT_STATE", layer);
     },
   },
 

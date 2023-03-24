@@ -7,11 +7,20 @@
         md="1"
         class="d-flex flex-md-column justify-center fixed"
       >
-        <div class="mx-auto teste">
-        <img  class="my-5 mx-auto" @click="highlightSearch" width="25px" src="@/assets/icons/search-icon.png" alt="" />
-        </div>
 
-        <div class="mx-auto teste">
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <div class="mx-auto verticalcolumn__menu_item" v-on="on">
+        <img class="my-5 mx-auto" @click="highlightSearch" width="25px" src="@/assets/icons/search-icon.png" alt="" />
+        </div>
+        </template>
+        <span>Selecionar município</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <div class="mx-auto verticalcolumn__menu_item" v-on="on">
         <img
           class="my-5 mx-auto"
           width="25px"
@@ -20,15 +29,28 @@
           @click="highlightMap"
         />
         </div>
-        <div class="mx-auto teste">
+        </template>
+        <span>Mapa principal</span>
+      </v-tooltip>
+
+
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+         <div class="mx-auto verticalcolumn__menu_item" v-on="on">
         <img
           class="my-5 mx-auto"
           width="25px"
           src="@/assets/icons/field2-icon.png"
           alt=""
         /></div>
+        </template>
+        <span>Quadro comparativo</span>
+      </v-tooltip>
 
-        <div class="mx-auto teste">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+        <div class="mx-auto verticalcolumn__menu_item" v-on="on">
         <img
           class="my-5 mx-auto"
           width="25px"
@@ -37,16 +59,29 @@
           @click="scrollToStats"
         />
         </div>
-        
-        <a
+        </template>
+        <span>Gráficos</span>
+      </v-tooltip>
+
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+         <a
           href="https://github.com/UrbVerde/urbverde-ui"
           target="_blank"
-          class="mx-auto teste"
+          class="mx-auto verticalcolumn__menu_item"
+          v-on="on"
         >
           <img width="25px" src="@/assets/icons/downloads-icon.png" alt="" />
         </a>
+        </template>
+        <span>Estatísticas</span>
+      </v-tooltip>
 
-        <div class="mx-auto teste">
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <div class="mx-auto verticalcolumn__menu_item" v-on="on">
         <img
           class="my-5 mx-auto"
           width="25px"
@@ -54,7 +89,23 @@
           alt=""
         />
         </div>
-        <ShareModal />
+        </template>
+        <span>Código</span>
+      </v-tooltip>
+
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }"> 
+         <div class="mx-auto" v-on="on">   
+          <ShareModal/>     
+          </div>  
+        </template>
+        <span>Compartilhar</span>
+      </v-tooltip>
+
+
+
+      
       </v-col>
 
       <v-col cols="12" md="3" class="d-flex ml-auto">
@@ -653,7 +704,7 @@ a {
   }
 }
 
-.teste {
+.verticalcolumn__menu_item {
   display: grid;
   place-items: center;
   padding: 10px;

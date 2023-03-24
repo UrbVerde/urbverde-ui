@@ -74,13 +74,13 @@ export const LAYERS_DEFAULT = [
         generateId: true,
         type: "vector",
         tiles: [
-          `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_municipio_2021/{z}/{x}/{y}.pbf?`,
+          `https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf?`,
         ],
         minzoom: 0,
         maxzoom: 22,
       },
     },
-    sourceLayer: "public.geodata_pracas_por_municipio_2021",
+    sourceLayer: "public.geom_pracas",
   },
 
   // Camadas Principais - ESTADUAL:VEGETACAO
@@ -931,20 +931,20 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 50,
+    zIndex: 100,
     componentName: "PracasParquesVector",
     props: {
       source: {
         generateId: true,
         type: "vector",
         tiles: [
-          `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_setor/{z}/{x}/{y}.pbf?`,
+          `https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf?`,
         ],
         minzoom: 0,
         maxzoom: 22,
       },
     },
-    sourceLayer: "public.geodata_pracas_por_setor",
+    sourceLayer: "public.geom_pracas",
   },
 
   {

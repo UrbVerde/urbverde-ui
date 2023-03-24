@@ -26,7 +26,6 @@
             <span>{{ layer.name }}</span>
           </div>
           <input
-            :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
             min="0.1"
             max="1"
@@ -131,7 +130,6 @@
             <span>{{ layer.name }}</span>
           </div>
           <input
-            :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
             min="0.1"
             max="1"
@@ -181,7 +179,6 @@
             <span>{{ layer.name }}</span>
           </div>
           <input
-            :disabled="!layer.visible || layer.type == 'raster'"
             type="range"
             min="0.1"
             max="1"

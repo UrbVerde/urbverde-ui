@@ -15,6 +15,8 @@
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>Porcentagem de cobertura Vegetal</label>
         <h3>{{ (slotProps.features[0].properties.b1 * 100).toFixed(1) }} %</h3>
       </VmPopup>

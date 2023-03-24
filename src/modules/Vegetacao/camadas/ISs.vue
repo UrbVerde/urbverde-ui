@@ -11,15 +11,12 @@
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cib369">
-        <div
-          class="d-flex flex-column justify-center align-center"
-          style="border-radius: 8px"
-        >
-          <label>ISs</label>
-          <h3>
-            {{ slotProps.features[0].properties.iss.toFixed(2) }}
-          </h3>
-        </div>
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+        <label>ISs</label>
+        <h3>
+          {{ slotProps.features[0].properties.iss.toFixed(2) }}
+        </h3>
       </VmPopup>
     </template>
   </VmLayer>

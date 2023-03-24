@@ -9,9 +9,12 @@
     :paint="layerPaint"
     :paint-hover="{ 'fill-color': '#7c99f4' }"
     :opacity="layer.opacity"
+    @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
+        <label>Município</label>
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>Temperatura Média de Superfície</label>
         <h3>{{ slotProps.features[0].properties.c2.toFixed(2) }} ºC</h3>
       </VmPopup>
@@ -122,6 +125,13 @@ export default {
   },
 
   methods: {
+    featureclick: function (layer) {
+      this.$router.push({
+        params: {
+          id: layer[0].properties.cd_mun,
+        },
+      });
+    },
     buildLegend() {
       const values = [];
       if (this.$route.params.escala == "intraurbana") {
@@ -162,13 +172,6 @@ export default {
       deep: true,
       immediate: true,
     },
-
-    // "$route.params.categoria": {
-    //   handler: async function (categoria) {
-    //     window.maplibregl.removeLayer(this.layer);
-    //   },
-
-    // },
   },
   updated() {},
 };

@@ -143,10 +143,7 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function () {
-        window.maplibregl.repaint();
-        console.log(this.layer);
-      },
+      handler: function () {},
       deep: true,
       immediate: true,
     },
