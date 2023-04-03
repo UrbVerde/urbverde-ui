@@ -897,6 +897,7 @@ export const LAYERS_DEFAULT = [
     visibleUI: true,
     colorUI: "#d4ecd5",
     zIndex: 1,
+    opacity: 1,
     componentName: "AuxTempIntraurb",
     props: {
       source: {},

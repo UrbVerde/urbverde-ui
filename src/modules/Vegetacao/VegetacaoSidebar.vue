@@ -301,11 +301,14 @@ export default {
         (item) => item.categoria == this.selectedLayer
       );
     },
+    layers() {
+      return this.$store.getters.layers;
+    },
   },
   watch: {
     "$route.params.escala": {
-      handler: function (escala, oldEscala) {
-        if (escala == "intraurbana") {
+      handler: function (escala, oldescala) {
+        if (escala !== oldescala) {
           this.getAuxByVariable.forEach((item) => {
             if (item.visible) {
               this.$store.commit("TOGGLE_LAYER", item);
@@ -316,26 +319,37 @@ export default {
               this.$store.commit("TOGGLE_LAYER", item);
             }
           });
-        }
-        if (escala == "estadual") {
           this.getAuxVegIntraurbano.forEach((item) => {
             if (item.visible) {
               this.$store.commit("TOGGLE_LAYER", item);
             }
           });
+        } else {
+          return;
         }
-        this.getPrincipalVegetacao.forEach((item) => {
-          if (item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
-        let activatedLayer = sessionStorage.getItem("vegSelectedLayer");
-        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
-        this.selectedLayer = activatedLayer;
       },
       deep: true,
       immediate: true,
     },
+
+    "$route.params.ano": {
+      handler: function (ano, oldano) {
+        if (ano !== oldano) {
+          let ids = [];
+          this.layers
+            .filter((item) => item.visible == true)
+            .forEach((item) => {
+              ids.push(layer._id);
+            });
+          this.$store.commit("SET_PREVIOUS_LAYERS", ids);
+        } else {
+          return;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
         if (oldLayerId == undefined) {
@@ -343,7 +357,7 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
-          sessionStorage.setItem("vegSelectedLayer", layerId);
+          localStorage.setItem("vegSelectedLayer", layerId);
         }
       },
       deep: true,
@@ -351,11 +365,11 @@ export default {
     },
   },
   mounted() {
-    let currentActiveLayer = sessionStorage.getItem("vegSelectedLayer");
+    let currentActiveLayer = localStorage.getItem("vegSelectedLayer");
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
-      sessionStorage.setItem("vegSelectedLayer", "/% Cobertura Vegetal (PCV)");
+      localStorage.setItem("vegSelectedLayer", "/% Cobertura Vegetal (PCV)");
       this.selectedLayer = "/% Cobertura Vegetal (PCV)";
     }
   },

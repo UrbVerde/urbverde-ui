@@ -143,8 +143,8 @@
         </div>
       </v-col>
 
-      <v-col style="height: 89vh" cols="12" md="8" class="d-flex flex-column">
-        <MapaBase :highlightMap="mapHighlight" />
+      <v-col style="height: 89vh" cols="12" md="8" class="d-flex flex-column ma-0 pa-0">
+        <MapaBase :key="this.$route.params.categoria" :highlightMap="mapHighlight" />
         <div
           v-if="this.$route.params.categoria == 'vegetacao'"
           class="d-flex justify-space-around align-center pa-2"
@@ -519,6 +519,21 @@ export default {
         console.log("não tem navigator.share");
       }
     },
+
+
+    toggleTwice (element) {
+      return new Promise((resolve, reject) => {
+        const currentState = this.layers.filter((item) => item.visible === true);
+        this.$store.commit("TOGGLE_LAYER", { _id: element });
+        setTimeout(() => {
+          const nextState = this.layers.filter((item) => item.visible === true);
+          if (currentState !== nextState) {
+            this.$store.commit("TOGGLE_LAYER", { _id: element });
+          }
+          resolve();
+        }, 500);
+      });
+    }
   },
 
   computed: {
@@ -538,16 +553,24 @@ export default {
     munPracaData() {
       return this.$store.getters.getMunPracaData[2021];
     },
+    layers () {
+      return this.$store.getters.layers
+    }
   },
   watch: {
     "$route.params.categoria": {
-      handler: function (categoria) {
-        this.$store.getters.layers.forEach((item) => {
-          if (item.categoria != "base" && item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
+      handler: function (categoria, oldcategoria) {
+        if (categoria == oldcategoria) {
+          return          
+        } else {
+           this.$store.getters.layers.forEach((item) => {
+            if (item.categoria != "base" && item.visible) {
+              this.$store.commit("TOGGLE_LAYER", item);
+            }
+          });
+        }       
       },
+
       deep: true,
       immediate: true,
     },
@@ -560,11 +583,18 @@ export default {
       deep: true,
     },
     "$route.params.ano": {
-      handler: async function (ano) {
+      handler: async function (ano, oldAno) {
         this.ano = ano;
+        if (ano !== oldAno) {
+           this.$store.getters.layersAtivos.forEach((camada) => {
+          this.toggleTwice(camada)
+        }) 
+        } else {
+          return
+        }
+              
       },
       deep: true,
-      immediate: true,
     },
   },
   created() {

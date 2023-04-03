@@ -8,6 +8,7 @@
     :paint="layerPaint"
     :paint-hover="{ 'fill-color': '#7c99f4' }"
     :opacity="layer.opacity"
+    @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
@@ -126,6 +127,13 @@ export default {
   },
 
   methods: {
+    featureclick: function (layer) {
+      this.$router.push({
+        params: {
+          id: layer[0].properties.cd_mun,
+        },
+      });
+    },
     buildLegend() {
       const values = [];
       if (this.$route.params.escala == "estadual") {

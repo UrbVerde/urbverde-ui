@@ -246,7 +246,6 @@ export default {
         prop: "opacity",
         value: Number(this.opacity[val]),
       });
-      this.$store.commit("SET_CURRENT_STATE", layer);
     },
   },
 
@@ -289,12 +288,16 @@ export default {
         (item) => item.categoria == this.selectedLayer
       );
     },
+
+    layers() {
+      return this.$store.getters.layers;
+    },
   },
   watch: {
     "$route.params.escala": {
-      handler: function (escala, oldEscala) {
-        if (escala == "intraurbana") {
-          this.getPrincipalPracas.forEach((item) => {
+      handler: function (escala, oldescala) {
+        if (escala !== oldescala) {
+          this.getAuxByVariable.forEach((item) => {
             if (item.visible) {
               this.$store.commit("TOGGLE_LAYER", item);
             }
@@ -304,26 +307,37 @@ export default {
               this.$store.commit("TOGGLE_LAYER", item);
             }
           });
-        }
-        if (escala == "estadual") {
           this.getAuxPracasIntraurbano.forEach((item) => {
             if (item.visible) {
               this.$store.commit("TOGGLE_LAYER", item);
             }
           });
+        } else {
+          return;
         }
-        this.getAuxByVariable.forEach((item) => {
-          if (item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
-        let activeLayer = sessionStorage.getItem("parquesSelectedLayer");
-        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
-        this.selectedLayer = activeLayer;
       },
       deep: true,
       immediate: true,
     },
+
+    "$route.params.ano": {
+      handler: function (ano, oldano) {
+        if (ano !== oldano) {
+          let ids = [];
+          this.layers
+            .filter((item) => item.visible == true)
+            .forEach((item) => {
+              ids.push(layer._id);
+            });
+          this.$store.commit("SET_PREVIOUS_LAYERS", ids);
+        } else {
+          return;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
         if (oldLayerId == undefined) {
@@ -331,7 +345,7 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
-          sessionStorage.setItem("parquesSelectedLayer", layerId);
+          localStorage.setItem("parquesSelectedLayer", layerId);
         }
       },
       deep: true,
@@ -339,11 +353,11 @@ export default {
     },
   },
   mounted() {
-    let currentActiveLayer = sessionStorage.getItem("parquesSelectedLayer");
+    let currentActiveLayer = localStorage.getItem("parquesSelectedLayer");
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
-      sessionStorage.setItem(
+      localStorage.setItem(
         "parquesSelectedLayer",
         "/Acesso população atendida pelas praças"
       );

@@ -191,35 +191,57 @@ export default {
         (item) => item.categoria == this.selectedLayer
       );
     },
+    layersBeforeYearUpdate() {
+      return this.$store.getters.getPreviousLayers;
+    },
+
+    layers() {
+      return this.$store.getters.layers;
+    },
   },
   watch: {
     "$route.params.escala": {
-      handler: function (escala, oldEscala) {
-        this.getAuxByVariable.forEach((item) => {
-          if (item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
-        this.getAuxTemperatura.forEach((item) => {
-          if (item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
-        this.getPrincipalTemperatura.forEach((item) => {
-          if (item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
-        this.getAuxTemperaturaIntraurbano.forEach((item) => {
-          if (item.visible) {
-            this.$store.commit("TOGGLE_LAYER", item);
-          }
-        });
-        let currentActiveLayer = sessionStorage.getItem("tempSelectedLayer");
-        this.$store.commit("TOGGLE_LAYER", { _id: this.selectedLayer });
-        this.selectedLayer = currentActiveLayer;
+      handler: function (escala, oldescala) {
+        if (escala !== oldescala) {
+          this.getAuxByVariable.forEach((item) => {
+            if (item.visible) {
+              this.$store.commit("TOGGLE_LAYER", item);
+            }
+          });
+          this.getAuxTemperatura.forEach((item) => {
+            if (item.visible) {
+              this.$store.commit("TOGGLE_LAYER", item);
+            }
+          });
+          this.getAuxTemperaturaIntraurbano.forEach((item) => {
+            if (item.visible) {
+              this.$store.commit("TOGGLE_LAYER", item);
+            }
+          });
+        } else {
+          return;
+        }
       },
       deep: true,
+      immediate: true,
+    },
+
+    "$route.params.ano": {
+      handler: function (ano, oldano) {
+        if (ano !== oldano) {
+          let ids = [];
+          this.layers
+            .filter((item) => item.visible == true)
+            .forEach((item) => {
+              ids.push(layer._id);
+            });
+          this.$store.commit("SET_PREVIOUS_LAYERS", ids);
+        } else {
+          return;
+        }
+      },
+      deep: true,
+      immediate: true,
     },
     selectedLayer: {
       handler: function (layerId, oldLayerId) {
@@ -228,19 +250,20 @@ export default {
         } else {
           this.$store.commit("TOGGLE_LAYER", { _id: layerId });
           this.$store.commit("TOGGLE_LAYER", { _id: oldLayerId });
-          sessionStorage.setItem("tempSelectedLayer", layerId);
+          localStorage.setItem("tempSelectedLayer", layerId);
         }
       },
       deep: true,
       immediate: true,
     },
   },
+
   mounted() {
-    let currentActiveLayer = sessionStorage.getItem("tempSelectedLayer");
+    let currentActiveLayer = localStorage.getItem("tempSelectedLayer");
     if (currentActiveLayer) {
       this.selectedLayer = currentActiveLayer;
     } else {
-      sessionStorage.setItem(
+      localStorage.setItem(
         "tempSelectedLayer",
         "/Coeficiente de Ilha de Calor"
       );

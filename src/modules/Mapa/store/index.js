@@ -20,6 +20,8 @@ let state = {
   municipios: [],
   municipiosList: [],
   mesoPracaData: [],
+  activeLayersList: [],
+  previousLayers: [],
 };
 
 let mutations = {
@@ -56,9 +58,37 @@ let mutations = {
 
   TOGGLE_LAYER: function (state, layer) {
     const layers = cloneDeep(state.layers);
+
     const currentLayer = find(layers, { _id: layer._id });
+
+    if (currentLayer.visible) {
+      this.commit("REMOVE_FROM_LAYERLIST", layer._id);
+    } else {
+      this.commit("ADD_ON_LAYERLIST", layer._id);
+    }
     currentLayer.visible = !currentLayer.visible;
     state.layers = cloneDeep(layers);
+  },
+
+  ADD_ON_LAYERLIST: function (state, layer) {
+    if (state.activeLayersList.includes(layer)) {
+      return;
+    } else {
+      state.activeLayersList.push(layer);
+    }
+  },
+
+  REMOVE_FROM_LAYERLIST: function (state, layerId) {
+    const index = state.activeLayersList.findIndex(
+      (layer) => layer === layerId
+    );
+    if (index >= 0) {
+      state.activeLayersList.splice(index, 1);
+    }
+  },
+
+  SET_PREVIOUS_LAYERS: function (state, ids) {
+    state.previousLayers = ids;
   },
 
   SET_LAYER_PROPERTIES: function (state, { layer, prop, value }) {
@@ -101,6 +131,14 @@ let getters = {
   },
   getMunicipiosList: (state) => {
     return cloneDeep(state.municipiosList);
+  },
+
+  layersAtivos: (state) => {
+    return cloneDeep(state.activeLayersList);
+  },
+
+  getPreviousLayers: (state) => {
+    return cloneDeep(state.previousLayers);
   },
 };
 

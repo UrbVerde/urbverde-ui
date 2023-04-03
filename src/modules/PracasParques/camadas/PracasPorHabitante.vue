@@ -8,7 +8,7 @@
     :opacity="layer.opacity"
     :paint="layerPaint"
     :paint-hover="{ 'fill-color': '#7c99f4' }"
-    @featurehover="featurehover"
+    @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
       <VmPopup color="#8cb369">
@@ -117,9 +117,14 @@ export default {
   },
 
   methods: {
-    featurehover(e) {
-      console.log(e);
+    featureclick: function (layer) {
+      this.$router.push({
+        params: {
+          id: layer[0].properties.cd_mun,
+        },
+      });
     },
+
     buildLegend() {
       const values = [];
       if (this.$route.params.escala == "intraurbana") {

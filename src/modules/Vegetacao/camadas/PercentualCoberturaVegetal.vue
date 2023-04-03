@@ -174,7 +174,11 @@ export default {
           params: { setorid: feature[0].properties.cd_setor },
         });
       } else {
-        return;
+        this.$router.push({
+          params: {
+            id: layer[0].properties.cd_mun,
+          },
+        });
       }
     },
   },

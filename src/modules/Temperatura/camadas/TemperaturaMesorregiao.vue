@@ -31,7 +31,9 @@ export default {
   components: { VmLayer, VmPopup },
   props: ["layer"],
   data() {
-    return {};
+    return {
+      ano: "",
+    };
   },
   computed: {
     routeId() {
@@ -39,23 +41,35 @@ export default {
     },
 
     sourceLayer() {
-      return `public.geodata_temperatura_por_mesorregiao_${this.$route.params.ano}`;
+      return `public.geodata_temperatura_por_mesorregiao_${this.ano}`;
     },
     layerSource() {
       return {
         generateId: true,
         type: "vector",
         tiles: [
-          `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_mesorregiao_${this.$route.params.ano}/{z}/{x}/{y}.pbf?`,
+          `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_mesorregiao_${this.ano}/{z}/{x}/{y}.pbf?`,
         ],
         minzoom: 0,
         maxzoom: 22,
       };
     },
+
+    layers() {
+      return this.$store.getters.layers;
+    },
   },
 
   methods: {},
-  watch: {},
+  watch: {
+    "$route.params.ano": {
+      handler: function (ano) {
+        this.ano = ano;
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   created() {},
   mounted() {},
 };

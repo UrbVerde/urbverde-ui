@@ -169,10 +169,8 @@ export default {
   },
   watch: {
     "$route.params.ano": {
-      handler: async function (ano) {
+      handler: function (ano) {
         this.ano = ano;
-        let currentActiveLayer = sessionStorage.getItem("selectedLayer");
-        this.$store.commit("TOGGLE_LAYER", { _id: currentActiveLayer });
       },
       deep: true,
       immediate: true,

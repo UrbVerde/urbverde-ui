@@ -62,7 +62,8 @@ a {
 .map_container {
   height: 100%;
   position: relative;
-  margin: 4px;
+  margin: 0 !important;
+  padding: 0 !important;
   @media (max-width: 950px) {
     height: 80vh;
   }
@@ -160,6 +161,7 @@ main {
   padding: 0;
   user-select: none;
   padding: 0;
+  margin: 0 0 5px 0;
   background-color: white;
   border-bottom: 1px solid #ddeaf3;
 }
