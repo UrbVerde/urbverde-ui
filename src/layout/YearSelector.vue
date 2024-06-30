@@ -1,154 +1,23 @@
 <template>
-  <div class="aside__toolbar_period">
-    <label>SELECIONE UM PERÍODO</label>
+  <div
+    class="aside__toolbar_period"
+    tabindex="0"
+    @keydown.left="decrementYear"
+    @keydown.right="incrementYear"
+  >
+    <!-- <label>ANO:</label> -->
     <v-row class="d-flex justify-space-between align-center">
-      <v-col cols="4" md="2">
-        <router-link
-          class=""
-          :to="{
-            params: {
-              ano: 2016,
-            },
-          }"
-        >
+      <v-col cols="4" md="2" v-for="year in years" :key="year.value">
+        <router-link :to="{
+          params: {
+            ano: year.value,
+          },
+        }">
           <div class="d-flex flex-column justify-center align-center">
-            <div
-              class="yearitem"
-              :class="{ itemActive: routeYearValue == 2016 }"
-            >
-              <img
-                v-if="routeYearValue == 2016"
-                src="@/assets/icons/yearactive-icon.png"
-                width="25px"
-                alt=""
-              />
+            <div class="yearitem" :class="{ itemActive: year.isActive }">
+              <img v-if="year.isActive" src="@/assets/icons/yearactive-icon.png" width="25px" alt="" />
             </div>
-            <span class="mt-5">2016</span>
-          </div>
-        </router-link>
-      </v-col>
-      <v-col cols="4" md="2">
-        <router-link
-          class=""
-          :to="{
-            params: {
-              ano: 2017,
-            },
-          }"
-        >
-          <div class="d-flex flex-column justify-center align-center">
-            <div
-              class="yearitem"
-              :class="{ itemActive: routeYearValue == 2017 }"
-            >
-              <img
-                v-if="routeYearValue == 2017"
-                src="@/assets/icons/yearactive-icon.png"
-                width="25px"
-                alt=""
-              />
-            </div>
-            <span class="mt-5">2017</span>
-          </div>
-        </router-link>
-      </v-col>
-      <v-col cols="4" md="2">
-        <router-link
-          class=""
-          :to="{
-            params: {
-              ano: 2018,
-            },
-          }"
-        >
-          <div class="d-flex flex-column justify-center align-center">
-            <div
-              class="yearitem"
-              :class="{ itemActive: routeYearValue == 2018 }"
-            >
-              <img
-                v-if="routeYearValue == 2018"
-                src="@/assets/icons/yearactive-icon.png"
-                width="25px"
-                alt=""
-              />
-            </div>
-            <span class="mt-5">2018</span>
-          </div>
-        </router-link>
-      </v-col>
-      <v-col cols="4" md="2">
-        <router-link
-          class=""
-          :to="{
-            params: {
-              ano: 2019,
-            },
-          }"
-        >
-          <div class="d-flex flex-column justify-center align-center">
-            <div
-              class="yearitem"
-              :class="{ itemActive: routeYearValue == 2019 }"
-            >
-              <img
-                v-if="routeYearValue == 2019"
-                src="@/assets/icons/yearactive-icon.png"
-                width="25px"
-                alt=""
-              />
-            </div>
-            <span class="mt-5">2019</span>
-          </div>
-        </router-link>
-      </v-col>
-      <v-col cols="4" md="2">
-        <router-link
-          class=""
-          :to="{
-            params: {
-              ano: 2020,
-            },
-          }"
-        >
-          <div class="d-flex flex-column justify-center align-center">
-            <div
-              class="yearitem"
-              :class="{ itemActive: routeYearValue == 2020 }"
-            >
-              <img
-                v-if="routeYearValue == 2020"
-                src="@/assets/icons/yearactive-icon.png"
-                width="25px"
-                alt=""
-              />
-            </div>
-            <span class="mt-5">2020</span>
-          </div>
-        </router-link>
-      </v-col>
-      <v-col cols="4" md="2">
-        <router-link
-          class=""
-          :to="{
-            params: {
-              ano: 2021,
-            },
-          }"
-        >
-          <div class="d-flex flex-column justify-center align-center">
-            <div
-              class="yearitem"
-              :class="{ itemActive: routeYearValue == 2021 }"
-            >
-              <img
-                v-if="routeYearValue == 2021"
-                src="@/assets/icons/yearactive-icon.png"
-                width="25px"
-                alt=""
-              />
-            </div>
-            <span class="mt-5">2021</span>
+            <span class="mt-5">{{ year.value }}</span>
           </div>
         </router-link>
       </v-col>
@@ -160,7 +29,39 @@
 export default {
   computed: {
     routeYearValue() {
-      return this.$route.params.ano;
+      return parseInt(this.$route.params.ano); // Convert to integer
+    },
+    years() {
+      const startYear = 2016;
+      const endYear = 2021;
+      const length = endYear - startYear + 1;
+
+      const yearsArray = Array.from({ length }, (_, index) => endYear - index);
+      yearsArray.reverse(); // Reverse the array
+
+      return yearsArray.map((year) => ({
+        value: year,
+        isActive: year === this.routeYearValue, // Set isActive to true for the current year
+      }));
+    },
+  },
+  methods: {
+    incrementYear() {
+      const currentIndex = this.years.findIndex((year) => year.isActive);
+      if (currentIndex < this.years.length - 1) {
+        const nextYear = this.years[currentIndex + 1].value;
+        this.changeYear(nextYear);
+      }
+    },
+    decrementYear() {
+      const currentIndex = this.years.findIndex((year) => year.isActive);
+      if (currentIndex > 0) {
+        const prevYear = this.years[currentIndex - 1].value;
+        this.changeYear(prevYear);
+      }
+    },
+    changeYear(year) {
+      this.$router.push({ params: { ano: year } });
     },
   },
 };

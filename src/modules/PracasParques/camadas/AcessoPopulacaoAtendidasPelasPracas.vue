@@ -11,11 +11,18 @@
     @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Acesso população atendida pelas praças</label>
-        <h3>{{ slotProps.features[0].properties.a1.toFixed(2) }}%</h3>
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Setor {{ slotProps.features[0].properties.cd_setor }} - IBGE 2020</label> -->
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label> População atendida por pelo menos uma praça:</label>
+          <h3>{{ slotProps.features[0].properties.a1.toFixed(0) }}% </h3>
+        </template>
+        <template v-else>
+          <label> População no setor atendida por pelo menos uma praça:</label>
+          <h3>{{ slotProps.features[0].properties.a1.toFixed(0) }} habitantes</h3>
+        </template>
+        
       </VmPopup>
     </template>
   </VmLayer>
@@ -46,19 +53,19 @@ export default {
             ["get", "a1"],
             0,
             ["to-color", "#d53e4f"],
-            19.74,
+            14.3,
             ["to-color", "#f46d43"],
-            27.88,
+            28.6,
             ["to-color", "#fdae61"],
-            48.29,
+            42.9,
             ["to-color", "#fee08b"],
-            66.95,
+            57.9,
             ["to-color", "#e6f598"],
-            80.68,
+            71.5,
             ["to-color", "#abdda4"],
-            91.47,
+            85.8,
             ["to-color", "#66c2a5"],
-            163,
+            100,
             ["to-color", "#3288bd"],
           ],
         };
@@ -131,14 +138,14 @@ export default {
           color: "linear-gradient(to right, #d53e4f, #fee08b, #3288bd)",
           value: `${this.munPracaData.a1_min.toFixed(
             2
-          )} - ${this.munPracaData.a1_max.toFixed(2)} %`,
+          )} - ${this.munPracaData.a1_max.toFixed(0)} hab`,
         });
       } else if (this.$route.params.escala == "estadual") {
         values.push({
           range: true,
           color:
             "linear-gradient(to right, #d53e4f, #f46d43, #fdae61, #fee08b, #e6f598, #abdda4, #66c2a5, #3288bd)",
-          value: `0 - 163 %`,
+          value: `0 - 100 %`,
         });
       }
       this.$store.commit("SET_LAYER_PROPERTIES", {

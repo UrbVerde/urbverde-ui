@@ -10,12 +10,13 @@
     @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#f4a259">
+      <!-- <VmPopup color="#f4a259"> -->
+      <!-- <VmPopup color="#F4F4F4">  
         <label>
-          Nome município:
+          Nome do município:
           <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         </label>
-      </VmPopup>
+      </VmPopup> -->
     </template>
   </VmLayer>
 </template>
@@ -24,6 +25,7 @@
 import VmLayer from "../components/VmLayer.vue";
 import VmPopup from "../components/VmPopup.vue";
 import axios from "axios";
+
 export default {
   components: { VmLayer, VmPopup },
   props: ["layer"],

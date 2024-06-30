@@ -8,14 +8,14 @@
           <span style="font-size: 2em; color: #01dc82"
             >Temperatura <span style="color: grey">de</span>
             {{ munTempData.nm_mun }}
-            <span style="color: grey">em</span> 2021</span
+            <span style="color: grey">em</span>  {{this.$route.params.ano }}</span
           >
           <div class="d-flex flex-column justify-start align-start"></div>
         </v-row>
       </v-col>
       <v-col cols="12">
         <p class="mb-0" color="#003C3C">
-          RANKING COMPARATIVO EM RELAÇÃO A OUTRAS REGIÕES
+          RANKING COMPARATIVO EM RELAÇÃO A OUTRAS CIDADES
         </p>
       </v-col>
     </v-row>
@@ -45,13 +45,13 @@
                     <strong>Coeficiente de Ilhas de Calor</strong>
                   </p>
                   <v-row class="d-flex justify-start align-start">
-                    <v-col>
+                    <v-col style="padding-right: 0px;">
                       <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c1_rank_estado }}
+                        {{ munTempData.c1_rank_estado }}  °
                       </p>
                     </v-col>
                     <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
+                      <p style="color: #01dc82; font-size: 0.9em">entre 645</p>
                     </v-col>
                   </v-row>
 
@@ -59,13 +59,13 @@
                     <strong>Temperatura Média de Superfície</strong>
                   </p>
                   <v-row class="d-flex justify-start align-start">
-                    <v-col>
+                    <v-col style="padding-right: 0px;">
                       <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c2_rank_estado }}
+                        {{ munTempData.c2_rank_estado }}  °
                       </p>
                     </v-col>
                     <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
+                      <p style="color: #01dc82; font-size: 0.9em">entre 645</p>
                     </v-col>
                   </v-row>
 
@@ -73,77 +73,13 @@
                     <strong>Temperatura Máxima de Superfície</strong>
                   </p>
                   <v-row class="d-flex justify-start align-start">
-                    <v-col>
+                    <v-col style="padding-right: 0px;">
                       <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c3_rank_estado }}
+                        {{ munTempData.c3_rank_estado }}  °
                       </p>
                     </v-col>
                     <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 645</p>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-container>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="4" class="d-flex justify-start align-start">
-            <v-card
-              outlined
-              class="d-flex flex-column justify-start"
-              style="border-radius: 12px"
-            >
-              <v-img src="@/assets/microreg.png"></v-img>
-              <v-container
-                class="d-flex flex-column justify-space-between align-start"
-              >
-                <v-card-subtitle class="pa-0"
-                  ><strong>Microrregiões</strong></v-card-subtitle
-                >
-                <v-card-text class="pa-0 mb-2"
-                  >A posição do seu município em relação aos municípios que
-                  compõe a mesma microrregião
-                </v-card-text>
-                <v-card-text class="pa-0">
-                  <p class="mb-0" style="font-size: 0.9em">
-                    <strong>Coeficiente de Ilhas de Calor</strong>
-                  </p>
-                  <v-row class="d-flex justify-start align-start">
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c1_rank_micro }}
-                      </p>
-                    </v-col>
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 21</p>
-                    </v-col>
-                  </v-row>
-
-                  <p class="mb-0" style="font-size: 0.9em">
-                    <strong>Temperatura Média de Superfície</strong>
-                  </p>
-                  <v-row class="d-flex justify-start align-start">
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c2_rank_micro }}
-                      </p>
-                    </v-col>
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 21</p>
-                    </v-col>
-                  </v-row>
-
-                  <p class="mb-0" style="font-size: 0.9em">
-                    <strong>Temperatura Máxima de Superfície</strong>
-                  </p>
-                  <v-row class="d-flex justify-start align-start">
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c3_rank_micro }}
-                      </p>
-                    </v-col>
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 21</p>
+                      <p style="color: #01dc82; font-size: 0.9em">entre 645</p>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -165,21 +101,21 @@
                   ><strong>Mesorregiões</strong></v-card-subtitle
                 >
                 <v-card-text class="pa-0 mb-2"
-                  >A posição do seu município em relação aos municípios que
-                  compõe a mesma mesorregião.
+                  >A posição do seu município em relação aos {{munTempData.n_rank_meso}} municípios 
+                  vizinhos que juntos compõe a mesorregião de {{munTempData.nm_meso}}
                 </v-card-text>
                 <v-card-text class="pa-0">
                   <p class="mb-0" style="font-size: 0.9em">
                     <strong>Coeficiente de Ilhas de Calor</strong>
                   </p>
                   <v-row class="d-flex justify-start align-start">
-                    <v-col>
+                    <v-col style="padding-right: 0px;">
                       <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c1_rank_meso }}
+                        {{ munTempData.c1_rank_meso }}  °
                       </p>
                     </v-col>
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 56</p>
+                    <v-col  style="padding-left: 0px;">
+                      <p style="color: #01dc82; font-size: 0.9em">entre {{ munTempData.n_rank_meso }}</p>
                     </v-col>
                   </v-row>
 
@@ -187,13 +123,13 @@
                     <strong>Temperatura Média de Superfície</strong>
                   </p>
                   <v-row class="d-flex justify-start align-start">
-                    <v-col>
+                    <v-col style="padding-right: 0px;">
                       <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c2_rank_meso }}
+                        {{ munTempData.c2_rank_meso }}  °
                       </p>
                     </v-col>
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 56</p>
+                    <v-col  style="padding-left: 0px;">
+                      <p style="color: #01dc82; font-size: 0.9em">entre {{ munTempData.n_rank_meso }}</p>
                     </v-col>
                   </v-row>
 
@@ -201,13 +137,84 @@
                     <strong>Temperatura Máxima de Superfície</strong>
                   </p>
                   <v-row class="d-flex justify-start align-start">
-                    <v-col>
+                    <v-col style="padding-right: 0px;">
                       <p style="color: #01dc82; font-size: 2em">
-                        {{ munTempData.c3_rank_meso }}
+                        {{ munTempData.c3_rank_meso }}  °
                       </p>
                     </v-col>
-                    <v-col>
-                      <p style="color: #01dc82; font-size: 0.9em">de 56</p>
+                    <v-col  style="padding-left: 0px;">
+                      <p style="color: #01dc82; font-size: 0.9em">entre {{ munTempData.n_rank_meso }}</p>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-container>
+            </v-card>
+          </v-col>
+
+
+          <v-col cols="12" md="4" class="d-flex justify-start align-start">
+            <v-card
+              outlined
+              class="d-flex flex-column justify-start"
+              style="border-radius: 12px"
+            >
+              <v-img src="@/assets/microreg.png"></v-img>
+              <v-container
+                class="d-flex flex-column justify-space-between align-start"
+              >
+                <v-card-subtitle class="pa-0"
+                  ><strong>Microrregiões</strong></v-card-subtitle
+                >
+                <v-card-text class="pa-0 mb-2"
+                  >A posição do seu município em relação aos {{munTempData.n_rank_micro}} municípios 
+                  vizinhos que compõe juntos a microrregião de {{munTempData.nm_micro}}
+                </v-card-text>
+                <v-card-text class="pa-0">
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>Coeficiente de Ilhas de Calor</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col style="padding-right: 0px;">
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munTempData.c1_rank_micro }} °
+                      </p>
+                    </v-col>
+                    <v-col  style="padding-left: 0px;">
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        entre {{ munTempData.n_rank_micro }}
+                      </p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>Temperatura Média de Superfície</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col style="padding-right: 0px;">
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munTempData.c2_rank_micro }} °
+                      </p>
+                    </v-col>
+                    <v-col  style="padding-left: 0px;">
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        entre {{ munTempData.n_rank_micro }}
+                      </p>
+                    </v-col>
+                  </v-row>
+
+                  <p class="mb-0" style="font-size: 0.9em">
+                    <strong>Temperatura Máxima de Superfície</strong>
+                  </p>
+                  <v-row class="d-flex justify-start align-start">
+                    <v-col style="padding-right: 0px;">
+                      <p style="color: #01dc82; font-size: 2em">
+                        {{ munTempData.c3_rank_micro }} °
+                      </p>
+                    </v-col>
+                    <v-col  style="padding-left: 0px;">
+                      <p style="color: #01dc82; font-size: 0.9em">
+                        entre {{ munTempData.n_rank_micro }}
+                      </p>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -233,37 +240,33 @@
 
           <v-card-text>
             <p>
-              As ilhas de calor urbano (ICU) são um fenômeno percebido nas áreas
-              mais quentes da cidade, onde as temperaturas de superficie ficam
-              mais altas pelo excesso de materiais escuros que retêm mais calor,
-              como o asfalto e o concreto, prejudicando a`qualidade de vida da
-              população
+              As <strong>ilhas de calor urbano (ICU)</strong> são um fenômeno percebido nas áreas
+              mais quentes de uma cidade. As <strong>Temperaturas de Superficie</strong> que calculamos
+              usando satélites destacam essas áreas com valores acima da média, geralmente associadas
+              ao excesso de volume construído e uso de materiais escuros que retêm mais calor,
+              como o asfalto e o concreto, o que prejudica a qualidade de vida da população.
             </p>
             <p>
-              💡 Você sabia que árvores e rios refrescam o microclima e são a
-              melhor solução para adaptar as cidades aos efeitos das mudanças
-              climáticas?
+              💡 <strong>Você sabia</strong> que árvores e rios refrescam o microclima e são a
+              melhor solução tecnológica para <strong>adaptação das cidades aos efeitos das mudanças
+              climáticas?</strong>
             </p>
-            <DownloadPdf />
+            <v-btn text disabled class="text-p"
+                >Saiba mais ...</v-btn
+              >
+            <!-- <DownloadPdf /> -->
           </v-card-text>
         </v-card>
-      </v-col>
-    </v-row>
 
-    <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
-      <v-col cols="8" class="d-flex flex-column justify-start align-start">
-        <p class="align-self-start ml-4">
-          PERCENTUAL DE POPULAÇÕES QUE VIVEM NAS ÁREAS MAIS QUENTES
-        </p>
-        <v-row class="d-flex justify-start align-start">
-          <v-col cols="12" md="6">
-            <v-card
+            <!-- <v-card
               outlined
               class="d-flex flex-column justify-start"
               style="border-radius: 12px"
             >
               <v-card-title>
-                <div class="text-h6">Temperatura Média de Superfície</div>
+                <div class="text-h6" style="word-break: normal;"">
+                  Temperatura Média de Superfície
+                </div>
               </v-card-title>
 
               <v-card-subtitle>
@@ -290,9 +293,7 @@
                 >
               </v-container>
             </v-card>
-          </v-col>
 
-          <v-col cols="12" md="6">
             <v-card
               outlined
               class="d-flex flex-column justify-start"
@@ -325,8 +326,16 @@
                   >{{ munTempData.h5b.toFixed() }}%</strong
                 >
               </v-container>
-            </v-card>
-          </v-col>
+            </v-card> -->
+      </v-col>
+    </v-row>
+
+    <v-row class="d-flex mx-auto w100-mobile" style="width: 80%">
+      <v-col cols="8" class="d-flex flex-column justify-start align-start">
+        <p class="align-self-start ml-4">
+          PERCENTUAL DE POPULAÇÕES QUE VIVEM NAS ÁREAS MAIS QUENTES
+        </p>
+        <v-row class="d-flex justify-start align-start">
 
           <v-col cols="12" md="6">
             <v-card
@@ -611,4 +620,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+body {
+  word-break: normal !important;
+}
+</style>

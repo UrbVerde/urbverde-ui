@@ -10,13 +10,14 @@
     :paint-hover="{ 'fill-color': '#7c99f4' }"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>
-          {{ slotProps.features[0].properties.nm_mun }}
-        </h3>
-        <label>Renda</label>
-        <h3>R$ {{ slotProps.features[0].properties.pib.toFixed(2) }}</h3>
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <!-- <template v-if="$route.params.escala === 'estadual'"> -->
+        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+        <!-- <label>Pib municipal:</label> -->
+        <!-- </template> -->
+        <label>PIB municipal:</label>
+        <h3>R$ {{ (slotProps.features[0].properties.pib * 1000).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </VmPopup>
     </template>
   </VmLayer>
@@ -45,29 +46,30 @@ export default {
           "interpolate",
           ["linear"],
           ["get", "pib"],
-          13,
+          0,
+          "#4c1212",
+          100,
           "#f63939",
-          40000,
+          // 40000, #f63939,, #6d93f1, #6c3df2
+          // "#fc3f74",
+          // 80000,
+          // "#ee5aa7",
+          // 120000,
+          // "#d177ce",
+          // 160000,
+          500,
           "#fc3f74",
-          80000,
-          "#ee5aa7",
-          120000,
-          "#d177ce",
-          160000,
-          "#ad90e3",
-          200000,
-          "#9c91e9",
-          240000,
-          "#8792ed",
-          280000,
+          // 240000,
+          // "#8792ed",
+          // 280000,
+          // "#6d93f1",
+          // 320000,
+          // "#6182f6",
+          3000,
           "#6d93f1",
-          320000,
-          "#6182f6",
-          360000,
-          "#5c6ff8",
-          400000,
-          "#6159f7",
-          450000,
+          // 400000,
+          // "#6159f7",
+          30000,
           "#6c3df2",
         ],
       };
@@ -94,8 +96,8 @@ export default {
 
       values.push({
         range: true,
-        color: "linear-gradient(to right, #f63939, #fc3f74, #6d93f1, #6c3df2",
-        value: `13 - 450.000 R$`,
+        color: "linear-gradient(to right, #4c1212, #f63939, #fc3f74, #6d93f1, #6c3df2",
+        value: `0 - 450.000 mi R$`,
       });
 
       this.$store.commit("SET_LAYER_PROPERTIES", {

@@ -10,13 +10,10 @@
     :paint-hover="{ 'fill-color': '#7c99f4' }"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>
-          {{ slotProps.features[0].properties.nm_mun }}
-        </h3>
-        <label>Renda</label>
-        <h3>R$ {{ slotProps.features[0].properties.renda.toFixed(2) }}</h3>
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <label>Renda per capita média no setor:</label>
+        <h3>R$ {{ slotProps.features[0].properties.renda.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </VmPopup>
     </template>
   </VmLayer>
@@ -49,12 +46,20 @@ export default {
             "interpolate",
             ["linear"],
             ["get", "renda"],
-            this.munPracaData.renda_min,
+            0.5*510,
+            ["to-color","#4c1212"],
+            1*510,
             ["to-color", "#f63939"],
-            this.munPracaData.renda_mean,
-            ["to-color", "#ad90e3"],
+            2*510,// this.munPracaData.renda_mean,
+            ["to-color", "#fc3f74"],
+            3*510,
+            // this.munPracaData.renda_max*0.6,
+            ["to-color", "#6d93f1"],
             this.munPracaData.renda_max,
-            ["to-color", "#6182f6"],
+            // 3*510,
+            ["to-color", "#6c3df2"],
+            // 4*510,
+            // ["to-color", "#6c3df2"],
           ],
           ["literal", "transparent"],
         ],
@@ -82,7 +87,7 @@ export default {
 
       values.push({
         range: true,
-        color: "linear-gradient(to right, #f63939, #fc3f74, #6d93f1, #6c3df2",
+        color: "linear-gradient(to right, #4c1212, #f63939, #fc3f74, #6d93f1, #6c3df2",
         value: `${this.munPracaData.renda_min.toFixed(
           2
         )} - ${this.munPracaData.renda_max.toFixed(2)} R$`,

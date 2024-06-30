@@ -8,20 +8,14 @@
     :paint="paintLayer"
     :paint-hover="{ 'fill-color': '#7c99f4' }"
     :opacity="layer.opacity"
-    @featurehover="featureHovered"
+    @featureclick="featureHovered"
   >
-    <template v-slot:popupHover="slotProps">
-      <label>
-        Praça / parque:
-        <h3>
-          {{ slotProps.features[0].properties.nm_praca }}
-        </h3>
-      </label>
-      <label>
-        Área:
-        <h3>{{ slotProps.features[0].properties.areaM2.toFixed(2) }} m²</h3>
-      </label>
-    </template>
+  <template v-slot:popupHover="slotProps">
+    <VmPopup color="#e6f1f2">
+      <h3>{{ slotProps.features[0].properties.nm_praca || "Sem Nome"}}</h3>
+      <label> Área da Praça: {{ slotProps.features[0].properties.aream2.toFixed(0) }} m²</label>
+    </VmPopup>
+  </template>
   </VmLayer>
 </template>
 
@@ -34,7 +28,7 @@ export default {
   props: ["layer"],
   data() {
     return {
-      bbox: ``,
+      bbox: '',
       loading: false,
       feature: "",
       munId: "",
@@ -65,31 +59,37 @@ export default {
     featureHovered(e) {
       this.feature = e[0].geometry;
     },
+    addBufferLayer() {
+      let buffer = turf.buffer(this.feature, 400, { units: "meters" });
+      window.maplibregl.addSource("buffer", {
+        type: "geojson",
+        data: buffer,
+      });
+      window.maplibregl.addLayer({
+        id: "buffer",
+        source: "buffer",
+        type: "fill",
+        paint: {
+          "fill-color": "#FF6F91",
+          "fill-opacity": 0.4,
+        },
+      },);
+    },
+    removeBufferLayer() {
+      window.maplibregl.removeLayer("buffer");
+      window.maplibregl.removeSource("buffer");
+    },
   },
 
   watch: {
     feature: {
       handler: function (val, oldVal) {
         if (oldVal) {
-          window.maplibregl.removeLayer("buffer");
-          window.maplibregl.removeSource("buffer");
+          this.removeBufferLayer();
         }
-
-        let buffer = turf.buffer(val, 400, { units: "meters" });
-
-        window.maplibregl.addSource("buffer", {
-          type: "geojson",
-          data: buffer,
-        });
-        window.maplibregl.addLayer({
-          id: "buffer",
-          source: "buffer",
-          type: "fill",
-          paint: {
-            "fill-color": "#FF6F91",
-            "fill-opacity": 0.4,
-          },
-        });
+        if (val) {
+          this.addBufferLayer();
+        }
       },
       immediate: true,
       deep: true,

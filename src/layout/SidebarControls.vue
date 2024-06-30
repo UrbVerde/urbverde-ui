@@ -1,12 +1,12 @@
 <template>
   <div class="aside__toolbar_layers">
-    <VegetacaoSidebar v-if="this.$route.params.categoria == 'vegetacao'" />
 
-    <PracasParquesSidebar
-      v-if="this.$route.params.categoria == 'pracasparques'"
-    />
+    <VegetacaoSidebar v-if="$route.params.categoria === 'vegetacao'" />
 
-    <TemperaturaSidebar v-if="this.$route.params.categoria == 'temperatura'" />
+    <PracasParquesSidebar v-if="$route.params.categoria === 'pracasparques'" />
+
+    <TemperaturaSidebar v-if="$route.params.categoria === 'temperatura'" />
+  
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
 }
 
 .aside__toolbar_layers {
-  margin-top: 1em;
+  margin-top: 0px !important;
   label {
     color: #003c3c;
     font-size: 13px;

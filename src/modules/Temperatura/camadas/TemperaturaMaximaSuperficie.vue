@@ -1,21 +1,17 @@
 <template>
-  <VmLayer
-    ref="layerTemp"
-    :name="layer.name"
-    :source="layerSource"
-    :type="layer.type"
-    :zIndex="layer.zIndex"
-    :sourceLayer="sourceLayer"
-    :paint="layerPaint"
-    :paint-hover="{ 'fill-color': '#7c99f4' }"
-    @featurehover="featurehover"
-    :opacity="layer.opacity"
-  >
+  <VmLayer ref="layerTemp" :name="layer.name" :source="layerSource" :type="layer.type" :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer" :paint="layerPaint" :paint-hover="{ 'fill-color': '#7c99f4' }" @featurehover="featurehover"
+    :opacity="layer.opacity">
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Temperatura Máxima de Superfície</label>
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Temperatura Máxima de Superfície:</label>
+        </template>
+        <template v-else>
+          <label>Temperatura Máxima de Superfície no setor:</label>
+        </template>
         <h3>{{ slotProps.features[0].properties.c3.toFixed(2) }} ºC</h3>
       </VmPopup>
     </template>
@@ -126,7 +122,7 @@ export default {
   },
 
   methods: {
-    featurehover(e) {},
+    featurehover(e) { },
     buildLegend() {
       const values = [];
 
@@ -156,7 +152,7 @@ export default {
     },
   },
 
-  created() {},
+  created() { },
   mounted() {
     this.buildLegend();
   },
@@ -176,7 +172,7 @@ export default {
 
     // },
   },
-  updated() {},
+  updated() { },
 };
 </script>
 

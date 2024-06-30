@@ -1,6 +1,6 @@
 export default [
   {
-    name: "Home",
+    // name: "Home",
     path: "/:id?",
     component: () => import("@/layout/Default"),
     children: [

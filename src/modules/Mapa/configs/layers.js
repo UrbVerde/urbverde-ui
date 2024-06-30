@@ -1,6 +1,6 @@
 export const LAYERS_DEFAULT = [
   {
-    name: "Camadas Base",
+    name: "Legenda",
     categoria: "base",
     type: "fill",
     visible: true,
@@ -19,17 +19,13 @@ export const LAYERS_DEFAULT = [
         contour: true,
         value: "Setores Censitários",
       },
-      {
-        color: "#40826D",
-        value: "Parques e Praças",
-      },
+
     ],
     props: {
       source: {
         generateId: true,
         type: "vector",
         tiles: [
-          // https://urbverde.iau.usp.br/dados
           `https://urbverde.iau.usp.br/dados/public.geom_municipios/{z}/{x}/{y}.pbf?`,
         ],
         minzoom: 0,
@@ -45,7 +41,7 @@ export const LAYERS_DEFAULT = [
     visible: true,
     visibleUI: false,
     colorUI: "#d4ecd5",
-    zIndex: 50,
+    zIndex: 50, 
     componentName: "SetoresCensitariosVector",
     props: {
       source: {
@@ -60,33 +56,11 @@ export const LAYERS_DEFAULT = [
     },
     sourceLayer: "public.geom_setores",
   },
-  {
-    name: "Praças e Parques",
-    categoria: "base",
-    type: "fill",
-    visible: false,
-    visibleUI: false,
-    colorUI: "#d4ecd5",
-    zIndex: 100,
-    componentName: "PracasParquesVector",
-    props: {
-      source: {
-        generateId: true,
-        type: "vector",
-        tiles: [
-          `https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf?`,
-        ],
-        minzoom: 0,
-        maxzoom: 22,
-      },
-    },
-    sourceLayer: "public.geom_pracas",
-  },
 
   // Camadas Principais - ESTADUAL:VEGETACAO
 
   {
-    name: "% Cobertura Vegetal (PCV)",
+    name: "Percentual de Cobertura Vegetal (PCV)",
     categoria: "principal_vegetacao",
     type: "fill",
     visible: false,
@@ -97,8 +71,8 @@ export const LAYERS_DEFAULT = [
     opacity: 1,
   },
   {
-    name: "% Cobertura Vegetal (PCV) por mesorregião",
-    categoria: "/% Cobertura Vegetal (PCV)",
+    name: "Percentual de Cobertura Vegetal (PCV) por Mesorregião",
+    categoria: "/Percentual de Cobertura Vegetal (PCV)",
     type: "fill",
     visible: false,
     visibleUI: true,
@@ -141,8 +115,8 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "% Cobertura Vegetal (PCV) por microrregião",
-    categoria: "/% Cobertura Vegetal (PCV)",
+    name: "Percentual de Cobertura Vegetal (PCV) por Microrregião",
+    categoria: "/Percentual de Cobertura Vegetal (PCV)",
     type: "fill",
     visible: false,
     visibleUI: true,
@@ -200,7 +174,7 @@ export const LAYERS_DEFAULT = [
     paint: {},
   },
   {
-    name: "Índice de Cobertura Vegetal (ICV) por mesorregião",
+    name: "Índice de Cobertura Vegetal (ICV) por Mesorregião",
     categoria: "/Índice de Cobertura Vegetal (ICV)",
     type: "fill",
     visible: false,
@@ -245,7 +219,7 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "Índice de Cobertura Vegetal (ICV) por microrregião",
+    name: "Índice de Cobertura Vegetal (ICV) por Microrregião",
     categoria: "/Índice de Cobertura Vegetal (ICV)",
     type: "fill",
     visible: false,
@@ -300,7 +274,40 @@ export const LAYERS_DEFAULT = [
     opacity: 1,
   },
   {
-    name: "IDSA por mesorregião",
+    name: "ISs - Subindicador Social",
+    categoria: "/Índice de Desigualdade Socioambiental (IDSA)",
+    type: "fill",
+    visible: false,
+    visibleUI: true,
+    colorUI: "#d4ecd5",
+    zIndex: 51,
+    componentName: "ISs",
+    opacity: 1,
+  },
+  {
+    name: "ISi - Subindicador de Infraestrutura",
+    categoria: "/Índice de Desigualdade Socioambiental (IDSA)",
+    type: "fill",
+    visible: false,
+    visibleUI: true,
+    colorUI: "#d4ecd5",
+    zIndex: 51,
+    componentName: "ISi",
+    opacity: 1,
+  },
+  {
+    name: "ISd - Subindicador Demográfico",
+    categoria: "/Índice de Desigualdade Socioambiental (IDSA)",
+    type: "fill",
+    visible: false,
+    visibleUI: true,
+    colorUI: "#d4ecd5",
+    zIndex: 51,
+    componentName: "ISd",
+    opacity: 1,
+  },
+  {
+    name: "IDSA por Mesorregião",
     categoria: "/Índice de Desigualdade Socioambiental (IDSA)",
     type: "fill",
     visible: false,
@@ -345,7 +352,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "IDSA por microrregião",
+    name: "IDSA por Microrregião",
     categoria: "/Índice de Desigualdade Socioambiental (IDSA)",
     type: "fill",
     visible: false,
@@ -389,10 +396,10 @@ export const LAYERS_DEFAULT = [
       ],
     },
   },
+  
   // Camadas Principais - PRACAS
-
   {
-    name: "Acesso população atendida pelas praças",
+    name: "População atendida pelas praças",
     categoria: "principal_pracas",
     type: "fill",
     visible: false,
@@ -405,7 +412,7 @@ export const LAYERS_DEFAULT = [
     paint: {},
   },
   {
-    name: "Acesso população atendida pelas praças por mesorregião",
+    name: "Acesso - população atendida pelas praças por Mesorregião",
     categoria: "/Acesso população atendida pelas praças",
     type: "fill",
     visible: false,
@@ -443,7 +450,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "Acesso população atendida pelas praças por microrregião",
+    name: "Acesso - população atendida pelas praças por Microrregião",
     categoria: "/Acesso população atendida pelas praças",
     type: "fill",
     visible: false,
@@ -482,7 +489,7 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "M² de praças por Habitante",
+    name: "Área de praças por Habitante",
     categoria: "principal_pracas",
     type: "fill",
     visible: false,
@@ -494,7 +501,7 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "M² de praças por Habitante por mesorregião",
+    name: "Área de praças por Habitante por Mesorregião",
     categoria: "/M² de praças por Habitante",
     type: "fill",
     visible: false,
@@ -536,7 +543,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "M² de praças por Habitante por microrregião",
+    name: "Área de praças por Habitante por Microrregião",
     categoria: "/M² de praças por Habitante",
     type: "fill",
     visible: false,
@@ -579,7 +586,7 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "% de área ocupada pelos buffers",
+    name: "Área atendida pelas praças",
     categoria: "principal_pracas",
     type: "fill",
     visible: false,
@@ -591,7 +598,7 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "% de área ocupada pelos buffers por mesorregião",
+    name: "Cobertura da vizinhança das praças área ocupada pelos buffers por Mesorregião",
     categoria: "/% de área ocupada pelos buffers",
     type: "fill",
     visible: false,
@@ -633,7 +640,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "% de área ocupada pelos buffers por microrregião",
+    name: "Cobertura - área ocupada pelos buffers por Microrregião",
     categoria: "/% de área ocupada pelos buffers",
     type: "fill",
     visible: false,
@@ -676,7 +683,7 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "Distância Média até praça mais próxima",
+    name: "Distância Média até as praças",
     categoria: "principal_pracas",
     type: "fill",
     visible: false,
@@ -727,7 +734,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "Distância Média até praça mais próxima por microrregião",
+    name: "Distância Média até praça mais próxima por Microrregião",
     categoria: "/Distância Média até praça mais próxima",
     type: "fill",
     visible: false,
@@ -826,14 +833,14 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "Índice de Desenvolvimento Humano",
+    name: "IDH",
     categoria: "aux_pracas",
     type: "fill",
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
     zIndex: 51,
-    componentName: "RegioesLayer",
+    componentName: "RegioesLayer-IDH",
     opacity: 1,
     sourceLayer: "public.geodata_pracas_por_municipio_2021",
     props: {
@@ -860,9 +867,9 @@ export const LAYERS_DEFAULT = [
         "interpolate",
         ["linear"],
         ["get", "idh"],
-        0.639,
+        0.7,
         "#f63939",
-        0.862,
+        0.8,
         "#6c3df2",
       ],
     },
@@ -875,7 +882,7 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 1,
+    zIndex: 52,
     componentName: "ManchaUrbana",
     opacity: 1,
     props: {
@@ -890,13 +897,13 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "Temperatura - intraurbano",
+    name: "Temperatura de Superfície (2016-2021)",
     categoria: "aux_pracas_intraurbano",
     type: "raster",
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 1,
+    zIndex: 52,
     opacity: 1,
     componentName: "AuxTempIntraurb",
     props: {
@@ -913,7 +920,7 @@ export const LAYERS_DEFAULT = [
     colorUI: "#d4ecd5",
     zIndex: 51,
     componentName: "Renda",
-    opacity: 1,
+    opacity: 0.8,
     legends: [
       {
         range: true,
@@ -934,6 +941,12 @@ export const LAYERS_DEFAULT = [
     colorUI: "#d4ecd5",
     zIndex: 100,
     componentName: "PracasParquesVector",
+    legends: [
+      {
+        color: "#40826D",
+        value: "Parques e Praças",
+      },
+    ],
     props: {
       source: {
         generateId: true,
@@ -949,13 +962,13 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "Buffer de 400m em torno das praças",
+    name: "Buffer de 400m ao redor das praças",
     categoria: "aux_pracas_intraurbano",
     type: "fill",
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 52,
+    zIndex: 53,
     componentName: "Buffer400m",
     opacity: 0.5,
     legends: [
@@ -964,7 +977,6 @@ export const LAYERS_DEFAULT = [
         value: "Área do buffer",
       },
     ],
-
     props: {
       source: {
         generateId: true,
@@ -986,7 +998,7 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 1,
+    zIndex: 52,
     componentName: "VegetacaoRaster",
     props: {
       source: {},
@@ -1008,7 +1020,7 @@ export const LAYERS_DEFAULT = [
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 1,
+    zIndex: 52,
     componentName: "NdviRaster",
     props: {
       source: {},
@@ -1022,40 +1034,9 @@ export const LAYERS_DEFAULT = [
       },
     ],
   },
-  {
-    name: "ISs - Subindicador Social",
-    categoria: "aux_veg_estadual",
-    type: "fill",
-    visible: false,
-    visibleUI: true,
-    colorUI: "#d4ecd5",
-    zIndex: 51,
-    componentName: "ISs",
-    opacity: 1,
-  },
-  {
-    name: "ISi - Subindicador de Infraestrutura",
-    categoria: "aux_veg_estadual",
-    type: "fill",
-    visible: false,
-    visibleUI: true,
-    colorUI: "#d4ecd5",
-    zIndex: 51,
-    componentName: "ISi",
-    opacity: 1,
-  },
-  {
-    name: "ISd - Subindicador Demográfico",
-    categoria: "aux_veg_estadual",
-    type: "fill",
-    visible: false,
-    visibleUI: true,
-    colorUI: "#d4ecd5",
-    zIndex: 51,
-    componentName: "ISd",
-    opacity: 1,
-  },
 
+
+  // Temperatura
   {
     name: "Coeficiente de Ilha de Calor",
     categoria: "principal_temperatura",
@@ -1067,98 +1048,96 @@ export const LAYERS_DEFAULT = [
     componentName: "CoeficienteIlhaCalor",
     opacity: 1,
   },
-
+  // {
+  //   name: "Coeficiente de Ilha de Calor por Microrregião",
+  //   categoria: "/Coeficiente de Ilha de Calor",
+  //   type: "fill",
+  //   visible: false,
+  //   visibleUI: true,
+  //   colorUI: "#d4ecd5",
+  //   zIndex: 51,
+  //   componentName: "TemperaturaMicrorregiao",
+  //   opacity: 1,
+  //   legends: [
+  //     {
+  //       value: "0 - 15",
+  //       range: true,
+  //       color:
+  //         "linear-gradient(to right, #3288bd, #99d594, #e6f598, #fee08b, #fc8d59, #d53e4f)",
+  //     },
+  //   ],
+  //   paint: {
+  //     "fill-color": [
+  //       "interpolate",
+  //       ["linear"],
+  //       ["get", "c1"],
+  //       0,
+  //       "#3288bd",
+  //       3,
+  //       "#99d594",
+  //       6,
+  //       "#e6f598",
+  //       9,
+  //       "#fee08b",
+  //       12,
+  //       "#fc8d59",
+  //       15,
+  //       "#d53e4f",
+  //     ],
+  //   },
+  // },
+  // {
+  //   name: "Coeficiente de Ilha de Calor por Mesorregião",
+  //   categoria: "/Coeficiente de Ilha de Calor",
+  //   type: "fill",
+  //   visible: false,
+  //   visibleUI: true,
+  //   colorUI: "#d4ecd5",
+  //   zIndex: 51,
+  //   componentName: "TemperaturaMesorregiao",
+  //   opacity: 1,
+  //   sourceLayer: "public.geodata_vegetacao_por_mesorregiao_2016",
+  //   legends: [
+  //     {
+  //       value: "0 - 5",
+  //       range: true,
+  //       color:
+  //         "linear-gradient(to right, #3288bd, #99d594, #e6f598, #fee08b, #fc8d59, #d53e4f)",
+  //     },
+  //   ],
+  //   paint: {
+  //     "fill-color": [
+  //       "interpolate",
+  //       ["linear"],
+  //       ["get", "c1"],
+  //       0,
+  //       "#3288bd",
+  //       1,
+  //       "#99d594",
+  //       2,
+  //       "#e6f598",
+  //       3,
+  //       "#fee08b",
+  //       4,
+  //       "#fc8d59",
+  //       5,
+  //       "#d53e4f",
+  //     ],
+  //   },
+  // },
+  // {
+  //   name: "Temperatura Média de Superfície",
+  //   categoria: "principal_temperatura",
+  //   type: "fill",
+  //   visible: false,
+  //   visibleUI: true,
+  //   colorUI: "#d4ecd5",
+  //   zIndex: 51,
+  //   componentName: "TemperaturaMediaSuperficie",
+  //   opacity: 1,
+  // },
   {
-    name: "Coeficiente de Ilha de Calor por Mesorregião",
-    categoria: "/Coeficiente de Ilha de Calor",
-    type: "fill",
-    visible: false,
-    visibleUI: true,
-    colorUI: "#d4ecd5",
-    zIndex: 51,
-    componentName: "TemperaturaMesorregiao",
-    opacity: 1,
-    sourceLayer: "public.geodata_vegetacao_por_mesorregiao_2016",
-    legends: [
-      {
-        value: "0 - 5",
-        range: true,
-        color:
-          "linear-gradient(to right, #3288bd, #99d594, #e6f598, #fee08b, #fc8d59, #d53e4f)",
-      },
-    ],
-    paint: {
-      "fill-color": [
-        "interpolate",
-        ["linear"],
-        ["get", "c1"],
-        0,
-        "#3288bd",
-        1,
-        "#99d594",
-        2,
-        "#e6f598",
-        3,
-        "#fee08b",
-        4,
-        "#fc8d59",
-        5,
-        "#d53e4f",
-      ],
-    },
-  },
-  {
-    name: "Coeficiente de Ilha de Calor por microrregião",
-    categoria: "/Coeficiente de Ilha de Calor",
-    type: "fill",
-    visible: false,
-    visibleUI: true,
-    colorUI: "#d4ecd5",
-    zIndex: 51,
-    componentName: "TemperaturaMicrorregiao",
-    opacity: 1,
-    legends: [
-      {
-        value: "0 - 15",
-        range: true,
-        color:
-          "linear-gradient(to right, #3288bd, #99d594, #e6f598, #fee08b, #fc8d59, #d53e4f)",
-      },
-    ],
-    paint: {
-      "fill-color": [
-        "interpolate",
-        ["linear"],
-        ["get", "c1"],
-        0,
-        "#3288bd",
-        3,
-        "#99d594",
-        6,
-        "#e6f598",
-        9,
-        "#fee08b",
-        12,
-        "#fc8d59",
-        15,
-        "#d53e4f",
-      ],
-    },
-  },
-
-  {
-    name: "Temperatura Média de Superfície (TMS)",
-    categoria: "principal_temperatura",
-    type: "fill",
-    visible: false,
-    visibleUI: true,
-    colorUI: "#d4ecd5",
-    zIndex: 51,
-    componentName: "TemperaturaMediaSuperficie",
-    opacity: 1,
-  },
-  {
-    name: "TMS por Mesorregião",
+    name: "Temperatura Média de Superfície por Mesorregião",
     categoria: "/Temperatura Média de Superfície (TMS)",
     type: "fill",
     visible: false,
@@ -1194,7 +1173,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "TMS por microrregião",
+    name: "Temperatura Média de Superfície por Microrregião",
     categoria: "/Temperatura Média de Superfície (TMS)",
     type: "fill",
     visible: false,
@@ -1280,7 +1259,7 @@ export const LAYERS_DEFAULT = [
     },
   },
   {
-    name: "TS máxima por microrregião",
+    name: "TS máxima por Microrregião",
     categoria: "/Temperatura Máxima de Superfície",
     type: "fill",
     visible: false,
@@ -1319,31 +1298,33 @@ export const LAYERS_DEFAULT = [
   },
 
   {
-    name: "Temperatura - microclimas",
+    name: "Temperatura de Superfície (2016-2021)",
     categoria: "aux_temperatura_intraurbano",
     type: "raster",
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 1,
-    componentName: "AuxTempIntraurb",
+    zIndex: 52,
+    componentName: "AuxTempIntraurban",
+    opacity: 1,
     props: {
       source: {},
     },
   },
 
   {
-    name: "Temperatura",
+    name: "Imagem de Temperatura Anual",
     categoria: "aux_temperatura",
     type: "raster",
     visible: false,
     visibleUI: true,
     colorUI: "#d4ecd5",
-    zIndex: 1,
+    zIndex: 52,
     componentName: "TemperaturaRaster",
     props: {
       source: {},
     },
+    opacity: 0.8,
   },
 
   // {

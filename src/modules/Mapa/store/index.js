@@ -22,6 +22,8 @@ let state = {
   mesoPracaData: [],
   activeLayersList: [],
   previousLayers: [],
+  zoom: null,     // Add zoom property
+  viewbox: null,  // Add viewbox property
 };
 
 let mutations = {
@@ -144,84 +146,83 @@ let getters = {
 
 let actions = {
   async getMunicipioVegData({ commit }, id) {
-    await axios
-      .get(
+    try {
+      const response = await axios.get(
         `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Avegetacao_highlights_data&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
-        // `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Adados_vegetacao_por_municipio&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
-      )
-      .then((response) => {
-        let vegetacaoSerieHistorica = {
-          2016: [],
-          2017: [],
-          2018: [],
-          2019: [],
-          2020: [],
-          2021: [],
-        };
-        response.data.features.forEach((item) =>
-          vegetacaoSerieHistorica[item.properties.ano].push(item.properties)
-        );
-        commit("SET_MUN_VEG_DATA", vegetacaoSerieHistorica);
-      });
+      );
+      let vegetacaoSerieHistorica = {
+        2016: [],
+        2017: [],
+        2018: [],
+        2019: [],
+        2020: [],
+        2021: [],
+      };
+      response.data.features.forEach((item) =>
+        vegetacaoSerieHistorica[item.properties.ano].push(item.properties)
+      );
+      commit("SET_MUN_VEG_DATA", vegetacaoSerieHistorica);
+    } catch (error) {
+      console.error("Error in getMunicipioVegData:", error);
+    }
   },
 
   async getMunicipioPracaData({ commit }, id) {
-    await axios
-      .get(
+    try {
+      const response = await axios.get(
         `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Adados_pracas_por_municipio&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
-      )
-      .then((response) => {
-        let pracaSerieHistorica = {
-          2016: [],
-          2017: [],
-          2018: [],
-          2019: [],
-          2020: [],
-          2021: [],
-        };
-        response.data.features.forEach((item) =>
-          pracaSerieHistorica[item.properties.ano].push(item.properties)
-        );
-
-        commit("SET_MUN_PRACA_DATA", pracaSerieHistorica);
-      });
+      );
+      let pracaSerieHistorica = {
+        2016: [],
+        2017: [],
+        2018: [],
+        2019: [],
+        2020: [],
+        2021: [],
+      };
+      response.data.features.forEach((item) =>
+        pracaSerieHistorica[item.properties.ano].push(item.properties)
+      );
+      commit("SET_MUN_PRACA_DATA", pracaSerieHistorica);
+    } catch (error) {
+      console.error("Error in getMunicipioPracaData:", error);
+    }
   },
 
   async getMunicipioTempData({ commit }, id) {
-    await axios
-      .get(
+    try {
+      const response = await axios.get(
         `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Adados_temperatura_por_municipio&CQL_FILTER=cd_mun=${id}&outputFormat=application%2Fjson`
-      )
-      .then((response) => {
-        let tempSerieHistorica = {
-          2016: [],
-          2017: [],
-          2018: [],
-          2019: [],
-          2020: [],
-          2021: [],
-        };
-        response.data.features.forEach((item) =>
-          tempSerieHistorica[item.properties.ano].push(item.properties)
-        );
-        commit("SET_MUN_TEMP_DATA", tempSerieHistorica);
-      });
+      );
+      let tempSerieHistorica = {
+        2016: [],
+        2017: [],
+        2018: [],
+        2019: [],
+        2020: [],
+        2021: [],
+      };
+      response.data.features.forEach((item) =>
+        tempSerieHistorica[item.properties.ano].push(item.properties)
+      );
+      commit("SET_MUN_TEMP_DATA", tempSerieHistorica);
+    } catch (error) {
+      console.error("Error in getMunicipioTempData:", error);
+    }
   },
 
   async getMunicipiosGeojson({ commit }) {
-    await axios
-      .get(
+    try {
+      const response = await axios.get(
         "https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Ageom_municipios&outputFormat=application%2Fjson"
-      )
-      .then((response) => {
-        commit("SET_MUN_GEOJSONS", response.data.features);
-        let munList = [];
-        response.data.features.forEach((item) =>
-          munList.push(item.properties.nm_mun)
-        );
-        commit("SET_MUN_LIST", munList);
-      })
-      .catch((err) => console.log("error"));
+      );
+      commit("SET_MUN_GEOJSONS", response.data.features);
+      const munList = response.data.features.map((item) => item.properties.nm_mun);
+      commit("SET_MUN_LIST", munList);
+    } catch (error) {
+      console.error("Error in getMunicipiosGeojson:", error);
+      // router.push("/"); // Redirect the user to the homepage
+    }
   },
 };
 

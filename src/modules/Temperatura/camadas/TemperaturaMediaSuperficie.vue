@@ -12,8 +12,8 @@
     @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
+      <VmPopup color="#F4F4F4">
+        <!-- <label>Município</label> -->
         <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>Temperatura Média de Superfície</label>
         <h3>{{ slotProps.features[0].properties.c2.toFixed(2) }} ºC</h3>

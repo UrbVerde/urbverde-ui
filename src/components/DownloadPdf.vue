@@ -1,5 +1,5 @@
 <template>
-  <v-btn :color="color" class="pa-3" @click="downloadPdf"
+  <v-btn disabled :color="color" class="pa-3" @click="downloadPdf"
     ><p class="mb-0 white--text">Baixar relatório</p>
   </v-btn>
 </template>
@@ -301,8 +301,8 @@ export default {
           head: [
             [
               "Ano",
-              "% Cobertura Vegetal do Município",
-              "% Cobertura Vegetal no Setor",
+              "Percentual de Cobertura Vegetal do Município",
+              "Percentual de Cobertura Vegetal no Setor",
             ],
           ],
           body: [
@@ -344,7 +344,7 @@ export default {
         head: [
           [
             "Ano",
-            "Porcentagem de Cobertura Vegetal",
+            "Percentual de Cobertura Vegetal",
             "Temperatura Média de Superfície",
           ],
         ],

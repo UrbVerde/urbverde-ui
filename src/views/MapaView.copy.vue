@@ -1,183 +1,135 @@
 <template>
   <section>
-
-    <HeaderMap :highlightSearch="searchHighlight" />
-
     <v-row class="d-flex">
 
-      <!-- Menu Lateral de Navegação -->
-      <v-col cols="5" md="1" class="d-flex flex-md-column justify-center fixed">
+      <v-col cols="12" md="3" class="d-flex ml-auto flex-column" style="
+        width: 100%; height: 98vh; 
+        background: var(--Gray-White, #FFF); box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+        display: flex;
+        padding: 15px 24px 16px 24px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        flex: 1 0 0;
+        align-self: stretch;
+      ">
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <div class="mx-auto verticalcolumn__menu_item" v-on="on">
-              <img class="my-5 mx-auto" @click="highlightSearch" width="25px" src="@/assets/icons/search-icon.png"
-                alt="" />
-            </div>
-          </template>
-          <span>Procurar município</span>
-        </v-tooltip>
+        <router-link :to="{ name: 'Home' }">
+          <img width="70%" src="@/assets/logos/urbverde-logo.png" />
+        </router-link>
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <div class="mx-auto verticalcolumn__menu_item" v-on="on">
-              <img class="my-5 mx-auto" width="25px" src="@/assets/icons/field-icon.png" alt="" @click="highlightMap" />
-            </div>
-          </template>
-          <span>Mapa principal</span>
-        </v-tooltip>
+        <div class="d-flex flex-column" style="width: 100%;">
+          <label>ESCALA</label>
+          <!-- <div class="aside__toolbar_scale"> -->
+          <!-- <div class="d-flex align-center justify-space-around aside__toolbar_btnbox"> -->
+          <router-link class="aside__toolbar_scale--buttons" :class="{
+          category__active: routeScaleValue == 'estadual',
+        }" :to="{ params: { escala: 'estadual' } }"><span>Estadual</span></router-link>
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <div class="mx-auto verticalcolumn__menu_item" v-on="on">
-              <img class="my-5 mx-auto" width="25px" src="@/assets/icons/field3-icon.png" alt="" @click="scrollToStats" />
-            </div>
-          </template>
-          <span>Rankings</span>
-        </v-tooltip>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <div class="mx-auto verticalcolumn__menu_item" v-on="on">
-              <img class="my-5 mx-auto" width="25px" src="@/assets/icons/field2-icon.png" alt=""
-                @click="scrollToGraphs" />
-            </div>
-          </template>
-          <span>Destaques</span>
-        </v-tooltip>
-
-        <!-- <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-         <a
-          href="https://github.com/UrbVerde/urbverde-ui"
-          target="_blank"
-          class="mx-auto verticalcolumn__menu_item"
-          v-on="on"
-        >
-          <img width="25px" src="@/assets/icons/downloads-icon.png" alt="" />
-        </a>
-        </template>
-        <span>Download</span>
-      </v-tooltip> -->
-
-        <!-- <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <div class="mx-auto verticalcolumn__menu_item" v-on="on">
-        <img
-          class="my-5 mx-auto"
-          width="25px"
-          src="@/assets/icons/field5-icon.png"
-          alt=""
-        />
+          <router-link class="aside__toolbar_scale--buttons" :class="{
+          category__active: routeScaleValue == 'intraurbana',
+        }" :to="{ params: { escala: 'intraurbana' } }"><span>Municipal</span></router-link>
+          <!-- </div> -->
         </div>
-        </template>
-        <span>Código</span>
-      </v-tooltip> -->
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <div class="mx-auto verticalcolumn__menu_item" v-on="on">
-              <ShareModal />
-            </div>
-          </template>
-          <span>Compartilhar</span>
-        </v-tooltip>
-      </v-col>
 
-      <!-- Menu Lateral Retrátil -->
-      <v-col cols="12" md="3" class="d-flex ml-auto">
-        <div class="d-flex flex-column" style="width: 100%">
+        <div>
+          <label>MUNICÍPIO</label>
+          <!-- <label>{{ this.$route.params.escala == 'estadual' ? 'MUNICIPIO' : 'ESTADO' }}</label> -->
+          <!-- <v-col cols="10" md="5" :class="{ highlight: highlightSearch }"> -->
+          <v-autocomplete v-model="municipioSelected" :items="municipios" label="Ex: São Carlos"></v-autocomplete>
+          <!-- </v-col> -->
+        </div>
 
-          <!-- Escala -->
-          <div class="aside__toolbar_scale">
-            <label>VISUALIZAR ESCALA :</label>
-            <div class="d-flex align-center justify-space-around aside__toolbar_btnbox">
-              <router-link class="aside__toolbar_scale--buttons" :class="{
-                category__active: routeScaleValue == 'estadual',
-              }" :to="{ params: { escala: 'estadual' } }"><span>Estadual</span></router-link>
+        <div style="display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+          flex: 1 0 0;
+          align-self: stretch;">
+          <label>CATEGORIAS</label>
+          <ul>
+            <li>Temperatura</li>
+            <li>Vegetação</li>
+            <li>Praças e Parques</li>
+            <li>Hidrografia</li>
+            <li>Emissões</li>
+            <li>IBGE</li>
+          </ul>
 
-              <router-link class="aside__toolbar_scale--buttons" :class="{
-                category__active: routeScaleValue == 'intraurbana',
-              }" :to="{ params: { escala: 'intraurbana' } }"><span>Intra-urbana</span></router-link>
+        </div>
+
+        <div
+          style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-start; align-items: center; display: inline-flex">
+          <div
+            style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; background: rgba(255, 255, 255, 0); justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+            <div
+              style="flex: 1 1 0; height: 24px; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
+              <div
+                style="background: rgba(255, 255, 255, 0); flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+                <div style="width: 24px; height: 24px; position: relative">
+                  <img style="width: 24px; height: 24px; left: 0px; top: 0px; position: absolute"
+                    src="https://via.placeholder.com/24x24" />
+                </div>
+              </div>
+              <div
+                style="flex: 1 1 0; background: rgba(255, 255, 255, 0); flex-direction: column; justify-content: center; align-items: flex-start; display: inline-flex">
+                <div
+                  style="align-self: stretch; color: #ADB5BD; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">
+                  Temperatura</div>
+              </div>
             </div>
           </div>
-
-          <!-- Camada Principal e Auxiliares -->
-          <div class="aside__toolbar_layers">
+        </div>
+        <!-- Camada Principal e Auxiliares -->
+        <!-- <div class="aside__toolbar_layers">
             <SidebarControls />
-          </div>
+          </div> -->
+
         </div>
       </v-col>
 
       <!-- Mapa e Barra inferior -->
-      <v-col style="height: 83vh" cols="12" md="8" class="d-flex flex-column ma-0 pa-0">
+      <v-col style="height: 83vh" cols="12" md="9" class="d-flex flex-column ma-0 pa-0">
+
+        Texto
+
         <MapaBase :key="this.$route.params.categoria" :highlightMap="mapHighlight" />
 
 
         <!-- Praças e Parques -->
-        <!-- <div
-          v-if="this.$route.params.categoria == 'pracasparques'"
-          class="d-flex justify-space-around align-center pa-2"
-          style="background-color: #f2f5f7; border-color: 1px solid #606773"
-        >
-          <h4 style="color: #606773">
-            Área selecionada : <strong>{{ munVegData[0].nm_mun }}</strong>
-          </h4>
-          <h4 style="color: #606773">
-            População Atendida por Praças :
-            <strong> {{ munPracaData[0].h5 }}</strong>
-          </h4>
-          <h4 style="color: #606773">
-            Desigualdade de Renda :
-            <strong>{{ munPracaData[0].h6 }} </strong>
-          </h4>
-        </div> -->
-        <div v-if="this.$route.params.categoria == 'pracasparques'" class="d-flex justify-space-around align-center pa-2">
+        <div v-if="this.$route.params.categoria == 'pracasparques'"
+          class="d-flex justify-space-around align-center pa-2">
           <div class="d-flex flex-column align-start">
-            <span><strong>{{ munPracaData[0].nm_mun }}</strong></span>
+            <span><strong>{{ munPracaData ? munPracaData[0].nm_mun : "..." }}</strong></span>
             <div class="d-flex justify-center align-center">
               <span>
                 {{
-                  this.$route.params.escala == "estadual"
-                  ? "Estadual"
-                  : "Intra-urbano"
-                }}
+          this.$route.params.escala == "estadual"
+            ? "Estadual"
+            : "Intra-urbano"
+        }}
               </span>
-              <!-- <span class="ml-3">{{ this.$route.params.ano }}</span> -->
+              <span class="ml-3">{{ this.$route.params.ano }}</span>
             </div>
           </div>
 
           <div class="d-flex flex-column justify-center align-center">
-            <span><strong>População atendida por praças </strong></span>
-            <span> {{ Math.round(munPracaData[0].h5 / 100) }}%</span>
+            <span><strong>População Atendida </strong></span>
+            <span> {{ munPracaData ? Math.round(munPracaData[0].h5 / 100) + '%' : "..." }}</span>
           </div>
-
-          <!-- <div class="d-flex justify-center align-center">
-            <table class="charts-css bar mr-2" style="height: 50px">
-              <tbody style="height: 50px">
-                <tr style="background-color: #f2ecff; height: 50px">
-                  <td :style="`--size: calc(${munPracaData[0].h6} / 100); background-color: #01dc82;`">
-                    <span class="data" style="color: white">
-                      <strong>{{ munPracaData[0].h6 }}</strong>
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table> -->
-
 
           <div class="d-flex flex-column justify-center align-center">
             <span class="text-center"><strong>Desigualdade de Renda</strong></span>
-            <span>{{ Math.round((munPracaData[0].h6 - 1)*100)}}%</span>
-            <!-- style="color: #01dc82"> -->
+            <span>{{ munPracaData ? Math.round((munPracaData[0].h6 - 1) * 100) + '%' : "..." }}</span>
           </div>
 
           <div class="d-flex justify-center align-center">
-          <DownloadPdf />
+            <DownloadPdf />
           </div>
 
         </div>
-        
+
         <!-- Vegetação -->
         <!-- <div
           v-if="this.$route.params.categoria == 'vegetacao'"
@@ -204,10 +156,10 @@
             <div class="d-flex justify-center align-center">
               <span>
                 {{
-                  this.$route.params.escala == "estadual"
-                  ? "Estadual"
-                  : "Intra-urbano"
-                }}
+          this.$route.params.escala == "estadual"
+            ? "Estadual"
+            : "Intra-urbano"
+        }}
               </span>
               <span class="ml-3">
                 {{ this.$route.params.ano }}
@@ -220,14 +172,14 @@
           <div class="d-flex flex-column justify-center align-center">
             <span class="text-center"><strong>Cobertura Vegetal</strong></span>
             <!-- <chart class="mr-2" :size="60" :valor="munVegData[0].b1 * 100" /> -->
-            <span>{{ (munVegData[0].b1 * 100).toFixed(1)}}%</span>
+            <span>{{ (munVegData[0].b1 * 100).toFixed(1) }}%</span>
           </div>
 
           <div class="vertical-line"></div>
 
           <div class="d-flex flex-column justify-center align-center"></div>
           <!-- <div class="d-flex justify-center align-center"> -->
-            <!-- <table class="charts-css bar mr-2">
+          <!-- <table class="charts-css bar mr-2">
               <tbody>
                 <tr style="background-color: #f2ecff">
                   <td :style="`--size: calc(${munVegData[0].b3} / 1); background-color: #01dc82;`">
@@ -238,11 +190,11 @@
                 </tr>
               </tbody>
             </table>-->
-            <span class="text-center"><strong> Desigualdade Socioambiental </strong>
+          <span class="text-center"><strong> Desigualdade Socioambiental </strong>
             <br>
             <span>{{ munVegData[0].b3.toFixed(2) }}</span>
           </span>
-          
+
 
           <div class="vertical-line"></div>
 
@@ -250,7 +202,7 @@
             <DownloadPdf />
           </div>
         </div>
-      <!-- </div> -->
+        <!-- </div> -->
 
 
         <!-- Temperatura -->
@@ -274,17 +226,17 @@
             <div class="d-flex justify-center align-center">
               <span>
                 {{
-                  this.$route.params.escala == "estadual"
-                  ? "Estadual"
-                  : "Intra-urbano"
-                }}
+          this.$route.params.escala == "estadual"
+            ? "Estadual"
+            : "Intra-urbano"
+        }}
               </span>
               <span class="ml-3">{{ this.$route.params.ano }}</span>
             </div>
           </div>
 
           <div class="d-flex flex-column justify-center align-center">
-            <span class="text-center"><strong>Temperatura Média de Superfície</strong></span>
+            <span class="text-center"><strong>Temperatura de Superfície</strong></span>
             <span>{{ munTempData[0].ch1.toFixed(2) }}ºC</span>
             <!-- style="color: #01dc82"><strong>{ -->
           </div>
@@ -305,37 +257,9 @@
         <VegetacaoHighlights v-if="this.$route.params.categoria == 'vegetacao'" />
         <PracasParquesHighlights v-if="this.$route.params.categoria == 'pracasparques'" />
         <TemperaturaHighlights v-if="this.$route.params.categoria == 'temperatura'" />
-        <div class="w100-mobile ml-md-auto" style="background-color: #e6f1f2; padding-bottom: 0; width: 90%">
-          <v-card class="" outlined color="#d0e3e3">
-
-            <NewsLetter />
-
-            <!-- Footer -->
-            <div style="background-color: white">
-              <v-row class="d-flex justify-space-between align-center" style="padding: 3em 0 3em 0">
-                <v-col style="height: 100%">
-                  <span class="pl-4"><img width="30%" src="@/assets/logos/urbverde-logo.png" /></span>
-                </v-col>
-                <v-col class="d-flex justify-center align-center">
-                  <a href="https://www.facebook.com/profile.php?id=100089182436996" target="_blank">
-                    <img width="30px" class="ma-3" src="@/assets/icons/fb-icon.png" />
-                  </a>
-                  <a href="https://twitter.com/UrbVerdeSP" target="_blank">
-                    <img width="30px" class="ma-3" src="@/assets/icons/twitter-icon.png" />
-                  </a>
-                  <a href="https://www.instagram.com/UrbVerdesp/" target="_blank">
-                    <img width="30px" class="ma-3" src="@/assets/icons/instagram-icon.png" />
-                  </a>
-                </v-col>
-              </v-row>
-            </div>
-          </v-card>
-        </div>
       </v-col>
 
     </v-row>
-
-
   </section>
 </template>
 
@@ -431,16 +355,16 @@ export default {
     },
 
     munTempData() {
-      return this.$store.getters.getMunTempData[this.$route.params.ano];
+      return this.$store.getters.getMunTempData[this.$route.params.ano] || null;
     },
     munVegData() {
-      return this.$store.getters.getMunVegData[this.$route.params.ano];
+      return this.$store.getters.getMunVegData[this.$route.params.ano] || null;
     },
     munPracaData() {
-      return this.$store.getters.getMunPracaData[2021];
+      return this.$store.getters.getMunPracaData[2021] || null;
     },
     layers() {
-      return this.$store.getters.layers;
+      return this.$store.getters.layers || null;
     }
   },
   watch: {
@@ -499,6 +423,39 @@ section {
 a {
   text-decoration: none;
   color: #003c3c;
+}
+
+label {
+  color: var(--Gray-600, #6C757D);
+  /* Components/Dropdowns/Item Header */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16.8px;
+  /* 120% */
+
+}
+
+.top {
+  display: flex;
+  height: 70px;
+  // padding: 0px 24px;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.logo {
+  background: var(--Gray-White, #FFF);
+  box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.13) inset;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  // display: flex; 
+  // align-items: center; 
+  // gap: 4px; 
+  // flex: 1 0 0;
 }
 
 .fixed {
@@ -601,46 +558,44 @@ a {
   padding: 2em;
 }
 
-
-
 .aside__toolbar_scale {
-  label {
-    color: #003c3c;
-    font-size: 13px;
-  }
-}
-
-.aside__toolbar_btnbox {
-  margin-top: 0.5em;
-  padding-bottom: 1em;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background-color: #d0e3e3;
-    bottom: 0;
-  }
-}
-
-.aside__toolbar_scale--buttons {
-  border-radius: 14px;
-  text-align: center;
-  background-color: #e6f1f2;
-  color: #003c3c;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 57px;
-  padding: 1em;
-
-  font-size: 1.2em;
-  cursor: pointer;
-
-  & span {
-    font-size: 0.8em;
-  }
+  padding: 24px 24px 32px 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
 }
-</style>
+
+// .aside__toolbar_btnbox {
+//   margin-top: 0.5em;
+//   padding-bottom: 1em;
+//   position: relative;
+// }
+// &::before {
+//   content: "";
+//   position: absolute;
+//   width: 100%;
+//   height: 1px;
+//   background-color: #d0e3e3;
+//   bottom: 0;
+// }
+
+// .aside__toolbar_scale--buttons {
+//   border-radius: 14px;
+//   text-align: center;
+//   background-color: #e6f1f2;
+//   color: #003c3c;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 57px;
+//   padding: 1em;
+
+//   font-size: 1.2em;
+//   cursor: pointer;
+
+//   & span {
+//     font-size: 0.8em;
+//   }
+// }</style>./MapaView.vue.copy

@@ -13,8 +13,8 @@
     :paint-hover="{ 'fill-color': '#7c99f4' }"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cib369">
-        <label>Município</label>
+      <VmPopup color="#F4F4F4">
+        <!-- <label>Município</label> -->
         <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
         <label>ISi</label>
         <h3>

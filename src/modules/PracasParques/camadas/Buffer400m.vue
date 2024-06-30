@@ -10,17 +10,17 @@
     :paint-hover="{ 'fill-color': '#7c99f4' }"
   >
     <template v-slot:popupClick="slotProps">
-      <VmPopup color="#f4a259">
+      <VmPopup color="#e6f1f2">
         <div style="border-radius: 8px">
           <label>
             Município:
-            <h3>
+            <!-- <h3>
               {{
                 slotProps.features &&
                 slotProps.features[0] &&
                 slotProps.features[0].properties.nm_mun
               }}
-            </h3>
+            </h3> -->
           </label>
         </div>
       </VmPopup>
@@ -31,7 +31,6 @@
 <script>
 import VmLayer from "../../Mapa/components/VmLayer.vue";
 import VmPopup from "../../Mapa/components/VmPopup.vue";
-// import axios from "axios";
 export default {
   components: { VmLayer, VmPopup },
   props: ["layer"],

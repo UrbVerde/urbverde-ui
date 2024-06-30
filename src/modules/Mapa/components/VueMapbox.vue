@@ -1,44 +1,30 @@
 <template>
-  <div
-    class="vue-mapbox"
-    :style="{ position: 'relative', width: myWidth, height: myHeight }"
-  >
-    <div
-      ref="mapabaselayer"
-      id="mapaBaseLayer"
-      class="map-layer mapbox-map-container"
-      style="
-        position: absolute;
-        left: 0px;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-      "
-    >
+  <div class="vue-mapbox" :style="{ position: 'relative', width: myWidth, height: myHeight }">
+    <div ref="mapabaselayer" id="mapaBaseLayer" class="map-layer mapbox-map-container" style="
+          position: absolute;
+          left: 0px;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          width: 100%;
+        ">
       <div v-if="mapLoaded">
         <slot></slot>
       </div>
       <div v-if="showLoader && !mapLoaded" class="loader">
         <slot name="loader">
-          <v-progress-circular
-            indeterminate
-            color="green"
-          ></v-progress-circular>
+          <v-progress-circular indeterminate color="green"></v-progress-circular>
         </slot>
       </div>
-      <div
-        v-if="devMode"
-        style="
-          position: absolute;
-          bottom: 0;
-          font-size: 9px;
-          padding: 0.4em;
-          z-index: 10;
-          background: #00000066;
-          color: white;
-        "
-      >
+      <div v-if="devMode" style="
+            position: absolute;
+            bottom: 0;
+            font-size: 9px;
+            padding: 0.4em;
+            z-index: 10;
+            background: #00000066;
+            color: white;
+          ">
         {{ camera }}
       </div>
     </div>
@@ -253,7 +239,7 @@ export default {
     };
   },
 
-  beforeCreate() {},
+  beforeCreate() { },
 
   async created() {
     if (!window.maplibregl) {
@@ -305,7 +291,7 @@ export default {
     },
   },
 
-  beforeUpdated() {},
+  beforeUpdated() { },
 
   mounted() {
     this.$nextTick(() => {
@@ -351,10 +337,32 @@ export default {
       this.map.on("load", () => {
         const _this = this;
 
+        this.map.addSource("terrain", {
+          "type": "raster-dem",
+          "url": "https://api.maptiler.com/tiles/terrain-rgb/tiles.json?key=XmSZh88cfG77QlyKTuwa",
+        });
+
         this.mapLoaded = true;
 
         this.$emit("load", _this, this.map);
-        this.map.addControl(new maplibregl.NavigationControl(), "top-right");
+        this.map.addControl(
+          new maplibregl.NavigationControl({
+            visualizePitch: true,
+            // showZoom: true,
+            // showCompass: true
+          }), "top-right");
+
+        this.map.addControl(
+          new maplibregl.ScaleControl({
+            maxWidth: 120,
+            unit: 'metric',
+          }), "bottom-left");
+
+        this.map.addControl(
+          new maplibregl.TerrainControl({
+            source: 'terrain',
+            exaggeration: 4.5,
+          }));
       });
     },
 
@@ -424,7 +432,7 @@ export default {
       return false;
     },
 
-    removeSource: function (id) {},
+    removeSource: function (id) { },
 
     updateSource: function (sourceid, type, options) {
       if (this.sources.has(sourceid)) {
@@ -604,7 +612,7 @@ export default {
       }
     },
 
-    moveLayer: function (id, zIndex) {},
+    moveLayer: function (id, zIndex) { },
 
     addPropsImages: function (images) {
       if (!this.map) return;
@@ -628,7 +636,7 @@ export default {
       let imgElement;
       try {
         imgElement = await this.processImage(url);
-      } catch (e) {}
+      } catch (e) { }
 
       if (this.map.hasImage(key) && imgElement) {
         this.map.removeImage(key);
@@ -712,7 +720,7 @@ export default {
         if (map && map.getLayer(id)) {
           map.removeLayer(id);
         }
-      } catch (e) {}
+      } catch (e) { }
       this.$nextTick(() => this.updateLayerOrder());
     },
 

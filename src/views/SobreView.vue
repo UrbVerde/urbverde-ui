@@ -29,7 +29,7 @@
         <div class="container">
           <div class="wrap-map">
             <div class="map mx-auto">
-              <img width="100%" class="mx-auto" src="@/assets/equipe.png" />
+              <img width="100%" class="mx-auto" src="@/assets/equipe2.png" />
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@
               <v-col cols="6"><strong>Coordenação Executiva </strong></v-col>
 
               <v-col cols="6">
-                <p style="color: #003c3c">
+                <!-- <p style="color: #003c3c">
                   Julio Cesar Pedrassoli
                   &nbsp;
                   <a href="https://orcid.org/0000-0001-9762-102X">
@@ -150,7 +150,7 @@
                     <img alt="Lattes CNPQ" src="https://ppgmvci.ufsc.br/files/2020/05/icon-lattes-100x100.png" width="16"
                       height="16" target="_blank" />
                   </a>
-                </p>
+                </p> -->
                 <p style="color: #003c3c">Rubia Gomes Morato
                   &nbsp;
                   <a href="https://orcid.org/0000-0001-6135-4302">
@@ -216,7 +216,7 @@
             <v-row>
               <v-col cols="6"><strong>Coordenação técnica</strong> </v-col>
               <v-col cols="6">
-                <p style="color: #003c3c">Joice Genaro Gomes
+                <p style="color: #003c3c">Mariana Mendes
                   &nbsp;
                   <a href="https://orcid.org/">
                     <img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png"
@@ -228,7 +228,7 @@
                       height="16" target="_blank" />
                   </a>
                 </p>
-                <p style="color: #003c3c">Daniel José de Andrade
+                <!-- <p style="color: #003c3c">Daniel José de Andrade
                   &nbsp;
                   <a href="https://orcid.org/">
                     <img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png"
@@ -239,7 +239,7 @@
                     <img alt="Lattes CNPQ" src="https://ppgmvci.ufsc.br/files/2020/05/icon-lattes-100x100.png" width="16"
                       height="16" target="_blank" />
                   </a>
-                </p>
+                </p> -->
               </v-col></v-row>
             <v-row>
               <v-col cols="6"><strong>Coordenação de desenvolvimento do sistema</strong></v-col>
@@ -495,18 +495,22 @@ export default {
         {
           name: "Vegetação urbana",
           values: [
-            "Daniel José de Andrade",
+            // "Daniel José de Andrade",
+            "Rodrigo Hitoshi",
             "Breno Malheiros de Melo",
-            "Vitor Antonio de Almeida Lacerda",
-            "Leonardo Fernandes Cesar",
-            "Thiago Vital do Carmo",
+            "Eduardo Félix Justiniano",
+            "Fernando Shinji Kawakubo",
+            // "Vitor Antonio de Almeida Lacerda",
+            // "Leonardo Fernandes Cesar",
+            // "Thiago Vital do Carmo",
           ],
         },
         {
-          name: "Temperatura de superfície",
+          name: "Mobilidade e Clima",
           values: [
-            "Daniel José de Andrade",
+            // "Daniel José de Andrade",
             "Gustavo Paixão Menezes",
+            "Yutaka Fábio Takesaki",
             "Edmilson dos Santos Rodrigues Junior",
             "Eduardo Félix Justiniano",
             "Vitor Antonio de Almeida Lacerda",
@@ -515,8 +519,8 @@ export default {
         {
           name: "Parques, praças e áreas verdes urbanas",
           values: [
-            "Joice Genaro Gomes",
-            "Julio Cesar Pedrassoli",
+            //"Joice Genaro Gomes",
+            //"Julio Cesar Pedrassoli",
             "Marcel Fantin",
             "Natalia Maria Canhete",
             "Leonardo Meneghetti Sani",
@@ -533,6 +537,8 @@ export default {
             "Leilane Ramalho",
             "Gustavo Paixão Menezes",
             "Vitor Antonio de Almeida Lacerda",
+            "Guilherme Bueno",
+            "Ana Lívia Magalhães Garbin",
           ],
         },
         {

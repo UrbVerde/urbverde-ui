@@ -30,7 +30,7 @@
           >
         </label>
         <label class="mt-2">
-          <h3>Distância Média até praça mais próxima</h3>
+          <h3>Distância Média até uma praça</h3>
           <span style="font-size: 1.2em"
             >{{ slotProps.features[0].properties.a4.toFixed(2) }} m</span
           >

@@ -1023,14 +1023,17 @@ export default {
           const path = this.dataJoinDataPath
             ? "data" + this.dataJoinDataPath
             : "data";
+          console.log('path on VMLayer.vue:' + path)
           const data = get(res, path);
           if (Array.isArray(data)) {
+            console.log('data on VMLayer.vue:' + data)
             return [...data];
           } else {
-            // console.error('dataJoin url dont return an Array in path:' + path)
+            console.error('dataJoin url dont return an Array in path:' + path)
           }
         } catch (e) {
-          // console.error(e)
+          console.error('VMLayer.vue - Erro de SobreCarga no Sistema');
+          // this.$router.push({ name: 'Home' });
         }
       }
       this.myData = res;
