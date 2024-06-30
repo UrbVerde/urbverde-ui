@@ -1,757 +1,89 @@
 <template>
   <header id="headernav">
-    <v-row>
+    <v-row style="width:100%">
       <v-col cols="2" md="1" class="d-flex justify-center align-center">
         <router-link :to="{ name: 'Home' }">
-          <v-img
-            max-width="70px"
-            src="@/assets/icons/urbverde-logo-icon.png"
-          ></v-img>
+          <v-img max-width="70px" src="@/assets/icons/urbverde-logo-icon.png"></v-img>
         </router-link>
       </v-col>
 
-      <v-col
-        cols="10"
-        md="5"
-        :class="{
-          highlight: highlightSearch == true,
-        }"
-      >
-        <v-autocomplete
-          color="#01dc82"
-          class="mt-5"
-          v-model="municipioSelected"
-          :items="municipios"
-          label="Selecione um município"
-        ></v-autocomplete>
+      <!-- Busca por Município -->
+      <v-col cols="10" md="5" :class="{ highlight: highlightSearch }">
+        <v-autocomplete color="#01dc82" class="mt-5" v-model="municipioSelected" :items="municipios"
+          label="Selecione outro município"></v-autocomplete>
       </v-col>
 
+      <!-- Categorias -->
       <v-col cols="12" md="6" class="headernav__categories">
-        <router-link
-          tag="a"
-          :to="{
-            name: 'Mapa',
-            params: {
-              id: this.$route.params.id,
-              ano: this.$route.params.ano || 2016,
-              escala: this.$route.params.escala,
-              categoria: 'pracasparques',
-            },
-          }"
-          class="layers__box_category"
-          :class="{
-            category__active: activeRoute == 'pracasparques',
-          }"
-          ><span>Praças e Parques</span></router-link
-        >
-        <router-link
-          tag="a"
-          :to="{
-            name: 'Mapa',
-            params: {
-              id: this.$route.params.id,
-              ano: this.$route.params.ano || 2016,
-              escala: this.$route.params.escala,
-              categoria: 'vegetacao',
-            },
-          }"
-          class="layers__box_category"
-          :class="{
-            category__active: activeRoute == 'vegetacao',
-          }"
-          ><span>Vegetação</span></router-link
-        >
 
-        <router-link
-          tag="a"
-          :to="{
-            name: 'Mapa',
-            params: {
-              id: this.$route.params.id,
-              ano: this.$route.params.ano || 2016,
-              escala: this.$route.params.escala,
-              categoria: 'temperatura',
-            },
-          }"
-          class="layers__box_category"
-          :class="{
-            category__active: activeRoute == 'temperatura',
-          }"
-          ><span>Temperatura</span></router-link
-        >
+        <router-link :to="{
+          name: 'Mapa',
+          params: {
+            id: this.$route.params.id,
+            ano: this.$route.params.ano || 2016,
+            escala: this.$route.params.escala,
+            categoria: 'pracasparques',
+          },
+        }" class="layers__box_category" :class="{ category__active: activeRoute == 'pracasparques', }">
+          <a><span>Praças e Parques</span></a>
+        </router-link>
+
+        <router-link :to="{
+          name: 'Mapa',
+          params: {
+            id: this.$route.params.id,
+            ano: this.$route.params.ano || 2016,
+            escala: this.$route.params.escala,
+            categoria: 'vegetacao',
+          },
+        }" class="layers__box_category" :class="{ category__active: activeRoute == 'vegetacao', }">
+          <a><span>Vegetação</span></a>
+        </router-link>
+
+        <router-link :to="{
+          name: 'Mapa',
+          params: {
+            id: this.$route.params.id,
+            ano: this.$route.params.ano || 2016,
+            escala: this.$route.params.escala,
+            categoria: 'temperatura',
+          },
+        }" class="layers__box_category" :class="{ category__active: activeRoute == 'temperatura', }">
+          <a><span>Temperatura</span></a>
+        </router-link>
       </v-col>
     </v-row>
+
   </header>
 </template>
 
 <script>
-import axios from "axios";
+import municipios from '@/modules/Mapa/municipios.js';
 import * as turf from "@turf/turf";
+import axios from "axios";
+
 export default {
   props: ["highlightSearch"],
   data() {
     return {
-      municipioSelected: "",
-      municipios: [
-        "Adamantina",
-        "Adolfo",
-        "Aguaí",
-        "Águas da Prata",
-        "Águas de Lindóia",
-        "Águas de Santa Bárbara",
-        "Águas de São Pedro",
-        "Agudos",
-        "Alambari",
-        "Alfredo Marcondes",
-        "Altair",
-        "Altinópolis",
-        "Alto Alegre",
-        "Alumínio",
-        "Álvares Florence",
-        "Álvares Machado",
-        "Álvaro de Carvalho",
-        "Alvinlândia",
-        "Americana",
-        "Américo Brasiliense",
-        "Américo de Campos",
-        "Amparo",
-        "Analândia",
-        "Andradina",
-        "Angatuba",
-        "Anhembi",
-        "Anhumas",
-        "Aparecida",
-        "Aparecida d'Oeste",
-        "Apiaí",
-        "Araçariguama",
-        "Araçatuba",
-        "Araçoiaba da Serra",
-        "Aramina",
-        "Arandu",
-        "Arapeí",
-        "Araraquara",
-        "Araras",
-        "Arco-Íris",
-        "Arealva",
-        "Areias",
-        "Areiópolis",
-        "Ariranha",
-        "Artur Nogueira",
-        "Arujá",
-        "Aspásia",
-        "Assis",
-        "Atibaia",
-        "Auriflama",
-        "Avaí",
-        "Avanhandava",
-        "Avaré",
-        "Bady Bassitt",
-        "Balbinos",
-        "Bálsamo",
-        "Bananal",
-        "Barão de Antonina",
-        "Barbosa",
-        "Bariri",
-        "Barra Bonita",
-        "Barra do Chapéu",
-        "Barra do Turvo",
-        "Barretos",
-        "Barrinha",
-        "Barueri",
-        "Bastos",
-        "Batatais",
-        "Bauru",
-        "Bebedouro",
-        "Bento de Abreu",
-        "Bernardino de Campos",
-        "Bertioga",
-        "Bilac",
-        "Birigui",
-        "Biritiba Mirim",
-        "Boa Esperança do Sul",
-        "Bocaina",
-        "Bofete",
-        "Boituva",
-        "Bom Jesus dos Perdões",
-        "Bom Sucesso de Itararé",
-        "Borá",
-        "Boracéia",
-        "Borborema",
-        "Borebi",
-        "Botucatu",
-        "Bragança Paulista",
-        "Braúna",
-        "Brejo Alegre",
-        "Brodowski",
-        "Brotas",
-        "Buri",
-        "Buritama",
-        "Buritizal",
-        "Cabrália Paulista",
-        "Cabreúva",
-        "Caçapava",
-        "Cachoeira Paulista",
-        "Caconde",
-        "Cafelândia",
-        "Caiabu",
-        "Caieiras",
-        "Caiuá",
-        "Cajamar",
-        "Cajati",
-        "Cajobi",
-        "Cajuru",
-        "Campina do Monte Alegre",
-        "Campinas",
-        "Campo Limpo Paulista",
-        "Campos do Jordão",
-        "Campos Novos Paulista",
-        "Cananéia",
-        "Canas",
-        "Cândido Mota",
-        "Cândido Rodrigues",
-        "Canitar",
-        "Capão Bonito",
-        "Capela do Alto",
-        "Capivari",
-        "Caraguatatuba",
-        "Carapicuíba",
-        "Cardoso",
-        "Casa Branca",
-        "Cássia dos Coqueiros",
-        "Castilho",
-        "Catanduva",
-        "Catiguá",
-        "Cedral",
-        "Cerqueira César",
-        "Cerquilho",
-        "Cesário Lange",
-        "Charqueada",
-        "Clementina",
-        "Colina",
-        "Colômbia",
-        "Conchal",
-        "Conchas",
-        "Cordeirópolis",
-        "Coroados",
-        "Coronel Macedo",
-        "Corumbataí",
-        "Cosmópolis",
-        "Cosmorama",
-        "Cotia",
-        "Cravinhos",
-        "Cristais Paulista",
-        "Cruzália",
-        "Cruzeiro",
-        "Cubatão",
-        "Cunha",
-        "Descalvado",
-        "Diadema",
-        "Dirce Reis",
-        "Divinolândia",
-        "Dobrada",
-        "Dois Córregos",
-        "Dolcinópolis",
-        "Dourado",
-        "Dracena",
-        "Duartina",
-        "Dumont",
-        "Echaporã",
-        "Eldorado",
-        "Elias Fausto",
-        "Elisiário",
-        "Embaúba",
-        "Embu das Artes",
-        "Embu-Guaçu",
-        "Emilianópolis",
-        "Engenheiro Coelho",
-        "Espírito Santo do Pinhal",
-        "Espírito Santo do Turvo",
-        "Estrela d'Oeste",
-        "Estrela do Norte",
-        "Euclides da Cunha Paulista",
-        "Fartura",
-        "Fernandópolis",
-        "Fernando Prestes",
-        "Fernão",
-        "Ferraz de Vasconcelos",
-        "Flora Rica",
-        "Floreal",
-        "Flórida Paulista",
-        "Florínea",
-        "Franca",
-        "Francisco Morato",
-        "Franco da Rocha",
-        "Gabriel Monteiro",
-        "Gália",
-        "Garça",
-        "Gastão Vidigal",
-        "Gavião Peixoto",
-        "General Salgado",
-        "Getulina",
-        "Glicério",
-        "Guaiçara",
-        "Guaimbê",
-        "Guaíra",
-        "Guapiaçu",
-        "Guapiara",
-        "Guará",
-        "Guaraçaí",
-        "Guaraci",
-        "Guarani d'Oeste",
-        "Guarantã",
-        "Guararapes",
-        "Guararema",
-        "Guaratinguetá",
-        "Guareí",
-        "Guariba",
-        "Guarujá",
-        "Guarulhos",
-        "Guatapará",
-        "Guzolândia",
-        "Herculândia",
-        "Holambra",
-        "Hortolândia",
-        "Iacanga",
-        "Iacri",
-        "Iaras",
-        "Ibaté",
-        "Ibirá",
-        "Ibirarema",
-        "Ibitinga",
-        "Ibiúna",
-        "Icém",
-        "Iepê",
-        "Igaraçu do Tietê",
-        "Igarapava",
-        "Igaratá",
-        "Iguape",
-        "Ilhabela",
-        "Ilha Comprida",
-        "Ilha Solteira",
-        "Indaiatuba",
-        "Indiana",
-        "Indiaporã",
-        "Inúbia Paulista",
-        "Ipaussu",
-        "Iperó",
-        "Ipeúna",
-        "Ipiguá",
-        "Iporanga",
-        "Ipuã",
-        "Iracemápolis",
-        "Irapuã",
-        "Irapuru",
-        "Itaberá",
-        "Itaí",
-        "Itajobi",
-        "Itaju",
-        "Itanhaém",
-        "Itaoca",
-        "Itapecerica da Serra",
-        "Itapetininga",
-        "Itapeva",
-        "Itapevi",
-        "Itapira",
-        "Itapirapuã Paulista",
-        "Itápolis",
-        "Itaporanga",
-        "Itapuí",
-        "Itapura",
-        "Itaquaquecetuba",
-        "Itararé",
-        "Itariri",
-        "Itatiba",
-        "Itatinga",
-        "Itirapina",
-        "Itirapuã",
-        "Itobi",
-        "Itu",
-        "Itupeva",
-        "Ituverava",
-        "Jaborandi",
-        "Jaboticabal",
-        "Jacareí",
-        "Jaci",
-        "Jacupiranga",
-        "Jaguariúna",
-        "Jales",
-        "Jambeiro",
-        "Jandira",
-        "Jardinópolis",
-        "Jarinu",
-        "Jaú",
-        "Jeriquara",
-        "Joanópolis",
-        "João Ramalho",
-        "José Bonifácio",
-        "Júlio Mesquita",
-        "Jumirim",
-        "Jundiaí",
-        "Junqueirópolis",
-        "Juquiá",
-        "Juquitiba",
-        "Lagoinha",
-        "Laranjal Paulista",
-        "Lavínia",
-
-        "Lavrinhas",
-        "Leme",
-        "Lençóis Paulista",
-        "Limeira",
-        "Lindóia",
-        "Lins",
-        "Lorena",
-        "Lourdes",
-        "Louveira",
-        "Lucélia",
-        "Lucianópolis",
-        "Luís Antônio",
-        "Luiziânia",
-        "Lupércio",
-        "Lutécia",
-        "Macatuba",
-        "Macaubal",
-        "Macedônia",
-        "Magda",
-        "Mairinque",
-        "Mairiporã",
-        "Manduri",
-        "Marabá Paulista",
-        "Maracaí",
-        "Marapoama",
-        "Mariápolis",
-        "Marília",
-        "Marinópolis",
-        "Martinópolis",
-        "Matão",
-        "Mauá",
-        "Mendonça",
-        "Meridiano",
-        "Mesópolis",
-        "Miguelópolis",
-        "Mineiros do Tietê",
-        "Miracatu",
-        "Mira Estrela",
-        "Mirandópolis",
-        "Mirante do Paranapanema",
-        "Mirassol",
-        "Mirassolândia",
-        "Mococa",
-        "Mogi das Cruzes",
-        "Mogi Guaçu",
-        "Mogi Mirim",
-        "Mombuca",
-        "Monções",
-        "Mongaguá",
-        "Monte Alegre do Sul",
-        "Monte Alto",
-        "Monte Aprazível",
-        "Monte Azul Paulista",
-        "Monte Castelo",
-        "Monteiro Lobato",
-        "Monte Mor",
-        "Morro Agudo",
-        "Morungaba",
-        "Motuca",
-        "Murutinga do Sul",
-        "Nantes",
-        "Narandiba",
-        "Natividade da Serra",
-        "Nazaré Paulista",
-        "Neves Paulista",
-        "Nhandeara",
-        "Nipoã",
-        "Nova Aliança",
-        "Nova Campina",
-        "Nova Canaã Paulista",
-        "Nova Castilho",
-        "Nova Europa",
-        "Nova Granada",
-        "Nova Guataporanga",
-        "Nova Independência",
-        "Novais",
-        "Nova Luzitânia",
-        "Nova Odessa",
-        "Novo Horizonte",
-        "Nuporanga",
-        "Ocauçu",
-        "Óleo",
-        "Olímpia",
-        "Onda Verde",
-        "Oriente",
-        "Orindiúva",
-        "Orlândia",
-        "Osasco",
-        "Oscar Bressane",
-        "Osvaldo Cruz",
-        "Ourinhos",
-        "Ouroeste",
-        "Ouro Verde",
-        "Pacaembu",
-        "Palestina",
-        "Palmares Paulista",
-        "Palmeira d'Oeste",
-        "Palmital",
-        "Panorama",
-        "Paraguaçu Paulista",
-        "Paraibuna",
-        "Paraíso",
-        "Paranapanema",
-        "Paranapuã",
-        "Parapuã",
-        "Pardinho",
-        "Pariquera-Açu",
-        "Parisi",
-        "Patrocínio Paulista",
-        "Paulicéia",
-        "Paulínia",
-        "Paulistânia",
-        "Paulo de Faria",
-        "Pederneiras",
-        "Pedra Bela",
-        "Pedranópolis",
-        "Pedregulho",
-        "Pedreira",
-        "Pedrinhas Paulista",
-        "Pedro de Toledo",
-        "Penápolis",
-        "Pereira Barreto",
-        "Pereiras",
-        "Peruíbe",
-        "Piacatu",
-        "Piedade",
-        "Pilar do Sul",
-        "Pindamonhangaba",
-        "Pindorama",
-        "Pinhalzinho",
-        "Piquerobi",
-        "Piquete",
-        "Piracaia",
-        "Piracicaba",
-        "Piraju",
-        "Pirajuí",
-        "Pirangi",
-        "Pirapora do Bom Jesus",
-        "Pirapozinho",
-        "Pirassununga",
-        "Piratininga",
-        "Pitangueiras",
-        "Planalto",
-        "Platina",
-        "Poá",
-        "Poloni",
-        "Pompéia",
-        "Pongaí",
-        "Pontal",
-        "Pontalinda",
-        "Pontes Gestal",
-        "Populina",
-        "Porangaba",
-        "Porto Feliz",
-        "Porto Ferreira",
-        "Potim",
-        "Potirendaba",
-        "Pracinha",
-        "Pradópolis",
-        "Praia Grande",
-        "Pratânia",
-        "Presidente Alves",
-        "Presidente Bernardes",
-        "Presidente Epitácio",
-        "Presidente Prudente",
-        "Presidente Venceslau",
-        "Promissão",
-        "Quadra",
-        "Quatá",
-        "Queiroz",
-        "Queluz",
-        "Quintana",
-        "Rafard",
-        "Rancharia",
-        "Redenção da Serra",
-        "Regente Feijó",
-        "Reginópolis",
-        "Registro",
-        "Restinga",
-        "Ribeira",
-        "Ribeirão Bonito",
-        "Ribeirão Branco",
-        "Ribeirão Corrente",
-        "Ribeirão do Sul",
-        "Ribeirão dos Índios",
-        "Ribeirão Grande",
-        "Ribeirão Pires",
-        "Ribeirão Preto",
-        "Riversul",
-        "Rifaina",
-        "Rincão",
-        "Rinópolis",
-        "Rio Claro",
-        "Rio das Pedras",
-        "Rio Grande da Serra",
-        "Riolândia",
-        "Rosana",
-        "Roseira",
-        "Rubiácea",
-        "Rubinéia",
-        "Sabino",
-        "Sagres",
-        "Sales",
-        "Sales Oliveira",
-        "Salesópolis",
-        "Salmourão",
-        "Saltinho",
-        "Salto",
-        "Salto de Pirapora",
-        "Salto Grande",
-        "Sandovalina",
-        "Santa Adélia",
-        "Santa Albertina",
-        "Santa Bárbara d'Oeste",
-        "Santa Branca",
-        "Santa Clara d'Oeste",
-        "Santa Cruz da Conceição",
-        "Santa Cruz da Esperança",
-        "Santa Cruz das Palmeiras",
-        "Santa Cruz do Rio Pardo",
-        "Santa Ernestina",
-        "Santa Fé do Sul",
-        "Santa Gertrudes",
-        "Santa Isabel",
-        "Santa Lúcia",
-        "Santa Maria da Serra",
-        "Santa Mercedes",
-        "Santana da Ponte Pensa",
-        "Santana de Parnaíba",
-        "Santa Rita d'Oeste",
-        "Santa Rita do Passa Quatro",
-        "Santa Rosa de Viterbo",
-        "Santa Salete",
-        "Santo Anastácio",
-        "Santo André",
-        "Santo Antônio da Alegria",
-        "Santo Antônio de Posse",
-        "Santo Antônio do Aracanguá",
-        "Santo Antônio do Jardim",
-        "Santo Antônio do Pinhal",
-        "Santo Expedito",
-        "Santópolis do Aguapeí",
-        "Santos",
-        "São Bento do Sapucaí",
-        "São Bernardo do Campo",
-        "São Caetano do Sul",
-        "São Carlos",
-        "São Francisco",
-        "São João da Boa Vista",
-        "São João das Duas Pontes",
-        "São João de Iracema",
-        "São João do Pau d'Alho",
-        "São Joaquim da Barra",
-        "São José da Bela Vista",
-        "São José do Barreiro",
-        "São José do Rio Pardo",
-        "São José do Rio Preto",
-        "São José dos Campos",
-        "São Lourenço da Serra",
-        "São Luiz do Paraitinga",
-        "São Manuel",
-        "São Miguel Arcanjo",
-        "São Paulo",
-        "São Pedro",
-        "São Pedro do Turvo",
-        "São Roque",
-        "São Sebastião",
-        "São Sebastião da Grama",
-        "São Simão",
-        "São Vicente",
-        "Sarapuí",
-        "Sarutaiá",
-        "Sebastianópolis do Sul",
-        "Serra Azul",
-        "Serrana",
-        "Serra Negra",
-        "Sertãozinho",
-        "Sete Barras",
-        "Severínia",
-        "Silveiras",
-        "Socorro",
-        "Sorocaba",
-        "Sud Mennucci",
-        "Sumaré",
-        "Suzano",
-        "Suzanápolis",
-        "Tabapuã",
-        "Tabatinga",
-        "Taboão da Serra",
-        "Taciba",
-        "Taguaí",
-        "Taiaçu",
-        "Taiúva",
-        "Tambaú",
-        "Tanabi",
-        "Tapiraí",
-        "Tapiratiba",
-        "Taquaral",
-        "Taquaritinga",
-        "Taquarituba",
-        "Taquarivaí",
-        "Tarabai",
-        "Tarumã",
-        "Tatuí",
-        "Taubaté",
-        "Tejupá",
-        "Teodoro Sampaio",
-        "Terra Roxa",
-        "Tietê",
-        "Timburi",
-        "Torre de Pedra",
-        "Torrinha",
-        "Trabiju",
-        "Tremembé",
-        "Três Fronteiras",
-        "Tuiuti",
-        "Tupã",
-        "Tupi Paulista",
-        "Turiúba",
-        "Turmalina",
-        "Ubarana",
-        "Ubatuba",
-        "Ubirajara",
-        "Uchoa",
-        "União Paulista",
-        "Urânia",
-        "Uru",
-        "Urupês",
-        "Valentim Gentil",
-        "Valinhos",
-        "Valparaíso",
-        "Vargem",
-        "Vargem Grande do Sul",
-        "Vargem Grande Paulista",
-        "Várzea Paulista",
-        "Vera Cruz",
-        "Vinhedo",
-        "Viradouro",
-        "Vista Alegre do Alto",
-        "Vitória Brasil",
-        "Votorantim",
-        "Votuporanga",
-        "Zacarias",
-        "Chavantes",
-        "Estiva Gerbi",
-      ],
+      municipioSelected: '',
     };
   },
   computed: {
+    municipios() {
+      return require('@/modules/Mapa/municipios.js').default;
+    },
     activeRoute() {
       return this.$route.params.categoria;
     },
+    routeScaleValue() {
+      return this.$route.params.escala;
+    },
   },
-
-  methods: {},
 
   watch: {
     municipioSelected(val) {
+      console.log(val)
       axios
         .get(
           `https://urbverde.iau.usp.br/geoserver/urbverde/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=urbverde%3Ageodata_pracas_por_municipio&PROPERTYNAME=nm_mun,cd_mun,geom&CQL_FILTER=nm_mun='${val}'&outputFormat=application%2Fjson`
@@ -777,8 +109,13 @@ export default {
             [bboxMun[0], bboxMun[1]],
             [bboxMun[2], bboxMun[3]],
           ]);
+        })
+        .catch((error) => {
+          console.error('HeaderMap.vue - Erro de SobreCarga no Sistema');
+          // this.$router.push({ name: 'Home' });
         });
     },
+    
   },
 };
 </script>
@@ -786,19 +123,69 @@ export default {
 <style lang="scss" scoped>
 a {
   text-decoration: none;
-  color: #003c3c;
+  color: #003c3c !important;
 }
 
 .headernav__categories {
+  // padding: 0 1.8em; // 0.8em;
+  // margin-left: px;
   border-left: 1px solid #ddeaf3;
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-.category__active {
+.category__active,
+.category__active a,
+/* Added selector for the <a> tag */
+.category__active span {
+  /* Added selector for the <span> tag */
   background-color: #003c3c !important;
   color: white !important;
 }
+
+// .headernav__categories__btn :hover {
+//   background-color: #35cc8d !important;
+//   color: #003c3c !important;
+// }
+// .category__active:hover {
+//   background-color: #003c3c !important;
+//   color: black !important;
+// }
+
+// .layer_active {
+//   background-color: #003c3c;
+//   color: white;
+// }
+
+// .aside__toolbar_scale {
+//   label {
+//     color: #003c3c;
+//     font-size: 13px;
+//   }
+// }
+
+// .aside__toolbar_btnbox {
+//   position: relative;
+// }
+
+// .aside__toolbar_scale--buttons {
+//   border-radius: 14px;
+//   text-align: center;
+//   background-color: #e6f1f2;
+//   color: #003c3c;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   height: 57px;
+//   padding: 2em;
+//   font-size: 1.2em;
+//   cursor: pointer;
+
+//   & span {
+//     font-size: 0.8em;
+//   }
+// }
 
 .layers__box {
   &_category {
@@ -808,35 +195,43 @@ a {
     color: #003c3c;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 1em;
-    height: 57px;
+    align-items: center !important;
+    vertical-align: middle;
+    // padding: 2em;
+    height: 63px;
+    width: 180px;
     font-size: 1.2em;
-    margin: 0.5em;
+    // margin: 0.8em;
     cursor: pointer;
+
     & span {
       font-size: 0.8em;
     }
-    @media (max-width: 950px) {
-    }
+
+    @media (max-width: 950px) {}
   }
 }
 </style>
+
 <style>
 .v-select__selection,
 .v-select__selection--comma,
 .v-select.v-text-field input {
   color: #003c3c !important;
+  /* font-size: 1.2em; */
+  /* max-height: 100%; */
 }
 
-#headernav
-  > div
-  > div.col.col-5
-  > div
-  > div
-  > div.v-input__slot
-  > div.v-select__slot
-  > label {
+.v-input__slot {
+  margin-bottom: 0px !important;
+}
+
+.v-text-field__details {
+  height: 0px !important;
+  padding: 0px !important;
+}
+
+#headernav>div>div.col.col-5>div>div>div.v-input__slot>div.v-select__slot>label {
   color: #003c3c !important;
 }
 </style>

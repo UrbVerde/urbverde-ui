@@ -14,10 +14,15 @@
     @featureclick="featureClicked"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Porcentagem de cobertura Vegetal</label>
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Porcentagem de Cobertura Vegetal:</label>
+        </template>
+        <template v-else>
+          <label>Porcentagem de Cobertura Vegetal no setor:</label>
+        </template>
         <h3>{{ (slotProps.features[0].properties.b1 * 100).toFixed(1) }} %</h3>
       </VmPopup>
     </template>

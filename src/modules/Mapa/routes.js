@@ -5,7 +5,7 @@ export default [
     children: [
       {
         name: "Mapa",
-        path: "/mapa/:id?/:escala?/:ano?/:categoria?/:variavel?/:setorid?",
+        path: "/mapa/SP/:id?/:escala?/:ano?/:categoria?/:variavel?",
         component: () => import("@/views/MapaView"),
       },
     ],

@@ -11,10 +11,16 @@
     @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Distância Média até praça mais próxima</label>
+      <!-- <VmPopup color="#8cb369"> -->
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Distância Média até uma praça:</label>
+        </template>
+        <template v-else>
+          <label>Distância Média até uma praça no setor:</label>
+        </template>
         <h3>{{ slotProps.features[0].properties.a4.toFixed(2) }} m</h3>
       </VmPopup>
     </template>
@@ -44,19 +50,19 @@ export default {
             "interpolate",
             ["linear"],
             ["get", "a4"],
-            0,
+            1.230115,
             "#1a9850",
-            10,
+            1.696049,
             "#91cf60",
-            20,
+            2.834390,
             "#d9ef8b",
-            40,
+            7.451875,
             "#ffffbf",
-            60,
+            18.978550,
             "#fee08b",
-            80,
+            35.078560,
             "#fc8d59",
-            100,
+            46.769281,
             "#d73027",
           ],
         };

@@ -1,13 +1,6 @@
 <template>
-  <VmLayer
-    v-if="this.$route.params.escala == 'intraurbana'"
-    :name="layer.name"
-    :source="layer.props.source"
-    :type="layer.type"
-    :zIndex="layer.zIndex"
-    :sourceLayer="layer.sourceLayer"
-    :paint="layerPaint"
-  >
+  <VmLayer v-if="this.$route.params.escala == 'intraurbana'" :name="layer.name" :source="layer.props.source"
+    :type="layer.type" :zIndex="layer.zIndex" :sourceLayer="layer.sourceLayer" :paint="layerPaint">
   </VmLayer>
 </template>
 
@@ -74,6 +67,10 @@ export default {
                 [bboxMun[0], bboxMun[1]],
                 [bboxMun[2], bboxMun[3]],
               ]);
+            })
+            .catch((error) => {
+              console.error('SetoresCensitariosVector.vue - Erro de SobreCarga no Sistema');
+              // this.$router.push({ name: 'Home' });
             });
         }
       },

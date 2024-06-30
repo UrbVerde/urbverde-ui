@@ -8,16 +8,17 @@
     :paint="layerPaint"
     :paint-hover="{ 'fill-color': '#7c99f4' }"
     :opacity="layer.opacity"
-    @featureclick="featureclick"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>% de área ocupada pelos buffers</label>
-        <h3>
-          {{ slotProps.features[0].properties.a3.toFixed(2) }}
-        </h3>
+      <VmPopup color="#e6f1f2">
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Área urbana atendida pelas praças:</label>
+        </template>
+        <template v-else>
+          <label>Área do setor coberta pelo buffer de 400m:</label>
+        </template>
+        <h3>{{ slotProps.features[0].properties.a3.toFixed(2) }} %</h3>
       </VmPopup>
     </template>
   </VmLayer>
@@ -46,9 +47,19 @@ export default {
             "interpolate",
             ["linear"],
             ["get", "a3"],
-            0,
+            8.703525,
             "#d73027",
-            100,
+            13.164806,
+            "#fc8d59",
+            22.922555,
+            "#fee08b",
+            35.181479,
+            "#ffffbf",
+            46.309639,
+            "#d9ef8b",
+            55.767913,
+            "#91cf60",
+            62.225301,
             "#1a9850",
           ],
         };
@@ -62,12 +73,20 @@ export default {
               "interpolate",
               ["linear"],
               ["get", "a3"],
-              this.munPracaData.a3_min,
-              ["to-color", "#d53e4f"],
-              this.munPracaData.a3_mean,
+              5, //this.munPracaData.a3_p5,
+              ["to-color", "#d73027"],
+              10,// this.munPracaData.a3_p10,
+              ["to-color", "#fc8d59"],
+              25,// this.munPracaData.a3_p25,
               ["to-color", "#fee08b"],
-              this.munPracaData.a3_max,
-              ["to-color", "#3288bd"],
+              50, // this.munPracaData.a3_median,
+              ["to-color", "#ffffbf"],
+              75, // this.munPracaData.a3_p75,
+              ["to-color", "#d9ef8b"],
+              90, // this.munPracaData.a3_p90,
+              ["to-color", "#91cf60"],
+              95, //this.munPracaData.a3_p95,
+              ["to-color", "#1a9850"],
             ],
             ["literal", "transparent"],
           ],
@@ -119,16 +138,14 @@ export default {
       if (this.$route.params.escala == "estadual") {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #d73027, #1a9850)",
+          color: "linear-gradient(to left, #1a9850, #91cf60, #d9ef8b, #ffffbf, #fee08b, #fc8d59, #d73027)",
           value: `0 - 100 %`,
         });
       } else if (this.$route.params.escala == "intraurbana") {
         values.push({
           range: true,
-          color: "linear-gradient(to right, #d53e4f, #fee08b, #3288bd)",
-          value: `${this.munPracaData.a3_min.toFixed(
-            2
-          )} - ${this.munPracaData.a3_max.toFixed(2)} %`,
+          color: "linear-gradient(to left, #1a9850, #66bd63, #a6d96a, #d9ef8b, #ffffbf, #fee08b, #fdae61, #f46d43, #d73027)",
+          value: '0 - 100 %', 
         });
       }
       this.$store.commit("SET_LAYER_PROPERTIES", {
@@ -140,7 +157,7 @@ export default {
   },
 
   watch: {},
-  created() {},
+  created() { },
   mounted() {
     this.buildLegend();
   },

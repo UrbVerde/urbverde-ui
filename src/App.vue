@@ -12,7 +12,7 @@ export default {
     //
   }),
   created() {
-    this.$store.dispatch("getMunicipiosGeojson");
+    // this.$store.dispatch("getMunicipiosGeojson");
   },
 };
 </script>

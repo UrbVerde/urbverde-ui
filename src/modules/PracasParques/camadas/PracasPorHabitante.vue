@@ -1,22 +1,20 @@
 <template>
-  <VmLayer
-    :name="layer.name"
-    :source="layerSource"
-    :type="layer.type"
-    :zIndex="layer.zIndex"
-    :sourceLayer="sourceLayer"
-    :opacity="layer.opacity"
-    :paint="layerPaint"
-    :paint-hover="{ 'fill-color': '#7c99f4' }"
-    @featureclick="featureclick"
-  >
+  <VmLayer :name="layer.name" :source="layerSource" :type="layer.type" :zIndex="layer.zIndex" :sourceLayer="sourceLayer"
+    :opacity="layer.opacity" :paint="layerPaint" :paint-hover="{ 'fill-color': '#7c99f4' }" @featureclick="featureclick">
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Praças por habitantes</label>
-        <h3>{{ slotProps.features[0].properties.a2 }} m²</h3>
+      <!-- <VmPopup color="#8cb369"> -->
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Setor {{ slotProps.features[0].properties.cd_setor }} - IBGE 2020</label> -->  
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Área de praças por habitante: </label>
+        </template>
+        <template v-else>
+          <label>Área de praças por habitante no setor:</label>
+        </template>
+        <h3>{{ slotProps.features[0].properties.a2 }} m²/hab</h3>
       </VmPopup>
+
     </template>
   </VmLayer>
 </template>
@@ -72,11 +70,11 @@ export default {
               "interpolate",
               ["linear"],
               ["get", "a2"],
-              this.munPracaData.a2_min,
+              0, //this.munPracaData.a2_min,
               ["to-color", "#d53e4f"],
-              this.munPracaData.a2_mean,
+              7.5, //this.munPracaData.a2_mean,
               ["to-color", "#fee08b"],
-              this.munPracaData.a2_max,
+              15, //this.munPracaData.a2_max,
               ["to-color", "#3288bd"],
             ],
             ["literal", "transparent"],
@@ -131,15 +129,15 @@ export default {
         values.push({
           range: true,
           color: "linear-gradient(to right, #d53e4f, #fee08b, #3288bd)",
-          value: `${this.munPracaData.a2_min.toFixed()} - ${this.munPracaData.a2_max.toFixed(
-            2
-          )} m²`,
+          value: '0 - 15 m²/hab', //`${this.munPracaData.a2_min.toFixed()} - ${this.munPracaData.a2_max.toFixed(
+          // 2
+          // )} m²/hab`,
         });
       } else if (this.$route.params.escala == "estadual") {
         values.push({
           range: true,
           color: "linear-gradient(to right, #d53e4f, #fee08b, #3288bd)",
-          value: `0 - 150 m²`,
+          value: `0 - 150 m²/hab`,
         });
       }
 
@@ -152,7 +150,7 @@ export default {
   },
 
   watch: {},
-  created() {},
+  created() { },
   mounted() {
     this.buildLegend();
   },

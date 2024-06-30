@@ -13,35 +13,32 @@ cd urbverde-ui/
 sudo npm install
 ```
 
-<!-- ### Compiles and hot-reloads for development
+### Compiles and hot-reloads for development
 ```
 npm run serve
-``` -->
+```
 
 ### Compiles and minifies for production
 ```
 sudo npm run build
 ```
-<!-- 
+
 ### Run your unit tests
 ```
 npm run test:unit
-``` -->
+```
 
-<!-- ### Run your end-to-end tests
+### Run your end-to-end tests
 ```
 npm run test:e2e
-``` -->
+```
 
-<!-- ### Lints and fixes files
+### Lints and fixes files
 ```
 npm run lint
-``` -->
+```
 
 ### Start development local server
 ```
 sudo npm run dev
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

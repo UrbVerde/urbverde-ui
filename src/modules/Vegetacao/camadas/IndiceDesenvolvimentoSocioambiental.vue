@@ -12,16 +12,21 @@
     :paint-hover="{ 'fill-color': '#7c99f4' }"
     @featureclick="featureclick"
   >
-    <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Índice de Desigualdade Socioambiental</label>
-        <h3>
-          {{ slotProps.features[0].properties.b3.toFixed(2) }}
-        </h3>
+  <template v-slot:popupHover="slotProps">
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Índice de Desigualdade Socioambiental:</label>
+        </template>
+        <template v-else>
+          <!-- {{ slotProps.features[0].properties.cd_setor }} -->
+          <label>Índice de Desigualdade Socioambiental no setor:</label>
+        </template>
+        <h3>{{ slotProps.features[0].properties.b3.toFixed(2) }}</h3>
       </VmPopup>
     </template>
+    
   </VmLayer>
 </template>
 

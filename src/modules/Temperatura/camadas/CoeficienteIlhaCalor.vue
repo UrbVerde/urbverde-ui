@@ -1,26 +1,22 @@
 <template>
-  <VmLayer
-    ref="layerTemp"
-    :name="layer.name"
-    :source="layerSource"
-    :type="layer.type"
-    :zIndex="layer.zIndex"
-    :sourceLayer="sourceLayer"
-    :paint="layerPaint"
-    :paint-hover="{ 'fill-color': '#7c99f4' }"
-    :opacity="layer.opacity"
-    @featureclick="featureclick"
-  >
+  <VmLayer ref="layerTemp" :name="layer.name" :source="layerSource" :type="layer.type" :zIndex="layer.zIndex"
+    :sourceLayer="sourceLayer" :paint="layerPaint" :paint-hover="{ 'fill-color': '#7c99f4' }" :opacity="layer.opacity"
+    @featureclick="featureclick">
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#8cb369">
-        <label>Município</label>
-        <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
-        <label>Coeficiente de Ilha de Calor</label>
-        <h3>
-          {{ slotProps.features[0].properties.c1.toFixed(2) }}
-        </h3>
+      <VmPopup color="#e6f1f2">
+        <!-- <label>Município</label> -->
+        <template v-if="$route.params.escala === 'estadual'">
+          <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
+          <label>Coeficiente de Ilha de Calor:</label>
+        </template>
+        <template v-else>
+          <!-- {{ slotProps.features[0].properties.cd_setor }} -->
+          <label>Coeficiente de Ilha de Calor do setor:</label>
+        </template>
+        <h3>{{ slotProps.features[0].properties.c1.toFixed(2) }}</h3>
       </VmPopup>
     </template>
+
   </VmLayer>
 </template>
 
@@ -163,7 +159,7 @@ export default {
     },
   },
 
-  created() {},
+  created() { },
   mounted() {
     this.buildLegend();
   },
@@ -176,7 +172,7 @@ export default {
       immediate: true,
     },
   },
-  updated() {},
+  updated() { },
 };
 </script>
 

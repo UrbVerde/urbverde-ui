@@ -6,7 +6,7 @@ body,
   padding: 0;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;400;600&family=Nunito:wght@300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap");//&family=Noto:wght@400;700&display=swap");
 
 *,
 *::before,
@@ -20,6 +20,7 @@ body,
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  font-family: "Noto Sans", sans-serif;
 }
 
 html {
@@ -27,14 +28,14 @@ html {
   height: 100%;
   padding: 0;
   margin: 0;
-  font-family: "Nunito Sans", sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
 body {
   height: 100%;
   padding: 0;
   margin: 0;
-  font-family: "Nunito Sans", sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
 // Utils
@@ -62,8 +63,9 @@ a {
 .map_container {
   height: 100%;
   position: relative;
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0 1px;
+  // margin: 0 !important;
+  // padding: 0 !important;
   @media (max-width: 950px) {
     height: 80vh;
   }
@@ -88,7 +90,8 @@ main {
 }
 
 .layer_selector_eye {
-  background-color: #e6f1f2;
+  background-color: #D0E3E3;
+  // background-color: #E6F1F2;
   width: 50px;
   height: 60px;
   display: flex;
@@ -100,6 +103,7 @@ main {
 
 .layer_selector_opacity {
   margin-left: 0.5em;
+  margin-right: 0.5em;
   span {
     font-size: 0.9em;
   }
@@ -161,7 +165,7 @@ main {
   padding: 0;
   user-select: none;
   padding: 0;
-  margin: 0 0 5px 0;
+  // margin: 0 0 1px 0;
   background-color: white;
   border-bottom: 1px solid #ddeaf3;
 }

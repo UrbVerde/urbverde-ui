@@ -8,7 +8,7 @@
     :paint="layerPaint"
   >
     <template v-slot:popupHover="slotProps">
-      <VmPopup color="#f4a259">
+      <VmPopup color="#e6f1f2">
         <div style="border-radius: 8px">
           <label>
             <h3>Praças de {{ slotProps.features[0].properties.nm_mun }}</h3>
