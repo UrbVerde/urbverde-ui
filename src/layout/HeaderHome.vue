@@ -32,13 +32,13 @@
 
 
             
-            <!-- CTA - Acesse à Plataforma -->
+            <!-- CTA - Acesse a Plataforma -->
             <v-col >
                 <router-link
                     :to="{ name: 'Mapa', params: { id: this.munId || 3548906, ano: 2021, escala: 'intraurbana', categoria: 'pracasparques', }, }"
                     style="padding: 12px; display: inline-block; background-color: #00494A;
                             border-radius: 5px; padding-left: 2em; padding-right: 2em; margin-left:1.5em;white-space: nowrap;">
-                    <a>Acesse à Plataforma</a>
+                    <a>Acesse a Plataforma</a>
                 </router-link>
             </v-col>
         </v-row>

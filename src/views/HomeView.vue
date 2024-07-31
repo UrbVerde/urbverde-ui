@@ -418,6 +418,12 @@
               <img width="100%" src="@/assets/logos/ufscar-removebg-preview.png" alt="Zukk - Inovação Geoespacial" />
             </v-col>
             <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="40%" src="@/assets/logos/unitau.png" alt="Zukk - Inovação Geoespacial" />
+            </v-col>
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="70%" src="@/assets/logos/uniara.png" alt="Zukk - Inovação Geoespacial" />
+            </v-col>
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="90%" src="@/assets/logos/run.png" alt="Rede RUN de Rios Urbanos Naturalizados" />
             </v-col>
             <v-col cols="4" md="3" class="d-flex justify-center align-center">
