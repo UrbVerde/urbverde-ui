@@ -63,7 +63,6 @@ header {
 }
 
 .menu {
-
     text-align: center;
     align-self: center;
     border-radius: 5px;
