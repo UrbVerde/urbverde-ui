@@ -4,10 +4,15 @@
     <div id="app">
       <Sidebar />
     </div>
-    <div class="">
+    <div class="prala">
 
       <h1>Bootstrap</h1>
       <h1>Ganso</h1>
+      <BuscaSimples/>
+      <SearchUserLocation/>
+      <SearchCity/>
+
+      
 
     </div>
   </div>
@@ -15,11 +20,20 @@
 
 <script>
 import Sidebar from './components/side_bar/SideBar.vue';
+import Formu from './components/search_dropdown/Formu.vue';
+import NominatimSearch from './components/search_dropdown/NominatimSearch.vue';
+import BuscaSimples from './components/search_dropdown/BuscaSimples.vue';
+import SearchUserLocation from './components/search_dropdown/SearchUserLocation.vue';
+import SearchCity from './components/search_dropdown/SearchCity.vue';
 
 export default {
   components: {
-    Sidebar
-
+    Sidebar,
+    Formu,
+    NominatimSearch,
+    BuscaSimples,
+    SearchUserLocation,
+    SearchCity,
   }
 };
 
@@ -51,7 +65,10 @@ html, body, #app {
   margin: 0 auto;
   padding: 0 20px;
 }
+.prala{
 
+  padding: 0 350px;
+}
 
 #app {
 
