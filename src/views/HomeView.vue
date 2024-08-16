@@ -384,6 +384,14 @@
                 alt="PRPi USP - Pró-Reitoria de Pesquisa e Inovação" />
             </v-col>
             <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="90%" src="@/assets/logos/logo-prceu.png"
+                alt="PRCEU - Pró-Reitoria de Cultura e Extensão Universitária" />
+            </v-col>
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
+              <img width="60%" src="@/assets/logos/logo-prg.png"
+                alt="PRG - Pró-Reitoria de Graduação" />
+            </v-col>
+            <v-col cols="4" md="2" class="d-flex justify-center align-center">
               <img width="90%" src="@/assets/logos/CNPq_v2017_rgb.png"
                 alt="CNPQ - Conselho Nacional de Desenvolvimento Científico e Tecnológico" />
             </v-col>
