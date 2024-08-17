@@ -1,9 +1,24 @@
 <template>
-  <div id="app">
+  <div class="app">
     <h1>Busca de Cidades Brasileiras</h1>
-    <input v-model="query" type="text" placeholder="Digite o nome da cidade"/>
-    <button @click="searchCity">Buscar</button>
-    <pre v-if="responseData">{{ responseData }}</pre>
+    <div class="search-container">
+      <input 
+        v-model="query" 
+        type="text" 
+        placeholder="Digite o nome da cidade" 
+        @keyup.enter="searchCity"
+      />
+      <button @click="searchCity">Buscar</button>
+    </div>
+    <div v-if="cities.length > 0" class="results">
+      <h2>Resultados:</h2>
+      <ul>
+        <li v-for="city in cities" :key="city.id">
+          {{ city.nome }}, {{ city.microrregiao.mesorregiao.UF.sigla }}
+        </li>
+      </ul>
+    </div>
+    <p v-else-if="searched">Nenhuma cidade encontrada.</p>
   </div>
 </template>
 
@@ -12,7 +27,8 @@ export default {
   data() {
     return {
       query: '',
-      responseData: null,
+      cities: [],
+      searched: false,
     };
   },
   methods: {
@@ -21,17 +37,13 @@ export default {
         alert('Por favor, insira o nome de uma cidade');
         return;
       }
-
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.query)}&country=Brazil&format=json&limit=40&addressdetails=1&dedupe=1&accept-language=pt-BR`
+          `https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${encodeURIComponent(this.query)}`
         );
         const data = await response.json();
-
-        // Filtrando resultados que começam com "São"
-        const filteredData = data.filter(item => item.display_name.startsWith('São'));
-
-        this.responseData = JSON.stringify(filteredData, null, 2);
+        this.cities = data.filter(city => city.nome.toLowerCase().startsWith(this.query.toLowerCase()));
+        this.searched = true;
       } catch (error) {
         console.error('Erro ao buscar a cidade:', error);
       }
@@ -41,23 +53,47 @@ export default {
 </script>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-  margin-top: 60px;
+.app {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
 }
+
+.search-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 input {
-  padding: 10px;
-  margin-right: 10px;
-  width: 300px;
+  flex-grow: 1;
+  padding: 0.5rem;
 }
+
 button {
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
-pre {
-  text-align: left;
-  margin-top: 20px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+
+button:hover {
+  background-color: #0056b3;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+li:last-child {
+  border-bottom: none;
 }
 </style>

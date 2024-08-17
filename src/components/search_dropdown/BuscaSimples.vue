@@ -4,6 +4,7 @@
       <input
         v-model="inputValue"
         @input="updateSuggestions"
+        @keydown.enter="handleEnter"
         placeholder="Digite o nome de um estado brasileiro"
         class="input-field"
       />
@@ -15,11 +16,17 @@
     </div>
     <div class="button-container">
       <button @click="submit">Enviar</button>
-      <span class="suggestion-count" v-if="suggestions.length > 0">
+      <span class="suggestion-count" v-if="inputValue && suggestions.length > 0">
         {{ suggestions.length }} sugestão(ões)
       </span>
+      <span class="cache-count">
+        Cache: {{ cachedCities.length }} item(ns)
+      </span>
+      <span class="history-count">
+        Histórico: {{ searchHistory.length }} item(ns)
+      </span>
     </div>
-    <ul v-if="visibleSuggestions.length" class="suggestions-list">
+    <ul v-if="inputValue && visibleSuggestions.length" class="suggestions-list">
       <li v-for="suggestion in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
         {{ suggestion }}
       </li>
@@ -41,32 +48,69 @@ export default {
         'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
         'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
         'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins'
-      ]
+      ],
+      cachedCities: [], // Array para armazenar as cidades buscadas
+      searchHistory: [] // Array para armazenar o histórico de busca
     };
+  },
+  created() {
+    this.loadSearchHistory(); // Carrega o histórico do localStorage ao iniciar o componente
+    this.updateSuggestions();
   },
   computed: {
     visibleSuggestions() {
-      return this.suggestions.slice(0, 2);
+      return this.suggestions.slice(0, 6);
     }
   },
   methods: {
+    async fetchCities(query) {
+      const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${query}`);
+      const data = await response.json();
+      const filteredCities = data.filter(city =>
+        city.nome.toLowerCase().includes(query.toLowerCase())
+      );
+      const cities = filteredCities.map(city => `${city.nome}, ${city.microrregiao.mesorregiao.UF.sigla}`);
+      this.cachedCities = cities; // Armazena as cidades no array de cache
+      this.updateSuggestions(); // Atualiza as sugestões com os novos dados
+    },
     updateSuggestions() {
-      if (this.inputValue.length > 0) {
-        const inputLower = this.inputValue.toLowerCase();
-        this.suggestions = this.states.filter(state =>
-          state.toLowerCase().startsWith(inputLower)
-        );
-        if (this.suggestions.length > 0) {
-          const suggestion = this.suggestions[0];
-          this.visibleInput = this.inputValue;
-          this.highlightedText = suggestion.slice(this.inputValue.length);
-        } else {
-          this.visibleInput = this.inputValue;
-          this.highlightedText = '';
-        }
-      } else {
+      const inputLower = this.inputValue.toLowerCase();
+
+      if (this.inputValue === '') {
         this.suggestions = [];
-        this.visibleInput = '';
+        this.highlightedText = '';
+        return;
+      }
+
+      // Filtra o histórico de busca
+      const historySuggestions = this.searchHistory.filter(item =>
+        item.toLowerCase().startsWith(inputLower)
+      );
+
+      // Filtra os estados excluindo os já presentes no histórico
+      const stateSuggestions = this.states.filter(state =>
+        state.toLowerCase().startsWith(inputLower) && !this.searchHistory.includes(state)
+      );
+
+      // Filtra as cidades no cache excluindo as já presentes no histórico
+      const citySuggestions = this.cachedCities.filter(city =>
+        city.toLowerCase().startsWith(inputLower) && !this.searchHistory.includes(city)
+      );
+
+      // Combina as sugestões do histórico, estados e cidades, dando prioridade ao histórico
+      this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
+
+      if (this.inputValue.length === 3) {
+        // Faz a consulta à API do IBGE quando o input tiver exatamente 3 letras
+        this.fetchCities(this.inputValue);
+      }
+
+      if (this.suggestions.length > 0) {
+        const suggestion = this.suggestions[0];
+        this.visibleInput = this.inputValue;
+        this.highlightedText = suggestion.slice(this.inputValue.length);
+      } else {
+        this.visibleInput = this.inputValue;
         this.highlightedText = '';
       }
     },
@@ -75,9 +119,40 @@ export default {
       this.visibleInput = suggestion;
       this.highlightedText = '';
       this.suggestions = [];
+      this.addToHistory(suggestion); // Adiciona a sugestão selecionada ao histórico
     },
     submit() {
-      alert(`Você selecionou: ${this.inputValue}`);
+      if (this.inputValue) {
+        alert(`Você selecionou: ${this.inputValue}`);
+        this.addToHistory(this.inputValue); // Adiciona a sugestão selecionada ao histórico
+      }
+      this.suggestions = [];
+    },
+    handleEnter() {
+      if (this.suggestions.length > 0) {
+        this.selectSuggestion(this.suggestions[0]);
+        setTimeout(() => {
+          this.submit();
+        }, 1000);
+      }
+    },
+    addToHistory(item) {
+      if (!this.searchHistory.includes(item)) {
+        this.searchHistory.unshift(item); // Adiciona ao início do array de histórico
+        if (this.searchHistory.length > 10) {
+          this.searchHistory.pop(); // Mantém o histórico limitado a 10 itens
+        }
+        this.saveSearchHistory(); // Salva o histórico atualizado no localStorage
+      }
+    },
+    saveSearchHistory() {
+      localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
+    },
+    loadSearchHistory() {
+      const savedHistory = localStorage.getItem('searchHistory');
+      if (savedHistory) {
+        this.searchHistory = JSON.parse(savedHistory);
+      }
     }
   }
 };
@@ -140,6 +215,16 @@ export default {
 }
 .suggestion-count {
   margin-left: 10px;
+  font-size: 14px;
+  color: #666;
+}
+.cache-count {
+  margin-left: 20px;
+  font-size: 14px;
+  color: #666;
+}
+.history-count {
+  margin-left: 20px;
   font-size: 14px;
   color: #666;
 }
