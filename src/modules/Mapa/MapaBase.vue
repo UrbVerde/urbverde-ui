@@ -3,7 +3,7 @@
     highlightMapa: highlightMap == true,
   }">
     <VueMapbox
-      mapStyle="https://api.maptiler.com/maps/8fde2eea-8799-479e-8a8d-0989e2c7eb2d/style.json?key=XmSZh88cfG77QlyKTuwa"
+      mapStyle="https://api.maptiler.com/maps/dataviz/style.json?key=eizpVHFsrBDeO6HGwWvQ"
       ref="mapbox" :maxBounds="[-53.97525, -25.47836, -41.22247, -19.79201]"
       :center="[viewState.longitude, viewState.latitude]" :interactive="true" :zoom="viewState.zoom" :showLoader="true">
       <template v-for="layer in layers">
@@ -87,12 +87,12 @@ export default {
         {
           title: "SATÉLITE",
           value:
-            "https://api.maptiler.com/maps/hybrid/style.json?key=XmSZh88cfG77QlyKTuwa",
+            "https://api.maptiler.com/maps/hybrid/style.json?key=eizpVHFsrBDeO6HGwWvQ", // XmSZh88cfG77QlyKTuwa",
         },
         {
           title: "MAPA",
           value:
-            "https://api.maptiler.com/maps/8fde2eea-8799-479e-8a8d-0989e2c7eb2d/style.json?key=XmSZh88cfG77QlyKTuwa",
+            "https://api.maptiler.com/maps/dataviz/style.json?key=eizpVHFsrBDeO6HGwWvQ", //XmSZh88cfG77QlyKTuwa",
         },
         // {
         //   title: "ruas",
