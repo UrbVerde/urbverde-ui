@@ -9,7 +9,12 @@
       <h1>Bootstrap</h1>
       <h1>Ganso</h1>
       <BuscaSimples/>
-      <SearchUserLocation/>
+      <SearchUserLocation @location-updated="handleLocationUpdate"/>
+      <p v-if="locationData">
+      Localização Atual: {{ locationData.city }}, {{ locationData.state }}, {{ locationData.country }}<br>
+      Internacional: {{ locationData.international ? 'Sim' : 'Não' }}
+    </p>
+    <p v-else>Aguardando localização...</p>
       <SearchCity/>
 
       
@@ -34,6 +39,16 @@ export default {
     BuscaSimples,
     SearchUserLocation,
     SearchCity,
+  },
+  data() {
+    return {
+      locationData: null,
+    };
+  },
+  methods: {
+    handleLocationUpdate(locationData) {
+      this.locationData = locationData;
+    },
   }
 };
 
