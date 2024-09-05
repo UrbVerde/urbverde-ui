@@ -4,10 +4,20 @@
     <div id="app">
       <Sidebar />
     </div>
-    <div class="">
+    <div class="prala">
 
       <h1>Bootstrap</h1>
       <h1>Ganso</h1>
+      <BuscaSimples/>
+      <SearchUserLocation @location-updated="handleLocationUpdate"/>
+      <p v-if="locationData">
+      Localização Atual: {{ locationData.city }}, {{ locationData.state }}, {{ locationData.country }}<br>
+      Internacional: {{ locationData.international ? 'Sim' : 'Não' }}
+    </p>
+    <p v-else>Aguardando localização...</p>
+      <SearchCity/>
+
+      
 
     </div>
   </div>
@@ -15,11 +25,30 @@
 
 <script>
 import Sidebar from './components/side_bar/SideBar.vue';
+import Formu from './components/search_dropdown/Formu.vue';
+import NominatimSearch from './components/search_dropdown/NominatimSearch.vue';
+import BuscaSimples from './components/search_dropdown/BuscaSimples.vue';
+import SearchUserLocation from './components/search_dropdown/SearchUserLocation.vue';
+import SearchCity from './components/search_dropdown/SearchCity.vue';
 
 export default {
   components: {
-    Sidebar
-
+    Sidebar,
+    Formu,
+    NominatimSearch,
+    BuscaSimples,
+    SearchUserLocation,
+    SearchCity,
+  },
+  data() {
+    return {
+      locationData: null,
+    };
+  },
+  methods: {
+    handleLocationUpdate(locationData) {
+      this.locationData = locationData;
+    },
   }
 };
 
@@ -51,7 +80,10 @@ html, body, #app {
   margin: 0 auto;
   padding: 0 20px;
 }
+.prala{
 
+  padding: 0 350px;
+}
 
 #app {
 
@@ -59,4 +91,3 @@ html, body, #app {
 
 }
 </style>
-

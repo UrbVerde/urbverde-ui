@@ -47,7 +47,10 @@ function changeSidebar() {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../assets/styles/custom.scss';
+
+
 .sidebar {
   width: 72px;
   height: 100vh;
@@ -56,7 +59,7 @@ function changeSidebar() {
   top: 0;
   left: 0;
   overflow: hidden;
-  background: var(--Gray-White, #FFF);
+  background-color: map-get($gray-colors, white);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
 }
 
@@ -79,7 +82,7 @@ function changeSidebar() {
   align-items: center;
   gap: 8px;
   align-self: stretch;
-  background: var(--White, #FFF);
+  background-color: map-get($gray-colors, white);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
 }
 
@@ -108,9 +111,6 @@ function changeSidebar() {
   gap: 16px;
   flex: 1 0 0;
   align-self: stretch;
-
-
-
 }
 
 .bottom-area {
@@ -125,13 +125,13 @@ function changeSidebar() {
   /* Empurra a área inferior para o fim */
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   border-top: 1px solid rgba(0, 0, 0, 0.13);
-  background: var(--White, #FFF);
+  background-color: map-get($gray-colors, white);
 }
 
 
 .link-button {
   text-decoration: none;
-  color: var(--Primary-Color, black);
+  color: map-get($theme-colors, primary);
   font-weight: bold;
   display: flex;
   padding: 4px 8px;
@@ -147,8 +147,7 @@ function changeSidebar() {
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-  font-family: Inter, sans-serif;
-  font-size: small;
+  @extend .small-regular;
 
 }
 </style>

@@ -220,8 +220,6 @@ const slots = ref([
 }
 
 
-#navCont {}
-
 #navItem {
   padding: 0px 0px;
 }
@@ -278,8 +276,8 @@ const slots = ref([
   
 
 }
-#dropdownitem-txt{
-}
+
+
 .dropdown-item {
   --bs-dropdown-link-active-bg: gray;
   --bs-dropdown-link-active-color: #fff;

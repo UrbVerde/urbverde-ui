@@ -15,7 +15,7 @@
 <script setup>
 
 import NavbarItem from "@/components/side_bar/drop_down/NavbarItemDropdown.vue";
-import test from "@/components/side_bar/drop_down/teste.vue";
+
 
 import { defineProps } from "vue";
 import { reactive } from 'vue';
@@ -82,10 +82,6 @@ const handleSelectionChange = (selectedIndex) => {
 
 
 }
-
-.nav {}
-
-.li {}
 
 
 </style>
