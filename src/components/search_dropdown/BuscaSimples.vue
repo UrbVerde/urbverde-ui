@@ -2,6 +2,7 @@
   <div>
     <div class="input-container">
       <input
+        ref="inputField" 
         v-model="inputValue"
         @input="updateSuggestions"
         @focus="handleFocus"
@@ -42,6 +43,7 @@ export default {
   data() {
     return {
       inputValue: '',
+      previousInputValue: '',
       visibleInput: '',
       suggestions: [],
       highlightedText: '',
@@ -52,25 +54,21 @@ export default {
         'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
         'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
       ],
-      cachedCities: [], // Array para armazenar as cidades buscadas
-      searchHistory: [], // Array para armazenar o histórico de busca
+      cachedCities: [],
+      searchHistory: [],
       dropdown: false,
     };
   },
   created() {
-    this.loadSearchHistory(); // Carrega o histórico do localStorage ao iniciar o componente
+    this.loadSearchHistory();
     this.updateSuggestions();
   },
-
   mounted() {
-  // Usar mousedown ao invés de click para evitar o fechamento imediato do dropdown
-  document.addEventListener('mousedown', this.handleClickOutside);
-},
-
-beforeDestroy() {
-  // Remove o listener quando o componente é destruído
-  document.removeEventListener('mousedown', this.handleClickOutside);
-},
+    document.addEventListener('mousedown', this.handleClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  },
   computed: {
     visibleSuggestions() {
       return this.suggestions.slice(0, 6);
@@ -78,188 +76,176 @@ beforeDestroy() {
   },
   methods: {
     async fetchCities(query) {
-    const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${query}`);
-    const data = await response.json();
-    const filteredCities = data.filter(city =>
-    city.nome.toLowerCase().includes(query.toLowerCase())
-  );
+      this.clearCache();
+      const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${query}`);
+      const data = await response.json();
+      const filteredCities = data.filter(city =>
+        city.nome.toLowerCase().includes(query.toLowerCase())
+      );
+      const cities = filteredCities.map(city => `${city.nome} - ${city.microrregiao.mesorregiao.UF.sigla}`);
+      this.cacheCities(cities);
+    },
+
+    handleClickOutside(event) {
+      if (!this.$refs.inputField.contains(event.target) && !this.$refs.dropdown.contains(event.target)) {
+        this.dropdown = false;
+      }
+    },
+
+    handleFocus(event) {
+      if (!this.dropdown) {
+        this.dropdown = true;
+      }
+      event.stopPropagation();
+    },
+
+    cacheCities(cities) {
+      this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+      this.updateSuggestions();
+    },
+
+    clearCache() {
+      this.cachedCities = [];
+    },
+
+    updateSuggestions() {
+      
+
+      
+      this.previousInputValue = this.inputValue;
+
+      if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
 
 
-  const cities = filteredCities.map(city => `${city.nome} - ${city.microrregiao.mesorregiao.UF.sigla}`);
-  
-  
-  // Adiciona as cidades ao cache no formato correto
-  this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
-  
-  this.updateSuggestions(); // Atualiza as sugestões com os novos dados
-  },
+      if (this.inputValue === '') {
+        this.generateDefaultSuggestions();
+        this.highlightedText = '';
+        return;
+      }
 
-  handleClickOutside(event) {
-    // Verifica se o clique foi fora do input e do dropdown e fecha o dropdown
-    if (!this.$el.contains(event.target) && !this.$refs.dropdown.contains(event.target)) {
-      this.dropdown = false;
-    }
-  },
+      const inputLower = this.inputValue.toLowerCase();
+      const historySuggestions = this.filterHistory(inputLower);
+      const stateSuggestions = this.filterStates(inputLower);
+      const citySuggestions = this.filterCities(inputLower);
 
-  handleFocus(event) {
-    this.dropdown = true;
-    event.stopPropagation();
-  },
+      this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
 
+      if (this.inputValue.length === 3) {
+        this.fetchCities(this.inputValue);
+      }
 
-  clearCache() {
-  this.cachedCities = [];
-  },
-  updateSuggestions() {
-  const inputLower = this.inputValue.toLowerCase();
+      this.updateHighlightedText();
+    },
 
-  if (this.inputValue === '') {
-    this.generateDefaultSuggestions();
-    this.highlightedText = '';
-    return;
-  }
+    filterHistory(query) {
+      return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
+    },
 
-  // Filtra o histórico de busca
-  const historySuggestions = this.searchHistory.filter(item =>
-    item.toLowerCase().startsWith(inputLower)
-  );
+    filterStates(query) {
+      return this.states
+        .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
+    },
 
-  // Filtra os estados excluindo os já presentes no histórico
-  const stateSuggestions = this.states
-    .filter(state =>
-      state.toLowerCase().startsWith(inputLower) && !this.searchHistory.includes(state)
-    )
-    .map(state => state); // Mantém apenas o nome do estado
+    filterCities(query) {
+      return this.cachedCities
+        .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
+    },
 
-  // Filtra as cidades no cache excluindo as já presentes no histórico
-  const citySuggestions = this.cachedCities
-    .filter(city =>
-      city.toLowerCase().startsWith(inputLower) && !this.searchHistory.includes(city)
-    )
-    .map(city => city); // Mantém o formato "Cidade - Sigla do Estado"
-
-  // Combina as sugestões do histórico, estados e cidades, dando prioridade ao histórico
-  this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
-
-  if (this.inputValue.length === 3) {
-    // Faz a consulta à API do IBGE quando o input tiver exatamente 3 letras
-    this.fetchCities(this.inputValue);
-  }
-
-  if (this.suggestions.length > 0) {
-    const suggestion = this.suggestions[0];
-    this.visibleInput = this.inputValue;
-    this.highlightedText = suggestion.slice(this.inputValue.length);
-  } else {
-    this.visibleInput = this.inputValue;
-    this.highlightedText = '';
-  }
-},
-
-
-  
+    updateHighlightedText() {
+      if (this.suggestions.length > 0) {
+        const suggestion = this.suggestions[0];
+        this.visibleInput = this.inputValue;
+        this.highlightedText = suggestion.slice(this.inputValue.length);
+      } else {
+        this.visibleInput = this.inputValue;
+        this.highlightedText = '';
+      }
+    },
 
     selectSuggestion(suggestion) {
       this.inputValue = suggestion;
       this.visibleInput = suggestion;
       this.highlightedText = '';
       this.suggestions = [];
-      this.addToHistory(suggestion); // Adiciona a sugestão selecionada ao histórico
-      this.clearCache();
+      this.addToHistory(suggestion);
+      this.dropdown = false;
     },
+
     submit() {
       if (this.inputValue) {
         alert(`Você selecionou: ${this.suggestions[0]}`);
-        this.addToHistory(this.suggestions[0]); // Adiciona a sugestão selecionada ao histórico
+        this.addToHistory(this.suggestions[0]);
       }
       this.suggestions = [];
     },
+
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
+        this.$refs.inputField.blur();
         setTimeout(() => {
           this.submit();
         }, 1000);
       }
-      this.clearCache();
     },
-    addToHistory(item) {
-  // Converte todos os itens no histórico para minúsculas e verifica se o novo item já existe
-  const itemLower = item.toLowerCase();
-  const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
 
-  if (!historyLower.includes(itemLower)) {
-    this.searchHistory.unshift(item); // Adiciona ao início do array de histórico
-    if (this.searchHistory.length > 10) {
-      this.searchHistory.pop(); // Mantém o histórico limitado a 10 itens
-    }
-    this.saveSearchHistory(); // Salva o histórico atualizado no localStorage
-  }
-},
+    addToHistory(item) {
+      const itemLower = item.toLowerCase();
+      const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
+
+      if (!historyLower.includes(itemLower)) {
+        this.searchHistory.unshift(item);
+        if (this.searchHistory.length > 10) {
+          this.searchHistory.pop();
+        }
+        this.saveSearchHistory();
+      }
+    },
+
     saveSearchHistory() {
       localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
     },
+
     clearHistory() {
-    this.searchHistory = []; // Limpa o array de histórico na memória
-    localStorage.removeItem('searchHistory'); // Remove o histórico do localStorage
-    alert('Histórico limpo com sucesso!');
-  },
+      this.searchHistory = [];
+      localStorage.removeItem('searchHistory');
+      alert('Histórico limpo com sucesso!');
+    },
+
     loadSearchHistory() {
       const savedHistory = localStorage.getItem('searchHistory');
       if (savedHistory) {
         this.searchHistory = JSON.parse(savedHistory);
       }
     },
+
+    generateDefaultSuggestions() {
+      const cachedData = this.getCachedData();
+      const { city, state, stateAbbreviation, international } = cachedData;
+
+      let defaultSuggestions = [];
+
+      if (international) {
+        defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
+      } else {
+        defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
+      }
+
+      const historySuggestions = this.searchHistory.slice(0, 3).filter(item => !defaultSuggestions.includes(item));
+      this.suggestions = [...historySuggestions, ...defaultSuggestions];
+    },
+
     getCachedData() {
-    const cachedCity = localStorage.getItem('cachedCity');
-    const cachedState = localStorage.getItem('cachedState');
-    const cachedStateAbbreviation = localStorage.getItem('cachedStateAbbreviation');
-    const cachedCountry = localStorage.getItem('cachedCountry');
-    const cachedInternational = localStorage.getItem('cachedInternational') === 'true';
-    const cachedTimestamp = localStorage.getItem('cachedTimestamp');
-
-    return {
-      city: cachedCity,
-      state: cachedState,
-      stateAbbreviation: cachedStateAbbreviation,
-      country: cachedCountry,
-      international: cachedInternational,
-      timestamp: cachedTimestamp,
-    };
-  },
-  generateDefaultSuggestions() {
-    // Carregar os dados armazenados em cache
-    const cachedData = this.getCachedData();
-
-    // Extrair dados relevantes
-    const { city, state, stateAbbreviation, international } = cachedData;
-
-    let defaultSuggestions = [];
-
-    if (international) {
-      defaultSuggestions = [
-        "Rio de Janeiro - RJ",
-        "São Paulo",
-        "Brasil"
-      ];
-    } else {
-      defaultSuggestions = [
-        `${city} - ${stateAbbreviation}`,
-        `${state}`,
-        "Brasil"
-      ];
+      return {
+        city: localStorage.getItem('cachedCity'),
+        state: localStorage.getItem('cachedState'),
+        stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
+        international: localStorage.getItem('cachedInternational') === 'true',
+        latitude: localStorage.getItem('cachedLatitude'),
+        longitude: localStorage.getItem('cachedLongitude'),
+      };
     }
-
-      // Filtra o histórico, excluindo itens que já estejam em defaultSuggestions
-  const historySuggestions = this.searchHistory.slice(0, 3).filter(item => {
-    return !defaultSuggestions.includes(item);
-  });
-
-    // Combinar histórico e sugestões padrão
-    this.suggestions = [...historySuggestions, ...defaultSuggestions];
   }
-  }
-  
 };
 </script>
 
