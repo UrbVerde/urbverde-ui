@@ -1,15 +1,8 @@
 <template>
   <div>
     <div class="input-container">
-      <input
-        ref="inputField" 
-        v-model="inputValue"
-        @input="updateSuggestions"
-        @focus="handleFocus"
-        @keydown.enter="handleEnter"
-        placeholder="Digite o nome de um estado brasileiro"
-        class="input-field"
-      />
+      <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
+        placeholder="Digite o nome de um estado brasileiro" class="input-field" />
       <div v-if="highlightedText" class="suggestion-overlay">
         <span class="suggestion-text">
           <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
@@ -29,10 +22,11 @@
       </span>
     </div>
     <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-  <li class="suggestion-item" v-for="suggestion in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-    {{ suggestion }}
-  </li>
-</ul>
+      <li class="suggestion-item" v-for="suggestion in visibleSuggestions" :key="suggestion"
+        @click="selectSuggestion(suggestion)">
+        {{ suggestion }}
+      </li>
+    </ul>
   </div>
   <button @click="clearHistory" class="clear-history-button">Limpar Histórico</button>
 
@@ -76,14 +70,19 @@ export default {
   },
   methods: {
     async fetchCities(query) {
-      this.clearCache();
-      const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${query}`);
-      const data = await response.json();
-      const filteredCities = data.filter(city =>
-        city.nome.toLowerCase().includes(query.toLowerCase())
-      );
-      const cities = filteredCities.map(city => `${city.nome} - ${city.microrregiao.mesorregiao.UF.sigla}`);
-      this.cacheCities(cities);
+      try {
+        this.clearCache();
+        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${query}`);
+        const data = await response.json();
+        const filteredCities = data.filter(city =>
+          city.nome.toLowerCase().includes(query.toLowerCase())
+        );
+        const cities = filteredCities.map(city => `${city.nome} - ${city.microrregiao.mesorregiao.UF.sigla}`);
+        this.cacheCities(cities);
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+        // Optionally, display an error message to the user
+      }
     },
 
     handleClickOutside(event) {
@@ -108,13 +107,19 @@ export default {
       this.cachedCities = [];
     },
 
+    keydown() {
+      this.updateSuggestions();
+      console.log(this.inputValue);
+
+    },
+
     updateSuggestions() {
-      
 
-      
-      this.previousInputValue = this.inputValue;
 
-      if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
+
+      //this.previousInputValue = this.inputValue;
+
+      //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
 
 
       if (this.inputValue === '') {
@@ -135,6 +140,9 @@ export default {
       }
 
       this.updateHighlightedText();
+
+
+
     },
 
     filterHistory(query) {
@@ -154,13 +162,17 @@ export default {
     updateHighlightedText() {
       if (this.suggestions.length > 0) {
         const suggestion = this.suggestions[0];
-        this.visibleInput = this.inputValue;
-        this.highlightedText = suggestion.slice(this.inputValue.length);
+        if (suggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
+          this.visibleInput = this.inputValue;
+          this.highlightedText = suggestion.slice(this.inputValue.length);
+        } else {
+          this.highlightedText = '';
+        }
       } else {
-        this.visibleInput = this.inputValue;
         this.highlightedText = '';
       }
     },
+
 
     selectSuggestion(suggestion) {
       this.inputValue = suggestion;
@@ -255,6 +267,7 @@ export default {
   display: inline-block;
   width: 300px;
 }
+
 .input-field {
   width: 100%;
   padding: 5px;
@@ -262,6 +275,7 @@ export default {
   border: 1px solid #ccc;
   font-size: 16px;
 }
+
 .suggestion-overlay {
   position: absolute;
   top: 0;
@@ -274,17 +288,21 @@ export default {
   padding: 5px;
   box-sizing: border-box;
 }
+
 .suggestion-text {
   white-space: pre;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .invisible {
   visibility: hidden;
 }
+
 .highlight {
   color: #bbb;
 }
+
 .suggestions-list {
   list-style-type: none;
   padding: 0;
@@ -292,30 +310,36 @@ export default {
   border: 1px solid #ccc;
   border-top: none;
 }
+
 .suggestions-list li {
   padding: 5px;
   cursor: pointer;
   flex-grow: 1;
   flex-basis: 1;
 }
+
 .suggestions-list li:hover {
   background-color: #f0f0f0;
 }
+
 .button-container {
   display: flex;
   align-items: center;
   margin-top: 10px;
 }
+
 .suggestion-count {
   margin-left: 10px;
   font-size: 14px;
   color: #666;
 }
+
 .cache-count {
   margin-left: 20px;
   font-size: 14px;
   color: #666;
 }
+
 .history-count {
   margin-left: 20px;
   font-size: 14px;
