@@ -22,8 +22,10 @@
       </span>
     </div>
     <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-      <li class="suggestion-item" v-for="suggestion in visibleSuggestions" :key="suggestion"
-        @click="selectSuggestion(suggestion)">
+      <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+        @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+        @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+        :ref="`suggestionItem-${index}`">
         {{ suggestion }}
       </li>
     </ul>
@@ -60,7 +62,7 @@ export default {
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   },
   computed: {
@@ -85,6 +87,23 @@ export default {
       }
     },
 
+    focusPreviousSuggestion(index) {
+      if (index > 0) {
+        const previousItem = this.$refs[`suggestionItem-${index - 1}`];
+        if (previousItem && previousItem[0]) {
+          previousItem[0].focus();
+        }
+      }
+    },
+    focusNextSuggestion(index) {
+      if (index < this.visibleSuggestions.length - 1) {
+        const nextItem = this.$refs[`suggestionItem-${index + 1}`];
+        if (nextItem && nextItem[0]) {
+          nextItem[0].focus();
+        }
+      }
+    },
+
     handleClickOutside(event) {
       if (!this.$refs.inputField.contains(event.target) && !this.$refs.dropdown.contains(event.target)) {
         this.dropdown = false;
@@ -93,7 +112,10 @@ export default {
 
     handleFocus(event) {
       if (!this.dropdown) {
-        this.dropdown = true;
+        if(this.inputValue != this.suggestions[0]){
+          this.dropdown = true;
+        }
+        
       }
       event.stopPropagation();
     },
@@ -181,6 +203,7 @@ export default {
       this.suggestions = [];
       this.addToHistory(suggestion);
       this.dropdown = false;
+      this.submit();
     },
 
     submit() {
