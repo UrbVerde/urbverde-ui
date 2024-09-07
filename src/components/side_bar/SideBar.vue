@@ -7,6 +7,10 @@
         <MinimizeButton @changed-state="changeSidebar" />
 
       </div>
+
+
+        <BuscaSimples/>
+
       <div v-show="isOpen" class="middle-area">
         <DropDown v-show="true" :options="options" />
       </div>
@@ -36,6 +40,7 @@ import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
 import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue'
 import LogoButton from '../side_bar/buttons/LogoButton.vue';
 import { ref } from "vue";
+import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
 
 const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
 const isOpen = ref(true);

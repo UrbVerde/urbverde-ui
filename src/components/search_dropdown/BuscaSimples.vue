@@ -1,36 +1,43 @@
 <template>
-  <div>
-    <div class="input-container">
-      <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-        placeholder="Digite o nome de um estado brasileiro" class="input-field" />
-      <div v-if="highlightedText" class="suggestion-overlay">
-        <span class="suggestion-text">
-          <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
-        </span>
-      </div>
+  <div class="input-container">
+    <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
+      placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
+    <div v-if="highlightedText" class="suggestion-overlay">
+      <span class="suggestion-text">
+        <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
+      </span>
+
     </div>
     <div class="button-container">
-      <button @click="submit">Enviar</button>
-      <span class="suggestion-count" v-if="inputValue && suggestions.length > 0">
-        {{ suggestions.length }} sugestão(ões)
-      </span>
-      <span class="cache-count">
-        Cache: {{ cachedCities.length }} item(ns)
-      </span>
-      <span class="history-count">
-        Histórico: {{ searchHistory.length }} item(ns)
-      </span>
-    </div>
-    <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-      <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-        @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-        @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-        :ref="`suggestionItem-${index}`">
-        {{ suggestion }}
-      </li>
-    </ul>
+        <button @click="submit"> <img class="clean-button" id="imgIcon" src="../icons/search.svg" width="16"
+            height="16" /> </button>
+        <button @click="submit"> <img class="search-button" id="imgIcon" src="../icons/search.svg" width="16"
+            height="16" /> </button>
+      </div>
   </div>
-  <button @click="clearHistory" class="clear-history-button">Limpar Histórico</button>
+  <div class="button-debug">
+
+
+    <span v-if="debug" class="suggestion-count"> 0">
+      {{ suggestions.length }} sugestão(ões)
+    </span>
+    <span v-if="debug" class="cache-count">
+      Cache: {{ cachedCities.length }} item(ns)
+    </span>
+    <span v-if="debug" class="history-count">
+      Histórico: {{ searchHistory.length }} item(ns)
+    </span>
+  </div>
+  <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
+    <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+      @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+      @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+      :ref="`suggestionItem-${index}`">
+      {{ suggestion }}
+    </li>
+  </ul>
+
+  <button v-if="debug" @click="clearHistory" class="clear-history-button">Limpar Histórico</button>
 
 </template>
 
@@ -53,6 +60,7 @@ export default {
       cachedCities: [],
       searchHistory: [],
       dropdown: false,
+      debug: false,
     };
   },
   created() {
@@ -112,10 +120,10 @@ export default {
 
     handleFocus(event) {
       if (!this.dropdown) {
-        if(this.inputValue != this.suggestions[0]){
+        if (this.inputValue != this.suggestions[0]) {
           this.dropdown = true;
         }
-        
+
       }
       event.stopPropagation();
     },
@@ -285,37 +293,77 @@ export default {
 </script>
 
 <style scoped>
+#imgIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
 .input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
   position: relative;
-  display: inline-block;
-  width: 300px;
+  width: 100%;
+  padding: 0px 16px;
+  /* Adicionado o padding solicitado */
+
+  display: flex;
+  height: 48px;
+  padding: 0px 16px 0px 24px;
+  align-items: center;
+  gap: 12px;
+  flex: 1 0 0;
+
+
+}
+
+.input-field,
+.suggestion-overlay {
+
+
+  height: 48px;
+  padding: 0 16px 0 24px;
+  border-radius: 99px;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 48px;
+  width: 100%;
+  /* Garante que ocupem 100% da largura do container */
 }
 
 .input-field {
-  width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  background: var(--Gray-100, #F8F9FA);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+  border: none;
+  position: relative;
+  z-index: 1;
 }
 
 .suggestion-overlay {
   position: absolute;
   top: 0;
-  left: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 100%;
+  left: 24px;
+  /* Ajustado para refletir o padding do contêiner */
+  right: 16px;
+  /* Mantém alinhado com o padding */
   display: flex;
   align-items: center;
-  padding: 5px;
-  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 2;
+  background: transparent;
+
 }
 
 .suggestion-text {
-  white-space: pre;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 100%;
 }
 
 .invisible {
@@ -325,6 +373,10 @@ export default {
 .highlight {
   color: #bbb;
 }
+
+.clean-button {}
+
+.search-button {}
 
 .suggestions-list {
   list-style-type: none;
@@ -345,11 +397,7 @@ export default {
   background-color: #f0f0f0;
 }
 
-.button-container {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
+.button-container {}
 
 .suggestion-count {
   margin-left: 10px;

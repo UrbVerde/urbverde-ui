@@ -8,18 +8,19 @@
 
       <h1>Bootstrap</h1>
       <h1>Ganso</h1>
-      <BuscaSimples/>
+      
       <SearchUserLocation @location-updated="handleLocationUpdate"/>
       <p v-if="locationData">
       Localização Atual: {{ locationData.city }}, {{ locationData.state }}, {{ locationData.country }}<br>
       Internacional: {{ locationData.international ? 'Sim' : 'Não' }}
+      
     </p>
     <p v-else>Aguardando localização...</p>
-      <SearchCity/>
-
+      
       
 
     </div>
+    
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import NominatimSearch from './components/search_dropdown/NominatimSearch.vue';
 import BuscaSimples from './components/search_dropdown/BuscaSimples.vue';
 import SearchUserLocation from './components/search_dropdown/SearchUserLocation.vue';
 import SearchCity from './components/search_dropdown/SearchCity.vue';
+import Teste from './components/search_dropdown/teste.vue';
 
 export default {
   components: {
@@ -39,6 +41,7 @@ export default {
     BuscaSimples,
     SearchUserLocation,
     SearchCity,
+    Teste,
   },
   data() {
     return {
