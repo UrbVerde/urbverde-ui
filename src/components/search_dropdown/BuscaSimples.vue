@@ -1,146 +1,200 @@
 <template>
   <div>
-    <div class="input-container">
-      <input
-        v-model="inputValue"
-        @input="updateSuggestions"
-        placeholder="Digite o nome de um estado brasileiro"
-        class="input-field"
-      />
-      <div v-if="highlightedText" class="suggestion-overlay">
-        <span class="suggestion-text">
-          <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
-        </span>
+    <div class="search-container">
+      <div class="input-wrapper">
+        <input
+          v-model="inputValue"
+          @input="updateSuggestions"
+          placeholder="Digite por município ou estado"
+          class="input-field"
+        />
+        <i class="search-icon"></i>
       </div>
+
+      <!-- Filtros de busca -->
+      <p class="filter-title">Busca por:</p>
+      <div class="filter-container">
+        <span :class="{'active-filter': activeFilter === 'Todos'}" @click="setFilter('Todos')">Todos</span>
+        <span :class="{'active-filter': activeFilter === 'Municipios'}" @click="setFilter('Municipios')">Municípios</span>
+        <span :class="{'active-filter': activeFilter === 'Estados'}" @click="setFilter('Estados')">Estados</span>
+      </div>
+
+      <!-- Lista de sugestões -->
+      <ul v-if="visibleSuggestions.length" class="suggestions-list">
+        <li v-for="suggestion in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+          {{ suggestion }}
+        </li>
+      </ul>
+
+      <!-- Mapa exibindo as coordenadas obtidas -->
     </div>
-    <div class="button-container">
-      <button @click="submit">Enviar</button>
-      <span class="suggestion-count" v-if="suggestions.length > 0">
-        {{ suggestions.length }} sugestão(ões)
-      </span>
-    </div>
-    <ul v-if="visibleSuggestions.length" class="suggestions-list">
-      <li v-for="suggestion in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-        {{ suggestion }}
-      </li>
-    </ul>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
+  components: {
+    
+  },
   data() {
     return {
       inputValue: '',
-      visibleInput: '',
       suggestions: [],
-      highlightedText: '',
+      activeFilter: 'Todos',
+      coordinates: null, // Adicionado para armazenar as coordenadas
       states: [
         'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
         'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
         'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
         'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
         'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins'
-      ]
+      ],
+      cities: ['São Paulo', 'Rio de Janeiro', 'Salvador', 'Belo Horizonte', 'Fortaleza']
     };
   },
   computed: {
     visibleSuggestions() {
-      return this.suggestions.slice(0, 2);
+      return this.suggestions.slice(0, 5); // Mostra no máximo 5 sugestões
     }
   },
   methods: {
     updateSuggestions() {
       if (this.inputValue.length > 0) {
         const inputLower = this.inputValue.toLowerCase();
-        this.suggestions = this.states.filter(state =>
-          state.toLowerCase().startsWith(inputLower)
-        );
-        if (this.suggestions.length > 0) {
-          const suggestion = this.suggestions[0];
-          this.visibleInput = this.inputValue;
-          this.highlightedText = suggestion.slice(this.inputValue.length);
-        } else {
-          this.visibleInput = this.inputValue;
-          this.highlightedText = '';
+        let allSuggestions = [];
+
+        if (this.activeFilter === 'Todos') {
+          allSuggestions = [...this.states, ...this.cities];
+        } else if (this.activeFilter === 'Municipios') {
+          allSuggestions = this.cities;
+        } else if (this.activeFilter === 'Estados') {
+          allSuggestions = this.states;
         }
+
+        this.suggestions = allSuggestions.filter(item =>
+          item.toLowerCase().startsWith(inputLower)
+        );
       } else {
         this.suggestions = [];
-        this.visibleInput = '';
-        this.highlightedText = '';
       }
     },
     selectSuggestion(suggestion) {
       this.inputValue = suggestion;
-      this.visibleInput = suggestion;
-      this.highlightedText = '';
       this.suggestions = [];
+      this.fetchCoordinates(suggestion); // Chama a função para buscar coordenadas
     },
-    submit() {
-      alert(`Você selecionou: ${this.inputValue}`);
+    setFilter(filter) {
+      this.activeFilter = filter;
+      this.updateSuggestions();
+    },
+    async fetchCoordinates(address) {
+      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Insira a chave de sua API
+      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
+      try {
+        const response = await axios.get(endpoint);
+        if (response.data && response.data.results.length > 0) {
+          this.coordinates = response.data.results[0].geometry;
+        } else {
+          this.coordinates = null;
+          console.error('Nenhuma coordenada encontrada.');
+        }
+      } catch (error) {
+        this.coordinates = null;
+        console.error('Erro ao buscar coordenadas:', error);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.input-container {
-  position: relative;
-  display: inline-block;
-  width: 300px;
+/* Estilos principais da busca */
+.search-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 288px;
+  font-family: 'Arial', sans-serif;
 }
+
+/* Input */
+.input-wrapper {
+  position: relative;
+}
+
 .input-field {
   width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
+  padding: 10px 40px 10px 16px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 16px;
-}
-.suggestion-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 5px;
   box-sizing: border-box;
 }
-.suggestion-text {
-  white-space: pre;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background-image: url('../../assets/Search.png');
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  width: 24px;
+  height: 24px;
+  display: inline-block;
 }
-.invisible {
-  visibility: hidden;
+
+/* Filtros */
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
 }
-.highlight {
-  color: #bbb;
+
+.filter-title{
+  color: #a1a1a1;
+  font-size: 14px;
+  font-weight:lighter;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  margin-left: -190px;
+  
 }
+
+.filter-container span {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.filter-container .active-filter {
+  background-color: #DFF2EC;
+  color: #025949;
+}
+
+/* Lista de sugestões */
 .suggestions-list {
   list-style-type: none;
   padding: 0;
-  margin: 0;
-  border: 1px solid #ccc;
-  border-top: none;
+  margin: 10px 0 0;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 .suggestions-list li {
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
+  font-size: 16px;
 }
+
 .suggestions-list li:hover {
   background-color: #f0f0f0;
-}
-.button-container {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-.suggestion-count {
-  margin-left: 10px;
-  font-size: 14px;
-  color: #666;
 }
 </style>

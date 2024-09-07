@@ -1,4 +1,5 @@
 <template>
+  
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
@@ -8,6 +9,8 @@
 
       </div>
       <div v-show="isOpen" class="middle-area">
+        <BuscaSimples/>
+
         <DropDown v-show="true" :options="options" />
       </div>
 
@@ -26,15 +29,18 @@
         </a>
       </div>
 
-
     </div>
   </div>
+
 </template>
 
 <script setup>
 import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
 import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue'
 import LogoButton from '../side_bar/buttons/LogoButton.vue';
+import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
+import SearchCity from "../search_dropdown/SearchCity.vue";
+
 import { ref } from "vue";
 
 const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
