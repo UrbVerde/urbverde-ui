@@ -9,11 +9,11 @@
 
     </div>
     <div class="button-container">
-        <button @click="submit"> <img class="clean-button" id="imgIcon" src="../icons/search.svg" width="16"
-            height="16" /> </button>
-        <button @click="submit"> <img class="search-button" id="imgIcon" src="../icons/search.svg" width="16"
-            height="16" /> </button>
-      </div>
+      <button @click="submit"> <img class="clean-button" id="imgIcon" src="../icons/search.svg" width="16"
+          height="16" /> </button>
+      <button @click="submit"> <img class="search-button" id="imgIcon" src="../icons/search.svg" width="16"
+          height="16" /> </button>
+    </div>
   </div>
   <div class="button-debug">
 
@@ -61,6 +61,7 @@ export default {
       searchHistory: [],
       dropdown: false,
       debug: false,
+      lastInputLength: 0,
     };
   },
   created() {
@@ -165,13 +166,14 @@ export default {
 
       this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
 
-      if (this.inputValue.length === 3) {
+      if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
         this.fetchCities(this.inputValue);
+        this.lastInputLength = 3;  // Atualiza o comprimento anterior
+      } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
+        this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
       }
 
       this.updateHighlightedText();
-
-
 
     },
 
