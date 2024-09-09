@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'input-container': !dropdown, 'input-container-dropdown': dropdown}">
+  <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
     <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
       placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
     <div v-if="highlightedText" class="suggestion-overlay">
@@ -9,8 +9,8 @@
 
     </div>
     <div class="button-container">
-      <button class="clean-button" @click="submit"> <img id="imgIcon" src="../icons/clean.svg" width="16"
-          height="16" /> </button>
+      <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }" @click="submit">
+        <img id="imgIcon" src="../icons/clean.svg" width="16" height="16" /> </button>
       <button class="search-button" @click="submit"> <img id="imgIcon" src="../icons/search.svg" width="16"
           height="16" /> </button>
     </div>
@@ -18,26 +18,29 @@
   <div class="button-debug">
 
 
-    <span v-if="debug" class="suggestion-count"> 0">
+    <span v-if="debug">
       {{ suggestions.length }} sugestão(ões)
     </span>
-    <span v-if="debug" class="cache-count">
+    <span v-if="debug">
       Cache: {{ cachedCities.length }} item(ns)
     </span>
-    <span v-if="debug" class="history-count">
+    <span v-if="debug">
       Histórico: {{ searchHistory.length }} item(ns)
     </span>
+    <button v-if="debug" @click="clearHistory">Limpar Histórico</button>
   </div>
-  <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-    <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-      @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-      @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-      :ref="`suggestionItem-${index}`">
-      {{ suggestion }}
-    </li>
-  </ul>
+  
+  <div class="suggestion-container">
+    <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
+      <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+        @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+        @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+        :ref="`suggestionItem-${index}`">
+        {{ suggestion }}
+      </li>
+    </ul>
+  </div>
 
-  <button v-if="debug" @click="clearHistory" class="clear-history-button">Limpar Histórico</button>
 
 </template>
 
@@ -307,27 +310,6 @@ export default {
 .input-container,
 .input-container-dropdown {
 
-display: flex;
-align-items: center;
-gap: 12px;
-align-self: stretch;
-
-height: 48px;
-padding: 0px 16px 0px 24px;
-
-border-radius: 99px;
-background: var(--Gray-100, #aa127c);
-
-/* Small Shadow */
-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-
-/* alinhar texto digitado com sugestão */
-position: relative;
-
-}
-
-.input-container {
-
   display: flex;
   align-items: center;
   gap: 12px;
@@ -336,35 +318,33 @@ position: relative;
   height: 48px;
   padding: 0px 16px 0px 24px;
 
-  border-radius: 99px;
-  background: var(--Gray-100, #aa127c);
-
-  /* Small Shadow */
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
 
   /* alinhar texto digitado com sugestão */
   position: relative;
 
 }
 
+.input-container {
+
+  border-radius: 99px;
+  background: var(--Gray-100, #aa127c);
+
+  /* Small Shadow */
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+
+}
+
 .input-container-dropdown {
 
-display: flex;
-align-items: center;
-gap: 12px;
-align-self: stretch;
+  border-radius: 8px;
+  background: var(--Gray-100, #F8F9FA);
 
-height: 48px;
-padding: 0px 16px 0px 24px;
+  /* Regular Shadow */
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
-border-radius: 99px;
-background: var(--Gray-100, #8a7e86);
+  /* depois volto aqui */
+  border-bottom: 1px solid #ccc;
 
-/* Small Shadow */
-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-
-/* alinhar texto digitado com sugestão */
-position: relative;
 
 }
 
@@ -421,9 +401,7 @@ position: relative;
   color: #bbb;
 }
 
-.suggestion-text {
-
-}
+.suggestion-text {}
 
 
 
@@ -445,18 +423,14 @@ position: relative;
   border: none;
 }
 
-.clean-button {
-  
-  
-}
+.clean-button {}
+
 .clean-button-hidden {
   display: none;
-  
-}
-
-.search-button {
 
 }
+
+.search-button {}
 
 .suggestions-list {
   list-style-type: none;
@@ -464,6 +438,9 @@ position: relative;
   margin: 0;
   border: 1px solid #ccc;
   border-top: none;
+
+
+
 }
 
 .suggestions-list li {
@@ -494,5 +471,9 @@ position: relative;
   margin-left: 20px;
   font-size: 14px;
   color: #666;
+}
+
+.button-debug {
+  display: none;
 }
 </style>
