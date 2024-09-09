@@ -305,11 +305,21 @@ export default {
 }
 
 .input-container {
+
+  display: flex;
+  padding: 0px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  position: relative;
+
+
   display: flex;
   /*flex-direction: column;*/
   align-items: flex-start;
   align-self: stretch;
-  position: relative;
+  
   width: 100%;
   padding: 0px 16px;
   /* Adicionado o padding solicitado */
@@ -320,16 +330,16 @@ export default {
   gap: 12px;
   flex: 1 0 0;
 
-  
 
-  
+
+
 
 }
 
 .input-field,
 .suggestion-overlay {
 
-/* como devem ficar sobre o input, devem ter o mesmo espaçamento */
+  /* como devem ficar sobre o input, devem ter o mesmo espaçamento */
   height: 48px;
   padding: 0 16px 0 24px;
   border-radius: 99px;
@@ -339,7 +349,7 @@ export default {
   width: 100%;
   /* Garante que ocupem 100% da largura do container */
 
-  
+
 }
 
 .input-field {
@@ -349,7 +359,7 @@ export default {
   position: relative;
   z-index: 1;
 
-  
+
 }
 
 .suggestion-overlay {
