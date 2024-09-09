@@ -16,7 +16,7 @@
       
     </p>
     <p v-else>Aguardando localização...</p>
-      
+      <Teste/>
       
 
     </div>
