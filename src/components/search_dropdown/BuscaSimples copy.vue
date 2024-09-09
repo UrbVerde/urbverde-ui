@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'input-container': !dropdown, 'input-container-dropdown': dropdown}">
+  <div class="input-container">
     <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
       placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
     <div v-if="highlightedText" class="suggestion-overlay">
@@ -9,9 +9,9 @@
 
     </div>
     <div class="button-container">
-      <button class="clean-button" @click="submit"> <img id="imgIcon" src="../icons/clean.svg" width="16"
+      <button @click="submit"> <img class="clean-button" id="imgIcon" src="../icons/search.svg" width="16"
           height="16" /> </button>
-      <button class="search-button" @click="submit"> <img id="imgIcon" src="../icons/search.svg" width="16"
+      <button @click="submit"> <img class="search-button" id="imgIcon" src="../icons/search.svg" width="16"
           height="16" /> </button>
     </div>
   </div>
@@ -304,113 +304,84 @@ export default {
 
 }
 
-.input-container,
-.input-container-dropdown {
-
-display: flex;
-align-items: center;
-gap: 12px;
-align-self: stretch;
-
-height: 48px;
-padding: 0px 16px 0px 24px;
-
-border-radius: 99px;
-background: var(--Gray-100, #aa127c);
-
-/* Small Shadow */
-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-
-/* alinhar texto digitado com sugestão */
-position: relative;
-
-}
-
 .input-container {
 
   display: flex;
-  align-items: center;
-  gap: 12px;
+  padding: 0px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
   align-self: stretch;
+  position: relative;
+
+
+  display: flex;
+  /*flex-direction: column;*/
+  align-items: flex-start;
+  align-self: stretch;
+  
+  width: 100%;
+  padding: 0px 16px;
+  /* Adicionado o padding solicitado */
 
   height: 48px;
   padding: 0px 16px 0px 24px;
+  align-items: center;
+  gap: 12px;
+  flex: 1 0 0;
 
-  border-radius: 99px;
-  background: var(--Gray-100, #aa127c);
 
-  /* Small Shadow */
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
 
-  /* alinhar texto digitado com sugestão */
-  position: relative;
 
-}
-
-.input-container-dropdown {
-
-display: flex;
-align-items: center;
-gap: 12px;
-align-self: stretch;
-
-height: 48px;
-padding: 0px 16px 0px 24px;
-
-border-radius: 99px;
-background: var(--Gray-100, #8a7e86);
-
-/* Small Shadow */
-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-
-/* alinhar texto digitado com sugestão */
-position: relative;
 
 }
 
 .input-field,
 .suggestion-overlay {
 
+  /* como devem ficar sobre o input, devem ter o mesmo espaçamento */
+  height: 48px;
+  padding: 0 16px 0 24px;
+  border-radius: 99px;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 48px;
+  width: 100%;
+  /* Garante que ocupem 100% da largura do container */
 
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1 0 0;
 
-  /* layout */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-
-  /* Typography */
-  overflow: hidden;
-  color: var(--Body-Text-Body-Color, #212529);
-  text-overflow: ellipsis;
-
-  /* Body/Small/Regular */
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  /* 21px */
 }
 
 .input-field {
-
+  background: var(--Gray-100, #F8F9FA);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
   border: none;
+  position: relative;
   z-index: 1;
+
 
 }
 
 .suggestion-overlay {
-
-  /* alinhar texto digitado com sugestão */
   position: absolute;
+  top: 0;
+  left: 24px;
+  /* Ajustado para refletir o padding do contêiner */
+  right: 16px;
+  /* Mantém alinhado com o padding */
+  display: flex;
+  align-items: center;
   pointer-events: none;
   z-index: 2;
   background: transparent;
 
+}
+
+.suggestion-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .invisible {
@@ -421,42 +392,9 @@ position: relative;
   color: #bbb;
 }
 
-.suggestion-text {
+.clean-button {}
 
-}
-
-
-
-.button-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-}
-
-.clean-button,
-.search-button {
-  display: flex;
-  padding: 8px;
-  align-items: center;
-  gap: 10px;
-
-  background: none;
-  border: none;
-}
-
-.clean-button {
-  
-  
-}
-.clean-button-hidden {
-  display: none;
-  
-}
-
-.search-button {
-
-}
+.search-button {}
 
 .suggestions-list {
   list-style-type: none;
@@ -477,6 +415,7 @@ position: relative;
   background-color: #f0f0f0;
 }
 
+.button-container {}
 
 .suggestion-count {
   margin-left: 10px;

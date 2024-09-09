@@ -8,9 +8,9 @@
 
       </div>
 
-
+      <div v-show="isOpen" class="search-area">
         <BuscaSimples/>
-
+      </div>
       <div v-show="isOpen" class="middle-area">
         <DropDown v-show="true" :options="options" />
       </div>
@@ -117,7 +117,14 @@ function changeSidebar() {
 
 
 }
-
+.search-area{
+display: flex;
+padding: 0px 16px;
+flex-direction: column;
+align-items: flex-start;
+gap: 16px;
+align-self: stretch;
+}
 .bottom-area {
   display: flex;
   flex-direction: column;
