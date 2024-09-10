@@ -52,7 +52,9 @@
           @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
           @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
           :ref="`suggestionItem-${index}`">
-          {{ suggestion.text }}
+          <img :src="getImageSource(suggestion.type)" width="20" height="20" />
+          <span class="item-text">{{ suggestion.text }}</span>
+
         </li>
       </ul>
     </div>
@@ -61,6 +63,9 @@
 </template>
 
 <script>
+import historyIcon from "../icons/history.svg"
+import locationIcon from "../icons/location.svg"
+
 export default {
   data() {
     return {
@@ -385,6 +390,10 @@ export default {
       }
     },
 
+    getImageSource(type) {
+      return type === 'history' ? historyIcon : locationIcon;
+    }
+
   }
 };
 </script>
@@ -656,19 +665,52 @@ export default {
   padding: 0;
   margin: 0;
 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+
 
 
 }
 
-.suggestions-list li {
-  padding: 5px;
-  cursor: pointer;
-  flex-grow: 1;
-  flex-basis: 1;
-}
+.suggestions-list li {}
 
 .suggestions-list li:hover {
   background-color: #f0f0f0;
+}
+
+.suggestion-item {
+  display: flex;
+  height: 32px;
+  padding: 0px 8px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+}
+
+.item-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+
+  overflow: hidden;
+  color: var(--Body-Text-Body-Color, #212529);
+  text-overflow: ellipsis;
+
+  /* Body/Small/Regular */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  /* 21px */
+
 }
 
 
