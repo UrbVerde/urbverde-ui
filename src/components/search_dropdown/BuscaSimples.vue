@@ -38,11 +38,11 @@
       <div class="filter-container">
         <span class="filter-text">Buscar por:</span>
         <div class="filter-button-container">
-          <button :class="{ 'filter-button': filterAll == false, 'filter-button-active': filterAll == true }"
+          <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
             @click="toggleAll">Todos</button>
-          <button :class="{ 'filter-button': filterCity == false, 'filter-button-active': filterCity == true }"
+          <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
             @click="toggleCity">Municípios</button>
-          <button :class="{ 'filter-button': filterState == false, 'filter-button-active': filterState == true }"
+          <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
             @click="toggleState">Estados</button>
         </div>
       </div>
@@ -52,7 +52,7 @@
           @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
           @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
           :ref="`suggestionItem-${index}`">
-          {{ suggestion }}
+          {{ suggestion.text }}
         </li>
       </ul>
     </div>
@@ -98,8 +98,18 @@ export default {
     document.removeEventListener('mousedown', this.handleClickOutside);
   },
   computed: {
+    filteredSuggestions() {
+      if (this.filterAll) {
+        return this.suggestions;
+      } else if (this.filterCity) {
+        return this.suggestions.filter(suggestion => suggestion.type === 'city');
+      } else if (this.filterState) {
+        return this.suggestions.filter(suggestion => suggestion.type === 'state');
+      }
+      return this.suggestions; // fallback para todos os casos
+    },
     visibleSuggestions() {
-      return this.suggestions.slice(0, 5);
+      return this.filteredSuggestions.slice(0, 5);
     }
   },
   methods: {
@@ -177,11 +187,6 @@ export default {
 
 
 
-      //this.previousInputValue = this.inputValue;
-
-      //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
-
-
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
@@ -193,7 +198,11 @@ export default {
       const stateSuggestions = this.filterStates(inputLower);
       const citySuggestions = this.filterCities(inputLower);
 
-      this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
+      this.suggestions = [
+        ...historySuggestions.map(item => ({ text: item, type: 'history' })),
+        ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
+        ...citySuggestions.map(item => ({ text: item, type: 'city' }))
+      ];
 
       if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
         this.fetchCities(this.inputValue);
@@ -221,11 +230,11 @@ export default {
     },
 
     updateHighlightedText() {
-      if (this.suggestions.length > 0) {
-        const suggestion = this.suggestions[0];
-        if (suggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
+      if (this.visibleSuggestions.length > 0) {
+        const firstSuggestion = this.visibleSuggestions[0].text;
+        if (firstSuggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
           this.visibleInput = this.inputValue;
-          this.highlightedText = suggestion.slice(this.inputValue.length);
+          this.highlightedText = firstSuggestion.slice(this.inputValue.length);
         } else {
           this.highlightedText = '';
         }
@@ -236,14 +245,13 @@ export default {
 
 
     selectSuggestion(suggestion) {
-      this.inputValue = suggestion;
-      this.visibleInput = suggestion;
+      this.inputValue = suggestion.text;
+      this.visibleInput = suggestion.text;
       this.highlightedText = '';
-      //this.suggestions = [];
-      this.addToHistory(suggestion);
+      this.addToHistory(suggestion.text);
       this.dropdown = false;
 
-      this.locationChosen = suggestion;
+      this.locationChosen = suggestion.text;
       this.submit();
     },
 
@@ -316,14 +324,27 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city == "error" || state == "error") {
-        defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
+      if (international || city === "error" || state === "error") {
+        defaultSuggestions = [
+          { text: "Rio de Janeiro - RJ", type: "city" },
+          { text: "São Paulo", type: "state" },
+          { text: "Brasil", type: "country" }
+        ];
       } else {
-        defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
+        defaultSuggestions = [
+          { text: `${city} - ${stateAbbreviation}`, type: "city" },
+          { text: state, type: "state" },
+          { text: "Brasil", type: "country" }
+        ];
       }
 
-      const historySuggestions = this.searchHistory.slice(0, 2).filter(item => !defaultSuggestions.includes(item));
+      const historySuggestions = this.searchHistory
+        .slice(0, 2)
+        .filter(item => !defaultSuggestions.some(def => def.text === item))
+        .map(item => ({ text: item, type: "history" }));
+
       this.suggestions = [...historySuggestions, ...defaultSuggestions];
+      this.updateHighlightedText();
     },
 
     getCachedData() {
@@ -338,27 +359,24 @@ export default {
     },
 
     toggleAll() {
-      if (this.filterAll == false) {
-        this.filterAll = true;
-        this.filterCity = false;
-        this.filterState = false;
-      }
+      this.filterAll = true;
+      this.filterCity = false;
+      this.filterState = false;
+      this.updateHighlightedText();
     },
 
     toggleCity() {
-      if (this.filterCity == false) {
-        this.filterAll = false;
-        this.filterCity = true;
-        this.filterState = false;
-      }
+      this.filterAll = false;
+      this.filterCity = true;
+      this.filterState = false;
+      this.updateHighlightedText();
     },
 
     toggleState() {
-      if (this.filterState == false) {
-        this.filterAll = false;
-        this.filterCity = false;
-        this.filterState = true;
-      }
+      this.filterAll = false;
+      this.filterCity = false;
+      this.filterState = true;
+      this.updateHighlightedText();
     },
 
   }
@@ -455,7 +473,7 @@ export default {
 .input-field {
   background: var(--Gray-100, #F8F9FA);
   border: none;
-  
+
 
 }
 
@@ -464,6 +482,7 @@ export default {
   flex: 1;
   overflow: hidden;
 }
+
 .suggestion-overlay {
 
   /* alinhar texto digitado com sugestão */
