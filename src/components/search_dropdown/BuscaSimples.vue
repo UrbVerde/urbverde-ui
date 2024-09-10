@@ -183,9 +183,10 @@ export default {
     },
 
     keydown() {
-      this.updateSuggestions();
-      console.log(this.inputValue);
-
+      if (this.inputValue !== this.previousInputValue) {
+        this.updateSuggestions();
+        this.previousInputValue = this.inputValue;
+      }
     },
 
     updateSuggestions() {
