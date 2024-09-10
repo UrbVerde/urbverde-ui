@@ -362,21 +362,27 @@ export default {
       this.filterAll = true;
       this.filterCity = false;
       this.filterState = false;
-      this.updateHighlightedText();
+      if (this.inputValue != '') {
+        this.updateHighlightedText();
+      }
     },
 
     toggleCity() {
       this.filterAll = false;
       this.filterCity = true;
       this.filterState = false;
-      this.updateHighlightedText();
+      if (this.inputValue != '') {
+        this.updateHighlightedText();
+      }
     },
 
     toggleState() {
       this.filterAll = false;
       this.filterCity = false;
       this.filterState = true;
-      this.updateHighlightedText();
+      if (this.inputValue != '') {
+        this.updateHighlightedText();
+      }
     },
 
   }
