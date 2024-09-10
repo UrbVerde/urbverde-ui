@@ -1,46 +1,60 @@
 <template>
-  <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
-    <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-      placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
-    <div v-if="highlightedText" class="suggestion-overlay">
-      <span class="suggestion-text">
-        <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
+  <div class="search-wrapper">
+    <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
+      <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
+        placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
+      <div v-if="highlightedText" class="suggestion-overlay">
+        <span class="suggestion-text">
+          <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
+        </span>
+
+      </div>
+      <div class="button-container">
+        <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
+          @click="clearInput">
+          <img id="imgIcon" src="../icons/clean.svg" width="16" height="16" /> </button>
+        <button class="search-button" @click="clearHistory"> <img id="imgIcon" src="../icons/search.svg" width="16"
+            height="16" /> </button>
+      </div>
+    </div>
+    <div class="button-debug">
+
+
+      <span v-if="debug">
+        {{ suggestions.length }} sugestão(ões)
       </span>
-
+      <span v-if="debug">
+        Cache: {{ cachedCities.length }} item(ns)
+      </span>
+      <span v-if="debug">
+        Histórico: {{ searchHistory.length }} item(ns)
+      </span>
+      <button v-if="debug" @click="clearHistory">Limpar Histórico</button>
     </div>
-    <div class="button-container">
-      <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }" @click="submit">
-        <img id="imgIcon" src="../icons/clean.svg" width="16" height="16" /> </button>
-      <button class="search-button" @click="submit"> <img id="imgIcon" src="../icons/search.svg" width="16"
-          height="16" /> </button>
+
+    <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
+      <div class="filter-container">
+        <span class="filter-text">Buscar por:</span>
+        <div class="filter-button-container">
+          <button :class="{ 'filter-button': filterAll == false, 'filter-button-active': filterAll == true }"
+            @click="toggleAll">Todos</button>
+          <button :class="{ 'filter-button': filterCity == false, 'filter-button-active': filterCity == true }"
+            @click="toggleCity">Municípios</button>
+          <button :class="{ 'filter-button': filterState == false, 'filter-button-active': filterState == true }"
+            @click="toggleState">Estados</button>
+        </div>
+      </div>
+
+      <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
+        <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+          @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+          @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+          :ref="`suggestionItem-${index}`">
+          {{ suggestion }}
+        </li>
+      </ul>
     </div>
   </div>
-  <div class="button-debug">
-
-
-    <span v-if="debug">
-      {{ suggestions.length }} sugestão(ões)
-    </span>
-    <span v-if="debug">
-      Cache: {{ cachedCities.length }} item(ns)
-    </span>
-    <span v-if="debug">
-      Histórico: {{ searchHistory.length }} item(ns)
-    </span>
-    <button v-if="debug" @click="clearHistory">Limpar Histórico</button>
-  </div>
-  
-  <div class="suggestion-container">
-    <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-      <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-        @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-        @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-        :ref="`suggestionItem-${index}`">
-        {{ suggestion }}
-      </li>
-    </ul>
-  </div>
-
 
 </template>
 
@@ -53,6 +67,7 @@ export default {
       visibleInput: '',
       suggestions: [],
       highlightedText: '',
+      locationChosen:'',
       states: [
         'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
         'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
@@ -65,6 +80,9 @@ export default {
       dropdown: false,
       debug: false,
       lastInputLength: 0,
+      filterAll: true,
+      filterCity: false,
+      filterState: false,
     };
   },
   created() {
@@ -79,7 +97,7 @@ export default {
   },
   computed: {
     visibleSuggestions() {
-      return this.suggestions.slice(0, 6);
+      return this.suggestions.slice(0, 5);
     }
   },
   methods: {
@@ -117,184 +135,232 @@ export default {
     },
 
     handleClickOutside(event) {
-      if (!this.$refs.inputField.contains(event.target) && !this.$refs.dropdown.contains(event.target)) {
+      const inputContainer = this.$el.querySelector('.input-container, .input-container-dropdown');
+      const dropdown = this.$refs.dropdown;
+      const suggestionContainer = this.$el.querySelector('.suggestion-container');
+
+      if ((inputContainer && !inputContainer.contains(event.target)) && 
+          (dropdown && !dropdown.contains(event.target)) &&
+          (suggestionContainer && !suggestionContainer.contains(event.target))) {
         this.dropdown = false;
       }
     },
 
-    handleFocus(event) {
-      if (!this.dropdown) {
-        if (this.inputValue != this.suggestions[0]) {
-          this.dropdown = true;
+      handleFocus(event) {
+        if (this.dropdown != true) {
+          
+            this.dropdown = true;
+          
+
+        }
+        event.stopPropagation();
+      },
+
+      cacheCities(cities) {
+        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+        this.updateSuggestions();
+      },
+
+      clearCache() {
+        this.cachedCities = [];
+      },
+
+      keydown() {
+        this.updateSuggestions();
+        console.log(this.inputValue);
+
+      },
+
+      updateSuggestions() {
+
+
+
+        //this.previousInputValue = this.inputValue;
+
+        //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
+
+
+        if (this.inputValue === '') {
+          this.generateDefaultSuggestions();
+          this.highlightedText = '';
+          return;
         }
 
-      }
-      event.stopPropagation();
-    },
+        const inputLower = this.inputValue.toLowerCase();
+        const historySuggestions = this.filterHistory(inputLower);
+        const stateSuggestions = this.filterStates(inputLower);
+        const citySuggestions = this.filterCities(inputLower);
 
-    cacheCities(cities) {
-      this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
-      this.updateSuggestions();
-    },
+        this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
 
-    clearCache() {
-      this.cachedCities = [];
-    },
+        if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
+          this.fetchCities(this.inputValue);
+          this.lastInputLength = 3;  // Atualiza o comprimento anterior
+        } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
+          this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
+        }
 
-    keydown() {
-      this.updateSuggestions();
-      console.log(this.inputValue);
+        this.updateHighlightedText();
 
-    },
+      },
 
-    updateSuggestions() {
+      filterHistory(query) {
+        return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
+      },
 
+      filterStates(query) {
+        return this.states
+          .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
+      },
 
+      filterCities(query) {
+        return this.cachedCities
+          .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
+      },
 
-      //this.previousInputValue = this.inputValue;
-
-      //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
-
-
-      if (this.inputValue === '') {
-        this.generateDefaultSuggestions();
-        this.highlightedText = '';
-        return;
-      }
-
-      const inputLower = this.inputValue.toLowerCase();
-      const historySuggestions = this.filterHistory(inputLower);
-      const stateSuggestions = this.filterStates(inputLower);
-      const citySuggestions = this.filterCities(inputLower);
-
-      this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
-
-      if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
-        this.fetchCities(this.inputValue);
-        this.lastInputLength = 3;  // Atualiza o comprimento anterior
-      } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
-        this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
-      }
-
-      this.updateHighlightedText();
-
-    },
-
-    filterHistory(query) {
-      return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
-    },
-
-    filterStates(query) {
-      return this.states
-        .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
-    },
-
-    filterCities(query) {
-      return this.cachedCities
-        .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
-    },
-
-    updateHighlightedText() {
-      if (this.suggestions.length > 0) {
-        const suggestion = this.suggestions[0];
-        if (suggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
-          this.visibleInput = this.inputValue;
-          this.highlightedText = suggestion.slice(this.inputValue.length);
+      updateHighlightedText() {
+        if (this.suggestions.length > 0) {
+          const suggestion = this.suggestions[0];
+          if (suggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
+            this.visibleInput = this.inputValue;
+            this.highlightedText = suggestion.slice(this.inputValue.length);
+          } else {
+            this.highlightedText = '';
+          }
         } else {
           this.highlightedText = '';
         }
-      } else {
+      },
+
+
+      selectSuggestion(suggestion) {
+        this.inputValue = suggestion;
+        this.visibleInput = suggestion;
         this.highlightedText = '';
-      }
-    },
+        //this.suggestions = [];
+        this.addToHistory(suggestion);
+        this.dropdown = false;
 
+        this.locationChosen = suggestion;
+        this.submit();
+      },
 
-    selectSuggestion(suggestion) {
-      this.inputValue = suggestion;
-      this.visibleInput = suggestion;
-      this.highlightedText = '';
-      this.suggestions = [];
-      this.addToHistory(suggestion);
-      this.dropdown = false;
-      this.submit();
-    },
-
-    submit() {
-      if (this.inputValue) {
-        alert(`Você selecionou: ${this.suggestions[0]}`);
-        this.addToHistory(this.suggestions[0]);
-      }
-      this.suggestions = [];
-    },
-
-    handleEnter() {
-      if (this.suggestions.length > 0) {
-        this.selectSuggestion(this.suggestions[0]);
-        this.$refs.inputField.blur();
-        setTimeout(() => {
-          this.submit();
-        }, 1000);
-      }
-    },
-
-    addToHistory(item) {
-      const itemLower = item.toLowerCase();
-      const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
-
-      if (!historyLower.includes(itemLower)) {
-        this.searchHistory.unshift(item);
-        if (this.searchHistory.length > 10) {
-          this.searchHistory.pop();
+      submit() {
+        if (this.inputValue) {
+          
+          this.addToHistory(this.suggestions[0]);
+          this.locationChosen = this.suggestions[0];
+          
         }
-        this.saveSearchHistory();
-      }
-    },
+        //this.suggestions = [];
+      },
 
-    saveSearchHistory() {
-      localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
-    },
+      handleEnter() {
+        if (this.suggestions.length > 0) {
+          this.selectSuggestion(this.suggestions[0]);
+          this.$refs.inputField.blur();
+          setTimeout(() => {
+            this.submit();
+          }, 1000);
+        }
+      },
 
-    clearHistory() {
-      this.searchHistory = [];
-      localStorage.removeItem('searchHistory');
-      alert('Histórico limpo com sucesso!');
-    },
+      addToHistory(item) {
+        const itemLower = item.toLowerCase();
+        const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
 
-    loadSearchHistory() {
-      const savedHistory = localStorage.getItem('searchHistory');
-      if (savedHistory) {
-        this.searchHistory = JSON.parse(savedHistory);
-      }
-    },
+        if (!historyLower.includes(itemLower)) {
+          this.searchHistory.unshift(item);
+          if (this.searchHistory.length > 10) {
+            this.searchHistory.pop();
+          }
+          this.saveSearchHistory();
+        }
+      },
 
-    generateDefaultSuggestions() {
-      const cachedData = this.getCachedData();
-      const { city, state, stateAbbreviation, international } = cachedData;
+      saveSearchHistory() {
+        localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
+      },
 
-      let defaultSuggestions = [];
+      clearHistory() {
+        this.searchHistory = [];
+        localStorage.removeItem('searchHistory');
+        alert('Histórico limpo com sucesso!');
+      },
 
-      if (international || city == "error" || state == "error") {
-        defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
-      } else {
-        defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
-      }
+      clearInput(){
+        this.suggestions = [];
+        this.generateDefaultSuggestions();
+        this.inputValue = '';
+        this.highlightedText = '';
 
-      const historySuggestions = this.searchHistory.slice(0, 3).filter(item => !defaultSuggestions.includes(item));
-      this.suggestions = [...historySuggestions, ...defaultSuggestions];
-    },
+        if (!this.dropdown){
+          this.dropdown = true;
+        }
 
-    getCachedData() {
-      return {
-        city: localStorage.getItem('cachedCity'),
-        state: localStorage.getItem('cachedState'),
-        stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
-        international: localStorage.getItem('cachedInternational') === 'true',
-        latitude: localStorage.getItem('cachedLatitude'),
-        longitude: localStorage.getItem('cachedLongitude'),
-      };
+        
+      },
+
+      loadSearchHistory() {
+        const savedHistory = localStorage.getItem('searchHistory');
+        if (savedHistory) {
+          this.searchHistory = JSON.parse(savedHistory);
+        }
+      },
+
+      generateDefaultSuggestions() {
+        const cachedData = this.getCachedData();
+        const { city, state, stateAbbreviation, international } = cachedData;
+
+        let defaultSuggestions = [];
+
+        if (international || city == "error" || state == "error") {
+          defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
+        } else {
+          defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
+        }
+
+        const historySuggestions = this.searchHistory.slice(0, 2).filter(item => !defaultSuggestions.includes(item));
+        this.suggestions = [...historySuggestions, ...defaultSuggestions];
+      },
+
+      getCachedData() {
+        return {
+          city: localStorage.getItem('cachedCity'),
+          state: localStorage.getItem('cachedState'),
+          stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
+          international: localStorage.getItem('cachedInternational') === 'true',
+          latitude: localStorage.getItem('cachedLatitude'),
+          longitude: localStorage.getItem('cachedLongitude'),
+        };
+      },
+
+      toggleAll(){
+        if (this.filterAll == false) {
+          this.filterAll = true;
+          this.filterCity = false;
+          this.filterState = false;
+        }
+      },
+
+      toggleCity(){
+        if (this.filterCity == false) {
+          this.filterAll = false;
+          this.filterCity = true;
+          this.filterState = false;
+        }
+      },
+
+      toggleState(){
+        if (this.filterState == false) {
+          this.filterAll = false;
+          this.filterCity = false;
+          this.filterState = true;
+        }
+      },
+
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
@@ -305,6 +371,11 @@ export default {
   align-items: center;
   border: none;
 
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .input-container,
@@ -321,13 +392,15 @@ export default {
 
   /* alinhar texto digitado com sugestão */
   position: relative;
+  z-index: 1;
+  /* Garante que o input fique acima do restante */
 
 }
 
 .input-container {
 
   border-radius: 99px;
-  background: var(--Gray-100, #aa127c);
+  background: var(--Gray-100, #F8F9FA);
 
   /* Small Shadow */
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
@@ -342,11 +415,10 @@ export default {
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
-  /* depois volto aqui */
-  border-bottom: 1px solid #ccc;
-
 
 }
+
+.input-container-dropdown::after {}
 
 .input-field,
 .suggestion-overlay {
@@ -366,6 +438,7 @@ export default {
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
+  
 
   /* Body/Small/Regular */
   font-family: Inter;
@@ -377,7 +450,7 @@ export default {
 }
 
 .input-field {
-
+  background: var(--Gray-100, #F8F9FA);
   border: none;
   z-index: 1;
 
@@ -390,6 +463,7 @@ export default {
   pointer-events: none;
   z-index: 2;
   background: transparent;
+  width: inherit;
 
 }
 
@@ -432,12 +506,121 @@ export default {
 
 .search-button {}
 
+.filter-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: stretch;
+
+  background: var(--HitBox, rgba(255, 255, 255, 0.00));
+
+  /*Typography*/
+  color: var(--Theme-Secondary, #6C757D);
+
+  /* Body/Small/Regular */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  /* 21px */
+}
+
+.filter-button-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+
+
+
+
+}
+
+.filter-button,
+.filter-button-active {
+  display: flex;
+  padding: 8px 14px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: none;
+
+
+
+
+  border-radius: 99px;
+
+  /* Body/Small/Regular */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  /* 21px */
+}
+
+.filter-button {
+
+  color: var(--Theme-Secondary, #6C757D);
+
+  background: var(--HitBox, rgba(255, 255, 255, 0.00));
+
+}
+
+.filter-button-active {
+
+background: var(--Primary-Fade-100, #D2E8DD);
+color: var(--Theme-Primary, #025949);
+
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+
+  background: var(--Gray-100, #F8F9FA);
+}
+
+
+.suggestion-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 24px;
+
+
+  border: 1px solid #ccc;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+
+  padding: 16px 16px 24px 16px;
+  border-radius: 0px 0px 8px 8px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--Gray-100, #F8F9FA);
+
+}
+
+.suggestion-container-hidden {
+  display: none;
+}
+
 .suggestions-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  border: 1px solid #ccc;
-  border-top: none;
 
 
 

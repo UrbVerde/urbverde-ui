@@ -9,7 +9,7 @@
       </div>
 
       <div v-show="isOpen" class="search-area">
-        <BuscaSimples/>
+        <BuscaSimples />
       </div>
       <div v-show="isOpen" class="middle-area">
         <DropDown v-show="true" :options="options" />
@@ -19,13 +19,11 @@
       <div v-show="isOpen" class="bottom-area">
 
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../icons/export.svg" width="20"
-            height="20" />
+          <img class="d-inline-block" id="imgIcon" src="../icons/export.svg" width="20" height="20" />
           <span id="txtBottom">Colabore com dados</span>
         </a>
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../icons/help.svg" width="20"
-            height="20" />
+          <img class="d-inline-block" id="imgIcon" src="../icons/help.svg" width="20" height="20" />
           <span id="txtBottom">Central de ajuda</span>
         </a>
       </div>
@@ -117,14 +115,19 @@ function changeSidebar() {
 
 
 }
-.search-area{
-display: flex;
-padding: 0px 16px;
-flex-direction: column;
-align-items: flex-start;
-gap: 16px;
-align-self: stretch;
+
+.search-area {
+
+  display: flex;
+  padding: 0px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  height: auto; /* Allow it to adjust to content */
+  min-height: 48px; /* Minimum height to match the input field */
+  overflow: visible; /* Allow content to overflow */
 }
+
 .bottom-area {
   display: flex;
   flex-direction: column;
