@@ -1,13 +1,15 @@
 <template>
   <div class="search-wrapper">
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
-      <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-        placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
-      <div v-if="highlightedText" class="suggestion-overlay">
-        <span class="suggestion-text">
-          <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
-        </span>
+      <div class="input-overlay">
+        <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
+          placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
+        <div v-if="highlightedText" class="suggestion-overlay">
+          <span class="suggestion-text">
+            <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
+          </span>
 
+        </div>
       </div>
       <div class="button-container">
         <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
@@ -67,7 +69,7 @@ export default {
       visibleInput: '',
       suggestions: [],
       highlightedText: '',
-      locationChosen:'',
+      locationChosen: '',
       states: [
         'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
         'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
@@ -139,228 +141,228 @@ export default {
       const dropdown = this.$refs.dropdown;
       const suggestionContainer = this.$el.querySelector('.suggestion-container');
 
-      if ((inputContainer && !inputContainer.contains(event.target)) && 
-          (dropdown && !dropdown.contains(event.target)) &&
-          (suggestionContainer && !suggestionContainer.contains(event.target))) {
+      if ((inputContainer && !inputContainer.contains(event.target)) &&
+        (dropdown && !dropdown.contains(event.target)) &&
+        (suggestionContainer && !suggestionContainer.contains(event.target))) {
         this.dropdown = false;
       }
     },
 
-      handleFocus(event) {
-        if (this.dropdown != true) {
-          
-            this.dropdown = true;
-          
+    handleFocus(event) {
+      if (this.dropdown != true) {
 
-        }
-        event.stopPropagation();
-      },
-
-      cacheCities(cities) {
-        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
-        this.updateSuggestions();
-      },
-
-      clearCache() {
-        this.cachedCities = [];
-      },
-
-      keydown() {
-        this.updateSuggestions();
-        console.log(this.inputValue);
-
-      },
-
-      updateSuggestions() {
+        this.dropdown = true;
 
 
+      }
+      event.stopPropagation();
+    },
 
-        //this.previousInputValue = this.inputValue;
+    cacheCities(cities) {
+      this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+      this.updateSuggestions();
+    },
 
-        //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
+    clearCache() {
+      this.cachedCities = [];
+    },
 
+    keydown() {
+      this.updateSuggestions();
+      console.log(this.inputValue);
 
-        if (this.inputValue === '') {
-          this.generateDefaultSuggestions();
-          this.highlightedText = '';
-          return;
-        }
+    },
 
-        const inputLower = this.inputValue.toLowerCase();
-        const historySuggestions = this.filterHistory(inputLower);
-        const stateSuggestions = this.filterStates(inputLower);
-        const citySuggestions = this.filterCities(inputLower);
-
-        this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
-
-        if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
-          this.fetchCities(this.inputValue);
-          this.lastInputLength = 3;  // Atualiza o comprimento anterior
-        } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
-          this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
-        }
-
-        this.updateHighlightedText();
-
-      },
-
-      filterHistory(query) {
-        return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
-      },
-
-      filterStates(query) {
-        return this.states
-          .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
-      },
-
-      filterCities(query) {
-        return this.cachedCities
-          .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
-      },
-
-      updateHighlightedText() {
-        if (this.suggestions.length > 0) {
-          const suggestion = this.suggestions[0];
-          if (suggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
-            this.visibleInput = this.inputValue;
-            this.highlightedText = suggestion.slice(this.inputValue.length);
-          } else {
-            this.highlightedText = '';
-          }
-        } else {
-          this.highlightedText = '';
-        }
-      },
+    updateSuggestions() {
 
 
-      selectSuggestion(suggestion) {
-        this.inputValue = suggestion;
-        this.visibleInput = suggestion;
-        this.highlightedText = '';
-        //this.suggestions = [];
-        this.addToHistory(suggestion);
-        this.dropdown = false;
 
-        this.locationChosen = suggestion;
-        this.submit();
-      },
+      //this.previousInputValue = this.inputValue;
 
-      submit() {
-        if (this.inputValue) {
-          
-          this.addToHistory(this.suggestions[0]);
-          this.locationChosen = this.suggestions[0];
-          
-        }
-        //this.suggestions = [];
-      },
+      //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
 
-      handleEnter() {
-        if (this.suggestions.length > 0) {
-          this.selectSuggestion(this.suggestions[0]);
-          this.$refs.inputField.blur();
-          setTimeout(() => {
-            this.submit();
-          }, 1000);
-        }
-      },
 
-      addToHistory(item) {
-        const itemLower = item.toLowerCase();
-        const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
-
-        if (!historyLower.includes(itemLower)) {
-          this.searchHistory.unshift(item);
-          if (this.searchHistory.length > 10) {
-            this.searchHistory.pop();
-          }
-          this.saveSearchHistory();
-        }
-      },
-
-      saveSearchHistory() {
-        localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
-      },
-
-      clearHistory() {
-        this.searchHistory = [];
-        localStorage.removeItem('searchHistory');
-        alert('Histórico limpo com sucesso!');
-      },
-
-      clearInput(){
-        this.suggestions = [];
+      if (this.inputValue === '') {
         this.generateDefaultSuggestions();
-        this.inputValue = '';
         this.highlightedText = '';
+        return;
+      }
 
-        if (!this.dropdown){
-          this.dropdown = true;
-        }
+      const inputLower = this.inputValue.toLowerCase();
+      const historySuggestions = this.filterHistory(inputLower);
+      const stateSuggestions = this.filterStates(inputLower);
+      const citySuggestions = this.filterCities(inputLower);
 
-        
-      },
+      this.suggestions = [...historySuggestions, ...stateSuggestions, ...citySuggestions];
 
-      loadSearchHistory() {
-        const savedHistory = localStorage.getItem('searchHistory');
-        if (savedHistory) {
-          this.searchHistory = JSON.parse(savedHistory);
-        }
-      },
+      if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
+        this.fetchCities(this.inputValue);
+        this.lastInputLength = 3;  // Atualiza o comprimento anterior
+      } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
+        this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
+      }
 
-      generateDefaultSuggestions() {
-        const cachedData = this.getCachedData();
-        const { city, state, stateAbbreviation, international } = cachedData;
+      this.updateHighlightedText();
 
-        let defaultSuggestions = [];
+    },
 
-        if (international || city == "error" || state == "error") {
-          defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
+    filterHistory(query) {
+      return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
+    },
+
+    filterStates(query) {
+      return this.states
+        .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
+    },
+
+    filterCities(query) {
+      return this.cachedCities
+        .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
+    },
+
+    updateHighlightedText() {
+      if (this.suggestions.length > 0) {
+        const suggestion = this.suggestions[0];
+        if (suggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
+          this.visibleInput = this.inputValue;
+          this.highlightedText = suggestion.slice(this.inputValue.length);
         } else {
-          defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
+          this.highlightedText = '';
         }
+      } else {
+        this.highlightedText = '';
+      }
+    },
 
-        const historySuggestions = this.searchHistory.slice(0, 2).filter(item => !defaultSuggestions.includes(item));
-        this.suggestions = [...historySuggestions, ...defaultSuggestions];
-      },
 
-      getCachedData() {
-        return {
-          city: localStorage.getItem('cachedCity'),
-          state: localStorage.getItem('cachedState'),
-          stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
-          international: localStorage.getItem('cachedInternational') === 'true',
-          latitude: localStorage.getItem('cachedLatitude'),
-          longitude: localStorage.getItem('cachedLongitude'),
-        };
-      },
+    selectSuggestion(suggestion) {
+      this.inputValue = suggestion;
+      this.visibleInput = suggestion;
+      this.highlightedText = '';
+      //this.suggestions = [];
+      this.addToHistory(suggestion);
+      this.dropdown = false;
 
-      toggleAll(){
-        if (this.filterAll == false) {
-          this.filterAll = true;
-          this.filterCity = false;
-          this.filterState = false;
+      this.locationChosen = suggestion;
+      this.submit();
+    },
+
+    submit() {
+      if (this.inputValue) {
+
+        this.addToHistory(this.suggestions[0]);
+        this.locationChosen = this.suggestions[0];
+
+      }
+      //this.suggestions = [];
+    },
+
+    handleEnter() {
+      if (this.suggestions.length > 0) {
+        this.selectSuggestion(this.suggestions[0]);
+        this.$refs.inputField.blur();
+        setTimeout(() => {
+          this.submit();
+        }, 1000);
+      }
+    },
+
+    addToHistory(item) {
+      const itemLower = item.toLowerCase();
+      const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
+
+      if (!historyLower.includes(itemLower)) {
+        this.searchHistory.unshift(item);
+        if (this.searchHistory.length > 10) {
+          this.searchHistory.pop();
         }
-      },
+        this.saveSearchHistory();
+      }
+    },
 
-      toggleCity(){
-        if (this.filterCity == false) {
-          this.filterAll = false;
-          this.filterCity = true;
-          this.filterState = false;
-        }
-      },
+    saveSearchHistory() {
+      localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
+    },
 
-      toggleState(){
-        if (this.filterState == false) {
-          this.filterAll = false;
-          this.filterCity = false;
-          this.filterState = true;
-        }
-      },
+    clearHistory() {
+      this.searchHistory = [];
+      localStorage.removeItem('searchHistory');
+      alert('Histórico limpo com sucesso!');
+    },
 
-    }
-  };
+    clearInput() {
+      this.suggestions = [];
+      this.generateDefaultSuggestions();
+      this.inputValue = '';
+      this.highlightedText = '';
+
+      if (!this.dropdown) {
+        this.dropdown = true;
+      }
+
+
+    },
+
+    loadSearchHistory() {
+      const savedHistory = localStorage.getItem('searchHistory');
+      if (savedHistory) {
+        this.searchHistory = JSON.parse(savedHistory);
+      }
+    },
+
+    generateDefaultSuggestions() {
+      const cachedData = this.getCachedData();
+      const { city, state, stateAbbreviation, international } = cachedData;
+
+      let defaultSuggestions = [];
+
+      if (international || city == "error" || state == "error") {
+        defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
+      } else {
+        defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
+      }
+
+      const historySuggestions = this.searchHistory.slice(0, 2).filter(item => !defaultSuggestions.includes(item));
+      this.suggestions = [...historySuggestions, ...defaultSuggestions];
+    },
+
+    getCachedData() {
+      return {
+        city: localStorage.getItem('cachedCity'),
+        state: localStorage.getItem('cachedState'),
+        stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
+        international: localStorage.getItem('cachedInternational') === 'true',
+        latitude: localStorage.getItem('cachedLatitude'),
+        longitude: localStorage.getItem('cachedLongitude'),
+      };
+    },
+
+    toggleAll() {
+      if (this.filterAll == false) {
+        this.filterAll = true;
+        this.filterCity = false;
+        this.filterState = false;
+      }
+    },
+
+    toggleCity() {
+      if (this.filterCity == false) {
+        this.filterAll = false;
+        this.filterCity = true;
+        this.filterState = false;
+      }
+    },
+
+    toggleState() {
+      if (this.filterState == false) {
+        this.filterAll = false;
+        this.filterCity = false;
+        this.filterState = true;
+      }
+    },
+
+  }
+};
 </script>
 
 <style scoped>
@@ -422,7 +424,8 @@ export default {
 
 .input-field,
 .suggestion-overlay {
-
+  width: 100%;
+  white-space: nowrap;
 
   display: flex;
   align-items: center;
@@ -438,7 +441,7 @@ export default {
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
-  
+
 
   /* Body/Small/Regular */
   font-family: Inter;
@@ -452,18 +455,23 @@ export default {
 .input-field {
   background: var(--Gray-100, #F8F9FA);
   border: none;
-  z-index: 1;
+  
 
 }
 
+.input-overlay {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
 .suggestion-overlay {
 
   /* alinhar texto digitado com sugestão */
   position: absolute;
+  top: 0;
+  left: 0;
   pointer-events: none;
-  z-index: 2;
   background: transparent;
-  width: inherit;
 
 }
 
@@ -474,6 +482,7 @@ export default {
 .highlight {
   color: #bbb;
 }
+
 
 .suggestion-text {}
 
@@ -571,8 +580,8 @@ export default {
 
 .filter-button-active {
 
-background: var(--Primary-Fade-100, #D2E8DD);
-color: var(--Theme-Primary, #025949);
+  background: var(--Primary-Fade-100, #D2E8DD);
+  color: var(--Theme-Primary, #025949);
 
 }
 
