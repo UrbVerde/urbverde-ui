@@ -1,57 +1,81 @@
 <template>
-  <div class="container">
-    <div class="map-container">
-      <div id="map" style="height: 400px;"></div>
-    </div>
-  </div>
+  <div ref="mapContainer" class="map-container"></div>
 </template>
 
 <script>
 import maplibregl from 'maplibre-gl';
+import { watch } from 'vue';
 
 export default {
-  props: ['coordinates'], // Recebe as coordenadas como prop
+  props: {
+    coordinates: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      map: null,
-      marker: null,
+      map: null, // Adicionado para armazenar a instância do mapa
     };
   },
   mounted() {
+    this.initializeMap();
+  },
+  methods: {
+    initializeMap() {
+      this.map = new maplibregl.Map({
+        container: this.$refs.mapContainer,
+        style: 'https://api.maptiler.com/maps/streets-v2-light/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+        center: [this.coordinates.lng, this.coordinates.lat],
+        pitch: 20,
+        zoom: 14,
+      });
 
-    const token = '7cQJrCdDD1u22ZekNOFw';
+      this.map.on('load', () => {
+        console.log('Mapa carregado completamente');
+        this.mapLoaded = true;
+        this.updateMapCenter(); // Atualiza o centro após o carregamento completo
+      });
 
-    // Inicializa o mapa usando MapLibre com estilo do MapTiler e o token
-    this.map = new maplibregl.Map({
-      container: 'map',
-      style: `https://api.maptiler.com/maps/8fde2eea-8799-479e-8a8d-0989e2c7eb2d/style.json?key=7cQJrCdDD1u22ZekNOFw`, // URL com o token
-      center: [this.coordinates.lng, this.coordinates.lat], // Usa as coordenadas passadas como prop
-      zoom: 14,
-      pitch: 60,
-      bearing: 45,
-      attributionControl: false
-    });
+      // Adicione aqui quaisquer controles ou listeners que você queira
 
-    // Adiciona um marcador inicial nas coordenadas fornecidas
-    this.marker = new maplibregl.Marker()
-      .setLngLat([this.coordinates.lng, this.coordinates.lat])
-      .addTo(this.map);
+      // Exemplo: Adicionar controles de navegação
+      this.map.addControl(new maplibregl.NavigationControl());
+
+      console.log('Mapa inicializado com coordenadas:', this.coordinates);
+    },
+    updateMapCenter() {
+      console.log('Tentando atualizar o centro do mapa');
+      if (this.map) {
+        console.log('Mapa existe, atualizando para:', this.coordinates);
+        this.map.setCenter([this.coordinates.lng, this.coordinates.lat]);
+      } else {
+        console.log('Mapa não inicializado');
+      }
+    },
   },
   watch: {
-    // Atualiza o marcador e recentra o mapa quando as coordenadas mudam
-    coordinates(newCoords) {
-      if (this.map && this.marker) {
-        this.marker.setLngLat([newCoords.lng, newCoords.lat]); // Atualiza o marcador
-        this.map.setCenter([newCoords.lng, newCoords.lat]);    // Recentra o mapa
-      }
+    coordinates: {
+      handler(newCoordinates) {
+        this.updateMapCenter();
+        console.log('mapGenerator.vue - Novas coordenadas recebidas:', newCoordinates);
+      },
+      deep: true,
+    },
+  },
+  beforeUnmount() {
+    if (this.map) {
+      this.map.remove();
+      console.log('Mapa removido');
     }
-  }
+  },
 };
 </script>
 
 <style scoped>
-#map {
-  height: 400px;
+.map-container {
   width: 100%;
+  height: 500px;
+  border-radius: 15px;
 }
 </style>

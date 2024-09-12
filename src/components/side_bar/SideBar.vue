@@ -9,8 +9,7 @@
 
       </div>
       <div v-show="isOpen" class="middle-area">
-        <BuscaSimples/>
-
+        <BuscaSimples @location-updated="onLocationUpdated"/>
         <DropDown v-show="true" :options="options" />
       </div>
 
@@ -41,7 +40,13 @@ import LogoButton from '../side_bar/buttons/LogoButton.vue';
 import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
 import SearchCity from "../search_dropdown/SearchCity.vue";
 
-import { ref } from "vue";
+import { ref, defineEmits } from 'vue';
+
+const emit = defineEmits(['update-coordinates']);
+
+const onLocationUpdated = (coordinates) => {
+  emit('update-coordinates', coordinates);
+};
 
 const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
 const isOpen = ref(true);

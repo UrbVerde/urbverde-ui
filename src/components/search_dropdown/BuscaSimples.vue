@@ -12,7 +12,7 @@
       </div>
 
       <!-- Filtros de busca -->
-      <p class="filter-title">Busca por:</p>
+      <p class="filter-title primary-fade-color:100 ">Busca por:</p>
       <div class="filter-container">
         <span :class="{'active-filter': activeFilter === 'Todos'}" @click="setFilter('Todos')">Todos</span>
         <span :class="{'active-filter': activeFilter === 'Municipios'}" @click="setFilter('Municipios')">Municípios</span>
@@ -26,8 +26,10 @@
         </li>
       </ul>
 
-      <!-- Mapa exibindo as coordenadas obtidas -->
-    </div>
+    <!-- Coordenadas exibidas na tela -->
+      <p v-if="coordinates">
+        Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
+      </p>    </div>
   </div>
 </template>
 
@@ -83,28 +85,31 @@ export default {
     selectSuggestion(suggestion) {
       this.inputValue = suggestion;
       this.suggestions = [];
+      console.log("Sugestão selecionada:", suggestion);
       this.fetchCoordinates(suggestion); // Chama a função para buscar coordenadas
     },
     setFilter(filter) {
       this.activeFilter = filter;
       this.updateSuggestions();
     },
+    
+    
+    //Organizacao das coordenadas
     async fetchCoordinates(address) {
-      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Insira a chave de sua API
+      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
       const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
-      try {
-        const response = await axios.get(endpoint);
-        if (response.data && response.data.results.length > 0) {
-          this.coordinates = response.data.results[0].geometry;
-        } else {
-          this.coordinates = null;
-          console.error('Nenhuma coordenada encontrada.');
-        }
-      } catch (error) {
-        this.coordinates = null;
-        console.error('Erro ao buscar coordenadas:', error);
+    try {
+      const response = await axios.get(endpoint);
+      if (response.data && response.data.results.length > 0) {
+        const location = response.data.results[0].geometry;
+        this.$emit('location-updated', { lat: location.lat, lng: location.lng });
+      } else {
+        console.error('Nenhuma coordenada encontrada.');
       }
+    } catch (error) {
+      console.error('Erro ao buscar coordenadas:', error);
     }
+    },
   }
 };
 </script>
