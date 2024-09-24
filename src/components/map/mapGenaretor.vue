@@ -74,7 +74,8 @@ export default {
 
 <style scoped>
 .map-container {
-  width: 100%;
+  margin-left: 200px;
+  width: 800px;
   height: 500px;
   border-radius: 15px;
 }

@@ -8,11 +8,12 @@
         <MinimizeButton @changed-state="changeSidebar" />
 
       </div>
-      <div v-show="isOpen" class="middle-area">
+      <div v-show="isOpen" class="search-area">
         <BuscaSimples @location-updated="onLocationUpdated"/>
+      </div>
+      <div v-show="isOpen" class="middle-area">
         <DropDown v-show="true" :options="options" />
       </div>
-
 
       <div v-show="isOpen" class="bottom-area">
 
@@ -38,7 +39,6 @@ import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
 import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue'
 import LogoButton from '../side_bar/buttons/LogoButton.vue';
 import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
-import SearchCity from "../search_dropdown/SearchCity.vue";
 
 import { ref, defineEmits } from 'vue';
 
@@ -124,6 +124,18 @@ function changeSidebar() {
 
 }
 
+.search-area {
+
+  display: flex;
+  padding: 0px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  height: auto; /* Allow it to adjust to content */
+  min-height: 48px; /* Minimum height to match the input field */
+  overflow: visible; /* Allow content to overflow */
+}
+
 .bottom-area {
   display: flex;
   flex-direction: column;
@@ -162,4 +174,6 @@ function changeSidebar() {
   font-size: small;
 
 }
+
+
 </style>
