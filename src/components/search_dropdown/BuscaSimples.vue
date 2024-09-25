@@ -115,7 +115,7 @@ export default {
       // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
     setTimeout(() => {
       this.dropdown = true; // Exibe o dropdown após 2 segundos
-    }, 7000);
+    }, 2500);
   },
   beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);

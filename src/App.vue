@@ -45,8 +45,8 @@ export default {
 
 .map-placeholder{
   margin-left: 500px;
-  width: 400px;
-  height: 250px;
+  width: 280px;
+  height: 175px;
   border-radius: 15px;
 }
 
