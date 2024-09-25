@@ -1,4 +1,5 @@
 <template>
+  
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
@@ -7,10 +8,12 @@
         <MinimizeButton @changed-state="changeSidebar" />
 
       </div>
+      <div v-show="isOpen" class="search-area">
+        <BuscaSimples @location-updated="onLocationUpdated"/>
+      </div>
       <div v-show="isOpen" class="middle-area">
         <DropDown v-show="true" :options="options" />
       </div>
-
 
       <div v-show="isOpen" class="bottom-area">
 
@@ -26,16 +29,24 @@
         </a>
       </div>
 
-
     </div>
   </div>
+
 </template>
 
 <script setup>
 import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
 import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue'
 import LogoButton from '../side_bar/buttons/LogoButton.vue';
-import { ref } from "vue";
+import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
+
+import { ref, defineEmits } from 'vue';
+
+const emit = defineEmits(['update-coordinates']);
+
+const onLocationUpdated = (coordinates) => {
+  emit('update-coordinates', coordinates);
+};
 
 const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
 const isOpen = ref(true);
@@ -47,10 +58,7 @@ function changeSidebar() {
 </script>
 
 
-<style scoped lang="scss">
-@import '../../assets/styles/custom.scss';
-
-
+<style scoped>
 .sidebar {
   width: 72px;
   height: 100vh;
@@ -59,7 +67,7 @@ function changeSidebar() {
   top: 0;
   left: 0;
   overflow: hidden;
-  background-color: map-get($gray-colors, white);
+  background: var(--Gray-White, #FFF);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
 }
 
@@ -82,7 +90,7 @@ function changeSidebar() {
   align-items: center;
   gap: 8px;
   align-self: stretch;
-  background-color: map-get($gray-colors, white);
+  background: var(--White, #FFF);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
 }
 
@@ -111,6 +119,21 @@ function changeSidebar() {
   gap: 16px;
   flex: 1 0 0;
   align-self: stretch;
+
+
+
+}
+
+.search-area {
+
+  display: flex;
+  padding: 0px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  height: auto; /* Allow it to adjust to content */
+  min-height: 48px; /* Minimum height to match the input field */
+  overflow: visible; /* Allow content to overflow */
 }
 
 .bottom-area {
@@ -125,13 +148,13 @@ function changeSidebar() {
   /* Empurra a área inferior para o fim */
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   border-top: 1px solid rgba(0, 0, 0, 0.13);
-  background-color: map-get($gray-colors, white);
+  background: var(--White, #FFF);
 }
 
 
 .link-button {
   text-decoration: none;
-  color: map-get($theme-colors, primary);
+  color: var(--Primary-Color, black);
   font-weight: bold;
   display: flex;
   padding: 4px 8px;
@@ -147,7 +170,10 @@ function changeSidebar() {
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-  @extend .small-regular;
+  font-family: Inter, sans-serif;
+  font-size: small;
 
 }
+
+
 </style>
