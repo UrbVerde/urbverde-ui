@@ -106,7 +106,7 @@ export default {
         this.country = data.address.country || 'error';
         
         // Verifica se o país é diferente de Brasil
-        this.international = this.country !== 'Brazil';
+        this.international = this.country !== 'Brasil';
 
         // Define a sigla do estado
         if (!this.international) {

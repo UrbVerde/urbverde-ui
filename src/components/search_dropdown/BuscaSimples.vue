@@ -330,7 +330,7 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city === "error" || state === "error") {
+      if (international || city === "error" || state === "error" || city === null ) {
         defaultSuggestions = [
           { text: "Rio de Janeiro - RJ", type: "city" },
           { text: "São Paulo", type: "state" },
