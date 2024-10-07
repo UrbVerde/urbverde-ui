@@ -5,7 +5,7 @@
 
     <!-- Exibe a imagem enquanto as coordenadas não forem alteradas -->
     <div v-if="!coordinates.lat || !coordinates.lng">
-      <img src="./assets/setLocation.png" alt="Imagem de espera" class="map-placeholder">
+      <img src="./assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder">
     </div>
     
     <!-- Renderiza o componente MapBox quando há coordenadas válidas -->
@@ -17,8 +17,8 @@
 
 <script>
 import { ref } from 'vue';
-import Sidebar from './components/side_bar/SideBar.vue';
-import MapBox from './components/map/mapGenerator.vue'; 
+import Sidebar from './view/SideBar.vue';
+import MapBox from './components/Map/mapGenerator.vue'; 
 
 export default {
   components: {

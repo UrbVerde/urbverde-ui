@@ -18,12 +18,12 @@
       <div v-show="isOpen" class="bottom-area">
 
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../../assets/icons/export.svg" width="20"
+          <img class="d-inline-block" id="imgIcon" src="../assets/icons/export.svg" width="20"
             height="20" />
           <span id="txtBottom">Colabore com dados</span>
         </a>
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../../assets/icons/help.svg" width="20"
+          <img class="d-inline-block" id="imgIcon" src="../assets/icons/help.svg" width="20"
             height="20" />
           <span id="txtBottom">Central de ajuda</span>
         </a>
@@ -36,9 +36,9 @@
 
 <script setup>
 import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
-import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue'
-import LogoButton from '../side_bar/buttons/LogoButton.vue';
-import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
+import MinimizeButton from '../components/side_bar/header/MinimizeButton.vue'
+import LogoButton from '../components/side_bar/header/LogoButton.vue';
+import BuscaSimples from "../components/Search/BuscaSimples.vue";
 
 import { ref, defineEmits } from 'vue';
 

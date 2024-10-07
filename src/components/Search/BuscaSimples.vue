@@ -16,8 +16,8 @@
       <div class="button-container">
         <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
           @click="clearInput">
-          <img id="imgIcon" src="../../assets/clean.svg" width="16" height="16" /> </button>
-        <button class="search-button" @click="clearHistory"> <img id="imgIcon" src="../../assets/search.png" width="16"
+          <img id="imgIcon" src="../../assets/icons/clean.svg" width="16" height="16" /> </button>
+        <button class="search-button" @click="clearHistory"> <img id="imgIcon" src="../../assets/images/search.png" width="16"
             height="16" /> </button>
       </div>
     </div>
@@ -485,8 +485,6 @@ export default {
 
 }
 
-.input-container-dropdown::after {}
-
 .input-field,
 .suggestion-overlay {
   width: 100%;
@@ -549,7 +547,6 @@ export default {
 }
 
 
-.suggestion-text {}
 
 
 
@@ -571,14 +568,12 @@ export default {
   border: none;
 }
 
-.clean-button {}
 
 .clean-button-hidden {
   display: none;
 
 }
 
-.search-button {}
 
 .filter-text {
   display: flex;
@@ -590,7 +585,7 @@ export default {
   background: var(--HitBox, rgba(255, 255, 255, 0.00));
 
   /*Typography*/
-  color: var(--Theme-Secondary, #6C757D);
+  color: var(--Theme-Secondary, #000000);
 
   /* Body/Small/Regular */
   font-size: 14px;
@@ -667,21 +662,22 @@ export default {
   gap: 24px;
 
 
-  border: 1px solid #ccc;
+  border: 1px solid #ebebeb;
   border-left: none;
   border-right: none;
   border-bottom: none;
 
   padding: 16px 16px 24px 16px;
-  border-radius: 0px 0px 8px 8px;
+  border-radius: 5px 5px 8px 8px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
   position: absolute;
+
   top: 100%;
   left: 0;
   right: 0;
   z-index: 10;
-  background: var(--Gray-100, #F8F9FA);
+  background: var(--Gray-100, #ffffff);
 
 }
 
@@ -694,6 +690,7 @@ export default {
   padding: 0;
   margin: 0;
 
+  width: 100%; /* O item ocupará a largura total do contêiner */
 
 
 }
@@ -701,13 +698,17 @@ export default {
 .suggestions-list li {
   padding: 5px;
   cursor: pointer;
-  flex-grow: 1;
-  flex-basis: 1;
+  width: 100%; /* O item ocupará a largura total do contêiner */
+  box-sizing: border-box; /* Inclui padding e bordas no tamanho total do elemento */
+  border-radius: 5px;
 }
 
 .suggestions-list li:hover {
   background-color: #f0f0f0;
+  width: 100%; /* Garante que o hover também ocupe 100% da largura */
+  box-sizing: border-box;
 }
+
 
 
 .suggestion-count {
