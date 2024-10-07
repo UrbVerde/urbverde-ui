@@ -83,9 +83,5 @@ const handleSelectionChange = (selectedIndex) => {
 
 }
 
-.nav {}
-
-.li {}
-
 
 </style>

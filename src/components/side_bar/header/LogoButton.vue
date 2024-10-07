@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="logo-button">
-      <img src="../../../assets/logo-white.png" alt="Logo" class="logo" />
+      <img src="../../../assets/images/logo-white.png" alt="Logo" class="logo" />
       <span class="text">URBVERDE</span>
     </button>
   </div>

@@ -1,400 +1,393 @@
-  @import 'bootstrap/dist/css/bootstrap.css';
-  @import 'bootstrap/scss/functions';
-  @import 'bootstrap/scss/variables';
-  @import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/bootstrap';
 
+// Cores Tema 
+$theme-colors: (
+  "primary": #025949,
+  "secondary": #6C757D,
+  "success": #198754,
+  "danger": #DC3545,
+  "warning": #FFC107,
+  "info": #0DCAF0,
+  "light": #F8F9FA,
+  "dark": #212529,
+  "border": #DEE2E6,
+  "hitbox": #FFFFFF,
+);
 
-  // Cores Tema 
-  $theme-colors: (
-    "primary": #025949,
-    "secondary": #6C757D,
-    "success": #198754,
-    "danger": #DC3545,
-    "warning": #FFC107,
-    "info": #0DCAF0,
-    "light": #F8F9FA,
-    "dark": #212529,
-    "border": #DEE2E6,
-    "hitbox": #FFFFFF,
-  );
+$text-color-body: #212529;     
 
-  $text-color-body: #212529;     
+// Primary Fade Colors
+$primary-fade-colors: (
+  50: #F2F8F5,
+  100: #D2EBDD,
+  200: #ABE1C6,
+  300: #81C3A2,
+  400: #60A884,
+  500: #418377,
+  600: #1C6A5C,
+  700: #025949, // Cor principal
+  800: #013C31,
+  900: #011F19
+);
 
-  // Primary Fade Colors
-  $primary-fade-colors: (
-    50: #F2F8F5,
-    100: #D2EBDD,
-    200: #ABE1C6,
-    300: #81C3A2,
-    400: #60A884,
-    500: #418377,
-    600: #1C6A5C,
-    700: #025949, // Cor principal
-    800: #013C31,
-    900: #011F19
-  );
+// Gray Colors
+$gray-colors: (
+  white: #FFFFFF,
+  100: #F8F9FA,
+  200: #E9ECEF,
+  300: #DEE2E6,
+  400: #CED4DA,
+  500: #ADB5BD,
+  550: #86919B,
+  600: #6C757D,
+  700: #495057,
+  800: #343A40,
+  900: #212529,
+  black: #000000
+);
 
-  // Gray Colors
-  $gray-colors: (
-    white: #FFFFFF,
-    100: #F8F9FA,
-    200: #E9ECEF,
-    300: #DEE2E6,
-    400: #CED4DA,
-    500: #ADB5BD,
-    550: #86919B,
-    600: #6C757D,
-    700: #495057,
-    800: #343A40,
-    900: #212529,
-    black: #000000
-  );
-
-  // Blue Colors
-  $blue-colors: (
-    100: #E7F1FF,
-    200: #9EC5FE,
-    300: #6EA8FE,
-    400: #3D8BFD,
-    500: #0D6EFD,
-    600: #0A58CA,
-    700: #084298,
-    800: #052C65,
-    900: #031633
-  );
+// Blue Colors
+$blue-colors: (
+  100: #E7F1FF,
+  200: #9EC5FE,
+  300: #6EA8FE,
+  400: #3D8BFD,
+  500: #0D6EFD,
+  600: #0A58CA,
+  700: #084298,
+  800: #052C65,
+  900: #031633
+);
 
 
 
-  // Shadow classes
+// Shadow classes
+.shadow-none {
+  box-shadow: none;
+}
 
-  $box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  $box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  $box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+.shadow-sm {
+  box-shadow: $box-shadow-sm;
+}
 
-  .shadow-none {
-    box-shadow: none;
-  }
+.shadow {
+  box-shadow: $box-shadow;
+}
 
-  .shadow-sm {
-    box-shadow: $box-shadow-sm;
-  }
+.shadow-lg {
+  box-shadow: $box-shadow-lg;
+}
 
-  .shadow {
-    box-shadow: $box-shadow;
-  }
-
-  .shadow-lg {
-    box-shadow: $box-shadow-lg;
-  }
-
+.shadow-inset {
+  box-shadow: $box-shadow-inset;
+}
 
 
 
+// Estilos de fonte para Fontes
+.caption-regular {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; // Regular
+  font-size: 12px;
+  line-height: 150%;
+}
 
-  // Estilos de fonte para Fontes
-  .caption-regular {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400; // Regular
-    font-size: 12px;
-    line-height: 150%;
-  }
+.caption-medium {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500; // Medium
+  font-size: 12px;
+  line-height: 150%;
+}
 
-  .caption-medium {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500; // Medium
-    font-size: 12px;
-    line-height: 150%;
-  }
+.caption-semibold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; // SemiBold
+  font-size: 12px;
+  line-height: 150%;
+}
 
-  .caption-semibold {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600; // SemiBold
-    font-size: 12px;
-    line-height: 150%;
-  }
+.caption-bold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; // Bold
+  font-size: 12px;
+  line-height: 150%;
+}
 
-  .caption-bold {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700; // Bold
-    font-size: 12px;
-    line-height: 150%;
-  }
+// Estilos de fonte para Small
+.small-regular {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; // Regular
+  font-size: 14px;
+  line-height: 150%;
+}
 
-  // Estilos de fonte para Small
-  .small-regular {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400; // Regular
-    font-size: 14px;
-    line-height: 150%;
-  }
+.small-medium {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500; // Medium
+  font-size: 14px;
+  line-height: 150%;
+}
 
-  .small-medium {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500; // Medium
-    font-size: 14px;
-    line-height: 150%;
-  }
+.small-semibold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; // SemiBold
+  font-size: 14px;
+  line-height: 150%;
+}
 
-  .small-semibold {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600; // SemiBold
-    font-size: 14px;
-    line-height: 150%;
-  }
+.small-bold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; // Bold
+  font-size: 14px;
+  line-height: 150%;
+}
 
-  .small-bold {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700; // Bold
-    font-size: 14px;
-    line-height: 150%;
-  }
+// Estilos de fonte para Normal
+.normal-light {
+  font-family: 'Inter Light', sans-serif;
+  font-weight: 300; // Light
+  font-size: 16px;
+  line-height: 150%;
+}
 
-  // Estilos de fonte para Normal
-  .normal-light {
-    font-family: 'Inter Light', sans-serif;
-    font-weight: 300; // Light
-    font-size: 16px;
-    line-height: 150%;
-  }
+.normal-regular {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; // Regular
+  font-size: 16px;
+  line-height: 150%;
+}
 
-  .normal-regular {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400; // Regular
-    font-size: 16px;
-    line-height: 150%;
-  }
+.normal-medium {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500; // Medium
+  font-size: 16px;
+  line-height: 150%;
+}
 
-  .normal-medium {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500; // Medium
-    font-size: 16px;
-    line-height: 150%;
-  }
+.normal-semibold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; // SemiBold
+  font-size: 16px;
+  line-height: 150%;
+}
 
-  .normal-semibold {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600; // SemiBold
-    font-size: 16px;
-    line-height: 150%;
-  }
+.normal-bold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; // Bold
+  font-size: 16px;
+  line-height: 150%;
+}
 
-  .normal-bold {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700; // Bold
-    font-size: 16px;
-    line-height: 150%;
-  }
+// Estilos de fonte adicionais
+.normal-italic {
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 150%;
+}
 
-  // Estilos de fonte adicionais
-  .normal-italic {
-    font-family: 'Inter', sans-serif;
-    font-style: italic;
-    font-size: 16px;
-    line-height: 150%;
-  }
+.normal-underline {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  text-decoration: underline;
+}
 
-  .normal-underline {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    line-height: 150%;
-    text-decoration: underline;
-  }
+.normal-strike {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  text-decoration: line-through;
+}
 
-  .normal-strike {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    line-height: 150%;
-    text-decoration: line-through;
-  }
+// Estilo de fonte para código
+.other-code {
+  font-family: 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 150%;
+}
 
-  // Estilo de fonte para código
-  .other-code {
-    font-family: 'Consolas', monospace;
-    font-size: 14px;
-    line-height: 150%;
-  }
+// Estilo de fonte para Lead
+.other-lead {
+  font-family: 'Inter Light', sans-serif;
+  font-weight: 300; // Light
+  font-size: 20px;
+  line-height: 150%;
+}
 
-  // Estilo de fonte para Lead
-  .other-lead {
-    font-family: 'Inter Light', sans-serif;
-    font-weight: 300; // Light
-    font-size: 20px;
-    line-height: 150%;
-  }
+// Estilo de fonte para Blockquote
+.other-blockquote {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  line-height: 150%;
+  font-style: italic;
+  border-left: 5px solid #ccc;
+  padding-left: 15px;
+}
 
-  // Estilo de fonte para Blockquote
-  .other-blockquote {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    line-height: 150%;
-    font-style: italic;
-    border-left: 5px solid #ccc;
-    padding-left: 15px;
-  }
+// Estilos de fonte para Heading
 
-  // Estilos de fonte para Heading
+.heading-h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 40px;
+  line-height: 120%;
+  font-weight: 500; // Medium
+}
 
-  .heading-h1 {
-    font-family: 'Inter', sans-serif;
-    font-size: 40px;
-    line-height: 120%;
-    font-weight: 500; // Medium
-  }
+.heading-h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  line-height: 120%;
+  font-weight: 500; // Medium
+}
 
-  .heading-h2 {
-    font-family: 'Inter', sans-serif;
-    font-size: 32px;
-    line-height: 120%;
-    font-weight: 500; // Medium
-  }
+.heading-h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  line-height: 120%;
+  font-weight: 500; // Medium
+}
 
-  .heading-h3 {
-    font-family: 'Inter', sans-serif;
-    font-size: 28px;
-    line-height: 120%;
-    font-weight: 500; // Medium
-  }
+.heading-h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  line-height: 120%;
+  font-weight: 500; // Medium
+}
 
-  .heading-h4 {
-    font-family: 'Inter', sans-serif;
-    font-size: 24px;
-    line-height: 120%;
-    font-weight: 500; // Medium
-  }
+.heading-h5 {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  line-height: 120%;
+  font-weight: 500; // Medium
+}
 
-  .heading-h5 {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    line-height: 120%;
-    font-weight: 500; // Medium
-  }
+.heading-h6 {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 120%;
+  font-weight: 500; // Medium
+}
 
-  .heading-h6 {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    line-height: 120%;
-    font-weight: 500; // Medium
-  }
+// Display - Cabeçalhos H1 a H6
+.display-h1 {
+  font-family: 'Inter Light', sans-serif;
+  font-size: 80px;
+  line-height: 120%;
+  font-weight: 300; // Light
+}
 
-  // Display - Cabeçalhos H1 a H6
-  .display-h1 {
-    font-family: 'Inter Light', sans-serif;
-    font-size: 80px;
-    line-height: 120%;
-    font-weight: 300; // Light
-  }
+.display-h2 {
+  font-family: 'Inter Light', sans-serif;
+  font-size: 72px;
+  line-height: 120%;
+  font-weight: 300; // Light
+}
 
-  .display-h2 {
-    font-family: 'Inter Light', sans-serif;
-    font-size: 72px;
-    line-height: 120%;
-    font-weight: 300; // Light
-  }
+.display-h3 {
+  font-family: 'Inter Light', sans-serif;
+  font-size: 64px;
+  line-height: 120%;
+  font-weight: 300; // Light
+}
 
-  .display-h3 {
-    font-family: 'Inter Light', sans-serif;
-    font-size: 64px;
-    line-height: 120%;
-    font-weight: 300; // Light
-  }
+.display-h4 {
+  font-family: 'Inter Light', sans-serif;
+  font-size: 56px;
+  line-height: 120%;
+  font-weight: 300; // Light
+}
 
-  .display-h4 {
-    font-family: 'Inter Light', sans-serif;
-    font-size: 56px;
-    line-height: 120%;
-    font-weight: 300; // Light
-  }
+.display-h5 {
+  font-family: 'Inter Light', sans-serif;
+  font-size: 48px;
+  line-height: 120%;
+  font-weight: 300; // Light
+}
 
-  .display-h5 {
-    font-family: 'Inter Light', sans-serif;
-    font-size: 48px;
-    line-height: 120%;
-    font-weight: 300; // Light
-  }
-
-  .display-h6 {
-    font-family: 'Inter Light', sans-serif;
-    font-size: 40px;
-    line-height: 120%;
-    font-weight: 300; // Light
-  }
+.display-h6 {
+  font-family: 'Inter Light', sans-serif;
+  font-size: 40px;
+  line-height: 120%;
+  font-weight: 300; // Light
+}
 
 
-  // Components - Badge H1 a H6
-  .badge-h1 {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 30px;
-    line-height: 100%;
-    font-weight: 700; // Bold
-  }
+// Components - Badge H1 a H6
+.badge-h1 {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 30px;
+  line-height: 100%;
+  font-weight: 700; // Bold
+}
 
-  .badge-h2 {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 24px;
-    line-height: 100%;
-    font-weight: 700; // Bold
-  }
+.badge-h2 {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 24px;
+  line-height: 100%;
+  font-weight: 700; // Bold
+}
 
-  .badge-h3 {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 21px;
-    line-height: 100%;
-    font-weight: 700; // Bold
-  }
+.badge-h3 {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 21px;
+  line-height: 100%;
+  font-weight: 700; // Bold
+}
 
-  .badge-h4 {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 18px;
-    line-height: 100%;
-    font-weight: 700; // Bold
-  }
+.badge-h4 {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 18px;
+  line-height: 100%;
+  font-weight: 700; // Bold
+}
 
-  .badge-h5 {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 15px;
-    line-height: 100%;
-    font-weight: 700; // Bold
-  }
+.badge-h5 {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 15px;
+  line-height: 100%;
+  font-weight: 700; // Bold
+}
 
-  .badge-h6 {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 12px;
-    line-height: 100%;
-    font-weight: 700; // Bold
-  }
+.badge-h6 {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 12px;
+  line-height: 100%;
+  font-weight: 700; // Bold
+}
 
-  // Components - Dropdowns (Item Header e Dropdown Header)
-  .dropdown-item-header {
-    font-family: 'Inter Medium', sans-serif;
-    font-size: 14px;
-    line-height: 17px;
-    font-weight: 500; // Medium
-  }
+// Components - Dropdowns (Item Header e Dropdown Header)
+.dropdown-item-header {
+  font-family: 'Inter Medium', sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500; // Medium
+}
 
-  .dropdown-header {
-    font-family: 'Inter Medium', sans-serif;
-    font-size: 14px;
-    line-height: 17px;
-    font-weight: 500; // Medium
-  }
+.dropdown-header {
+  font-family: 'Inter Medium', sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500; // Medium
+}
 
-  .process-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 18px;
-    font-weight: 400; // Regular
-  }
+.process-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400; // Regular
+}
 
-  .toast-header-title {
-    font-family: 'Inter Bold', sans-serif;
-    font-size: 14px;
-    line-height: 21px;
-    font-weight: 700; // Bold
-  }
+.toast-header-title {
+  font-family: 'Inter Bold', sans-serif;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 700; // Bold
+}
 
-  .toast-header-time {
-    font-family: 'Inter', sans-serif;
-    font-size: 12.25px;
-    line-height: 18px;
-    font-weight: 400; // Regular
-  }
+.toast-header-time {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.25px;
+  line-height: 18px;
+  font-weight: 400; // Regular
+}
