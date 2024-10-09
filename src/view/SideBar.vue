@@ -35,9 +35,9 @@
 </template>
 
 <script setup>
-import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
-import MinimizeButton from '../components/side_bar/header/MinimizeButton.vue'
-import LogoButton from '../components/side_bar/header/LogoButton.vue';
+import DropDown from "@/components/SideBar/drop_down/NavbarDropdown.vue"
+import MinimizeButton from '../components/SideBar/header/MinimizeButton.vue'
+import LogoButton from '../components/SideBar/header/LogoButton.vue';
 import BuscaSimples from "../components/Search/BuscaSimples.vue";
 
 import { ref, defineEmits } from 'vue';

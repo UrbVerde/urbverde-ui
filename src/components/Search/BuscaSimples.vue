@@ -603,7 +603,6 @@ export default {
 
 
 
-
 }
 
 .filter-button,
@@ -650,7 +649,7 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-  background: var(--Gray-100, #F8F9FA);
+  background: var(--Gray-100, #FFFFFF);
 }
 
 

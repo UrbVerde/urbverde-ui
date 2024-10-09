@@ -5,6 +5,8 @@
 
     <!-- Exibe a imagem enquanto as coordenadas não forem alteradas -->
     <div v-if="!coordinates.lat || !coordinates.lng">
+      <Navbar/>
+
       <img src="./assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder">
     </div>
     
@@ -18,12 +20,14 @@
 <script>
 import { ref } from 'vue';
 import Sidebar from './view/SideBar.vue';
+import Navbar from './components/Navbar/Navbar.vue';
 import MapBox from './components/Map/mapGenerator.vue'; 
 
 export default {
   components: {
     Sidebar,
     MapBox,
+    Navbar,
   },
   setup() {
     // Coordenadas padrão (ou nulas se preferir que não haja nada inicialmente)

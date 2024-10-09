@@ -14,7 +14,7 @@
 
 <script setup>
 
-import NavbarItem from "@/components/side_bar/drop_down/NavbarItemDropdown.vue";
+import NavbarItem from "@/components/SideBar/drop_down/NavbarItemDropdown.vue";
 
 
 import { defineProps } from "vue";
