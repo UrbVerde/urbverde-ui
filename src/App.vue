@@ -5,13 +5,12 @@
 
     <!-- Exibe a imagem enquanto as coordenadas não forem alteradas -->
     <div v-if="!coordinates.lat || !coordinates.lng">
-      <Navbar/>
-
       <img src="./assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder">
     </div>
     
     <!-- Renderiza o componente MapBox quando há coordenadas válidas -->
-    <div v-else>
+    <div v-else class="painel">
+      <Navbar/>
       <MapBox :coordinates="coordinates" />
     </div>
   </div>
@@ -51,7 +50,6 @@ export default {
   margin-left: 500px;
   width: 280px;
   height: 175px;
-  border-radius: 15px;
 }
 
 </style>

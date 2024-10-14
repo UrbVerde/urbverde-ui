@@ -72,11 +72,13 @@
   };
   </script>
   
+  <!--left 148  -> 188-->
   <style scoped>
   .map-container {
-    margin-left: 200px;
-    width: 800px;
-    height: 500px;
+    margin-top: 80px;
+    margin-left: 188px; 
+    width: 1150px;
+    height: 550px;;
     border-radius: 15px;
   }
   </style>

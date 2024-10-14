@@ -81,7 +81,7 @@
   }
 
   .header-left h1 {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     color: #333;
 }
@@ -128,14 +128,13 @@
   .tabs {
     display: flex;
     gap: 12px;
-    margin-top: 16px
   }
 
   .tab-button {
     background-color: transparent;
     border: none;
-    padding: 8px 16px;
-    font-size: 16px;
+    padding: 4px 24px;
+    font-size: 14px;
     cursor: pointer;
     color: #333;
   }
@@ -149,6 +148,7 @@
     background-color: #d2e8dd;
     color: #025949;
     border-radius: 16px;
+    font-weight: 600;
   }
   </style>
   
