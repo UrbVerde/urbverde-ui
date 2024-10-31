@@ -20,7 +20,7 @@ export default {
   border: none;
   padding: 0;
   cursor: pointer;
-  width: 232px;
+  width: 190px;
   /* Definindo a largura do botão */
   height: 56px;
   /* Definindo a altura do botão */
@@ -41,9 +41,9 @@ export default {
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%;
+  line-height: 30px;
   /* 30px */
-  letter-spacing: 1px;
+  letter-spacing: 0.05px;
 
   color: var(--Theme-Primary, #025949);
   leading-trim: both;

@@ -75,9 +75,9 @@
   <!--left 148  -> 188-->
   <style scoped>
   .map-container {
-    margin-top: 80px;
-    margin-left: 188px; 
-    width: 1150px;
+    margin-top: 140px;
+    margin-left: 290px; 
+    width: 1200px;
     height: 550px;;
     border-radius: 15px;
   }

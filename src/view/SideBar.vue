@@ -77,7 +77,7 @@ function changeSidebar() {
 }
 
 .sidebar-open {
-  width: 320px;
+  width: 272px;  /* 280px*/
   display: flex;
   flex-direction: column;
   align-items: flex-start;

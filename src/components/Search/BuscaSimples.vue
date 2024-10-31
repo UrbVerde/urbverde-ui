@@ -38,7 +38,6 @@
 
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
-        <span class="filter-text">Buscar por:</span>
         <div class="filter-button-container">
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
             @click="toggleAll">Todos</button>
@@ -516,7 +515,7 @@ export default {
 
 .input-field {
   background: var(--Gray-100, #F8F9FA);
-  border: none;
+  border: transparent;
 
 
 }
@@ -525,6 +524,8 @@ export default {
   position: relative;
   flex: 1;
   overflow: hidden;
+  border: none;
+
 }
 
 .suggestion-overlay {
@@ -574,26 +575,6 @@ export default {
 
 }
 
-
-.filter-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  align-self: stretch;
-
-  background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
-  /*Typography*/
-  color: var(--Theme-Secondary, #000000);
-
-  /* Body/Small/Regular */
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  /* 21px */
-}
 
 .filter-button-container {
   display: flex;

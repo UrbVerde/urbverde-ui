@@ -30,8 +30,8 @@ export default {
   display: flex;
   padding: 10px;
   align-items: center;
-  gap: 10px;
   transition: 0.3s;
+  margin-left: -10px
 }
 
 .btn-open {

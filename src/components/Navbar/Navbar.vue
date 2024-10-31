@@ -1,73 +1,77 @@
 <template>
-    <div class="navbar">
-        <!-- Primeira linha: Título e Botões -->
-        <div class="header">
-          <div class="header-left">
-            <h1>Temperatura de Superfície Terrestre em São Carlos</h1>
-          </div>    
-          <div class="header-right">
-            
-            <button @click="shareMap" class="share-button">
-              <img src="../../assets/icons/share.svg" alt="Compartilhar" />
-            </button>
-            
-            <button @click="layerInfo" class="info-button">
-             <img src="../../assets/icons/info.svg" alt="Informações da camada" />
-              Informações da camada
-           </button>
-          </div>
-        </div>
-
-      <!-- Segunda linha: Navegação -->
-      <div class="tabs">
-        <button
-          v-for="tab in tabs"
-          :key="tab"
-          @click="selectTab(tab)"
-          :class="{ 'active-tab': selectedTab === tab }"
-          class="tab-button"
-        >
-          {{ tab }}
+  <div class="navbar">
+    <!-- Primeira linha: Título e Botões -->
+    <div class="header">
+      <div class="header-left">
+        <h5>Temperatura de Superfície Terrestre em São Carlos</h5>
+      </div>    
+      <div class="header-right">
+        <button @click="shareMap" class="share-button">
+          <img src="../../assets/icons/share.svg" alt="Compartilhar" />
+        </button>
+        <button @click="layerInfo" class="info-button">
+          <img src="../../assets/icons/info.svg" alt="Informações da camada" />
+          Informações da camada
         </button>
       </div>
     </div>
 
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        tabs: ["Mapa", "Estatística", "Ranking"],
-        selectedTab: "Mapa",
-      };
+    <!-- Segunda linha: Navegação -->
+    <div class="tabs">
+      <button
+        v-for="tab in tabs"
+        :key="tab"
+        @click="selectTab(tab)"
+        :class="{ 'active-tab': selectedTab === tab }"
+        class="tab-button"
+      >
+        {{ tab }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      tabs: ["Mapa", "Estatística", "Ranking"],
+      selectedTab: "Mapa",
+    };
+  },
+  methods: {
+    selectTab(tab) {
+      this.selectedTab = tab;
+
+      if (tab === "Estatística") {
+        this.$emit('scrollToStats'); // Emite evento para scroll até estatística
+      }
+
+      if (tab === "Mapa") {
+        this.$emit('scrollToMap'); // Emite evento para scroll até o mapa
+      }
     },
-    methods: {
-      selectTab(tab) {
-        this.selectedTab = tab;
-        // Lógica para alterar o conteúdo do mapa, estatística ou ranking
-      },
-      shareMap() {
-        // Lógica para compartilhar o mapa
-        alert("Compartilhar mapa");
-      },
+    shareMap() {
+      alert("Compartilhar mapa");
     },
-  };
-  </script>
-  
+  },
+};
+</script>
+
+
   <style scoped>
   .navbar {
     position: fixed;
     top: 0;
-    left: 320px;
+    left: 290px;
     right: 0;
     background-color: #F8F9FACC;
-    border-bottom: 1px solid #e0e0e0;
     z-index: 1000;
     padding: 16px 24px;
     box-sizing: border-box;
     flex-direction: column;
     align-items: stretch; 
+    padding-bottom: 25px;
   }
 
   .header{
@@ -80,7 +84,7 @@
 
   }
 
-  .header-left h1 {
+  .header-left h5 {
     font-size: 28px;
     font-weight: bold;
     color: #333;
