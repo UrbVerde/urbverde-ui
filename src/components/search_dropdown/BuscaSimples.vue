@@ -121,16 +121,13 @@ export default {
     async fetchCities(query) {
       try {
         this.clearCache();
-        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${query}`);
-        const data = await response.json();
-        const filteredCities = data.filter(city =>
-          city.nome.toLowerCase().includes(query.toLowerCase())
-        );
-        const cities = filteredCities.map(city => `${city.nome} - ${city.microrregiao.mesorregiao.UF.sigla}`);
+
+        const response = await fetch(`http://localhost:8080/api/v1/address/suggestions?query=${query}`);
+        const cities = await response.json();
+
         this.cacheCities(cities);
       } catch (error) {
         console.error('Error fetching cities:', error);
-        // Optionally, display an error message to the user
       }
     },
 
@@ -190,9 +187,6 @@ export default {
     },
 
     updateSuggestions() {
-
-
-
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
