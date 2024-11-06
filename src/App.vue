@@ -91,17 +91,15 @@ export default {
 .global {
   background-color: #F8F9FACC;
   width: 100%;
-  height: 100vh; 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center;
-  align-items: center; 
+  height: 100vh;  
 }
 
 .map-placeholder{
+  display: flex;
+  justify-self: center;
+  transform: translate(-10%, 160%);
   width: 280px;
   height: 175px;
-  margin: auto 0;
   margin-left: 252px;
 }
 
