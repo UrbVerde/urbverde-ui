@@ -1,12 +1,10 @@
 <template>
-  
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
-
         <LogoButton v-show="isOpen" />
-        <MinimizeButton @changed-state="changeSidebar" />
-
+        <!-- Emite o evento para alternar o estado da sidebar -->
+        <MinimizeButton @click="toggleSidebar" />
       </div>
       <div v-show="isOpen" class="search-area">
         <BuscaSimples @location-updated="onLocationUpdated"/>
@@ -14,20 +12,17 @@
       <div v-show="isOpen" class="middle-area">
         <DropDown v-if="isSearchDone" :options="options" />
       </div>
-
       <div v-show="isOpen" class="bottom-area">
-
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../assets/icons/export.svg" width="20"
-            height="20" />
+          <img class="d-inline-block" id="imgIcon" src="../assets/icons/export.svg" width="20" height="20" />
           <span id="txtBottom">Colabore com dados</span>
         </a>
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../assets/icons/help.svg" width="20"
-            height="20" />
+          <img class="d-inline-block" id="imgIcon" src="../assets/icons/help.svg" width="20" height="20" />
           <span id="txtBottom">Central de ajuda</span>
         </a>
       </div>
+
 
     </div>
   </div>
@@ -40,26 +35,33 @@ import MinimizeButton from '../components/SideBar/header/MinimizeButton.vue'
 import LogoButton from '../components/SideBar/header/LogoButton.vue';
 import BuscaSimples from "../components/Search/BuscaSimples.vue";
 
-import { ref, defineEmits } from 'vue';
+import { ref, defineEmits, defineProps } from 'vue';
 
-const emit = defineEmits(['update-coordinates']);
+
+// Definindo props e emits
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    default: true
+  }
+});
+
+const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
 
 // Variável para controlar se a busca foi feita
 const isSearchDone = ref(false);
 
 const onLocationUpdated = (coordinates) => {
-  // Define como true quando a busca for concluída
   isSearchDone.value = true;
   emit('update-coordinates', coordinates);
 };
 
 const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
-const isOpen = ref(true);
 
-function changeSidebar() {
-  isOpen.value = !isOpen.value;
+// Função para alternar a abertura/fechamento da sidebar
+function toggleSidebar() {
+  emit('toggle-sidebar'); // Emite o evento para o App.vue alternar o estado da sidebar
 }
-
 </script>
 
 
@@ -74,6 +76,7 @@ function changeSidebar() {
   overflow: hidden;
   background: var(--Gray-White, #FFF);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
+  z-index: 100;
 }
 
 .sidebar-open {
@@ -84,7 +87,8 @@ function changeSidebar() {
   flex-shrink: 0;
   align-self: stretch;
 
-
+  position: fixed; 
+  z-index: 100;
 }
 
 .top-area {

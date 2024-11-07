@@ -38,7 +38,16 @@
 
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
-        <div class="filter-button-container">
+        <div class="filter-button-container"
+          ref="filterButtonContainer"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+          @touchstart="startDrag"
+          @touchmove="onDrag"
+          @touchend="endDrag"
+        >
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
             @click="toggleAll">Todos</button>
           <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
@@ -102,6 +111,10 @@ export default {
       filterAll: true,
       filterCity: false,
       filterState: false,
+
+      isDragging: false,
+      startX: 0,
+      scrollLeft: 0,
     };
   },
   created() {
@@ -408,6 +421,22 @@ export default {
         this.updateHighlightedText();
       }
     },
+
+    startDrag(event) {
+      this.isDragging = true;
+      this.startX = event.pageX || event.touches[0].pageX;
+      this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
+    },
+    onDrag(event) {
+      if (!this.isDragging) return;
+      const x = event.pageX || event.touches[0].pageX;
+      const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
+      this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
+    },
+    endDrag() {
+      this.isDragging = false;
+    },
+
     //Organizacao das coordenadas
     async fetchCoordinates(address) {
       const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
@@ -582,9 +611,11 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-
-
+  overflow: hidden; 
+  white-space: nowrap;
+  cursor: grab; 
 }
+
 
 .filter-button,
 .filter-button-active {
@@ -596,7 +627,7 @@ export default {
   border: none;
 
 
-
+  flex-shrink: 0; 
 
   border-radius: 99px;
 

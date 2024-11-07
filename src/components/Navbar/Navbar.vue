@@ -1,32 +1,34 @@
 <template>
   <div class="navbar">
-    <!-- Primeira linha: Título e Botões -->
-    <div class="header">
-      <div class="header-left">
-        <h5>Temperatura de Superfície Terrestre em São Carlos</h5>
-      </div>    
-      <div class="header-right">
-        <button @click="shareMap" class="share-button">
-          <img src="../../assets/icons/share.svg" alt="Compartilhar" />
-        </button>
-        <button @click="layerInfo" class="info-button">
-          <img src="../../assets/icons/info.svg" alt="Informações da camada" />
-          Informações da camada
+    <div class="response">
+      <!-- Primeira linha: Título e Botões -->
+      <div class="header">
+        <div class="header-left">
+          <h5>Temperatura de Superfície Terrestre em São Carlos</h5>
+        </div>    
+        <div class="header-right">
+          <button @click="shareMap" class="share-button">
+            <img src="../../assets/icons/share.svg" alt="Compartilhar" />
+          </button>
+          <button @click="layerInfo" class="info-button">
+            <img src="../../assets/icons/info.svg" alt="Informações da camada" />
+            Informações da camada
+          </button>
+        </div>
+      </div>
+
+      <!-- Segunda linha: Navegação -->
+      <div class="tabs">
+        <button
+          v-for="tab in tabs"
+          :key="tab"
+          @click="selectTab(tab)"
+          :class="{ 'active-tab': selectedTab === tab }"
+          class="tab-button"
+        >
+          {{ tab }}
         </button>
       </div>
-    </div>
-
-    <!-- Segunda linha: Navegação -->
-    <div class="tabs">
-      <button
-        v-for="tab in tabs"
-        :key="tab"
-        @click="selectTab(tab)"
-        :class="{ 'active-tab': selectedTab === tab }"
-        class="tab-button"
-      >
-        {{ tab }}
-      </button>
     </div>
   </div>
 </template>
@@ -63,15 +65,18 @@ export default {
   .navbar {
     position: fixed;
     top: 0;
-    left: 290px;
-    right: 0;
     background-color: #F8F9FACC;
-    z-index: 1000;
+    z-index: 10;
     padding: 16px 24px;
     box-sizing: border-box;
     flex-direction: column;
     align-items: stretch; 
     padding-bottom: 25px;
+    width: 100%;
+  }
+
+  .response{
+    margin-left: 290px;
   }
 
   .header{

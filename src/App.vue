@@ -1,13 +1,15 @@
 <template>
   <div class="global">
-    <Sidebar @update-coordinates="updateCoordinates" />
+    <Sidebar :is-open="isSidebarOpen"
+      @toggle-sidebar="toggleSidebar" 
+      @update-coordinates="updateCoordinates" />
 
     <div v-if="!coordinates.lat || !coordinates.lng">
       <img src="./assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder">
     </div>
 
-    <div v-else class="painel">
-      <Navbar @scrollToStats="scrollToStats" @scrollToMap="scrollToMap" />
+    <div v-else :class="['painel', { 'painel-collapsed': !isSidebarOpen }]">
+      <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }"  @scrollToStats="scrollToStats" @scrollToMap="scrollToMap" />
 
       <!-- Adicionar o ref "mapSection" para a div do mapa -->
       <div ref="mapSection">
@@ -64,6 +66,13 @@ export default {
     // Referências para o mapa e a seção de estatísticas
     const statsSection = ref(null);
 
+    // Controle de estado da sidebar
+    const isSidebarOpen = ref(true);
+
+    const toggleSidebar = () => {
+      isSidebarOpen.value = !isSidebarOpen.value;
+    };
+
     const updateCoordinates = (newCoordinates) => {
       coordinates.value = newCoordinates;
     };
@@ -80,7 +89,15 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    return { coordinates, updateCoordinates, scrollToStats, scrollToMap, statsSection };
+    return { 
+      coordinates,
+      updateCoordinates, 
+      scrollToStats, 
+      scrollToMap, 
+      statsSection,
+      isSidebarOpen, 
+      toggleSidebar 
+     };
   }
 };
 </script>
@@ -102,6 +119,16 @@ export default {
   height: 175px;
   margin-left: 252px;
 }
+
+
+.painel {
+  transition: 0.6s ease;
+}
+.painel-collapsed {
+  margin-left: -100px;
+  transition: 0.6s ease;
+}
+
 
 .legend {
   position: absolute;
