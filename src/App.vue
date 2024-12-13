@@ -16,7 +16,7 @@
       
     </p>
     <p v-else>Aguardando localização...</p>
-      <Teste/>
+      <SearchDropdown/>
       
 
     </div>
@@ -26,22 +26,14 @@
 
 <script>
 import Sidebar from './components/side_bar/SideBar.vue';
-import Formu from './components/search_dropdown/Formu.vue';
-import NominatimSearch from './components/search_dropdown/NominatimSearch.vue';
-import BuscaSimples from './components/search_dropdown/BuscaSimples.vue';
 import SearchUserLocation from './components/search_dropdown/SearchUserLocation.vue';
-import SearchCity from './components/search_dropdown/SearchCity.vue';
-import Teste from './components/search_dropdown/teste.vue';
+import SearchDropdown from './components/search_dropdown/SearchDropdown.vue';
 
 export default {
   components: {
     Sidebar,
-    Formu,
-    NominatimSearch,
-    BuscaSimples,
     SearchUserLocation,
-    SearchCity,
-    Teste,
+    SearchDropdown,
   },
   data() {
     return {

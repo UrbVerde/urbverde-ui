@@ -16,8 +16,6 @@
 
 import NavbarItem from "@/components/side_bar/drop_down/NavbarItemDropdown.vue";
 
-
-import { defineProps } from "vue";
 import { reactive } from 'vue';
 
 const dropdowns = reactive([
@@ -25,14 +23,6 @@ const dropdowns = reactive([
     {name: 'Vegetação', isSelected: false },
     {name: 'Parques e Praças', isSelected: false },
 ]);
-
-
-const props = defineProps({
-    options: {
-        type: Array,
-        required: true
-    }
-});
 
 const handleSelectionChange = (selectedIndex) => {
   dropdowns.forEach((dropdown, index) => {
