@@ -14,7 +14,7 @@ import { ref } from 'vue';
 import AddressFieldGroup from './AdressFieldGroup.vue';
 
 export default {
-    name: "Formu",
+    name: "FormComponent",
     components: {
         AddressFieldGroup
     },
