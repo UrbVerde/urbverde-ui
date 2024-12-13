@@ -14,14 +14,13 @@
         </a>
 
         <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="navbarDropdown">
-
           <li v-for="(slot, index) in slots" :key="index"
             :class="{ 'is-active': slot.isActive, 'notActive': !slot.isActive, 'active': slot.isActive }"
-            @click="toggleSlotActive(index, $event)">
-          <li v-show="slot.show" id="intern-padding">
-          
-          <a tag="dropdownitem-txt" v-show="slot.show" class="dropdown-item">{{ slot.name }}</a>
-        </li>
+            @click="toggleSlotActive(index, $event)"
+          >
+            <div v-show="slot.show" id="intern-padding">
+              <a tag="dropdownitem-txt" v-show="slot.show" class="dropdown-item">{{ slot.name }}</a>
+            </div>
           </li>
         </ul>
       </div>
@@ -32,8 +31,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 import { defineProps, defineEmits } from 'vue';
-import { Dropdown } from 'bootstrap';
-
 
 //Dropdown.Default.autoClose = false;
 
@@ -92,7 +89,7 @@ const closeDropdownOnOutsideClick = (event) => {
   } else {
     if (isDropdownSelected.value && isDropdownOpen.value) {
       if (dropdownElement && !dropdownElement.contains(event.target)) {
-        slots.value.forEach((slot, i) => {
+        slots.value.forEach((slot) => {
           if (!slot.isActive)
             slot.show = false;
         });
@@ -127,7 +124,7 @@ const toggleDropdown = (event) => {
   event.preventDefault();
   event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
-  slots.value.forEach((slot, i) => {
+  slots.value.forEach((slot) => {
     if (!slot.isActive) {
 
       slot.show = true;
