@@ -83,7 +83,7 @@ export default {
           this.showError
         );
       } else {
-        alert("Geolocalização não é suportada por este navegador.");
+        alert('Geolocalização não é suportada por este navegador.');
       }
     },
     setPosition(position) {
@@ -92,7 +92,7 @@ export default {
       this.getCityName();
     },
     showError(error) {
-      console.error("Erro ao obter localização: ", error);
+      console.error('Erro ao obter localização: ', error);
     },
     async getCityName() {
       try {
@@ -103,7 +103,7 @@ export default {
         this.city = data.address.city || data.address.town || data.address.village || 'error';
         this.state = data.address.state || 'error';
         this.country = data.address.country || 'error';
-        
+
         // Verifica se o país é diferente de Brasil
         this.international = this.country !== 'Brasil';
 
@@ -125,7 +125,7 @@ export default {
 
         this.emitLocationData(); // Emitir dados após obter localização
       } catch (error) {
-        console.error("Erro ao obter o nome da cidade: ", error);
+        console.error('Erro ao obter o nome da cidade: ', error);
       }
     },
     emitLocationData() {

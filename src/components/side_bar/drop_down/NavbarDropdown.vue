@@ -1,26 +1,29 @@
 <template>
-    <div class="container">
-        <span class="text">CATEGORIAS</span>
+  <div class="container">
+    <span class="text">CATEGORIAS</span>
 
-        <div>
-            <NavbarItem v-for="(dropdown, index) in dropdowns" :key="index" :isSelectedItem="dropdown.isSelected" :itemName="dropdown.name"
-                @update:isSelectedItem="handleSelectionChange(index)" />
-
-        </div>
+    <div>
+      <NavbarItem v-for="(dropdown, index) in dropdowns"
+                  :key="index"
+                  :isSelectedItem="dropdown.isSelected"
+                  :itemName="dropdown.name"
+                  @update:isSelectedItem="handleSelectionChange(index)" />
 
     </div>
+
+  </div>
 </template>
 
 <script setup>
 
-import NavbarItem from "@/components/side_bar/drop_down/NavbarItemDropdown.vue";
+import NavbarItem from '@/components/side_bar/drop_down/NavbarItemDropdown.vue';
 
 import { reactive } from 'vue';
 
 const dropdowns = reactive([
-    {name: 'Clima', isSelected: false },
-    {name: 'Vegetação', isSelected: false },
-    {name: 'Parques e Praças', isSelected: false },
+  {name: 'Clima', isSelected: false },
+  {name: 'Vegetação', isSelected: false },
+  {name: 'Parques e Praças', isSelected: false },
 ]);
 
 const handleSelectionChange = (selectedIndex) => {

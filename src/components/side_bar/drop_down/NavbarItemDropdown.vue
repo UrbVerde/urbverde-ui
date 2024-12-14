@@ -2,21 +2,34 @@
   <nav class="navbar navbar-expand-x1 navbar-light  container-fluid">
     <ul class="navbar-nav w-100 justify-content-center" id="navCont">
       <div class="dropdown" data-bs-auto-close="false">
-        <a href="#" class="navbar nav-link " :class="{ 'dropdown-active': isDropdownOpen }" id="navbarDropdown"
-          role="button" data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
+        <a href="#"
+           class="navbar nav-link "
+           :class="{ 'dropdown-active': isDropdownOpen }"
+           id="navbarDropdown"
+           role="button"
+           data-bs-toggle="dropdown"
+           aria-expanded="false"
+           @click="toggleDropdown">
 
-          <img class="d-inline-block" id="imgIcon" :src="iconPath" width="20"
-            height="20" />
+          <img class="d-inline-block"
+               id="imgIcon"
+               :src="iconPath"
+               width="20"
+               height="20" />
           <span id="txtItem">{{ props.itemName }}</span>
           <span id="txtBadge">{{ txtBadge }}</span>
-          <img class="d-inline-block" :src="isDropdownOpen ? collapseIcon : expandIcon" width="14" height="14" />
+          <img class="d-inline-block"
+               :src="isDropdownOpen ? collapseIcon : expandIcon"
+               width="14"
+               height="14" />
 
         </a>
 
         <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="navbarDropdown">
-          <li v-for="(slot, index) in slots" :key="index"
-            :class="{ 'is-active': slot.isActive, 'notActive': !slot.isActive, 'active': slot.isActive }"
-            @click="toggleSlotActive(index, $event)"
+          <li v-for="(slot, index) in slots"
+              :key="index"
+              :class="{ 'is-active': slot.isActive, 'notActive': !slot.isActive, 'active': slot.isActive }"
+              @click="toggleSlotActive(index, $event)"
           >
             <div v-show="slot.show" id="intern-padding">
               <a tag="dropdownitem-txt" v-show="slot.show" class="dropdown-item">{{ slot.name }}</a>
@@ -29,32 +42,30 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
-import { defineProps, defineEmits } from 'vue';
-
+import { defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed } from 'vue';
 //Dropdown.Default.autoClose = false;
 
 import collapseIcon from '../../../components/icons/collapse.svg';
 import expandIcon from '../../../components/icons/expand.svg';
-import sun from "../../../components/icons/sunBehindeCloud.svg";
-import tree from "../../../components/icons/pineTree.svg"
-import bike from "../../../components/icons/bike.svg"
+import sun from '../../../components/icons/sunBehindeCloud.svg';
+import tree from '../../../components/icons/pineTree.svg';
+import bike from '../../../components/icons/bike.svg';
 
-const txtBadge = ref("");
+const txtBadge = ref('');
 
 const isDropdownOpen = ref(false);
 
 // Computed property to get the icon path based on itemName
 const iconPath = computed(() => {
   switch (props.itemName.toLowerCase()) {
-    case 'clima':
-      return sun;
-    case 'vegetação':
-      return tree;
-    case 'parques e praças':
-      return bike;
-    default:
-      return sun; // Default icon if itemName doesn't match any case
+  case 'clima':
+    return sun;
+  case 'vegetação':
+    return tree;
+  case 'parques e praças':
+    return bike;
+  default:
+    return sun; // Default icon if itemName doesn't match any case
   }
 });
 
@@ -65,7 +76,7 @@ const props = defineProps({
   },
   itemName: {
     type: String,
-    default: "",
+    default: '',
   }
 });
 
@@ -87,7 +98,7 @@ const closeDropdownOnOutsideClick = (event) => {
       if (dropdownElement && !dropdownElement.contains(event.target)) {
         slots.value.forEach((slot) => {
           if (!slot.isActive)
-            slot.show = false;
+          {slot.show = false;}
         });
       }
 
@@ -99,7 +110,7 @@ const closeDropdownOnOutsideClick = (event) => {
 watch(() => props.isSelectedItem, (newVal) => {
   isDropdownSelected.value = newVal;
   if (!newVal) {
-    txtBadge.value = "";
+    txtBadge.value = '';
     slots.value.forEach((slot) => {
       slot.isActive = false;
       slot.show = true;
@@ -127,10 +138,10 @@ const toggleDropdown = (event) => {
 
   });
   if (!isDropdownOpen.value && isDropdownSelected.value) {//se ta fechado e selecionado
-    txtBadge.value = "1";
+    txtBadge.value = '1';
   }
   if (isDropdownOpen.value && isDropdownOpen.value) {//se ta aberto e selecionado
-    txtBadge.value = "";
+    txtBadge.value = '';
   }
 };
 
@@ -140,7 +151,7 @@ const toggleSlotActive = (index, event) => {
 
     isDropdownSelected.value = false;
 
-    txtBadge.value = "";
+    txtBadge.value = '';
 
     slots.value[index].isActive = !slots.value[index].isActive;
     slots.value.forEach((slot) => {
@@ -209,7 +220,7 @@ const slots = ref([
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
 }
 
 #navbarDropdown {
@@ -219,14 +230,14 @@ const slots = ref([
   gap: 12px;
   align-self: stretch;
   border-radius: 8px;
-  
+
 }
 
 .navbar {
   padding: var(--bs-navbar-padding-x);
   background-color: white;
   padding: 8px 0px;
-  
+
 }
 
 .nav-link:hover {
@@ -244,7 +255,7 @@ const slots = ref([
   /* Remove a sombra do dropdown, se houver */
   background-color: var(--Primary-Fade-100, orange);
   display: none;
-  
+
 }
 
 .dropdown-menu.show {
@@ -258,7 +269,7 @@ const slots = ref([
   --bs-dropdown-link-active-bg: gray;
   --bs-dropdown-link-active-color: #fff;
   --bs-dropdown-link-hover-bg: #D3E1E0;
-  
+
   font-size:small;
   font-family: Inter, sans-serif;
 
@@ -288,7 +299,7 @@ const slots = ref([
 /* Novo estilo para quando o dropdown está ativo */
 .dropdown-active {
   background: var(--Primary-Fade-100, #F8F9FA);
-  
+
 }
 
 /*? */

@@ -2,8 +2,13 @@
   <div class="search-wrapper">
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
-        <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-          placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
+        <input ref="inputField"
+               v-model="inputValue"
+               @keyup="keydown"
+               @focus="handleFocus"
+               @keydown.enter="handleEnter"
+               placeholder="Digite um cidade ou estado brasileiro"
+               class="input-field" />
         <div v-if="highlightedText" class="suggestion-overlay">
           <span class="suggestion-text">
             <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
@@ -13,10 +18,15 @@
       </div>
       <div class="button-container">
         <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-          @click="clearInput">
-          <img id="imgIcon" src="../icons/clean.svg" width="16" height="16" /> </button>
-        <button class="search-button" @click="clearHistory"> <img id="imgIcon" src="../icons/search.svg" width="16"
-            height="16" /> </button>
+                @click="clearInput">
+          <img id="imgIcon"
+               src="../icons/clean.svg"
+               width="16"
+               height="16" /> </button>
+        <button class="search-button" @click="clearHistory"> <img id="imgIcon"
+                                                                  src="../icons/search.svg"
+                                                                  width="16"
+                                                                  height="16" /> </button>
       </div>
     </div>
     <div class="button-debug">
@@ -38,19 +48,24 @@
         <span class="filter-text">Buscar por:</span>
         <div class="filter-button-container">
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
-            @click="toggleAll">Todos</button>
+                  @click="toggleAll">Todos</button>
           <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
-            @click="toggleCity">Municípios</button>
+                  @click="toggleCity">Municípios</button>
           <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
-            @click="toggleState">Estados</button>
+                  @click="toggleState">Estados</button>
         </div>
       </div>
 
       <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-        <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-          @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-          @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-          :ref="`suggestionItem-${index}`">
+        <li class="suggestion-item"
+            v-for="(suggestion, index) in visibleSuggestions"
+            :key="suggestion"
+            @click="selectSuggestion(suggestion)"
+            tabindex="0"
+            @keydown.enter="selectSuggestion(suggestion)"
+            @keydown.up.prevent="focusPreviousSuggestion(index)"
+            @keydown.down.prevent="focusNextSuggestion(index)"
+            :ref="`suggestionItem-${index}`">
           <img :src="getImageSource(suggestion.type)" width="20" height="20" />
           <span class="item-text">{{ suggestion.text }}</span>
 
@@ -62,8 +77,8 @@
 </template>
 
 <script>
-import historyIcon from "../icons/history.svg"
-import locationIcon from "../icons/location.svg"
+import historyIcon from '../icons/history.svg';
+import locationIcon from '../icons/location.svg';
 
 export default {
   data() {
@@ -110,6 +125,7 @@ export default {
       } else if (this.filterState) {
         return this.suggestions.filter(suggestion => suggestion.type === 'state');
       }
+
       return this.suggestions; // fallback para todos os casos
     },
     visibleSuggestions() {
@@ -160,10 +176,8 @@ export default {
     },
 
     handleFocus(event) {
-      if (this.dropdown != true) {
-
+      if (this.dropdown !== true) {
         this.dropdown = true;
-
       }
       event.stopPropagation();
     },
@@ -188,6 +202,7 @@ export default {
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
+
         return;
       }
 
@@ -320,24 +335,24 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city === "error" || state === "error" || city === null ) {
+      if (international || city === 'error' || state === 'error' || city === null ) {
         defaultSuggestions = [
-          { text: "Rio de Janeiro - RJ", type: "city" },
-          { text: "São Paulo", type: "state" },
-          { text: "Brasil", type: "country" }
+          { text: 'Rio de Janeiro - RJ', type: 'city' },
+          { text: 'São Paulo', type: 'state' },
+          { text: 'Brasil', type: 'country' }
         ];
       } else {
         defaultSuggestions = [
-          { text: `${city} - ${stateAbbreviation}`, type: "city" },
-          { text: state, type: "state" },
-          { text: "Brasil", type: "country" }
+          { text: `${city} - ${stateAbbreviation}`, type: 'city' },
+          { text: state, type: 'state' },
+          { text: 'Brasil', type: 'country' }
         ];
       }
 
       const historySuggestions = this.searchHistory
         .slice(0, 2)
         .filter(item => !defaultSuggestions.some(def => def.text === item))
-        .map(item => ({ text: item, type: "history" }));
+        .map(item => ({ text: item, type: 'history' }));
 
       this.suggestions = [...historySuggestions, ...defaultSuggestions];
       this.updateHighlightedText();
@@ -358,7 +373,7 @@ export default {
       this.filterAll = true;
       this.filterCity = false;
       this.filterState = false;
-      if (this.inputValue != '') {
+      if (this.inputValue !== '') {
         this.updateHighlightedText();
       }
     },
@@ -367,7 +382,7 @@ export default {
       this.filterAll = false;
       this.filterCity = true;
       this.filterState = false;
-      if (this.inputValue != '') {
+      if (this.inputValue !== '') {
         this.updateHighlightedText();
       }
     },
@@ -376,7 +391,7 @@ export default {
       this.filterAll = false;
       this.filterCity = false;
       this.filterState = true;
-      if (this.inputValue != '') {
+      if (this.inputValue !== '') {
         this.updateHighlightedText();
       }
     },

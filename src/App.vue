@@ -7,18 +7,18 @@
 
       <h1>Bootstrap</h1>
       <h1>Ganso</h1>
-      
+
       <SearchUserLocation @location-updated="handleLocationUpdate"/>
       <p v-if="locationData">
-      Localização Atual: {{ locationData.city }}, {{ locationData.state }}, {{ locationData.country }}<br>
-      Internacional: {{ locationData.international ? 'Sim' : 'Não' }}
-      
-    </p>
-    <p v-else>Aguardando localização...</p>
+        Localização Atual: {{ locationData.city }}, {{ locationData.state }}, {{ locationData.country }}<br>
+        Internacional: {{ locationData.international ? 'Sim' : 'Não' }}
+
+      </p>
+      <p v-else>Aguardando localização...</p>
       <SearchDropdown/>
 
     </div>
-    
+
   </div>
 </template>
 

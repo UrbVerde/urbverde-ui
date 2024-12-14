@@ -1,7 +1,12 @@
 <template>
   <div class="input-container">
-    <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-      placeholder="Digite um cidade ou estado brasileiro" class="input-field" />
+    <input ref="inputField"
+           v-model="inputValue"
+           @keyup="keydown"
+           @focus="handleFocus"
+           @keydown.enter="handleEnter"
+           placeholder="Digite um cidade ou estado brasileiro"
+           class="input-field" />
     <div v-if="highlightedText" class="suggestion-overlay">
       <span class="suggestion-text">
         <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
@@ -9,10 +14,16 @@
 
     </div>
     <div class="button-container">
-      <button @click="submit"> <img class="clean-button" id="imgIcon" src="../icons/search.svg" width="16"
-          height="16" /> </button>
-      <button @click="submit"> <img class="search-button" id="imgIcon" src="../icons/search.svg" width="16"
-          height="16" /> </button>
+      <button @click="submit"> <img class="clean-button"
+                                    id="imgIcon"
+                                    src="../icons/search.svg"
+                                    width="16"
+                                    height="16" /> </button>
+      <button @click="submit"> <img class="search-button"
+                                    id="imgIcon"
+                                    src="../icons/search.svg"
+                                    width="16"
+                                    height="16" /> </button>
     </div>
   </div>
   <div class="button-debug">
@@ -28,10 +39,15 @@
     </span>
   </div>
   <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-    <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-      @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-      @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-      :ref="`suggestionItem-${index}`">
+    <li class="suggestion-item"
+        v-for="(suggestion, index) in visibleSuggestions"
+        :key="suggestion"
+        @click="selectSuggestion(suggestion)"
+        tabindex="0"
+        @keydown.enter="selectSuggestion(suggestion)"
+        @keydown.up.prevent="focusPreviousSuggestion(index)"
+        @keydown.down.prevent="focusNextSuggestion(index)"
+        :ref="`suggestionItem-${index}`">
       {{ suggestion }}
     </li>
   </ul>
@@ -120,7 +136,7 @@ export default {
 
     handleFocus(event) {
       if (!this.dropdown) {
-        if (this.inputValue != this.suggestions[0]) {
+        if (this.inputValue !== this.suggestions[0]) {
           this.dropdown = true;
         }
 
@@ -139,8 +155,6 @@ export default {
 
     keydown() {
       this.updateSuggestions();
-      console.log(this.inputValue);
-
     },
 
     updateSuggestions() {
@@ -152,6 +166,7 @@ export default {
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
+
         return;
       }
 
@@ -265,10 +280,10 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city == "error" || state == "error") {
-        defaultSuggestions = ["Rio de Janeiro - RJ", "São Paulo", "Brasil"];
+      if (international || city === 'error' || state === 'error') {
+        defaultSuggestions = ['Rio de Janeiro - RJ', 'São Paulo', 'Brasil'];
       } else {
-        defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, "Brasil"];
+        defaultSuggestions = [`${city} - ${stateAbbreviation}`, `${state}`, 'Brasil'];
       }
 
       const historySuggestions = this.searchHistory.slice(0, 3).filter(item => !defaultSuggestions.includes(item));
@@ -313,7 +328,7 @@ export default {
   /*flex-direction: column;*/
   align-items: flex-start;
   align-self: stretch;
-  
+
   width: 100%;
   padding: 0px 16px;
   /* Adicionado o padding solicitado */

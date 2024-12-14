@@ -24,15 +24,15 @@
 export default {
   data() {
     return {
-      searchQuery: "",
+      searchQuery: '',
       validPrefixes: [
-        "Rua", "R.", "Avenida", "Av.", "Alameda", "Al.", "Travessa", "Tv.", "Largo",
-        "Lg.", "Praça", "Pça.", "Estrada", "Est.", "Rodovia", "Rod.", "Viela",
-        "Vl.", "Beco", "B.", "Parque", "Pq.", "Jardim", "Jd.", "Ladeira", "Ld.",
-        "Vila", "Vl.", "Caminho", "Conjunto", "Cj.", "Passagem", "Pass.", "Viaduto",
-        "Vd.", "Balneário", "Baln.", "Esplanada", "Espl."
+        'Rua', 'R.', 'Avenida', 'Av.', 'Alameda', 'Al.', 'Travessa', 'Tv.', 'Largo',
+        'Lg.', 'Praça', 'Pça.', 'Estrada', 'Est.', 'Rodovia', 'Rod.', 'Viela',
+        'Vl.', 'Beco', 'B.', 'Parque', 'Pq.', 'Jardim', 'Jd.', 'Ladeira', 'Ld.',
+        'Vila', 'Vl.', 'Caminho', 'Conjunto', 'Cj.', 'Passagem', 'Pass.', 'Viaduto',
+        'Vd.', 'Balneário', 'Baln.', 'Esplanada', 'Espl.'
       ],
-      apiKey: "YOUR_API_KEY_HERE", // Substitua pela sua chave da API
+      apiKey: 'YOUR_API_KEY_HERE', // Substitua pela sua chave da API
       latitude: -23.550520,
       longitude: -46.633308,
       searchTimeout: null,
@@ -58,12 +58,11 @@ export default {
     },
     searchAddress() {
       if (!this.latitude || !this.longitude) {
-        console.log("Erro: Latitude e longitude não estão definidas");
         return;
       }
 
       const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-      const baseURL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
+      const baseURL = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
       const params = new URLSearchParams({
         query: this.searchQuery,
         location: `${this.latitude},${this.longitude}`,
@@ -80,6 +79,7 @@ export default {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
+
           return response.json();
         })
         .then(data => {
@@ -87,11 +87,10 @@ export default {
             this.results = data.results;
           } else {
             this.results = [];
-            console.log("Nenhum resultado encontrado");
           }
         })
         .catch(error => {
-          console.error("Erro na solicitação à API do Google Places:", error);
+          console.error('Erro na solicitação à API do Google Places:', error);
         });
     }
   }

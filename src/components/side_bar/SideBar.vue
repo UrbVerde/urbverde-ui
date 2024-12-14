@@ -18,11 +18,19 @@
       <div v-show="isOpen" class="bottom-area">
 
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../icons/export.svg" width="20" height="20" />
+          <img class="d-inline-block"
+               id="imgIcon"
+               src="../icons/export.svg"
+               width="20"
+               height="20" />
           <span id="txtBottom">Colabore com dados</span>
         </a>
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../icons/help.svg" width="20" height="20" />
+          <img class="d-inline-block"
+               id="imgIcon"
+               src="../icons/help.svg"
+               width="20"
+               height="20" />
           <span id="txtBottom">Central de ajuda</span>
         </a>
       </div>
@@ -32,13 +40,13 @@
 </template>
 
 <script setup>
-import DropDown from "@/components/side_bar/drop_down/NavbarDropdown.vue"
-import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue'
+import DropDown from '@/components/side_bar/drop_down/NavbarDropdown.vue';
+import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue';
 import LogoButton from '../side_bar/buttons/LogoButton.vue';
-import { ref } from "vue";
-import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
+import { ref } from 'vue';
+import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 
-const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
+const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
 const isOpen = ref(true);
 
 function changeSidebar() {

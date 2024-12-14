@@ -2,10 +2,10 @@
   <div class="app">
     <h1>Busca de Cidades Brasileiras</h1>
     <div class="search-container">
-      <input 
-        v-model="query" 
-        type="text" 
-        placeholder="Digite o nome da cidade" 
+      <input
+        v-model="query"
+        type="text"
+        placeholder="Digite o nome da cidade"
         @keyup.enter="searchCity"
       />
       <button @click="searchCity">Buscar</button>
@@ -35,6 +35,7 @@ export default {
     async searchCity() {
       if (this.query.trim() === '') {
         alert('Por favor, insira o nome de uma cidade');
+
         return;
       }
       try {
