@@ -44,7 +44,6 @@ const txtBadge = ref("");
 
 const isDropdownOpen = ref(false);
 
-
 // Computed property to get the icon path based on itemName
 const iconPath = computed(() => {
   switch (props.itemName.toLowerCase()) {
@@ -58,7 +57,6 @@ const iconPath = computed(() => {
       return sun; // Default icon if itemName doesn't match any case
   }
 });
-
 
 const props = defineProps({
   isSelectedItem: {
@@ -76,8 +74,6 @@ const isDropdownSelected = ref(props.isSelectedItem);
 
 // Crie um emit
 const emit = defineEmits(['update:isSelectedItem']);
-
-
 
 const closeDropdownOnOutsideClick = (event) => {
   const dropdownElement = document.querySelector('.dropdown');
@@ -111,7 +107,6 @@ watch(() => props.isSelectedItem, (newVal) => {
   }
 });
 
-
 onMounted(() => {
   document.addEventListener('click', closeDropdownOnOutsideClick);
 });
@@ -130,7 +125,6 @@ const toggleDropdown = (event) => {
       slot.show = true;
     }
 
-
   });
   if (!isDropdownOpen.value && isDropdownSelected.value) {//se ta fechado e selecionado
     txtBadge.value = "1";
@@ -139,10 +133,6 @@ const toggleDropdown = (event) => {
     txtBadge.value = "";
   }
 };
-
-
-
-
 
 const toggleSlotActive = (index, event) => {
   event.stopPropagation();
@@ -163,8 +153,6 @@ const toggleSlotActive = (index, event) => {
 
     emit('update:isSelectedItem', !props.isSelectedItem);
 
-
-
     slots.value.forEach((slot, i) => {
       slot.isActive = i === index;
 
@@ -177,11 +165,6 @@ const slots = ref([
   { name: 'Item 2 2nd Level ', isActive: false, show: true },
   { name: 'Item 3 2nd Level ', isActive: false, show: true }
 ]);
-
-
-
-
-
 
 </script>
 
@@ -216,7 +199,6 @@ const slots = ref([
   font-family: Inter, sans-serif;
 }
 
-
 #navCont {}
 
 #navItem {
@@ -247,7 +229,6 @@ const slots = ref([
   
 }
 
-
 .nav-link:hover {
   color: black;
   /* Cor desejada para o texto */
@@ -255,8 +236,6 @@ const slots = ref([
   /* Cor de fundo opcional */
   background-color: var(--Primary-Fade-100, #F8F9FA);
 }
-
-
 
 .dropdown-menu {
   border: none;
@@ -266,13 +245,11 @@ const slots = ref([
   background-color: var(--Primary-Fade-100, orange);
   display: none;
   
-  
 }
 
 .dropdown-menu.show {
   display: block;
   background-color: var(--Primary-Fade-100, white);
-  
 
 }
 #dropdownitem-txt{
@@ -284,12 +261,8 @@ const slots = ref([
   
   font-size:small;
   font-family: Inter, sans-serif;
-  
 
 }
-
-
-
 
 .active {
   border-left: 3px solid var(--Body-Text-Body-Color, #212529);
@@ -304,10 +277,8 @@ const slots = ref([
 
   padding: 0px 0px;
   background: var(--Primary-Fade-100, #F8F9FA);
-  
 
 }
-
 
 /**?*/
 #intern-padding {

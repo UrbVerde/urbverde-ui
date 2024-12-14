@@ -2,7 +2,6 @@
     <div class="container">
         <span class="text">CATEGORIAS</span>
 
-
         <div>
             <NavbarItem v-for="(dropdown, index) in dropdowns" :key="index" :isSelectedItem="dropdown.isSelected" :itemName="dropdown.name"
                 @update:isSelectedItem="handleSelectionChange(index)" />
@@ -32,8 +31,6 @@ const handleSelectionChange = (selectedIndex) => {
 
 </script>
 
-
-
 <style scoped>
 .container {
     padding: 0px 0px;
@@ -43,13 +40,9 @@ const handleSelectionChange = (selectedIndex) => {
     gap: 16px;
     align-self: stretch;
 
-
-
     flex: 1 0 0;
     color: black;
     background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
-
 
 }
 
@@ -70,12 +63,10 @@ const handleSelectionChange = (selectedIndex) => {
     gap: 8px;
     align-self: stretch;
 
-
 }
 
 .nav {}
 
 .li {}
-
 
 </style>

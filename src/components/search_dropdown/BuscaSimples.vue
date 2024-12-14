@@ -21,7 +21,6 @@
     </div>
     <div class="button-debug">
 
-
       <span v-if="debug">
         {{ suggestions.length }} sugestão(ões)
       </span>
@@ -165,7 +164,6 @@ export default {
 
         this.dropdown = true;
 
-
       }
       event.stopPropagation();
     },
@@ -243,7 +241,6 @@ export default {
       }
     },
 
-
     selectSuggestion(suggestion) {
       this.inputValue = suggestion.text;
       this.visibleInput = suggestion.text;
@@ -307,7 +304,6 @@ export default {
       if (!this.dropdown) {
         this.dropdown = true;
       }
-
 
     },
 
@@ -419,7 +415,6 @@ export default {
   height: 48px;
   padding: 0px 16px 0px 24px;
 
-
   /* alinhar texto digitado com sugestão */
   position: relative;
   z-index: 1;
@@ -445,7 +440,6 @@ export default {
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
-
 }
 
 .input-container-dropdown::after {}
@@ -470,7 +464,6 @@ export default {
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
 
-
   /* Body/Small/Regular */
   font-family: Inter;
   font-size: 14px;
@@ -483,7 +476,6 @@ export default {
 .input-field {
   background: var(--Gray-100, #F8F9FA);
   border: none;
-
 
 }
 
@@ -512,10 +504,7 @@ export default {
   color: #bbb;
 }
 
-
 .suggestion-text {}
-
-
 
 .button-container {
   display: flex;
@@ -571,9 +560,6 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-
-
-
 }
 
 .filter-button,
@@ -584,9 +570,6 @@ export default {
   align-items: center;
   gap: 10px;
   border: none;
-
-
-
 
   border-radius: 99px;
 
@@ -624,14 +607,12 @@ export default {
   background: var(--Gray-100, #F8F9FA);
 }
 
-
 .suggestion-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   gap: 24px;
-
 
   border: 1px solid #ccc;
   border-left: none;
@@ -665,8 +646,6 @@ export default {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-
-
 
 }
 
@@ -707,7 +686,6 @@ export default {
   /* 21px */
 
 }
-
 
 .suggestion-count {
   margin-left: 10px;

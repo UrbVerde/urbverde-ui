@@ -1,4 +1,3 @@
-
 <template>
   <div class="container">
     <div id="app">
@@ -17,7 +16,6 @@
     </p>
     <p v-else>Aguardando localização...</p>
       <SearchDropdown/>
-      
 
     </div>
     
@@ -47,7 +45,6 @@ export default {
   }
 };
 
-
 </script>
 <style>
 /* Reset CSS */
@@ -56,7 +53,6 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-
 
 html, body, #app {
   font-family: 'Times New Roman', Times, serif;
@@ -86,4 +82,3 @@ html, body, #app {
 
 }
 </style>
-

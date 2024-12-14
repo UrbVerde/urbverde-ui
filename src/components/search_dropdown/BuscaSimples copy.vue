@@ -17,7 +17,6 @@
   </div>
   <div class="button-debug">
 
-
     <span v-if="debug" class="suggestion-count"> 0">
       {{ suggestions.length }} sugestão(ões)
     </span>
@@ -146,12 +145,9 @@ export default {
 
     updateSuggestions() {
 
-
-
       //this.previousInputValue = this.inputValue;
 
       //if (this.inputValue === this.previousInputValue && this.inputValue.length === 2) return;
-
 
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
@@ -204,7 +200,6 @@ export default {
         this.highlightedText = '';
       }
     },
-
 
     selectSuggestion(suggestion) {
       this.inputValue = suggestion;
@@ -314,7 +309,6 @@ export default {
   align-self: stretch;
   position: relative;
 
-
   display: flex;
   /*flex-direction: column;*/
   align-items: flex-start;
@@ -329,10 +323,6 @@ export default {
   align-items: center;
   gap: 12px;
   flex: 1 0 0;
-
-
-
-
 
 }
 
@@ -349,7 +339,6 @@ export default {
   width: 100%;
   /* Garante que ocupem 100% da largura do container */
 
-
 }
 
 .input-field {
@@ -358,7 +347,6 @@ export default {
   border: none;
   position: relative;
   z-index: 1;
-
 
 }
 

@@ -15,7 +15,6 @@
         <DropDown v-show="true" :options="options" />
       </div>
 
-
       <div v-show="isOpen" class="bottom-area">
 
         <a class="link-button">
@@ -27,7 +26,6 @@
           <span id="txtBottom">Central de ajuda</span>
         </a>
       </div>
-
 
     </div>
   </div>
@@ -49,7 +47,6 @@ function changeSidebar() {
 
 </script>
 
-
 <style scoped>
 .sidebar {
   width: 72px;
@@ -70,7 +67,6 @@ function changeSidebar() {
   align-items: flex-start;
   flex-shrink: 0;
   align-self: stretch;
-
 
 }
 
@@ -112,8 +108,6 @@ function changeSidebar() {
   flex: 1 0 0;
   align-self: stretch;
 
-
-
 }
 
 .search-area {
@@ -142,7 +136,6 @@ function changeSidebar() {
   border-top: 1px solid rgba(0, 0, 0, 0.13);
   background: var(--White, #FFF);
 }
-
 
 .link-button {
   text-decoration: none;

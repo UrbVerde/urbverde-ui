@@ -49,6 +49,4 @@ export default {
   leading-trim: both;
   text-edge: cap;
 
-
-
 }</style>
