@@ -1,44 +1,30 @@
-# urbverde-ui
-Interface de usuário do projeto UrbVerde
+# Urbverde
 
-## Download Project
-```
-cd Desktop/
-sudo git clone https://github.com/UrbVerde/urbverde-ui/
-cd urbverde-ui/
-```
+This template should help get you started developing with Vue 3 in Vite.
 
-## Project setup
-```
-sudo npm install
-```
+## Recommended IDE Setup
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
 ```
 
-### Compiles and minifies for production
-```
-sudo npm run build
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
 ```
 
-### Run your unit tests
-```
-npm run test:unit
-```
+### Compile and Minify for Production
 
-### Run your end-to-end tests
+```sh
+npm run build
 ```
-npm run test:e2e
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Start development local server
-```
-sudo npm run dev
-```
+.
