@@ -2,58 +2,68 @@
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
-
         <LogoButton v-show="isOpen" />
-        <MinimizeButton @changed-state="changeSidebar" />
-
+        <!-- Emite o evento para alternar o estado da sidebar -->
+        <MinimizeButton @click="toggleSidebar" />
       </div>
-
       <div v-show="isOpen" class="search-area">
-        <BuscaSimples />
+        <BuscaSimples @location-updated="onLocationUpdated"/>
       </div>
       <div v-show="isOpen" class="middle-area">
-        <DropDown v-show="true" :options="options" />
+        <DropDown v-if="isSearchDone" :options="options" />
       </div>
-
       <div v-show="isOpen" class="bottom-area">
-
         <a class="link-button">
-          <img class="d-inline-block"
-               id="imgIcon"
-               src="../icons/export.svg"
-               width="20"
-               height="20" />
+          <img class="d-inline-block" id="imgIcon" src="../../assets/icons/export.svg" width="20" height="20" />
           <span id="txtBottom">Colabore com dados</span>
         </a>
         <a class="link-button">
-          <img class="d-inline-block"
-               id="imgIcon"
-               src="../icons/help.svg"
-               width="20"
-               height="20" />
+          <img class="d-inline-block" id="imgIcon" src="../../assets/icons/help.svg" width="20" height="20" />
           <span id="txtBottom">Central de ajuda</span>
         </a>
       </div>
 
+
     </div>
   </div>
+
 </template>
 
 <script setup>
-import DropDown from '@/components/side_bar/drop_down/NavbarDropdown.vue';
-import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue';
-import LogoButton from '../side_bar/buttons/LogoButton.vue';
-import { ref } from 'vue';
-import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
+import DropDown from "./drop_down/NavbarDropdown.vue"
+import MinimizeButton from './buttons/MinimizeButton.vue';
+import LogoButton from './buttons/LogoButton.vue';
+import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
 
-const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
-const isOpen = ref(true);
+import { ref, defineEmits, defineProps } from 'vue';
 
-function changeSidebar() {
-  isOpen.value = !isOpen.value;
+
+// Definindo props e emits
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    default: true
+  }
+});
+
+const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
+
+// Variável para controlar se a busca foi feita
+const isSearchDone = ref(false);
+
+const onLocationUpdated = (coordinates) => {
+  isSearchDone.value = true;
+  emit('update-coordinates', coordinates);
+};
+
+const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
+
+// Função para alternar a abertura/fechamento da sidebar
+function toggleSidebar() {
+  emit('toggle-sidebar'); // Emite o evento para o App.vue alternar o estado da sidebar
 }
-
 </script>
+
 
 <style scoped>
 .sidebar {
@@ -66,16 +76,19 @@ function changeSidebar() {
   overflow: hidden;
   background: var(--Gray-White, #FFF);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
+  z-index: 100;
 }
 
 .sidebar-open {
-  width: 320px;
+  width: 272px;  /* 280px*/
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
   align-self: stretch;
 
+  position: fixed; 
+  z-index: 100;
 }
 
 .top-area {
@@ -116,6 +129,8 @@ function changeSidebar() {
   flex: 1 0 0;
   align-self: stretch;
 
+
+
 }
 
 .search-area {
@@ -145,6 +160,7 @@ function changeSidebar() {
   background: var(--White, #FFF);
 }
 
+
 .link-button {
   text-decoration: none;
   color: var(--Primary-Color, black);
@@ -167,4 +183,6 @@ function changeSidebar() {
   font-size: small;
 
 }
+
+
 </style>

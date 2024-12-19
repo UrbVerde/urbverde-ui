@@ -1,14 +1,11 @@
-<template>
+]<template>
   <div class="search-wrapper">
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
-        <input ref="inputField"
-               v-model="inputValue"
-               @keyup="keydown"
-               @focus="handleFocus"
-               @keydown.enter="handleEnter"
-               placeholder="Digite um cidade ou estado brasileiro"
-               class="input-field" />
+        <input 
+          ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
+           placeholder="Buscar um lugar" class="input-field"
+            />
         <div v-if="highlightedText" class="suggestion-overlay">
           <span class="suggestion-text">
             <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
@@ -18,18 +15,14 @@
       </div>
       <div class="button-container">
         <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-                @click="clearInput">
-          <img id="imgIcon"
-               src="../icons/clean.svg"
-               width="16"
-               height="16" /> </button>
-        <button class="search-button" @click="clearHistory"> <img id="imgIcon"
-                                                                  src="../icons/search.svg"
-                                                                  width="16"
-                                                                  height="16" /> </button>
+          @click="clearInput">
+          <img id="imgIcon" src="../../assets/icons/clean.svg" width="16" height="16" /> </button>
+        <button class="search-button" @click="clearHistory"> <img id="imgIcon" src="../../assets/images/search.png" width="16"
+            height="16" /> </button>
       </div>
     </div>
     <div class="button-debug">
+
 
       <span v-if="debug">
         {{ suggestions.length }} sugestão(ões)
@@ -45,44 +38,57 @@
 
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
-        <span class="filter-text">Buscar por:</span>
-        <div class="filter-button-container">
+        <div class="filter-button-container"
+          ref="filterButtonContainer"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+          @touchstart="startDrag"
+          @touchmove="onDrag"
+          @touchend="endDrag"
+        >
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
-                  @click="toggleAll">Todos</button>
+            @click="toggleAll">Todos</button>
           <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
-                  @click="toggleCity">Municípios</button>
+            @click="toggleCity">Municípios</button>
           <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
-                  @click="toggleState">Estados</button>
+            @click="toggleState">Estados</button>
         </div>
       </div>
 
       <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-        <li class="suggestion-item"
-            v-for="(suggestion, index) in visibleSuggestions"
-            :key="suggestion"
-            @click="selectSuggestion(suggestion)"
-            tabindex="0"
-            @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)"
-            @keydown.down.prevent="focusNextSuggestion(index)"
-            :ref="`suggestionItem-${index}`">
-          <img :src="getImageSource(suggestion.type)" width="20" height="20" />
-          <span class="item-text">{{ suggestion.text }}</span>
-
+        <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+          @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+          @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+          :ref="`suggestionItem-${index}`">
+          {{ suggestion.text }}
         </li>
       </ul>
     </div>
+
+    <!-- Coordenadas exibidas na tela -->
+    <p v-if="coordinates">
+        Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
+      </p>   
+
   </div>
 
 </template>
 
 <script>
-import historyIcon from '../icons/history.svg';
-import locationIcon from '../icons/location.svg';
+
+
+import axios from 'axios';
 
 export default {
+  components: {
+    
+  },
   data() {
     return {
+      
+      coordinates: null, 
       inputValue: '',
       previousInputValue: '',
       visibleInput: '',
@@ -99,11 +105,16 @@ export default {
       cachedCities: [],
       searchHistory: [],
       dropdown: false,
+      showSuggestions: false, // Controla a exibição das sugestões
       debug: false,
       lastInputLength: 0,
       filterAll: true,
       filterCity: false,
       filterState: false,
+
+      isDragging: false,
+      startX: 0,
+      scrollLeft: 0,
     };
   },
   created() {
@@ -112,6 +123,11 @@ export default {
   },
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
+
+      // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
+    setTimeout(() => {
+      this.dropdown = true; // Exibe o dropdown após 2 segundos
+    }, 2500);
   },
   beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
@@ -125,7 +141,6 @@ export default {
       } else if (this.filterState) {
         return this.suggestions.filter(suggestion => suggestion.type === 'state');
       }
-
       return this.suggestions; // fallback para todos os casos
     },
     visibleSuggestions() {
@@ -137,14 +152,15 @@ export default {
       try {
         this.clearCache();
 
-        const response = await fetch(`http://localhost:8080/api/v1/address/suggestions?query=${query}`);
+        const response = await fetch(`https://urbverde.iau.usp.br/api/v1/address/suggestions?query=${query}`);
         const cities = await response.json();
 
         this.cacheCities(cities);
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
-    },
+    }, 
+
 
     focusPreviousSuggestion(index) {
       if (index > 0) {
@@ -176,8 +192,11 @@ export default {
     },
 
     handleFocus(event) {
-      if (this.dropdown !== true) {
+      if (this.dropdown != true) {
+
         this.dropdown = true;
+
+
       }
       event.stopPropagation();
     },
@@ -199,10 +218,11 @@ export default {
     },
 
     updateSuggestions() {
+
+
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
-
         return;
       }
 
@@ -264,6 +284,9 @@ export default {
       this.dropdown = false;
 
       this.locationChosen = suggestion.text;
+
+      this.fetchCoordinates(suggestion.text); // Chama a função para buscar coordenadas
+
       this.submit();
     },
 
@@ -320,6 +343,7 @@ export default {
         this.dropdown = true;
       }
 
+
     },
 
     loadSearchHistory() {
@@ -335,24 +359,24 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city === 'error' || state === 'error' || city === null ) {
+      if (international || city === "error" || state === "error") {
         defaultSuggestions = [
-          { text: 'Rio de Janeiro - RJ', type: 'city' },
-          { text: 'São Paulo', type: 'state' },
-          { text: 'Brasil', type: 'country' }
+          { text: "Rio de Janeiro - RJ", type: "city" },
+          { text: "São Paulo", type: "state" },
+          { text: "Brasil", type: "country" }
         ];
       } else {
         defaultSuggestions = [
-          { text: `${city} - ${stateAbbreviation}`, type: 'city' },
-          { text: state, type: 'state' },
-          { text: 'Brasil', type: 'country' }
+          { text: `${city} - ${stateAbbreviation}`, type: "city" },
+          { text: state, type: "state" },
+          { text: "Brasil", type: "country" }
         ];
       }
 
       const historySuggestions = this.searchHistory
         .slice(0, 2)
         .filter(item => !defaultSuggestions.some(def => def.text === item))
-        .map(item => ({ text: item, type: 'history' }));
+        .map(item => ({ text: item, type: "history" }));
 
       this.suggestions = [...historySuggestions, ...defaultSuggestions];
       this.updateHighlightedText();
@@ -373,7 +397,7 @@ export default {
       this.filterAll = true;
       this.filterCity = false;
       this.filterState = false;
-      if (this.inputValue !== '') {
+      if (this.inputValue != '') {
         this.updateHighlightedText();
       }
     },
@@ -382,7 +406,7 @@ export default {
       this.filterAll = false;
       this.filterCity = true;
       this.filterState = false;
-      if (this.inputValue !== '') {
+      if (this.inputValue != '') {
         this.updateHighlightedText();
       }
     },
@@ -391,18 +415,46 @@ export default {
       this.filterAll = false;
       this.filterCity = false;
       this.filterState = true;
-      if (this.inputValue !== '') {
+      if (this.inputValue != '') {
         this.updateHighlightedText();
       }
     },
 
-    getImageSource(type) {
-      return type === 'history' ? historyIcon : locationIcon;
-    }
+    startDrag(event) {
+      this.isDragging = true;
+      this.startX = event.pageX || event.touches[0].pageX;
+      this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
+    },
+    onDrag(event) {
+      if (!this.isDragging) return;
+      const x = event.pageX || event.touches[0].pageX;
+      const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
+      this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
+    },
+    endDrag() {
+      this.isDragging = false;
+    },
 
+    //Organizacao das coordenadas
+    async fetchCoordinates(address) {
+      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
+      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
+    try {
+      const response = await axios.get(endpoint);
+      if (response.data && response.data.results.length > 0) {
+        const location = response.data.results[0].geometry;
+        this.$emit('location-updated', { lat: location.lat, lng: location.lng });
+      } else {
+        console.error('Nenhuma coordenada encontrada.');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar coordenadas:', error);
+    }
+    },
   }
 };
 </script>
+
 
 <style scoped>
 #imgIcon {
@@ -430,6 +482,7 @@ export default {
   height: 48px;
   padding: 0px 16px 0px 24px;
 
+
   /* alinhar texto digitado com sugestão */
   position: relative;
   z-index: 1;
@@ -455,9 +508,8 @@ export default {
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
-}
 
-.input-container-dropdown::after {}
+}
 
 .input-field,
 .suggestion-overlay {
@@ -479,8 +531,8 @@ export default {
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
 
+
   /* Body/Small/Regular */
-  font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -490,7 +542,8 @@ export default {
 
 .input-field {
   background: var(--Gray-100, #F8F9FA);
-  border: none;
+  border: transparent;
+
 
 }
 
@@ -498,6 +551,8 @@ export default {
   position: relative;
   flex: 1;
   overflow: hidden;
+  border: none;
+
 }
 
 .suggestion-overlay {
@@ -519,7 +574,9 @@ export default {
   color: #bbb;
 }
 
-.suggestion-text {}
+
+
+
 
 .button-container {
   display: flex;
@@ -539,35 +596,12 @@ export default {
   border: none;
 }
 
-.clean-button {}
 
 .clean-button-hidden {
   display: none;
 
 }
 
-.search-button {}
-
-.filter-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  align-self: stretch;
-
-  background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
-  /*Typography*/
-  color: var(--Theme-Secondary, #6C757D);
-
-  /* Body/Small/Regular */
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  /* 21px */
-}
 
 .filter-button-container {
   display: flex;
@@ -575,7 +609,11 @@ export default {
   gap: 8px;
   align-self: stretch;
 
+  overflow: hidden; 
+  white-space: nowrap;
+  cursor: grab; 
 }
+
 
 .filter-button,
 .filter-button-active {
@@ -586,10 +624,12 @@ export default {
   gap: 10px;
   border: none;
 
+
+  flex-shrink: 0; 
+
   border-radius: 99px;
 
   /* Body/Small/Regular */
-  font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -619,8 +659,9 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-  background: var(--Gray-100, #F8F9FA);
+  background: var(--Gray-100, #FFFFFF);
 }
+
 
 .suggestion-container {
   display: flex;
@@ -629,21 +670,23 @@ export default {
   align-self: stretch;
   gap: 24px;
 
-  border: 1px solid #ccc;
+
+  border: 1px solid #ebebeb;
   border-left: none;
   border-right: none;
   border-bottom: none;
 
   padding: 16px 16px 24px 16px;
-  border-radius: 0px 0px 8px 8px;
+  border-radius: 5px 5px 8px 8px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
   position: absolute;
+
   top: 100%;
   left: 0;
   right: 0;
   z-index: 10;
-  background: var(--Gray-100, #F8F9FA);
+  background: var(--Gray-100, #ffffff);
 
 }
 
@@ -656,51 +699,26 @@ export default {
   padding: 0;
   margin: 0;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  align-self: stretch;
+  width: 100%; /* O item ocupará a largura total do contêiner */
+
 
 }
 
-.suggestions-list li {}
+.suggestions-list li {
+  padding: 5px;
+  cursor: pointer;
+  width: 100%; /* O item ocupará a largura total do contêiner */
+  box-sizing: border-box; /* Inclui padding e bordas no tamanho total do elemento */
+  border-radius: 5px;
+}
 
 .suggestions-list li:hover {
   background-color: #f0f0f0;
+  width: 100%; /* Garante que o hover também ocupe 100% da largura */
+  box-sizing: border-box;
 }
 
-.suggestion-item {
-  display: flex;
-  height: 32px;
-  padding: 0px 8px;
-  align-items: center;
-  gap: 10px;
-  align-self: stretch;
-  border-radius: 4px;
 
-  cursor: pointer;
-
-}
-
-.item-text {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-
-  overflow: hidden;
-  color: var(--Body-Text-Body-Color, #212529);
-  text-overflow: ellipsis;
-
-  /* Body/Small/Regular */
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  /* 21px */
-
-}
 
 .suggestion-count {
   margin-left: 10px;
