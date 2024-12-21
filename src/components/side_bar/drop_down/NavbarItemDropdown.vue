@@ -42,9 +42,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
-import { defineProps, defineEmits } from 'vue';
-import { Dropdown } from 'bootstrap';
+import { defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed } from 'vue';
 
 //Dropdown.Default.autoClose = false;
 
