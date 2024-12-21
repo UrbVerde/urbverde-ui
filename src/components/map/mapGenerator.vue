@@ -4,7 +4,6 @@
 
 <script>
 import maplibregl from 'maplibre-gl';
-import { watch } from 'vue';
 
 export default {
   props: {
