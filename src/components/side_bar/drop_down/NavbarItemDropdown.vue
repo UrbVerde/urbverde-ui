@@ -42,14 +42,17 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed } from 'vue';
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
+import { defineProps, defineEmits } from 'vue';
+import { Dropdown } from 'bootstrap';
+
 //Dropdown.Default.autoClose = false;
 
-import collapseIcon from '../../../components/icons/collapse.svg';
-import expandIcon from '../../../components/icons/expand.svg';
-import sun from '../../../components/icons/sunBehindeCloud.svg';
-import tree from '../../../components/icons/pineTree.svg';
-import bike from '../../../components/icons/bike.svg';
+import collapseIcon from '../../../assets/icons/collapse.svg';
+import expandIcon from '../../../assets/icons/expand.svg';
+import sun from '../../../assets/icons/sunBehindeCloud.svg';
+import tree from '../../../assets/icons/pineTree.svg';
+import bike from '../../../assets/icons/bike.svg';
 
 const txtBadge = ref('');
 
