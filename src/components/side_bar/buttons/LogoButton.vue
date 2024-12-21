@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="logo-button">
-      <img src="../../../assets/logo-white.png" alt="Logo" class="logo" />
+      <img src="../../../assets/images/logo-white.png" alt="Logo" class="logo" />
       <span class="text">URBVERDE</span>
     </button>
   </div>
@@ -16,18 +16,18 @@ export default {
 <style scoped>
 .logo-button {
 
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  width: 232px;
-  /* Definindo a largura do botão */
-  height: 56px;
-  /* Definindo a altura do botão */
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  /* Espaçamento entre a imagem e o texto */
+background: none;
+border: none;
+padding: 0;
+cursor: pointer;
+width: 190px;
+/* Definindo a largura do botão */
+height: 56px;
+/* Definindo a altura do botão */
+display: flex;
+align-items: center;
+gap: 8px;
+/* Espaçamento entre a imagem e o texto */
 }
 
 .logo {
