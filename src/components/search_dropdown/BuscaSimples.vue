@@ -2,10 +2,15 @@
   <div class="search-wrapper">
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
-        <input 
-          ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-           placeholder="Buscar um lugar" class="input-field"
-            />
+        <input
+          ref="inputField"
+          v-model="inputValue"
+          @keyup="keydown"
+          @focus="handleFocus"
+          @keydown.enter="handleEnter"
+          placeholder="Buscar um lugar"
+          class="input-field"
+        />
         <div v-if="highlightedText" class="suggestion-overlay">
           <span class="suggestion-text">
             <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
@@ -15,14 +20,18 @@
       </div>
       <div class="button-container">
         <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-          @click="clearInput">
-          <img id="imgIcon" src="../../assets/icons/clean.svg" width="16" height="16" /> </button>
-        <button class="search-button" @click="clearHistory"> <img id="imgIcon" src="../../assets/images/search.png" width="16"
-            height="16" /> </button>
+                @click="clearInput">
+          <img id="imgIcon"
+               src="../../assets/icons/clean.svg"
+               width="16"
+               height="16" /> </button>
+        <button class="search-button" @click="clearHistory"> <img id="imgIcon"
+                                                                  src="../../assets/images/search.png"
+                                                                  width="16"
+                                                                  height="16" /> </button>
       </div>
     </div>
     <div class="button-debug">
-
 
       <span v-if="debug">
         {{ suggestions.length }} sugestão(ões)
@@ -39,29 +48,34 @@
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
         <div class="filter-button-container"
-          ref="filterButtonContainer"
-          @mousedown="startDrag"
-          @mousemove="onDrag"
-          @mouseup="endDrag"
-          @mouseleave="endDrag"
-          @touchstart="startDrag"
-          @touchmove="onDrag"
-          @touchend="endDrag"
+             ref="filterButtonContainer"
+             @mousedown="startDrag"
+             @mousemove="onDrag"
+             @mouseup="endDrag"
+             @mouseleave="endDrag"
+             @touchstart="startDrag"
+             @touchmove="onDrag"
+             @touchend="endDrag"
         >
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
-            @click="toggleAll">Todos</button>
+                  @click="toggleAll">Todos</button>
           <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
-            @click="toggleCity">Municípios</button>
+                  @click="toggleCity">Municípios</button>
           <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
-            @click="toggleState">Estados</button>
+                  @click="toggleState">Estados</button>
         </div>
       </div>
 
       <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-        <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-          @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-          @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-          :ref="`suggestionItem-${index}`">
+        <li class="suggestion-item"
+            v-for="(suggestion, index) in visibleSuggestions"
+            :key="suggestion"
+            @click="selectSuggestion(suggestion)"
+            tabindex="0"
+            @keydown.enter="selectSuggestion(suggestion)"
+            @keydown.up.prevent="focusPreviousSuggestion(index)"
+            @keydown.down.prevent="focusNextSuggestion(index)"
+            :ref="`suggestionItem-${index}`">
           {{ suggestion.text }}
         </li>
       </ul>
@@ -69,8 +83,8 @@
 
     <!-- Coordenadas exibidas na tela -->
     <p v-if="coordinates">
-        Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
-      </p>   
+      Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
+    </p>
 
   </div>
 
@@ -78,17 +92,16 @@
 
 <script>
 
-
 import axios from 'axios';
 
 export default {
   components: {
-    
+
   },
   data() {
     return {
-      
-      coordinates: null, 
+
+      coordinates: null,
       inputValue: '',
       previousInputValue: '',
       visibleInput: '',
@@ -124,7 +137,7 @@ export default {
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
 
-      // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
+    // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
     setTimeout(() => {
       this.dropdown = true; // Exibe o dropdown após 2 segundos
     }, 2500);
@@ -141,6 +154,7 @@ export default {
       } else if (this.filterState) {
         return this.suggestions.filter(suggestion => suggestion.type === 'state');
       }
+
       return this.suggestions; // fallback para todos os casos
     },
     visibleSuggestions() {
@@ -159,8 +173,7 @@ export default {
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
-    }, 
-
+    },
 
     focusPreviousSuggestion(index) {
       if (index > 0) {
@@ -196,7 +209,6 @@ export default {
 
         this.dropdown = true;
 
-
       }
       event.stopPropagation();
     },
@@ -219,10 +231,10 @@ export default {
 
     updateSuggestions() {
 
-
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
+
         return;
       }
 
@@ -343,7 +355,6 @@ export default {
         this.dropdown = true;
       }
 
-
     },
 
     loadSearchHistory() {
@@ -359,24 +370,24 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city === "error" || state === "error") {
+      if (international || city === 'error' || state === 'error') {
         defaultSuggestions = [
-          { text: "Rio de Janeiro - RJ", type: "city" },
-          { text: "São Paulo", type: "state" },
-          { text: "Brasil", type: "country" }
+          { text: 'Rio de Janeiro - RJ', type: 'city' },
+          { text: 'São Paulo', type: 'state' },
+          { text: 'Brasil', type: 'country' }
         ];
       } else {
         defaultSuggestions = [
-          { text: `${city} - ${stateAbbreviation}`, type: "city" },
-          { text: state, type: "state" },
-          { text: "Brasil", type: "country" }
+          { text: `${city} - ${stateAbbreviation}`, type: 'city' },
+          { text: state, type: 'state' },
+          { text: 'Brasil', type: 'country' }
         ];
       }
 
       const historySuggestions = this.searchHistory
         .slice(0, 2)
         .filter(item => !defaultSuggestions.some(def => def.text === item))
-        .map(item => ({ text: item, type: "history" }));
+        .map(item => ({ text: item, type: 'history' }));
 
       this.suggestions = [...historySuggestions, ...defaultSuggestions];
       this.updateHighlightedText();
@@ -426,7 +437,7 @@ export default {
       this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
     },
     onDrag(event) {
-      if (!this.isDragging) return;
+      if (!this.isDragging) {return;}
       const x = event.pageX || event.touches[0].pageX;
       const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
       this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
@@ -439,22 +450,21 @@ export default {
     async fetchCoordinates(address) {
       const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
       const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
-    try {
-      const response = await axios.get(endpoint);
-      if (response.data && response.data.results.length > 0) {
-        const location = response.data.results[0].geometry;
-        this.$emit('location-updated', { lat: location.lat, lng: location.lng });
-      } else {
-        console.error('Nenhuma coordenada encontrada.');
+      try {
+        const response = await axios.get(endpoint);
+        if (response.data && response.data.results.length > 0) {
+          const location = response.data.results[0].geometry;
+          this.$emit('location-updated', { lat: location.lat, lng: location.lng });
+        } else {
+          console.error('Nenhuma coordenada encontrada.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar coordenadas:', error);
       }
-    } catch (error) {
-      console.error('Erro ao buscar coordenadas:', error);
-    }
     },
   }
 };
 </script>
-
 
 <style scoped>
 #imgIcon {
@@ -482,7 +492,6 @@ export default {
   height: 48px;
   padding: 0px 16px 0px 24px;
 
-
   /* alinhar texto digitado com sugestão */
   position: relative;
   z-index: 1;
@@ -508,7 +517,6 @@ export default {
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
-
 }
 
 .input-field,
@@ -531,7 +539,6 @@ export default {
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
 
-
   /* Body/Small/Regular */
   font-size: 14px;
   font-style: normal;
@@ -543,7 +550,6 @@ export default {
 .input-field {
   background: var(--Gray-100, #F8F9FA);
   border: transparent;
-
 
 }
 
@@ -574,10 +580,6 @@ export default {
   color: #bbb;
 }
 
-
-
-
-
 .button-container {
   display: flex;
   flex-direction: row;
@@ -596,12 +598,10 @@ export default {
   border: none;
 }
 
-
 .clean-button-hidden {
   display: none;
 
 }
-
 
 .filter-button-container {
   display: flex;
@@ -609,11 +609,10 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-  overflow: hidden; 
+  overflow: hidden;
   white-space: nowrap;
-  cursor: grab; 
+  cursor: grab;
 }
-
 
 .filter-button,
 .filter-button-active {
@@ -624,8 +623,7 @@ export default {
   gap: 10px;
   border: none;
 
-
-  flex-shrink: 0; 
+  flex-shrink: 0;
 
   border-radius: 99px;
 
@@ -662,14 +660,12 @@ export default {
   background: var(--Gray-100, #FFFFFF);
 }
 
-
 .suggestion-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   gap: 24px;
-
 
   border: 1px solid #ebebeb;
   border-left: none;
@@ -701,7 +697,6 @@ export default {
 
   width: 100%; /* O item ocupará a largura total do contêiner */
 
-
 }
 
 .suggestions-list li {
@@ -717,8 +712,6 @@ export default {
   width: 100%; /* Garante que o hover também ocupe 100% da largura */
   box-sizing: border-box;
 }
-
-
 
 .suggestion-count {
   margin-left: 10px;

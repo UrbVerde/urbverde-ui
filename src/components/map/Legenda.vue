@@ -1,101 +1,101 @@
 <template>
-    <div class="legend-wrapper">
-      <!-- Cabeçalho com o botão de expandir/recolher -->
-      <div class="legend-header" @click="toggleLegend">
-        <span>Legenda</span>
-        <img :src="wrapperIcon" :class="{'icon-open': isOpen, 'icon-closed': !isOpen}" alt="toggle icon" />
-      </div>
-  
-      <!-- Corpo da legenda que aparece ao abrir -->
-      <div v-if="isOpen" class="legend-body">
-        <!-- Seção do Ano -->
-        <div class="section-container">
-            <div class="year-section">
-            <div class="year-label">
-                <img src="@/assets/icons/calendar.svg" alt="Calendar icon" />
-                <span>Ano</span>
-            </div>
-            <select v-model="selectedYear" class="form-select">
-                <option v-for="year in availableYears" :key="year" :value="year">
-                {{ year }}
-                </option>
-            </select>
-            </div>
-        </div>
-        
-        <span>CAMADAS</span>
-        <!-- Seção de Camadas -->
-        <div class="section-container">
-          <div class="layers-section">
-            
-              <img src="@/assets/icons/layer.svg" alt="Layer icon" />
-              <p>Contornos e traços</p>
-          </div>
-          <div class="layer-details">
-            <p class="layer-sub"><span class="legend-line black"></span>Setores censitários</p>
-            <p class="layer-sub"><span class="legend-line blue"></span>Municípios</p>
+  <div class="legend-wrapper">
+    <!-- Cabeçalho com o botão de expandir/recolher -->
+    <div class="legend-header" @click="toggleLegend">
+      <span>Legenda</span>
+      <img :src="wrapperIcon" :class="{'icon-open': isOpen, 'icon-closed': !isOpen}" alt="toggle icon" />
+    </div>
 
-           </div>
-          
-        </div>
-  
-        <!-- Seção de Temperatura -->
-        <div class="section-container">
-          <div class="temperatura-header">
-              <img src="@/assets/icons/temperatura.svg" alt="Temperature icon" />
-              <p>Temperatura de Superfície</p>
+    <!-- Corpo da legenda que aparece ao abrir -->
+    <div v-if="isOpen" class="legend-body">
+      <!-- Seção do Ano -->
+      <div class="section-container">
+        <div class="year-section">
+          <div class="year-label">
+            <img src="@/assets/icons/calendar.svg" alt="Calendar icon" />
+            <span>Ano</span>
           </div>
-          
-          <div class="temperature-scale">
-            <div class="temperature-bar"></div>
-            <span>-5ºC</span>
-            <span>0ºC</span>
-            <span>+5ºC</span>
-            </div>
-          </div>
-        <!-- Botão de Comparar -->
-         <div class="compare">
-            <button>Comparar camada</button>
-         </div>  
-        <!-- Botão de Baixar -->
-        <div class="section-container download-button">
-          <button @click="downloadData">
-            Baixar
-          </button>
+          <select v-model="selectedYear" class="form-select">
+            <option v-for="year in availableYears" :key="year" :value="year">
+              {{ year }}
+            </option>
+          </select>
         </div>
+      </div>
+
+      <span>CAMADAS</span>
+      <!-- Seção de Camadas -->
+      <div class="section-container">
+        <div class="layers-section">
+
+          <img src="@/assets/icons/layer.svg" alt="Layer icon" />
+          <p>Contornos e traços</p>
+        </div>
+        <div class="layer-details">
+          <p class="layer-sub"><span class="legend-line black"></span>Setores censitários</p>
+          <p class="layer-sub"><span class="legend-line blue"></span>Municípios</p>
+
+        </div>
+
+      </div>
+
+      <!-- Seção de Temperatura -->
+      <div class="section-container">
+        <div class="temperatura-header">
+          <img src="@/assets/icons/temperatura.svg" alt="Temperature icon" />
+          <p>Temperatura de Superfície</p>
+        </div>
+
+        <div class="temperature-scale">
+          <div class="temperature-bar"></div>
+          <span>-5ºC</span>
+          <span>0ºC</span>
+          <span>+5ºC</span>
+        </div>
+      </div>
+      <!-- Botão de Comparar -->
+      <div class="compare">
+        <button>Comparar camada</button>
+      </div>
+      <!-- Botão de Baixar -->
+      <div class="section-container download-button">
+        <button @click="downloadData">
+          Baixar
+        </button>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import wrapperIcon from '../../assets/icons/wrapper.svg'; 
-  
-  export default {
-    name: "Legend",
-    data() {
-      return {
-        isOpen: false,
-        selectedYear: 2021,
-        availableYears: [2021, 2020, 2019, 2018], // Exemplo de anos disponíveis
-      };
+  </div>
+</template>
+
+<script>
+import wrapperIcon from '../../assets/icons/wrapper.svg';
+
+export default {
+  name: 'Legend',
+  data() {
+    return {
+      isOpen: false,
+      selectedYear: 2021,
+      availableYears: [2021, 2020, 2019, 2018], // Exemplo de anos disponíveis
+    };
+  },
+  methods: {
+    toggleLegend() {
+      this.isOpen = !this.isOpen;
     },
-    methods: {
-      toggleLegend() {
-        this.isOpen = !this.isOpen;
-      },
-      downloadData() {
-        // Função que será chamada ao clicar no botão "Baixar"
-        console.log("Baixando os dados...");
-      },
+    downloadData() {
+      // Função que será chamada ao clicar no botão "Baixar"
+      console.log('Baixando os dados...');
     },
-    computed: {
-      wrapperIcon() {
-        return wrapperIcon;
-      },
+  },
+  computed: {
+    wrapperIcon() {
+      return wrapperIcon;
     },
-  };
-  </script>
-  
+  },
+};
+</script>
+
   <style scoped>
   .legend-wrapper {
     border: 1px solid #ccc;
@@ -104,7 +104,7 @@
     width: 296px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   .legend-header {
     display: flex;
     justify-content: space-between;
@@ -114,7 +114,7 @@
     cursor: pointer;
     box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.13) inset;
   }
-  
+
   .legend-header span {
       margin-left: 16px;
       font-weight: bold;
@@ -125,20 +125,20 @@
     transition: transform 0.4s ease;
     margin-right: 16px;
   }
-  
+
   .icon-open {
     transform: rotate(180deg); /* Rotaciona o ícone quando a legenda está aberta */
   }
-  
+
   .icon-closed {
     transform: rotate(0deg); /* Ícone na posição padrão quando fechada */
   }
-  
+
   .legend-body {
     padding: 10px;
     background-color: #F8F9FA;
   }
-  
+
   /* Estilo para a seção do ano */
   .section-container {
     background-color: #FFF;
@@ -174,7 +174,6 @@ select {
   background-position: right 10px center;
   cursor: pointer;
 }
-
 
 .layers-section{
  display: flex;
@@ -233,14 +232,12 @@ select {
   margin: 0 10px;
 }
 
-
-.compare-button, 
+.compare-button,
 .download-button {
   text-align: center;
   width: 80%;
 
 }
-
 
 .compare {
   display: flex;
@@ -281,4 +278,3 @@ select {
   padding: 10px 16px;
 }
   </style>
-  

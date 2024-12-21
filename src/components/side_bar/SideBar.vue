@@ -14,15 +14,22 @@
       </div>
       <div v-show="isOpen" class="bottom-area">
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../../assets/icons/export.svg" width="20" height="20" />
+          <img class="d-inline-block"
+               id="imgIcon"
+               src="../../assets/icons/export.svg"
+               width="20"
+               height="20" />
           <span id="txtBottom">Colabore com dados</span>
         </a>
         <a class="link-button">
-          <img class="d-inline-block" id="imgIcon" src="../../assets/icons/help.svg" width="20" height="20" />
+          <img class="d-inline-block"
+               id="imgIcon"
+               src="../../assets/icons/help.svg"
+               width="20"
+               height="20" />
           <span id="txtBottom">Central de ajuda</span>
         </a>
       </div>
-
 
     </div>
   </div>
@@ -30,13 +37,12 @@
 </template>
 
 <script setup>
-import DropDown from "./drop_down/NavbarDropdown.vue"
+import DropDown from './drop_down/NavbarDropdown.vue';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
-import BuscaSimples from "../search_dropdown/BuscaSimples.vue";
+import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 
 import { ref, defineEmits, defineProps } from 'vue';
-
 
 // Definindo props e emits
 const props = defineProps({
@@ -56,14 +62,13 @@ const onLocationUpdated = (coordinates) => {
   emit('update-coordinates', coordinates);
 };
 
-const options = ref(["Clima", "Vegetação", "Parques e Praças"]);
+const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
 
 // Função para alternar a abertura/fechamento da sidebar
 function toggleSidebar() {
   emit('toggle-sidebar'); // Emite o evento para o App.vue alternar o estado da sidebar
 }
 </script>
-
 
 <style scoped>
 .sidebar {
@@ -87,7 +92,7 @@ function toggleSidebar() {
   flex-shrink: 0;
   align-self: stretch;
 
-  position: fixed; 
+  position: fixed;
   z-index: 100;
 }
 
@@ -129,8 +134,6 @@ function toggleSidebar() {
   flex: 1 0 0;
   align-self: stretch;
 
-
-
 }
 
 .search-area {
@@ -160,7 +163,6 @@ function toggleSidebar() {
   background: var(--White, #FFF);
 }
 
-
 .link-button {
   text-decoration: none;
   color: var(--Primary-Color, black);
@@ -183,6 +185,5 @@ function toggleSidebar() {
   font-size: small;
 
 }
-
 
 </style>

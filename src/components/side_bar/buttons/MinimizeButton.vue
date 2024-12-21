@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import minimizeImage from '@/assets//icons/minimize.svg';
+import minimizeImage from '@/assets/icons/minimize.svg';
 import maximizeImage from '@/assets/icons/maximize.svg';
 
 export default {
