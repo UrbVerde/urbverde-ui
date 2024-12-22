@@ -36,7 +36,7 @@ import Navbar from '.././components/navbar/Navbar.vue';
 import MapBox from '.././components/map/mapGenerator.vue';
 import Legenda from '.././components/map/Legenda.vue';
 
-export default {
+export default { 
   components: {
     Sidebar,
     MapBox,

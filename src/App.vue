@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Plataforma from './pages/Platform.vue';
+import Plataforma from './pages/platform.vue';
 
 export default {
   components: {
