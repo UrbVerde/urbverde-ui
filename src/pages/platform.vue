@@ -40,7 +40,7 @@ import MapBox from '../components/map/mapGenerator.vue'
 import Legenda from '../components/map/Legenda.vue'
 
 export default {
-  name: 'PlatformPage',
+  name: 'Plataforma',
   components: {
     Sidebar,
     MapBox,
