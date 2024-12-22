@@ -31,10 +31,10 @@
 
 <script>
 import { ref } from 'vue';
-import Sidebar from '.././components/side_bar/SideBar.vue';
-import Navbar from '.././components/navbar/Navbar.vue';
-import MapBox from '.././components/map/mapGenerator.vue';
-import Legenda from '.././components/map/Legenda.vue';
+import Sidebar from '../components/side_bar/SideBar.vue';
+import Navbar from '../components/navbar/Navbar.vue';
+import MapBox from '../components/map/mapGenerator.vue';
+import Legenda from '../components/map/Legenda.vue';
 
 export default { 
   components: {
@@ -85,46 +85,45 @@ export default {
 };
 </script>
 
-  <style>
-  .global {
-    background-color: #F8F9FACC;
-    width: 100%;
-    height: 100vh;
-  }
+<style>
+.global {
+  background-color: #F8F9FACC;
+  width: 100%;
+  height: 100vh;
+}
 
-  .map-placeholder{
-    display: flex;
-    justify-self: center;
-    transform: translate(-10%, 160%);
-    width: 280px;
-    height: 175px;
-    margin-left: 252px;
-  }
+.map-placeholder {
+  display: flex;
+  justify-self: center;
+  transform: translate(-10%, 160%);
+  width: 280px;
+  height: 175px;
+  margin-left: 252px;
+}
 
-  .painel {
-    transition: 0.6s ease;
-  }
-  .painel-collapsed {
-    margin-left: -100px;
-    transition: 0.6s ease;
-  }
+.painel {
+  transition: 0.6s ease;
+}
+.painel-collapsed {
+  margin-left: -100px;
+  transition: 0.6s ease;
+}
 
-  .legend {
-    position: absolute;
-    top: 170px;
-    right: 60px;
-    }
+.legend {
+  position: absolute;
+  top: 170px;
+  right: 60px;
+}
 
-  .box {
-    display: flex;
-    gap: 80px;
-    margin-top: 110px;
-    justify-content: center;
-  }
-  .static{
-    padding: 26px 30px;
-    background-color: rgb(176, 171, 171);
-    border-radius: 16px;
-  }
-
-  </style>
+.box {
+  display: flex;
+  gap: 80px;
+  margin-top: 110px;
+  justify-content: center;
+}
+.static {
+  padding: 26px 30px;
+  background-color: rgb(176, 171, 171);
+  border-radius: 16px;
+}
+</style>
