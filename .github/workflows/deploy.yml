@@ -1,4 +1,4 @@
-# sphere-api-stack/urbverde-ui/.github/workflows/deploy.yml
+# urbverde-ui/.github/workflows/deploy.yml
 name: Deploy UI to Staging
 
 on:
@@ -13,8 +13,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-      with:
-        ref: dev  # Explicitly checkout the dev branch
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -24,10 +22,17 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:latest
+        # Create a timestamp tag
+        TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+        # Build with both latest and timestamped tags
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:latest -t ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:$TIMESTAMP .
+        # Push both tags
+        docker push ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:$TIMESTAMP
+        # Save the timestamp for the deployment step
+        echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
         
-    - name: Deploy to Staging Server
+    - name: Deploy to Production Server
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.PRODUCTION_HOST }}
@@ -37,22 +42,25 @@ jobs:
         script: |
           cd /home/${{ secrets.PRODUCTION_USER }}/sphere-api-stack
           
-          # If the 'urbverde-ui' directory does not exist, clone the repository
+          # Save the previous version tag before updating
+          if [ -f "urbverde-ui-version.txt" ]; then
+            PREV_VERSION=$(cat urbverde-ui-version.txt)
+            echo "Previous version was: $PREV_VERSION"
+          fi
+          
+          # Store the new version
+          echo "${{ env.TIMESTAMP }}" > urbverde-ui-version.txt
+          
+          # Clone or update repository
           if [ ! -d "urbverde-ui" ]; then
-            echo "Cloning urbverde-ui repository..."
-            git clone -b dev https://${{ secrets.REPO_ACCESS_TOKEN }}@github.com/UrbVerde/urbverde-ui.git urbverde-ui
-            if [ $? -ne 0 ]; then
-              echo "Failed to clone urbverde-ui repository. Exiting."
-              exit 1
-            fi
+            git clone https://${{ secrets.REPO_ACCESS_TOKEN }}@github.com/UrbVerde/urbverde-ui.git urbverde-ui
           else
-            echo "urbverde-ui already exists. Pulling latest changes from dev branch..."
             cd urbverde-ui
             git fetch origin dev
             git reset --hard origin/dev
             cd ..
           fi
 
-          # Pull the latest dev image and restart the UI service
+          # Deploy new version
           docker-compose pull urbverde-ui
-          docker-compose up -d --force-recreate --no-deps urbverde-ui
+          docker-compose up -d --no-deps --build urbverde-ui
