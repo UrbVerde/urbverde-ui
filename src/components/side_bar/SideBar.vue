@@ -42,15 +42,7 @@ import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 
-import { ref, defineEmits, defineProps } from 'vue';
-
-// Definindo props e emits
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    default: true
-  }
-});
+import { ref, defineEmits } from 'vue';
 
 const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
 

@@ -35,6 +35,7 @@
 
 <script>
 export default {
+  name: 'AppNavbar',
   data() {
     return {
       tabs: ['Mapa', 'Estatística', 'Ranking'],

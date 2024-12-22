@@ -205,7 +205,7 @@ export default {
     },
 
     handleFocus(event) {
-      if (this.dropdown != true) {
+      if (this.dropdown !== true) {
 
         this.dropdown = true;
 
@@ -408,7 +408,7 @@ export default {
       this.filterAll = true;
       this.filterCity = false;
       this.filterState = false;
-      if (this.inputValue != '') {
+      if (this.inputValue !== '') {
         this.updateHighlightedText();
       }
     },
@@ -417,7 +417,7 @@ export default {
       this.filterAll = false;
       this.filterCity = true;
       this.filterState = false;
-      if (this.inputValue != '') {
+      if (this.inputValue !== '') {
         this.updateHighlightedText();
       }
     },
@@ -426,7 +426,7 @@ export default {
       this.filterAll = false;
       this.filterCity = false;
       this.filterState = true;
-      if (this.inputValue != '') {
+      if (this.inputValue !== '') {
         this.updateHighlightedText();
       }
     },

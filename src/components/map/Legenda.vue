@@ -71,7 +71,7 @@
 import wrapperIcon from '../../assets/icons/wrapper.svg';
 
 export default {
-  name: 'Legend',
+  name: 'MapLegend',
   data() {
     return {
       isOpen: false,
