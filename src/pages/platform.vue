@@ -1,25 +1,25 @@
 <template>
   <div class="global">
-    <Sidebar 
+    <Sidebar
       :is-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar"
-      @update-coordinates="updateCoordinates" 
+      @update-coordinates="updateCoordinates"
     />
     <div v-if="!coordinates.lat || !coordinates.lng">
-      <img 
-        src="../assets/images/setLocation.png" 
-        alt="Imagem de espera" 
+      <img
+        src="../assets/images/setLocation.png"
+        alt="Imagem de espera"
         class="map-placeholder"
       >
     </div>
-    <div 
+    <div
       :class="['painel', { 'painel-collapsed': !isSidebarOpen }]"
       v-else
     >
-      <Navbar 
-        :class="{ 'navbar-collapsed': !isSidebarOpen }"  
-        @scroll-to-stats="scrollToStats" 
-        @scroll-to-map="scrollToMap" 
+      <Navbar
+        :class="{ 'navbar-collapsed': !isSidebarOpen }"
+        @scroll-to-stats="scrollToStats"
+        @scroll-to-map="scrollToMap"
       />
       <div ref="mapSection">
         <MapBox :coordinates="coordinates" />
@@ -33,14 +33,14 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import Sidebar from '../components/side_bar/SideBar.vue'
-import Navbar from '../components/navbar/Navbar.vue'
-import MapBox from '../components/map/mapGenerator.vue'
-import Legenda from '../components/map/Legenda.vue'
+import { ref } from 'vue';
+import Sidebar from '../components/side_bar/SideBar.vue';
+import Navbar from '../components/navbar/Navbar.vue';
+import MapBox from '../components/map/mapGenerator.vue';
+import Legenda from '../components/map/Legenda.vue';
 
 export default {
-  name: 'Plataforma',
+  name: 'PlatformPage',
   components: {
     Sidebar,
     MapBox,
@@ -48,27 +48,27 @@ export default {
     Legenda
   },
   setup() {
-    const coordinates = ref({ lat: null, lng: null })
-    const statsSection = ref(null)
-    const isSidebarOpen = ref(true)
+    const coordinates = ref({ lat: null, lng: null });
+    const statsSection = ref(null);
+    const isSidebarOpen = ref(true);
 
     const toggleSidebar = () => {
-      isSidebarOpen.value = !isSidebarOpen.value
-    }
+      isSidebarOpen.value = !isSidebarOpen.value;
+    };
 
     const updateCoordinates = (newCoordinates) => {
-      coordinates.value = newCoordinates
-    }
+      coordinates.value = newCoordinates;
+    };
 
     const scrollToStats = () => {
       if (statsSection.value) {
-        statsSection.value.scrollIntoView({ behavior: 'smooth' })
+        statsSection.value.scrollIntoView({ behavior: 'smooth' });
       }
-    }
+    };
 
     const scrollToMap = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return {
       coordinates,
@@ -78,9 +78,9 @@ export default {
       statsSection,
       isSidebarOpen,
       toggleSidebar
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
