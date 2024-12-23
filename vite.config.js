@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  base: '/staging/',  // Set base URL for development
+  base: '/dev/',  // Set base URL for development
   plugins: [
     vue(),
   ],

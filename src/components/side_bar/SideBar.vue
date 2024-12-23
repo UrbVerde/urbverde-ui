@@ -54,12 +54,16 @@ const onLocationUpdated = (coordinates) => {
   emit('update-coordinates', coordinates);
 };
 
+// to-do: axios request from the api, what categories and layers exist for that specific cd_mun
 const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
 
-// Função para alternar a abertura/fechamento da sidebar
+const isOpen = ref(true);
+
 function toggleSidebar() {
-  emit('toggle-sidebar'); // Emite o evento para o App.vue alternar o estado da sidebar
+  isOpen.value = !isOpen.value;
+  localStorage.setItem('sidebarOpen', isOpen.value);
 }
+
 </script>
 
 <style scoped>
