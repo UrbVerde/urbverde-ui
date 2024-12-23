@@ -1,3 +1,4 @@
+<!-- src\components\side_bar\SideBar.vue -->
 <template>
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
@@ -37,32 +38,34 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 import DropDown from './drop_down/NavbarDropdown.vue';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 
-import { ref, defineEmits } from 'vue';
-
+// defineEmits é uma macro: não precisa de import!
 const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
 
 // Variável para controlar se a busca foi feita
 const isSearchDone = ref(false);
 
-const onLocationUpdated = (coordinates) => {
-  isSearchDone.value = true;
-  emit('update-coordinates', coordinates);
-};
+// Variável para controlar se a sidebar fica aberta
+const isOpen = ref(true);
 
 // to-do: axios request from the api, what categories and layers exist for that specific cd_mun
 const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
 
-const isOpen = ref(true);
+function onLocationUpdated(coordinates) {
+  isSearchDone.value = true;
+  emit('update-coordinates', coordinates);
+};
 
 function toggleSidebar() {
   isOpen.value = !isOpen.value;
   localStorage.setItem('sidebarOpen', isOpen.value);
-}
+};
 
 </script>
 
@@ -87,7 +90,6 @@ function toggleSidebar() {
   align-items: flex-start;
   flex-shrink: 0;
   align-self: stretch;
-
   position: fixed;
   z-index: 100;
 }

@@ -85,7 +85,7 @@ export default {
     },
     downloadData() {
       // Função que será chamada ao clicar no botão "Baixar"
-      console.log('Baixando os dados...');
+      console.warn('Baixando os dados...');
     },
   },
   computed: {

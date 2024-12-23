@@ -31,7 +31,7 @@ export default {
       });
 
       this.map.on('load', () => {
-        console.log('Mapa carregado completamente');
+        console.warn('Mapa carregado completamente');
         this.mapLoaded = true;
         this.updateMapCenter(); // Atualiza o centro após o carregamento completo
       });
@@ -41,15 +41,15 @@ export default {
       // Exemplo: Adicionar controles de navegação
       this.map.addControl(new maplibregl.NavigationControl());
 
-      console.log('Mapa inicializado com coordenadas:', this.coordinates);
+      console.warn('Mapa inicializado com coordenadas:', this.coordinates);
     },
-    updateMapCenter() {
-      console.log('Tentando atualizar o centro do mapa');
+    warn() {
+      console.warn('Tentando atualizar o centro do mapa');
       if (this.map) {
-        console.log('Mapa existe, atualizando para:', this.coordinates);
+        console.warn('Mapa existe, atualizando para:', this.coordinates);
         this.map.setCenter([this.coordinates.lng, this.coordinates.lat]);
       } else {
-        console.log('Mapa não inicializado');
+        console.warn('Mapa não inicializado');
       }
     },
   },
@@ -57,7 +57,7 @@ export default {
     coordinates: {
       handler(newCoordinates) {
         this.updateMapCenter();
-        console.log('mapGenerator.vue - Novas coordenadas recebidas:', newCoordinates);
+        console.warn('mapGenerator.vue - Novas coordenadas recebidas:', newCoordinates);
       },
       deep: true,
     },
@@ -65,7 +65,7 @@ export default {
   beforeUnmount() {
     if (this.map) {
       this.map.remove();
-      console.log('Mapa removido');
+      console.warn('Mapa removido');
     }
   },
 };

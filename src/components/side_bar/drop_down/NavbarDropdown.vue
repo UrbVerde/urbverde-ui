@@ -1,3 +1,4 @@
+<!-- src\components\side_bar\drop_down\NavbarDropdown.vue -->
 <template>
   <div class="container">
     <span class="text">CATEGORIAS</span>

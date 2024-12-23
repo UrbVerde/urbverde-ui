@@ -14,7 +14,7 @@ export default [
       'space-before-function-paren': ['error', 'never'],
       'eqeqeq': ['error', 'always'],
       'no-unused-vars': ['error'],
-      'no-console': ['warn'],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-var': 'error',
       'prefer-const': 'error',
       'no-debugger': 'error',
