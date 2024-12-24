@@ -1,16 +1,16 @@
 <template>
   <div>
-    <PlatformPage />
+    <Home />
 
   </div>
 </template>
 
 <script>
-import PlatformPage from './pages/Platform.vue';
+import Home from './pages/Home.vue';
 
 export default {
   components: {
-    PlatformPage,
+    Home,
   },
 };
 </script>
