@@ -1,10 +1,22 @@
 <!-- Exemplo de Uso
-    <PrimaryButton 
+    Botão com ícone do Bootstrap:
+    <PrimaryButton
+      label="Confirmar"
+      :filled="true"
+      icon="bi-check-circle" -> Classe do ícone Bootstrap
+      iconType="bootstrap"
+      iconPosition="left"
+    />
+
+    Botão com ícone de imagem SVG:
+    <PrimaryButton
       label="Cancelar"
       :filled="false"
-      :icon="logo"
+      :icon="require('@/assets/icons/logo.svg')"
+      iconType="image"
       iconPosition="right"
     />
+
 
     Deve importar a imagem no local para utilizar, Vite não cosegue carregar dinamicamente a imagem.    
 -->
@@ -14,17 +26,19 @@
         class="primary-button"
         :class="{ 'filled': filled, 'notFilled': !filled}"
     >
-        <!-- Ícone no lado esquerdo -->
+        <!-- Ícone do Bootstrap ou imagem no lado esquerdo -->
         <span v-if="icon && iconPosition === 'left'" class="icon">
-            <img :src="icon" alt="icon" />
+            <i v-if="iconType === 'bootstrap'" :class="`bi ${icon}`"></i>
+            <img v-else :src="icon" alt="icon" />
         </span>
-            
+
         <!-- Texto do botão -->
         {{ label }}
-            
-        <!-- Ícone no lado direito -->
+
+        <!-- Ícone do Bootstrap ou imagem no lado direito -->
         <span v-if="icon && iconPosition === 'right'" class="icon">
-            <img :src="icon" alt="icon" />
+            <i v-if="iconType === 'bootstrap'" :class="`bi ${icon}`"></i>
+            <img v-else :src="icon" alt="icon" />
         </span>
     </button>
 </template>
@@ -40,6 +54,11 @@
             filled: {
                 type: Boolean,
                 default: true,
+            },
+            iconType: {
+                type: String, // "bootstrap" ou "image"
+                default: "bootstrap",
+                validator: (value) => ["bootstrap", "image"].includes(value),
             },
             icon: {
                 type: String, // Caminho ou URL do ícone
@@ -86,7 +105,7 @@
     .filled:hover {
         background: radial-gradient(48.28% 48.28% at 51.72% 100%, #0D5232 0%, #15774A 100%);
         box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.25) inset;
-
+        
     }
 
     .notFilled {
