@@ -1,6 +1,4 @@
-@import 'bootstrap/scss/bootstrap';
-
-// Estilos de fonte para Fontes
+@use 'bootstrap/scss/bootstrap' as *;
 
 // Estilos de fonte para Caption
 .caption-regular {

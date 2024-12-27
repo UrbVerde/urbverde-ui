@@ -1,19 +1,11 @@
 <template>
-  <div>
-    <PlatformPage />
-
+  <div id="app">
+    <router-view />
   </div>
 </template>
 
 <script>
-import PlatformPage from './pages/Platform.vue';
-
 export default {
-  components: {
-    PlatformPage,
-  },
+  name: 'App',
 };
 </script>
-
-<style>
-</style>

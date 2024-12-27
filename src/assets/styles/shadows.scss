@@ -1,7 +1,6 @@
-@import 'bootstrap/scss/bootstrap';
+@use 'bootstrap/scss/bootstrap' as *;
 
 // Classe de Shadows
-
 .shadow-none {
   box-shadow: none;
 }
