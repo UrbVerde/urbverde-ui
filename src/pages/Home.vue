@@ -4,9 +4,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <!-- Logo -->
-        <a href="#">
+        <router-link to="/" class="navbar-logo-homepage">
           <img src="@/assets/images/logo-homepage.png" alt="Logo Homepage" />
-        </a>
+        </router-link>
         
         <!-- Botão para collapse (responsivo para telas menores) -->
         <button
@@ -40,7 +40,7 @@
           </ul>
           
           <!-- Botão à direita -->
-          <router-link to="/platform" class="button-primary-link">
+          <router-link to="/mapa" class="button-primary-link">
             <PrimaryButton 
               label="Acessar a plataforma"
               :filled="true"
@@ -116,6 +116,10 @@
     z-index: 2;
   }
 
+  .navbar .navbar-logo-homepage:hover{
+    background-color: transparent;
+  }
+
   .navbar .navbar-toggler{
     border: transparent;
   }
@@ -143,6 +147,7 @@
     text-decoration: none;
     color: $text-color-body;
     text-align: center;
+    border-radius: 4px;
   }
 
   .navbar .navbar-button {
@@ -197,6 +202,14 @@
     text-decoration: none;
   }
 
+  .content {
+    background-color: lightblue;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
   @media (max-width: 768px) {
     .navbar {
       padding: 16px 24px;
@@ -209,14 +222,6 @@
     .navbar-button {
       margin-top: 0;
     }
-  }
-
-  .content {
-    background-color: lightblue;
-    padding: 20px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
   }
 
 </style>
