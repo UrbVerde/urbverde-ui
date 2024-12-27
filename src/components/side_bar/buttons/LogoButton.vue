@@ -1,9 +1,13 @@
 <template>
   <div>
-    <button class="logo-button">
-      <img src="../../../assets/images/logo-white.png" alt="Logo" class="logo" />
+    <router-link to="/" class="logo-button">
+      <img
+        src="../../../assets/images/logo-white.png"
+        alt="Logo"
+        class="logo"
+      />
       <span class="text">URBVERDE</span>
-    </button>
+    </router-link>
   </div>
 </template>
 
@@ -15,19 +19,16 @@ export default {
 
 <style scoped>
 .logo-button {
-
-background: none;
-border: none;
-padding: 0;
-cursor: pointer;
-width: 190px;
-/* Definindo a largura do botão */
-height: 56px;
-/* Definindo a altura do botão */
-display: flex;
-align-items: center;
-gap: 8px;
-/* Espaçamento entre a imagem e o texto */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 190px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none; /* Remove underline for link */
 }
 
 .logo {
@@ -42,11 +43,8 @@ gap: 8px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%;
-  /* 30px */
   letter-spacing: 1px;
-
-  color: var(--Theme-Primary, #025949);
   leading-trim: both;
   text-edge: cap;
-
-}</style>
+}
+</style>

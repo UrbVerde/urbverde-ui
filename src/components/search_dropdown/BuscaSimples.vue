@@ -166,7 +166,7 @@ export default {
       try {
         this.clearCache();
 
-        const response = await fetch(`https://urbverde.iau.usp.br/api/v1/address/suggestions?query=${query}`);
+        const response = await fetch(`https://api.urbverde.iau.usp.br/v1/address/suggestions?query=${query}`);
         const cities = await response.json();
 
         this.cacheCities(cities);
