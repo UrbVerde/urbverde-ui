@@ -33,7 +33,7 @@
         </span>
 
         <!-- Texto do botão -->
-        {{ label }}
+        <span class="small-medium">{{ label }}</span> 
 
         <!-- Ícone do Bootstrap ou imagem no lado direito -->
         <span v-if="icon && iconPosition === 'right'" class="icon">
@@ -74,7 +74,10 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    @use '@/assets/styles/colors.scss' as *;
+    @use '@/assets/styles/fonts.scss' as *;
+    @use '@/assets/styles/shadows.scss' as *;
 
     .primary-button{
         width: 261px;
@@ -98,8 +101,7 @@
         background: radial-gradient(48.28% 48.28% at 51.72% 100%, #146C43 0%, #198754 100%);
         box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.25) inset;
 
-        font-size: 16px;
-        color: #FFFF;
+        color: map-get($gray-colors, white);
     }
 
     .filled:hover {
@@ -111,7 +113,7 @@
     .notFilled {
         border: 1px solid var(--Green-500, #198754);
         background-color: #FFF;
-        color: #146C43;
+        color: var(--green-500);
     }
 
     .notFilled:hover {

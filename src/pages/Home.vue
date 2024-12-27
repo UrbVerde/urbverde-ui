@@ -8,7 +8,7 @@
           <img src="@/assets/images/logo-homepage.png" alt="Logo Homepage" />
         </a>
         
-        <!-- Botão responsivo (para telas menores) -->
+        <!-- Botão para collapse (responsivo para telas menores) -->
         <button
           class="navbar-toggler"
           type="button"
@@ -26,21 +26,21 @@
           <!-- Links de navegação -->
           <ul class="navbar-nav">
             <li class="nav-item d-flex">
-              <a class="nav-link" href="#">Seja Parceiro</a>
+              <a href="#" class="small-regular">Seja Parceiro</a>
             </li>
             <li class="nav-item d-flex">
-              <a class="nav-link" href="#">Quem Somos</a>
+              <a href="#" class="small-regular">Quem Somos</a>
             </li>
             <li class="nav-item d-flex">
-              <a class="nav-link" href="#">Transparência</a>
+              <a href="#" class="small-regular">Transparência</a>
             </li>
             <li class="nav-item d-flex">
-              <a class="nav-link" href="#">UrbVerde Educa</a>
+              <a href="#" class="small-regular">UrbVerde Educa</a>
             </li>
           </ul>
           
           <!-- Botão à direita -->
-          <div>
+          <router-link to="/platform" class="button-primary-link">
             <PrimaryButton 
               label="Acessar a plataforma"
               :filled="true"
@@ -48,10 +48,13 @@
               icon="bi bi-arrow-right"
               iconPosition="right"
             />
-          </div>
+          </router-link>
         </div>
       </div>
     </nav>
+
+    <!-- Fundo escuro -->
+    <div class="navbar-backdrop"></div>
 
     <!-- Conteúdo da Página -->
     <div class="content">
@@ -61,22 +64,125 @@
 </template>
 
 <script>
-  import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+  import PrimaryButton from "@/components/buttons/PrimaryButton.vue";
 
+  // Fecha o collapse se clicka fora do menu
   export default {
     name: "Home",
     components: {
       PrimaryButton,
     },
+    methods: {
+      handleOutsideClick(event) {
+        const collapseElement = document.getElementById("navbarNav");
+        const togglerElement = document.querySelector(".navbar-toggler");
+
+        // Verifica se o clique foi fora do menu e do botão
+        if (
+          collapseElement &&
+          togglerElement &&
+          !collapseElement.contains(event.target) &&
+          !togglerElement.contains(event.target)
+        ) {
+          // Fecha o menu se estiver aberto
+          if (togglerElement.getAttribute("aria-expanded") === "true") {
+            togglerElement.click(); // Simula o clique no botão para fechar
+          }
+        }
+      },
+    },
+    mounted() {
+      // Adiciona o listener ao clicar fora
+      document.addEventListener("click", this.handleOutsideClick);
+    },
+    beforeUnmount() {
+      // Remove o listener ao desmontar o componente
+      document.removeEventListener("click", this.handleOutsideClick);
+    },
   };
 </script>
 
-<style scoped>
+
+<style scoped lang="scss">
+  @use '@/assets/styles/colors.scss' as *;
+  @use '@/assets/styles/fonts.scss' as *;
+  @use '@/assets/styles/shadows.scss' as *;
 
   .navbar {
     padding: 0;
     min-height: 72px;
     padding: 16px 128px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .navbar .navbar-toggler{
+    border: transparent;
+  }
+
+  .navbar .navbar-toggler.collapsed{
+    border: transparent;
+  }
+
+  .navbar .navbar-toggler-icon{
+    font-size: 16px;
+    color: var(--bs-green-500)
+  }
+
+  .navbar .navbar-nav {
+    margin: auto; 
+    padding: 0 12px;
+    list-style: none;
+    gap: 8px;
+  }
+
+  .navbar .navbar-nav .nav-item a{
+    display: flex;
+    padding: 8px 12px;
+    align-items: center;
+    text-decoration: none;
+    color: $text-color-body;
+    text-align: center;
+  }
+
+  .navbar .navbar-button {
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .navbar .navbar-collapse {
+    transition: height 0.3s ease, padding 0.3s ease; 
+  }
+
+  .navbar .navbar-collapse.collapsing{
+    position: absolute;
+    z-index: 3;
+    top: 100%;
+    background-color: var(--bs-light);
+    left: 0;
+    right: 0;
+    box-shadow: 0px 24px 24px 0px rgba(0, 0, 0, 0.05);
+    padding: 0 32px;
+  }
+
+  .navbar .navbar-collapse.collapsing .navbar-nav{
+    padding: 12px 6px 56px 6px;
+  }
+
+  .navbar .navbar-collapse.collapse.show{
+    position: absolute;
+    height: auto; 
+    z-index: 3;
+    top: 100%;
+    background-color: var(--bs-light);
+    left: 0;
+    right: 0;
+    box-shadow: 0px 24px 24px 0px rgba(0, 0, 0, 0.1);
+    padding: 12px 32px 64px;
+  }
+
+  .navbar .navbar-collapse.collapse.show .navbar-nav{
+    padding: 12px 6px 56px 6px;
   }
 
   .container-fluid{
@@ -87,38 +193,8 @@
     padding: 0;
   }
 
-  .navbar-nav {
-    margin: auto; 
-    padding: 0 12px;
-    list-style: none;
-    gap: 8px;
-  }
-
-  .navbar-nav .nav-item a{
-    display: flex;
-    padding: 8px 12px;
-    align-items: center;
-  }
-
-  .navbar-button {
-    margin-top: 16px;
-    text-align: center;
-  }
-
-  .navbar-collapse.collapsing{
-    padding-bottom: 12px;
-  }
-
-  .navbar-collapse.collapsing .navbar-nav{
-    padding: 24px 6px 12px 6px;
-  }
-
-  .navbar-collapse.collapse.show{
-    padding-bottom: 12px;
-  }
-
-  .navbar-collapse.collapse.show .navbar-nav{
-    padding: 24px 6px 12px 6px;
+  .button-primary-link{
+    text-decoration: none;
   }
 
   @media (max-width: 768px) {
@@ -139,6 +215,8 @@
     background-color: lightblue;
     padding: 20px;
     text-align: center;
+    position: relative;
+    z-index: 1;
   }
 
 </style>
@@ -146,8 +224,8 @@
 
 <!-- 
 
-- modificar logo qnd chega em 1280px 
-- quando clica na tela, ao inves de arrastar pra baixo o content ficar pra cima e desfocado 
- - mudar o ícone também
- 
+- Verificar os warnings dos styles, provavelmente incongruencia com o bootstrap
+- Verificar para adicionar os imports globais direto no vite.config.js
+- Adicionar nav como componente e subir junto com o button-primary para flor reutilizar
+
 -->
