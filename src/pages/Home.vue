@@ -1,6 +1,6 @@
 <template>
   <div>
-      <NavbarHomepage />
+    <NavbarHomepage />
   </div>
 
   <div class="content">
@@ -10,19 +10,17 @@
   </div>
 </template>
 
-
 <script>
-  import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
+import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 
-  export default {
-  name: "Home",
+export default {
+  name: 'HomePage',
   components: {
-      NavbarHomepage,
+    NavbarHomepage,
   },
-  };
+};
 
 </script>
-
 
 <style scoped lang="scss">
 

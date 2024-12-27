@@ -1,5 +1,5 @@
-<!-- 
- 
+<!--
+
 Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 1;
 
 .content {
@@ -17,7 +17,7 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
         <router-link to="/" class="navbar-logo-homepage">
           <img src="@/assets/images/logo-homepage.png" alt="Logo Homepage" />
         </router-link>
-        
+
         <!-- Botão para collapse (responsivo para telas menores) -->
         <button
           class="navbar-toggler"
@@ -48,10 +48,10 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
               <a href="#" class="small-regular">UrbVerde Educa</a>
             </li>
           </ul>
-          
+
           <!-- PrimaryButton -->
           <router-link to="/mapa" class="button-primary-link">
-            <PrimaryButton 
+            <PrimaryButton
               label="Acessar a plataforma"
               :filled="true"
               iconType="bootstrap"
@@ -66,41 +66,41 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
 </template>
 
 <script>
-  import PrimaryButton from "@/components/buttons/PrimaryButton.vue";
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 
-  export default {
-    name: "NavbarHomepage",
-    components: {
-      PrimaryButton,
-    },
-    methods: {
-      handleOutsideClick(event) {
-        const collapseElement = document.getElementById("navbarNav");
-        const togglerElement = document.querySelector(".navbar-toggler");
+export default {
+  name: 'NavbarHomepage',
+  components: {
+    PrimaryButton,
+  },
+  methods: {
+    handleOutsideClick(event) {
+      const collapseElement = document.getElementById('navbarNav');
+      const togglerElement = document.querySelector('.navbar-toggler');
 
-        // Verifica se o clique foi fora do menu e do botão
-        if (
-          collapseElement &&
+      // Verifica se o clique foi fora do menu e do botão
+      if (
+        collapseElement &&
           togglerElement &&
           !collapseElement.contains(event.target) &&
           !togglerElement.contains(event.target)
-        ) {
-          // Fecha o menu se estiver aberto
-          if (togglerElement.getAttribute("aria-expanded") === "true") {
-            togglerElement.click(); // Simula o clique no botão para fechar
-          }
+      ) {
+        // Fecha o menu se estiver aberto
+        if (togglerElement.getAttribute('aria-expanded') === 'true') {
+          togglerElement.click(); // Simula o clique no botão para fechar
         }
-      },
+      }
     },
-    mounted() {
-      // Adiciona o listener ao clicar fora
-      document.addEventListener("click", this.handleOutsideClick);
-    },
-    beforeUnmount() {
-      // Remove o listener ao desmontar o componente
-      document.removeEventListener("click", this.handleOutsideClick);
-    },
-  };
+  },
+  mounted() {
+    // Adiciona o listener ao clicar fora
+    document.addEventListener('click', this.handleOutsideClick);
+  },
+  beforeUnmount() {
+    // Remove o listener ao desmontar o componente
+    document.removeEventListener('click', this.handleOutsideClick);
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -130,7 +130,7 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
   }
 
   .navbar .navbar-nav {
-    margin: auto; 
+    margin: auto;
     padding: 0 12px;
     list-style: none;
     gap: 8px;
@@ -152,7 +152,7 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
   }
 
   .navbar .navbar-collapse {
-    transition: height 0.3s ease, padding 0.3s ease; 
+    transition: height 0.3s ease, padding 0.3s ease;
   }
 
   .navbar .navbar-collapse.collapsing{
@@ -172,7 +172,7 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
 
   .navbar .navbar-collapse.collapse.show{
     position: absolute;
-    height: auto; 
+    height: auto;
     z-index: 3;
     top: 100%;
     background-color: var(--bs-light);
