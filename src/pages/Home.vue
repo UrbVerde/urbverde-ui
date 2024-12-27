@@ -24,14 +24,14 @@
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 
-.content {
-      background-color: lightblue;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
+  .content {
+    background-color: map-get($primary-fade-colors, 400);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
 
 </style>

@@ -1,0 +1,10 @@
+// Importa o Bootstrap
+@use 'bootstrap/scss/bootstrap' as *;
+
+// Importa os estilos globais`
+@use '@/assets/styles/colors.scss' as *;
+@use '@/assets/styles/fonts.scss' as *;
+@use '@/assets/styles/shadows.scss' as *;
+
+// Importa a fonte do Google
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');

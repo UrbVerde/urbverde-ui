@@ -1,7 +1,4 @@
-@import 'bootstrap/scss/bootstrap';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-// Estilos de fonte para Fontes
+@use 'bootstrap/scss/bootstrap' as *;
 
 // Estilos de fonte para Caption
 .caption-regular {
