@@ -8,11 +8,12 @@
         <template v-if="$route.params.escala === 'estadual'">
           <h3>{{ slotProps.features[0].properties.nm_mun }}</h3>
           <label>Área de praças por habitante: </label>
+          <h3>{{ Number((10*slotProps.features[0].properties.a2).toFixed(2)) }} m²/hab</h3>
         </template>
         <template v-else>
           <label>Área de praças por habitante no setor:</label>
+          <h3>{{ slotProps.features[0].properties.a2 }} m²/hab</h3>
         </template>
-        <h3>{{ slotProps.features[0].properties.a2 }} m²/hab</h3>
       </VmPopup>
 
     </template>
@@ -137,7 +138,7 @@ export default {
         values.push({
           range: true,
           color: "linear-gradient(to right, #d53e4f, #fee08b, #3288bd)",
-          value: `0 - 150 m²/hab`,
+          value: `0 - 15 m²/hab`,
         });
       }
 
