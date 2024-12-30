@@ -1,11 +1,16 @@
+<!-- src/modules/Mapa/MapaBase.vue -->
 <template>
-  <div class="map_container" :class="{
-    highlightMapa: highlightMap == true,
-  }">
-    <VueMapbox
-      mapStyle="https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ"
-      ref="mapbox" :maxBounds="[-53.97525, -25.47836, -41.22247, -19.79201]"
-      :center="[viewState.longitude, viewState.latitude]" :interactive="true" :zoom="viewState.zoom" :showLoader="true">
+  <div class="map_container" :class="{highlightMapa: highlightMap == true,}">
+  <VueMapbox
+      :mapStyle="currentMapStyle"
+      :terrainStyleUrl="terrainStyleUrl"
+      ref="mapbox"
+      :maxBounds="[-53.97525, -25.47836, -41.22247, -19.79201]"
+      :center="[viewState.longitude, viewState.latitude]"
+      :interactive="true"
+      :zoom="viewState.zoom"
+      :showLoader="true"
+    >
       <template v-for="layer in layers">
         <component v-if="layer.visible" :key="layer._id" v-bind:is="layer.componentName" :layer="layer"
           @OnFeatureClick="setBboxFromFeature">
@@ -46,6 +51,7 @@ import * as turf from "@turf/turf";
 import VueMapbox from "./components/VueMapbox.vue";
 import VmLayer from "./components/VmLayer.vue";
 import VmPopup from "./components/VmPopup.vue";
+import axios from "axios";
 // import spgeojson from "@/assets/data/geom_municipios.geo.json";
 
 function requireAllComponents(requireContext) {
@@ -60,10 +66,9 @@ requireAllComponents(
   require.context("./layers", true, /[A-Za-z]\w+\.(vue|js)$/)
 );
 
-import axios from "axios";
 
 export default {
-  name: "",
+  name: "MapaBase",
   components: { VueMapbox, VmLayer, VmPopup },
   props: ["highlightMap"],
   data() {
@@ -83,6 +88,7 @@ export default {
       },
       userMun: "",
       selectedBasemap: "MAPA",
+      terrainStyleUrl: "https://api.maptiler.com/maps/basic-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ", // Replace with your non-extruded style URL
       basemapList: [
         {
           title: "SATÉLITE",
@@ -91,8 +97,7 @@ export default {
         },
         {
           title: "MAPA",
-          value:
-            "https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ", //XmSZh88cfG77QlyKTuwa",
+          value: "https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ",
         },
         // {
         //   title: "ruas",
@@ -109,6 +114,9 @@ export default {
     },
     munPracaData() {
       return this.$store.getters.getMunPracaData[2021][0];
+    },
+    currentMapStyle() {
+      return this.basemapList.find(item => item.title === this.selectedBasemap)?.value || this.basemapList[1].value;
     },
   },
 
@@ -160,33 +168,55 @@ export default {
     },
 
     changeMapStyle: async function (style) {
-      const activeLayers = this.layers.filter((item) => item.visible === true);
+  console.log('Changing map style to:', style);
+  this.selectedBasemap = style;
 
-      // Get current viewbox and zoom level
-      const { latitude, longitude, zoom } = this.viewState;
-      console.log("Current Viewbox:", [longitude, latitude]);
-      console.log("Current Zoom Level:", zoom);
+  if (this.$refs.mapbox && this.$refs.mapbox.map) {
+    const map = this.$refs.mapbox.map;
+    
+    // Save current view state
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    const bearing = map.getBearing();
+    const pitch = map.getPitch();
 
-      await new Promise((resolve) => {
-        window.maplibregl.setStyle(style);
-        window.maplibregl.once("styledata", () => resolve());
-      });
+    // Save active layers before changing style
+    const activeLayers = this.layers.filter(layer => layer.visible);
+    console.log('Active layers before style change:', activeLayers.map(l => l._id));
 
-      const togglePromises = activeLayers.map((layer) => {
-        return new Promise((resolve) => {
-          this.$store.commit("TOGGLE_LAYER", layer);
-          setTimeout(() => {
-            this.$store.commit("TOGGLE_LAYER", layer);
-            resolve();
+    try {
+      await new Promise((resolve, reject) => {
+        map.once('style.load', () => {
+          console.log('New style loaded');
+          
+          // Restore the view
+          map.setCenter(center);
+          map.setZoom(zoom);
+          map.setBearing(bearing);
+          map.setPitch(pitch);
+
+          // Reapply active layers
+          activeLayers.forEach(layer => {
+            console.log('Reapplying layer:', layer._id);
+            this.$store.commit("TOGGLE_LAYER", { ...layer, visible: false });
+            this.$nextTick(() => {
+              this.$store.commit("TOGGLE_LAYER", { ...layer, visible: true });
+            });
           });
+
+          resolve();
         });
+        map.once('error', reject);
+        console.log('Setting new style');
+        map.setStyle(style);
       });
 
-      await Promise.all(togglePromises);
-
-      // Reset map to the previous viewbox and zoom level
-      await window.maplibregl.jumpTo({ center: [longitude, latitude], zoom });
-    },
+      console.log('Map style changed successfully');
+    } catch (error) {
+      console.error('Error changing map style:', error);
+    }
+  }
+},
 
     loadingFeatures(loading) {
       this.loading = loading;

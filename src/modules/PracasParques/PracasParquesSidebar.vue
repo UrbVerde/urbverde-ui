@@ -1,4 +1,5 @@
-<template>
+<!-- src/modules/PracasParques/PracasParquesSidebar.vue -->
+ <template>
   <div>
 
     <p style="margin-bottom: 0.5em;">

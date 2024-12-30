@@ -1,3 +1,4 @@
+// src/modules/Mapa/configs/layers.js
 export const LAYERS_DEFAULT = [
   {
     name: "Legenda",

@@ -1,3 +1,4 @@
+<!-- src/modules/Mapa/components/VueMapBox.vue -->
 <template>
   <div class="vue-mapbox" :style="{ position: 'relative', width: myWidth, height: myHeight }">
     <div ref="mapabaselayer" id="mapaBaseLayer" class="map-layer mapbox-map-container" style="
@@ -123,8 +124,8 @@ export default {
      * The map's Mapbox style. Can be a URL or the STYLE OBJECT itself . example mapbox://styles/mapbox/streets-v11.  more info at https://mapbox.com/maplibre-gl-style-spec/
      */
     mapStyle: {
-      type: [String, Object],
-      default: "mapbox://styles/mapbox/outdoors-v11",
+      type: String,
+      required: true
     },
     /**
      * The minimum zoom level of the map (0-24).
@@ -215,6 +216,10 @@ export default {
       type: Boolean,
       default: true,
     }, // {'name':url,'name2':url2}
+    showBuildings: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   provide: function () {
@@ -236,6 +241,9 @@ export default {
       sources: null,
       layers: null,
       camera: "",
+      terrainEnabled: false,
+      buildingLayerIds: [],
+      currentZoom: 0,
     };
   },
 
@@ -281,6 +289,11 @@ export default {
   },
 
   watch: {
+    currentZoom(newZoom, oldZoom) {
+      if ((newZoom >= 16 && oldZoom < 16) || (newZoom < 16 && oldZoom >= 16)) {
+        this.updateLayerOrder();
+      }
+    },
     bounds: function (val) {
       this.map.fitBounds(val, { padding: this.padding });
     },
@@ -288,6 +301,20 @@ export default {
       if (this.map) {
         this.map.setMaxBounds(val);
       }
+    },
+    mapStyle: {
+      handler: function (newStyle) {
+        if (this.map) {
+          const currentCenter = this.map.getCenter();
+          const currentZoom = this.map.getZoom();
+          this.map.setStyle(newStyle);
+          this.map.once('styledata', () => {
+            this.map.setCenter(currentCenter);
+            this.map.setZoom(currentZoom);
+          });
+        }
+      },
+      immediate: true
     },
   },
 
@@ -312,57 +339,191 @@ export default {
 
   methods: {
     createMap: function () {
-      this.map = new maplibregl.Map({
-        ...this.otherOptions,
-        container: this.$refs.mapabaselayer,
-        refreshExpiredTiles: false,
-        antialias: true,
-        style: this.mapStyle,
-        center: this.center,
-        zoom: this.zoom,
-        hash: this.hash,
-        bounds: this.bounds,
-        maxBounds: this.maxBounds,
-        minZoom: this.minZoom,
-        maxZoom: this.maxZoom,
-        interactive: this.interactive,
-        attributionControl: this.attributionControl,
-      });
-      window.maplibregl = this.map;
-
-      this.addPropsImages();
-
-      this.setupEvents(this.$listeners, this.map, nativeEventsTypes);
-
-      this.map.on("load", () => {
-        const _this = this;
-
-        this.map.addSource("terrain", {
-          "type": "raster-dem",
-          "url": "https://api.maptiler.com/tiles/terrain-rgb/tiles.json?key=XmSZh88cfG77QlyKTuwa",
+      try {
+        this.map = new maplibregl.Map({
+          ...this.otherOptions,
+          container: this.$refs.mapabaselayer,
+          style: this.mapStyle,
+          refreshExpiredTiles: false,
+          antialias: true,
+          center: this.center,
+          zoom: this.zoom,
+          hash: this.hash,
+          bounds: this.bounds,
+          maxBounds: this.maxBounds,
+          minZoom: this.minZoom,
+          maxZoom: this.maxZoom,
+          interactive: this.interactive,
+          attributionControl: this.attributionControl,
         });
 
-        this.mapLoaded = true;
+        window.maplibregl = this.map;
 
-        this.$emit("load", _this, this.map);
-        this.map.addControl(
-          new maplibregl.NavigationControl({
-            visualizePitch: true,
-            // showZoom: true,
-            // showCompass: true
-          }), "top-right");
+        this.map.on('error', (e) => {
+          console.error('Erro do MapLibre:', e);
+        });
 
-        this.map.addControl(
-          new maplibregl.ScaleControl({
-            maxWidth: 120,
-            unit: 'metric',
-          }), "bottom-left");
+        this.addPropsImages();
+        this.setupEvents(this.$listeners, this.map, nativeEventsTypes);
 
-        this.map.addControl(
-          new maplibregl.TerrainControl({
-            source: 'terrain',
-            exaggeration: 4.5,
-          }));
+        this.map.on("load", () => {
+          const _this = this;
+
+          this.mapLoaded = true;
+          this.$emit("load", _this, this.map);
+
+          this.map.addControl(
+            new maplibregl.NavigationControl({
+              visualizePitch: true,
+              // showZoom: true,
+              // showCompass: true
+            }), "top-right");
+
+          this.map.addControl(
+            new maplibregl.TerrainControl({
+              source: 'terrain',
+              exaggeration: 6,
+            }),);
+
+          this.map.addControl(
+            new maplibregl.ScaleControl({
+              maxWidth: 120,
+              unit: 'metric',
+            }), "bottom-left");
+
+          this.map.addSource("terrain", {
+            "type": "raster-dem",
+            "url": "https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=eizpVHFsrBDeO6HGwWvQ",
+          });
+
+          // Find and store building layer IDs
+          // this.findBuildingLayers();
+
+          // Listen for terrain changes
+          this.map.on('terrain', (e) => {
+            console.log('Terrain changed:', e.terrain);
+            this.terrainEnabled = e.terrain;
+            // We don't need to switch styles anymore, just update the terrain
+            this.updateTerrain(e.terrain);
+          });
+
+          // Initialize currentZoom
+          this.currentZoom = this.map.getZoom();
+
+          // Add zoom change listener to update currentZoom
+          this.map.on('zoom', () => {
+            this.currentZoom = this.map.getZoom();
+          });
+
+          // Initial layer ordering
+          this.updateLayerOrder();
+
+          // Adicionar um ouvinte para mudanças de estilo
+          this.map.on('style.load', () => {
+            console.log('Novo estilo carregado');
+            this.updateLayerOrder();
+          });
+        });
+
+        // Listen for style changes
+        this.map.on('styledata', () => {
+          console.log('Style changed');
+        });
+
+      } catch (error) {
+        console.error('Error creating map:', error);
+      }
+    },
+
+    updateTerrain: function (enabled) {
+      if (enabled) {
+        this.toggleBuildingLayers(false);
+        this.map.setTerrain({ source: 'terrain', exaggeration: 6 });
+      } else {
+        this.map.setTerrain(null);
+        this.toggleBuildingLayers(true);
+      }
+    },
+
+    toggleBuildingLayers: function (visible) {
+      const layers = this.map.getStyle().layers;
+      for (const layer of layers) {
+        if (layer.type === 'fill-extrusion' && layer.id.toLowerCase().includes('building')) {
+          this.map.setLayoutProperty(layer.id, 'visibility', visible ? 'visible' : 'none');
+        }
+      }
+    },
+
+    findBuildingAndStreetLayers: function () {
+      const style = this.map.getStyle();
+      this.buildingLayerIds = style.layers
+        .filter(layer => layer.type === 'fill-extrusion' && layer.id.toLowerCase().includes('building'))
+        .map(layer => layer.id);
+
+      this.streetLayerIds = style.layers
+        .filter(layer => (layer.type === 'line' || layer.type === 'fill') && layer.id.toLowerCase().includes('road'))
+        .map(layer => layer.id);
+    },
+
+    updateBuildingsAndStreetsVisibility: function () {
+      this.buildingLayerIds.forEach(layerId => {
+        if (this.terrainEnabled) {
+          this.map.setLayoutProperty(layerId, 'visibility', 'none');
+        } else {
+          this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+          this.map.moveLayer(layerId);
+        }
+      });
+
+      this.streetLayerIds.forEach(layerId => {
+        const layer = this.map.getLayer(layerId);
+        if (layer) {
+          if (this.terrainEnabled) {
+            if (layer.type === 'line') {
+              this.map.setPaintProperty(layerId, 'line-opacity', 0.5);
+            } else if (layer.type === 'fill') {
+              this.map.setPaintProperty(layerId, 'fill-opacity', 0.5);
+            }
+          } else {
+            if (layer.type === 'line') {
+              this.map.setPaintProperty(layerId, 'line-opacity', 1);
+            } else if (layer.type === 'fill') {
+              this.map.setPaintProperty(layerId, 'fill-opacity', 1);
+            }
+          }
+          this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+        }
+      });
+    },
+
+    switchBasemapStyle: function (terrainEnabled) {
+      console.log('Switching basemap style. Terrain enabled:', terrainEnabled);
+      const currentStyleUrl = this.map.getStyle().sprite;
+      let newStyleUrl;
+
+      if (terrainEnabled) {
+        // Switch to a style without building extrusions
+        newStyleUrl = "https://api.maptiler.com/maps/92fa6478-03bb-44cc-897a-fe5411f52e99/style.json?key=eizpVHFsrBDeO6HGwWvQ";
+      } else {
+        // Switch back to the original style with building extrusions
+        newStyleUrl = "https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ";
+      }
+
+      if (currentStyleUrl !== newStyleUrl) {
+        console.log('Applying new style:', newStyleUrl);
+        this.map.setStyle(newStyleUrl);
+      }
+    },
+
+    updateBuildingsVisibility: function () {
+      this.buildingLayerIds.forEach(layerId => {
+        if (this.terrainEnabled) {
+          this.map.setLayoutProperty(layerId, 'visibility', 'none');
+        } else {
+          this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+          // Ensure building extrusions are on top
+          this.map.moveLayer(layerId);
+        }
       });
     },
 
@@ -556,13 +717,10 @@ export default {
       let layersId = layerInstances.map((layer, i) => {
         const component = layer.componentInstance || layer;
         const id = get(component, "$data.layerId");
-        if (!id) {
-          // debugger
-        }
         let zIndex = get(component, "$props.zIndex");
         const index = i;
         if (zIndex) {
-          zIndex = Number(zIndex); // + (index / 10)
+          zIndex = Number(zIndex);
         }
         return { id, index, zIndex };
       });
@@ -575,42 +733,50 @@ export default {
       }
       layersId = orderBy(layersId, ["zIndex"], ["asc"]);
 
-      const currentLayersByID = {};
-      currentLayers.forEach((layer, index, array) => {
-        const obj = { id: layer.id, topLayerId: undefined };
-        obj.topLayerId = currentLayers?.[index + 1]?.id;
-        currentLayersByID[layer.id] = obj;
-      });
+      // Identify different layer types
+      const streetLayers = currentLayers.filter(layer =>
+        (layer.type === 'line' || layer.type === 'symbol') &&
+        (layer.id.toLowerCase().includes('road') || layer.id.toLowerCase().includes('street'))
+      );
 
-      const virtualLayerVNodeByID = {};
-      layersId.forEach((layer, index, array) => {
-        const obj = { id: layer.id, topLayerId: undefined };
-        obj.topLayerId = layersId?.[index + 1]?.id;
-        virtualLayerVNodeByID[layer.id] = obj;
-      });
+      const labelsAndBuildings = currentLayers.filter(layer =>
+        layer.type === 'symbol' || (layer.type === 'fill-extrusion' && layer.id.toLowerCase().includes('building'))
+      );
 
-      if (setLayerNameToReturnItBeforeLayerID) {
-        let beforeId = currentLayersByID?.[setLayerNameToReturnItBeforeLayerID];
-        if (!beforeId)
-          beforeId =
-            virtualLayerVNodeByID?.[setLayerNameToReturnItBeforeLayerID];
+      const setoresCensitariosLayer = layersId.find(layer =>
+        layer.id.toLowerCase().includes('setorescensitarios')
+      );
 
-        return beforeId?.topLayerId;
-      }
-
-      for (let i = layersId.length; i != -1; i--) {
-        const topLayer = layersId?.[i]?.id;
-        const currentLayer = layersId?.[i - 1]?.id;
-
-        if (!currentLayersByID?.[currentLayer]) continue;
-
-        if (currentLayersByID?.[currentLayer]?.topLayerId !== topLayer) {
-          if (this.map.getLayer(currentLayer) && this.map.getLayer(topLayer)) {
-            this.map.moveLayer(currentLayer, topLayer);
-          }
+      // Move other custom layers based on their zIndex
+      for (let i = 0; i < layersId.length; i++) {
+        const currentLayer = layersId[i].id;
+        if (this.map.getLayer(currentLayer) && currentLayer !== setoresCensitariosLayer?.id) {
+          this.map.moveLayer(currentLayer);
         }
       }
+
+      // Move SetoresCensitariosVector layer to the top of custom layers
+      if (setoresCensitariosLayer && this.map.getLayer(setoresCensitariosLayer.id)) {
+        this.map.moveLayer(setoresCensitariosLayer.id);
+      }
+
+      // Move street layers based on zoom level
+      if (this.currentZoom > 16) {
+        streetLayers.forEach(layer => {
+          if (this.map.getLayer(layer.id)) {
+            this.map.moveLayer(layer.id);
+          }
+        });
+      }
+
+      // Always move label and building layers to the very top
+      labelsAndBuildings.forEach(layer => {
+        if (this.map.getLayer(layer.id)) {
+          this.map.moveLayer(layer.id);
+        }
+      });
     },
+
 
     moveLayer: function (id, zIndex) { },
 

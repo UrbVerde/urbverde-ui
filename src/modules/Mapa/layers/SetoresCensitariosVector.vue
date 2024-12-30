@@ -1,3 +1,4 @@
+<!-- src/modules/Mapa/layers/SetoresCensitariosVector.vue -->
 <template>
   <VmLayer v-if="this.$route.params.escala == 'intraurbana'" :name="layer.name" :source="layer.props.source"
     :type="layer.type" :zIndex="layer.zIndex" :sourceLayer="layer.sourceLayer" :paint="layerPaint">
@@ -33,7 +34,7 @@ export default {
           "match",
           ["get", "cd_mun"],
           Number(this.munId),
-          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "#000"],
+          ["interpolate", ["linear"], ["get", "cd_mun"], 0, "transparent"],
           ["literal", "transparent"],
         ],
       };

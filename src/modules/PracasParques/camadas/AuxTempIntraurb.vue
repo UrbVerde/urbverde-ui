@@ -1,3 +1,4 @@
+<!-- src/modules/PracasParques/camadas/AuxTempIntraurb.vue -->
 <template>
   <VmLayer
     :name="layer.name"

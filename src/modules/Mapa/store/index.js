@@ -1,3 +1,5 @@
+// src/modules/Mapa/store/index.js
+
 import set from "lodash/set";
 import find from "lodash/find";
 import filter from "lodash/filter";
