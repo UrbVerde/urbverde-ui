@@ -7,7 +7,7 @@
 
       <!-- Background fixo e atrás dos contents -->
       <div class="image-background">
-        <img src="@/assets/images/homepage-background.png" alt="Natureza e pessoas plantando" />
+        <img src="@/assets/images/homepage/homepage-background.png" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
       </div>
 
       <!-- Hero content -->
@@ -20,10 +20,10 @@
                 <span class="h1-lasttext" :key="currentWord">{{ currentWord }}</span>
               </transition>
             </h1>
-            <p class="subtitle normal-medium">
+            <h2 class="subtitle normal-medium">
               Acesse dados sociais e ambientais completos de seu município,
               de forma totalmente gratuita!
-            </p>
+            </h2>
           </div>
           <div class="search">
             <div class="search-button">
@@ -45,14 +45,14 @@
         <div class="wrapper-platform">
 
           <!-- Imagem da plataforma -->
-          <router-link to="/mapa" class="platform-link">
+          <router-link to="/mapa" class="platform-link" aria-label="Acessar a plataforma da UrbVerde">
             <div
               class="platform"
               @mousemove="handleMouseMove"
               @mouseleave="resetZoom"
             >
               <div class="overlay"></div>
-              <img src="@/assets/images/platform.png" alt="Plataforma UrbVerde" ref="zoomImage" />
+              <img src="@/assets/images/platform.png" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
             </div>
           </router-link>
 
@@ -66,15 +66,15 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-1.png" alt="José Renato Nalini">
+                  <img src="@\assets\images\homepage\image-card-1.png" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
-                  <p class="title small-bold">
+                  <h3 class="title small-bold">
                     José Renato Nalini
-                  </p>
-                  <p class="subtitle small-regular">
+                  </h3>
+                  <h4 class="subtitle small-regular">
                     Secretário Executivo de São Paulo
-                  </p>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -86,15 +86,15 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-2.png" alt="Juliana Domingos de Lima">
+                  <img src="@\assets\images\homepage\image-card-2.png" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
-                  <p class="title small-bold">
+                  <h3 class="title small-bold">
                     Juliana Domingos de Lima
-                  </p>
-                  <p class="subtitle small-regular">
+                  </h3>
+                  <h4 class="subtitle small-regular">
                     Jornalista do Estadão
-                  </p>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -107,15 +107,15 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-3.png" alt="José Renato Nalini">
+                  <img src="@\assets\images\homepage\image-card-3.png" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
-                  <p class="title small-bold">
+                  <h3 class="title small-bold">
                     Marcela Cury Petenusci
-                  </p>
-                  <p class="subtitle small-regular">
+                  </h3>
+                  <h4 class="subtitle small-regular">
                     Professora de Ribeirão Preto
-                  </p>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -127,9 +127,13 @@
 </template>
 
 <script>
+// Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+
+// Para criação de meta tags de SEO
+import { useHead } from '@vueuse/head';
 
 export default {
   name: 'HomePage',
@@ -137,6 +141,31 @@ export default {
     NavbarHomepage,
     PrimaryButton,
     BuscaSimples,
+  },
+
+  // Configuração das meta tags de SEO
+  setup() {
+    useHead({
+      title: 'UrbVerde - Dados Sociais e Ambientais Gratuitos do seu Município',
+      meta: [
+        {
+          name: 'description',
+          content: 'Descubra dados sociais e ambientais do seu município com a UrbVerde. Acesse informações gratuitas para planejar cidades verdes, inclusivas e sustentáveis.',
+        },
+        {
+          name: 'keywords',
+          content: 'dados sociais gratuitos, dados ambientais, sustentabilidade, cidades verdes, planejamento urbano, smart cities, desenvolvimento sustentável, acesso gratuito, dados municipais',
+        },
+        {
+          property: 'og:title',
+          content: 'UrbVerde - Dados Sociais e Ambientais Gratuitos do seu Município',
+        },
+        {
+          property: 'og:description',
+          content: 'Explore informações sociais e ambientais completas de municípios brasileiros com a UrbVerde, contribuindo para cidades mais resilientes e sustentáveis.',
+        },
+      ],
+    });
   },
 
   // Transição das palavras
@@ -266,7 +295,7 @@ export default {
     white-space: nowrap;
   }
 
-  .hero-text p {
+  .hero-text h2 {
     margin: 0;
   }
 
@@ -473,6 +502,16 @@ export default {
   }
 
   .cards .bottom-content p{
+    padding: 0;
+    margin: 0;
+  }
+
+  .cards .bottom-content h3{
+    padding: 0;
+    margin: 0;
+  }
+
+  .cards .bottom-content h4{
     padding: 0;
     margin: 0;
   }

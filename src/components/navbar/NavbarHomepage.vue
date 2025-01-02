@@ -50,7 +50,7 @@ Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 
           </ul>
 
           <!-- PrimaryButton -->
-          <router-link to="/mapa" class="button-primary-link">
+          <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">
             <PrimaryButton
               label="Acessar a plataforma"
               :filled="true"
