@@ -40,7 +40,6 @@
 <script setup>
 import { ref } from 'vue';
 
-import LogoButton from './buttons/LogoButton.vue';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
