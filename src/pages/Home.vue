@@ -1,9 +1,10 @@
 <template>
   <div class="homepage">
+    <!-- Navbar -->
     <NavbarHomepage />
 
-    <!-- Hero -->
-    <div class="hero">
+    <!-- Content -->
+    <div class="content">
 
       <!-- Background fixo e atrás dos contents -->
       <div class="image-background">
@@ -20,10 +21,10 @@
                 <span class="h1-lasttext" :key="currentWord">{{ currentWord }}</span>
               </transition>
             </h1>
-            <h2 class="subtitle normal-medium">
+            <h4 class="subtitle normal-medium">
               Acesse dados sociais e ambientais completos de seu município,
               de forma totalmente gratuita!
-            </h2>
+            </h4>
           </div>
           <div class="search">
             <div class="search-button">
@@ -52,7 +53,7 @@
               @mouseleave="resetZoom"
             >
               <div class="overlay"></div>
-              <img src="@/assets/images/platform.png" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
+              <img src="@/assets/images/homepage/platform.png" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
             </div>
           </router-link>
 
@@ -122,7 +123,40 @@
           </div>
         </div>
       </section>
+
+      <!-- Institutes content-->
+      <div class="institutes container">
+        
+        <div class="institutes-header">
+          <h2>
+            Da universidade para a sociedade
+          </h2>
+          <h4 class="normal-medium">
+            A UrbVerde é fruto de uma colaboração entre diversas instituições públicas, 
+            por meio do financiamento do CNPq e do PPPP da FAPESP. 
+            <a href="#" class="normal-medium">
+              Leia mais
+              <i class="bi bi-arrow-up-right"></i>
+            </a>
+          </h4>
+        </div>
+  
+        <div class="institutes-logo-carousel">
+          <div class="logo-track" ref="logoTrack">
+            <div class="logo-item" v-for="(logo, index) in logos" :key="index">
+              <img :src="logo.src" :alt="logo.alt" loading="lazy" />
+            </div>
+          </div>
+        </div>
+  
+        <div class="institutes-awards">
+          premios
+        </div>
+  
+      </div>
     </div>
+
+
   </div>
 </template>
 
@@ -131,6 +165,27 @@
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+
+// Importação das logos
+import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.png';
+import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.png';
+import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.png';
+import logo4 from '@/assets/images/homepage/institutes-logo/logo-04.png';
+import logo5 from '@/assets/images/homepage/institutes-logo/logo-05.png';
+import logo6 from '@/assets/images/homepage/institutes-logo/logo-06.png';
+import logo7 from '@/assets/images/homepage/institutes-logo/logo-07.png';
+import logo8 from '@/assets/images/homepage/institutes-logo/logo-08.png';
+import logo9 from '@/assets/images/homepage/institutes-logo/logo-09.png';
+import logo10 from '@/assets/images/homepage/institutes-logo/logo-10.png';
+import logo11 from '@/assets/images/homepage/institutes-logo/logo-11.png';
+import logo12 from '@/assets/images/homepage/institutes-logo/logo-12.png';
+import logo13 from '@/assets/images/homepage/institutes-logo/logo-13.png';
+import logo14 from '@/assets/images/homepage/institutes-logo/logo-14.png';
+import logo15 from '@/assets/images/homepage/institutes-logo/logo-15.png';
+import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.png';
+import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.png';
+import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.png';
+import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.png';
 
 // Para criação de meta tags de SEO
 import { useHead } from '@vueuse/head';
@@ -150,11 +205,13 @@ export default {
       meta: [
         {
           name: 'description',
-          content: 'Descubra dados sociais e ambientais do seu município com a UrbVerde. Acesse informações gratuitas para planejar cidades verdes, inclusivas e sustentáveis.',
+          content:
+            'Descubra dados sociais e ambientais do seu município com a UrbVerde. Acesse informações gratuitas para planejar cidades verdes, inclusivas e sustentáveis.',
         },
         {
           name: 'keywords',
-          content: 'dados sociais gratuitos, dados ambientais, sustentabilidade, cidades verdes, planejamento urbano, smart cities, desenvolvimento sustentável, acesso gratuito, dados municipais',
+          content:
+            'dados sociais gratuitos, dados ambientais, sustentabilidade, cidades verdes, planejamento urbano, smart cities, desenvolvimento sustentável, acesso gratuito, dados municipais',
         },
         {
           property: 'og:title',
@@ -162,7 +219,8 @@ export default {
         },
         {
           property: 'og:description',
-          content: 'Explore informações sociais e ambientais completas de municípios brasileiros com a UrbVerde, contribuindo para cidades mais resilientes e sustentáveis.',
+          content:
+            'Explore informações sociais e ambientais completas de municípios brasileiros com a UrbVerde, contribuindo para cidades mais resilientes e sustentáveis.',
         },
       ],
     });
@@ -171,8 +229,31 @@ export default {
   // Transição das palavras
   data() {
     return {
-      rotatingWords: ['Verde', 'Inclusivo', 'Resiliente'], // Palavras para rotação
+      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente'], // Palavras para rotação
       currentWordIndex: 0,
+      logos: [
+        // Caminho das logos
+        { src: logo1, alt: 'Logo da Instituição 1' },
+        { src: logo2, alt: 'Logo da Instituição 1' },
+        { src: logo3, alt: 'Logo da Instituição 1' },
+        { src: logo4, alt: 'Logo da Instituição 1' },
+        { src: logo5, alt: 'Logo da Instituição 1' },
+        { src: logo6, alt: 'Logo da Instituição 1' },
+        { src: logo7, alt: 'Logo da Instituição 1' },
+        { src: logo8, alt: 'Logo da Instituição 1' },
+        { src: logo9, alt: 'Logo da Instituição 1' },
+        { src: logo10, alt: 'Logo da Instituição 1' },
+        { src: logo11, alt: 'Logo da Instituição 1' },
+        { src: logo12, alt: 'Logo da Instituição 1' },
+        { src: logo13, alt: 'Logo da Instituição 1' },
+        { src: logo14, alt: 'Logo da Instituição 1' },
+        { src: logo15, alt: 'Logo da Instituição 1' },
+        { src: logo16, alt: 'Logo da Instituição 1' },
+        { src: logo17, alt: 'Logo da Instituição 1' },
+        { src: logo18, alt: 'Logo da Instituição 1' },
+        { src: logo19, alt: 'Logo da Instituição 1' },
+
+      ],
     };
   },
 
@@ -181,11 +262,15 @@ export default {
       return this.rotatingWords[this.currentWordIndex];
     },
   },
+
   mounted() {
     this.startWordRotation();
+    this.startLogoScroll();
   },
+
   beforeUnmount() {
     clearInterval(this.wordRotationInterval);
+    clearInterval(this.logoScrollInterval);
   },
 
   methods: {
@@ -194,6 +279,15 @@ export default {
       this.wordRotationInterval = setInterval(() => {
         this.currentWordIndex = (this.currentWordIndex + 1) % this.rotatingWords.length;
       }, 4000); // Intervalo de 4 segundos
+    },
+
+    // Animação de rolagem das logos
+    startLogoScroll() {
+      const logoTrack = this.$refs.logoTrack;
+      this.logoScrollInterval = setInterval(() => {
+        const firstChild = logoTrack.firstElementChild;
+        logoTrack.appendChild(firstChild); // Move o primeiro logo para o final
+      }, 2000); // Intervalo de 2 segundos
     },
 
     // Manipulação da imagem da plataforma
@@ -217,9 +311,97 @@ export default {
 };
 </script>
 
+
   <style scoped lang="scss">
+  
+  .institutes {
+    display: flex;
+    flex-direction: column;
+    padding: 160px 0 184px 0; // Uso de Padding pois o margin não está funcionando
+    gap: 128px;
+  }
+  
+  .institutes .institutes-header {
+    display: flex;
+    padding: 0px 128px;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    align-self: stretch;
+    text-align: center;
+  }
+  
+  .institutes .institutes-header h2{
+    color: var(--Primary-Fade-800, #013C31);
+    font-family: Inter;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 57.6px */
+    align-self: stretch;
+    margin: 0;
+  }
+
+  .institutes .institutes-header h4{
+    color: var(--Gray-600, #6C757D);
+    margin: 0;
+  }
+  
+  .institutes .institutes-header a{
+    color: var(--Green-500, #198754);
+    text-decoration-line: underline;
+    text-underline-position: from-font;
+  }
+
+  .institutes .institutes-header a .bi{
+    font-size: 14px;
+  }
+
+  // Animação da rotação das logos
+  .institutes-logo-carousel {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding: 24px 0;
+  }
+
+  .logo-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    animation: scroll-logos 20s linear infinite;
+  }
+
+  .logo-item {
+    flex: 0 0 calc(12.5% - 16px); /* 8 logos por linha */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo-item img {
+    max-width: 100%;
+    max-height: 80px;
+    object-fit: contain;
+  }
+
+  @keyframes scroll-logos {
+    from {
+      transform: translateX(0%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+
+
+
+  
+  
   a {
     text-decoration: none;
+    border-radius: 4px;
   }
 
   .homepage {
@@ -232,12 +414,15 @@ export default {
     height: 3000px;
   }
 
-  .hero {
+  .content {
     position: relative;
+    display: flex;
+    flex-direction: column;
     z-index: 1;
     width: 100%;
     height: 100vh;
     top: -72px;
+    padding-top: 1px;
   }
 
   .image-background {
@@ -295,7 +480,7 @@ export default {
     white-space: nowrap;
   }
 
-  .hero-text h2 {
+  .hero-text h4 {
     margin: 0;
   }
 
