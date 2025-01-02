@@ -1,192 +1,192 @@
-  <template>
-    <div class="homepage">
-      <NavbarHomepage />
+<template>
+  <div class="homepage">
+    <NavbarHomepage />
 
-      <!-- Hero -->
-      <div class="hero">
-        
-        <!-- Background fixo e atrás dos contents -->
-        <div class="image-background">
-          <img src="@/assets/images/homepage-background.png" alt="Natureza e pessoas plantando" />
-        </div>
+    <!-- Hero -->
+    <div class="hero">
 
-        <!-- Hero content -->
-        <section class="hero-content container">
-          <div class="hero-top">
-            <div class="hero-text">
-              <h1>
-                <span class="h1-text">Mapeando um Futuro </span>
-                <transition name="fade" mode="out-in">
-                  <span class="h1-lasttext" :key="currentWord">{{ currentWord }}</span>
-                </transition>
-              </h1>
-              <p class="subtitle normal-medium">
-                Acesse dados sociais e ambientais completos de seu município,
-                de forma totalmente gratuita!
-              </p>
-            </div>
-            <div class="search">
-              <div class="search-button">
-                <BuscaSimples @location-updated="onLocationUpdated" />
-              </div>
-              <router-link to="/mapa" class="button-primary-link">
-                <PrimaryButton
-                  label="Acessar"
-                  :filled="true"
-                  iconType="bootstrap"
-                  icon="bi bi-arrow-right"
-                  iconPosition="right"
-                />
-              </router-link>
+      <!-- Background fixo e atrás dos contents -->
+      <div class="image-background">
+        <img src="@/assets/images/homepage-background.png" alt="Natureza e pessoas plantando" />
+      </div>
 
-            </div>
+      <!-- Hero content -->
+      <section class="hero-content container">
+        <div class="hero-top">
+          <div class="hero-text">
+            <h1>
+              <span class="h1-text">Mapeando um Futuro </span>
+              <transition name="fade" mode="out-in">
+                <span class="h1-lasttext" :key="currentWord">{{ currentWord }}</span>
+              </transition>
+            </h1>
+            <p class="subtitle normal-medium">
+              Acesse dados sociais e ambientais completos de seu município,
+              de forma totalmente gratuita!
+            </p>
           </div>
-
-          <div class="wrapper-platform">
-
-            <!-- Imagem da plataforma -->
-            <router-link to="/mapa" class="platform-link">
-              <div 
-                class="platform" 
-                @mousemove="handleMouseMove" 
-                @mouseleave="resetZoom"
-              >
-                <div class="overlay"></div>
-                <img src="@/assets/images/platform.png" alt="Plataforma UrbVerde" ref="zoomImage" />
-              </div>
+          <div class="search">
+            <div class="search-button">
+              <BuscaSimples @location-updated="onLocationUpdated" />
+            </div>
+            <router-link to="/mapa" class="button-primary-link">
+              <PrimaryButton
+                label="Acessar"
+                :filled="true"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
             </router-link>
 
-            <!-- Cards de comentários sobre a UrbVerde -->
-            <div class="wrapper-cards">
+          </div>
+        </div>
 
-              <div class="cards shadow-lg">
-                <div class="top-content small-regular">
-                  <p>“ Iniciativas como a UrbVerde [...] fornecem a esperança de que 
+        <div class="wrapper-platform">
+
+          <!-- Imagem da plataforma -->
+          <router-link to="/mapa" class="platform-link">
+            <div
+              class="platform"
+              @mousemove="handleMouseMove"
+              @mouseleave="resetZoom"
+            >
+              <div class="overlay"></div>
+              <img src="@/assets/images/platform.png" alt="Plataforma UrbVerde" ref="zoomImage" />
+            </div>
+          </router-link>
+
+          <!-- Cards de comentários sobre a UrbVerde -->
+          <div class="wrapper-cards">
+
+            <div class="cards shadow-lg">
+              <div class="top-content small-regular">
+                <p>“ Iniciativas como a UrbVerde [...] fornecem a esperança de que
                   <span class="highlight small-bold">o mundo ainda tem jeito</span>. ”</p>
+              </div>
+              <div class="bottom-content">
+                <div>
+                  <img src="@\assets\images\homepage\image-card-1.png" alt="José Renato Nalini">
                 </div>
-                <div class="bottom-content">
-                  <div>
-                    <img src="@\assets\images\homepage\image-card-1.png" alt="José Renato Nalini">
-                  </div>
-                  <div class="wrapper-bottom-content">
-                    <p class="title small-bold">
-                      José Renato Nalini
-                    </p>
-                    <p class="subtitle small-regular">
-                      Secretário Executivo de São Paulo
-                    </p>
-                  </div>
+                <div class="wrapper-bottom-content">
+                  <p class="title small-bold">
+                    José Renato Nalini
+                  </p>
+                  <p class="subtitle small-regular">
+                    Secretário Executivo de São Paulo
+                  </p>
                 </div>
               </div>
+            </div>
 
-              <div class="cards shadow-lg">
-                <div class="top-content small-regular">
-                  <p>“ A UrbVerde foi desenvolvida para fornecer dados ao 
+            <div class="cards shadow-lg">
+              <div class="top-content small-regular">
+                <p>“ A UrbVerde foi desenvolvida para fornecer dados ao
                   <span class="highlight small-bold">poder público e aos cidadãos</span>. ” </p>
+              </div>
+              <div class="bottom-content">
+                <div>
+                  <img src="@\assets\images\homepage\image-card-2.png" alt="Juliana Domingos de Lima">
                 </div>
-                <div class="bottom-content">
-                  <div>
-                    <img src="@\assets\images\homepage\image-card-2.png" alt="Juliana Domingos de Lima">
-                  </div>
-                  <div class="wrapper-bottom-content">
-                    <p class="title small-bold">
-                      Juliana Domingos de Lima
-                    </p>
-                    <p class="subtitle small-regular">
-                      Jornalista do Estadão
-                    </p>
-                  </div>
+                <div class="wrapper-bottom-content">
+                  <p class="title small-bold">
+                    Juliana Domingos de Lima
+                  </p>
+                  <p class="subtitle small-regular">
+                    Jornalista do Estadão
+                  </p>
                 </div>
               </div>
+            </div>
 
-              <div class="cards shadow-lg">
-                <div class="top-content small-regular">
-                  <p>“ É uma  
+            <div class="cards shadow-lg">
+              <div class="top-content small-regular">
+                <p>“ É uma
                   <span class="highlight small-bold">plataforma que caiu do céu.</span>
                   […] ajuda a ler a cidade de uma forma clara. ”</p>
+              </div>
+              <div class="bottom-content">
+                <div>
+                  <img src="@\assets\images\homepage\image-card-3.png" alt="José Renato Nalini">
                 </div>
-                <div class="bottom-content">
-                  <div>
-                    <img src="@\assets\images\homepage\image-card-3.png" alt="José Renato Nalini">
-                  </div>
-                  <div class="wrapper-bottom-content">
-                    <p class="title small-bold">
-                      Marcela Cury Petenusci
-                    </p>
-                    <p class="subtitle small-regular">
-                      Professora de Ribeirão Preto
-                    </p>
-                  </div>
+                <div class="wrapper-bottom-content">
+                  <p class="title small-bold">
+                    Marcela Cury Petenusci
+                  </p>
+                  <p class="subtitle small-regular">
+                    Professora de Ribeirão Preto
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-  import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
-  import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-  import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+<script>
+import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 
-  export default {
-    name: 'HomePage',
-    components: {
-      NavbarHomepage,
-      PrimaryButton,
-      BuscaSimples,
+export default {
+  name: 'HomePage',
+  components: {
+    NavbarHomepage,
+    PrimaryButton,
+    BuscaSimples,
+  },
+
+  // Transição das palavras
+  data() {
+    return {
+      rotatingWords: ['Verde', 'Inclusivo', 'Resiliente'], // Palavras para rotação
+      currentWordIndex: 0,
+    };
+  },
+
+  computed: {
+    currentWord() {
+      return this.rotatingWords[this.currentWordIndex];
+    },
+  },
+  mounted() {
+    this.startWordRotation();
+  },
+  beforeUnmount() {
+    clearInterval(this.wordRotationInterval);
+  },
+
+  methods: {
+    // Método para rotação das palavras
+    startWordRotation() {
+      this.wordRotationInterval = setInterval(() => {
+        this.currentWordIndex = (this.currentWordIndex + 1) % this.rotatingWords.length;
+      }, 4000); // Intervalo de 4 segundos
     },
 
-    // Transição das palavras
-    data() {
-      return {
-        rotatingWords: ['Verde', 'Inclusivo', 'Resiliente'], // Palavras para rotação
-        currentWordIndex: 0,
-      };
+    // Manipulação da imagem da plataforma
+    handleMouseMove(event) {
+      const image = this.$refs.zoomImage;
+      const rect = image.getBoundingClientRect();
+
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
+
+      const centerX = (offsetX / rect.width - 0.5) * 5; // Calcula deslocamento X
+      const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
+
+      image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
     },
-
-    computed: {
-      currentWord() {
-        return this.rotatingWords[this.currentWordIndex]; 
-      },
+    resetZoom() {
+      const image = this.$refs.zoomImage;
+      image.style.transform = 'scale(1) translate(0, 0)';
     },
-    mounted() {
-      this.startWordRotation(); 
-    },
-    beforeUnmount() {
-      clearInterval(this.wordRotationInterval);
-    },
-
-    methods: {
-      // Método para rotação das palavras
-      startWordRotation() {
-        this.wordRotationInterval = setInterval(() => {
-          this.currentWordIndex = (this.currentWordIndex + 1) % this.rotatingWords.length;
-        }, 4000); // Intervalo de 4 segundos
-      },
-
-      // Manipulação da imagem da plataforma
-      handleMouseMove(event) {
-        const image = this.$refs.zoomImage; 
-        const rect = image.getBoundingClientRect(); 
-
-        const offsetX = event.clientX - rect.left; 
-        const offsetY = event.clientY - rect.top; 
-
-        const centerX = (offsetX / rect.width - 0.5) * 5; // Calcula deslocamento X
-        const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
-
-        image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
-      },
-      resetZoom() {
-        const image = this.$refs.zoomImage;
-        image.style.transform = 'scale(1) translate(0, 0)';
-      },
-    },
-  };
-  </script>
+  },
+};
+</script>
 
   <style scoped lang="scss">
   a {
@@ -205,12 +205,11 @@
 
   .hero {
     position: relative;
-    z-index: 1;  
+    z-index: 1;
     width: 100%;
-    height: 100vh; 
+    height: 100vh;
     top: -72px;
   }
-
 
   .image-background {
     position: absolute;
@@ -218,7 +217,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; 
+    z-index: -1;
     background-color: map-get($gray-colors, "white");
   }
 
@@ -305,7 +304,6 @@
     opacity: 0;
   }
 
-
   .h1-lasttext {
     display: inline-block;
     color: var(--Green-500, #198754);
@@ -345,7 +343,7 @@
   .search .button-primary-link .primary-button{
     width: 143px;
     height: 48px;
-  } 
+  }
 
   .wrapper-platform{
     display: flex;
@@ -373,7 +371,7 @@
       display: block;
       overflow: hidden;
       border-radius: 32px;
-      box-shadow: 
+      box-shadow:
         0px 0px 8px 1px #FFF inset,
         0px 67.187px 62.388px 0px rgba(0, 0, 0, 0.04),
         0px 0px 0px 0.96px rgba(0, 0, 0, 0.05),
@@ -384,17 +382,17 @@
         0px 1.92px 1.92px 0px rgba(0, 0, 0, 0.02);
 
       .overlay {
-        position: absolute; 
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); 
-        opacity: 0; 
-        transition: opacity 0.3s ease; 
-        border-radius: 32px; 
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 32px;
         z-index: 2; // Overlay acima da imagem
-        pointer-events: none; 
+        pointer-events: none;
       }
 
       &:hover .overlay {
@@ -402,7 +400,7 @@
       }
 
       img {
-        position: relative; 
+        position: relative;
         z-index: 1;
         width: 100%;
         height: auto;
@@ -410,13 +408,13 @@
         border-radius: 32px;
         border: 1px solid var(--Gray-300, #DEE2E6);
         background: map-get($gray-colors, "white");
-        transition: transform 0.2s ease-out; 
-        will-change: transform; 
+        transition: transform 0.2s ease-out;
+        will-change: transform;
       }
 
       &:hover img {
-        transform: scale(1.05); 
-        box-shadow: 
+        transform: scale(1.05);
+        box-shadow:
           0px 4px 12px rgba(0, 0, 0, 0.2);
       }
     }
@@ -463,8 +461,8 @@
   .cards .top-content p .highlight{
     background-color: var(--Green-100, #D1E7DD);
     padding: 0 4px;
-    border-radius: 4px; 
-    line-height: 150%; 
+    border-radius: 4px;
+    line-height: 150%;
   }
 
   .cards .bottom-content{
