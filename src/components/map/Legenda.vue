@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/map/Legenda.vue -->
 <template>
   <div class="legend-wrapper">
     <!-- Cabeçalho com o botão de expandir/recolher -->

@@ -21,6 +21,7 @@
   Deve importar a imagem no local para utilizar, Vite não cosegue carregar dinamicamente a imagem.
 -->
 
+<!-- urbverde-ui/src/components/buttons/PrimaryButton.vue -->
 <template>
   <button
     class="primary-button"

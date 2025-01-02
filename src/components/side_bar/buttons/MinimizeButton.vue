@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/buttons/MinimizeButton.vue -->
 <template>
   <button @click="changeButton" :class="['btn', 'btn-light', 'minimize-btn', { 'btn-open': !minimized, 'btn-closed': minimized }]">
     <img :src="minimized ?  maximize : minimize" alt="" />

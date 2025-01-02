@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/map/mapGenerator.vue -->
 <template>
   <div ref="mapContainer" class="map-container"></div>
 </template>

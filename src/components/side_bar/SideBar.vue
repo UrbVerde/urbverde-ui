@@ -1,4 +1,4 @@
-<!-- src\components\side_bar\SideBar.vue -->
+<!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
@@ -40,10 +40,11 @@
 <script setup>
 import { ref } from 'vue';
 
-import DropDown from './drop_down/NavbarDropdown.vue';
+import LogoButton from './buttons/LogoButton.vue';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
+import DropDown from './drop_down/NavbarDropdown.vue';
 
 // defineEmits é uma macro: não precisa de import!
 const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
