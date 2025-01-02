@@ -126,37 +126,93 @@
 
       <!-- Institutes content-->
       <div class="institutes container">
-        
+
         <div class="institutes-header">
           <h2>
             Da universidade para a sociedade
           </h2>
           <h4 class="normal-medium">
-            A UrbVerde é fruto de uma colaboração entre diversas instituições públicas, 
-            por meio do financiamento do CNPq e do PPPP da FAPESP. 
+            A UrbVerde é fruto de uma colaboração entre diversas instituições públicas,
+            por meio do financiamento do CNPq e do PPPP da FAPESP.
             <a href="#" class="normal-medium">
               Leia mais
               <i class="bi bi-arrow-up-right"></i>
             </a>
           </h4>
         </div>
-  
+
         <div class="institutes-logo-carousel">
-          <div class="logo-track" ref="logoTrack">
-            <div class="logo-item" v-for="(logo, index) in logos" :key="index">
+          <div class="logo-track">
+            <!-- Primeira lista de logos -->
+            <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
+              <img :src="logo.src" :alt="logo.alt" loading="lazy" />
+            </div>
+            <!-- Segunda lista de logos para criar o loop contínuo -->
+            <div class="logo-item" v-for="(logo, index) in logos" :key="`duplicate-${index}`">
               <img :src="logo.src" :alt="logo.alt" loading="lazy" />
             </div>
           </div>
         </div>
-  
+
         <div class="institutes-awards">
-          premios
+
+          <div class="award">
+            <img src="@/assets/images/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <div class="award-label">
+              <h5>
+                2024
+              </h5>
+              <div class="award-label-text">
+                <p class="caption-bold">
+                  Prêmio USP Impacto Social
+                </p>
+                <p class="caption-medium">
+                  Cidades e Comunidades Sustentáveis
+                </p>
+              </div>
+            </div>
+            <img src="@/assets/images/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+          </div>
+
+          <div class="award">
+            <img src="@/assets/images/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <div class="award-label">
+              <h5>
+                2024
+              </h5>
+              <div class="award-label-text">
+                <p class="caption-bold">
+                  Prêmio Promoção de Justiça Climática
+                </p>
+                <p class="caption-medium">
+                  Instituto de Arquitetos do Brasil - IAB
+                </p>
+              </div>
+            </div>
+            <img src="@/assets/images/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+          </div>
+
+          <div class="award">
+            <img src="@/assets/images/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <div class="award-label">
+              <h5>
+                2024
+              </h5>
+              <div class="award-label-text">
+                <p class="caption-bold">
+                  Excelência em Design
+                </p>
+                <p class="caption-medium">
+                  Competição de Design, Simpósio IHC
+                </p>
+              </div>
+            </div>
+            <img src="@/assets/images/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+          </div>
+
         </div>
-  
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -201,7 +257,7 @@ export default {
   // Configuração das meta tags de SEO
   setup() {
     useHead({
-      title: 'UrbVerde - Dados Sociais e Ambientais Gratuitos do seu Município',
+      title: 'UrbVerde - Página inicial',
       meta: [
         {
           name: 'description',
@@ -211,7 +267,7 @@ export default {
         {
           name: 'keywords',
           content:
-            'dados sociais gratuitos, dados ambientais, sustentabilidade, cidades verdes, planejamento urbano, smart cities, desenvolvimento sustentável, acesso gratuito, dados municipais',
+            'dados sociais gratuitos, dados ambientais, sustentabilidade, cidades verdes, planejamento urbano, smart cities, desenvolvimento sustentável, acesso gratuito, dados municipais, UrbVerde, página inicial',
         },
         {
           property: 'og:title',
@@ -226,33 +282,33 @@ export default {
     });
   },
 
-  // Transição das palavras
   data() {
     return {
+      // Palavras para transição
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente'], // Palavras para rotação
       currentWordIndex: 0,
-      logos: [
-        // Caminho das logos
-        { src: logo1, alt: 'Logo da Instituição 1' },
-        { src: logo2, alt: 'Logo da Instituição 1' },
-        { src: logo3, alt: 'Logo da Instituição 1' },
-        { src: logo4, alt: 'Logo da Instituição 1' },
-        { src: logo5, alt: 'Logo da Instituição 1' },
-        { src: logo6, alt: 'Logo da Instituição 1' },
-        { src: logo7, alt: 'Logo da Instituição 1' },
-        { src: logo8, alt: 'Logo da Instituição 1' },
-        { src: logo9, alt: 'Logo da Instituição 1' },
-        { src: logo10, alt: 'Logo da Instituição 1' },
-        { src: logo11, alt: 'Logo da Instituição 1' },
-        { src: logo12, alt: 'Logo da Instituição 1' },
-        { src: logo13, alt: 'Logo da Instituição 1' },
-        { src: logo14, alt: 'Logo da Instituição 1' },
-        { src: logo15, alt: 'Logo da Instituição 1' },
-        { src: logo16, alt: 'Logo da Instituição 1' },
-        { src: logo17, alt: 'Logo da Instituição 1' },
-        { src: logo18, alt: 'Logo da Instituição 1' },
-        { src: logo19, alt: 'Logo da Instituição 1' },
 
+      // Imagens das logos das instituições
+      logos: [
+        { src: logo1, alt: 'Logo da Instituição 1' },
+        { src: logo2, alt: 'Logo da Instituição 2' },
+        { src: logo3, alt: 'Logo da Instituição 3' },
+        { src: logo4, alt: 'Logo da Instituição 4' },
+        { src: logo5, alt: 'Logo da Instituição 5' },
+        { src: logo6, alt: 'Logo da Instituição 6' },
+        { src: logo7, alt: 'Logo da Instituição 7' },
+        { src: logo8, alt: 'Logo da Instituição 8' },
+        { src: logo9, alt: 'Logo da Instituição 9' },
+        { src: logo10, alt: 'Logo da Instituição 10' },
+        { src: logo11, alt: 'Logo da Instituição 11' },
+        { src: logo12, alt: 'Logo da Instituição 12' },
+        { src: logo13, alt: 'Logo da Instituição 13' },
+        { src: logo14, alt: 'Logo da Instituição 14' },
+        { src: logo15, alt: 'Logo da Instituição 15' },
+        { src: logo16, alt: 'Logo da Instituição 16' },
+        { src: logo17, alt: 'Logo da Instituição 17' },
+        { src: logo18, alt: 'Logo da Instituição 18' },
+        { src: logo19, alt: 'Logo da Instituição 19' },
       ],
     };
   },
@@ -265,12 +321,10 @@ export default {
 
   mounted() {
     this.startWordRotation();
-    this.startLogoScroll();
   },
 
   beforeUnmount() {
     clearInterval(this.wordRotationInterval);
-    clearInterval(this.logoScrollInterval);
   },
 
   methods: {
@@ -279,15 +333,6 @@ export default {
       this.wordRotationInterval = setInterval(() => {
         this.currentWordIndex = (this.currentWordIndex + 1) % this.rotatingWords.length;
       }, 4000); // Intervalo de 4 segundos
-    },
-
-    // Animação de rolagem das logos
-    startLogoScroll() {
-      const logoTrack = this.$refs.logoTrack;
-      this.logoScrollInterval = setInterval(() => {
-        const firstChild = logoTrack.firstElementChild;
-        logoTrack.appendChild(firstChild); // Move o primeiro logo para o final
-      }, 2000); // Intervalo de 2 segundos
     },
 
     // Manipulação da imagem da plataforma
@@ -311,94 +356,7 @@ export default {
 };
 </script>
 
-
   <style scoped lang="scss">
-  
-  .institutes {
-    display: flex;
-    flex-direction: column;
-    padding: 160px 0 184px 0; // Uso de Padding pois o margin não está funcionando
-    gap: 128px;
-  }
-  
-  .institutes .institutes-header {
-    display: flex;
-    padding: 0px 128px;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-    align-self: stretch;
-    text-align: center;
-  }
-  
-  .institutes .institutes-header h2{
-    color: var(--Primary-Fade-800, #013C31);
-    font-family: Inter;
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 120%; /* 57.6px */
-    align-self: stretch;
-    margin: 0;
-  }
-
-  .institutes .institutes-header h4{
-    color: var(--Gray-600, #6C757D);
-    margin: 0;
-  }
-  
-  .institutes .institutes-header a{
-    color: var(--Green-500, #198754);
-    text-decoration-line: underline;
-    text-underline-position: from-font;
-  }
-
-  .institutes .institutes-header a .bi{
-    font-size: 14px;
-  }
-
-  // Animação da rotação das logos
-  .institutes-logo-carousel {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-    padding: 24px 0;
-  }
-
-  .logo-track {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    animation: scroll-logos 20s linear infinite;
-  }
-
-  .logo-item {
-    flex: 0 0 calc(12.5% - 16px); /* 8 logos por linha */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .logo-item img {
-    max-width: 100%;
-    max-height: 80px;
-    object-fit: contain;
-  }
-
-  @keyframes scroll-logos {
-    from {
-      transform: translateX(0%);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  }
-
-
-
-
-  
-  
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -684,6 +642,8 @@ export default {
     align-items: flex-start;
     gap: 16px;
     align-self: stretch;
+    flex: 1;
+    width: 100%;
   }
 
   .cards .bottom-content p{
@@ -714,8 +674,9 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex: 1 0 0;
+    flex: 1;
     align-self: stretch;
+    width: 100%;
   }
 
   .cards .bottom-content .title{
@@ -725,6 +686,7 @@ export default {
     justify-content: center;
     align-items: flex-start;
     align-self: stretch;
+    width: 100%;
   }
 
   .cards .bottom-content .subtitle{
@@ -734,6 +696,140 @@ export default {
     justify-content: center;
     align-items: flex-start;
     align-self: stretch;
+    width: 100%;
+  }
+
+  .institutes {
+    display: flex;
+    flex-direction: column;
+    padding: 200px 0 184px 0; // Uso de Padding pois o margin não está funcionando
+    gap: 128px;
+  }
+
+  .institutes .institutes-header {
+    display: flex;
+    padding: 0px 128px;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    align-self: stretch;
+    text-align: center;
+  }
+
+  .institutes .institutes-header h2{
+    color: var(--Primary-Fade-800, #013C31);
+    font-family: Inter;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%;
+    align-self: stretch;
+    margin: 0;
+  }
+
+  .institutes .institutes-header h4{
+    color: var(--Gray-600, #6C757D);
+    margin: 0;
+  }
+
+  .institutes .institutes-header a{
+    color: var(--Green-500, #198754);
+    text-decoration-line: underline;
+    text-underline-position: from-font;
+  }
+
+  .institutes .institutes-header a .bi{
+    font-size: 14px;
+  }
+
+  // Animação das logos de instituições
+
+  .institutes-logo-carousel {
+    overflow: hidden;
+    position: relative;
+    margin: 0 24px;
+  }
+
+  .logo-track {
+    display: flex;
+    gap: 56px;
+    width: max-content;
+    animation: scroll-logos 50s linear infinite;
+  }
+
+  .logo-item {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo-item img {
+    max-width: 100%;
+    max-height: 80px; // tamanho máximo das logos
+    object-fit: contain;
+  }
+
+  @keyframes scroll-logos {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
+    }
+  }
+
+  .institutes-awards{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+  }
+
+  .institutes-awards p,
+  .institutes-awards h4,
+  .institutes-awards h5 {
+    margin: 0;
+  }
+
+  .institutes-awards .award{
+    display: flex;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .institutes-awards .award img{
+    width: 32px;
+    height: 80px;
+  }
+
+  .institutes-awards .award .award-label{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    align-self: stretch;
+  }
+
+  .institutes-awards .award .award-label h5{
+    color: #013C31;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%; /* 30px */
+  }
+
+  .institutes-awards .award .award-label .award-label-text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--Primary-Fade-700, #025949);
+  }
+
+  .institutes-awards .award .award-label .award-label-text p:last-child{
+    color: var(--Primary-Fade-700, #025949);
+    font-size: 10px;
   }
 
   </style>
