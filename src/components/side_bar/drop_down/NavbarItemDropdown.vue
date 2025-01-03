@@ -30,8 +30,7 @@
           <li v-for="(slot, index) in slots"
               :key="index"
               :class="{ 'is-active': slot.isActive, 'notActive': !slot.isActive, 'active': slot.isActive }"
-              @click="toggleSlotActive(index, $event)"
-          >
+              @click="toggleSlotActive(index, $event)">
             <div v-show="slot.show" id="intern-padding">
               <a tag="dropdownitem-txt" v-show="slot.show" class="dropdown-item">{{ slot.name }}</a>
             </div>
@@ -43,7 +42,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed } from 'vue';
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 
 //Dropdown.Default.autoClose = false;
 
@@ -99,8 +98,7 @@ const closeDropdownOnOutsideClick = (event) => {
     if (isDropdownSelected.value && isDropdownOpen.value) {
       if (dropdownElement && !dropdownElement.contains(event.target)) {
         slots.value.forEach((slot) => {
-          if (!slot.isActive)
-          {slot.show = false;}
+          if (!slot.isActive) { slot.show = false; }
         });
       }
 
@@ -265,14 +263,15 @@ const slots = ref([
   background-color: var(--Primary-Fade-100, white);
 
 }
-#dropdownitem-txt{
-}
+
+#dropdownitem-txt {}
+
 .dropdown-item {
   --bs-dropdown-link-active-bg: gray;
   --bs-dropdown-link-active-color: #fff;
   --bs-dropdown-link-hover-bg: #D3E1E0;
 
-  font-size:small;
+  font-size: small;
   font-family: Inter, sans-serif;
 
 }
@@ -283,14 +282,11 @@ const slots = ref([
   transition: .2s;
   padding: 0px 0px;
   gap: 12px;
-
 }
 
 .notActive {
-
   padding: 0px 0px;
   background: var(--Primary-Fade-100, #F8F9FA);
-
 }
 
 /**?*/
@@ -301,12 +297,10 @@ const slots = ref([
 /* Novo estilo para quando o dropdown está ativo */
 .dropdown-active {
   background: var(--Primary-Fade-100, #F8F9FA);
-
 }
 
 /*? */
 .is-active .nav-link {
   background-color: var(--Primary-Fade-100, black);
-
 }
 </style>
