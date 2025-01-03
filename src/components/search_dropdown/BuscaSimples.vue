@@ -8,7 +8,7 @@
           @keyup="keydown"
           @focus="handleFocus"
           @keydown.enter="handleEnter"
-          placeholder="Procure um local :)"
+          placeholder="Procure um local"
           class="input-field"
         />
         <div v-if="highlightedText" class="suggestion-overlay">
