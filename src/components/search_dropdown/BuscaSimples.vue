@@ -1,4 +1,4 @@
-]<template>
+<template>
   <div class="search-wrapper">
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
@@ -8,7 +8,7 @@
           @keyup="keydown"
           @focus="handleFocus"
           @keydown.enter="handleEnter"
-          placeholder="Buscar um lugar"
+          placeholder="Procure um local :)"
           class="input-field"
         />
         <div v-if="highlightedText" class="suggestion-overlay">
@@ -25,8 +25,8 @@
                src="../../assets/icons/clean.svg"
                width="16"
                height="16" /> </button>
-        <button class="search-button" @click="clearHistory"> <img id="imgIcon"
-                                                                  src="../../assets/images/search.png"
+        <button class="search-button" @click="submit"> <img id="imgIcon"
+                                                                  src="../../assets/icons/search.svg"
                                                                   width="16"
                                                                   height="16" /> </button>
       </div>
@@ -76,7 +76,8 @@
             @keydown.up.prevent="focusPreviousSuggestion(index)"
             @keydown.down.prevent="focusNextSuggestion(index)"
             :ref="`suggestionItem-${index}`">
-          {{ suggestion.text }}
+            <img :src="getImageSource(suggestion.type)" width="20" height="20" />
+          <span class="item-text">{{ suggestion.text }}</span>
         </li>
       </ul>
     </div>
@@ -93,6 +94,8 @@
 <script>
 
 import axios from 'axios';
+import historyIcon from '../../assets/icons/history.svg';
+import locationIcon from '../../assets/icons/location.svg';
 
 export default {
   components: {
@@ -139,7 +142,7 @@ export default {
 
     // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
     setTimeout(() => {
-      this.dropdown = true; // Exibe o dropdown após 2 segundos
+      this.dropdown = true; // Exibe o dropdown após 2,5 segundos
     }, 2500);
   },
   beforeUnmount() {
@@ -339,7 +342,7 @@ export default {
       localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
     },
 
-    clearHistory() {
+    clearHistory() {//usar para debug no botão search
       this.searchHistory = [];
       localStorage.removeItem('searchHistory');
       alert('Histórico limpo com sucesso!');
@@ -370,7 +373,7 @@ export default {
 
       let defaultSuggestions = [];
 
-      if (international || city === 'error' || state === 'error') {
+      if (international || city === 'error' || state === 'error' || city === null ){
         defaultSuggestions = [
           { text: 'Rio de Janeiro - RJ', type: 'city' },
           { text: 'São Paulo', type: 'state' },
@@ -393,6 +396,9 @@ export default {
       this.updateHighlightedText();
     },
 
+    getImageSource(type) {
+      return type === 'history' ? historyIcon : locationIcon;
+    },
     getCachedData() {
       return {
         city: localStorage.getItem('cachedCity'),
@@ -540,16 +546,21 @@ export default {
   text-overflow: ellipsis;
 
   /* Body/Small/Regular */
+  font-family: Inter;
   font-size: 14px;
+  
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
+
+  padding: 0; 
   /* 21px */
 }
 
 .input-field {
   background: var(--Gray-100, #F8F9FA);
-  border: transparent;
+  border: none;
+  outline: none;
 
 }
 
@@ -557,7 +568,10 @@ export default {
   position: relative;
   flex: 1;
   overflow: hidden;
-  border: none;
+  border:none;
+
+  display: flex;
+  align-items: center; /* Alinha verticalmente os elementos */
 
 }
 
@@ -569,6 +583,7 @@ export default {
   left: 0;
   pointer-events: none;
   background: transparent;
+  
 
 }
 
@@ -603,32 +618,33 @@ export default {
 
 }
 
+
+
 .filter-button-container {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
 
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: grab;
+
 }
 
 .filter-button,
 .filter-button-active {
   display: flex;
-  padding: 8px 14px;
+  padding: 5px 8px;
   justify-content: center;
   align-items: center;
   gap: 10px;
   border: none;
 
-  flex-shrink: 0;
+  
 
   border-radius: 99px;
 
   /* Body/Small/Regular */
-  font-size: 14px;
+  font-family: Inter;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
@@ -657,7 +673,7 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-  background: var(--Gray-100, #FFFFFF);
+  background: var(--Gray-100, #F8F9FA);
 }
 
 .suggestion-container {
@@ -667,13 +683,13 @@ export default {
   align-self: stretch;
   gap: 24px;
 
-  border: 1px solid #ebebeb;
+  border: 1px solid #ccc;
   border-left: none;
   border-right: none;
   border-bottom: none;
 
   padding: 16px 16px 24px 16px;
-  border-radius: 5px 5px 8px 8px;
+  border-radius: 0px 0px 8px 8px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
   position: absolute;
@@ -682,7 +698,7 @@ export default {
   left: 0;
   right: 0;
   z-index: 10;
-  background: var(--Gray-100, #ffffff);
+  background: var(--Gray-100, #F8F9FA);
 
 }
 
@@ -695,22 +711,43 @@ export default {
   padding: 0;
   margin: 0;
 
-  width: 100%; /* O item ocupará a largura total do contêiner */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
 
-}
-
-.suggestions-list li {
-  padding: 5px;
-  cursor: pointer;
-  width: 100%; /* O item ocupará a largura total do contêiner */
-  box-sizing: border-box; /* Inclui padding e bordas no tamanho total do elemento */
-  border-radius: 5px;
 }
 
 .suggestions-list li:hover {
   background-color: #f0f0f0;
-  width: 100%; /* Garante que o hover também ocupe 100% da largura */
-  box-sizing: border-box;
+}
+
+.suggestion-item {
+  display: flex;
+  height: 32px;
+  padding: 0px 8px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 4px;
+  
+}
+
+.item-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: var(--Body-Text-Body-Color, #212529);
+  text-overflow: ellipsis;
+  /* Body/Small/Regular */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  /* 21px */
 }
 
 .suggestion-count {
