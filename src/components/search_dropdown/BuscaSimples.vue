@@ -3,18 +3,19 @@
     <search-user-location @location-updated="updateLocationData" />
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
-        <input
-          ref="inputField"
-          v-model="inputValue"
-          @keyup="keydown"
-          @focus="handleFocus"
+        <input 
+          ref="inputField" 
+          v-model="inputValue" 
+          @keyup="keydown" 
+          @focus="handleFocus" 
           @keydown.enter="handleEnter"
-          placeholder="Procure um local"
-          class="input-field"
+          :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
+          class="input-field" 
         />
-
-        <div v-if="highlightedText" class="suggestion-overlay">
+        <div v-if="highlightedText && inputValue" class="suggestion-overlay">
           <span class="suggestion-text">
+            <span class="invisible">{{ visibleInput }}</span>
+            <span class="highlight">{{ highlightedText }}</span>
             <span class="invisible">{{ visibleInput }}</span>
             <span class="highlight">{{ highlightedText }}</span>
           </span>
@@ -44,32 +45,21 @@
         </button>
       </div>
     </div>
-
-    <div class="button-debug">
-      <span v-if="debug">
-        {{ suggestions.length }} sugestão(ões)
-      </span>
-      <span v-if="debug">
-        Cache: {{ cachedCities.length }} item(ns)
-      </span>
-      <span v-if="debug">
-        Histórico: {{ searchHistory.length }} item(ns)
-      </span>
-      <button v-if="debug" @click="clearHistory">Limpar Histórico</button>
+    <div v-if="debug" class="button-debug">
+      <span>{{ suggestions.length }} sugestão(ões)</span>
+      <span>Cache: {{ cachedCities.length }} item(ns)</span>
+      <span>Histórico: {{ searchHistory.length }} item(ns)</span>
+      <button @click="clearHistory">Limpar Histórico</button>
     </div>
 
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
-        <div
-          class="filter-button-container"
-          ref="filterButtonContainer"
-          @mousedown="startDrag"
-          @mousemove="onDrag"
-          @mouseup="endDrag"
-          @mouseleave="endDrag"
-          @touchstart="startDrag"
-          @touchmove="onDrag"
-          @touchend="endDrag"
+        <div class="filter-button-container"
+             ref="filterButtonContainer"
+             @mousedown="startDrag"
+             @mousemove="onDrag"
+             @mouseup="endDrag"
+             @mouseleave="endDrag"
         >
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
                   @click="toggleAll">Todos</button>
@@ -78,7 +68,7 @@
                   @click="toggleCity">Municípios</button>
 
           <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
-                  @click="toggleState">Estados</button>
+            @click="toggleState">Estados</button>
         </div>
       </div>
 
@@ -108,6 +98,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash';
 import axios from 'axios';
 
 import { API_URLS } from '@/constants/endpoints';
@@ -117,9 +108,8 @@ import locationIcon from '../../assets/icons/location.svg';
 import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
-  components: {
-    SearchUserLocation
-  },
+  components: {},
+
   data() {
     return {
       locationData: null,
@@ -152,21 +142,36 @@ export default {
       scrollLeft: 0,
     };
   },
+
   created() {
+    this.debouncedFetchCities = debounce(this.fetchCities, 300);
     this.loadSearchHistory();
+    this.generateDefaultSuggestions();
     this.updateSuggestions();
   },
+
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
 
-    // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
+    const filterButton = this.$refs.filterButtonContainer;
+    filterButton.addEventListener('touchstart', this.startDrag, { passive: true });
+    filterButton.addEventListener('touchmove', this.onDrag, { passive: true });
+    filterButton.addEventListener('touchend', this.endDrag, { passive: true });
+
+    // Show dropdown after 2s delay
     setTimeout(() => {
-      this.dropdown = true; // Exibe o dropdown após 2,5 segundos
+      this.dropdown = true;
     }, 2500);
   },
   beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
+
+    const filterButton = this.$refs.filterButtonContainer;
+    filterButton.removeEventListener('touchstart', this.startDrag);
+    filterButton.removeEventListener('touchmove', this.onDrag);
+    filterButton.removeEventListener('touchend', this.endDrag);
   },
+
   computed: {
     filteredSuggestions() {
       if (this.filterAll) {
@@ -251,10 +256,12 @@ export default {
       }
     },
     updateSuggestions() {
+      // Only proceed if input actually changed
+      if (this.inputValue === this.previousInputValue) return;
+
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
-
         return;
       }
 
@@ -262,6 +269,13 @@ export default {
       const historySuggestions = this.filterHistory(inputLower);
       const stateSuggestions = this.filterStates(inputLower);
       const citySuggestions = this.filterCities(inputLower);
+      
+      // Fetch cities immediately when input changes
+      // Debounce waits 300ms after last keypress before making API call
+      // This prevents excessive API calls while typing
+      this.debouncedFetchCities(this.inputValue);
+
+      this.previousInputValue = this.inputValue; // Update previous value
 
       this.suggestions = [
         ...historySuggestions.map(item => ({ text: item, type: 'history' })),
@@ -269,12 +283,15 @@ export default {
         ...citySuggestions.map(item => ({ text: item, type: 'city' }))
       ];
 
-      if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
-        this.fetchCities(this.inputValue);
-        this.lastInputLength = 3;  // Atualiza o comprimento anterior
-      } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
-        this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
-      }
+      // Before: Only fetched cities after 3 characters
+      // This was limiting immediate suggestions 
+      // Purely based on especulations that the API could overcharge
+      // if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
+      //   this.fetchCities(this.inputValue);
+      //   this.lastInputLength = 3;  // Atualiza o comprimento anterior
+      // } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
+      //   this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
+      // }
 
       this.updateHighlightedText();
 
@@ -291,17 +308,15 @@ export default {
         .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
     },
     updateHighlightedText() {
-      if (this.visibleSuggestions.length > 0) {
+      if (this.visibleSuggestions.length > 0 && this.inputValue) {
         const firstSuggestion = this.visibleSuggestions[0].text;
         if (firstSuggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
           this.visibleInput = this.inputValue;
           this.highlightedText = firstSuggestion.slice(this.inputValue.length);
-        } else {
-          this.highlightedText = '';
+          return;
         }
-      } else {
-        this.highlightedText = '';
-      }
+      } 
+      this.highlightedText = '';
     },
     selectSuggestion(suggestion) {
       this.inputValue = suggestion.text;
@@ -377,6 +392,7 @@ export default {
       let defaultSuggestions = [];
 
       if (international || city === 'error' || state === 'error' || city === null) {
+      if (international || city === 'error' || state === 'error' || city === null) {
         defaultSuggestions = [
           { text: 'Rio de Janeiro - RJ', type: 'city' },
           { text: 'São Paulo', type: 'state' },
@@ -442,6 +458,7 @@ export default {
       this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
     },
     onDrag(event) {
+      if (!this.isDragging) { return; }
       if (!this.isDragging) { return; }
       const x = event.pageX || event.touches[0].pageX;
       const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
@@ -560,10 +577,12 @@ export default {
   flex: 1;
   overflow: hidden;
   border: none;
+  border: none;
 
   display: flex;
   align-items: center;
   /* Alinha verticalmente os elementos */
+
 }
 
 .suggestion-overlay {
