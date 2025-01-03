@@ -26,9 +26,9 @@
                width="16"
                height="16" /> </button>
         <button class="search-button" @click="submit"> <img id="imgIcon"
-                                                                  src="../../assets/icons/search.svg"
-                                                                  width="16"
-                                                                  height="16" /> </button>
+                                                            src="../../assets/icons/search.svg"
+                                                            width="16"
+                                                            height="16" /> </button>
       </div>
     </div>
     <div class="button-debug">
@@ -76,7 +76,7 @@
             @keydown.up.prevent="focusPreviousSuggestion(index)"
             @keydown.down.prevent="focusNextSuggestion(index)"
             :ref="`suggestionItem-${index}`">
-            <img :src="getImageSource(suggestion.type)" width="20" height="20" />
+          <img :src="getImageSource(suggestion.type)" width="20" height="20" />
           <span class="item-text">{{ suggestion.text }}</span>
         </li>
       </ul>
@@ -548,12 +548,12 @@ export default {
   /* Body/Small/Regular */
   font-family: Inter;
   font-size: 14px;
-  
+
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
 
-  padding: 0; 
+  padding: 0;
   /* 21px */
 }
 
@@ -583,7 +583,6 @@ export default {
   left: 0;
   pointer-events: none;
   background: transparent;
-  
 
 }
 
@@ -618,14 +617,11 @@ export default {
 
 }
 
-
-
 .filter-button-container {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-
 
 }
 
@@ -637,8 +633,6 @@ export default {
   align-items: center;
   gap: 10px;
   border: none;
-
-  
 
   border-radius: 99px;
 
@@ -731,7 +725,7 @@ export default {
   gap: 10px;
   align-self: stretch;
   border-radius: 4px;
-  
+
 }
 
 .item-text {
