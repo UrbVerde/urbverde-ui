@@ -184,7 +184,8 @@ export default {
         this.clearCache();
 
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`);
-        const cities = await response.json();
+        const data = await response.json();
+        const cities = data.map(item => item.display_name);
 
         this.cacheCities(cities);
       } catch (error) {
