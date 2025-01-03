@@ -5,9 +5,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-import { createApp } from 'vue';
-import App from './App.vue';
+import { createHead } from '@vueuse/head';
 import axios from 'axios';
+import { createApp } from 'vue';
+
+import App from './App.vue';
 import router from './router';
 
 async function prepareApp() {
@@ -24,10 +26,12 @@ async function prepareApp() {
 }
 
 const app = createApp(App);
+const head = createHead();
 
 prepareApp().then(() => {
   app.config.globalProperties.$axios = axios;
 
+  app.use(head);
   app.use(router);
   app.mount('#app');
 });
