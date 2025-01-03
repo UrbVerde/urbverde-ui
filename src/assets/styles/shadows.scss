@@ -1,3 +1,13 @@
+/*
+  ╔═════════════════════════════════════════════════════════════════════╗
+  ║                    COMO USAR AS SOMBRAS DEFINIDAS                   ║
+  ╚═════════════════════════════════════════════════════════════════════╝
+    
+  Para usar as sombras definidas, basta adicionar as classes no seu HTML:
+    <div class="shadow-sm">Conteúdo</div>
+
+*/
+
 @use 'bootstrap/scss/bootstrap' as *;
 
 // Classe de Shadows

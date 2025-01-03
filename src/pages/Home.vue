@@ -357,6 +357,7 @@ export default {
 </script>
 
   <style scoped lang="scss">
+
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -390,7 +391,7 @@ export default {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-color: map-get($gray-colors, "white");
+    background-color: map-get($urbverde-gray-colors, "white");
   }
 
   .image-background img {
@@ -579,7 +580,7 @@ export default {
         display: block;
         border-radius: 32px;
         border: 1px solid var(--Gray-300, #DEE2E6);
-        background: map-get($gray-colors, "white");
+        background: map-get($urbverde-gray-colors, "white");
         transition: transform 0.2s ease-out;
         will-change: transform;
       }
@@ -609,7 +610,7 @@ export default {
     flex: 1 1 calc(33.333% - 24px);
     border-radius: 16px;
     border: 1px solid #E9ECEF;
-    background: map-get($gray-colors, "white");
+    background: map-get($urbverde-gray-colors, "white");
     max-width: 100%;
     min-width: 280px;
     gap: 24px;
@@ -622,7 +623,7 @@ export default {
   }
 
   .cards .top-content{
-    color: $text-color-body;
+    color: $urbverde-text-color-body;
   }
 
   .cards .top-content p{
@@ -680,7 +681,7 @@ export default {
   }
 
   .cards .bottom-content .title{
-    color: $text-color-body;
+    color: $urbverde-text-color-body;
     display: flex;
     flex-direction: column;
     justify-content: center;
