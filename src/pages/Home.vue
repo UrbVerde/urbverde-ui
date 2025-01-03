@@ -328,6 +328,13 @@ export default {
   },
 
   methods: {
+
+    // Handler for location updates from BuscaSimples component
+    onLocationUpdated(locationData) {
+      // Handle the location data here
+      console.log('Location updated:', locationData);
+    },
+
     // Método para rotação das palavras
     startWordRotation() {
       this.wordRotationInterval = setInterval(() => {
@@ -356,7 +363,7 @@ export default {
 };
 </script>
 
-  <style scoped lang="scss">
+<style scoped lang="scss">
 
   a {
     text-decoration: none;
@@ -833,4 +840,4 @@ export default {
     font-size: 10px;
   }
 
-  </style>
+</style>
