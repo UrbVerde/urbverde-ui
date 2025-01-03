@@ -1,5 +1,6 @@
 <template>
   <div class="search-wrapper">
+    <search-user-location @location-updated="updateLocationData" />
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
         <input
@@ -96,14 +97,15 @@
 import axios from 'axios';
 import historyIcon from '../../assets/icons/history.svg';
 import locationIcon from '../../assets/icons/location.svg';
+import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
   components: {
-
+    SearchUserLocation
   },
   data() {
     return {
-
+      locationData: null,
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -165,6 +167,11 @@ export default {
     }
   },
   methods: {
+    updateLocationData(location) {
+    this.locationData = location;
+    console.log("Dados de localização atualizados:", location);
+    this.cacheCities([location.city]);
+  },
     async fetchCities(query) {
       try {
         this.clearCache();

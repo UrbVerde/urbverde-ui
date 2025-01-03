@@ -1,8 +1,10 @@
 <!-- urbverde-ui/src/components/search_dropdown/SearchUserLocation.vue -->
 <template>
   <div>
+    <!--
     <p v-if="city">Você está em: {{ city }}, {{ state }}, {{ stateAbbreviation }}, {{ country }}</p>
-    <p v-else>Obtendo sua localização...</p>
+    <p v-else>Obtendo sua localização...</p> 
+    -->
   </div>
 </template>
 
