@@ -41,7 +41,7 @@
           </ul>
 
           <!-- PrimaryButton -->
-          <router-link to="/mapa" class="button-primary-link">
+          <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">
             <PrimaryButton
               label="Acessar a plataforma"
               :filled="true"
@@ -132,7 +132,7 @@ export default {
     padding: 8px 12px;
     align-items: center;
     text-decoration: none;
-    color: $text-color-body;
+    color: $urbverde-text-color-body;
     text-align: center;
     border-radius: 4px;
   }

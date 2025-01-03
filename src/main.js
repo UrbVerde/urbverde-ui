@@ -8,11 +8,13 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import axios from 'axios';
 import router from './router';
+import { createHead } from '@vueuse/head'; // Para criar meta tags de SEO
 
 const app = createApp(App);
+const head = createHead();
 
 // Configuração global do Axios
 app.config.globalProperties.$axios = axios;
-
+app.use(head);
 app.use(router);
 app.mount('#app');

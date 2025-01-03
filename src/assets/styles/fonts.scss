@@ -1,4 +1,13 @@
-// urbverde-ui/src/assets/styles/fonts.scss
+/*
+  ╔═════════════════════════════════════════════════════════════════════╗
+  ║                     COMO USAR AS FONTES DEFINIDAS                   ║
+  ╚═════════════════════════════════════════════════════════════════════╝
+
+  Você pode simplesmente adicionar as classes no seu HTML:
+    <p class="normal-regular">Texto</p>
+
+*/
+
 @use 'bootstrap/scss/bootstrap' as *;
 
 // Estilos de fonte para Caption

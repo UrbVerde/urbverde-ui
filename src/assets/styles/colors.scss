@@ -1,8 +1,26 @@
-// urbverde-ui/src/assets/styles/colors.scss
+/*
+  ╔═════════════════════════════════════════════════════════════════════╗
+  ║                 COMO USAR AS CORES DO URBVERDE THEME                ║
+  ╚═════════════════════════════════════════════════════════════════════╝
+
+  1) USANDO VARIÁVEIS DIRETAS:
+    - Caso tenha alguma variável direta (ex.: $urbverde-text-color-body),
+      você pode utilizá-la em qualquer SCSS. Ex.:
+      
+        .meu-texto {
+          color: $urbverde-text-color-body;
+        }
+
+  2) USANDO MAPAS DE CORES (map-get):
+    - Para buscar uma cor dentro do mapa, use: 
+        color: map-get($urbverde-theme-colors, "primary"); 
+        color: map-get($urbverde-primary-fade-colors, 800);
+*/
+
 @use 'bootstrap/scss/bootstrap' as *;
 
 // Cores Tema 
-$theme-colors: (
+$urbverde-theme-colors: (
   "primary": #025949,
   "secondary": #6C757D,
   "success": #198754,
@@ -15,10 +33,10 @@ $theme-colors: (
   "hitbox": #FFFFFF,
 );
 
-$text-color-body: #212529;     
+$urbverde-text-color-body: #212529;     
 
 // Primary Fade Colors
-$primary-fade-colors: (
+$urbverde-primary-fade-colors: (
   50: #F2F8F5,
   100: #D2EBDD,
   200: #ABE1C6,
@@ -32,7 +50,7 @@ $primary-fade-colors: (
 );
 
 // Gray Colors
-$gray-colors: (
+$urbverde-gray-colors: (
   white: #FFFFFF,
   100: #F8F9FA,
   200: #E9ECEF,
@@ -48,7 +66,7 @@ $gray-colors: (
 );
 
 // Blue Colors
-$blue-colors: (
+$urbverde-blue-colors: (
   100: #E7F1FF,
   200: #9EC5FE,
   300: #6EA8FE,
