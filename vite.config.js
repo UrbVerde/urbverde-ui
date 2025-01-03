@@ -22,6 +22,7 @@ export default defineConfig({
           @use "@/assets/styles/fonts.scss" as *;
           @use "@/assets/styles/shadows.scss" as *;
         `,
+        silenceDeprecations: ['mixed-decls', 'color-functions', 'global-builtin', 'import']
       },
     },
   },
