@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/buttons/LogoButton.vue -->
 <template>
   <div>
     <router-link to="/" class="logo-button">

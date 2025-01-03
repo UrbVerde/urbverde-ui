@@ -1,4 +1,4 @@
-<!-- src\components\side_bar\drop_down\NavbarDropdown.vue -->
+<!-- urbverde-ui/src/components/side_bar/drop_down/NavbarDropdown.vue -->
 <template>
   <div class="container">
     <span class="text">CATEGORIAS</span>
@@ -68,9 +68,4 @@ const handleSelectionChange = (selectedIndex) => {
     align-self: stretch;
 
 }
-
-.nav {}
-
-.li {}
-
 </style>

@@ -1,13 +1,4 @@
-<!--
-
-Para funcionar corretamente, o content abaixo do menú tem que possuir z-index: 1;
-
-.content {
-      z-index: 1;
-    }
-
--->
-
+<!-- src/components/navbar/NavbarHomepage.vue -->
 <template>
   <div>
     <!-- Navbar  -->

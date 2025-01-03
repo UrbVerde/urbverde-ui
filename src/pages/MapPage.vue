@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="global">
     <Sidebar
