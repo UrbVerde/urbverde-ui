@@ -74,6 +74,7 @@
     </p>
 
   </div>
+  </div>
 
 </template>
 
