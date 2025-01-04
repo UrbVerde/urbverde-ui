@@ -3,8 +3,9 @@
     <search-user-location @location-updated="updateLocationData" />
     <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
       <div class="input-overlay">
-        <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
-          :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''" class="input-field" />
+        <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
+          @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
+          class="input-field" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay">
           <span class="suggestion-text">
             <span class="invisible">{{ visibleInput }}</span>
@@ -44,19 +45,31 @@
 
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-          <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-            @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+        <template v-for="(suggestion, index) in visibleSuggestions" :key="index">
+          <!-- Skip rendering if suggestion is undefined -->
+          <li v-if="suggestion && suggestion.type"
+            :data-type="suggestion.type"
+            :class="[
+              'suggestion-item',
+              suggestion.type === 'separator' ? 'suggestion-separator' : ''
+            ]"
+            @click="suggestion.type !== 'separator' && selectSuggestion(suggestion)"
+            tabindex="0"
+            @keydown.enter="suggestion.type !== 'separator' && selectSuggestion(suggestion)"
+            @keydown.up.prevent="focusPreviousSuggestion(index)"
+            @keydown.down.prevent="focusNextSuggestion(index)"
             :ref="`suggestionItem-${index}`">
-            <img :src="getImageSource(suggestion.type)" width="20" height="20" />
-            <span class="item-text small-regular">{{ suggestion.text }}</span>
+            <template v-if="suggestion.type !== 'separator'">
+              <img :src="getImageSource(suggestion.type)" width="20" height="20" />
+              <span class="item-text">{{ suggestion.text }}</span>
+            </template>
           </li>
-        </ul>
-      </div>
+        </template>
+      </ul>
     </div>
 
     <!-- Coordenadas exibidas na tela -->
-    <p v-if="coordinates">
+    <p v-if="debug && coordinates">
       Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
     </p>
 
@@ -78,6 +91,10 @@ export default {
   data() {
     return {
       locationData: null,
+      defaultCoordinates: {
+        lat: -23.30958993100988,
+        lng: -51.36049903673405
+      },
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -109,7 +126,7 @@ export default {
   },
 
   created() {
-    this.debouncedFetchCities = debounce(this.fetchCities, 300);
+    this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.loadSearchHistory();
     this.generateDefaultSuggestions();
     this.updateSuggestions();
@@ -142,22 +159,56 @@ export default {
       if (this.filterAll) {
         return this.suggestions;
       } else if (this.filterCity) {
-        return this.suggestions.filter(suggestion => suggestion.type === 'city');
+        // Include cities from history and regular city suggestions
+        return this.suggestions.filter(suggestion =>
+          suggestion.type === 'city' ||
+          (suggestion.type === 'history' && !this.states.includes(suggestion.text))
+        );
       } else if (this.filterState) {
-        return this.suggestions.filter(suggestion => suggestion.type === 'state');
+        return this.suggestions.filter(suggestion =>
+          suggestion.type === 'state' ||
+          (suggestion.type === 'history' && this.states.includes(suggestion.text))
+        );
       }
-
       return this.suggestions; // fallback para todos os casos
     },
     visibleSuggestions() {
-      return this.filteredSuggestions.slice(0, 5);
+      const suggestions = this.filteredSuggestions;
+      
+      // Find first state suggestion
+      const firstStateIndex = suggestions.findIndex(s => s.type === 'state');
+      
+      if (firstStateIndex === -1) {
+        // No states found, return first 5 items
+        return suggestions.slice(0, 5);
+      }
+
+      // Get cities before first state
+      const citiesBefore = suggestions.slice(0, firstStateIndex);
+      // Get states after
+      const statesAfter = suggestions.slice(firstStateIndex);
+
+      // Calculate how many items we can show while ensuring at least one state
+      const totalItems = Math.min(5, suggestions.length);
+      const citiesCount = Math.min(citiesBefore.length, totalItems - 1); // Reserve 1 spot for state
+
+      return [
+        ...citiesBefore.slice(0, citiesCount),
+        // { type: 'separator' }, // Add separator
+        ...statesAfter.slice(0, totalItems - citiesCount)
+      ];
     }
   },
+
   methods: {
     updateLocationData(location) {
       this.locationData = location;
       console.log("Dados de localização atualizados:", location);
-      this.cacheCities([location.city]);
+      if (location?.city) {
+        const locationText = `${location.city} - ${location.stateAbbreviation}`;
+        this.cacheCities([locationText]);
+        this.generateDefaultSuggestions();
+      }
     },
     async fetchCities(query) {
       try {
@@ -167,7 +218,8 @@ export default {
         const data = await response.json();
         const cities = data.map(item => item.display_name);
 
-        this.cacheCities(cities);
+        // Update cache 
+        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
@@ -220,14 +272,14 @@ export default {
       this.cachedCities = [];
     },
 
-    keydown() {
+    handleInput() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
-        this.previousInputValue = this.inputValue;
+        // this.previousInputValue = this.inputValue;
       }
     },
 
-    updateSuggestions() {
+    async updateSuggestions() {
       // Only proceed if input actually changed
       if (this.inputValue === this.previousInputValue) return;
 
@@ -237,24 +289,29 @@ export default {
         return;
       }
 
-      const inputLower = this.inputValue.toLowerCase();
-      const historySuggestions = this.filterHistory(inputLower);
-      const stateSuggestions = this.filterStates(inputLower);
-      const citySuggestions = this.filterCities(inputLower);
+      try {
+        // Make the API call
+        await this.fetchCities(this.inputValue);
 
-      // Fetch cities immediately when input changes
-      // Debounce waits 300ms after last keypress before making API call
-      // This prevents excessive API calls while typing
-      this.debouncedFetchCities(this.inputValue);
+        // Then update suggestions with everything (including new cities)
+        const inputLower = this.inputValue.toLowerCase();
+        const historySuggestions = this.filterHistory(inputLower);
+        const stateSuggestions = this.filterStates(inputLower);
+        const citySuggestions = this.filterCities(inputLower);
 
-      this.previousInputValue = this.inputValue; // Update previous value
+        this.suggestions = [
+          ...historySuggestions.map(item => ({ text: item, type: 'history' })),
+          ...citySuggestions.map(item => ({ text: item, type: 'city' })),
+          // { type: 'separator' }, // Add separator after history items
+          ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
+        ];
 
-      this.suggestions = [
-        ...historySuggestions.map(item => ({ text: item, type: 'history' })),
-        ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
-        ...citySuggestions.map(item => ({ text: item, type: 'city' }))
-      ];
-
+        // Update these after everything is done
+        this.previousInputValue = this.inputValue;
+        this.updateHighlightedText();
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
       // Before: Only fetched cities after 3 characters
       // This was limiting immediate suggestions 
       // Purely based on especulations that the API could overcharge
@@ -263,10 +320,7 @@ export default {
       //   this.lastInputLength = 3;  // Atualiza o comprimento anterior
       // } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
       //   this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
-      // }
-
-      this.updateHighlightedText();
-
+      // }   
     },
 
     filterHistory(query) {
@@ -310,22 +364,27 @@ export default {
     },
 
     submit() {
-      if (this.inputValue) {
-
-        this.addToHistory(this.suggestions[0]);
-        this.locationChosen = this.suggestions[0];
-
+      if (this.inputValue && this.suggestions.length > 0) {
+        const suggestion = this.suggestions[0];
+        if (suggestion && suggestion.text) {
+          this.locationChosen = suggestion.text;
+          // Only add to history if not already handled by selectSuggestion
+          if (!this.locationChosen) {
+            this.addToHistory(suggestion.text);
+          }
+        }
       }
-      //this.suggestions = [];
+      // this.suggestions = [];
     },
 
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
         this.$refs.inputField.blur();
-        setTimeout(() => {
-          this.submit();
-        }, 1000);
+        // Removed setTimeout/submit since selectSuggestion already handles it
+        // setTimeout(() => {
+        //   this.submit();
+        // }, 1000);
       }
     },
 
@@ -384,8 +443,13 @@ export default {
           { text: 'Brasil', type: 'country' }
         ];
       } else {
+
+        const locationText = `${city} - ${stateAbbreviation}`;
+        // Check if location is in history to determine type
+        const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
+
         defaultSuggestions = [
-          { text: `${city} - ${stateAbbreviation}`, type: 'city' },
+          { text: locationText, type: locationType }, // Use the determined type
           { text: state, type: 'state' },
           { text: 'Brasil', type: 'country' }
         ];
@@ -459,20 +523,54 @@ export default {
     //Organizacao das coordenadas
     async fetchCoordinates(address) {
       const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
-      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
+      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`; //!KEY  EXPOSTA - COORDENADAS SERÃO DADAS PELA API.URBVERDE 
       try {
         const response = await axios.get(endpoint);
         if (response.data && response.data.results.length > 0) {
           const location = response.data.results[0].geometry;
-          this.$emit('location-updated', { lat: location.lat, lng: location.lng });
+          const coordinates = { lat: location.lat, lng: location.lng };
+          this.coordinates = coordinates;
+          this.$emit('location-updated', coordinates);
         } else {
+          this.handleLocationFailure();
           console.error('Nenhuma coordenada encontrada.');
         }
       } catch (error) {
         console.error('Erro ao buscar coordenadas:', error);
+        this.handleLocationFailure();
       }
     },
-  }
+
+    handleLocationFailure() {
+      // Try to get user's location first
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const coordinates = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.coordinates = coordinates;
+            this.$emit('location-updated', coordinates);
+          },
+          (error) => {
+            // If geolocation fails, use default coordinates
+            console.log('Geolocation error:', error);
+            this.useDefaultCoordinates();
+          }
+        );
+      } else {
+        // If geolocation not supported, use default coordinates
+        this.useDefaultCoordinates();
+      }
+      this.$emit('api-error'); // Add this line to emit the error event
+    },
+
+    useDefaultCoordinates() {
+      this.coordinates = this.defaultCoordinates;
+      this.$emit('location-updated', this.defaultCoordinates);
+    }
+  },
 };
 </script>
 
@@ -739,6 +837,7 @@ opacity: 0px;
 
 .suggestions-list li:hover {
   background-color: #E9ECEF;
+
 }
 
 .suggestion-item {
@@ -749,7 +848,16 @@ opacity: 0px;
   gap: 10px;
   align-self: stretch;
   border-radius: 4px;
+}
 
+
+
+/* Add this new class */
+.suggestion-item[data-type="separator"] {
+  height: 1px;
+  background-color: #E9ECEF;
+  margin: 0px 0;
+  padding: 0;
 }
 
 .item-text {

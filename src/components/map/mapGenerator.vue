@@ -11,11 +11,15 @@ export default {
     coordinates: {
       type: Object,
       required: true,
-    },
+      validator: (value) => {
+        return value.lat !== null && value.lng !== null;
+      }
+    }
   },
   data() {
     return {
-      map: null, // Adicionado para armazenar a instância do mapa
+      map: null,
+      mapLoaded: false
     };
   },
   mounted() {
@@ -23,61 +27,62 @@ export default {
   },
   methods: {
     initializeMap() {
+      if (!this.coordinates.lat || !this.coordinates.lng) {
+        console.warn('Invalid coordinates for map initialization');
+        return;
+      }
+
       this.map = new maplibregl.Map({
         container: this.$refs.mapContainer,
-        style: 'https://api.maptiler.com/maps/streets-v2-light/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+        style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ', //!CHAVE EXPOSTA
         center: [this.coordinates.lng, this.coordinates.lat],
         pitch: 20,
-        zoom: 14,
+        zoom: 14
       });
 
       this.map.on('load', () => {
-        console.warn('Mapa carregado completamente');
+        console.log('Map loaded successfully');
         this.mapLoaded = true;
-        this.updateMapCenter(); // Atualiza o centro após o carregamento completo
       });
 
-      // Adicione aqui quaisquer controles ou listeners que você queira
-
-      // Exemplo: Adicionar controles de navegação
       this.map.addControl(new maplibregl.NavigationControl());
-
-      console.warn('Mapa inicializado com coordenadas:', this.coordinates);
     },
-    warn() {
-      console.warn('Tentando atualizar o centro do mapa');
-      if (this.map) {
-        console.warn('Mapa existe, atualizando para:', this.coordinates);
-        this.map.setCenter([this.coordinates.lng, this.coordinates.lat]);
-      } else {
-        console.warn('Mapa não inicializado');
+    updateMapCenter() {
+      if (this.map && this.mapLoaded && this.coordinates.lat && this.coordinates.lng) {
+        console.log('Updating map center to:', this.coordinates);
+        this.map.flyTo({
+          center: [this.coordinates.lng, this.coordinates.lat],
+          zoom: 14,
+          duration: 10000,
+          essential: true
+        });
       }
-    },
+    }
   },
   watch: {
     coordinates: {
       handler(newCoordinates) {
+        console.log('MapBox received new coordinates:', newCoordinates);
         this.updateMapCenter();
-        console.warn('mapGenerator.vue - Novas coordenadas recebidas:', newCoordinates);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   beforeUnmount() {
     if (this.map) {
       this.map.remove();
-      console.warn('Mapa removido');
+      console.log('Map removed');
     }
-  },
+  }
 };
 </script>
 
-  <style scoped>
-  .map-container {
-    margin-top: 140px;
-    margin-left: 290px;
-    width: 1200px;
-    height: 550px;;
-    border-radius: 15px;
-  }
-  </style>
+<style scoped>
+.map-container {
+  margin-top: 140px;
+  margin-left: 290px;
+  width: 1200px;
+  height: 550px;
+  border-radius: 15px;
+}
+</style>

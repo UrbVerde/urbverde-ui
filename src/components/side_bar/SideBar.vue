@@ -8,7 +8,7 @@
         <MinimizeButton @click="toggleSidebar" />
       </div>
       <div v-show="isOpen" class="search-area">
-        <BuscaSimples @location-updated="onLocationUpdated"/>
+        <BuscaSimples @api-error="$emit('api-error')" @location-updated="onLocationUpdated"/>
       </div>
       <div v-show="isOpen" class="middle-area">
         <DropDown v-if="isSearchDone" :options="options" />
@@ -46,7 +46,7 @@ import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import DropDown from './drop_down/NavbarDropdown.vue';
 
 // defineEmits é uma macro: não precisa de import!
-const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
+const emit = defineEmits(['update-coordinates', 'toggle-sidebar', 'toggle-sidebar', 'update-coordinates', 'api-error']);
 
 // Variável para controlar se a busca foi feita
 const isSearchDone = ref(false);
