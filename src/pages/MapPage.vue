@@ -1,10 +1,20 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="global">
+    <!-- Custom warning alert -->
+    <div v-if="showWarning" class="warning-alert">
+      <button class="close-button" @click="closeWarning">✕</button>
+      <div class="warning-text">
+        <h3>ERRO: A API de localização atingiu seu limite! :(</h3>
+        <span>Usando suas coordenadas locais temporariamente. Isso não acontecerá mais nas versões futuras da UrbVerde, logo resolvo.</span>
+      </div>
+    </div>
+
     <Sidebar
       :is-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar"
       @update-coordinates="updateCoordinates"
+      @api-error="handleApiError"
     />
     <div v-if="!coordinates.lat || !coordinates.lng">
       <img
@@ -52,6 +62,7 @@ export default {
     const coordinates = ref({ lat: null, lng: null });
     const statsSection = ref(null);
     const isSidebarOpen = ref(true);
+    const showWarning = ref(false);
 
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
@@ -59,6 +70,14 @@ export default {
 
     const updateCoordinates = (newCoordinates) => {
       coordinates.value = newCoordinates;
+    };
+
+    const handleApiError = () => {
+      showWarning.value = true;
+    };
+
+    const closeWarning = () => {
+      showWarning.value = false;
     };
 
     const scrollToStats = () => {
@@ -78,7 +97,10 @@ export default {
       scrollToMap,
       statsSection,
       isSidebarOpen,
-      toggleSidebar
+      toggleSidebar,
+      showWarning,
+      handleApiError,
+      closeWarning
     };
   }
 };
@@ -89,6 +111,54 @@ export default {
   background-color: #F8F9FACC;
   width: 100%;
   height: 100vh;
+}
+
+.warning-alert {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #ffebeb;
+  padding: 1rem;
+  max-width: 28rem;
+  z-index: 1000;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.warning-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-right: 1.5rem;
+  color: #dc2626;
+}
+
+.warning-text h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.warning-text span {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.close-button {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.close-button:hover {
+  opacity: 0.8;
 }
 
 .map-placeholder {

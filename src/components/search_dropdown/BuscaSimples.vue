@@ -113,6 +113,10 @@ export default {
   data() {
     return {
       locationData: null,
+      defaultCoordinates: {
+        lat: -23.30958993100988,
+        lng: -51.36049903673405
+      },
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -529,13 +533,45 @@ export default {
           this.coordinates = coordinates;
           this.$emit('location-updated', coordinates);
         } else {
+          this.handleLocationFailure();
           console.error('Nenhuma coordenada encontrada.');
         }
       } catch (error) {
         console.error('Erro ao buscar coordenadas:', error);
+        this.handleLocationFailure();
       }
     },
-  }
+
+    handleLocationFailure() {
+      // Try to get user's location first
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const coordinates = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.coordinates = coordinates;
+            this.$emit('location-updated', coordinates);
+          },
+          (error) => {
+            // If geolocation fails, use default coordinates
+            console.log('Geolocation error:', error);
+            this.useDefaultCoordinates();
+          }
+        );
+      } else {
+        // If geolocation not supported, use default coordinates
+        this.useDefaultCoordinates();
+      }
+      this.$emit('api-error'); // Add this line to emit the error event
+    },
+
+    useDefaultCoordinates() {
+      this.coordinates = this.defaultCoordinates;
+      this.$emit('location-updated', this.defaultCoordinates);
+    }
+  },
 };
 </script>
 
