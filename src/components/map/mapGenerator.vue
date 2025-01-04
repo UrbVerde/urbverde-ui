@@ -1,6 +1,8 @@
 <!-- urbverde-ui/src/components/map/mapGenerator.vue -->
 <template>
-  <div ref="mapContainer" class="map-container"></div>
+  <div ref="mapContainer" class="map-container">
+    <slot></slot> <!-- This allows child components to render inside MapBox -->
+  </div>
 </template>
 
 <script>
@@ -11,10 +13,11 @@ export default {
     coordinates: {
       type: Object,
       required: true,
+      default: () => ({ lat: 0, lng: 0 }), // Avoid undefined errors
       validator: (value) => {
-        return value.lat !== null && value.lng !== null;
-      }
-    }
+        return typeof value.lat === 'number' && typeof value.lng === 'number';
+      },
+    },
   },
   data() {
     return {
@@ -34,29 +37,52 @@ export default {
 
       this.map = new maplibregl.Map({
         container: this.$refs.mapContainer,
-        style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ', //!CHAVE EXPOSTA
+        style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
         center: [this.coordinates.lng, this.coordinates.lat],
         pitch: 20,
-        zoom: 14
+        zoom: 14,
+        attributionControl: false,  // Add this line to hide attribution
+        NavigationControl: true,
       });
+      
+      // Add zoom and rotation controls
+      // this.map.addControl(
+      //   new maplibregl.NavigationControl({
+      //     showCompass: true,
+      //     showZoom: true,
+      //     visualizePitch: true
+      //   }),
+      //   'top-left'
+      // );
 
-      this.map.on('load', () => {
-        console.log('Map loaded successfully');
-        this.mapLoaded = true;
-      });
+    //   // Add geolocate control
+    //   this.map.addControl(
+    //     new maplibregl.GeolocateControl({
+    //       positionOptions: {
+    //         enableHighAccuracy: true
+    //       },
+    //       trackUserLocation: true
+    //     }),
+    //     'top-left'
+    //   );
 
-      this.map.addControl(new maplibregl.NavigationControl());
-    },
-    updateMapCenter() {
-      if (this.map && this.mapLoaded && this.coordinates.lat && this.coordinates.lng) {
-        console.log('Updating map center to:', this.coordinates);
-        this.map.flyTo({
-          center: [this.coordinates.lng, this.coordinates.lat],
-          zoom: 14,
-          duration: 10000,
-          essential: true
-        });
-      }
+    //   this.map.on('load', () => {
+    //     console.log('Map loaded successfully');
+    //     this.mapLoaded = true;
+    //   });
+
+    //   this.map.addControl(new maplibregl.NavigationControl());
+    // },
+    // updateMapCenter() {
+    //   if (this.map && this.mapLoaded && this.coordinates.lat && this.coordinates.lng) {
+    //     console.log('Updating map center to:', this.coordinates);
+    //     this.map.flyTo({
+    //       center: [this.coordinates.lng, this.coordinates.lat],
+    //       zoom: 14,
+    //       duration: 10000,
+    //       essential: true
+    //     });
+    //   }
     }
   },
   watch: {
@@ -79,10 +105,12 @@ export default {
 
 <style scoped>
 .map-container {
-  margin-top: 140px;
-  margin-left: 290px;
-  width: 1200px;
-  height: 550px;
+  position: relative; /* Make this container the reference for absolute positioning */
+  width: calc(100% - 48px);
+  height: calc(100vh - 35px - 144px);
   border-radius: 15px;
+  margin: 0px 24px 0; 
 }
+
+
 </style>
