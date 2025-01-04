@@ -1,13 +1,8 @@
-<!-- src/components/navbar/NavbarHomepage.vue -->
 <template>
   <div>
-    <!-- Navbar  -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <!-- Logo -->
-        <router-link to="/" class="navbar-logo-homepage">
-          <img src="@/assets/images/logo-homepage.png" alt="Logo Homepage" />
-        </router-link>
+        <LogoRouterLink />
 
         <!-- Botão para collapse (responsivo para telas menores) -->
         <button
@@ -22,9 +17,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Links e Botão -->
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- Links de navegação -->
           <ul class="navbar-nav">
             <li class="nav-item d-flex">
               <a href="#" class="small-regular">Seja Parceiro</a>
@@ -40,7 +33,6 @@
             </li>
           </ul>
 
-          <!-- PrimaryButton -->
           <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">
             <PrimaryButton
               label="Acessar a plataforma"
@@ -58,11 +50,13 @@
 
 <script>
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
 
 export default {
   name: 'NavbarHomepage',
   components: {
     PrimaryButton,
+    LogoRouterLink,
   },
   methods: {
     handleOutsideClick(event) {
@@ -84,11 +78,9 @@ export default {
     },
   },
   mounted() {
-    // Adiciona o listener ao clicar fora
     document.addEventListener('click', this.handleOutsideClick);
   },
   beforeUnmount() {
-    // Remove o listener ao desmontar o componente
     document.removeEventListener('click', this.handleOutsideClick);
   },
 };
@@ -103,7 +95,7 @@ export default {
     z-index: 2;
   }
 
-  .navbar .navbar-logo-homepage:hover{
+  .navbar .navbar-logo-homepage:hover {
     background-color: transparent;
   }
 
