@@ -1,21 +1,16 @@
+<!-- urbverde-ui/src/components/search_dropdown/BuscaSimples.vue -->
 <template>
   <div class="search-wrapper">
+
     <search-user-location @location-updated="updateLocationData" />
-    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
-    <search-user-location @location-updated="updateLocationData" />
+    
     <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
           class="input-field small-regular" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
-        <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
-          @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
-          class="input-field small-regular" />
-        <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
           <span class="suggestion-text">
-            <span class="invisible small-regular">{{ visibleInput }}</span>
-            <span class="highlight small-regular">{{ highlightedText }}</span>
             <span class="invisible small-regular">{{ visibleInput }}</span>
             <span class="highlight small-regular">{{ highlightedText }}</span>
           </span>
@@ -45,11 +40,7 @@
         </button>
       </div>
     </div>
-    <div v-if="debug" class="button-debug">
-      <span>{{ suggestions.length }} sugestão(ões)</span>
-      <span>Cache: {{ cachedCities.length }} item(ns)</span>
-      <span>Histórico: {{ searchHistory.length }} item(ns)</span>
-      <button @click="clearHistory">Limpar Histórico</button>
+
     <div v-if="debug" class="button-debug">
       <span>{{ suggestions.length }} sugestão(ões)</span>
       <span>Cache: {{ cachedCities.length }} item(ns)</span>
@@ -86,16 +77,13 @@
 
     <!-- Coordenadas exibidas na tela -->
     <p v-if="debug && coordinates">
-    <p v-if="debug && coordinates">
       Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
     </p>
 
   </div>
-  </div>
 </template>
 
 <script>
-import { debounce } from 'lodash';
 import { debounce } from 'lodash';
 import axios from 'axios';
 
@@ -104,18 +92,12 @@ import { API_URLS } from '@/constants/endpoints';
 import historyIcon from '../../assets/icons/history.svg';
 import locationIcon from '../../assets/icons/location.svg';
 import SearchUserLocation from './SearchUserLocation.vue';
-import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
   components: {},
 
   data() {
     return {
-      locationData: null,
-      defaultCoordinates: {
-        lat: -23.30958993100988,
-        lng: -51.36049903673405
-      },
       locationData: null,
       defaultCoordinates: {
         lat: -23.30958993100988,
@@ -154,9 +136,7 @@ export default {
 
   created() {
     this.debouncedFetchCities = debounce(this.fetchCities, 100);
-    this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.loadSearchHistory();
-    this.generateDefaultSuggestions();
     this.generateDefaultSuggestions();
     this.updateSuggestions();
   },
@@ -164,18 +144,7 @@ export default {
 
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
-
     const filterButton = this.$refs.filterButtonContainer;
-    filterButton.addEventListener('touchstart', this.startDrag, { passive: true });
-    filterButton.addEventListener('touchmove', this.onDrag, { passive: true });
-    filterButton.addEventListener('touchend', this.endDrag, { passive: true });
-
-    // Show dropdown after 2s delay
-    const filterButton = this.$refs.filterButtonContainer;
-    filterButton.addEventListener('touchstart', this.startDrag, { passive: true });
-    filterButton.addEventListener('touchmove', this.onDrag, { passive: true });
-    filterButton.addEventListener('touchend', this.endDrag, { passive: true });
-
     // Show dropdown after 2s delay
     setTimeout(() => {
       this.dropdown = true;
@@ -184,16 +153,7 @@ export default {
   },
   beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
-
     const filterButton = this.$refs.filterButtonContainer;
-    filterButton.removeEventListener('touchstart', this.startDrag);
-    filterButton.removeEventListener('touchmove', this.onDrag);
-    filterButton.removeEventListener('touchend', this.endDrag);
-
-    const filterButton = this.$refs.filterButtonContainer;
-    filterButton.removeEventListener('touchstart', this.startDrag);
-    filterButton.removeEventListener('touchmove', this.onDrag);
-    filterButton.removeEventListener('touchend', this.endDrag);
   },
 
 
@@ -207,16 +167,7 @@ export default {
           suggestion.type === 'city' ||
           (suggestion.type === 'history' && !this.states.includes(suggestion.text))
         );
-        // Include cities from history and regular city suggestions
-        return this.suggestions.filter(suggestion =>
-          suggestion.type === 'city' ||
-          (suggestion.type === 'history' && !this.states.includes(suggestion.text))
-        );
       } else if (this.filterState) {
-        return this.suggestions.filter(suggestion =>
-          suggestion.type === 'state' ||
-          (suggestion.type === 'history' && this.states.includes(suggestion.text))
-        );
         return this.suggestions.filter(suggestion =>
           suggestion.type === 'state' ||
           (suggestion.type === 'history' && this.states.includes(suggestion.text))
@@ -225,30 +176,6 @@ export default {
       return this.suggestions; // fallback para todos os casos
     },
     visibleSuggestions() {
-      const suggestions = this.filteredSuggestions;
-      
-      // Find first state suggestion
-      const firstStateIndex = suggestions.findIndex(s => s.type === 'state');
-      
-      if (firstStateIndex === -1) {
-        // No states found, return first 5 items
-        return suggestions.slice(0, 5);
-      }
-
-      // Get cities before first state
-      const citiesBefore = suggestions.slice(0, firstStateIndex);
-      // Get states after
-      const statesAfter = suggestions.slice(firstStateIndex);
-
-      // Calculate how many items we can show while ensuring at least one state
-      const totalItems = Math.min(5, suggestions.length);
-      const citiesCount = Math.min(citiesBefore.length, totalItems - 1); // Reserve 1 spot for state
-
-      return [
-        ...citiesBefore.slice(0, citiesCount),
-        // { type: 'separator' }, // Add separator
-        ...statesAfter.slice(0, totalItems - citiesCount)
-      ];
       const suggestions = this.filteredSuggestions;
       
       // Find first state suggestion
@@ -290,8 +217,6 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`);
         const data = await response.json();
         const cities = data.map(item => item.display_name);
-        const data = await response.json();
-        const cities = data.map(item => item.display_name);
 
         // Update cache 
         this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
@@ -321,7 +246,6 @@ export default {
 
     handleClickOutside(event) {
       const inputContainer = this.$el.querySelector('.input-container , .input-container-dropdown ');
-      const inputContainer = this.$el.querySelector('.input-container , .input-container-dropdown ');
       const dropdown = this.$refs.dropdown;
       const suggestionContainer = this.$el.querySelector('.suggestion-container');
 
@@ -344,19 +268,13 @@ export default {
     clearCache() {
       this.cachedCities = [];
     },
-
-    handleInput() {
     handleInput() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
         // this.previousInputValue = this.inputValue;
-        // this.previousInputValue = this.inputValue;
       }
     },
 
-    async updateSuggestions() {
-      // Only proceed if input actually changed
-      if (this.inputValue === this.previousInputValue) return;
     async updateSuggestions() {
       // Only proceed if input actually changed
       if (this.inputValue === this.previousInputValue) return;
@@ -367,40 +285,23 @@ export default {
         return;
       }
 
-      const inputLower = this.inputValue.toLowerCase();
-      const historySuggestions = this.filterHistory(inputLower);
-      const stateSuggestions = this.filterStates(inputLower);
-      const citySuggestions = this.filterCities(inputLower);
+      try {
+        // Make the API call
+        await this.fetchCities(this.inputValue);
 
-      // Fetch cities immediately when input changes
-      // Debounce waits 300ms after last keypress before making API call
-      // This prevents excessive API calls while typing
-      this.debouncedFetchCities(this.inputValue);
+        // Then update suggestions with everything (including new cities)
+        const inputLower = this.inputValue.toLowerCase();
+        const historySuggestions = this.filterHistory(inputLower);
+        const stateSuggestions = this.filterStates(inputLower);
+        const citySuggestions = this.filterCities(inputLower);
 
-      this.previousInputValue = this.inputValue; // Update previous value
+        // Fetch cities immediately when input changes
+        // Debounce waits 300ms after last keypress before making API call
+        // This prevents excessive API calls while typing
+        this.debouncedFetchCities(this.inputValue);
 
-        this.suggestions = [
-          ...historySuggestions.map(item => ({ text: item, type: 'history' })),
-          ...citySuggestions.map(item => ({ text: item, type: 'city' })),
-          // { type: 'separator' }, // Add separator after history items
-          ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
-        ];
+        this.previousInputValue = this.inputValue; // Update previous value
 
-        // Update these after everything is done
-        this.previousInputValue = this.inputValue;
-        this.updateHighlightedText();
-      } catch (error) {
-        console.error('Error fetching cities:', error);
-      }
-      // Before: Only fetched cities after 3 characters
-      // This was limiting immediate suggestions 
-      // Purely based on especulations that the API could overcharge
-      // if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
-      //   this.fetchCities(this.inputValue);
-      //   this.lastInputLength = 3;  // Atualiza o comprimento anterior
-      // } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
-      //   this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
-      // }   
         this.suggestions = [
           ...historySuggestions.map(item => ({ text: item, type: 'history' })),
           ...citySuggestions.map(item => ({ text: item, type: 'city' })),
@@ -437,17 +338,13 @@ export default {
     },
     updateHighlightedText() {
       if (this.visibleSuggestions.length > 0 && this.inputValue) {
-      if (this.visibleSuggestions.length > 0 && this.inputValue) {
         const firstSuggestion = this.visibleSuggestions[0].text;
         if (firstSuggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
           this.visibleInput = this.inputValue;
           this.highlightedText = firstSuggestion.slice(this.inputValue.length);
           return;
-          return;
         }
       }
-      }
-      this.highlightedText = '';
       this.highlightedText = '';
     },
     selectSuggestion(suggestion) {
@@ -456,11 +353,8 @@ export default {
       this.highlightedText = '';
       this.addToHistory(suggestion.text);
       this.dropdown = false;
-
       this.locationChosen = suggestion.text;
-
       this.fetchCoordinates(suggestion.text); // Chama a função para buscar coordenadas
-
       this.submit();
     },
     submit() {
@@ -473,17 +367,7 @@ export default {
             this.addToHistory(suggestion.text);
           }
         }
-      if (this.inputValue && this.suggestions.length > 0) {
-        const suggestion = this.suggestions[0];
-        if (suggestion && suggestion.text) {
-          this.locationChosen = suggestion.text;
-          // Only add to history if not already handled by selectSuggestion
-          if (!this.locationChosen) {
-            this.addToHistory(suggestion.text);
-          }
-        }
       }
-      // this.suggestions = [];
       // this.suggestions = [];
     },
     handleEnter() {
@@ -543,7 +427,6 @@ export default {
       let defaultSuggestions = [];
 
       if (international || city === 'error' || state === 'error' || city === null) {
-      if (international || city === 'error' || state === 'error' || city === null) {
         defaultSuggestions = [
           { text: 'Rio de Janeiro - RJ', type: 'city' },
           { text: 'São Paulo', type: 'state' },
@@ -555,13 +438,7 @@ export default {
         // Check if location is in history to determine type
         const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
 
-
-        const locationText = `${city} - ${stateAbbreviation}`;
-        // Check if location is in history to determine type
-        const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
-
         defaultSuggestions = [
-          { text: locationText, type: locationType }, // Use the determined type
           { text: locationText, type: locationType }, // Use the determined type
           { text: state, type: 'state' },
           { text: 'Brasil', type: 'country' }
@@ -621,7 +498,6 @@ export default {
     },
     onDrag(event) {
       if (!this.isDragging) { return; }
-      if (!this.isDragging) { return; }
       const x = event.pageX || event.touches[0].pageX;
       const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
       this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
@@ -634,7 +510,6 @@ export default {
     async fetchCoordinates(address) {
       const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
       const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`; //!KEY  EXPOSTA - COORDENADAS SERÃO DADAS PELA API.URBVERDE 
-      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`; //!KEY  EXPOSTA - COORDENADAS SERÃO DADAS PELA API.URBVERDE 
       try {
         const response = await axios.get(endpoint);
         if (response.data && response.data.results.length > 0) {
@@ -642,18 +517,13 @@ export default {
           const coordinates = { lat: location.lat, lng: location.lng };
           this.coordinates = coordinates;
           this.$emit('location-updated', coordinates);
-          const coordinates = { lat: location.lat, lng: location.lng };
-          this.coordinates = coordinates;
-          this.$emit('location-updated', coordinates);
         } else {
-          this.handleLocationFailure();
           this.handleLocationFailure();
           console.error('Nenhuma coordenada encontrada.');
         }
       } catch (error) {
         console.error('Erro ao buscar coordenadas:', error);
         this.handleLocationFailure();
-        this.handleLocationFailure();
       }
     },
 
@@ -685,40 +555,9 @@ export default {
     useDefaultCoordinates() {
       this.coordinates = this.defaultCoordinates;
       this.$emit('location-updated', this.defaultCoordinates);
-    }
-  },
-
-    handleLocationFailure() {
-      // Try to get user's location first
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const coordinates = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            this.coordinates = coordinates;
-            this.$emit('location-updated', coordinates);
-          },
-          (error) => {
-            // If geolocation fails, use default coordinates
-            console.log('Geolocation error:', error);
-            this.useDefaultCoordinates();
-          }
-        );
-      } else {
-        // If geolocation not supported, use default coordinates
-        this.useDefaultCoordinates();
-      }
-      this.$emit('api-error'); // Add this line to emit the error event
     },
-
-    useDefaultCoordinates() {
-      this.coordinates = this.defaultCoordinates;
-      this.$emit('location-updated', this.defaultCoordinates);
-    }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>
@@ -754,12 +593,6 @@ export default {
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-
-
-
-
-
-
 }
 
 .input-container-dropdown {
@@ -887,29 +720,11 @@ export default {
   gap: 10px;
   
 */
-
 border: none;
 padding: 8px 8px 8px 8px;
 gap: 10px;
-border-radius: 99px 0px 0px 0px;
+/* border-radius: 99px 0px 0px 0px; */
 opacity: 0px;
-
-
-  
-*/
-
-border: none;
-padding: 8px 8px 8px 8px;
-gap: 10px;
-border-radius: 99px 0px 0px 0px;
-opacity: 0px;
-
-
-
-  border-radius: 99px;
-
-
-
 }
 
 .filter-button {
@@ -932,39 +747,21 @@ opacity: 0px;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-
-  
-  
 }
 
 .suggestion-container {
-
   position: absolute;
-
-  position: absolute;
-
-  border: 1px solid #fffff;
-  border: 1px solid #fffff;
+  border: 1px solid #ffffff;
   border-left: none;
   border-right: none;
   border-bottom: none;
-
   gap: 0px;
   border-radius: 16px 16px 8px 8px;
   opacity: 0px;
-
-
   /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
   gap: 0px;
   border-radius: 16px 16px 8px 8px;
   opacity: 0px;
-
-
-  /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
-
-  
-  
-
   top: 100%;
   left: 0;
   right: 0;
@@ -974,14 +771,11 @@ opacity: 0px;
 }
 
 .suggestion-grid {
-
   position: relative;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
-
   padding: 16px 16px 24px 16px;
   gap: 24px;
 
