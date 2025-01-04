@@ -11,28 +11,40 @@
           placeholder="Procure um local"
           class="input-field"
         />
+
         <div v-if="highlightedText" class="suggestion-overlay">
           <span class="suggestion-text">
-            <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
+            <span class="invisible">{{ visibleInput }}</span>
+            <span class="highlight">{{ highlightedText }}</span>
           </span>
-
         </div>
       </div>
+
       <div class="button-container">
-        <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-                @click="clearInput">
-          <img id="imgIcon"
-               src="../../assets/icons/clean.svg"
-               width="16"
-               height="16" /> </button>
-        <button class="search-button" @click="submit"> <img id="imgIcon"
-                                                            src="../../assets/icons/search.svg"
-                                                            width="16"
-                                                            height="16" /> </button>
+        <button
+          :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
+          @click="clearInput"
+        >
+          <img
+            id="imgIcon"
+            src="../../assets/icons/clean.svg"
+            width="16"
+            height="16"
+          />
+        </button>
+
+        <button class="search-button" @click="submit">
+          <img
+            id="imgIcon"
+            src="../../assets/icons/search.svg"
+            width="16"
+            height="16"
+          />
+        </button>
       </div>
     </div>
-    <div class="button-debug">
 
+    <div class="button-debug">
       <span v-if="debug">
         {{ suggestions.length }} sugestão(ões)
       </span>
@@ -47,35 +59,40 @@
 
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
-        <div class="filter-button-container"
-             ref="filterButtonContainer"
-             @mousedown="startDrag"
-             @mousemove="onDrag"
-             @mouseup="endDrag"
-             @mouseleave="endDrag"
-             @touchstart="startDrag"
-             @touchmove="onDrag"
-             @touchend="endDrag"
+        <div
+          class="filter-button-container"
+          ref="filterButtonContainer"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+          @touchstart="startDrag"
+          @touchmove="onDrag"
+          @touchend="endDrag"
         >
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
                   @click="toggleAll">Todos</button>
+
           <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
                   @click="toggleCity">Municípios</button>
+
           <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
                   @click="toggleState">Estados</button>
         </div>
       </div>
 
       <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-        <li class="suggestion-item"
-            v-for="(suggestion, index) in visibleSuggestions"
-            :key="suggestion"
-            @click="selectSuggestion(suggestion)"
-            tabindex="0"
-            @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)"
-            @keydown.down.prevent="focusNextSuggestion(index)"
-            :ref="`suggestionItem-${index}`">
+        <li
+          class="suggestion-item"
+          v-for="(suggestion, index) in visibleSuggestions"
+          :key="suggestion"
+          @click="selectSuggestion(suggestion)"
+          tabindex="0"
+          @keydown.enter="selectSuggestion(suggestion)"
+          @keydown.up.prevent="focusPreviousSuggestion(index)"
+          @keydown.down.prevent="focusNextSuggestion(index)"
+          :ref="`suggestionItem-${index}`"
+        >
           <img :src="getImageSource(suggestion.type)" width="20" height="20" />
           <span class="item-text">{{ suggestion.text }}</span>
         </li>
@@ -86,24 +103,21 @@
     <p v-if="coordinates">
       Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
     </p>
-
   </div>
-
 </template>
 
 <script>
-
 import axios from 'axios';
+
+import { API_URLS } from '@/constants/endpoints';
+
 import historyIcon from '../../assets/icons/history.svg';
 import locationIcon from '../../assets/icons/location.svg';
 
 export default {
-  components: {
-
-  },
+  components: {},
   data() {
     return {
-
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -206,34 +220,26 @@ export default {
         this.dropdown = false;
       }
     },
-
     handleFocus(event) {
       if (this.dropdown !== true) {
-
         this.dropdown = true;
-
       }
       event.stopPropagation();
     },
-
     cacheCities(cities) {
       this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       this.updateSuggestions();
     },
-
     clearCache() {
       this.cachedCities = [];
     },
-
     keydown() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
         this.previousInputValue = this.inputValue;
       }
     },
-
     updateSuggestions() {
-
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
@@ -262,21 +268,17 @@ export default {
       this.updateHighlightedText();
 
     },
-
     filterHistory(query) {
       return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
     },
-
     filterStates(query) {
       return this.states
         .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
     },
-
     filterCities(query) {
       return this.cachedCities
         .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
     },
-
     updateHighlightedText() {
       if (this.visibleSuggestions.length > 0) {
         const firstSuggestion = this.visibleSuggestions[0].text;
@@ -290,7 +292,6 @@ export default {
         this.highlightedText = '';
       }
     },
-
     selectSuggestion(suggestion) {
       this.inputValue = suggestion.text;
       this.visibleInput = suggestion.text;
@@ -304,7 +305,6 @@ export default {
 
       this.submit();
     },
-
     submit() {
       if (this.inputValue) {
 
@@ -314,7 +314,6 @@ export default {
       }
       //this.suggestions = [];
     },
-
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
@@ -324,7 +323,6 @@ export default {
         }, 1000);
       }
     },
-
     addToHistory(item) {
       const itemLower = item.toLowerCase();
       const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
@@ -337,17 +335,14 @@ export default {
         this.saveSearchHistory();
       }
     },
-
     saveSearchHistory() {
       localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
     },
-
     clearHistory() {//usar para debug no botão search
       this.searchHistory = [];
       localStorage.removeItem('searchHistory');
       alert('Histórico limpo com sucesso!');
     },
-
     clearInput() {
       this.suggestions = [];
       this.generateDefaultSuggestions();
@@ -357,23 +352,20 @@ export default {
       if (!this.dropdown) {
         this.dropdown = true;
       }
-
     },
-
     loadSearchHistory() {
       const savedHistory = localStorage.getItem('searchHistory');
       if (savedHistory) {
         this.searchHistory = JSON.parse(savedHistory);
       }
     },
-
     generateDefaultSuggestions() {
       const cachedData = this.getCachedData();
       const { city, state, stateAbbreviation, international } = cachedData;
 
       let defaultSuggestions = [];
 
-      if (international || city === 'error' || state === 'error' || city === null ){
+      if (international || city === 'error' || state === 'error' || city === null) {
         defaultSuggestions = [
           { text: 'Rio de Janeiro - RJ', type: 'city' },
           { text: 'São Paulo', type: 'state' },
@@ -409,7 +401,6 @@ export default {
         longitude: localStorage.getItem('cachedLongitude'),
       };
     },
-
     toggleAll() {
       this.filterAll = true;
       this.filterCity = false;
@@ -418,7 +409,6 @@ export default {
         this.updateHighlightedText();
       }
     },
-
     toggleCity() {
       this.filterAll = false;
       this.filterCity = true;
@@ -427,7 +417,6 @@ export default {
         this.updateHighlightedText();
       }
     },
-
     toggleState() {
       this.filterAll = false;
       this.filterCity = false;
@@ -436,14 +425,13 @@ export default {
         this.updateHighlightedText();
       }
     },
-
     startDrag(event) {
       this.isDragging = true;
       this.startX = event.pageX || event.touches[0].pageX;
       this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
     },
     onDrag(event) {
-      if (!this.isDragging) {return;}
+      if (!this.isDragging) { return; }
       const x = event.pageX || event.touches[0].pageX;
       const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
       this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
@@ -454,8 +442,8 @@ export default {
 
     //Organizacao das coordenadas
     async fetchCoordinates(address) {
-      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
-      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
+      const apiKey = import.meta.env.VITE_OPENCAGEDATA_API_KEY; // Sua chave API
+      const endpoint = `${API_URLS.OPENCAGEDATA}?q=${encodeURIComponent(address)}&key=${apiKey}`;
       try {
         const response = await axios.get(endpoint);
         if (response.data && response.data.results.length > 0) {
@@ -479,7 +467,6 @@ export default {
   justify-content: center;
   align-items: center;
   border: none;
-
 }
 
 .search-wrapper {
@@ -489,7 +476,6 @@ export default {
 
 .input-container,
 .input-container-dropdown {
-
   display: flex;
   align-items: center;
   gap: 12px;
@@ -502,27 +488,22 @@ export default {
   position: relative;
   z-index: 1;
   /* Garante que o input fique acima do restante */
-
 }
 
 .input-container {
-
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
 
   /* Small Shadow */
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-
 }
 
 .input-container-dropdown {
-
   border-radius: 8px;
   background: var(--Gray-100, #F8F9FA);
 
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-
 }
 
 .input-field,
@@ -561,29 +542,26 @@ export default {
   background: var(--Gray-100, #F8F9FA);
   border: none;
   outline: none;
-
 }
 
 .input-overlay {
   position: relative;
   flex: 1;
   overflow: hidden;
-  border:none;
+  border: none;
 
   display: flex;
-  align-items: center; /* Alinha verticalmente os elementos */
-
+  align-items: center;
+  /* Alinha verticalmente os elementos */
 }
 
 .suggestion-overlay {
-
   /* alinhar texto digitado com sugestão */
   position: absolute;
   top: 0;
   left: 0;
   pointer-events: none;
   background: transparent;
-
 }
 
 .invisible {
@@ -598,7 +576,6 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-
 }
 
 .clean-button,
@@ -646,18 +623,14 @@ export default {
 }
 
 .filter-button {
-
   color: var(--Theme-Secondary, #6C757D);
 
   background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
 }
 
 .filter-button-active {
-
   background: var(--Primary-Fade-100, #D2E8DD);
   color: var(--Theme-Primary, #025949);
-
 }
 
 .filter-container {
@@ -693,7 +666,6 @@ export default {
   right: 0;
   z-index: 10;
   background: var(--Gray-100, #F8F9FA);
-
 }
 
 .suggestion-container-hidden {
@@ -710,7 +682,6 @@ export default {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-
 }
 
 .suggestions-list li:hover {
