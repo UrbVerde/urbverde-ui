@@ -5,11 +5,11 @@
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
-          class="input-field" />
-        <div v-if="highlightedText && inputValue" class="suggestion-overlay">
+          class="input-field small-regular" />
+        <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
           <span class="suggestion-text">
-            <span class="invisible">{{ visibleInput }}</span>
-            <span class="highlight">{{ highlightedText }}</span>
+            <span class="invisible small-regular">{{ visibleInput }}</span>
+            <span class="highlight small-regular">{{ highlightedText }}</span>
           </span>
 
         </div>
@@ -649,14 +649,6 @@ export default {
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
 
-  /* Body/Small/Regular */
-  font-family: Inter;
-  font-size: 14px;
-
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-
   padding: 0;
   /* 21px */
 }
@@ -696,7 +688,8 @@ export default {
 }
 
 .highlight {
-  color: #bbb;
+  color: var(--Gray-500, #ADB5BD);
+  
 }
 
 .button-container {
