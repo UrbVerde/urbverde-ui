@@ -1,17 +1,10 @@
 <template>
   <div class="search-wrapper">
     <search-user-location @location-updated="updateLocationData" />
-    <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
+    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
       <div class="input-overlay">
-        <input 
-          ref="inputField" 
-          v-model="inputValue" 
-          @keyup="keydown" 
-          @focus="handleFocus" 
-          @keydown.enter="handleEnter"
-          :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
-          class="input-field" 
-        />
+        <input ref="inputField" v-model="inputValue" @keyup="keydown" @focus="handleFocus" @keydown.enter="handleEnter"
+          :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''" class="input-field" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay">
           <span class="suggestion-text">
             <span class="invisible">{{ visibleInput }}</span>
@@ -35,28 +28,31 @@
       <button @click="clearHistory">Limpar Histórico</button>
     </div>
 
-    <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
-      <div class="filter-container">
-        <div class="filter-button-container" ref="filterButtonContainer" @mousedown="startDrag" @mousemove="onDrag"
-          @mouseup="endDrag" @mouseleave="endDrag">
-          <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
-            @click="toggleAll">Todos</button>
-          <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
-            @click="toggleCity">Municípios</button>
-          <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
-            @click="toggleState">Estados</button>
+    <div :class="{ 'suggestion-container shadow': dropdown, 'suggestion-container-hidden': !dropdown }">
+      <div class="suggestion-grid">
+        <div class="filter-container">
+          <div class="filter-button-container" ref="filterButtonContainer" @mousedown="startDrag" @mousemove="onDrag"
+            @mouseup="endDrag" @mouseleave="endDrag">
+            <button :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
+              @click="toggleAll">Todos</button>
+            <button :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
+              @click="toggleCity">Municípios</button>
+            <button :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
+              @click="toggleState">Estados</button>
+          </div>
         </div>
-      </div>
 
-      <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-        <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-          @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-          @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-          :ref="`suggestionItem-${index}`">
-          <img :src="getImageSource(suggestion.type)" width="20" height="20" />
-          <span class="item-text">{{ suggestion.text }}</span>
-        </li>
-      </ul>
+
+        <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
+          <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+            @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+            :ref="`suggestionItem-${index}`">
+            <img :src="getImageSource(suggestion.type)" width="20" height="20" />
+            <span class="item-text small-regular">{{ suggestion.text }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <!-- Coordenadas exibidas na tela -->
@@ -159,10 +155,10 @@ export default {
   },
   methods: {
     updateLocationData(location) {
-    this.locationData = location;
-    console.log("Dados de localização atualizados:", location);
-    this.cacheCities([location.city]);
-  },
+      this.locationData = location;
+      console.log("Dados de localização atualizados:", location);
+      this.cacheCities([location.city]);
+    },
     async fetchCities(query) {
       try {
         this.clearCache();
@@ -195,7 +191,7 @@ export default {
     },
 
     handleClickOutside(event) {
-      const inputContainer = this.$el.querySelector('.input-container, .input-container-dropdown');
+      const inputContainer = this.$el.querySelector('.input-container , .input-container-dropdown ');
       const dropdown = this.$refs.dropdown;
       const suggestionContainer = this.$el.querySelector('.suggestion-container');
 
@@ -245,7 +241,7 @@ export default {
       const historySuggestions = this.filterHistory(inputLower);
       const stateSuggestions = this.filterStates(inputLower);
       const citySuggestions = this.filterCities(inputLower);
-      
+
       // Fetch cities immediately when input changes
       // Debounce waits 300ms after last keypress before making API call
       // This prevents excessive API calls while typing
@@ -295,7 +291,7 @@ export default {
           this.highlightedText = firstSuggestion.slice(this.inputValue.length);
           return;
         }
-      } 
+      }
       this.highlightedText = '';
     },
 
@@ -517,10 +513,9 @@ export default {
 
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-  
 
-  /* Small Shadow */
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+
+
 
 }
 
@@ -529,11 +524,9 @@ export default {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
   outline: 2px solid #418377;
-  outline-offset: -2px; 
-  
+  outline-offset: -2px;
 
-  /* Regular Shadow */
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+
 
 }
 
@@ -635,35 +628,39 @@ export default {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-
+  /*overflow: hidden;
+  text-overflow: ellipsis;
+  */
 }
 
 .filter-button,
 .filter-button-active {
-  display: flex;
+  /*display: flex;
   padding: 5px 8px;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border: none;
+  
+*/
+
+border: none;
+padding: 8px 8px 8px 8px;
+gap: 10px;
+border-radius: 99px 0px 0px 0px;
+opacity: 0px;
+
+
 
   border-radius: 99px;
 
-  /* Body/Small/Regular */
-  font-family: Inter;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  /* 21px */
+
 }
 
 .filter-button {
 
-  color: var(--Theme-Secondary, #6C757D);
+  color: var(--Theme-Secondary, #525960);
 
-  background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
+  background: var(--Gray-100, #F8F9FA);
 }
 
 .filter-button-active {
@@ -680,34 +677,46 @@ export default {
   gap: 8px;
   align-self: stretch;
 
-  background: var(--Gray-100, #F8F9FA);
+  
 }
 
 .suggestion-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-  gap: 24px;
 
-  border: 1px solid #ccc;
+  position: absolute;
+
+  border: 1px solid #fffff;
   border-left: none;
   border-right: none;
   border-bottom: none;
 
-  padding: 16px 16px 24px 16px;
-  border-radius: 0px 0px 8px 8px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+  gap: 0px;
+  border-radius: 16px 16px 8px 8px;
+  opacity: 0px;
+
+
+  /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
 
   
-
-  position: absolute;
 
   top: 100%;
   left: 0;
   right: 0;
   z-index: 10;
   background: var(--Gray-100, #F8F9FA);
+
+}
+
+.suggestion-grid {
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+
+  padding: 16px 16px 24px 16px;
+  gap: 24px;
 
 }
 
@@ -729,7 +738,7 @@ export default {
 }
 
 .suggestions-list li:hover {
-  background-color: #f0f0f0;
+  background-color: #E9ECEF;
 }
 
 .suggestion-item {
@@ -745,18 +754,24 @@ export default {
 
 .item-text {
   display: -webkit-box;
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: vertical;/*evita quebra de linha*/ 
   -webkit-line-clamp: 1;
+
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
-  /* Body/Small/Regular */
-  font-family: Inter;
+
+  
+  /* Body/Small/Regular 
+    font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
   /* 21px */
+  
+
+
 }
 
 .suggestion-count {
