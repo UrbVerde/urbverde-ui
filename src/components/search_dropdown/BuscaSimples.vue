@@ -517,6 +517,7 @@ export default {
 
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
+  
 
   /* Small Shadow */
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
@@ -525,8 +526,11 @@ export default {
 
 .input-container-dropdown {
 
-  border-radius: 8px;
+  border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
+  outline: 2px solid #418377;
+  outline-offset: -2px; 
+  
 
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
@@ -694,6 +698,8 @@ export default {
   padding: 16px 16px 24px 16px;
   border-radius: 0px 0px 8px 8px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+
+  
 
   position: absolute;
 
