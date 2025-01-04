@@ -59,7 +59,7 @@
 
           <!-- Cards de comentários sobre a UrbVerde -->
           <div class="wrapper-cards">
-
+ 
             <div class="cards shadow-lg">
               <div class="top-content small-regular">
                 <p>“ Iniciativas como a UrbVerde [...] fornecem a esperança de que
