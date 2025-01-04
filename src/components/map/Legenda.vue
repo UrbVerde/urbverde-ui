@@ -106,7 +106,7 @@ export default {
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   overflow: hidden;
-  z-index: 50; /* Ensure it stays above the map */
+  z-index: 1; /* Ensure it stays above the map */
   transition: opacity 0.3s ease-in-out;
 }
 
