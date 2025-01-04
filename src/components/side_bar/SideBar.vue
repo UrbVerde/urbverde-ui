@@ -71,27 +71,25 @@ function toggleSidebar() {
 
 <style scoped>
 .sidebar {
+  /* Remove position: fixed; top; left; */
   width: 72px;
   height: 100vh;
   transition: 0.3s;
-  position: fixed;
-  top: 0;
-  left: 0;
   overflow: hidden;
   background: var(--Gray-White, #FFF);
-  box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
-  z-index: 100;
+  box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
+  z-index: 100; /* optional if you want it above the map if they overlap horizontally */
 }
 
 .sidebar-open {
-  width: 272px;  /* 280px*/
+  width: 272px;
+  /* Remove position: fixed here too */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
-  align-self: stretch;
-  position: fixed;
-  z-index: 100;
+  background: var(--Gray-White, #FFF);
+  transition: 0.3s;
 }
 
 .top-area {

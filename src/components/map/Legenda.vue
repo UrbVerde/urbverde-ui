@@ -1,13 +1,13 @@
 <!-- urbverde-ui/src/components/map/Legenda.vue -->
 <template>
   <div class="legend-wrapper">
-    <!-- Cabeçalho com o botão de expandir/recolher -->
+    <!-- Header with expand/collapse toggle -->
     <div class="legend-header" @click="toggleLegend">
       <span>Legenda</span>
       <img :src="wrapperIcon" :class="{'icon-open': isOpen, 'icon-closed': !isOpen}" alt="toggle icon" />
     </div>
 
-    <!-- Corpo da legenda que aparece ao abrir -->
+    <!-- Legend body, visible only when expanded -->
     <div v-if="isOpen" class="legend-body">
       <!-- Seção do Ano -->
       <div class="section-container">
@@ -25,28 +25,24 @@
       </div>
 
       <span>CAMADAS</span>
-      <!-- Seção de Camadas -->
+      <!-- Layers Section -->
       <div class="section-container">
         <div class="layers-section">
-
           <img src="@/assets/icons/layer.svg" alt="Layer icon" />
           <p>Contornos e traços</p>
         </div>
         <div class="layer-details">
           <p class="layer-sub"><span class="legend-line black"></span>Setores censitários</p>
           <p class="layer-sub"><span class="legend-line blue"></span>Municípios</p>
-
         </div>
-
       </div>
 
-      <!-- Seção de Temperatura -->
+      <!-- Temperature Section -->
       <div class="section-container">
         <div class="temperatura-header">
           <img src="@/assets/icons/temperatura.svg" alt="Temperature icon" />
           <p>Temperatura de Superfície</p>
         </div>
-
         <div class="temperature-scale">
           <div class="temperature-bar"></div>
           <span>-5ºC</span>
@@ -54,15 +50,13 @@
           <span>+5ºC</span>
         </div>
       </div>
-      <!-- Botão de Comparar -->
+
+      <!-- Compare and Download Buttons -->
       <div class="compare">
         <button>Comparar camada</button>
       </div>
-      <!-- Botão de Baixar -->
       <div class="section-container download-button">
-        <button @click="downloadData">
-          Baixar
-        </button>
+        <button @click="downloadData"> Baixar </button>
       </div>
     </div>
   </div>
@@ -97,56 +91,68 @@ export default {
 };
 </script>
 
-  <style scoped>
-  .legend-wrapper {
-    border: 1px solid #ccc;
-    border-radius: 16px;
-    overflow: hidden;
-    width: 296px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+<style scoped>
+.legend-wrapper {
+  position: absolute;
+  top: 33px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 264px;
+  height: auto;
+  max-height: calc(100% - 40px); /* Prevents it from exceeding the map's height */
+  border-radius: 16px 0px 0px 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  overflow: hidden;
+  z-index: 50; /* Ensure it stays above the map */
+  transition: opacity 0.3s ease-in-out;
+}
 
-  .legend-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 16px;
-    background-color: #FFF;
-    cursor: pointer;
-    box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.13) inset;
-  }
+.legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.13) inset;
+}
 
-  .legend-header span {
-      margin-left: 16px;
-      font-weight: bold;
-  }
-  .legend-header img {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.4s ease;
-    margin-right: 16px;
-  }
+.legend-header span {
+    margin-left: 16px;
+    font-weight: bold;
+}
+.legend-header img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+  /* margin-right: 16px; */
+}
 
-  .icon-open {
-    transform: rotate(180deg); /* Rotaciona o ícone quando a legenda está aberta */
-  }
+.icon-open {
+  transform: rotate(180deg); /* Rotaciona o ícone quando a legenda está aberta */
+}
 
-  .icon-closed {
-    transform: rotate(0deg); /* Ícone na posição padrão quando fechada */
-  }
+.icon-closed {
+  transform: rotate(0deg); /* Ícone na posição padrão quando fechada */
+}
 
-  .legend-body {
-    padding: 10px;
-    background-color: #F8F9FA;
-  }
+.legend-body {
+  padding: 16px;
+  background-color: #F8F9FA;
+  overflow-y: auto; /* Add scroll if content exceeds container height */
+}
 
-  /* Estilo para a seção do ano */
-  .section-container {
-    background-color: #FFF;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* Estilo para a seção do ano */
+.section-container {
+  background-color: #FFF;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .year-section {
@@ -155,10 +161,10 @@ export default {
   align-items: center;
 }
 
-.year-label {
+/* .year-label {
   display: flex;
   align-items: center;
-}
+} */
 
 .year-label img {
   margin-right: 10px;

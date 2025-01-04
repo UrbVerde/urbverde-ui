@@ -1,50 +1,64 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="global">
-    <!-- Custom warning alert -->
-    <div v-if="showWarning" class="warning-alert">
-      <button class="close-button" @click="closeWarning">✕</button>
-      <div class="warning-text">
-        <h3>ERRO: A API de localização atingiu seu limite! :(</h3>
-        <span>Usando suas coordenadas locais temporariamente. Isso não acontecerá mais nas versões futuras da UrbVerde, logo resolvo.</span>
-      </div>
-    </div>
 
-    <Sidebar
-      :is-open="isSidebarOpen"
-      @toggle-sidebar="toggleSidebar"
-      @update-coordinates="updateCoordinates"
-      @api-error="handleApiError"
-    />
-    <div v-if="!coordinates.lat || !coordinates.lng">
-      <img
-        src="../assets/images/setLocation.png"
-        alt="Imagem de espera"
-        class="map-placeholder"
-      >
-    </div>
-    <div
-      :class="['painel', { 'painel-collapsed': !isSidebarOpen }]"
-      v-else
-    >
-      <Navbar
-        :class="{ 'navbar-collapsed': !isSidebarOpen }"
-        @scroll-to-stats="scrollToStats"
-        @scroll-to-map="scrollToMap"
-      />
-      <div ref="mapSection">
-        <MapBox :coordinates="coordinates" />
+    <div class="content-wrapper">
+      <!-- Sidebar -->
+      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" :is-open="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" @api-error="handleApiError" />
+
+      <!-- Main content (navbar, map, etc.) -->
+      <div class="main-wrapper">
+        <!-- Show placeholder if no coordinates, otherwise show map content -->
+        <div v-if="!coordinates.lat || !coordinates.lng" class="placeholder-container">
+          <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
+        </div>
+        <div v-else>
+          <!-- If coordinates exist, show the map -->
+
+          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }" :active-section="activeSection"
+            @navigate-to="scrollToSection" />
+
+          <!-- Content area: Map and Legend -->
+          <div id="map" ref="Mapa" class="content-area">
+            <MapBox :coordinates="coordinates" class="map-box">
+              <Legenda />
+            </MapBox>
+          </div>
+
+          <!-- Stats Section (scroll target) -->
+          <div id="stats" ref="statsSection" class="box" style="height:476px; ">
+            Estatísticas do [ Clima ] em [ São Carlos ]
+          </div>
+
+          <!-- Pop Vulnerável -->
+          <div id="vulnerable" ref="vulnerableSection" class="box" style="height:666px; border-top: 1px solid black">
+            Quem é o mais afetado pelo calor extremo?
+          </div>
+
+          <!-- Ranking -->
+          <div id="ranking" ref="rankingSection" class="box" style="height:1082px; border-top: 1px solid black">
+            [São Carlos] no ranking dos municípios
+          </div>
+
+          <!-- Dados Gerais e Baixar Relatório -->
+          <div id="data" ref="dataSection" class="box" style="height:636px; border-top: 1px solid black">
+            Veja mais sobre [São Carlos]
+          </div>
+
+          <!-- Footer -->
+          <div id="newsletter" ref="newsletterSection" class="box"
+            style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
+            RECEBA AS NOVIDADES POR EMAIL
+          </div>
+        </div>
       </div>
-      <div class="legend">
-        <Legenda />
-      </div>
-      <div ref="statsSection" class="box" />
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
@@ -60,9 +74,16 @@ export default {
   },
   setup() {
     const coordinates = ref({ lat: null, lng: null });
-    const statsSection = ref(null);
+    const activeSection = ref('map');
+    const sections = {
+      map: null,
+      stats: null,
+      vulnerable: null,
+      ranking: null,
+      data: null,
+      newsletter: null
+    };
     const isSidebarOpen = ref(true);
-    const showWarning = ref(false);
 
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
@@ -72,35 +93,72 @@ export default {
       coordinates.value = newCoordinates;
     };
 
-    const handleApiError = () => {
-      showWarning.value = true;
-    };
+    // Scroll spy functionality
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const navbarHeight = 100; // Adjust this value based on your navbar height
 
-    const closeWarning = () => {
-      showWarning.value = false;
-    };
+      // Get all section elements
+      const sectionElements = document.querySelectorAll('[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]');
 
-    const scrollToStats = () => {
-      if (statsSection.value) {
-        statsSection.value.scrollIntoView({ behavior: 'smooth' });
+      for (const element of sectionElements) {
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + scrollPosition - navbarHeight;
+        const bottom = top + rect.height;
+
+        if (scrollPosition >= top && scrollPosition < bottom) {
+          activeSection.value = element.id;
+          history.replaceState(null, null, `#${element.id}`);
+          break;
+        }
       }
     };
 
-    const scrollToMap = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    const scrollToSection = (sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const navbarHeight = 100; // Adjust this value based on your navbar height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        activeSection.value = sectionId;
+        history.pushState(null, null, `#${sectionId}`);
+      }
     };
+
+    onMounted(() => {
+      // Add scroll event listener
+      window.addEventListener('scroll', handleScroll);
+
+      // Check for hash in URL on load and scroll to section
+      if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+          scrollToSection(sectionId);
+        }, 100);
+      }
+
+      // Initial scroll spy check
+      handleScroll();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
 
     return {
       coordinates,
       updateCoordinates,
-      scrollToStats,
-      scrollToMap,
-      statsSection,
+      activeSection,
+      scrollToSection,
       isSidebarOpen,
       toggleSidebar,
-      showWarning,
-      handleApiError,
-      closeWarning
     };
   }
 };
@@ -111,90 +169,103 @@ export default {
   background-color: #F8F9FACC;
   width: 100%;
   height: 100vh;
-}
-
-.warning-alert {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background-color: #ffebeb;
-  padding: 1rem;
-  max-width: 28rem;
-  z-index: 1000;
-  border-radius: 0.375rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.warning-text {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-right: 1.5rem;
-  color: #dc2626;
 }
 
-.warning-text h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.warning-text span {
-  font-size: 0.875rem;
-  line-height: 1.4;
-}
-
-.close-button {
-  position: absolute;
-  right: 0.75rem;
-  top: 0.75rem;
-  background: none;
-  border: none;
-  color: #dc2626;
-  cursor: pointer;
-  padding: 0.25rem;
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.close-button:hover {
-  opacity: 0.8;
-}
-
-.map-placeholder {
+/* Flex container to hold sidebar (left) and main content (right) */
+.content-wrapper {
+  flex: 1;
+  /* grows to fill remaining vertical space */
   display: flex;
-  justify-self: center;
-  transform: translate(-10%, 160%);
-  width: 280px;
-  height: 175px;
-  margin-left: 252px;
+  /* horizontal layout: sidebar + main content */
 }
 
-.painel {
-  transition: 0.6s ease;
+/* Sidebar “collapsed” style (if you want a narrower width) */
+.sidebar-collapsed {
+  width: 72px;
+  transition: width 0.3s;
 }
 
-.painel-collapsed {
-  margin-left: -100px;
-  transition: 0.6s ease;
+/* Main content takes the rest of the horizontal space */
+.main-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* Full viewport height */
+  overflow-y: auto;
+  /* Enable scrolling for content that exceeds viewport */
 }
 
-.legend {
+.content-area {
+  flex: 1;
+  /* Fills the remaining space below the Navbar */
+  position: relative;
+  /* Acts as the container for Legend's absolute positioning */
+  display: flex;
+}
+
+.map-box {
+  flex: 1;
+  /* Allow the map to take full width */
+  position: relative;
+  /* Parent container for Legend */
+}
+
+.legend-wrapper {
   position: absolute;
-  top: 170px;
-  right: 60px;
+  top: 16px;
+  /* Adjust as needed */
+  right: 16px;
+  /* Adjust as needed */
+  width: 264px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  /* Ensure it stays above the map */
 }
 
+/* Center the placeholder vertically and horizontally */
+.placeholder-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* Take full height of the main-wrapper */
+  margin-top: 3%;
+}
+
+/* Placeholder image if coordinates are not set */
+.map-placeholder {
+  display: block;
+  margin: 40px auto;
+  /* center horizontally */
+  /* width: 280px;
+  height: 175px; */
+  opacity: 0.45;
+}
+
+/* Just a section to hold stats or other elements */
 .box {
   display: flex;
+  flex-direction: column;
   gap: 80px;
-  margin-top: 110px;
+  gap: 16px;
+  margin-top: 0px;
   justify-content: center;
+  padding: 32px 40px;
+  justify-content: space-between;
+  width: 100%;
+  color: var(--Body-Text-Body-Color, #212529);
+  font-family: Inter, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
 }
 
-.static {
-  padding: 26px 30px;
-  background-color: rgb(176, 171, 171);
-  border-radius: 16px;
-}
+
+.header-left2 {}
 </style>
