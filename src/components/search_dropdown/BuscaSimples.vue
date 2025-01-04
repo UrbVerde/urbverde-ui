@@ -2,12 +2,20 @@
   <div class="search-wrapper">
     <search-user-location @location-updated="updateLocationData" />
     <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
+    <search-user-location @location-updated="updateLocationData" />
+    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
           class="input-field small-regular" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
+        <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
+          @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
+          class="input-field small-regular" />
+        <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
           <span class="suggestion-text">
+            <span class="invisible small-regular">{{ visibleInput }}</span>
+            <span class="highlight small-regular">{{ highlightedText }}</span>
             <span class="invisible small-regular">{{ visibleInput }}</span>
             <span class="highlight small-regular">{{ highlightedText }}</span>
           </span>
@@ -37,6 +45,11 @@
         </button>
       </div>
     </div>
+    <div v-if="debug" class="button-debug">
+      <span>{{ suggestions.length }} sugestão(ões)</span>
+      <span>Cache: {{ cachedCities.length }} item(ns)</span>
+      <span>Histórico: {{ searchHistory.length }} item(ns)</span>
+      <button @click="clearHistory">Limpar Histórico</button>
     <div v-if="debug" class="button-debug">
       <span>{{ suggestions.length }} sugestão(ões)</span>
       <span>Cache: {{ cachedCities.length }} item(ns)</span>
@@ -73,6 +86,7 @@
 
     <!-- Coordenadas exibidas na tela -->
     <p v-if="debug && coordinates">
+    <p v-if="debug && coordinates">
       Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
     </p>
 
@@ -82,6 +96,7 @@
 
 <script>
 import { debounce } from 'lodash';
+import { debounce } from 'lodash';
 import axios from 'axios';
 
 import { API_URLS } from '@/constants/endpoints';
@@ -89,12 +104,18 @@ import { API_URLS } from '@/constants/endpoints';
 import historyIcon from '../../assets/icons/history.svg';
 import locationIcon from '../../assets/icons/location.svg';
 import SearchUserLocation from './SearchUserLocation.vue';
+import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
   components: {},
 
   data() {
     return {
+      locationData: null,
+      defaultCoordinates: {
+        lat: -23.30958993100988,
+        lng: -51.36049903673405
+      },
       locationData: null,
       defaultCoordinates: {
         lat: -23.30958993100988,
@@ -130,12 +151,16 @@ export default {
     };
   },
 
+
   created() {
+    this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.loadSearchHistory();
     this.generateDefaultSuggestions();
+    this.generateDefaultSuggestions();
     this.updateSuggestions();
   },
+
 
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
@@ -146,7 +171,14 @@ export default {
     filterButton.addEventListener('touchend', this.endDrag, { passive: true });
 
     // Show dropdown after 2s delay
+    const filterButton = this.$refs.filterButtonContainer;
+    filterButton.addEventListener('touchstart', this.startDrag, { passive: true });
+    filterButton.addEventListener('touchmove', this.onDrag, { passive: true });
+    filterButton.addEventListener('touchend', this.endDrag, { passive: true });
+
+    // Show dropdown after 2s delay
     setTimeout(() => {
+      this.dropdown = true;
       this.dropdown = true;
     }, 2500);
   },
@@ -157,7 +189,13 @@ export default {
     filterButton.removeEventListener('touchstart', this.startDrag);
     filterButton.removeEventListener('touchmove', this.onDrag);
     filterButton.removeEventListener('touchend', this.endDrag);
+
+    const filterButton = this.$refs.filterButtonContainer;
+    filterButton.removeEventListener('touchstart', this.startDrag);
+    filterButton.removeEventListener('touchmove', this.onDrag);
+    filterButton.removeEventListener('touchend', this.endDrag);
   },
+
 
   computed: {
     filteredSuggestions() {
@@ -169,7 +207,16 @@ export default {
           suggestion.type === 'city' ||
           (suggestion.type === 'history' && !this.states.includes(suggestion.text))
         );
+        // Include cities from history and regular city suggestions
+        return this.suggestions.filter(suggestion =>
+          suggestion.type === 'city' ||
+          (suggestion.type === 'history' && !this.states.includes(suggestion.text))
+        );
       } else if (this.filterState) {
+        return this.suggestions.filter(suggestion =>
+          suggestion.type === 'state' ||
+          (suggestion.type === 'history' && this.states.includes(suggestion.text))
+        );
         return this.suggestions.filter(suggestion =>
           suggestion.type === 'state' ||
           (suggestion.type === 'history' && this.states.includes(suggestion.text))
@@ -202,8 +249,33 @@ export default {
         // { type: 'separator' }, // Add separator
         ...statesAfter.slice(0, totalItems - citiesCount)
       ];
+      const suggestions = this.filteredSuggestions;
+      
+      // Find first state suggestion
+      const firstStateIndex = suggestions.findIndex(s => s.type === 'state');
+      
+      if (firstStateIndex === -1) {
+        // No states found, return first 5 items
+        return suggestions.slice(0, 5);
+      }
+
+      // Get cities before first state
+      const citiesBefore = suggestions.slice(0, firstStateIndex);
+      // Get states after
+      const statesAfter = suggestions.slice(firstStateIndex);
+
+      // Calculate how many items we can show while ensuring at least one state
+      const totalItems = Math.min(5, suggestions.length);
+      const citiesCount = Math.min(citiesBefore.length, totalItems - 1); // Reserve 1 spot for state
+
+      return [
+        ...citiesBefore.slice(0, citiesCount),
+        // { type: 'separator' }, // Add separator
+        ...statesAfter.slice(0, totalItems - citiesCount)
+      ];
     }
   },
+
 
   methods: {
     updateLocationData(location) {
@@ -218,7 +290,11 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`);
         const data = await response.json();
         const cities = data.map(item => item.display_name);
+        const data = await response.json();
+        const cities = data.map(item => item.display_name);
 
+        // Update cache 
+        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
         // Update cache 
         this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       } catch (error) {
@@ -245,6 +321,7 @@ export default {
 
     handleClickOutside(event) {
       const inputContainer = this.$el.querySelector('.input-container , .input-container-dropdown ');
+      const inputContainer = this.$el.querySelector('.input-container , .input-container-dropdown ');
       const dropdown = this.$refs.dropdown;
       const suggestionContainer = this.$el.querySelector('.suggestion-container');
 
@@ -269,12 +346,17 @@ export default {
     },
 
     handleInput() {
+    handleInput() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
+        // this.previousInputValue = this.inputValue;
         // this.previousInputValue = this.inputValue;
       }
     },
 
+    async updateSuggestions() {
+      // Only proceed if input actually changed
+      if (this.inputValue === this.previousInputValue) return;
     async updateSuggestions() {
       // Only proceed if input actually changed
       if (this.inputValue === this.previousInputValue) return;
@@ -319,6 +401,28 @@ export default {
       // } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
       //   this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
       // }   
+        this.suggestions = [
+          ...historySuggestions.map(item => ({ text: item, type: 'history' })),
+          ...citySuggestions.map(item => ({ text: item, type: 'city' })),
+          // { type: 'separator' }, // Add separator after history items
+          ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
+        ];
+
+        // Update these after everything is done
+        this.previousInputValue = this.inputValue;
+        this.updateHighlightedText();
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+      // Before: Only fetched cities after 3 characters
+      // This was limiting immediate suggestions 
+      // Purely based on especulations that the API could overcharge
+      // if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
+      //   this.fetchCities(this.inputValue);
+      //   this.lastInputLength = 3;  // Atualiza o comprimento anterior
+      // } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
+      //   this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
+      // }   
     },
     filterHistory(query) {
       return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
@@ -333,14 +437,17 @@ export default {
     },
     updateHighlightedText() {
       if (this.visibleSuggestions.length > 0 && this.inputValue) {
+      if (this.visibleSuggestions.length > 0 && this.inputValue) {
         const firstSuggestion = this.visibleSuggestions[0].text;
         if (firstSuggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
           this.visibleInput = this.inputValue;
           this.highlightedText = firstSuggestion.slice(this.inputValue.length);
           return;
+          return;
         }
       }
       }
+      this.highlightedText = '';
       this.highlightedText = '';
     },
     selectSuggestion(suggestion) {
@@ -366,13 +473,27 @@ export default {
             this.addToHistory(suggestion.text);
           }
         }
+      if (this.inputValue && this.suggestions.length > 0) {
+        const suggestion = this.suggestions[0];
+        if (suggestion && suggestion.text) {
+          this.locationChosen = suggestion.text;
+          // Only add to history if not already handled by selectSuggestion
+          if (!this.locationChosen) {
+            this.addToHistory(suggestion.text);
+          }
+        }
       }
+      // this.suggestions = [];
       // this.suggestions = [];
     },
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
         this.$refs.inputField.blur();
+        // Removed setTimeout/submit since selectSuggestion already handles it
+        // setTimeout(() => {
+        //   this.submit();
+        // }, 1000);
         // Removed setTimeout/submit since selectSuggestion already handles it
         // setTimeout(() => {
         //   this.submit();
@@ -434,7 +555,13 @@ export default {
         // Check if location is in history to determine type
         const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
 
+
+        const locationText = `${city} - ${stateAbbreviation}`;
+        // Check if location is in history to determine type
+        const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
+
         defaultSuggestions = [
+          { text: locationText, type: locationType }, // Use the determined type
           { text: locationText, type: locationType }, // Use the determined type
           { text: state, type: 'state' },
           { text: 'Brasil', type: 'country' }
@@ -507,6 +634,7 @@ export default {
     async fetchCoordinates(address) {
       const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
       const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`; //!KEY  EXPOSTA - COORDENADAS SERÃO DADAS PELA API.URBVERDE 
+      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`; //!KEY  EXPOSTA - COORDENADAS SERÃO DADAS PELA API.URBVERDE 
       try {
         const response = await axios.get(endpoint);
         if (response.data && response.data.results.length > 0) {
@@ -514,15 +642,51 @@ export default {
           const coordinates = { lat: location.lat, lng: location.lng };
           this.coordinates = coordinates;
           this.$emit('location-updated', coordinates);
+          const coordinates = { lat: location.lat, lng: location.lng };
+          this.coordinates = coordinates;
+          this.$emit('location-updated', coordinates);
         } else {
+          this.handleLocationFailure();
           this.handleLocationFailure();
           console.error('Nenhuma coordenada encontrada.');
         }
       } catch (error) {
         console.error('Erro ao buscar coordenadas:', error);
         this.handleLocationFailure();
+        this.handleLocationFailure();
       }
     },
+
+    handleLocationFailure() {
+      // Try to get user's location first
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const coordinates = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.coordinates = coordinates;
+            this.$emit('location-updated', coordinates);
+          },
+          (error) => {
+            // If geolocation fails, use default coordinates
+            console.log('Geolocation error:', error);
+            this.useDefaultCoordinates();
+          }
+        );
+      } else {
+        // If geolocation not supported, use default coordinates
+        this.useDefaultCoordinates();
+      }
+      this.$emit('api-error'); // Add this line to emit the error event
+    },
+
+    useDefaultCoordinates() {
+      this.coordinates = this.defaultCoordinates;
+      this.$emit('location-updated', this.defaultCoordinates);
+    }
+  },
 
     handleLocationFailure() {
       // Try to get user's location first
@@ -594,12 +758,18 @@ export default {
 
 
 
+
+
 }
 
 .input-container-dropdown {
 
   border-radius: 99px;
+  border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
+  outline: 2px solid #418377;
+  outline-offset: -2px;
+
   outline: 2px solid #418377;
   outline-offset: -2px;
 
@@ -647,6 +817,8 @@ export default {
   display: flex;
   align-items: center;
   /* Alinha verticalmente os elementos */
+  align-items: center;
+  /* Alinha verticalmente os elementos */
 
 }
 
@@ -664,6 +836,8 @@ export default {
 }
 
 .highlight {
+  color: var(--Gray-500, #ADB5BD);
+  
   color: var(--Gray-500, #ADB5BD);
   
 }
@@ -698,10 +872,14 @@ export default {
   /*overflow: hidden;
   text-overflow: ellipsis;
   */
+  /*overflow: hidden;
+  text-overflow: ellipsis;
+  */
 }
 
 .filter-button,
 .filter-button-active {
+  /*display: flex;
   /*display: flex;
   padding: 5px 8px;
   justify-content: center;
@@ -717,8 +895,19 @@ border-radius: 99px 0px 0px 0px;
 opacity: 0px;
 
 
+  
+*/
+
+border: none;
+padding: 8px 8px 8px 8px;
+gap: 10px;
+border-radius: 99px 0px 0px 0px;
+opacity: 0px;
+
+
 
   border-radius: 99px;
+
 
 
 }
@@ -726,7 +915,9 @@ opacity: 0px;
 .filter-button {
 
   color: var(--Theme-Secondary, #525960);
+  color: var(--Theme-Secondary, #525960);
 
+  background: var(--Gray-100, #F8F9FA);
   background: var(--Gray-100, #F8F9FA);
 }
 
@@ -743,12 +934,16 @@ opacity: 0px;
   align-self: stretch;
 
   
+  
 }
 
 .suggestion-container {
 
   position: absolute;
 
+  position: absolute;
+
+  border: 1px solid #fffff;
   border: 1px solid #fffff;
   border-left: none;
   border-right: none;
@@ -760,7 +955,14 @@ opacity: 0px;
 
 
   /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
+  gap: 0px;
+  border-radius: 16px 16px 8px 8px;
+  opacity: 0px;
 
+
+  /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
+
+  
   
 
   top: 100%;
@@ -768,6 +970,20 @@ opacity: 0px;
   right: 0;
   z-index: 10;
   background: var(--Gray-100, #F8F9FA);
+
+}
+
+.suggestion-grid {
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+
+  padding: 16px 16px 24px 16px;
+  gap: 24px;
 
 }
 
@@ -813,17 +1029,32 @@ opacity: 0px;
   gap: 10px;
   align-self: stretch;
   border-radius: 4px;
+}
 
+
+
+/* Add this new class */
+.suggestion-item[data-type="separator"] {
+  height: 1px;
+  background-color: #E9ECEF;
+  margin: 0px 0;
+  padding: 0;
 }
 
 .item-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;/*evita quebra de linha*/ 
+  -webkit-box-orient: vertical;/*evita quebra de linha*/ 
   -webkit-line-clamp: 1;
+
 
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
+
+  
+  /* Body/Small/Regular 
+    font-family: Inter;
 
   
   /* Body/Small/Regular 
@@ -833,6 +1064,9 @@ opacity: 0px;
   font-weight: 400;
   line-height: 150%;
   /* 21px */
+  
+
+
   
 
 

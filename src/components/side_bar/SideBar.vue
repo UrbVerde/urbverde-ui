@@ -82,7 +82,7 @@ function toggleSidebar() {
 }
 
 .sidebar-open {
-  width: 288px;  /* 280px*/
+  width: 301px;  /* 280px*/
   display: flex;
   flex-direction: column;
   align-items: flex-start;
