@@ -92,8 +92,10 @@
 </template>
 
 <script>
-
 import axios from 'axios';
+
+import { API_URLS } from '@/constants/endpoints';
+
 import historyIcon from '../../assets/icons/history.svg';
 import locationIcon from '../../assets/icons/location.svg';
 
@@ -454,8 +456,8 @@ export default {
 
     //Organizacao das coordenadas
     async fetchCoordinates(address) {
-      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
-      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`;
+      const apiKey = import.meta.env.VITE_OPENCAGEDATA_API_KEY; // Sua chave API
+      const endpoint = `${API_URLS.OPENCAGEDATA}?q=${encodeURIComponent(address)}&key=${apiKey}`;
       try {
         const response = await axios.get(endpoint);
         if (response.data && response.data.results.length > 0) {

@@ -1,7 +1,8 @@
+import { API_URLS } from '@/constants/endpoints';
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.get('https://api.opencagedata.com/geocode/v1/json', () => HttpResponse.json({
+  http.get(API_URLS.OPENCAGEDATA, () => HttpResponse.json({
     documentation: 'https://opencagedata.com/api',
     licenses: [
       {
