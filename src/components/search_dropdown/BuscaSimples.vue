@@ -76,6 +76,8 @@
     <p v-if="debug && coordinates">
       Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
     </p>
+
+  </div>
   </div>
 </template>
 
