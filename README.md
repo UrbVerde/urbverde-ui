@@ -1,8 +1,8 @@
 <p align="center">
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
-        <span style="color: #025949; font-family: Inter, sans-serif; font-size: 20px; font-weight: 700;">URBVERDE</span>
     </a>
+      <span style="color: #025949; font-size: 20px; font-weight: 700;">URBVERDE</span>
     <br>
     <img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors">
     <img src="https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge" alt="Stars">
