@@ -3,7 +3,7 @@
         <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
     </a>
     <br>
-      <span style="color: #025949; font-size: 20px; font-weight: 700;">URBVERDE</span>
+    # URBVERDE
     <br>
     <img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors">
     <img src="https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge" alt="Stars">
