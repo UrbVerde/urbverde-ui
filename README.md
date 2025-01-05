@@ -2,21 +2,16 @@
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
     </a>
-    <br>
-    <h1>URBVERDE</h1>
-    <br>
-    <img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors">
-    <img src="https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge" alt="Stars">
-    <img src="https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge" alt="Commits This Month">
-    <a href="https://urbverde.iau.usp.br/">
-        <img src="https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge" alt="AI Powered">
-    </a>
-    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui?style=for-the-badge" alt="GitHub Pull Requests">
-    <br>
-    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="GitHub Pull Requests">
-    <a href="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml">
-        <img src="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg" alt="Deploy Status">
-    </a>
+</p>
+
+[![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/graphs/contributors)
+[![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/stargazers)
+[![Commits](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/commits/main)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge)](https://urbverde.iau.usp.br/)
+[![PRs](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/pulls)
+
+[![Issues](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues)
+[![Deploy](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
 
 
 ![Teaser](https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png) 
