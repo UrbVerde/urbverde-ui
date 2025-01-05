@@ -18,55 +18,35 @@
 <!-- Bem-vindo ao projeto UrbVerde UI! Este repositório faz parte da iniciativa open-source UrbVerde, que visa democratizar dados ambientais e promover a sustentabilidade urbana. A interface foi projetada para oferecer uma plataforma intuitiva, rápida e altamente acessível para explorar insights geoespaciais e socioambientais. -->
 
 
-## 🔥 Novidades
+<!-- ## 🔥 Novidades -->
 
-- **🌐 Integração de Dados Nacionais**: Explore dados ambientais em nível nacional.
-- **📍 Mapeamento Interativo**: Trabalhe com mapas com recursos avançados de interação.
-- **📖 Blog e Newsletter**: Fique atualizado com nossos últimos desenvolvimentos e insights.
-- **🔗 Repositório Unificado**: Interface e API em um único ambiente Dockerizado para implantação local fácil.
-- **📊 Banco de Dados Atualizado**: Estrutura aprimorada para armazenamento de dados mais rápido e confiável.
+## 📦 Atualizações
+- **[2025-01-01]** Desenvolvimento da nova página inicial.
+- **[2024-12-31]** Estrutura de blog e newsletter adicionada.
+- **[2024-12-31]** Beta da integração do banco de dados nacional lançado.
 
-
-## 🗺️ Roadmap
-
-| Feature               | Status  | Notes                             |
-|-----------------------|---------|-----------------------------------------|
-| 🏠 New Home           | 🛠️ In Progress | Expected Q1 2025                  |
-| 🗺️ Interactive Map    | ✅ Delivered  | Beta released December 2024      |
-| ✉️ Blog & Newsletter  | ✅ Delivered  | Framework added December 2024    |
-| 📦 New Database       | 🛠️ In Progress | Transition in progress           |
-| 🛠️ Unified Repository | 🚧 Planned   | Targeting Q2 2025                |
-| 🌍 National Data      | 🚧 Planned   | Pending final validation         |
-
-
-### Desenvolvimentos Atuais
-
-- 🏠 **Nova Home**: Reformulando a página inicial para maior engajamento do usuário.
-- 🗺️ **Mapa Funcional**: Construindo um recurso de mapeamento altamente interativo.
-- ✉️ **Blog e Newsletter**: Lançando um hub de comunicação para atualizações e histórias.
-- 📦 **Novo Banco de Dados**: Migrando para uma solução de banco de dados robusta e escalável.
-- 🛠️ **Repositório Unificado**: Unindo interface e API em um único stack Dockerizado.
-- 🌍 **Dados Nacionais**: Expansão da cobertura para incluir dados de todo o país.
-
-### Visão de Longo Prazo
-
-- 🎨 **README Aprimorado**: Adicionar logotipo, GIFs e tutoriais em vídeo para uma primeira impressão mais atraente.
-- 📄 **Links para Figma**: Compartilhar arquivos de design para melhoria colaborativa.
-- 🌐 **Internacionalização**: Traduções para README e interface.
-- 🏷️ **Badges e Tags**: Destacar métricas do projeto e participação.
-- 📑 **Artigos Relacionados**: Referenciar pesquisas acadêmicas que apoiam o UrbVerde.
-
-## 🎉 Últimas Notícias
-
-- **[2025-01-01]** Desenvolvimento da nova página inicial está em andamento!
-- **[2024-12-25]** Estrutura de blog e newsletter adicionada.
-- **[2024-12-15]** Beta da integração do banco de dados nacional lançado.
+## 🛠️ To-Do
+<!-- 🔄 Em andamento (Atividades que estão em progresso).
+📅 Planejado (Atividades que ainda não começaram, mas já estão programadas).
+✅ Concluído (Atividades já finalizadas). 
+🛠️
+🚧
+-->
+- [ ] _[Status: Planejado]_ Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo. 📄🎥 
+- [ ] Adicionar links para arquivos de design no Figma. 🔗🎨 _[Status: Planejado]_
+    - Status: Planejado.
+- [ ] Traduzir README e interface para outras línguas (internacionalização). 🌐🗣️
+    - Status: Planejado.
+- [ ] Incluir badges e tags para destacar métricas do projeto e participação. 🏷️📊
+    - Status: Planejado.
+- [ ] Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 📚🔬
+    - Status: Planejado.
 
 ## 💻 Configuração do Projeto
 
 ### Requisitos Prévios
 
-- Node.js (>= 16.0)
+- Node.js (>= 22.12)
 - npm ou yarn
 
 ### Instalação
@@ -106,24 +86,25 @@
 
 ## 📜 Licença
 
-O UrbVerde UI está licenciado sob a [???](LICENSE).
+O UrbVerde UI está licenciado sob a [AGPL-3.0](LICENSE).
 
 ## 📖 Documentação
 
-Documentação detalhada está disponível em nossos [Docs](). <!-- https://urbverde.org/docs). -->
+Documentação detalhada está disponível em nossos [Docs](https://urbverde-educa.tawk.help/). <!-- https://urbverde.org/docs). -->
 
 ## 🧩 Contribuição
 
 Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) para começar.
 
-## 📚 Artigos Relacionados
+## 🌐 Pesquisa
 
-<!-- - Doe, J. et al. (2024). "Environmental Insights through Web-Based Mapping Platforms." -->
-<!-- - Smith, A. et al. (2023). "Democratizing Data for Urban Sustainability." -->
+<!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
+- COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
 
-## 🌐 Research Blog 
+## 📚 Guias
 
-Acompanhe nossa jornada em [GitHub Open Archives](). <!-- https://github.com/UrbVerde/urbverde-blog). -->
+<!-- Acompanhe nossa jornada em [GitHub Open Archives](). https://github.com/UrbVerde/urbverde-blog). -->
+ Acompanhe nossa jornada em [UrbVerde Educa](https://urbverde-educa.tawk.help/). 
 
 ## 🗣 Suporte
 
