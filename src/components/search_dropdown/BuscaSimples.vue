@@ -118,6 +118,7 @@ export default {
         'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
       ],
       cachedCities: [],
+      cachedCityData: {}, // Will store { [cityName]: { cd_mun, lat, lng } }
       searchHistory: [],
       dropdown: false,
       showSuggestions: false, // Controla a exibição das sugestões
@@ -134,8 +135,9 @@ export default {
 
 
   created() {
-    this.debouncedFetchCities = debounce(this.fetchCities, 100);
+    // this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.loadSearchHistory();
+    
     this.generateDefaultSuggestions();
     this.updateSuggestions();
   },
@@ -210,34 +212,30 @@ export default {
       this.cacheCities([location.city]);
     },
     
-    async fetchCities(query) {
-      try {
-        this.clearCache();
-
-        // Keep using the online API for suggestions
-        // Change URL if you to use local MSW API instead
-        // const response = await fetch(`/v1/address/suggestions?query=${query}`); // Local MSW API
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`); // Online API
-        const data = await response.json();
-        
-    // Store both display_name and cd_mun
-    this.citiesWithCodes = data.reduce((acc, item) => {
-          acc[item.display_name] = item.cd_mun;
-          return acc;
-        }, {});
-
-        // Update cache with display_names
-        const cities = data.map(item => item.display_name);
-        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
-
-      } catch (error) {
-        console.error('Error fetching cities:', error);
+    parseCityState(text) {
+      // Check if the text contains a state abbreviation
+      const parts = text.split(' - ');
+      if (parts.length === 2) {
+        return {
+          city: parts[0],
+          state: parts[1]
+        };
       }
+      return {
+        city: text,
+        state: null
+      };
     },
-    
+
     async fetchCoordinates(address) {
+      // Parse the address to get city name without state abbreviation
+      const { city } = this.parseCityState(address);
+      
       try {
-        // Get the cd_mun from our stored mapping
+        // Always fetch fresh city data first
+        await this.fetchCities(city);
+        
+        // Get the city code using the full address
         const cityCode = this.citiesWithCodes[address];
         
         if (!cityCode) {
@@ -246,8 +244,8 @@ export default {
           return;
         }
 
-        // Use the mock API with cd_mun
-        const response = await fetch(`/v1/address/suggestions?query=${cityCode}`);
+        // Use the production API URL
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${cityCode}`);
         const data = await response.json();
         
         if (data && data.length > 0) {
@@ -261,7 +259,86 @@ export default {
           if (location && location.lat && location.lng) {
             const coordinates = { lat: location.lat, lng: location.lng };
             this.coordinates = coordinates;
-            // Emit both coordinates and cd_mun
+            
+            // Cache the result for future reference
+            this.cachedCityData[address] = {
+              cd_mun: cityCode,
+              lat: location.lat,
+              lng: location.lng
+            };
+            localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
+            
+            this.$emit('location-updated', { 
+              ...coordinates, 
+              cd_mun: cityCode 
+            });
+          } else {
+            this.handleLocationFailure();
+            console.error('Invalid coordinates in response');
+          }
+        } else {
+          this.handleLocationFailure();
+          console.error('No coordinates found');
+        }
+      } catch (error) {
+        console.error('Error fetching coordinates:', error);
+        this.handleLocationFailure();
+      }
+    },
+    
+    async fetchCoordinates(address) {
+      // Parse the address to get city name without state abbreviation
+      const { city } = this.parseCityState(address);
+      
+      // Check cache using the full address (with state abbreviation)
+      const cached = this.cachedCityData[address];
+      if (cached && cached.lat && cached.lng) {
+        this.coordinates = { lat: cached.lat, lng: cached.lng };
+        this.$emit('location-updated', { 
+          lat: cached.lat, 
+          lng: cached.lng, 
+          cd_mun: cached.cd_mun 
+        });
+        return;
+      }
+
+      try {
+        // First, ensure we have fresh city data
+        await this.fetchCities(city);
+        
+        // Now try to get the city code using the full address
+        const cityCode = this.citiesWithCodes[address];
+        
+        if (!cityCode) {
+          this.handleLocationFailure();
+          console.error('City code not found for:', address);
+          return;
+        }
+
+        // Use the production API URL
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${cityCode}`);
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+          if (data[0].error) {
+            this.handleLocationFailure();
+            console.error('Location error:', data[0].error);
+            return;
+          }
+          
+          const location = data[0].coordinates;
+          if (location && location.lat && location.lng) {
+            const coordinates = { lat: location.lat, lng: location.lng };
+            this.coordinates = coordinates;
+            
+            // Cache the result for future use
+            this.cachedCityData[address] = {
+              cd_mun: cityCode,
+              lat: location.lat,
+              lng: location.lng
+            };
+            localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
+            
             this.$emit('location-updated', { 
               ...coordinates, 
               cd_mun: cityCode 
@@ -324,9 +401,6 @@ export default {
       this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       this.updateSuggestions();
     },
-    clearCache() {
-      this.cachedCities = [];
-    },
     handleInput() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
@@ -357,7 +431,8 @@ export default {
         // Fetch cities immediately when input changes
         // Debounce waits 300ms after last keypress before making API call
         // This prevents excessive API calls while typing
-        this.debouncedFetchCities(this.inputValue);
+        // this.debouncedFetchCities(this.inputValue);
+        this.fetchCities(this.inputValue);
 
         this.previousInputValue = this.inputValue; // Update previous value
 
@@ -473,6 +548,10 @@ export default {
       const savedHistory = localStorage.getItem('searchHistory');
       if (savedHistory) {
         this.searchHistory = JSON.parse(savedHistory);
+      }
+      const savedCache = localStorage.getItem('cachedCityData');
+      if (savedCache) {
+        this.cachedCityData = JSON.parse(savedCache);
       }
     },
     generateDefaultSuggestions() {

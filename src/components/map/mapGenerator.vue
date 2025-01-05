@@ -101,8 +101,8 @@ export default {
       if (this.map && this.mapLoaded) {
         this.map.flyTo({
           center: [this.coordinates.lng, this.coordinates.lat],
-          zoom: 14,
-          duration: 4000,
+          zoom: 16,
+          duration: 8000,
           essential: true
         });
       }
