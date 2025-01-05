@@ -45,24 +45,27 @@
 <!-- ![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui/tree/dev) -->
 
 ---
-<h1>📁/UrbVerde-UI</h1>
-
 [![README em Português](https://img.shields.io/badge/Português-d9d9d9)](./README_BR.md)
 [![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
 [![README em French](https://img.shields.io/badge/Français-d9d9d9)](./README_FR.md)
+
+<h1>📁/UrbVerde-UI</h1>
+
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
 
 Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para **acelerer a adaptação climática das cidades brasileiras**. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas _Open-Source_ e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a [UrbVerde](https://urbverde.com.br) capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades **mais sustentáveis, resilientes e inclusivas**.
 
-
+<br>
 <!-- ## 🔥 Novidades -->
 
 ## 📦 Atualizações
 <!-- - **[2025-00-00]** Desenvolvimento da nova página inicial. -->
 - **[2024-00-00]** Estrutura de blog e newsletter adicionada.
 - **[2024-00-00]** Beta da integração do banco de dados nacional lançado.
+
+<br>
 
 ## 🎯 To-Do
 <!-- 🔄 Em andamento (Atividades que estão em progresso).
@@ -77,6 +80,8 @@ Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plata
 - [ ] 📅 _Planejado_ - 📄 Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo.
 - [ ] 📅 _Planejado_ - 🎨 Adicionar links para arquivos de design no Figma. 
 - [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 
+
+<br>
 
 ## 💻 Setup
 
@@ -115,17 +120,14 @@ Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plata
    docker-compose up --build
    ```
 
-## 📜 Licença
+<br>
 
-O UrbVerde UI está licenciado sob a [AGPL-3.0](LICENSE).
 
 ## 📖 Documentação
 
 Documentação detalhada está disponível em nossos [Docs](https://urbverde-educa.tawk.help/). <!-- https://urbverde.org/docs). -->
 
-## 🧩 Contribuição
-
-Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) para começar.
+<br>
 
 ## 🌐 Pesquisa
 
@@ -134,10 +136,26 @@ Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) 
 
 Saiba mais em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias)
 
+<br>
+
 ## 📚 Guias
 
 <!-- Acompanhe nossa jornada em [GitHub Open Archives](). https://github.com/UrbVerde/urbverde-blog). -->
  Acompanhe nossa jornada em [UrbVerde Educa](https://urbverde-educa.tawk.help/). 
+
+<br>
+
+## 🧩 Contribuição
+
+Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) para começar.
+
+<br>
+
+## 📜 Licença
+
+O UrbVerde UI está licenciado sob a [AGPL-3.0](LICENSE).
+
+<br>
 
 ## 🗣 Suporte
 
