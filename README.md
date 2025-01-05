@@ -44,6 +44,10 @@
 
 <!-- ![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui/tree/dev) -->
 
+ 
+<br>
+
+<h1>📁/UrbVerde-UI</h1>
 <p align="left">
     <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português" href="./README_BR.md">
     <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English" href="./README.md">
@@ -52,13 +56,10 @@
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
 </p>
- 
 
-<h1>📁/UrbVerde-UI</h1>
-
-
-
-Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para **acelerer a adaptação climática das cidades brasileiras**. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas _Open-Source_ e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a [UrbVerde](https://urbverde.com.br) capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades **mais sustentáveis, resilientes e inclusivas**.
+<p align="justify">
+    Este é o repositório oficial da <a href="https://urbverde.com.br">UrbVerde</a>, uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para <strong>acelerar a adaptação climática das cidades brasileiras</strong>. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas <em>Open-Source</em> e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a <a href="https://urbverde.com.br">UrbVerde</a> capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades <strong>mais sustentáveis, resilientes e inclusivas</strong>.
+</p>
 
 <br>
 <!-- ## 🔥 Novidades -->
@@ -132,7 +133,7 @@ Documentação detalhada está disponível em nossos [Docs](https://urbverde-edu
 <br> 
  -->
 
-## 🌐 Pesquisa
+## 🎓 Pesquisa
 
 Saiba mais sobre nosso impacto em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias).
 
@@ -151,11 +152,23 @@ Saiba mais sobre nosso impacto em [UrbVerde nas mídias](https://urbverde-educa.
 Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) para começar.
 
 
-## 📜 Licença
+## 🏛️ Licença
 
-Este repositório está licenciado sob a [📜 AGPL-3.0](LICENSE).
+Este repositório está licenciado sob a [⚖️AGPL-3.0](LICENSE).
 
+## 📜 Referência
 
+Se você utilizar o UrbVerde em sua pesquisa, por favor, considere citá-la no formato:
+
+```bibtex
+@software{UrbVerde,
+    author = {Autores da UrbVerde},
+    title = {UrbVerde: Plataforma de Monitoramento Ambiental Urbano},
+    month = {Janeiro},
+    year = {2025},
+    url = {https://github.com/UrbVerde/urbverde-ui}
+}
+```
 ## 🗣 Suporte
 
 Para dúvidas ou sugestões, participe de nossas [Discussões](https://github.com/UrbVerde/urbverde-ui/discussions).
