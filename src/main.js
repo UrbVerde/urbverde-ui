@@ -1,3 +1,4 @@
+// urbverde-ui/src/main.js
 /* eslint-disable no-undef */
 import './assets/main.css';
 import '@/assets/styles/main.scss';
@@ -19,7 +20,7 @@ async function prepareApp() {
   ) {
     const { worker } = await import('./mocks/browser');
 
-    return worker.start();
+    // return worker.start();
   }
 
   return Promise.resolve();

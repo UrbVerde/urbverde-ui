@@ -1,7 +1,14 @@
 <!-- urbverde-ui/src/components/map/mapGenerator.vue -->
 <template>
   <div ref="mapContainer" class="map-container">
-    <slot></slot> <!-- This allows child components to render inside MapBox -->
+    <!-- Error Placeholder -->
+    <div v-if="showError" class="error-placeholder">
+      <div class="error-content">
+        <span class="error-icon">🗺️</span>
+        <p class="error-text">Selecione uma cidade para visualizar no mapa</p>
+      </div>
+    </div>
+    <slot v-else></slot> <!-- This allows child components to render inside MapBox -->
   </div>
 </template>
 
@@ -22,18 +29,31 @@ export default {
   data() {
     return {
       map: null,
-      mapLoaded: false
+      mapLoaded: false,
+      showError: false
     };
   },
   mounted() {
-    this.initializeMap();
+    this.checkCoordinates();
+    // this.initializeMap();
   },
   methods: {
-    initializeMap() {
-      if (!this.coordinates.lat || !this.coordinates.lng) {
-        console.warn('Invalid coordinates for map initialization');
+    checkCoordinates() {
+      // Check if coordinates are valid
+      if (!this.coordinates || 
+          !this.coordinates.lat || 
+          !this.coordinates.lng || 
+          this.coordinates.lat === 0 || 
+          this.coordinates.lng === 0) {
+        this.showError = true;
         return;
       }
+      
+      this.showError = false;
+      this.initializeMap();
+    },
+    initializeMap() {
+      if (this.showError) return;
 
       this.map = new maplibregl.Map({
         container: this.$refs.mapContainer,
@@ -41,48 +61,51 @@ export default {
         center: [this.coordinates.lng, this.coordinates.lat],
         pitch: 20,
         zoom: 14,
-        attributionControl: false,  // Add this line to hide attribution
+        attributionControl: false,
         NavigationControl: true,
       });
+
+      // Add listener for missing images
+      this.map.on('styleimagemissing', (e) => {
+        const id = e.id; // id of the missing image
+        // Create a 1x1 transparent pixel as a placeholder
+        const placeholder = new Image(1, 1);
+        placeholder.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==';
+        
+        placeholder.onload = () => {
+          this.map.addImage(id, placeholder);
+        };
+      });
       
-      // Add zoom and rotation controls
-      // this.map.addControl(
-      //   new maplibregl.NavigationControl({
-      //     showCompass: true,
-      //     showZoom: true,
-      //     visualizePitch: true
-      //   }),
-      //   'top-left'
-      // );
+      this.map.on('load', () => {
+        console.log('Map loaded successfully');
+        this.mapLoaded = true;
+      });
+    },
+    updateMapCenter() {
+      if (!this.coordinates || !this.coordinates.lat || !this.coordinates.lng) {
+        this.showError = true;
+        if (this.map) {
+          this.map.remove();
+          this.map = null;
+        }
+        return;
+      }
 
-    //   // Add geolocate control
-    //   this.map.addControl(
-    //     new maplibregl.GeolocateControl({
-    //       positionOptions: {
-    //         enableHighAccuracy: true
-    //       },
-    //       trackUserLocation: true
-    //     }),
-    //     'top-left'
-    //   );
+      if (this.showError) {
+        this.showError = false;
+        this.initializeMap();
+        return;
+      }
 
-    //   this.map.on('load', () => {
-    //     console.log('Map loaded successfully');
-    //     this.mapLoaded = true;
-    //   });
-
-    //   this.map.addControl(new maplibregl.NavigationControl());
-    // },
-    // updateMapCenter() {
-    //   if (this.map && this.mapLoaded && this.coordinates.lat && this.coordinates.lng) {
-    //     console.log('Updating map center to:', this.coordinates);
-    //     this.map.flyTo({
-    //       center: [this.coordinates.lng, this.coordinates.lat],
-    //       zoom: 14,
-    //       duration: 10000,
-    //       essential: true
-    //     });
-    //   }
+      if (this.map && this.mapLoaded) {
+        this.map.flyTo({
+          center: [this.coordinates.lng, this.coordinates.lat],
+          zoom: 14,
+          duration: 4000,
+          essential: true
+        });
+      }
     }
   },
   watch: {
@@ -110,7 +133,36 @@ export default {
   height: calc(100vh - 35px - 144px);
   border-radius: 15px;
   margin: 0px 24px 0; 
+  background: #F8F9FA;
 }
 
+.error-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #F8F9FA;
+  border-radius: 15px;
+}
+
+.error-content {
+  text-align: center;
+  color: #6C757D;
+}
+
+.error-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.error-text {
+  font-size: 16px;
+  margin: 0;
+}
 
 </style>

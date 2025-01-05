@@ -50,8 +50,8 @@
 
 <p align="left">
     <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português" href="./README_BR.md">
-    <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English" href="./README.md">
-    <img src="https://img.shields.io/badge/Français-d9d9d9" alt="README em French" href="./README_FR.md">
+    <img src="https://img.shields.io/badge/English-d9d9d9" alt="README em English" href="./README.md">
+    <img src="https://img.shields.io/badge/Français-d9d9d9" alt="README em Francês" href="./README_FR.md">
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
@@ -146,12 +146,9 @@ Saiba mais sobre nosso impacto em [UrbVerde nas mídias](https://urbverde-educa.
 <!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
 - COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
 
-
-
 ## 🧩 Contribuição
 
 Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) para começar.
-
 
 ## 🏛️ Licença
 
@@ -170,6 +167,7 @@ Se você utilizar o UrbVerde em sua pesquisa, por favor, considere citá-la no f
     url = {https://github.com/UrbVerde/urbverde-ui}
 }
 ```
+
 ## 🗣 Suporte
 
 Para dúvidas ou sugestões, participe de nossas [Discussões](https://github.com/UrbVerde/urbverde-ui/discussions).

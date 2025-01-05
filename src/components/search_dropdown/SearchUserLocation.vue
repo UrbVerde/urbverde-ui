@@ -51,9 +51,27 @@ export default {
     };
   },
   mounted() {
-    this.loadCachedLocation();
+    // Just initialize the cache check
+    this.checkCachedLocation();
   },
   methods: {
+    checkCachedLocation() {
+      const cachedTimestamp = localStorage.getItem('cachedTimestamp');
+      const cacheDuration = 24 * 60 * 60 * 1000;
+      
+      if (!cachedTimestamp || Date.now() - cachedTimestamp > cacheDuration) {
+        // Show a button or message to get location if needed
+        this.needsLocationUpdate = true;
+      } else {
+        this.loadCachedLocation();
+      }
+    },
+    
+    // Call this on user action instead
+    requestLocation() {
+      this.getLocation();
+    },
+
     loadCachedLocation() {
       const cachedCity = localStorage.getItem('cachedCity');
       const cachedState = localStorage.getItem('cachedState');

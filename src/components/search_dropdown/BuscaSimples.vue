@@ -94,15 +94,15 @@ import locationIcon from '../../assets/icons/location.svg';
 import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
-  components: {},
+  components: {
+    SearchUserLocation
+  },
 
   data() {
     return {
       locationData: null,
-      defaultCoordinates: {
-        lat: -23.30958993100988,
-        lng: -51.36049903673405
-      },
+      defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
+      citiesWithCodes: {}, // Will store { display_name: cd_mun } mapping
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -126,7 +126,6 @@ export default {
       filterAll: true,
       filterCity: false,
       filterState: false,
-
       isDragging: false,
       startX: 0,
       scrollLeft: 0,
@@ -210,21 +209,81 @@ export default {
       console.log("Dados de localização atualizados:", location);
       this.cacheCities([location.city]);
     },
+    
     async fetchCities(query) {
       try {
         this.clearCache();
 
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`);
+        // Keep using the online API for suggestions
+        // Change URL if you to use local MSW API instead
+        // const response = await fetch(`/v1/address/suggestions?query=${query}`); // Local MSW API
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`); // Online API
         const data = await response.json();
-        const cities = data.map(item => item.display_name);
+        
+    // Store both display_name and cd_mun
+    this.citiesWithCodes = data.reduce((acc, item) => {
+          acc[item.display_name] = item.cd_mun;
+          return acc;
+        }, {});
 
-        // Update cache 
+        // Update cache with display_names
+        const cities = data.map(item => item.display_name);
         this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
-        // Update cache 
-        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
+    },
+    
+    async fetchCoordinates(address) {
+      try {
+        // Get the cd_mun from our stored mapping
+        const cityCode = this.citiesWithCodes[address];
+        
+        if (!cityCode) {
+          this.handleLocationFailure();
+          console.error('City code not found for:', address);
+          return;
+        }
+
+        // Use the mock API with cd_mun
+        const response = await fetch(`/v1/address/suggestions?query=${cityCode}`);
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+          if (data[0].error) {
+            this.handleLocationFailure();
+            console.error('Location error:', data[0].error);
+            return;
+          }
+          
+          const location = data[0].coordinates;
+          if (location && location.lat && location.lng) {
+            const coordinates = { lat: location.lat, lng: location.lng };
+            this.coordinates = coordinates;
+            // Emit both coordinates and cd_mun
+            this.$emit('location-updated', { 
+              ...coordinates, 
+              cd_mun: cityCode 
+            });
+          } else {
+            this.handleLocationFailure();
+            console.error('Invalid coordinates in response');
+          }
+        } else {
+          this.handleLocationFailure();
+          console.error('No coordinates found');
+        }
+      } catch (error) {
+        console.error('Error fetching coordinates:', error);
+        this.handleLocationFailure();
+      }
+    },
+    
+    handleLocationFailure() {
+      this.coordinates = null;
+      this.$emit('location-updated', null);
+      this.$emit('api-error');
     },
 
     focusPreviousSuggestion(index) {
@@ -378,10 +437,6 @@ export default {
         // setTimeout(() => {
         //   this.submit();
         // }, 1000);
-        // Removed setTimeout/submit since selectSuggestion already handles it
-        // setTimeout(() => {
-        //   this.submit();
-        // }, 1000);
       }
     },
     addToHistory(item) {
@@ -506,56 +561,8 @@ export default {
       this.isDragging = false;
     },
 
-    //Organizacao das coordenadas
-    async fetchCoordinates(address) {
-      const apiKey = '3f84bf15d01643f5a6dac9ce3905198a'; // Sua chave API
-      const endpoint = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`; //!KEY  EXPOSTA - COORDENADAS SERÃO DADAS PELA API.URBVERDE 
-      try {
-        const response = await axios.get(endpoint);
-        if (response.data && response.data.results.length > 0) {
-          const location = response.data.results[0].geometry;
-          const coordinates = { lat: location.lat, lng: location.lng };
-          this.coordinates = coordinates;
-          this.$emit('location-updated', coordinates);
-        } else {
-          this.handleLocationFailure();
-          console.error('Nenhuma coordenada encontrada.');
-        }
-      } catch (error) {
-        console.error('Erro ao buscar coordenadas:', error);
-        this.handleLocationFailure();
-      }
-    },
 
-    handleLocationFailure() {
-      // Try to get user's location first
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const coordinates = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            this.coordinates = coordinates;
-            this.$emit('location-updated', coordinates);
-          },
-          (error) => {
-            // If geolocation fails, use default coordinates
-            console.log('Geolocation error:', error);
-            this.useDefaultCoordinates();
-          }
-        );
-      } else {
-        // If geolocation not supported, use default coordinates
-        this.useDefaultCoordinates();
-      }
-      this.$emit('api-error'); // Add this line to emit the error event
-    },
 
-    useDefaultCoordinates() {
-      this.coordinates = this.defaultCoordinates;
-      this.$emit('location-updated', this.defaultCoordinates);
-    },
   }
 }
 </script>
@@ -723,7 +730,7 @@ export default {
 border: none;
 padding: 8px 8px 8px 8px;
 gap: 10px;
-/* border-radius: 99px 0px 0px 0px; */
+border-radius: 99px;
 opacity: 0px;
 }
 

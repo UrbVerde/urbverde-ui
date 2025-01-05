@@ -4,35 +4,51 @@
     <span class="text">CATEGORIAS</span>
 
     <div>
-      <NavbarItem v-for="(dropdown, index) in dropdowns"
-                  :key="index"
-                  :isSelectedItem="dropdown.isSelected"
-                  :itemName="dropdown.name"
-                  @update:isSelectedItem="handleSelectionChange(index)" />
-
+      <NavbarItem 
+        v-for="(category, index) in categories"
+        :key="category.id"
+        :isSelectedItem="category.isSelected"
+        :itemName="category.name"
+        :layers="category.layers"
+        @update:isSelectedItem="handleSelectionChange(index)" />
     </div>
-
   </div>
 </template>
 
 <script setup>
-
 import NavbarItem from '@/components/side_bar/drop_down/NavbarItemDropdown.vue';
+import { ref, onMounted } from 'vue';
 
-import { reactive } from 'vue';
+const categories = ref([]);
 
-const dropdowns = reactive([
-  {name: 'Clima', isSelected: false },
-  {name: 'Vegetação', isSelected: false },
-  {name: 'Parques e Praças', isSelected: false },
-]);
+const fetchCategories = async () => {
+  try {
+    const response = await fetch('/api/categories');
+    const data = await response.json();
+    categories.value = data.categories.map(category => ({
+      ...category,
+      isSelected: false
+    }));
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    // Fallback to static data in case of error
+    categories.value = [
+      {name: 'Clima', isSelected: false},
+      {name: 'Vegetação', isSelected: false},
+      {name: 'Parques e Praças', isSelected: false},
+    ];
+  }
+};
 
 const handleSelectionChange = (selectedIndex) => {
-  dropdowns.forEach((dropdown, index) => {
-    dropdown.isSelected = index === selectedIndex;
+  categories.value.forEach((category, index) => {
+    category.isSelected = index === selectedIndex;
   });
 };
 
+onMounted(() => {
+  fetchCategories();
+});
 </script>
 
 <style scoped>
@@ -43,29 +59,22 @@ const handleSelectionChange = (selectedIndex) => {
     justify-content: flex-start;
     gap: 16px;
     align-self: stretch;
-
     flex: 1 0 0;
     color: black;
     background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
 }
 
 .text {
     color: var(--Theme-Secondary, #6C757D);
-
-    /* Body/Caption/Medium */
     font-family: Inter;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
     line-height: 150%;
     font-family: Inter, sans-serif;
-    /* 18px */
-
     display: flex;
     align-items: center;
     gap: 8px;
     align-self: stretch;
-
 }
 </style>

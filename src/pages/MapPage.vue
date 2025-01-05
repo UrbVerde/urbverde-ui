@@ -10,7 +10,7 @@
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
         <!-- Show placeholder if no coordinates, otherwise show map content -->
-        <div v-if="!coordinates.lat || !coordinates.lng" class="placeholder-container">
+        <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
           <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
         </div>
         <div v-else>
@@ -152,6 +152,11 @@ export default {
       window.removeEventListener('scroll', handleScroll);
     });
 
+
+    const handleApiError = () => {
+      console.log('API error occurred');
+    };
+
     return {
       coordinates,
       updateCoordinates,
@@ -159,6 +164,7 @@ export default {
       scrollToSection,
       isSidebarOpen,
       toggleSidebar,
+      handleApiError,
     };
   }
 };
@@ -176,9 +182,7 @@ export default {
 /* Flex container to hold sidebar (left) and main content (right) */
 .content-wrapper {
   flex: 1;
-  /* grows to fill remaining vertical space */
   display: flex;
-  /* horizontal layout: sidebar + main content */
 }
 
 /* Sidebar “collapsed” style (if you want a narrower width) */
@@ -194,38 +198,29 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  /* Full viewport height */
   overflow-y: auto;
-  /* Enable scrolling for content that exceeds viewport */
 }
 
 .content-area {
   flex: 1;
-  /* Fills the remaining space below the Navbar */
   position: relative;
-  /* Acts as the container for Legend's absolute positioning */
   display: flex;
 }
 
 .map-box {
   flex: 1;
-  /* Allow the map to take full width */
   position: relative;
-  /* Parent container for Legend */
 }
 
 .legend-wrapper {
   position: absolute;
   top: 16px;
-  /* Adjust as needed */
   right: 16px;
-  /* Adjust as needed */
   width: 264px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  /* Ensure it stays above the map */
 }
 
 /* Center the placeholder vertically and horizontally */
@@ -234,7 +229,6 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  /* Take full height of the main-wrapper */
   margin-top: 3%;
 }
 
@@ -242,9 +236,6 @@ export default {
 .map-placeholder {
   display: block;
   margin: 40px auto;
-  /* center horizontally */
-  /* width: 280px;
-  height: 175px; */
   opacity: 0.45;
 }
 
@@ -265,7 +256,4 @@ export default {
   font-weight: 500;
   line-height: 24px;
 }
-
-
-.header-left2 {}
 </style>

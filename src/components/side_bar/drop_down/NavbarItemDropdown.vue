@@ -1,10 +1,9 @@
-<!-- src\components\side_bar\drop_down\NavbarItemDropdown.vue -->
 <template>
-  <nav class="navbar navbar-expand-x1 navbar-light  container-fluid">
+  <nav class="navbar navbar-expand-x1 navbar-light container-fluid">
     <ul class="navbar-nav w-100 justify-content-center" id="navCont">
       <div class="dropdown" data-bs-auto-close="false">
         <a href="#"
-           class="navbar nav-link "
+           class="navbar nav-link"
            :class="{ 'dropdown-active': isDropdownOpen }"
            id="navbarDropdown"
            role="button"
@@ -18,21 +17,20 @@
                width="20"
                height="20" />
           <span id="txtItem">{{ props.itemName }}</span>
-          <span id="txtBadge">{{ txtBadge }}</span>
+          <span id="txtBadge" v-if="txtBadge">{{ txtBadge }}</span>
           <img class="d-inline-block"
                :src="isDropdownOpen ? collapseIcon : expandIcon"
                width="14"
                height="14" />
-
         </a>
 
         <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="navbarDropdown">
-          <li v-for="(slot, index) in slots"
-              :key="index"
-              :class="{ 'is-active': slot.isActive, 'notActive': !slot.isActive, 'active': slot.isActive }"
-              @click="toggleSlotActive(index, $event)">
-            <div v-show="slot.show" id="intern-padding">
-              <a tag="dropdownitem-txt" v-show="slot.show" class="dropdown-item">{{ slot.name }}</a>
+          <li v-for="(layer, index) in props.layers"
+              :key="layer.id"
+              :class="{ 'is-active': layer.isActive, 'notActive': !layer.isActive, 'active': layer.isActive }"
+              @click="toggleLayerActive(index, $event)">
+            <div v-show="layer.show" id="intern-padding">
+              <a tag="dropdownitem-txt" v-show="layer.show" class="dropdown-item">{{ layer.name }}</a>
             </div>
           </li>
         </ul>
@@ -44,8 +42,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 
-//Dropdown.Default.autoClose = false;
-
 import collapseIcon from '../../../assets/icons/collapse.svg';
 import expandIcon from '../../../assets/icons/expand.svg';
 import sun from '../../../assets/icons/sunBehindeCloud.svg';
@@ -53,20 +49,18 @@ import tree from '../../../assets/icons/pineTree.svg';
 import bike from '../../../assets/icons/bike.svg';
 
 const txtBadge = ref('');
-
 const isDropdownOpen = ref(false);
 
-// Computed property to get the icon path based on itemName
 const iconPath = computed(() => {
   switch (props.itemName.toLowerCase()) {
-  case 'clima':
-    return sun;
-  case 'vegetação':
-    return tree;
-  case 'parques e praças':
-    return bike;
-  default:
-    return sun; // Default icon if itemName doesn't match any case
+    case 'clima':
+      return sun;
+    case 'vegetação':
+      return tree;
+    case 'parques e praças':
+      return bike;
+    default:
+      return sun;
   }
 });
 
@@ -78,47 +72,49 @@ const props = defineProps({
   itemName: {
     type: String,
     default: '',
+  },
+  layers: {
+    type: Array,
+    default: () => [],
   }
 });
 
-// Crie uma variável reativa para manter o estado interno
 const isDropdownSelected = ref(props.isSelectedItem);
-
-// Crie um emit
 const emit = defineEmits(['update:isSelectedItem']);
 
 const closeDropdownOnOutsideClick = (event) => {
   const dropdownElement = document.querySelector('.dropdown');
   if (!isDropdownSelected.value && isDropdownOpen.value) {
-
     if (dropdownElement && !dropdownElement.contains(event.target)) {
       isDropdownOpen.value = false;
     }
   } else {
     if (isDropdownSelected.value && isDropdownOpen.value) {
       if (dropdownElement && !dropdownElement.contains(event.target)) {
-        slots.value.forEach((slot) => {
-          if (!slot.isActive) { slot.show = false; }
+        props.layers.forEach((layer) => {
+          if (!layer.isActive) { layer.show = false; }
         });
       }
-
     }
   }
 };
 
-// Adicionar um watch para monitorar a mudança de isSelectedItem
 watch(() => props.isSelectedItem, (newVal) => {
   isDropdownSelected.value = newVal;
   if (!newVal) {
     txtBadge.value = '';
-    slots.value.forEach((slot) => {
-      slot.isActive = false;
-      slot.show = true;
+    props.layers.forEach((layer) => {
+      layer.isActive = false;
+      layer.show = true;
     });
   }
 });
 
 onMounted(() => {
+  // Initialize show property for each layer
+  props.layers.forEach(layer => {
+    layer.show = true;
+  });
   document.addEventListener('click', closeDropdownOnOutsideClick);
 });
 
@@ -130,53 +126,37 @@ const toggleDropdown = (event) => {
   event.preventDefault();
   event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
-  slots.value.forEach((slot) => {
-    if (!slot.isActive) {
-
-      slot.show = true;
+  props.layers.forEach((layer) => {
+    if (!layer.isActive) {
+      layer.show = true;
     }
-
   });
-  if (!isDropdownOpen.value && isDropdownSelected.value) {//se ta fechado e selecionado
+  
+  if (!isDropdownOpen.value && isDropdownSelected.value) {
     txtBadge.value = '1';
   }
-  if (isDropdownOpen.value && isDropdownOpen.value) {//se ta aberto e selecionado
+  if (isDropdownOpen.value && isDropdownOpen.value) {
     txtBadge.value = '';
   }
 };
 
-const toggleSlotActive = (index, event) => {
+const toggleLayerActive = (index, event) => {
   event.stopPropagation();
-  if (slots.value[index].isActive) {
-
+  if (props.layers[index].isActive) {
     isDropdownSelected.value = false;
-
     txtBadge.value = '';
-
-    slots.value[index].isActive = !slots.value[index].isActive;
-    slots.value.forEach((slot) => {
-      slot.show = true;
+    props.layers[index].isActive = !props.layers[index].isActive;
+    props.layers.forEach((layer) => {
+      layer.show = true;
     });
   } else {
-
-    // Função para alternar o valor de isDropdownSelected e emitir um evento
     isDropdownSelected.value = true;
-
     emit('update:isSelectedItem', !props.isSelectedItem);
-
-    slots.value.forEach((slot, i) => {
-      slot.isActive = i === index;
-
+    props.layers.forEach((layer, i) => {
+      layer.isActive = i === index;
     });
   }
 };
-
-const slots = ref([
-  { name: 'Item 1 2nd Level ', isActive: false, show: true },
-  { name: 'Item 2 2nd Level ', isActive: false, show: true },
-  { name: 'Item 3 2nd Level ', isActive: false, show: true }
-]);
-
 </script>
 
 <style scoped>
