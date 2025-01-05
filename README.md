@@ -5,13 +5,13 @@
 
 <!-- [![PyPI - Version](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/)
 [![PyPI - Downloads](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/) -->
-[![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues)
-[![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions)
+<!-- [![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues) -->
+<!-- [![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions) -->
 ![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
 ![GitHub Pull Requests](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)
 ![Commits This Month](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui)
-![Build Status](https://img.shields.io/github/actions/workflow/status/UrbVerde/urbverde-ui/main.yml?branch=main)
-![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/UrbVerde/urbverde-ui/.github/workflows/deploy.yml?branch=dev)](https://github.com/UrbVerde/urbverde-ui/actions)
+![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui/tree/dev)
 ![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
 
 [![README em Português](https://img.shields.io/badge/Portuguese-d9d9d9)](./README_BR.md)
