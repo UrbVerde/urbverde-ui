@@ -23,10 +23,10 @@
 </p>
 
 <p align="center">
-    <a href="https://www.urbverde.com.br">https://www.urbverde.com.br</a>
     <img src="https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png" href="https://urbverde.com.br" alt="Teaser">
     <img src="https://i.ibb.co/R9T9vsC/Captura-de-tela-2024-12-30-150306.png" href="https://urbverde.com.br" alt="Teaser">
     </a>
+    <a href="https://www.urbverde.com.br">https://www.urbverde.com.br</a>
 </p>
 
 </p>
@@ -45,23 +45,18 @@
 
 ---
  
-<p align="right">
-    <a href="./README_BR.md">
-        <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português">
-    </a>
-    <a href="./README.md">
-        <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English">
-    </a>
-    <a href="./README_FR.md">
-        <img src="https://img.shields.io/badge/Français-d9d9d9" alt="README em French">
-    </a>
-</p>
 
 <h1>📁/UrbVerde-UI</h1>
 
+<p align="right">
+    <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português" href="./README_BR.md">
+    <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English" href="./README.md">
+    <img src="https://img.shields.io/badge/Français-d9d9d9" alt="README em French" href="./README_FR.md">
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
+</p>
+
 
 Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para **acelerer a adaptação climática das cidades brasileiras**. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas _Open-Source_ e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a [UrbVerde](https://urbverde.com.br) capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades **mais sustentáveis, resilientes e inclusivas**.
 
