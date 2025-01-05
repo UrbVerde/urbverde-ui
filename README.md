@@ -7,10 +7,11 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/) -->
 <!-- [![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues) -->
 <!-- [![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions) -->
-![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
 ![GitHub Pull Requests](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)
-![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
 [![Deploy Status](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
+
+![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
+![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
 <!-- ![Commits This Month](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui) -->
 <!-- ![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui/tree/dev) -->
 
@@ -106,7 +107,8 @@ Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) 
 
 <!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
 - COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
-- UrbVerde nas mídias [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias)
+
+Saiba mais em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias)
 
 ## 📚 Guias
 
@@ -117,7 +119,4 @@ Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) 
 
 Para dúvidas ou sugestões, participe de nossas [Discussões](https://github.com/UrbVerde/urbverde-ui/discussions).
 
----
-
-Estamos construindo a UrbVerde para empoderar comunidades e melhorar a tomada de decisões através de dados ambientais acessíveis. Junte-se a nós nesta missão!
 
