@@ -30,7 +30,7 @@
 [![README en Français](https://img.shields.io/badge/Français-d9d9d9)](./README_FR.md)
 
 <p align="justify">
-Voici le dépôt officiel d'<a href="https://urbverde.com">UrbVerde</a>, une plateforme Web-GIS gratuite dédiée au développement de technologies pour <strong>accélérer l'adaptation climatique des villes</strong>. En utilisant la télédétection de pointe, en promouvant la recherche académique <em>open-source</em> et en proposant des outils d'analyse avancés axés sur l'<strong>expérience utilisateur</strong>, <a href="https://urbverde.com">UrbVerde</a> permet aux gestionnaires publics, chercheurs, journalistes et citoyens de façonner des environnements urbains plus <strong>durables, résilients et inclusifs</strong> pour l'avenir.
+Voici le dépôt officiel d'<a href="https://urbverde.com">UrbVerde</a>, une plateforme SIG-Web (Système d'Information Géographique sur le Web) gratuite dédiée au développement de technologies pour <strong>accélérer l'adaptation climatique des villes</strong>. En utilisant la télédétection de pointe, en promouvant la recherche académique <em>open-source</em> et en proposant des outils d'analyse avancés axés sur l'<strong>expérience utilisateur</strong>, <a href="https://urbverde.com">UrbVerde</a> permet aux gestionnaires publics, chercheurs, journalistes et citoyens de façonner des environnements urbains plus <strong>durables, résilients et inclusifs</strong> pour l'avenir.
 </p>
 
 <br>
