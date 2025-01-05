@@ -2,15 +2,30 @@
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
     </a>
+</p>
 
-[![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/graphs/contributors)
-[![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/stargazers)
-[![Commits](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/commits/main)
-[![AI Powered](https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge)](https://urbverde.iau.usp.br/)
+<p align="center">
+    <a href="https://github.com/UrbVerde/urbverde-ui/commits/main">
+        <img src="https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge" alt="Commits">
+    </a>
+    <a href="https://urbverde.iau.usp.br/">
+        <img src="https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge" alt="AI Powered">
+    </a>
+    <a href="https://github.com/UrbVerde/urbverde-ui/stargazers">
+        <img src="https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge" alt="Stars">
+    </a>
+    <a href="https://github.com/UrbVerde/urbverde-ui/graphs/contributors">
+        <img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors">
+    </a>
+</p>
 
-[![Issues](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues)
-[![Deploy](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
-
+<p align="center">
+    <a href="https://github.com/UrbVerde/urbverde-ui/issues">
+        <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="Issues">
+    </a>
+    <a href="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml">
+        <img src="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg" alt="Deploy">
+    </a>
 </p>
 
 ![Teaser](https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png) 
