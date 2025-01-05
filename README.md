@@ -2,17 +2,16 @@
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
     </a>
-</p>
 
 [![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/graphs/contributors)
 [![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/stargazers)
 [![Commits](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/commits/main)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge)](https://urbverde.iau.usp.br/)
-[![PRs](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui?style=for-the-badge)](https://github.com/UrbVerde/urbverde-ui/pulls)
 
 [![Issues](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues)
 [![Deploy](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
 
+</p>
 
 ![Teaser](https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png) 
 
