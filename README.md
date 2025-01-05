@@ -16,13 +16,17 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="Issues" 
-         href="https://github.com/UrbVerde/urbverde-ui/issues">
     <img src="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg" alt="Deploy" 
          href="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml">
+    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="Issues" 
+         href="https://github.com/UrbVerde/urbverde-ui/issues">
 </p>
 
-![Teaser](https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png) 
+<p align="center">
+    <img src="https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png" href="https://urbverde.com.br" alt="Teaser">
+    <img src="https://i.ibb.co/R9T9vsC/Captura-de-tela-2024-12-30-150306.png" href="https://urbverde.com.br" alt="Teaser">
+    </a>
+</p>
 
 </p>
 <!-- https://github.com/sponsors/urbverde-ui -->
