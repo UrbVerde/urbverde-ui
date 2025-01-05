@@ -35,11 +35,6 @@
  
 <br>
 
-<p align="left">
-    <img src="https://img.shields.io/badge/Portuguese-d9d9d9" alt="README in Portuguese" href="./README_BR.md">
-    <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English" href="./README.md">
-    <img src="https://img.shields.io/badge/French-d9d9d9" alt="README in French" href="./README_FR.md">
-</p>
 <h1>📁/UrbVerde-UI</h1>
 
 [![README in Portuguese](https://img.shields.io/badge/Português-d9d9d9)](./README_BR.md)
