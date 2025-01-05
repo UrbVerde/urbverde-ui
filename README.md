@@ -1,24 +1,21 @@
-<div style="display: flex; align-items: center;">
-    <img src="src/assets/images/logo-white.png" alt="Logo UrbVerde" width="100" height="100">
-    <h1 style="margin-left: 20px;">UrbVerde UI</h1>
-</div>
+<img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200"> <!-- colocar logo com texto kk-->
+<!-- ![UrbVerde](src/assets/images/logo-white.png) colocar logo com texto kk -->
 
-![Genesis](imgs/big_text.png) <!-- colocar logo com texto kk-->
-
-![Teaser](imgs/teaser.png) <!-- colocar img da plataforma -->
+<!-- ![Teaser](imgs/teaser.png) colocar img da plataforma -->
 
 <!-- [![PyPI - Version](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/)
 [![PyPI - Downloads](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/) -->
 [![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues)
 [![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions)
 
-[![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
 [![README em Português](https://img.shields.io/badge/Francais-d9d9d9)](./README_BR.md)
+[![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
+[![README em French](https://img.shields.io/badge/Francais-d9d9d9)](./README_FR.md)
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
 
-Bem-vindo ao projeto UrbVerde UI! Este repositório faz parte da iniciativa open-source UrbVerde, que visa democratizar dados ambientais e promover a sustentabilidade urbana. A interface foi projetada para oferecer uma plataforma intuitiva, rápida e altamente acessível para explorar insights geoespaciais e socioambientais.
+<!-- Bem-vindo ao projeto UrbVerde UI! Este repositório faz parte da iniciativa open-source UrbVerde, que visa democratizar dados ambientais e promover a sustentabilidade urbana. A interface foi projetada para oferecer uma plataforma intuitiva, rápida e altamente acessível para explorar insights geoespaciais e socioambientais. -->
 
 
 ## 🔥 Novidades
@@ -29,12 +26,11 @@ Bem-vindo ao projeto UrbVerde UI! Este repositório faz parte da iniciativa open
 - **🔗 Repositório Unificado**: Interface e API em um único ambiente Dockerizado para implantação local fácil.
 - **📊 Banco de Dados Atualizado**: Estrutura aprimorada para armazenamento de dados mais rápido e confiável.
 
-## 🗺️ Roadmap
 
 ## 🗺️ Roadmap
 
 | Feature               | Status  | Notes                             |
-|-----------------------|---------|-----------------------------------|
+|-----------------------|---------|-----------------------------------------|
 | 🏠 New Home           | 🛠️ In Progress | Expected Q1 2025                  |
 | 🗺️ Interactive Map    | ✅ Delivered  | Beta released December 2024      |
 | ✉️ Blog & Newsletter  | ✅ Delivered  | Framework added December 2024    |
