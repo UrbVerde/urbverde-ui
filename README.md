@@ -45,9 +45,17 @@
 
 ---
  
-[![README em Português](https://img.shields.io/badge/Português-d9d9d9)](./README_BR.md)
-[![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
-[![README em French](https://img.shields.io/badge/Français-d9d9d9)](./README_FR.md)
+<p align="right">
+    <a href="./README_BR.md">
+        <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português">
+    </a>
+    <a href="./README.md">
+        <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English">
+    </a>
+    <a href="./README_FR.md">
+        <img src="https://img.shields.io/badge/Français-d9d9d9" alt="README em French">
+    </a>
+</p>
 
 <h1>📁/UrbVerde-UI</h1>
 
@@ -120,9 +128,6 @@ Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plata
    docker-compose up --build
    ```
 
-<br>
-
-
 ## 📖 Documentação
 
 Documentação detalhada está disponível em nossos [Docs](https://urbverde-educa.tawk.help/). <!-- https://urbverde.org/docs). -->
@@ -134,14 +139,10 @@ Documentação detalhada está disponível em nossos [Docs](https://urbverde-edu
 <!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
 - COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
 
-Saiba mais em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias)
-
-<br>
-
-## 📚 Guias
+Saiba mais em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias).
 
 <!-- Acompanhe nossa jornada em [GitHub Open Archives](). https://github.com/UrbVerde/urbverde-blog). -->
- Acompanhe nossa jornada em [UrbVerde Educa](https://urbverde-educa.tawk.help/). 
+ Ou aprenda com a gente em [UrbVerde Educa](https://urbverde-educa.tawk.help/). 
 
 <br>
 
@@ -153,13 +154,15 @@ Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) 
 
 ## 📜 Licença
 
-O UrbVerde UI está licenciado sob a [AGPL-3.0](LICENSE).
+Este repositório está licenciado sob a [AGPL-3.0](LICENSE).
 
 <br>
 
 ## 🗣 Suporte
 
 Para dúvidas ou sugestões, participe de nossas [Discussões](https://github.com/UrbVerde/urbverde-ui/discussions).
+
+Fale com a gente!
 
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/+5511916709802)
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/urb.verde)
