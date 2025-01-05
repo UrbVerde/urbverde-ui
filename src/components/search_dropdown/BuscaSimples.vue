@@ -2,35 +2,49 @@
   <div class="search-wrapper">
     <div :class="{ 'input-container': !dropdown, 'input-container-dropdown': dropdown }">
       <div class="input-overlay">
-        <input ref="inputField"
-               v-model="inputValue"
-               @keyup="keydown"
-               @focus="handleFocus"
-               @keydown.enter="handleEnter"
-               placeholder="Digite um cidade ou estado brasileiro"
-               class="input-field" />
+        <input
+          ref="inputField"
+          v-model="inputValue"
+          @keyup="keydown"
+          @focus="handleFocus"
+          @keydown.enter="handleEnter"
+          placeholder="Procure um local"
+          class="input-field"
+        />
+
         <div v-if="highlightedText" class="suggestion-overlay">
           <span class="suggestion-text">
-            <span class="invisible">{{ visibleInput }}</span><span class="highlight">{{ highlightedText }}</span>
+            <span class="invisible">{{ visibleInput }}</span>
+            <span class="highlight">{{ highlightedText }}</span>
           </span>
-
         </div>
       </div>
+
       <div class="button-container">
-        <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-                @click="clearInput">
-          <img id="imgIcon"
-               src="../icons/clean.svg"
-               width="16"
-               height="16" /> </button>
-        <button class="search-button" @click="clearHistory"> <img id="imgIcon"
-                                                                  src="../icons/search.svg"
-                                                                  width="16"
-                                                                  height="16" /> </button>
+        <button
+          :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
+          @click="clearInput"
+        >
+          <img
+            id="imgIcon"
+            src="../../assets/icons/clean.svg"
+            width="16"
+            height="16"
+          />
+        </button>
+
+        <button class="search-button" @click="submit">
+          <img
+            id="imgIcon"
+            src="../../assets/icons/search.svg"
+            width="16"
+            height="16"
+          />
+        </button>
       </div>
     </div>
-    <div class="button-debug">
 
+    <div class="button-debug">
       <span v-if="debug">
         {{ suggestions.length }} sugestão(ões)
       </span>
@@ -45,44 +59,66 @@
 
     <div :class="{ 'suggestion-container': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="filter-container">
-        <span class="filter-text">Buscar por:</span>
-        <div class="filter-button-container">
+        <div
+          class="filter-button-container"
+          ref="filterButtonContainer"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+          @touchstart="startDrag"
+          @touchmove="onDrag"
+          @touchend="endDrag"
+        >
           <button :class="{ 'filter-button': !filterAll, 'filter-button-active': filterAll }"
                   @click="toggleAll">Todos</button>
+
           <button :class="{ 'filter-button': !filterCity, 'filter-button-active': filterCity }"
                   @click="toggleCity">Municípios</button>
+
           <button :class="{ 'filter-button': !filterState, 'filter-button-active': filterState }"
                   @click="toggleState">Estados</button>
         </div>
       </div>
 
       <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-        <li class="suggestion-item"
-            v-for="(suggestion, index) in visibleSuggestions"
-            :key="suggestion"
-            @click="selectSuggestion(suggestion)"
-            tabindex="0"
-            @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)"
-            @keydown.down.prevent="focusNextSuggestion(index)"
-            :ref="`suggestionItem-${index}`">
+        <li
+          class="suggestion-item"
+          v-for="(suggestion, index) in visibleSuggestions"
+          :key="suggestion"
+          @click="selectSuggestion(suggestion)"
+          tabindex="0"
+          @keydown.enter="selectSuggestion(suggestion)"
+          @keydown.up.prevent="focusPreviousSuggestion(index)"
+          @keydown.down.prevent="focusNextSuggestion(index)"
+          :ref="`suggestionItem-${index}`"
+        >
           <img :src="getImageSource(suggestion.type)" width="20" height="20" />
           <span class="item-text">{{ suggestion.text }}</span>
-
         </li>
       </ul>
     </div>
-  </div>
 
+    <!-- Coordenadas exibidas na tela -->
+    <p v-if="coordinates">
+      Coordenadas encontradas: Latitude: {{ coordinates.lat }}, Longitude: {{ coordinates.lng }}
+    </p>
+  </div>
 </template>
 
 <script>
-import historyIcon from '../icons/history.svg';
-import locationIcon from '../icons/location.svg';
+import axios from 'axios';
+
+import { API_URLS } from '@/constants/endpoints';
+
+import historyIcon from '../../assets/icons/history.svg';
+import locationIcon from '../../assets/icons/location.svg';
 
 export default {
+  components: {},
   data() {
     return {
+      coordinates: null,
       inputValue: '',
       previousInputValue: '',
       visibleInput: '',
@@ -99,11 +135,16 @@ export default {
       cachedCities: [],
       searchHistory: [],
       dropdown: false,
+      showSuggestions: false, // Controla a exibição das sugestões
       debug: false,
       lastInputLength: 0,
       filterAll: true,
       filterCity: false,
       filterState: false,
+
+      isDragging: false,
+      startX: 0,
+      scrollLeft: 0,
     };
   },
   created() {
@@ -112,6 +153,11 @@ export default {
   },
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
+
+    // Adiciona o atraso de 2 segundos antes de exibir a barra de sugestões
+    setTimeout(() => {
+      this.dropdown = true; // Exibe o dropdown após 2,5 segundos
+    }, 2500);
   },
   beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
@@ -137,7 +183,7 @@ export default {
       try {
         this.clearCache();
 
-        const response = await fetch(`http://localhost:8080/api/v1/address/suggestions?query=${query}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${query}`);
         const cities = await response.json();
 
         this.cacheCities(cities);
@@ -174,30 +220,25 @@ export default {
         this.dropdown = false;
       }
     },
-
     handleFocus(event) {
       if (this.dropdown !== true) {
         this.dropdown = true;
       }
       event.stopPropagation();
     },
-
     cacheCities(cities) {
       this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       this.updateSuggestions();
     },
-
     clearCache() {
       this.cachedCities = [];
     },
-
     keydown() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
         this.previousInputValue = this.inputValue;
       }
     },
-
     updateSuggestions() {
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
@@ -227,21 +268,17 @@ export default {
       this.updateHighlightedText();
 
     },
-
     filterHistory(query) {
       return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
     },
-
     filterStates(query) {
       return this.states
         .filter(state => state.toLowerCase().startsWith(query) && !this.searchHistory.includes(state));
     },
-
     filterCities(query) {
       return this.cachedCities
         .filter(city => city.toLowerCase().startsWith(query) && !this.searchHistory.includes(city));
     },
-
     updateHighlightedText() {
       if (this.visibleSuggestions.length > 0) {
         const firstSuggestion = this.visibleSuggestions[0].text;
@@ -255,7 +292,6 @@ export default {
         this.highlightedText = '';
       }
     },
-
     selectSuggestion(suggestion) {
       this.inputValue = suggestion.text;
       this.visibleInput = suggestion.text;
@@ -264,9 +300,11 @@ export default {
       this.dropdown = false;
 
       this.locationChosen = suggestion.text;
+
+      this.fetchCoordinates(suggestion.text); // Chama a função para buscar coordenadas
+
       this.submit();
     },
-
     submit() {
       if (this.inputValue) {
 
@@ -276,7 +314,6 @@ export default {
       }
       //this.suggestions = [];
     },
-
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
@@ -286,7 +323,6 @@ export default {
         }, 1000);
       }
     },
-
     addToHistory(item) {
       const itemLower = item.toLowerCase();
       const historyLower = this.searchHistory.map(historyItem => historyItem.toLowerCase());
@@ -299,17 +335,14 @@ export default {
         this.saveSearchHistory();
       }
     },
-
     saveSearchHistory() {
       localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
     },
-
-    clearHistory() {
+    clearHistory() {//usar para debug no botão search
       this.searchHistory = [];
       localStorage.removeItem('searchHistory');
       alert('Histórico limpo com sucesso!');
     },
-
     clearInput() {
       this.suggestions = [];
       this.generateDefaultSuggestions();
@@ -319,23 +352,20 @@ export default {
       if (!this.dropdown) {
         this.dropdown = true;
       }
-
     },
-
     loadSearchHistory() {
       const savedHistory = localStorage.getItem('searchHistory');
       if (savedHistory) {
         this.searchHistory = JSON.parse(savedHistory);
       }
     },
-
     generateDefaultSuggestions() {
       const cachedData = this.getCachedData();
       const { city, state, stateAbbreviation, international } = cachedData;
 
       let defaultSuggestions = [];
 
-      if (international || city === 'error' || state === 'error' || city === null ) {
+      if (international || city === 'error' || state === 'error' || city === null) {
         defaultSuggestions = [
           { text: 'Rio de Janeiro - RJ', type: 'city' },
           { text: 'São Paulo', type: 'state' },
@@ -358,6 +388,9 @@ export default {
       this.updateHighlightedText();
     },
 
+    getImageSource(type) {
+      return type === 'history' ? historyIcon : locationIcon;
+    },
     getCachedData() {
       return {
         city: localStorage.getItem('cachedCity'),
@@ -368,7 +401,6 @@ export default {
         longitude: localStorage.getItem('cachedLongitude'),
       };
     },
-
     toggleAll() {
       this.filterAll = true;
       this.filterCity = false;
@@ -377,7 +409,6 @@ export default {
         this.updateHighlightedText();
       }
     },
-
     toggleCity() {
       this.filterAll = false;
       this.filterCity = true;
@@ -386,7 +417,6 @@ export default {
         this.updateHighlightedText();
       }
     },
-
     toggleState() {
       this.filterAll = false;
       this.filterCity = false;
@@ -395,11 +425,37 @@ export default {
         this.updateHighlightedText();
       }
     },
+    startDrag(event) {
+      this.isDragging = true;
+      this.startX = event.pageX || event.touches[0].pageX;
+      this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
+    },
+    onDrag(event) {
+      if (!this.isDragging) { return; }
+      const x = event.pageX || event.touches[0].pageX;
+      const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
+      this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
+    },
+    endDrag() {
+      this.isDragging = false;
+    },
 
-    getImageSource(type) {
-      return type === 'history' ? historyIcon : locationIcon;
-    }
-
+    //Organizacao das coordenadas
+    async fetchCoordinates(address) {
+      const apiKey = import.meta.env.VITE_OPENCAGEDATA_API_KEY; // Sua chave API
+      const endpoint = `${API_URLS.OPENCAGEDATA}?q=${encodeURIComponent(address)}&key=${apiKey}`;
+      try {
+        const response = await axios.get(endpoint);
+        if (response.data && response.data.results.length > 0) {
+          const location = response.data.results[0].geometry;
+          this.$emit('location-updated', { lat: location.lat, lng: location.lng });
+        } else {
+          console.error('Nenhuma coordenada encontrada.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar coordenadas:', error);
+      }
+    },
   }
 };
 </script>
@@ -411,7 +467,6 @@ export default {
   justify-content: center;
   align-items: center;
   border: none;
-
 }
 
 .search-wrapper {
@@ -421,7 +476,6 @@ export default {
 
 .input-container,
 .input-container-dropdown {
-
   display: flex;
   align-items: center;
   gap: 12px;
@@ -434,30 +488,23 @@ export default {
   position: relative;
   z-index: 1;
   /* Garante que o input fique acima do restante */
-
 }
 
 .input-container {
-
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
 
   /* Small Shadow */
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-
 }
 
 .input-container-dropdown {
-
   border-radius: 8px;
   background: var(--Gray-100, #F8F9FA);
 
   /* Regular Shadow */
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-
 }
-
-.input-container-dropdown::after {}
 
 .input-field,
 .suggestion-overlay {
@@ -482,33 +529,39 @@ export default {
   /* Body/Small/Regular */
   font-family: Inter;
   font-size: 14px;
+
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
+
+  padding: 0;
   /* 21px */
 }
 
 .input-field {
   background: var(--Gray-100, #F8F9FA);
   border: none;
-
+  outline: none;
 }
 
 .input-overlay {
   position: relative;
   flex: 1;
   overflow: hidden;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  /* Alinha verticalmente os elementos */
 }
 
 .suggestion-overlay {
-
   /* alinhar texto digitado com sugestão */
   position: absolute;
   top: 0;
   left: 0;
   pointer-events: none;
   background: transparent;
-
 }
 
 .invisible {
@@ -519,13 +572,10 @@ export default {
   color: #bbb;
 }
 
-.suggestion-text {}
-
 .button-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-
 }
 
 .clean-button,
@@ -539,34 +589,9 @@ export default {
   border: none;
 }
 
-.clean-button {}
-
 .clean-button-hidden {
   display: none;
 
-}
-
-.search-button {}
-
-.filter-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  align-self: stretch;
-
-  background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
-  /*Typography*/
-  color: var(--Theme-Secondary, #6C757D);
-
-  /* Body/Small/Regular */
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  /* 21px */
 }
 
 .filter-button-container {
@@ -580,7 +605,7 @@ export default {
 .filter-button,
 .filter-button-active {
   display: flex;
-  padding: 8px 14px;
+  padding: 5px 8px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -590,7 +615,7 @@ export default {
 
   /* Body/Small/Regular */
   font-family: Inter;
-  font-size: 14px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
@@ -598,18 +623,14 @@ export default {
 }
 
 .filter-button {
-
   color: var(--Theme-Secondary, #6C757D);
 
   background: var(--HitBox, rgba(255, 255, 255, 0.00));
-
 }
 
 .filter-button-active {
-
   background: var(--Primary-Fade-100, #D2E8DD);
   color: var(--Theme-Primary, #025949);
-
 }
 
 .filter-container {
@@ -639,12 +660,12 @@ export default {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
 
   position: absolute;
+
   top: 100%;
   left: 0;
   right: 0;
   z-index: 10;
   background: var(--Gray-100, #F8F9FA);
-
 }
 
 .suggestion-container-hidden {
@@ -661,10 +682,7 @@ export default {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-
 }
-
-.suggestions-list li {}
 
 .suggestions-list li:hover {
   background-color: #f0f0f0;
@@ -679,19 +697,15 @@ export default {
   align-self: stretch;
   border-radius: 4px;
 
-  cursor: pointer;
-
 }
 
 .item-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
-
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
-
   /* Body/Small/Regular */
   font-family: Inter;
   font-size: 14px;
@@ -699,7 +713,6 @@ export default {
   font-weight: 400;
   line-height: 150%;
   /* 21px */
-
 }
 
 .suggestion-count {

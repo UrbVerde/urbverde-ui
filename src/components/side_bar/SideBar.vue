@@ -1,26 +1,23 @@
+<!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
-
         <LogoButton v-show="isOpen" />
-        <MinimizeButton @changed-state="changeSidebar" />
-
+        <!-- Emite o evento para alternar o estado da sidebar -->
+        <MinimizeButton @click="toggleSidebar" />
       </div>
-
       <div v-show="isOpen" class="search-area">
-        <BuscaSimples />
+        <BuscaSimples @location-updated="onLocationUpdated"/>
       </div>
       <div v-show="isOpen" class="middle-area">
-        <DropDown v-show="true" :options="options" />
+        <DropDown v-if="isSearchDone" :options="options" />
       </div>
-
       <div v-show="isOpen" class="bottom-area">
-
         <a class="link-button">
           <img class="d-inline-block"
                id="imgIcon"
-               src="../icons/export.svg"
+               src="../../assets/icons/export.svg"
                width="20"
                height="20" />
           <span id="txtBottom">Colabore com dados</span>
@@ -28,7 +25,7 @@
         <a class="link-button">
           <img class="d-inline-block"
                id="imgIcon"
-               src="../icons/help.svg"
+               src="../../assets/icons/help.svg"
                width="20"
                height="20" />
           <span id="txtBottom">Central de ajuda</span>
@@ -37,21 +34,38 @@
 
     </div>
   </div>
+
 </template>
 
 <script setup>
-import DropDown from '@/components/side_bar/drop_down/NavbarDropdown.vue';
-import MinimizeButton from '../side_bar/buttons/MinimizeButton.vue';
-import LogoButton from '../side_bar/buttons/LogoButton.vue';
 import { ref } from 'vue';
-import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 
-const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
+import MinimizeButton from './buttons/MinimizeButton.vue';
+import LogoButton from './buttons/LogoButton.vue';
+import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
+import DropDown from './drop_down/NavbarDropdown.vue';
+
+// defineEmits é uma macro: não precisa de import!
+const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
+
+// Variável para controlar se a busca foi feita
+const isSearchDone = ref(false);
+
+// Variável para controlar se a sidebar fica aberta
 const isOpen = ref(true);
 
-function changeSidebar() {
+// to-do: axios request from the api, what categories and layers exist for that specific cd_mun
+const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
+
+function onLocationUpdated(coordinates) {
+  isSearchDone.value = true;
+  emit('update-coordinates', coordinates);
+};
+
+function toggleSidebar() {
   isOpen.value = !isOpen.value;
-}
+  localStorage.setItem('sidebarOpen', isOpen.value);
+};
 
 </script>
 
@@ -66,23 +80,25 @@ function changeSidebar() {
   overflow: hidden;
   background: var(--Gray-White, #FFF);
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
+  z-index: 100;
 }
 
 .sidebar-open {
-  width: 320px;
+  width: 272px;  /* 280px*/
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
   align-self: stretch;
-
+  position: fixed;
+  z-index: 100;
 }
 
 .top-area {
   display: flex;
   height: 88px;
   padding: 16px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
   align-self: stretch;
@@ -167,4 +183,5 @@ function changeSidebar() {
   font-size: small;
 
 }
+
 </style>

@@ -1,33 +1,33 @@
+<!-- urbverde-ui/src/components/buttons/LogoButton.vue -->
 <template>
   <div>
-    <button class="logo-button">
-      <img src="../../../assets/logo-white.png" alt="Logo" class="logo" />
-      <span class="text">URBVERDE</span>
-    </button>
+    <LogoRouterLink />
   </div>
 </template>
 
 <script>
+import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
+
 export default {
-  name: 'LogoButton'
+  name: 'LogoButton',
+  components: {
+    LogoRouterLink,
+  },
 };
 </script>
 
 <style scoped>
 .logo-button {
-
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  width: 232px;
-  /* Definindo a largura do botão */
+  width: 190px;
   height: 56px;
-  /* Definindo a altura do botão */
   display: flex;
   align-items: center;
   gap: 8px;
-  /* Espaçamento entre a imagem e o texto */
+  text-decoration: none;
 }
 
 .logo {
@@ -42,11 +42,8 @@ export default {
   font-style: normal;
   font-weight: 700;
   line-height: 150%;
-  /* 30px */
   letter-spacing: 1px;
-
-  color: var(--Theme-Primary, #025949);
   leading-trim: both;
   text-edge: cap;
-
-}</style>
+}
+</style>
