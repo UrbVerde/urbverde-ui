@@ -48,18 +48,17 @@
  
 <br>
 
-<p align="left">
-    <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português" href="./README_BR.md">
-    <img src="https://img.shields.io/badge/English-d9d9d9" alt="README em English" href="./README.md">
-    <img src="https://img.shields.io/badge/Français-d9d9d9" alt="README em Francês" href="./README_FR.md">
+<h1>📁/UrbVerde-UI</h1>
+
+[![README in Portuguese](https://img.shields.io/badge/Português-d9d9d9)](./README_BR.md)
+[![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
+[![README in French](https://img.shields.io/badge/Français-d9d9d9)](./README_FR.md)
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
-</p>
-<h1>📁/UrbVerde-UI</h1>
 
 <p align="justify">
-    Este é o repositório oficial da <a href="https://urbverde.com.br">UrbVerde</a>, uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para <strong>acelerar a adaptação climática das cidades brasileiras</strong>. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas <em>Open-Source</em> e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a <a href="https://urbverde.com.br">UrbVerde</a> capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades <strong>mais sustentáveis, resilientes e inclusivas</strong>.
+    Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plataforma Web-SIG gratuita que desenvolve tecnologias para <strong>acelerar a adaptação climática das cidades brasileiras</strong>. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas <em>Open-Source</em> e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a [UrbVerde](https://urbverde.com.br) capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades <strong>mais sustentáveis, resilientes e inclusivas</strong>.
 </p>
 
 <br>
@@ -124,7 +123,7 @@
 - [ ] 📅 _Planejado_ - 🛠️ Abrir comunidade e colocar badge de chat on discord. 
 - [ ] 📅 _Planejado_ - 📄 Criar README mais aprimorado, com logotipo com e demonstração em GIF.
 - [ ] 📅 _Planejado_ - 🎨 Adicionar links para arquivos de design no Figma. 
-- [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 
+- [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos produzidos com a [UrbVerde](https://urbverde.com.br). 
 <!-- sponsors -->
 
 <!-- ## 📖 Documentação
@@ -144,6 +143,7 @@ Saiba mais sobre nosso impacto em [UrbVerde nas mídias](https://urbverde-educa.
  Artigos produzidos:
 
 <!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
+
 - COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
 
 ## 🧩 Contribuição

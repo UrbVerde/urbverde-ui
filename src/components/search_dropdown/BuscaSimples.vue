@@ -631,6 +631,7 @@ export default {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
 
   /* Typography */
   overflow: hidden;
@@ -845,9 +846,8 @@ opacity: 0px;
 .item-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;/*evita quebra de linha*/ 
-  -webkit-box-orient: vertical;/*evita quebra de linha*/ 
   -webkit-line-clamp: 1;
-
+  line-clamp: 1;
 
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
