@@ -70,22 +70,6 @@ Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plata
 
 <br>
 
-## 🎯 To-Do
-<!-- 🔄 Em andamento (Atividades que estão em progresso).
-📅 Planejado (Atividades que ainda não começaram, mas já estão programadas).
-✅ Concluído (Atividades já finalizadas). 
-🛠️
-🚧
--->
-- [ ] 🚧 _Em andamento_ - 📄 Traduzir README e interface para outras línguas (internacionalização).
-- [x] ✅ _Concluído_ - 🏷️Incluir badges e tags para destacar métricas do projeto e participação. 
-- [ ] 📅 _Planejado_ - 🛠️ Abrir comunidade e colocar badge de chat on discord. 
-- [ ] 📅 _Planejado_ - 📄 Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo.
-- [ ] 📅 _Planejado_ - 🎨 Adicionar links para arquivos de design no Figma. 
-- [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 
-
-<br>
-
 ## 💻 Setup
 
 ### Requisitos Prévios
@@ -123,35 +107,54 @@ Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plata
    docker-compose up --build
    ```
 
-## 📖 Documentação
+<br> 
 
-Documentação detalhada está disponível em nossos [Docs](https://urbverde-educa.tawk.help/). <!-- https://urbverde.org/docs). -->
+## 🎯 To-Do
+<!-- 🔄 Em andamento (Atividades que estão em progresso).
+📅 Planejado (Atividades que ainda não começaram, mas já estão programadas).
+✅ Concluído (Atividades já finalizadas). 
+🛠️
+🚧
+-->
+- [x] 🚧 _Em andamento_ - 📄 Traduzir README e interface para outras línguas (internacionalização).
+- [x] ✅ _Concluído_ - 🏷️Incluir badges e tags para destacar métricas do projeto e participação. 
+- [ ] 📅 _Planejado_ - Criar o CONTRIBUTING.md  
+- [ ] 📅 _Planejado_ - 🛠️ Abrir comunidade e colocar badge de chat on discord. 
+- [ ] 📅 _Planejado_ - 📄 Criar README mais aprimorado, com logotipo com e demonstração em GIF.
+- [ ] 📅 _Planejado_ - 🎨 Adicionar links para arquivos de design no Figma. 
+- [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 
 
-<br>
+
+<!-- ## 📖 Documentação
+
+Documentação detalhada está disponível em nossos [Docs](https://urbverde-educa.tawk.help/). <!-- https://urbverde.org/docs).
+
+<br> 
+ -->
 
 ## 🌐 Pesquisa
+
+Saiba mais sobre nosso impacto em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias).
+
+<!-- Acompanhe nossa jornada em [GitHub Open Archives](). https://github.com/UrbVerde/urbverde-blog). -->
+ Aprenda com a gente em [UrbVerde Educa](https://urbverde-educa.tawk.help/). 
+
+ Artigos produzidos:
 
 <!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
 - COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
 
-Saiba mais em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias).
 
-<!-- Acompanhe nossa jornada em [GitHub Open Archives](). https://github.com/UrbVerde/urbverde-blog). -->
- Ou aprenda com a gente em [UrbVerde Educa](https://urbverde-educa.tawk.help/). 
-
-<br>
 
 ## 🧩 Contribuição
 
 Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) para começar.
 
-<br>
 
 ## 📜 Licença
 
-Este repositório está licenciado sob a [AGPL-3.0](LICENSE).
+Este repositório está licenciado sob a [📜 AGPL-3.0](LICENSE).
 
-<br>
 
 ## 🗣 Suporte
 
