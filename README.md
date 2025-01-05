@@ -3,21 +3,25 @@
 
 <!-- ![Teaser](imgs/teaser.png) colocar img da plataforma -->
 
+![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
+![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
+
+[![Deploy Status](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)
+
+<!-- Outros Badges -->
 <!-- [![PyPI - Version](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/)
 [![PyPI - Downloads](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/) -->
 <!-- [![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues) -->
 <!-- [![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions) -->
-![GitHub Pull Requests](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)
-[![Deploy Status](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
-
-![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
-![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
 <!-- ![Commits This Month](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui) -->
 <!-- ![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui/tree/dev) -->
 
-[![README em Português](https://img.shields.io/badge/Portuguese-d9d9d9)](./README_BR.md)
+---
+
+[![README em Português](https://img.shields.io/badge/Português-d9d9d9)](./README_BR.md)
 [![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
-[![README em French](https://img.shields.io/badge/Francais-d9d9d9)](./README_FR.md)
+[![README em French](https://img.shields.io/badge/Français-d9d9d9)](./README_FR.md)
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
@@ -32,22 +36,18 @@
 - **[2024-00-00]** Estrutura de blog e newsletter adicionada.
 - **[2024-00-00]** Beta da integração do banco de dados nacional lançado.
 
-## 🛠️ To-Do
+## 🎯 To-Do
 <!-- 🔄 Em andamento (Atividades que estão em progresso).
 📅 Planejado (Atividades que ainda não começaram, mas já estão programadas).
 ✅ Concluído (Atividades já finalizadas). 
 🛠️
 🚧
 -->
-- [ ] _[Status: Planejado]_ Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo. 📄🎥 
-- [ ] Adicionar links para arquivos de design no Figma. 🔗🎨 _[Status: Planejado]_
-    - Status: Planejado.
-- [ ] Traduzir README e interface para outras línguas (internacionalização). 🌐🗣️
-    - Status: Planejado.
-- [ ] Incluir badges e tags para destacar métricas do projeto e participação. 🏷️📊
-    - Status: Planejado.
-- [ ] Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 📚🔬
-    - Status: Planejado.
+- [ ] 📄 Traduzir README e interface para outras línguas (internacionalização). [🚧 Em andamento]
+- [x] 🏷️Incluir badges e tags para destacar métricas do projeto e participação. [✅ Concluído]
+- [ ] 📄 Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo.  [📅 Planejado] 
+- [ ] 🎨 Adicionar links para arquivos de design no Figma. 🔗 [📅 Planejado]
+- [ ] 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. [📅 Planejado]
 
 ## 💻 Configuração do Projeto
 
@@ -81,14 +81,9 @@
 
 ## 🐳 Configuração com Docker
 
-1. Construa a imagem Docker:
+1. Construa a imagem Docker e execute :
    ```sh
-   docker build -t urbverde-ui .
-   ```
-
-2. Execute o container:
-   ```sh
-   docker run -p 8080:80 urbverde-ui
+   docker-compose up --build
    ```
 
 ## 📜 Licença
