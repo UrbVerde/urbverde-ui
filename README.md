@@ -16,11 +16,6 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/UrbVerde/urbverde-ui/commits/main"><img src="https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge" alt="Commits"></a><a href="https://urbverde.iau.usp.br/"><img src="https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge" alt="AI Powered"></a><a href="https://github.com/UrbVerde/urbverde-ui/stargazers"><img src="https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge" alt="Stars"></a><a href="https://github.com/UrbVerde/urbverde-ui/graphs/contributors"><img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors"></a>
-</p>
-
-
-<p align="center">
     <a href="https://github.com/UrbVerde/urbverde-ui/issues">
         <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="Issues">
     </a>
