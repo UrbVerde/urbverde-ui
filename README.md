@@ -16,12 +16,10 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/UrbVerde/urbverde-ui/issues">
-        <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="Issues">
-    </a>
-    <a href="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml">
-        <img src="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg" alt="Deploy">
-    </a>
+    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="Issues" 
+         href="https://github.com/UrbVerde/urbverde-ui/issues">
+    <img src="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg" alt="Deploy" 
+         href="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml">
 </p>
 
 ![Teaser](https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png) 
