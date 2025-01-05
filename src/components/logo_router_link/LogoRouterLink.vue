@@ -23,8 +23,6 @@ export default {
   border: none;
   padding: 0;
   cursor: pointer;
-  width: 190px;
-  height: 56px;
   display: flex;
   align-items: center;
   gap: 8px;

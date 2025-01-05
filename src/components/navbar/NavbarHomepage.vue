@@ -99,15 +99,15 @@ export default {
     background-color: transparent;
   }
 
-  .navbar .navbar-toggler{
+  .navbar .navbar-toggler {
     border: transparent;
   }
 
-  .navbar .navbar-toggler.collapsed{
+  .navbar .navbar-toggler.collapsed {
     border: transparent;
   }
 
-  .navbar .navbar-toggler-icon{
+  .navbar .navbar-toggler-icon {
     font-size: 16px;
     color: var(--bs-green-500)
   }
@@ -119,7 +119,7 @@ export default {
     gap: 8px;
   }
 
-  .navbar .navbar-nav .nav-item a{
+  .navbar .navbar-nav .nav-item a {
     display: flex;
     padding: 8px 12px;
     align-items: center;
@@ -138,7 +138,7 @@ export default {
     transition: height 0.3s ease, padding 0.3s ease;
   }
 
-  .navbar .navbar-collapse.collapsing{
+  .navbar .navbar-collapse.collapsing {
     position: absolute;
     z-index: 3;
     top: 100%;
@@ -149,11 +149,11 @@ export default {
     padding: 0 32px;
   }
 
-  .navbar .navbar-collapse.collapsing .navbar-nav{
+  .navbar .navbar-collapse.collapsing .navbar-nav {
     padding: 12px 6px 56px 6px;
   }
 
-  .navbar .navbar-collapse.collapse.show{
+  .navbar .navbar-collapse.collapse.show {
     position: absolute;
     height: auto;
     z-index: 3;
@@ -165,19 +165,21 @@ export default {
     padding: 12px 32px 64px;
   }
 
-  .navbar .navbar-collapse.collapse.show .navbar-nav{
+  .navbar .navbar-collapse.collapse.show .navbar-nav {
     padding: 12px 6px 56px 6px;
   }
 
-  .container-fluid{
+  .container-fluid {
     padding: 0;
   }
 
-  .container-fluid a{
+  .container-fluid a {
     padding: 0;
+    width: auto;
+    margin: 0;
   }
 
-  .button-primary-link{
+  .button-primary-link {
     text-decoration: none;
   }
 
