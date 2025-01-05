@@ -7,8 +7,14 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/) -->
 [![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues)
 [![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions)
+![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)
+![Commits This Month](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui)
+![Build Status](https://img.shields.io/github/actions/workflow/status/UrbVerde/urbverde-ui/main.yml?branch=main)
+![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui)
+![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
 
-[![README em Português](https://img.shields.io/badge/Francais-d9d9d9)](./README_BR.md)
+[![README em Português](https://img.shields.io/badge/Portuguese-d9d9d9)](./README_BR.md)
 [![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
 [![README em French](https://img.shields.io/badge/Francais-d9d9d9)](./README_FR.md)
 <!-- [![한국어 README](https://img.shields.io/badge/한국어-d9d9d9)](./README_KR.md)
@@ -21,9 +27,9 @@
 <!-- ## 🔥 Novidades -->
 
 ## 📦 Atualizações
-- **[2025-01-01]** Desenvolvimento da nova página inicial.
-- **[2024-12-31]** Estrutura de blog e newsletter adicionada.
-- **[2024-12-31]** Beta da integração do banco de dados nacional lançado.
+<!-- - **[2025-00-00]** Desenvolvimento da nova página inicial. -->
+- **[2024-00-00]** Estrutura de blog e newsletter adicionada.
+- **[2024-00-00]** Beta da integração do banco de dados nacional lançado.
 
 ## 🛠️ To-Do
 <!-- 🔄 Em andamento (Atividades que estão em progresso).
@@ -100,6 +106,7 @@ Aceitamos contribuições! Leia nosso [Guia de Contribuição](CONTRIBUTING.md) 
 
 <!-- - Menezes, Gustavo Paixão, et al. (2023). "CRISE CLIMÁTICA E ADAPTAÇÃO VIÁRIA: REFLEXÕES PARA A CIDADE DE SÃO CARLOS-SP COM AUXÍLIO DA PLATAFORMA URBVERDE." -->
 - COSTA, Marcela Fernandes da et al. (2024). **"Explorando o potencial da plataforma Urbverde para o planejamento ambiente urbano: ODS 11 - Cidades e Comunidades Sustentáveis."** Universidade de São Paulo. Instituto de Arquitetura e Urbanismo. DOI: [https://doi.org/10.11606/9786586810769](https://doi.org/10.11606/9786586810769). 
+- UrbVerde nas mídias [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias)
 
 ## 📚 Guias
 
