@@ -47,7 +47,6 @@
  
 <br>
 
-<h1>📁/UrbVerde-UI</h1>
 <p align="left">
     <img src="https://img.shields.io/badge/Português-d9d9d9" alt="README em Português" href="./README_BR.md">
     <img src="https://img.shields.io/badge/English-d9d9d9" alt="README in English" href="./README.md">
@@ -56,6 +55,7 @@
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
 </p>
+<h1>📁/UrbVerde-UI</h1>
 
 <p align="justify">
     Este é o repositório oficial da <a href="https://urbverde.com.br">UrbVerde</a>, uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para <strong>acelerar a adaptação climática das cidades brasileiras</strong>. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas <em>Open-Source</em> e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a <a href="https://urbverde.com.br">UrbVerde</a> capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades <strong>mais sustentáveis, resilientes e inclusivas</strong>.
@@ -117,14 +117,14 @@
 🛠️
 🚧
 -->
-- [x] 🚧 _Em andamento_ - 📄 Traduzir README e interface para outras línguas (internacionalização).
+- [x] ✅ _Concluído_ - 📄 Traduzir README e interface para outras línguas (internacionalização).
 - [x] ✅ _Concluído_ - 🏷️Incluir badges e tags para destacar métricas do projeto e participação. 
-- [ ] 📅 _Planejado_ - Criar o CONTRIBUTING.md  
+- [ ] 🚧 _Em andamento_ - 📄 Criar o CONTRIBUTING.md  
 - [ ] 📅 _Planejado_ - 🛠️ Abrir comunidade e colocar badge de chat on discord. 
 - [ ] 📅 _Planejado_ - 📄 Criar README mais aprimorado, com logotipo com e demonstração em GIF.
 - [ ] 📅 _Planejado_ - 🎨 Adicionar links para arquivos de design no Figma. 
 - [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 
-
+<!-- sponsors -->
 
 <!-- ## 📖 Documentação
 
