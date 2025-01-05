@@ -2,6 +2,7 @@
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
     </a>
+    <br>
       <span style="color: #025949; font-size: 20px; font-weight: 700;">URBVERDE</span>
     <br>
     <img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors">
