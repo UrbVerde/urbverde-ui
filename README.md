@@ -1,23 +1,41 @@
-<img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200"> <!-- colocar logo com texto kk-->
-<!-- ![UrbVerde](src/assets/images/logo-white.png) colocar logo com texto kk -->
+<p align="center">
+    <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+        <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
+        <span style="color: #025949; font-family: Inter, sans-serif; font-size: 20px; font-weight: 700;">URBVERDE</span>
+    </a>
+    <br>
+    <img src="https://img.shields.io/github/contributors/UrbVerde/urbverde-ui?style=for-the-badge" alt="Contributors">
+    <img src="https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=for-the-badge" alt="Stars">
+    <img src="https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui?style=for-the-badge" alt="Commits This Month">
+    <a href="https://urbverde.iau.usp.br/">
+        <img src="https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge" alt="AI Powered">
+    </a>
+    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui?style=for-the-badge" alt="GitHub Pull Requests">
+    <br>
+    <img src="https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui" alt="GitHub Pull Requests">
+    <a href="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml">
+        <img src="https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg" alt="Deploy Status">
+    </a>
 
-<!-- ![Teaser](imgs/teaser.png) colocar img da plataforma -->
 
-![Contributors](https://img.shields.io/github/contributors/UrbVerde/urbverde-ui)
-![Stars](https://img.shields.io/github/stars/UrbVerde/urbverde-ui?style=social)
+![Teaser](https://i.ibb.co/44F7ZMG/Captura-de-tela-2025-01-05-022659.png) 
 
-[![Deploy Status](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/UrbVerde/urbverde-ui/actions/workflows/deploy.yml)
-![GitHub Pull Requests](https://img.shields.io/github/issues-pr/UrbVerde/urbverde-ui)
+</p>
+<!-- https://github.com/sponsors/urbverde-ui -->
+<!-- [![Backers on Open Collective](https://img.shields.io/opencollective/backers/shields)](https://shields.io/community#backers)
+[![Sponsors on Open Collective](https://img.shields.io/opencollective/sponsors/shields)](https://shields.io/community#sponsors) -->
+<!-- [![Chat on Discord](https://img.shields.io/discord/308323056592486420?logo=discord&logoColor=white)](https://discord.gg/aaaaaaa) -->
 
 <!-- Outros Badges -->
 <!-- [![PyPI - Version](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/)
 [![PyPI - Downloads](https://img.shields.io/pypi/UrbVerde/urbverde-ui)](https://pypi.org/project/) -->
 <!-- [![GitHub Issues](https://img.shields.io/github/issues/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/issues) -->
 <!-- [![GitHub Discussions](https://img.shields.io/github/discussions/UrbVerde/urbverde-ui)](https://github.com/UrbVerde/urbverde-ui/discussions) -->
-<!-- ![Commits This Month](https://img.shields.io/github/commit-activity/m/UrbVerde/urbverde-ui) -->
+
 <!-- ![Last Commit](https://img.shields.io/github/last-commit/UrbVerde/urbverde-ui/tree/dev) -->
 
 ---
+<h1>📁/UrbVerde-UI</h1>
 
 [![README em Português](https://img.shields.io/badge/Português-d9d9d9)](./README_BR.md)
 [![README in English](https://img.shields.io/badge/English-d9d9d9)](./README.md)
@@ -26,7 +44,7 @@
 [![简体中文版自述文件](https://img.shields.io/badge/简体中文-d9d9d9)](./README_CN.md)
 [![日本語版 README](https://img.shields.io/badge/日本語-d9d9d9)](./README_JA.md) -->
 
-<!-- Bem-vindo ao projeto UrbVerde UI! Este repositório faz parte da iniciativa open-source UrbVerde, que visa democratizar dados ambientais e promover a sustentabilidade urbana. A interface foi projetada para oferecer uma plataforma intuitiva, rápida e altamente acessível para explorar insights geoespaciais e socioambientais. -->
+Este é o repositório oficial da [UrbVerde](https://urbverde.com.br), uma plataforma Web-GIS gratuita dedicada ao desenvolvimento de tecnologias para **acelerer a adaptação climática das cidades brasileiras**. Utilizando o estado da arte em sensoriamento remoto, promovendo pesquisas acadêmicas _Open-Source_ e oferecendo ferramentas de análise avançadas, focadas na experiência do usuário, a [UrbVerde](https://urbverde.com.br) capacita gestores públicos, pesquisadores, jornalistas e cidadãos a mudarem o seu entorno por um futuro de cidades **mais sustentáveis, resilientes e inclusivas**.
 
 
 <!-- ## 🔥 Novidades -->
@@ -43,13 +61,14 @@
 🛠️
 🚧
 -->
-- [ ] 📄 Traduzir README e interface para outras línguas (internacionalização). [🚧 Em andamento]
-- [x] 🏷️Incluir badges e tags para destacar métricas do projeto e participação. [✅ Concluído]
-- [ ] 📄 Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo.  [📅 Planejado] 
-- [ ] 🎨 Adicionar links para arquivos de design no Figma. 🔗 [📅 Planejado]
-- [ ] 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. [📅 Planejado]
+- [ ] 🚧 _Em andamento_ - 📄 Traduzir README e interface para outras línguas (internacionalização).
+- [x] ✅ _Concluído_ - 🏷️Incluir badges e tags para destacar métricas do projeto e participação. 
+- [ ] 📅 _Planejado_ - 🛠️ Abrir comunidade e colocar badge de chat on discord. 
+- [ ] 📅 _Planejado_ - 📄 Criar README aprimorado com logotipo, GIFs e tutoriais em vídeo.
+- [ ] 📅 _Planejado_ - 🎨 Adicionar links para arquivos de design no Figma. 
+- [ ] 📅 _Planejado_ - 📄 Referenciar artigos acadêmicos que apoiam o UrbVerde em materiais oficiais. 
 
-## 💻 Configuração do Projeto
+## 💻 Setup
 
 ### Requisitos Prévios
 
@@ -114,4 +133,8 @@ Saiba mais em [UrbVerde nas mídias](https://urbverde-educa.tawk.help/category/u
 
 Para dúvidas ou sugestões, participe de nossas [Discussões](https://github.com/UrbVerde/urbverde-ui/discussions).
 
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/+5511916709802)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/urb.verde)
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/urbverde/)
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:comunica.urbverde@usp.br)
 
