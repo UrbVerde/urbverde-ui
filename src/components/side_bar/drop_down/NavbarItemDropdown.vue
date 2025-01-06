@@ -1,34 +1,21 @@
 <template>
-  <nav class="navbar navbar-expand-x1 navbar-light container-fluid">
-    <ul class="navbar-nav w-100 justify-content-center" id="navCont">
+  <div class="option">
+    <ul class="inline-nav-item navbar-nav">
       <div class="dropdown" data-bs-auto-close="false">
-        <a href="#"
-           class="navbar nav-link"
-           :class="{ 'dropdown-active': isDropdownOpen }"
-           id="navbarDropdown"
-           role="button"
-           data-bs-toggle="dropdown"
-           aria-expanded="false"
-           @click="toggleDropdown">
-
-          <img class="d-inline-block"
-               id="imgIcon"
-               :src="iconPath"
-               width="20"
-               height="20" />
-          <span id="txtItem">{{ props.itemName }}</span>
-          <span id="txtBadge" v-if="txtBadge">{{ txtBadge }}</span>
-          <img class="d-inline-block"
-               :src="isDropdownOpen ? collapseIcon : expandIcon"
-               width="14"
-               height="14" />
+        <a href="#" class="nav-item nav-link" :class="{ 'dropdown-active': isDropdownOpen }" id="navbarDropdown"
+          role="button" data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
+          <i :class="iconPath" class="bi" id="imgIcon"></i>
+          <span class="textItem small-regular">{{ props.itemName }}</span>
+          <div class="badge-right-menu" v-if="txtBadge">
+            <span class="textBadge caption-medium">{{ txtBadge }}</span>
+          </div>
+          <i :class="isDropdownOpen ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" width="14" height="14"></i>
         </a>
 
         <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="navbarDropdown">
-          <li v-for="(layer, index) in props.layers"
-              :key="layer.id"
-              :class="{ 'is-active': layer.isActive, 'notActive': !layer.isActive, 'active': layer.isActive }"
-              @click="toggleLayerActive(index, $event)">
+          <li v-for="(layer, index) in props.layers" :key="layer.id"
+            :class="{ 'is-active': layer.isActive, 'notActive': !layer.isActive, 'active': layer.isActive }"
+            @click="toggleLayerActive(index, $event)">
             <div v-show="layer.show" id="intern-padding">
               <a tag="dropdownitem-txt" v-show="layer.show" class="dropdown-item">{{ layer.name }}</a>
             </div>
@@ -36,17 +23,12 @@
         </ul>
       </div>
     </ul>
-  </nav>
+  </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 
-import collapseIcon from '../../../assets/icons/collapse.svg';
-import expandIcon from '../../../assets/icons/expand.svg';
-import sun from '../../../assets/icons/sunBehindeCloud.svg';
-import tree from '../../../assets/icons/pineTree.svg';
-import bike from '../../../assets/icons/bike.svg';
 
 const txtBadge = ref('');
 const isDropdownOpen = ref(false);
@@ -54,13 +36,13 @@ const isDropdownOpen = ref(false);
 const iconPath = computed(() => {
   switch (props.itemName.toLowerCase()) {
     case 'clima':
-      return sun;
+      return 'bi bi-cloud-sun'; // Ícone de clima
     case 'vegetação':
-      return tree;
+      return 'bi bi-tree'; // Ícone de vegetação
     case 'parques e praças':
-      return bike;
+      return 'bi bi-bicycle'; // Ícone de parques
     default:
-      return sun;
+      return 'bi bi-exclamation-circle'; // Ícone padrão
   }
 });
 
@@ -131,7 +113,7 @@ const toggleDropdown = (event) => {
       layer.show = true;
     }
   });
-  
+
   if (!isDropdownOpen.value && isDropdownSelected.value) {
     txtBadge.value = '1';
   }
@@ -163,34 +145,47 @@ const toggleLayerActive = (index, event) => {
 /* Outras regras de estilo */
 
 #imgIcon {
+
+  font-size: 20px;
+  /* Ajuste o tamanho do ícone */
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
 }
 
-#txtItem {
+
+
+.textItem {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-  font-family: Inter, sans-serif;
-  font-size: small;
+
 }
 
-#txtBadge {
-  font-size: small;
+.textBadge {
   display: flex;
-  padding: 0px 7px;
-  align-items: center;
-  gap: 10px;
-  border-radius: 4px;
-  background: var(--Primary-Fade-100, #D3E1E0);
-  font-family: Inter, sans-serif;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
 }
 
-#navCont {}
+.badge-right-menu {
+
+  display: flex;
+  align-items: center;
+
+  padding: 2px 8px;
+  gap: 10px;
+
+  border-radius: 4px;
+  color: var(--Theme-Primary, #025949);
+  background: var(--Primary-Fade-100, #D2E8DD);
+}
+
 
 #navItem {
   padding: 0px 0px;
@@ -203,7 +198,34 @@ const toggleLayerActive = (index, event) => {
 
 }
 
-#navbarDropdown {
+.option {
+  background-color: pink;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+
+
+}
+
+.inline-nav-item {
+
+  background-color: white;
+  align-self: stretch;
+
+}
+.inline-nav-item:hover {
+
+  color: black;
+  /* Cor desejada para o texto */
+
+  /* Cor de fundo opcional */
+  background-color: var(--Primary-Fade-100, #F8F9FA);
+
+}
+
+.nav-item {
+
   display: flex;
   padding: 8px 16px;
   align-items: center;
@@ -213,28 +235,18 @@ const toggleLayerActive = (index, event) => {
 
 }
 
-.navbar {
-  padding: var(--bs-navbar-padding-x);
-  background-color: white;
-  padding: 8px 0px;
 
-}
-
-
-
-.nav-link:hover {
+.nav-item:hover {
   color: black;
   /* Cor desejada para o texto */
 
   /* Cor de fundo opcional */
-  background-color: var(--Primary-Fade-100, #F8F9FA);
+  background-color: orange;
 }
 
 .dropdown-menu {
   border: none;
-  /* Remove a borda do dropdown */
   box-shadow: none;
-  /* Remove a sombra do dropdown, se houver */
   background-color: var(--Primary-Fade-100, orange);
   display: none;
 
@@ -282,7 +294,11 @@ const toggleLayerActive = (index, event) => {
 }
 
 /*? */
-.is-active .nav-link {
+.is-active .nav-item {
   background-color: var(--Primary-Fade-100, black);
+}
+
+.dropdown{
+  background-color: white;
 }
 </style>

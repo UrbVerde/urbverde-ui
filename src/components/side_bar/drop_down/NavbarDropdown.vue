@@ -4,13 +4,8 @@
     <span class="text caption-medium">CATEGORIAS</span>
 
     <div class="options">
-      <NavbarItem 
-        v-for="(category, index) in categories"
-        :key="category.id"
-        :isSelectedItem="category.isSelected"
-        :itemName="category.name"
-        :layers="category.layers"
-        @update:isSelectedItem="handleSelectionChange(index)" />
+      <NavbarItem v-for="(category, index) in categories" :key="category.id" :isSelectedItem="category.isSelected"
+        :itemName="category.name" :layers="category.layers" @update:isSelectedItem="handleSelectionChange(index)" />
     </div>
   </div>
 </template>
@@ -33,9 +28,9 @@ const fetchCategories = async () => {
     console.error('Error fetching categories:', error);
     // Fallback to static data in case of error
     categories.value = [
-      {name: 'Clima', isSelected: false},
-      {name: 'Vegetação', isSelected: false},
-      {name: 'Parques e Praças', isSelected: false},
+      { name: 'Clima', isSelected: false },
+      { name: 'Vegetação', isSelected: false },
+      { name: 'Parques e Praças', isSelected: false },
     ];
   }
 };
@@ -53,26 +48,33 @@ onMounted(() => {
 
 <style scoped>
 .container {
-    padding: 0px 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 16px;
-    align-self: stretch;
-    flex: 1 0 0;
-    color: black;
-    /*background: var(--HitBox, rgba(255, 255, 255, 0.00));*/
-    background: black;
+  padding: 0px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  flex: 1 0 0;
+  color: black;
+  /*background: var(--HitBox, rgba(255, 255, 255, 0.00));*/
+  background: black;
+}
+
+.options {
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
 }
 
 .text {
-    color: var(--Theme-Secondary, #6C757D);
+  color: var(--Theme-Secondary, #6C757D);
 
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
 }
-
-
 </style>
