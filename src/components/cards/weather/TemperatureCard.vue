@@ -14,13 +14,13 @@
   import Card from "@/components/cards/Card.vue";
   
   export default {
-    name: "CardMedio",
+    name: "TemperatureCard",
     components: {
       Card,
     },
     props: {
       data: {
-        type: Array, // Define que 'data' é um array
+        type: Array, 
         required: true,
       },
     },
@@ -32,24 +32,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px; /* Espaçamento entre os elementos */
+    gap: 16px; 
   }
   
-  .titulo {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--Gray-800, #343A40);
-  }
-  
-  .info {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--Primary-500, #007BFF);
-  }
-  
-  .textodescritivo {
-    font-size: 14px;
-    font-weight: normal;
-    color: var(--Gray-600, #6C757D);
-  }
   </style>

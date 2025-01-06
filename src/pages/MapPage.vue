@@ -30,6 +30,7 @@
       </div>
       <div ref="statsSection" class="box" >
         <TemperatureSection />
+        <RankSection/>
       </div>
     </div>
   </div>
@@ -41,7 +42,8 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
-import TemperatureSection from '@/components/cards/clima/TemperatureSection.vue';
+import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
+import RankSection from '@/components/cards/weather/RankSection.vue';
 
 
 export default {
@@ -51,7 +53,8 @@ export default {
     MapBox,
     Navbar,
     Legenda,
-    TemperatureSection
+    TemperatureSection,
+    RankSection
   },
   setup() {
     const coordinates = ref({ lat: null, lng: null });
