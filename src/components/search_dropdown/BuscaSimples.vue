@@ -64,12 +64,20 @@
 
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-          <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-            @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-            :ref="`suggestionItem-${index}`">
+          <li class="suggestion-item" 
+          v-for="(suggestion, index) in visibleSuggestions" 
+          :key="suggestion"  
+          @click="selectSuggestion(suggestion)" tabindex="0" 
+          @keydown.enter="selectSuggestion(suggestion)"
+          @keydown.up.prevent="focusPreviousSuggestion(index)" 
+          @keydown.down.prevent="focusNextSuggestion(index)"
+          :ref="`suggestionItem-${index}`">
             <img :src="getImageSource(suggestion.type)" width="20" height="20" />
-            <span class="item-text small-regular">{{ suggestion.text }}</span>
+            
+            <span class="item-text small-regular">
+              <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
+              <span>{{ getUnmatchedPart(suggestion.text) }}</span>
+            </span>
           </li>
         </ul>
       </div>
@@ -206,6 +214,19 @@ export default {
 
 
   methods: {
+      getMatchedPart(text) {
+        if (!this.inputValue) return '';
+          const input = this.inputValue.toLowerCase();
+          const suggestion = text.toLowerCase();
+          return suggestion.startsWith(input) ? text.substring(0, this.inputValue.length) : '';
+      },
+    getUnmatchedPart(text) {
+      if (!this.inputValue) return text;
+        const input = this.inputValue.toLowerCase();
+        const suggestion = text.toLowerCase();
+        return suggestion.startsWith(input) ? text.substring(this.inputValue.length) : text;
+    },
+
     updateLocationData(location) {
       this.locationData = location;
       console.log("Dados de localização atualizados:", location);
@@ -933,12 +954,10 @@ opacity: 0px;
   font-weight: 400;
   line-height: 150%;
   /* 21px */
-  
 
-
-  
-
-
+}
+.text-highlight {
+  font-weight: bold;
 }
 
 .suggestion-count {
