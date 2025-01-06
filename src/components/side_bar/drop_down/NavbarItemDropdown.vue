@@ -220,6 +220,8 @@ const toggleLayerActive = (index, event) => {
 
 }
 
+
+
 .nav-link:hover {
   color: black;
   /* Cor desejada para o texto */

@@ -1,9 +1,9 @@
 <!-- urbverde-ui/src/components/side_bar/drop_down/NavbarDropdown.vue -->
 <template>
   <div class="container">
-    <span class="text">CATEGORIAS</span>
+    <span class="text caption-medium">CATEGORIAS</span>
 
-    <div>
+    <div class="options">
       <NavbarItem 
         v-for="(category, index) in categories"
         :key="category.id"
@@ -61,20 +61,18 @@ onMounted(() => {
     align-self: stretch;
     flex: 1 0 0;
     color: black;
-    background: var(--HitBox, rgba(255, 255, 255, 0.00));
+    /*background: var(--HitBox, rgba(255, 255, 255, 0.00));*/
+    background: black;
 }
 
 .text {
     color: var(--Theme-Secondary, #6C757D);
-    font-family: Inter;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-    font-family: Inter, sans-serif;
+
     display: flex;
     align-items: center;
     gap: 8px;
     align-self: stretch;
 }
+
+
 </style>
