@@ -254,15 +254,16 @@ export default {
     BuscaSimples,
   },
 
-  // Configuração das meta tags de SEO
   setup() {
+
+    // Configuração das meta tags de SEO
     useHead({
-      title: 'UrbVerde - Página inicial',
+      title: 'UrbVerde: Dados gratuitos para cidades mais verdes e sustentáveis',
       meta: [
         {
           name: 'description',
           content:
-            'Descubra dados sociais e ambientais do seu município com a UrbVerde. Acesse informações gratuitas para planejar cidades verdes, inclusivas e sustentáveis.',
+            'Conheça a UrbVerde, uma iniciativa dedicada a democratizar o acesso a dados ambientais e sociais gratuitos de todos os municípios brasileiros. Planeje cidades mais verdes e inclusivas com informações confiáveis.',
         },
         {
           name: 'keywords',
