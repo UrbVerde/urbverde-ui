@@ -48,9 +48,9 @@ export default {
       tabs: [
         { id: 'map', label: 'Mapa' },
         { id: 'stats', label: 'Estatísticas' },
-        { id: 'vulnerable', label: 'Vulnerabilidade' },
+        // { id: 'vulnerable', label: 'Vulnerabilidade' },
         { id: 'ranking', label: 'Ranking' },
-        { id: 'data', label: 'Dados' }
+        // { id: 'data', label: 'Dados' }
       ]
     };
   },

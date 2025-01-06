@@ -53,6 +53,7 @@ export default {
   mounted() {
     // Just initialize the cache check
     this.checkCachedLocation();
+    this.getLocation()
   },
   methods: {
     checkCachedLocation() {
@@ -61,7 +62,7 @@ export default {
       
       if (!cachedTimestamp || Date.now() - cachedTimestamp > cacheDuration) {
         // Show a button or message to get location if needed
-        this.needsLocationUpdate = true;
+        // this.needsLocationUpdate = true;
       } else {
         this.loadCachedLocation();
       }

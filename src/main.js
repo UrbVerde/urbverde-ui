@@ -7,8 +7,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { createHead } from '@vueuse/head';
-import axios from 'axios';
 import { createApp } from 'vue';
+import { createPinia } from 'pinia'; 
+import axios from 'axios';
 
 import App from './App.vue';
 import router from './router';
@@ -27,6 +28,7 @@ async function prepareApp() {
 }
 
 const app = createApp(App);
+const pinia = createPinia(); 
 const head = createHead();
 
 prepareApp().then(() => {
@@ -34,5 +36,6 @@ prepareApp().then(() => {
 
   app.use(head);
   app.use(router);
+  app.use(pinia);
   app.mount('#app');
 });

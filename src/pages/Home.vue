@@ -217,6 +217,9 @@
 </template>
 
 <script>
+import { useLocationStore } from '@/stores/locationStore.js'
+import { useRouter } from 'vue-router'
+
 // Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';

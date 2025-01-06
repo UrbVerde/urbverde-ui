@@ -9,17 +9,18 @@
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
-        <!-- Show placeholder if no coordinates, otherwise show map content -->
+        <!-- If no coordinates, show a placeholder -->
         <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
           <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
         </div>
+
         <div v-else>
-          <!-- If coordinates exist, show the map -->
+          <Navbar 
+            :class="{ 'navbar-collapsed': !isSidebarOpen }" 
+            :active-section="activeSection"
+            @navigate-to="scrollToSection" 
+          />
 
-          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }" :active-section="activeSection"
-            @navigate-to="scrollToSection" />
-
-          <!-- Content area: Map and Legend -->
           <div id="map" ref="Mapa" class="content-area">
             <MapBox :coordinates="coordinates" class="map-box">
               <Legenda />

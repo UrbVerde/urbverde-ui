@@ -227,72 +227,64 @@ export default {
       };
     },
 
-    async fetchCoordinates(address) {
-      // Parse the address to get city name without state abbreviation
-      const { city } = this.parseCityState(address);
-      
+    async fetchCities(query) {
       try {
-        // Always fetch fresh city data first
-        await this.fetchCities(city);
-        
-        // Get the city code using the full address
-        const cityCode = this.citiesWithCodes[address];
-        
-        if (!cityCode) {
-          this.handleLocationFailure();
-          console.error('City code not found for:', address);
-          return;
-        }
+        // !to-do: gambiarra momentânea, deverá ser feito pela API 
+        // Parse the query in case it contains state abbreviation
+        const { city } = this.parseCityState(query);
 
-        // Use the production API URL
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${cityCode}`);
+        // Change URL if you to use local MSW API instead
+        // const response = await fetch(`/v1/address/suggestions?query=${query}`); // Local MSW API
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`); // Online API
         const data = await response.json();
         
-        if (data && data.length > 0) {
-          if (data[0].error) {
-            this.handleLocationFailure();
-            console.error('Location error:', data[0].error);
-            return;
-          }
-          
-          const location = data[0].coordinates;
-          if (location && location.lat && location.lng) {
-            const coordinates = { lat: location.lat, lng: location.lng };
-            this.coordinates = coordinates;
-            
-            // Cache the result for future reference
-            this.cachedCityData[address] = {
-              cd_mun: cityCode,
-              lat: location.lat,
-              lng: location.lng
-            };
-            localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
-            
-            this.$emit('location-updated', { 
-              ...coordinates, 
-              cd_mun: cityCode 
-            });
-          } else {
-            this.handleLocationFailure();
-            console.error('Invalid coordinates in response');
-          }
-        } else {
-          this.handleLocationFailure();
-          console.error('No coordinates found');
-        }
+        // Store both display_name and cd_mun
+        data.forEach(item => {
+          // Store with the full display format (including state)
+          const displayName = item.state_abbreviation ? 
+            `${item.display_name} - ${item.state_abbreviation}` : 
+            item.display_name;
+
+          this.cachedCityData[displayName] = {
+            cd_mun: item.cd_mun,
+            lat: item.coordinates?.lat,
+            lng: item.coordinates?.lng,
+          };
+        });
+
+        // IMPORTANT: persist to localStorage
+        localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
+
+        // Also update your existing data structures
+        this.citiesWithCodes = data.reduce((acc, item) => {
+          const displayName = item.state_abbreviation ? 
+            `${item.display_name} - ${item.state_abbreviation}` : 
+            item.display_name;
+          acc[displayName] = item.cd_mun;
+          return acc;
+        }, {});
+
+      // Update cache with display_names including state abbreviations
+      const cities = data.map(item => item.state_abbreviation ? 
+        `${item.display_name} - ${item.state_abbreviation}` : 
+        item.display_name
+      );
+      this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+
       } catch (error) {
-        console.error('Error fetching coordinates:', error);
-        this.handleLocationFailure();
+        console.error('Error fetching cities:', error);
       }
     },
     
     async fetchCoordinates(address) {
+
       // Parse the address to get city name without state abbreviation
       const { city } = this.parseCityState(address);
-      
-      // Check cache using the full address (with state abbreviation)
+
+      // If you are also storing lat/lng, you can do:
       const cached = this.cachedCityData[address];
       if (cached && cached.lat && cached.lng) {
+        // we already have coordinates, skip fetch
         this.coordinates = { lat: cached.lat, lng: cached.lng };
         this.$emit('location-updated', { 
           lat: cached.lat, 
@@ -302,21 +294,25 @@ export default {
         return;
       }
 
+      // Otherwise, if you must still fetch from API (for the lat/lng):
       try {
-        // First, ensure we have fresh city data
-        await this.fetchCities(city);
-        
-        // Now try to get the city code using the full address
+        // Get the cd_mun from our stored mapping
         const cityCode = this.citiesWithCodes[address];
         
         if (!cityCode) {
-          this.handleLocationFailure();
-          console.error('City code not found for:', address);
-          return;
+          // If not found, try fetching cities first
+          await this.fetchCities(city);
+          // Try getting the code again after fetching
+          const newCityCode = this.citiesWithCodes[address];
+          if (!newCityCode) {
+            this.handleLocationFailure();
+            console.error('City code not found for:', address);
+            return;
+          }
         }
 
-        // Use the production API URL
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${cityCode}`);
+        // Use the mock API with cd_mun
+        const response = await fetch(`/v1/address/suggestions?query=${cityCode}`);
         const data = await response.json();
         
         if (data && data.length > 0) {
@@ -330,15 +326,7 @@ export default {
           if (location && location.lat && location.lng) {
             const coordinates = { lat: location.lat, lng: location.lng };
             this.coordinates = coordinates;
-            
-            // Cache the result for future use
-            this.cachedCityData[address] = {
-              cd_mun: cityCode,
-              lat: location.lat,
-              lng: location.lng
-            };
-            localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
-            
+            // Emit both coordinates and cd_mun
             this.$emit('location-updated', { 
               ...coordinates, 
               cd_mun: cityCode 
@@ -401,6 +389,7 @@ export default {
       this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       this.updateSuggestions();
     },
+
     handleInput() {
       if (this.inputValue !== this.previousInputValue) {
         this.updateSuggestions();
