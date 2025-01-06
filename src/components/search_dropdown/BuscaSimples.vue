@@ -10,9 +10,9 @@
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
           class="input-field small-regular" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
-          <span class="suggestion-text">
-            <span class="invisible small-regular">{{ visibleInput }}</span>
-            <span class="highlight small-regular">{{ highlightedText }}</span>
+          <span class="suggestion-text small-regular">
+            <span class="invisible ">{{ visibleInput }}</span>
+            <span class="highlight ">{{ highlightedText }}</span>
           </span>
         </div>
       </div>
