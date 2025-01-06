@@ -2,8 +2,8 @@
   <div class="option">
     <ul class="inline-nav-item navbar-nav">
       <div class="dropdown" data-bs-auto-close="false">
-        <a href="#" class="nav-item nav-link" :class="{ 'dropdown-active': isDropdownOpen }" id="navbarDropdown"
-          role="button" data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
+        <a href="#" class="nav-item nav-link" :class="{ 'dropdown-active': isDropdownOpen }" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
           <i :class="iconPath" class="bi" id="imgIcon"></i>
           <span class="textItem small-regular">{{ props.itemName }}</span>
           <div class="badge-right-menu" v-if="txtBadge">
@@ -12,12 +12,11 @@
           <i :class="isDropdownOpen ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" width="14" height="14"></i>
         </a>
 
-        <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="navbarDropdown">
-          <li v-for="(layer, index) in props.layers" :key="layer.id"
-            :class="{'active': layer.isActive }"
+        <ul class="dropdown-menu-hidden" :class="{ 'dropdown-menu-show': isDropdownOpen }">
+          <li class = "dropdown-menu-item" v-for="(layer, index) in props.layers" :key="layer.id" :class="{ 'active': layer.isActive }"
             @click="toggleLayerActive(index, $event)">
-            <div  id="intern-padding">
-              <a tag="dropdownitem-txt"  class="dropdown-item">{{ layer.name }}</a>
+            <div id="intern-padding">
+              <a tag="dropdownitem-txt" class="dropdown-item">{{ layer.name }}</a>
             </div>
           </li>
         </ul>
@@ -186,6 +185,7 @@ const toggleLayerActive = (index, event) => {
   align-self: stretch;
 
 }
+
 .inline-nav-item:hover {
 
   color: black;
@@ -216,17 +216,27 @@ const toggleLayerActive = (index, event) => {
   background-color: orange;
 }
 
-.dropdown-menu {
+.dropdown-menu-hidden {
   border: none;
   box-shadow: none;
-  background-color: var(--Primary-Fade-100, orange);
   display: none;
 
 }
 
-.dropdown-menu.show {
-  display: block;
-  background-color: var(--Primary-Fade-100, white);
+.dropdown-menu-show {
+  list-style-type: none;
+
+  background-color: var(--Primary-Fade-100, pink);
+
+  display: flex;
+  padding: 8px 0px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+
+  border-radius: 4px;
+  background: var(--Gray-100, #F8F9FA);
 
 }
 
@@ -270,7 +280,7 @@ const toggleLayerActive = (index, event) => {
   background-color: var(--Primary-Fade-100, black);
 }
 
-.dropdown{
+.dropdown {
   background-color: white;
 }
 </style>
