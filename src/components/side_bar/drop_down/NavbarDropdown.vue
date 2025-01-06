@@ -5,7 +5,7 @@
 
     <div class="options">
       <NavbarItem v-for="(category, index) in categories" :key="category.id" :isSelectedItem="category.isSelected"
-        :itemName="category.name" :layers="category.layers" @update:isSelectedItem="handleSelectionChange(index)" />
+        :itemName="category.name" :icon="category.icon" :layers="category.layers" @update:isSelectedItem="handleSelectionChange(index)" />
     </div>
   </div>
 </template>
@@ -26,12 +26,6 @@ const fetchCategories = async () => {
     }));
   } catch (error) {
     console.error('Error fetching categories:', error);
-    // Fallback to static data in case of error
-    categories.value = [
-      { name: 'Clima', isSelected: false },
-      { name: 'Vegetação', isSelected: false },
-      { name: 'Parques e Praças', isSelected: false },
-    ];
   }
 };
 
@@ -55,9 +49,9 @@ onMounted(() => {
   gap: 16px;
   align-self: stretch;
   flex: 1 0 0;
-  color: black;
+
   /*background: var(--HitBox, rgba(255, 255, 255, 0.00));*/
-  background: black;
+
 }
 
 .options {

@@ -4,7 +4,7 @@
       <div class="dropdown" data-bs-auto-close="false">
         <a href="#" class="nav-item nav-link" :class="{ 'dropdown-active': isDropdownOpen }" role="button"
           data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
-          <i :class="iconPath" class="bi" id="imgIcon"></i>
+          <i :class="icon" class="bi" id="imgIcon"></i>
           <span class="textItem small-regular">{{ props.itemName }}</span>
           <div class="badge-right-menu" v-if="txtBadge">
             <span class="textBadge caption-medium">{{ txtBadge }}</span>
@@ -19,7 +19,7 @@
 
             <span class="dropdown-item-text small-regular">{{ layer.name }}</span>
             <div class="" v-if="layer.isActive">
-              <span class="textBadge caption-medium">!</span>
+              <i :class="iconNew" class="bi" id="imgIcon"></i>
             </div>
           </li>
 
@@ -36,17 +36,9 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 const txtBadge = ref('');
 const isDropdownOpen = ref(false);
 
-const iconPath = computed(() => {
-  switch (props.itemName.toLowerCase()) {
-    case 'clima':
-      return 'bi bi-cloud-sun'; // Ícone de clima
-    case 'vegetação':
-      return 'bi bi-tree'; // Ícone de vegetação
-    case 'parques e praças':
-      return 'bi bi-bicycle'; // Ícone de parques
-    default:
-      return 'bi bi-exclamation-circle'; // Ícone padrão
-  }
+
+const iconNew = computed(() => {
+  return 'bi bi-stars'; // Ícone de camada nova
 });
 
 const props = defineProps({
@@ -61,7 +53,11 @@ const props = defineProps({
   layers: {
     type: Array,
     default: () => [],
-  }
+  },
+  icon: {
+    type: String,
+    default: 'bi bi-exclamation-circle',
+  },
 });
 
 const isDropdownSelected = ref(props.isSelectedItem);
@@ -174,7 +170,7 @@ const toggleLayerActive = (index, event) => {
 }
 
 .option {
-  background-color: pink;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -185,20 +181,11 @@ const toggleLayerActive = (index, event) => {
 
 .inline-nav-item {
 
-  background-color: white;
+  background-color: black;
   align-self: stretch;
 
 }
 
-.inline-nav-item:hover {
-
-  color: black;
-  /* Cor desejada para o texto */
-
-  /* Cor de fundo opcional */
-  background-color: var(--Primary-Fade-100, #F8F9FA);
-
-}
 
 .nav-item {
 
@@ -208,16 +195,11 @@ const toggleLayerActive = (index, event) => {
   gap: 12px;
   align-self: stretch;
   border-radius: 8px;
-
 }
 
 
 .nav-item:hover {
-  color: black;
-  /* Cor desejada para o texto */
-
-  /* Cor de fundo opcional */
-  background-color: orange;
+  background: var(--Gray-200, #E9ECEF);
 }
 
 .dropdown-menu-hidden {
@@ -256,7 +238,7 @@ const toggleLayerActive = (index, event) => {
 }
 
 .dropdown-menu-item:hover {
-  background-color: red;
+  background: var(--Gray-200, #E9ECEF);
 }
 
 .dropdown-menu-item-active {
@@ -264,6 +246,10 @@ const toggleLayerActive = (index, event) => {
   background: var(--Primary-Fade-100, #D2E8DD);
   transition: .2s;
 
+}
+
+.dropdown-menu-item-active:hover {
+  background: var(--Primary-Fade-100, #D2E8DD);
 }
 
 .dropdown-menu-slot {}

@@ -11,7 +11,7 @@
         <BuscaSimples @api-error="$emit('api-error')" @location-updated="onLocationUpdated"/>
       </div>
       <div v-show="isOpen" class="middle-area">
-        <DropDown v-if="isSearchDone" :options="options" />
+        <DropDown v-if="isSearchDone" :categories="categories" />
       </div>
       <div v-show="isOpen" class="bottom-area">
         <a class="link-button">
@@ -54,8 +54,6 @@ const isSearchDone = ref(false);
 // Variável para controlar se a sidebar fica aberta
 const isOpen = ref(true);
 
-// to-do: axios request from the api, what categories and layers exist for that specific cd_mun
-const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
 
 function onLocationUpdated(coordinates) {
   isSearchDone.value = true;
