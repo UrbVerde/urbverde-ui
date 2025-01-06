@@ -59,6 +59,11 @@
 </template>
 
 <script>
+/**
+ * We are still using the Options API (classic) 
+ * instead of <script setup> the new recommended approach 
+ * in Vue 3.2+ for clean, concise code.
+*/
 import { ref, onMounted, onUnmounted } from 'vue';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
