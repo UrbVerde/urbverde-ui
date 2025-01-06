@@ -14,10 +14,10 @@
 
         <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="navbarDropdown">
           <li v-for="(layer, index) in props.layers" :key="layer.id"
-            :class="{ 'is-active': layer.isActive, 'notActive': !layer.isActive, 'active': layer.isActive }"
+            :class="{'active': layer.isActive }"
             @click="toggleLayerActive(index, $event)">
-            <div v-show="layer.show" id="intern-padding">
-              <a tag="dropdownitem-txt" v-show="layer.show" class="dropdown-item">{{ layer.name }}</a>
+            <div  id="intern-padding">
+              <a tag="dropdownitem-txt"  class="dropdown-item">{{ layer.name }}</a>
             </div>
           </li>
         </ul>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 
 
 const txtBadge = ref('');
@@ -70,33 +70,12 @@ const closeDropdownOnOutsideClick = (event) => {
     if (dropdownElement && !dropdownElement.contains(event.target)) {
       isDropdownOpen.value = false;
     }
-  } else {
-    if (isDropdownSelected.value && isDropdownOpen.value) {
-      if (dropdownElement && !dropdownElement.contains(event.target)) {
-        props.layers.forEach((layer) => {
-          if (!layer.isActive) { layer.show = false; }
-        });
-      }
-    }
   }
 };
 
-watch(() => props.isSelectedItem, (newVal) => {
-  isDropdownSelected.value = newVal;
-  if (!newVal) {
-    txtBadge.value = '';
-    props.layers.forEach((layer) => {
-      layer.isActive = false;
-      layer.show = true;
-    });
-  }
-});
+
 
 onMounted(() => {
-  // Initialize show property for each layer
-  props.layers.forEach(layer => {
-    layer.show = true;
-  });
   document.addEventListener('click', closeDropdownOnOutsideClick);
 });
 
@@ -105,21 +84,17 @@ onUnmounted(() => {
 });
 
 const toggleDropdown = (event) => {
-  event.preventDefault();
+
   event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
-  props.layers.forEach((layer) => {
-    if (!layer.isActive) {
-      layer.show = true;
-    }
-  });
+
 
   if (!isDropdownOpen.value && isDropdownSelected.value) {
     txtBadge.value = '1';
   }
-  if (isDropdownOpen.value && isDropdownOpen.value) {
-    txtBadge.value = '';
-  }
+  /* if (isDropdownOpen.value) { 
+  txtBadge.value = '';
+  }*/
 };
 
 const toggleLayerActive = (index, event) => {
@@ -128,9 +103,6 @@ const toggleLayerActive = (index, event) => {
     isDropdownSelected.value = false;
     txtBadge.value = '';
     props.layers[index].isActive = !props.layers[index].isActive;
-    props.layers.forEach((layer) => {
-      layer.show = true;
-    });
   } else {
     isDropdownSelected.value = true;
     emit('update:isSelectedItem', !props.isSelectedItem);
