@@ -13,12 +13,16 @@
         </a>
 
         <ul class="dropdown-menu-hidden" :class="{ 'dropdown-menu-show': isDropdownOpen }">
-          <li class = "dropdown-menu-item" v-for="(layer, index) in props.layers" :key="layer.id" :class="{ 'active': layer.isActive }"
-            @click="toggleLayerActive(index, $event)">
-            <div id="intern-padding">
-              <a tag="dropdownitem-txt" class="dropdown-item">{{ layer.name }}</a>
+
+          <li class="dropdown-menu-item" v-for="(layer, index) in props.layers" :key="layer.id"
+            :class="{ 'dropdown-menu-item-active': layer.isActive }" @click="toggleLayerActive(index, $event)">
+
+            <span class="dropdown-item-text small-regular">{{ layer.name }}</span>
+            <div class="" v-if="layer.isActive">
+              <span class="textBadge caption-medium">!</span>
             </div>
           </li>
+
         </ul>
       </div>
     </ul>
@@ -240,25 +244,48 @@ const toggleLayerActive = (index, event) => {
 
 }
 
-#dropdownitem-txt {}
+.dropdown-menu-item {
+  cursor: pointer;
 
-.dropdown-item {
-  --bs-dropdown-link-active-bg: gray;
-  --bs-dropdown-link-active-color: #fff;
-  --bs-dropdown-link-hover-bg: #D3E1E0;
-
-  font-size: small;
-  font-family: Inter, sans-serif;
+  display: flex;
+  padding: 8px 16px 8px 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
 
 }
 
-.active {
+.dropdown-menu-item:hover {
+  background-color: red;
+}
+
+.dropdown-menu-item-active {
   border-left: 3px solid var(--Body-Text-Body-Color, #212529);
-  background: var(--Primary-Fade-100, #D3E1E0);
+  background: var(--Primary-Fade-100, #D2E8DD);
   transition: .2s;
-  padding: 0px 0px;
-  gap: 12px;
+
 }
+
+.dropdown-menu-slot {}
+
+
+.dropdown-item-text {
+
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+
+  color: var(--Body-Text-Body-Color, #212529);
+}
+
+
+
+.dropdown-item {}
+
+
 
 .notActive {
   padding: 0px 0px;
@@ -266,9 +293,7 @@ const toggleLayerActive = (index, event) => {
 }
 
 /**?*/
-#intern-padding {
-  padding: 0px 0px;
-}
+
 
 /* Novo estilo para quando o dropdown está ativo */
 .dropdown-active {
