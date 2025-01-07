@@ -55,10 +55,11 @@
 
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-          <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-            @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-            :ref="`suggestionItem-${index}`">
+          <li :class="{'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0}" 
+              v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+              @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+              @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+              :ref="`suggestionItem-${index}`">
 
             <i :class=getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
 
@@ -905,6 +906,10 @@ export default {
 }
 
 .suggestions-list li:hover {
+  background-color: #E9ECEF;
+}
+
+.first-suggestion {
   background-color: #E9ECEF;
 }
 

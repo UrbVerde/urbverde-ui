@@ -54,7 +54,7 @@ async function toggleSidebar() {
     // When opening, first expand the sidebar
     isOpen.value = true;
     // Wait 1 second before showing content
-    await new Promise(resolve => setTimeout(resolve, 250));
+    await new Promise(resolve => setTimeout(resolve, 200));
     showContent.value = true;
   }
   localStorage.setItem('sidebarOpen', isOpen.value);
