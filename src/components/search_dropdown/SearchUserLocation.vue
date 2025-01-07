@@ -151,14 +151,25 @@ export default {
       }
     },
     emitLocationData() {
-      this.$emit('location-updated', {
+      const locationData = {
         city: this.city,
         state: this.state,
         stateAbbreviation: this.stateAbbreviation,
         country: this.country,
         international: this.international,
-      });
-    },
+      };
+      
+      // Emit location update
+      this.$emit('location-updated', locationData);
+      
+      // Store in localStorage for immediate access
+      localStorage.setItem('cachedCity', this.city);
+      localStorage.setItem('cachedState', this.state);
+      localStorage.setItem('cachedStateAbbreviation', this.stateAbbreviation);
+      localStorage.setItem('cachedCountry', this.country);
+      localStorage.setItem('cachedInternational', this.international.toString());
+      localStorage.setItem('cachedTimestamp', Date.now().toString());
+    },  
   },
 };
 </script>

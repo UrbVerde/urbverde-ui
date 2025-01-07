@@ -8,7 +8,9 @@
         <p class="error-text">Selecione uma cidade para visualizar no mapa</p>
       </div>
     </div>
-    <slot v-else></slot> <!-- This allows child components to render inside MapBox -->
+    <div v-else :class="['map-wrapper', { 'visible': mapVisible }]">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -20,7 +22,7 @@ export default {
     coordinates: {
       type: Object,
       required: true,
-      default: () => ({ lat: 0, lng: 0 }), // Avoid undefined errors
+      default: () => ({ lat: 0, lng: 0 }),
       validator: (value) => {
         return typeof value.lat === 'number' && typeof value.lng === 'number';
       },
@@ -30,16 +32,19 @@ export default {
     return {
       map: null,
       mapLoaded: false,
-      showError: false
+      mapVisible: false,
+      showError: false,
+      // Standardized map settings
+      MAP_ZOOM_START: 12,
+      MAP_ZOOM_FINAL: 17,
+      MAP_ANIMATION_DURATION: 8000,
     };
   },
   mounted() {
     this.checkCoordinates();
-    // this.initializeMap();
   },
   methods: {
     checkCoordinates() {
-      // Check if coordinates are valid
       if (!this.coordinates || 
           !this.coordinates.lat || 
           !this.coordinates.lng || 
@@ -55,23 +60,25 @@ export default {
     initializeMap() {
       if (this.showError) return;
 
+      // Reset states
+      this.mapLoaded = false;
+      this.mapVisible = false;
+
       this.map = new maplibregl.Map({
         container: this.$refs.mapContainer,
         style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
         center: [this.coordinates.lng, this.coordinates.lat],
         pitch: 20,
-        zoom: 14,
+        zoom: this.MAP_ZOOM_START,
         attributionControl: false,
         NavigationControl: true,
+        fadeDuration: 0
       });
 
-      // Add listener for missing images
       this.map.on('styleimagemissing', (e) => {
-        const id = e.id; // id of the missing image
-        // Create a 1x1 transparent pixel as a placeholder
+        const id = e.id;
         const placeholder = new Image(1, 1);
         placeholder.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==';
-        
         placeholder.onload = () => {
           this.map.addImage(id, placeholder);
         };
@@ -79,15 +86,33 @@ export default {
       
       this.map.on('load', () => {
         console.log('Map loaded successfully');
-        this.mapLoaded = true;
+        
+        // First make the container visible
+        this.mapVisible = true;
+
+        // Wait a brief moment for fade-in to start
+        setTimeout(() => {
+          // Then start the fly animation
+          this.map.flyTo({
+            center: [this.coordinates.lng, this.coordinates.lat],
+            zoom: this.MAP_ZOOM_FINAL,
+            duration: this.MAP_ANIMATION_DURATION,
+            essential: true
+          });
+          
+          this.mapLoaded = true;
+        }, 300); // Wait for fade-in to complete
       });
     },
     updateMapCenter() {
       if (!this.coordinates || !this.coordinates.lat || !this.coordinates.lng) {
         this.showError = true;
         if (this.map) {
-          this.map.remove();
-          this.map = null;
+          this.mapVisible = false;
+          setTimeout(() => {
+            this.map.remove();
+            this.map = null;
+          }, 300); // Wait for fade-out
         }
         return;
       }
@@ -101,8 +126,8 @@ export default {
       if (this.map && this.mapLoaded) {
         this.map.flyTo({
           center: [this.coordinates.lng, this.coordinates.lat],
-          zoom: 16,
-          duration: 8000,
+          zoom: this.MAP_ZOOM_FINAL,
+          duration: this.MAP_ANIMATION_DURATION,
           essential: true
         });
       }
@@ -119,8 +144,11 @@ export default {
   },
   beforeUnmount() {
     if (this.map) {
-      this.map.remove();
-      console.log('Map removed');
+      this.mapVisible = false;
+      setTimeout(() => {
+        this.map.remove();
+        console.log('Map removed');
+      }, 300);
     }
   }
 };
@@ -128,12 +156,26 @@ export default {
 
 <style scoped>
 .map-container {
-  position: relative; /* Make this container the reference for absolute positioning */
+  position: relative;
   width: calc(100% - 48px);
   height: calc(100vh - 35px - 144px);
   border-radius: 15px;
   margin: 0px 24px 0; 
   background: #F8F9FA;
+}
+
+.map-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.map-wrapper.visible {
+  opacity: 1;
 }
 
 .error-placeholder {
@@ -147,6 +189,8 @@ export default {
   align-items: center;
   background: #F8F9FA;
   border-radius: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .error-content {
@@ -164,5 +208,4 @@ export default {
   font-size: 16px;
   margin: 0;
 }
-
 </style>

@@ -53,7 +53,7 @@ async function toggleSidebar() {
   } else {
     // When opening, first expand the sidebar
     isOpen.value = true;
-    // Wait 1 second before showing content
+    // Wait 0.2 second before showing content
     await new Promise(resolve => setTimeout(resolve, 200));
     showContent.value = true;
   }
