@@ -1,5 +1,4 @@
 <template>
-    <div>
       <Card
         v-for="(item, index) in data"
         :key="index"
@@ -7,7 +6,6 @@
         :subtitle="item.subtitle"
         :value="item.value"
       />
-    </div>
   </template>
   
   <script>
@@ -35,4 +33,10 @@
     gap: 16px; 
   }
   
+  .value {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--Green-500, #198754);
+  margin: 8px 0;
+}
   </style>

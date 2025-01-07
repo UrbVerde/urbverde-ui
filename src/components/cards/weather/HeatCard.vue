@@ -1,20 +1,18 @@
 <template>
-    <div>
       <Card
         v-for="(item, index) in data"
         :key="index"
         :title="item.title"
         :subtitle="item.subtitle"
-        :value="item.value"
+        :value="item.value" class="value-heat"
       />
-    </div>
   </template>
   
   <script>
   import Card from "@/components/cards/Card.vue";
   
   export default {
-    name: "TemperatureCard",
+    name: "HeatCard",
     components: {
       Card,
     },
@@ -35,21 +33,18 @@
     gap: 16px; /* Espaçamento entre os elementos */
   }
   
-  .titulo {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--Gray-800, #343A40);
+  .value-heat {
+    color: var(--Green-500, #198754);
+    text-align: center;
+
+    /* Small Shadow */
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+    font-family: Montserrat;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px;
   }
+
   
-  .info {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--Primary-500, #007BFF);
-  }
-  
-  .textodescritivo {
-    font-size: 14px;
-    font-weight: normal;
-    color: var(--Gray-600, #6C757D);
-  }
   </style>

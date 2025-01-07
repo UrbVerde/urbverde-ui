@@ -6,7 +6,7 @@
 
     <div class="card-header">
       <h1 v-if="title" class="titulo">{{ title }}</h1>
-      <h2 v-if="value" class="info">{{ value }}</h2>
+      <h2 v-if="value" class="value">{{ value }}</h2>
       <p v-if="subtitle" class="textodescritivo">{{ subtitle }}</p>
     </div>
 
@@ -70,7 +70,7 @@ export default {
   margin-bottom: 4px;
 }
 
-.info {
+.value {
   font-size: 28px;
   font-weight: bold;
   color: var(--Green-500, #198754);
