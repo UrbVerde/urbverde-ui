@@ -1,3 +1,4 @@
+// router/index.js (example)
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/pages/Home.vue';
 import MapPage from '@/pages/MapPage.vue';

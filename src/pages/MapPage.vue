@@ -5,7 +5,7 @@
     <div class="content-wrapper">
       <!-- Sidebar -->
       <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" @api-error="handleApiError" />
+        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" />
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
@@ -65,6 +65,8 @@
  * in Vue 3.2+ for clean, concise code.
 */
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
+import { useLocationStore } from '@/stores/locationStore'
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
@@ -72,25 +74,24 @@ import Legenda from '../components/map/Legenda.vue';
 
 export default {
   name: 'MapPage',
-  components: {
-    Sidebar,
-    MapBox,
-    Navbar,
-    Legenda
-  },
+  components: {Sidebar,MapBox,Navbar,Legenda},
   setup() {
+    const route = useRoute()
+    const router = useRouter()
+
+    const locationStore = useLocationStore()
+
+    // Any existing refs in your code
     const coordinates = ref({ lat: null, lng: null });
     const activeSection = ref('map');
+    const isSidebarOpen = ref(true);
     const sections = {
       map: null,
       stats: null,
-      vulnerable: null,
       ranking: null,
-      data: null,
-      newsletter: null
     };
-    const isSidebarOpen = ref(true);
 
+    // Existing methods
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
     };
@@ -99,7 +100,6 @@ export default {
       coordinates.value = newCoordinates;
     };
 
-    // Scroll spy functionality
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const navbarHeight = 100; // Adjust this value based on your navbar height
@@ -138,30 +138,32 @@ export default {
     };
 
     onMounted(() => {
-      // Add scroll event listener
-      window.addEventListener('scroll', handleScroll);
-
-      // Check for hash in URL on load and scroll to section
-      if (window.location.hash) {
-        const sectionId = window.location.hash.substring(1);
-        // Small delay to ensure DOM is ready
-        setTimeout(() => {
-          scrollToSection(sectionId);
-        }, 100);
+      // Check if URL has ?nm_mun=..., ?cd_mun=...
+      const { nm_mun, cd_mun } = route.query
+      if (nm_mun || cd_mun) {
+        locationStore.setLocation({
+          cd_mun: cd_mun ?? null,
+          nm_mun: nm_mun ?? null,
+        })
       }
 
-      // Initial scroll spy check
+      // If your store has coordinates or you want to fetch them, do so here
+      //    e.g. locationStore.fetchCoordinatesByCdMun(cd_mun)
+
+      // Restore or set the coordinates in local MapPage refs from store if needed
+      // e.g. coordinates.value = locationStore.coordinates
+
+      window.addEventListener('scroll', handleScroll);
+      if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => scrollToSection(sectionId), 100);
+      }
       handleScroll();
     });
 
     onUnmounted(() => {
       window.removeEventListener('scroll', handleScroll);
     });
-
-
-    const handleApiError = () => {
-      console.log('API error occurred');
-    };
 
     return {
       coordinates,
@@ -170,7 +172,6 @@ export default {
       scrollToSection,
       isSidebarOpen,
       toggleSidebar,
-      handleApiError,
     };
   }
 };

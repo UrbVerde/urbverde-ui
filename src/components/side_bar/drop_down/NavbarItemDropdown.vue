@@ -252,26 +252,14 @@ const toggleLayerActive = (index, event) => {
   background: var(--Primary-Fade-100, #D2E8DD);
 }
 
-.dropdown-menu-slot {}
-
-
 .dropdown-item-text {
-
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-
   color: var(--Body-Text-Body-Color, #212529);
 }
-
-
-
-.dropdown-item {}
-
-
 
 .notActive {
   padding: 0px 0px;

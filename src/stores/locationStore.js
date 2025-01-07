@@ -11,7 +11,6 @@ export const useLocationStore = defineStore('locationStore', {
     scale: 'intraurbana',
     coordinates: { lat: null, lng: null },
     zoom: null,
-    // If you want to store more location data or fetch states, do it here
   }),
   actions: {
     setLocation({ cd_mun, nm_mun, uf, category, layer, scale }) {
