@@ -16,12 +16,12 @@
         <div class="hero-top">
           <div class="hero-text">
             <h1>
-              <span class="h1-text">Mapeando um Futuro </span>
+              <span class="h1-text heading-h1">Mapeando um Futuro </span>
               <transition name="fade" mode="out-in">
-                <span class="h1-lasttext" :key="currentWord">{{ currentWord }}</span>
+                <span class="h1-lasttext heading-h1" :key="currentWord">{{ currentWord }}</span>
               </transition>
             </h1>
-            <h4 class="subtitle normal-medium">
+            <h4 class="subtitle body-normal-medium">
               Acesse dados sociais e ambientais completos de seu município,
               de forma totalmente gratuita!
             </h4>
@@ -61,19 +61,19 @@
           <div class="wrapper-cards">
 
             <div class="cards shadow-lg">
-              <div class="top-content small-regular">
+              <div class="top-content body-small-regular">
                 <p>“ Iniciativas como a UrbVerde [...] fornecem a esperança de que
-                  <span class="highlight small-bold">o mundo ainda tem jeito</span>. ”</p>
+                  <span class="highlight body-small-bold">o mundo ainda tem jeito</span>. ”</p>
               </div>
               <div class="bottom-content">
                 <div>
                   <img src="@\assets\images\homepage\image-card-1.png" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
-                  <h3 class="title small-bold">
+                  <h3 class="title body-small-bold">
                     José Renato Nalini
                   </h3>
-                  <h4 class="subtitle small-regular">
+                  <h4 class="subtitle body-small-regular">
                     Secretário Executivo de São Paulo
                   </h4>
                 </div>
@@ -81,19 +81,19 @@
             </div>
 
             <div class="cards shadow-lg">
-              <div class="top-content small-regular">
+              <div class="top-content body-small-regular">
                 <p>“ A UrbVerde foi desenvolvida para fornecer dados ao
-                  <span class="highlight small-bold">poder público e aos cidadãos</span>. ” </p>
+                  <span class="highlight body-small-bold">poder público e aos cidadãos</span>. ” </p>
               </div>
               <div class="bottom-content">
                 <div>
                   <img src="@\assets\images\homepage\image-card-2.png" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
-                  <h3 class="title small-bold">
+                  <h3 class="title body-small-bold">
                     Juliana Domingos de Lima
                   </h3>
-                  <h4 class="subtitle small-regular">
+                  <h4 class="subtitle body-small-regular">
                     Jornalista do Estadão
                   </h4>
                 </div>
@@ -101,9 +101,9 @@
             </div>
 
             <div class="cards shadow-lg">
-              <div class="top-content small-regular">
+              <div class="top-content body-small-regular">
                 <p>“ É uma
-                  <span class="highlight small-bold">plataforma que caiu do céu.</span>
+                  <span class="highlight body-small-bold">plataforma que caiu do céu.</span>
                   […] ajuda a ler a cidade de uma forma clara. ”</p>
               </div>
               <div class="bottom-content">
@@ -111,10 +111,10 @@
                   <img src="@\assets\images\homepage\image-card-3.png" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
-                  <h3 class="title small-bold">
+                  <h3 class="title body-small-bold">
                     Marcela Cury Petenusci
                   </h3>
-                  <h4 class="subtitle small-regular">
+                  <h4 class="subtitle body-small-regular">
                     Professora de Ribeirão Preto
                   </h4>
                 </div>
@@ -128,13 +128,13 @@
       <div class="institutes container">
 
         <div class="institutes-header">
-          <h2>
+          <h2 class="heading-h2">
             Da universidade para a sociedade
           </h2>
-          <h4 class="normal-medium">
+          <h4 class="body-normal-medium">
             A UrbVerde é fruto de uma colaboração entre diversas instituições públicas,
             por meio do financiamento do CNPq e do PPPP da FAPESP.
-            <a href="#" class="normal-medium">
+            <a href="#" class="body-normal-medium">
               Leia mais
               <i class="bi bi-arrow-up-right"></i>
             </a>
@@ -157,97 +157,147 @@
         <div class="institutes-awards">
 
           <div class="award">
-            <img src="@/assets/images/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
             <div class="award-label">
               <h5>
                 2024
               </h5>
               <div class="award-label-text">
-                <p class="caption-bold">
+                <p class="body-caption-bold">
                   Prêmio USP Impacto Social
                 </p>
-                <p class="caption-medium">
+                <p class="body-caption-medium">
                   Cidades e Comunidades Sustentáveis
                 </p>
               </div>
             </div>
-            <img src="@/assets/images/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
           </div>
 
           <div class="award">
-            <img src="@/assets/images/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
             <div class="award-label">
               <h5>
                 2024
               </h5>
               <div class="award-label-text">
-                <p class="caption-bold">
+                <p class="body-caption-bold">
                   Prêmio Promoção de Justiça Climática
                 </p>
-                <p class="caption-medium">
+                <p class="body-caption-medium">
                   Instituto de Arquitetos do Brasil - IAB
                 </p>
               </div>
             </div>
-            <img src="@/assets/images/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
           </div>
 
           <div class="award">
-            <img src="@/assets/images/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
             <div class="award-label">
               <h5>
                 2024
               </h5>
               <div class="award-label-text">
-                <p class="caption-bold">
+                <p class="body-caption-bold">
                   Excelência em Design
                 </p>
-                <p class="caption-medium">
+                <p class="body-caption-medium">
                   Competição de Design, Simpósio IHC
                 </p>
               </div>
             </div>
-            <img src="@/assets/images/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
           </div>
 
         </div>
 
       </div>
 
-      <!-- Products content-->
+      <!-- Products content -->
       <div class="products">
         <div class="title container">
-          <h2>Ferramentas para uma gestão sustentável</h2>
+          <h2 class="heading-h2">
+            Ferramentas para uma gestão sustentável
+          </h2>
         </div>
+
         <div class="products-content container">
+          <!-- Primeiro produto -->
           <div class="product">
             <div class="image-wrapper">
-              <img src="@/assets/images/homepage/product-bg-1.png" class="image-bg">
-              <img src="@/assets/images/homepage/product-bg-2.png" class="image-front"> 
+              <img
+                src="@/assets/images/homepage/product-bg-1.png"
+                class="image-bg shadow-lg"
+                alt="Vista aérea mostrando contraste entre bairros residenciais e áreas verdes com quadras de esportes"
+                loading="lazy"
+              />
+              <img
+                src="@/assets/images/homepage/product-bg-2.png"
+                class="image-front"
+                alt="Mapa de calor detalhando variações de temperatura e vegetação em áreas urbanas"
+                loading="lazy"
+              />
             </div>
             <div class="product-text">
               <div class="title">
                 <h3 class="heading-h2">
                   Mapas ambientais e sociais
                 </h3>
-                <h4 class="normal-regular">
+                <h4 class="body-normal-regular">
                   Explore mapas detalhados sobre vegetação, temperatura, parques e praças para entender melhor a sua cidade!
                 </h4>
               </div>
               <router-link to="/mapa" class="button-primary-link">
-              <PrimaryButton
-                label="Acessar"
-                :filled="false"
-                iconType="bootstrap"
-                icon="bi bi-arrow-right"
-                iconPosition="right"
+                <PrimaryButton
+                  label="Acessar"
+                  :filled="false"
+                  iconType="bootstrap"
+                  icon="bi bi-arrow-right"
+                  iconPosition="right"
+                />
+              </router-link>
+            </div>
+          </div>
+
+          <!-- Segundo produto -->
+          <div class="product">
+            <div class="image-wrapper">
+              <img
+                src="@/assets/images/homepage/product-bg-3.png"
+                class="image-bg shadow-lg"
+                alt="Mapa representando índices de cobertura vegetal por região em tons de verde"
+                loading="lazy"
+              />
+              <img
+                src="@/assets/images/homepage/product-bg-4.png"
+                class="image-front shadow-lg"
+                alt="Cartão estatístico destacando média da cobertura vegetal de 20%"
+                loading="lazy"
+              />
+            </div>
+            <div class="product-text">
+              <div class="title">
+                <h3 class="heading-h2">
+                  Dados estatísticos completos
+                </h3>
+                <h4 class="body-normal-regular">
+                  Descubra informações completas sobre seu município e compare com todo o Brasil!
+                </h4>
+              </div>
+              <router-link to="/mapa" class="button-primary-link">
+                <PrimaryButton
+                  label="Acessar"
+                  :filled="false"
+                  iconType="bootstrap"
+                  icon="bi bi-arrow-right"
+                  iconPosition="right"
                 />
               </router-link>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -395,110 +445,6 @@ export default {
 
   <style scoped lang="scss">
 
-  .products{
-    background-color: #146C43;
-    display: flex;
-    padding: 128px 128px 200px 128px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 120px;
-    align-self: stretch;
-  }
-
-  .products .title{
-    display: flex;
-    max-width: 1184px;
-    padding: 0px 128px;
-    flex-direction: column;
-    align-items: center;
-    gap: 21px;
-    align-self: stretch;
-  }
-
-  .products .title h2{
-    color: map-get($gray, white);
-    text-align: center;
-    font-family: Inter;
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 120%; /* 57.6px */
-  }
-
-  .products .products-content{
-    display: flex;
-    max-width: 1184px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 120px;
-    align-self: stretch;
-  }
-
-  .products .products-content .product{
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    align-self: stretch;
-  }
-
-  .products .products-content .product .image-wrapper{
-    width: 530.531px;
-    height: 397.257px;
-    flex-shrink: 0;
-    position: relative;
-  }
-
-  .products .products-content .product .image-bg{
-    width: 100%;
-    height: 100%;
-    flex-shrink: 0;
-    position: absolute;
-  }
-
-  .products .products-content .product .image-front{
-    display: flex;
-    width: 305px;
-    height: 186px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    position: absolute;
-    bottom: 52px;
-    left: 282px;
-  }
-
-  .products .products-content .product .product-text{
-    display: flex;
-    padding: 0px 40px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 56px;
-    flex: 1 0 0;
-  }
-
-  .products .products-content .product .product-text .title{
-    display: flex;
-    flex-direction: column;
-    padding: 0px 40px;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    align-self: stretch;
-    color: map-get($gray, white);
-    text-align: center;
-  }
-
-  .products .products-content .product .product-text .button-primary-link{
-  }
-
-
-
-
-
-
-
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -532,7 +478,7 @@ export default {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-color: map-get($gray, "white");
+    background-color: map-get($gray, white);
   }
 
   .image-background img {
@@ -585,11 +531,10 @@ export default {
   }
 
   .h1-text {
-    color: var(--Primary-Fade-800, #013C31);
-    font-family: Inter;
+    color: map-get($primary-fade, 800);
+
     font-size: 48px;
     font-weight: 700;
-    line-height: 120%;
   }
 
   //Transição aplicada pelo <transition name="fade" mode="out-in">
@@ -620,11 +565,9 @@ export default {
 
   .h1-lasttext {
     display: inline-block;
-    color: var(--Green-500, #198754);
-    font-family: Inter;
+    color: map-get($green, 500);
     font-size: 48px;
     font-weight: 700;
-    line-height: 120%;
     width: 200px; // Tamanho fixo para evitar movimentação horizontal brusca
     text-align: left;
   }
@@ -632,7 +575,7 @@ export default {
   .subtitle {
     width: 520px;
     max-width: 100%;
-    color: #6C757D;
+    color: map-get($theme, secondary);
   }
 
   .search {
@@ -643,9 +586,8 @@ export default {
   }
 
   .search .input-container{
-    border: 2px solid var(--Primary-Fade-500, #418377) !important; // Não funcionando, ajustar depois
     border-radius: 14px;
-    background: var(--Gray-100, #F8F9FA);
+    background: map-get($gray, 100);
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
   }
 
@@ -720,7 +662,7 @@ export default {
         height: auto;
         display: block;
         border-radius: 32px;
-        border: 1px solid var(--Gray-300, #DEE2E6);
+        border: 1px solid map-get($gray, 300);
         background: map-get($gray, "white");
         transition: transform 0.2s ease-out;
         will-change: transform;
@@ -764,7 +706,7 @@ export default {
   }
 
   .cards .top-content{
-    color: $body-text;
+    color: map-get($body-text, body-color);
   }
 
   .cards .top-content p{
@@ -773,7 +715,7 @@ export default {
   }
 
   .cards .top-content p .highlight{
-    background-color: var(--Green-100, #D1E7DD);
+    background-color: map-get($green, 100);
     padding: 0 4px;
     border-radius: 4px;
     line-height: 150%;
@@ -807,7 +749,7 @@ export default {
     width: 56px;
     height: 56px;
     border-radius: 56px;
-    border: 1px solid var(--Gray-400, #CED4DA);
+    border: 1px solid map-get($gray, 400);
     background: url(<path-to-image>) lightgray 50% / cover no-repeat;
   }
 
@@ -822,7 +764,7 @@ export default {
   }
 
   .cards .bottom-content .title{
-    color: $body-text;
+    color: map-get($body-text, body-color);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -859,23 +801,21 @@ export default {
   }
 
   .institutes .institutes-header h2{
-    color: var(--Primary-Fade-800, #013C31);
-    font-family: Inter;
+    color: map-get($primary-fade, 800);
     font-size: 48px;
     font-style: normal;
     font-weight: 600;
-    line-height: 120%;
     align-self: stretch;
     margin: 0;
   }
 
   .institutes .institutes-header h4{
-    color: var(--Gray-600, #6C757D);
+    color: map-get($gray, 600);
     margin: 0;
   }
 
   .institutes .institutes-header a{
-    color: var(--Green-500, #198754);
+    color: map-get($green, 500);
     text-decoration-line: underline;
     text-underline-position: from-font;
   }
@@ -966,12 +906,115 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--Primary-Fade-700, #025949);
+    color: map-get($primary-fade, 700);
   }
 
   .institutes-awards .award .award-label .award-label-text p:last-child{
-    color: var(--Primary-Fade-700, #025949);
+    color: map-get($primary-fade, 700);
     font-size: 10px;
+  }
+
+  .products{
+    background-color: map-get($green, 600);
+    display: flex;
+    padding: 128px 128px 200px 128px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 120px;
+    align-self: stretch;
+  }
+
+  .products .title{
+    display: flex;
+    max-width: 1184px;
+    padding: 0px 128px;
+    flex-direction: column;
+    align-items: center;
+    gap: 21px;
+    align-self: center;
+  }
+
+  .products .title h2{
+    color: map-get($gray, white);
+    text-align: center;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .products .products-content{
+    display: flex;
+    max-width: 1184px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 120px;
+    align-self: center;
+  }
+
+  .products .products-content .product{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    align-self: center;
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  .products .products-content .product .image-wrapper{
+    width: 530.531px;
+    height: 397.257px;
+    flex-shrink: 0;
+    position: relative;
+    margin-right: 52px;
+  }
+
+  .products .products-content .product .image-bg{
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    position: absolute;
+    border-radius: 21px;
+  }
+
+  .products .products-content .product .image-front{
+    display: flex;
+    width: 305px;
+    height: 186px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: absolute;
+    bottom: 52px;
+    left: 282px;
+    border-radius: 21px;
+    box-shadow: -20px -20px 48px 0px rgba(0, 0, 0, 0.40);
+  }
+
+  .products .products-content .product .product-text{
+    display: flex;
+    padding: 0px 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 56px;
+    flex: 1 0 0;
+  }
+
+  .products .products-content .product .product-text .title{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+    color: map-get($gray, white);
+    text-align: center;
+  }
+
+  .products .products-content .product .product-text .button-primary-link{
+    color: #013C31;
   }
 
   </style>

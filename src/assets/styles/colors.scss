@@ -17,9 +17,10 @@
         color: map-get($urbverde-primary-fade-colors, 800);
 */
 
-@use 'bootstrap/scss/bootstrap' as *;
+// bs na importação para evitar conflito de tokens
+@use 'bootstrap/scss/bootstrap' as bs;  
 
-// Cores Tema 
+// Theme Colors 
 $theme: (
   "primary": #025949,
   "secondary": #6C757D,
@@ -33,7 +34,10 @@ $theme: (
   "hitbox": #FFFFFF,
 );
 
-$body-text: #212529;     
+// Body Colors 
+$body-text: (
+  "body-color": #212529,
+);   
 
 // Primary Fade Colors
 $primary-fade: (
@@ -44,7 +48,7 @@ $primary-fade: (
   400: #60A884,
   500: #418377,
   600: #1C6A5C,
-  700: #025949, // Cor principal
+  700: #025949, // Primary Color
   800: #013C31,
   900: #011F19
 );
@@ -78,6 +82,85 @@ $blue: (
   900: #031633
 );
 
+// Indigo Colors
+$indigo: (
+  100: #E0CFFC,
+  200: #C29FFA,
+  300: #A370F7,
+  400: #8540F5,
+  500: #6610F2,
+  600: #520DC2,
+  700: #3D0A91,
+  800: #290661,
+  900: #140330
+);
+
+// Purple Colors
+$purple: (
+  100: #E2D9F3,
+  200: #C5B3E6,
+  300: #A98EDA,
+  400: #8C68CD,
+  500: #6F42C1,
+  600: #59359A,
+  700: #432874,
+  800: #2C1A4D,
+  900: #160D27
+);
+
+// Pink Colors
+$pink: (
+  100: #F7D6E6,
+  200: #EFADCE,
+  300: #E685B5,
+  400: #DE5C9D,
+  500: #D63384,
+  600: #AB296A,
+  700: #801F4F,
+  800: #561435,
+  900: #2B0A1A
+);
+
+// Red Colors
+$red: (
+  100: #F8D7DA,
+  200: #F1AEB5,
+  300: #EA868F,
+  400: #E35D6A,
+  500: #DC3545,
+  600: #B02A37,
+  700: #842029,
+  800: #58151C,
+  900: #2C0B0E
+);
+
+// Orange Colors
+$orange: (
+  100: #FFE5D0,
+  200: #FECBA1,
+  300: #FEB272,
+  400: #FD9843,
+  500: #FD7E14,
+  600: #CA6510,
+  700: #984C0C,
+  800: #653208,
+  900: #331904
+);
+
+// Yellow Colors
+$yellow: (
+  100: #FFF3CD,
+  200: #FFE69C,
+  300: #FFDA6A,
+  400: #FFCD39,
+  500: #FFC107,
+  600: #CC9A06,
+  700: #997404,
+  800: #664D03,
+  900: #332701
+);
+
+// Green Colors
 $green: (
   100: #D1E7DD,
   200: #A3CFBB,
@@ -90,6 +173,7 @@ $green: (
   900: #051B11
 );
 
+// Teal Colors
 $teal: (
   100: #D2F4EA,
   200: #A6E9D5,
@@ -100,4 +184,17 @@ $teal: (
   700: #13795B,
   800: #0D503C,
   900: #06281E
+);
+
+// Cyan Colors
+$cyan: (
+  100: #CFF4FC,
+  200: #9EEAF9,
+  300: #6EDFF6,
+  400: #3DD5F3,
+  500: #0DCAF0,
+  600: #0AA2C0,
+  700: #087990,
+  800: #055160,
+  900: #032830
 );

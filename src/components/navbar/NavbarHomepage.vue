@@ -20,16 +20,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">Seja Parceiro</a>
+              <a href="#" class="body-small-regular">Seja Parceiro</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">Quem Somos</a>
+              <a href="#" class="body-small-regular">Quem Somos</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">Transparência</a>
+              <a href="#" class="body-small-regular">Transparência</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">UrbVerde Educa</a>
+              <a href="#" class="body-small-regular">UrbVerde Educa</a>
             </li>
           </ul>
 
@@ -124,7 +124,7 @@ export default {
     padding: 8px 12px;
     align-items: center;
     text-decoration: none;
-    color: $body-text;
+    color: map-get($body-text, body-color);
     text-align: center;
     border-radius: 4px;
   }

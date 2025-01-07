@@ -39,7 +39,7 @@
     </span>
 
     <!-- Texto do botão -->
-    <span class="small-medium">{{ label }}</span>
+    <span class="body-small-medium">{{ label }}</span>
 
     <!-- Ícone do Bootstrap ou imagem no lado direito -->
     <span v-if="icon && iconPosition === 'right'" class="icon">
