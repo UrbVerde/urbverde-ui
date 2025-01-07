@@ -4,13 +4,12 @@
 
     <search-user-location @location-updated="updateLocationData" />
 
-    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }" @click="activateInput">
+    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+      @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
-          class="input-field small-regular"
-          :disabled="!isInputActive" 
-          @click="activateInput"/>
+          class="input-field small-regular" :disabled="!isInputActive" @click="activateInput" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
           <span class="suggestion-text small-regular">
             <span class="invisible ">{{ visibleInput }}</span>
@@ -154,7 +153,7 @@ export default {
         this.dropdown = true;
         this.activateInput();
       }
-      
+
     }, 2500);
   },
   beforeUnmount() {
@@ -528,41 +527,73 @@ export default {
       this.inputValue = suggestion.text;
       this.visibleInput = suggestion.text;
       this.highlightedText = '';
-      this.addToHistory(suggestion.text);
       this.dropdown = false;
       this.locationChosen = suggestion.text;
-      this.updateSuggestions();
+
       this.loadAnimation();
+      this.addToHistory(suggestion.text);
+      this.updateSuggestions();
       this.fetchCoordinates(this.locationChosen);
 
     },
     submit() {
-      
+      const suggestion = this.suggestions[0];
+      if (this.inputValue) {
+        this.locationChosen = suggestion.text;
+      }
+
+      if (!this.inputValue) {
+        this.isInputActive = true;
+        this.dropdown = true;
+        //alert('Por favor, insira um local.');
+        if (this.locationChosen) {
+          //alert('aqui.3');
+          this.fetchCoordinates(this.locationChosen);
+          this.loadAnimation();
+          this.inputValue = this.locationChosen;
+          this.visibleInput = this.locationChosen;
+          this.highlightedText = '';
+          this.dropdown = false;
+        }
+        return;
+      }
+
       if (this.inputValue && this.suggestions.length > 0) {
-        const suggestion = this.suggestions[0];
+        //alert('aqui.');
         if (suggestion && suggestion.text) {
+          this.loadAnimation();
+          this.addToHistory(suggestion.text);
+
+          this.inputValue = suggestion.text;
+          this.visibleInput = suggestion.text;
+          this.highlightedText = '';
+          this.dropdown = false;
           this.locationChosen = suggestion.text;
+
+
+          this.updateSuggestions();
+          this.fetchCoordinates(this.locationChosen);
+          //alert('aqui2.');
           // Only add to history if not already handled by selectSuggestion
           if (!this.locationChosen) {
-            this.addToHistory(suggestion.text);
+
 
           }
         }
-        this.inputValue = suggestion.text;
-        this.visibleInput = suggestion.text;
-        this.highlightedText = '';
-        
-        
+
+      } else {
+        this.dropdown = false;
+
+
       }
 
-      this.dropdown = false;
-      this.isInputActive = false;
 
-      // this.suggestions = [];
 
-      this.loadAnimation();
-      this.fetchCoordinates(this.locationChosen); // Chama a função para buscar coordenadas
+
     },
+    // this.suggestions = [];
+
+    // Chama a função para buscar coordenadas
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
@@ -746,6 +777,8 @@ export default {
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
+
+
 }
 
 .input-container-dropdown {
