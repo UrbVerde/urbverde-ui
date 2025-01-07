@@ -47,7 +47,7 @@ watch(
 );
 
 // Function to fetch categories based on location code
-async function fetchCategories(code) {
+async function fetchCategories(code, type) {
   try {
     console.log('Fetching categories:', { code, type });
     const response = await fetch(`${API_URLS.CATEGORIES}?code=${code}&type=${type}`);
