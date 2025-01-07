@@ -25,10 +25,10 @@
           <i class="bi bi-x-lg" id="imgIcon" width="16" height="16"></i>
         </button>
 
-        <button class="search-button" @click="submit">
+        <button class="search-button" @click.stop="submit">
 
           <i v-if="!isLoading" class="bi bi-search" id="imgIcon" width="16" height="16"></i>
-          <div v-else class="spinner-border text-primary spinner-border-sm" role="status">
+          <div v-else class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
         </button>
@@ -524,6 +524,7 @@ export default {
 
     },
     submit() {
+      
       if (this.inputValue && this.suggestions.length > 0) {
         const suggestion = this.suggestions[0];
         if (suggestion && suggestion.text) {
@@ -537,11 +538,12 @@ export default {
         this.inputValue = suggestion.text;
         this.visibleInput = suggestion.text;
         this.highlightedText = '';
-        this.dropdown = false;
+        
         
       }
 
-
+      this.dropdown = false;
+      this.isInputActive = false;
 
       // this.suggestions = [];
 
