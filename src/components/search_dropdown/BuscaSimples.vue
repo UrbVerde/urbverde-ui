@@ -3,7 +3,7 @@
   <div class="search-wrapper">
 
     <search-user-location @location-updated="updateLocationData" />
-    
+
     <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
@@ -18,25 +18,13 @@
       </div>
 
       <div class="button-container">
-        <button
-          :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-          @click="clearInput"
-        >
-          <img
-            id="imgIcon"
-            src="../../assets/icons/clean.svg"
-            width="16"
-            height="16"
-          />
+        <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
+          @click="clearInput">
+          <i class="bi bi-x-lg" id="imgIcon" width="16" height="16"></i>
         </button>
 
         <button class="search-button" @click="submit">
-          <img
-            id="imgIcon"
-            src="../../assets/icons/search.svg"
-            width="16"
-            height="16"
-          />
+          <i class="bi bi-search" id="imgIcon" width="16" height="16"></i>
         </button>
       </div>
     </div>
@@ -53,27 +41,27 @@
         <div class="filter-container">
           <div class="filter-button-container" ref="filterButtonContainer" @mousedown="startDrag" @mousemove="onDrag"
             @mouseup="endDrag" @mouseleave="endDrag">
-            <button :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
+            <button
+              :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
               @click="toggleAll">Todos</button>
-            <button :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
+            <button
+              :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
               @click="toggleCity">Municípios</button>
-            <button :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
+            <button
+              :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
               @click="toggleState">Estados</button>
           </div>
         </div>
 
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-          <li class="suggestion-item" 
-          v-for="(suggestion, index) in visibleSuggestions" 
-          :key="suggestion"  
-          @click="selectSuggestion(suggestion)" tabindex="0" 
-          @keydown.enter="selectSuggestion(suggestion)"
-          @keydown.up.prevent="focusPreviousSuggestion(index)" 
-          @keydown.down.prevent="focusNextSuggestion(index)"
-          :ref="`suggestionItem-${index}`">
-            <img :src="getImageSource(suggestion.type)" width="20" height="20" />
-            
+          <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+            @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+            :ref="`suggestionItem-${index}`">
+          
+            <i :class= getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
+
             <span class="item-text small-regular">
               <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
               <span>{{ getUnmatchedPart(suggestion.text) }}</span>
@@ -145,7 +133,7 @@ export default {
   created() {
     // this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.loadSearchHistory();
-    
+
     this.generateDefaultSuggestions();
     this.updateSuggestions();
   },
@@ -186,10 +174,10 @@ export default {
     },
     visibleSuggestions() {
       const suggestions = this.filteredSuggestions;
-      
+
       // Find first state suggestion
       const firstStateIndex = suggestions.findIndex(s => s.type === 'state');
-      
+
       if (firstStateIndex === -1) {
         // No states found, return first 5 items
         return suggestions.slice(0, 5);
@@ -214,17 +202,17 @@ export default {
 
 
   methods: {
-      getMatchedPart(text) {
-        if (!this.inputValue) return '';
-          const input = this.inputValue.toLowerCase();
-          const suggestion = text.toLowerCase();
-          return suggestion.startsWith(input) ? text.substring(0, this.inputValue.length) : '';
-      },
+    getMatchedPart(text) {
+      if (!this.inputValue) return '';
+      const input = this.inputValue.toLowerCase();
+      const suggestion = text.toLowerCase();
+      return suggestion.startsWith(input) ? text.substring(0, this.inputValue.length) : '';
+    },
     getUnmatchedPart(text) {
       if (!this.inputValue) return text;
-        const input = this.inputValue.toLowerCase();
-        const suggestion = text.toLowerCase();
-        return suggestion.startsWith(input) ? text.substring(this.inputValue.length) : text;
+      const input = this.inputValue.toLowerCase();
+      const suggestion = text.toLowerCase();
+      return suggestion.startsWith(input) ? text.substring(this.inputValue.length) : text;
     },
 
     updateLocationData(location) {
@@ -232,7 +220,7 @@ export default {
       console.log("Dados de localização atualizados:", location);
       this.cacheCities([location.city]);
     },
-    
+
     parseCityState(text) {
       // Check if the text contains a state abbreviation
       const parts = text.split(' - ');
@@ -258,12 +246,12 @@ export default {
         // const response = await fetch(`/v1/address/suggestions?query=${query}`); // Local MSW API
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`); // Online API
         const data = await response.json();
-        
+
         // Store both display_name and cd_mun
         data.forEach(item => {
           // Store with the full display format (including state)
-          const displayName = item.state_abbreviation ? 
-            `${item.display_name} - ${item.state_abbreviation}` : 
+          const displayName = item.state_abbreviation ?
+            `${item.display_name} - ${item.state_abbreviation}` :
             item.display_name;
 
           this.cachedCityData[displayName] = {
@@ -278,25 +266,25 @@ export default {
 
         // Also update your existing data structures
         this.citiesWithCodes = data.reduce((acc, item) => {
-          const displayName = item.state_abbreviation ? 
-            `${item.display_name} - ${item.state_abbreviation}` : 
+          const displayName = item.state_abbreviation ?
+            `${item.display_name} - ${item.state_abbreviation}` :
             item.display_name;
           acc[displayName] = item.cd_mun;
           return acc;
         }, {});
 
-      // Update cache with display_names including state abbreviations
-      const cities = data.map(item => item.state_abbreviation ? 
-        `${item.display_name} - ${item.state_abbreviation}` : 
-        item.display_name
-      );
-      this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+        // Update cache with display_names including state abbreviations
+        const cities = data.map(item => item.state_abbreviation ?
+          `${item.display_name} - ${item.state_abbreviation}` :
+          item.display_name
+        );
+        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
 
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
     },
-    
+
     async fetchCoordinates(address) {
 
       // Parse the address to get city name without state abbreviation
@@ -307,10 +295,10 @@ export default {
       if (cached && cached.lat && cached.lng) {
         // we already have coordinates, skip fetch
         this.coordinates = { lat: cached.lat, lng: cached.lng };
-        this.$emit('location-updated', { 
-          lat: cached.lat, 
-          lng: cached.lng, 
-          cd_mun: cached.cd_mun 
+        this.$emit('location-updated', {
+          lat: cached.lat,
+          lng: cached.lng,
+          cd_mun: cached.cd_mun
         });
         return;
       }
@@ -319,7 +307,7 @@ export default {
       try {
         // Get the cd_mun from our stored mapping
         const cityCode = this.citiesWithCodes[address];
-        
+
         if (!cityCode) {
           // If not found, try fetching cities first
           await this.fetchCities(city);
@@ -335,22 +323,22 @@ export default {
         // Use the mock API with cd_mun
         const response = await fetch(`/v1/address/suggestions?query=${cityCode}`);
         const data = await response.json();
-        
+
         if (data && data.length > 0) {
           if (data[0].error) {
             this.handleLocationFailure();
             console.error('Location error:', data[0].error);
             return;
           }
-          
+
           const location = data[0].coordinates;
           if (location && location.lat && location.lng) {
             const coordinates = { lat: location.lat, lng: location.lng };
             this.coordinates = coordinates;
             // Emit both coordinates and cd_mun
-            this.$emit('location-updated', { 
-              ...coordinates, 
-              cd_mun: cityCode 
+            this.$emit('location-updated', {
+              ...coordinates,
+              cd_mun: cityCode
             });
           } else {
             this.handleLocationFailure();
@@ -365,7 +353,7 @@ export default {
         this.handleLocationFailure();
       }
     },
-    
+
     handleLocationFailure() {
       this.coordinates = null;
       this.$emit('location-updated', null);
@@ -599,7 +587,7 @@ export default {
     },
 
     getImageSource(type) {
-      return type === 'history' ? historyIcon : locationIcon;
+      return type === 'history' ? 'bi bi-clock-history' : 'bi bi-geo-alt';
     },
     getCachedData() {
       return {
@@ -657,13 +645,7 @@ export default {
 </script>
 
 <style scoped>
-#imgIcon {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: none;
-}
+
 
 .search-wrapper {
   position: relative;
@@ -767,9 +749,9 @@ export default {
 
 .highlight {
   color: var(--Gray-500, #ADB5BD);
-  
+
   color: var(--Gray-500, #ADB5BD);
-  
+
 }
 
 .button-container {
@@ -817,11 +799,11 @@ export default {
   gap: 10px;
   
 */
-border: none;
-padding: 8px 8px 8px 8px;
-gap: 10px;
-border-radius: 99px;
-opacity: 0px;
+  border: none;
+  padding: 8px 8px 8px 8px;
+  gap: 10px;
+  border-radius: 99px;
+  opacity: 0px;
 }
 
 .filter-button {
@@ -934,7 +916,8 @@ opacity: 0px;
 
 .item-text {
   display: -webkit-box;
-  -webkit-box-orient: vertical;/*evita quebra de linha*/ 
+  -webkit-box-orient: vertical;
+  /*evita quebra de linha*/
   -webkit-line-clamp: 1;
   line-clamp: 1;
 
@@ -942,7 +925,7 @@ opacity: 0px;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
 
-  
+
   /* Body/Small/Regular 
     font-family: Inter;
 
@@ -956,6 +939,7 @@ opacity: 0px;
   /* 21px */
 
 }
+
 .text-highlight {
   font-weight: bold;
 }
@@ -980,5 +964,25 @@ opacity: 0px;
 
 .button-debug {
   display: none;
+}
+
+#imgIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Add a specific style for suggestion icons */
+.suggestion-item .bi {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Keep separate styles for other icons if needed */
+.button-container .bi {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 </style>
