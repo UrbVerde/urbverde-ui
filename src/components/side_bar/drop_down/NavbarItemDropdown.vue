@@ -276,7 +276,7 @@ background: var(--Primary-Fade-100, #D2E8DD);;
 .dropdown-menu-item-active {
   border-left: 3px solid var(--Body-Text-Body-Color, #212529);
   background: var(--Primary-Fade-100, #D2E8DD);
-  transition: .2s;
+  
 
 }
 
