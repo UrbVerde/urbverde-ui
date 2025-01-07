@@ -37,7 +37,8 @@
       "name": "Águas",
       "icon": "bi bi-water",
       "layers": [
-        {"id": "flood_areas", "name": "Áreas Inundáveis", "isActive": false, "isNew": true}
+        {"id": "flood_areas", "name": "Áreas Inundáveis", "isActive": false, "isNew": true},
+        {"id": "dam_flood_areas", "name": "Mapa da Lama", "isActive": false, "isNew": true}
       ]
     },
     {

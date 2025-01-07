@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/side_bar/drop_down/NavbarDropdown.vue -->
 <template>
   <div class="container">
-    <span class="text caption-medium">CATEGORIAS</span>
+    <span class="text caption-medium">CAMADAS</span>
 
     <div class="options">
       <NavbarItem v-for="(category, index) in categories" :key="category.id" :isSelectedItem="category.isSelected"

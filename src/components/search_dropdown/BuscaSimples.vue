@@ -105,7 +105,7 @@ export default {
       isLoading: false,
       locationData: null,
       defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
-      citiesWithCodes: {}, // Will store { display_name: cd_mun } mapping
+      LocationCodes: {}, // Will store { display_name: code } mapping
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -121,7 +121,7 @@ export default {
         'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
       ],
       cachedCities: [],
-      cachedCityData: {}, // Will store { [cityName]: { cd_mun, lat, lng } }
+      cachedCityData: {}, // Will store { [cityName]: { code: number, type: string, lat: number, lng: number } }
       searchHistory: [],
       dropdown: false,
       showSuggestions: false, // Controla a exibição das sugestões
@@ -279,7 +279,7 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`); // Online API
         const data = await response.json();
 
-        // Store both display_name and cd_mun
+        // Store both display_name and code
         data.forEach(item => {
           // Store with the full display format (including state)
           const displayName = item.state_abbreviation ?
@@ -287,32 +287,34 @@ export default {
             item.display_name;
 
           this.cachedCityData[displayName] = {
-            cd_mun: item.cd_mun,
+            code: item.cd_mun,
+            type: 'city',
             lat: item.coordinates?.lat,
             lng: item.coordinates?.lng,
           };
         });
 
-        // IMPORTANT: persist to localStorage
-        localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
-
         // Also update your existing data structures
-        this.citiesWithCodes = data.reduce((acc, item) => {
+        this.LocationCodes = data.reduce((acc, item) => {
           const displayName = item.state_abbreviation ?
-            `${item.display_name} - ${item.state_abbreviation}` :
-            item.display_name;
+          `${item.display_name} - ${item.state_abbreviation}` :
+          item.display_name;
           acc[displayName] = item.cd_mun;
           return acc;
         }, {});
 
         // Update cache with display_names including state abbreviations
-        const cities = data.map(item => item.state_abbreviation ?
-          `${item.display_name} - ${item.state_abbreviation}` :
-          item.display_name
-        );
-        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+        const cities = data.map(item => 
+          item.state_abbreviation ?
+            `${item.display_name} - ${item.state_abbreviation}` :
+            item.display_name
+          );
+          this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+          
+          // IMPORTANT: persist to localStorage
+          localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
 
-      } catch (error) {
+        } catch (error) {
         console.error('Error fetching cities:', error);
       }
     },
@@ -330,30 +332,31 @@ export default {
         this.$emit('location-updated', {
           lat: cached.lat,
           lng: cached.lng,
-          cd_mun: cached.cd_mun
+          code: cached.code,
+          type: 'city'
         });
         return;
       }
 
       // Otherwise, if you must still fetch from API (for the lat/lng):
       try {
-        // Get the cd_mun from our stored mapping
-        const cityCode = this.citiesWithCodes[address];
+        // Get the code from our stored mapping
+        const code = this.LocationCodes[address];
 
-        if (!cityCode) {
+        if (!code) {
           // If not found, try fetching cities first
           await this.fetchCities(city);
           // Try getting the code again after fetching
-          const newCityCode = this.citiesWithCodes[address];
-          if (!newCityCode) {
+          const newcode = this.LocationCodes[address];
+          if (!newcode) {
             this.handleLocationFailure();
             console.error('City code not found for:', address);
             return;
           }
         }
 
-        // Use the mock API with cd_mun
-        const response = await fetch(`/v1/address/suggestions?query=${cityCode}`);
+        // Use the mock API with code
+        const response = await fetch(`/v1/address/suggestions?query=${code}`);
         const data = await response.json();
 
         if (data && data.length > 0) {
@@ -367,10 +370,11 @@ export default {
           if (location && location.lat && location.lng) {
             const coordinates = { lat: location.lat, lng: location.lng };
             this.coordinates = coordinates;
-            // Emit both coordinates and cd_mun
+            // Emit both coordinates and code
             this.$emit('location-updated', {
               ...coordinates,
-              cd_mun: cityCode
+              code: cd_mun,
+              type: 'city'
             });
           } else {
             this.handleLocationFailure();
@@ -719,9 +723,8 @@ export default {
   padding: 0px 16px 0px 24px; /* 0px 9px 0px 16px;  */
   position: relative;
   z-index: 1;
-  cursor: text;
   cursor: default;
-  user-select: none;
+  /* user-select: none; */
 }
 
 .input-container {
@@ -762,14 +765,13 @@ export default {
   border: none;
   outline: none;
   user-select: none;
-  cursor: default;
+  cursor: text;
 }
 
 .input-overlay {
   position: relative;
   flex: 1;
   overflow: hidden;
-  border: none;
   border: none;
   display: flex;
   align-items: center;
@@ -907,8 +909,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  /* gap: 8px; */
   align-self: stretch;
+  cursor: pointer;
 }
 
 .suggestions-list li:hover {
@@ -920,13 +923,15 @@ export default {
 }
 
 .suggestion-item {
+  width: 100%;
   display: flex;
-  height: 32px;
-  padding: 0px 8px;
+  height: 40px;
+  padding: 8px 16px; /* 0px 8px; */
   align-items: center;
-  gap: 10px;
+  gap: 10px; /* This gap is for internal elements like icon and text */
   align-self: stretch;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .suggestion-item[data-type="separator"] {
