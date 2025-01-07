@@ -539,9 +539,9 @@ export default {
       if (!this.inputValue) {
         this.isInputActive = true;
         this.dropdown = true;
-        alert('Por favor, insira um local.');
+        //alert('Por favor, insira um local.');
         if (this.locationChosen) {
-          alert('aqui.3');
+          //alert('aqui.3');
           this.fetchCoordinates(this.locationChosen);
           this.loadAnimation();
           this.inputValue = this.locationChosen;
@@ -553,7 +553,7 @@ export default {
       }
 
       if (this.inputValue && this.suggestions.length > 0) {
-        alert('aqui.');
+        //alert('aqui.');
         if (suggestion && suggestion.text) {
           this.loadAnimation();
           this.addToHistory(suggestion.text);
@@ -567,7 +567,7 @@ export default {
 
           this.updateSuggestions();
           this.fetchCoordinates(this.locationChosen);
-          alert('aqui2.');
+          //alert('aqui2.');
           // Only add to history if not already handled by selectSuggestion
           if (!this.locationChosen) {
 
