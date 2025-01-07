@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/RankingCard.vue -->
 <template>
   <CardBase :title="title" :subtitle="subtitle">
     <div class="sections">
