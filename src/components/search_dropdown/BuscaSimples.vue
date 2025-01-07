@@ -697,7 +697,8 @@ export default {
 .spinner-border {
   width: 16px;
   height: 16px;
-  color: black;
+  color: var(--Theme-Primary, #025949);
+  border-width: 2px;
 }
 
 .search-wrapper {
