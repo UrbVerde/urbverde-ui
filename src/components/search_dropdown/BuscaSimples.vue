@@ -694,91 +694,75 @@ export default {
 </script>
 
 <style scoped>
-.spinner-border {
-  width: 16px;
-  height: 16px;
-  color: var(--Theme-Primary, #025949);
-  border-width: 2px;
+#imgIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
 }
 
+/* Base layout */
 .search-wrapper {
   position: relative;
   width: 100%;
 }
 
+/* Input containers */
 .input-container,
 .input-container-dropdown {
   display: flex;
   align-items: center;
+  gap: 12px;
   align-self: stretch;
   height: 48px;
+  padding: 0px 16px 0px 24px; /* 0px 9px 0px 16px;  */
   position: relative;
   z-index: 1;
-  gap: 12px;
-  padding: 0px 16px 0px 24px;
-  /* padding: 0px 9px 0px 16px;  */
-
   cursor: text;
+  cursor: default;
+  user-select: none;
 }
 
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-
-  
 }
 
 .input-container-dropdown {
-
-  border-radius: 99px;
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
   outline: 2px solid #418377;
   outline-offset: -2px;
-
-  outline: 2px solid #418377;
-  outline-offset: -2px;
-
-  
-
-  
-
-
-
+  user-select: none;
+  cursor: default;
 }
 
+/* Input and overlay */
 .input-field,
 .suggestion-overlay {
   width: 100%;
   white-space: nowrap;
-
   display: flex;
   align-items: center;
   gap: 8px;
   flex: 1 0 0;
-
-  /* layout */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   line-clamp: 1;
-
-  /* Typography */
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
-
   padding: 0;
-  /* 21px */
 }
 
 .input-field {
   background: var(--Gray-100, #F8F9FA);
   border: none;
   outline: none;
-
-
-
+  user-select: none;
+  cursor: default;
 }
 
 .input-overlay {
@@ -787,17 +771,11 @@ export default {
   overflow: hidden;
   border: none;
   border: none;
-
   display: flex;
   align-items: center;
-  /* Alinha verticalmente os elementos */
-  align-items: center;
-  /* Alinha verticalmente os elementos */
-
 }
 
 .suggestion-overlay {
-  /* alinhar texto digitado com sugestão */
   position: absolute;
   top: 0;
   left: 0;
@@ -805,7 +783,7 @@ export default {
   background: transparent;
 }
 
-
+/* Text styles */
 .invisible {
   visibility: hidden;
 }
@@ -814,9 +792,13 @@ export default {
   color: var(--Gray-500, #ADB5BD);
 
   color: var(--Gray-500, #ADB5BD);
-
 }
 
+.text-highlight {
+  font-weight: bold;
+}
+
+/* Buttons */
 .button-container {
   display: flex;
   flex-direction: row;
@@ -829,24 +811,20 @@ export default {
   padding: 8px;
   align-items: center;
   gap: 10px;
-
   background: none;
   border: none;
 }
 
 .clean-button-hidden {
   display: none;
-
 }
 
+/* Filter buttons */
 .filter-button-container {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-  /*overflow: hidden;
-  text-overflow: ellipsis;
-  */
   /*overflow: hidden;
   text-overflow: ellipsis;
   */
@@ -860,21 +838,16 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  
 */
   border: none;
-  padding: 8px 8px 8px 8px;
+  padding: 8px;
   gap: 10px;
   border-radius: 99px;
   opacity: 0px;
 }
 
 .filter-button {
-
   color: var(--Theme-Secondary, #525960);
-  color: var(--Theme-Secondary, #525960);
-
-  background: var(--Gray-100, #F8F9FA);
   background: var(--Gray-100, #F8F9FA);
 }
 
@@ -883,6 +856,7 @@ export default {
   color: var(--Theme-Primary, #025949);
 }
 
+/* Filter container */
 .filter-container {
   display: flex;
   flex-direction: column;
@@ -891,6 +865,7 @@ export default {
   align-self: stretch;
 }
 
+/* Suggestion container */
 .suggestion-container {
   position: absolute;
   border: 1px solid #ffffff;
@@ -901,51 +876,34 @@ export default {
   border-radius: 16px 16px 8px 8px;
   opacity: 0px;
   /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
-  gap: 0px;
-  border-radius: 16px 16px 8px 8px;
-  opacity: 0px;
   top: 100%;
   left: 0;
   right: 0;
   z-index: 10;
   background: var(--Gray-100, #F8F9FA);
-
-}
-
-.suggestion-grid {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-  padding: 16px 16px 24px 16px;
-  gap: 24px;
-
-}
-
-.suggestion-grid {
-
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-
-  padding: 16px 16px 24px 16px;
-  gap: 24px;
-
 }
 
 .suggestion-container-hidden {
   display: none;
 }
 
+/* Suggestion grid */
+.suggestion-grid {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  padding: 16px 16px 24px 16px;
+  gap: 24px;
+
+}
+
+/* Suggestions list */
 .suggestions-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -971,9 +929,6 @@ export default {
   border-radius: 4px;
 }
 
-
-
-/* Add this new class */
 .suggestion-item[data-type="separator"] {
   height: 1px;
   background-color: #E9ECEF;
@@ -984,19 +939,11 @@ export default {
 .item-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  /*evita quebra de linha*/
   -webkit-line-clamp: 1;
   line-clamp: 1;
-
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
-
-
-  /* Body/Small/Regular 
-    font-family: Inter;
-
-  
   /* Body/Small/Regular 
     font-family: Inter;
   font-size: 14px;
@@ -1004,11 +951,32 @@ export default {
   font-weight: 400;
   line-height: 150%;
   /* 21px */
-
 }
 
-.text-highlight {
-  font-weight: bold;
+/* Icons */
+.suggestion-item .bi {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.button-container .bi {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Loading */
+.spinner-border {
+  width: 16px;
+  height: 16px;
+  color: var(--Theme-Primary, #025949);
+  border-width: 2px;
+}
+
+/* Debug elements */
+.button-debug {
+  display: none;
 }
 
 .suggestion-count {
@@ -1027,29 +995,5 @@ export default {
   margin-left: 20px;
   font-size: 14px;
   color: #666;
-}
-
-.button-debug {
-  display: none;
-}
-
-#imgIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Add a specific style for suggestion icons */
-.suggestion-item .bi {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-/* Keep separate styles for other icons if needed */
-.button-container .bi {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
 }
 </style>

@@ -4,8 +4,26 @@ import { API_URLS } from '@/constants/endpoints';
 import cities from './responses/cities.json';
 import categoriesResponse from './responses/categories.json';
 
+// Function to filter categories based on city code
+const filterCategories = (cityCode) => {
+  const categories = categoriesResponse.categories;
+  // If in the state of São Paulo (35)
+  if (cityCode?.toString().startsWith('35')) {
+    return {
+      categories: [...categories]
+    };
+  } else {
+    // Return only sociodemographics and parks categories
+    return {
+      categories: categories.filter(category => 
+        category.id === 'parks' || category.id === 'sociodemographics'
+      )
+    };
+  }
+};
+
 export const handlers = [
-  
+
   // Handler for address suggestions
   http.get('*/v1/address/suggestions', ({ request }) => {
     const url = new URL(request.url);
@@ -71,7 +89,13 @@ export const handlers = [
     }
   }),
 
-  http.get(API_URLS.CATEGORIES, () => HttpResponse.json(categoriesResponse))
+   // Modified categories handler
+   http.get(API_URLS.CATEGORIES, async ({ request }) => {
+    const url = new URL(request.url);
+    const cityCode = url.searchParams.get('cityCode');
+    
+    return HttpResponse.json(filterCategories(cityCode));
+  })
 ];
 
 

@@ -1,4 +1,4 @@
-# urbverde-ui/src/components/side_bar/SideBar.vue
+<!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
@@ -13,11 +13,11 @@
         <DropDown v-if="isSearchDone" :categories="categories" />
       </div>
       <div v-show="showContent" class="bottom-area">
-        <a class="link-button">
+        <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
             <i class="bi bi-upload" tag="imgIcon"></i>
           <span id="txtBottom small-regular">Colaborar com dados</span>
         </a>
-        <a class="link-button">
+        <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
           <i class="bi bi-question-circle" tag="imgIcon"></i>
           <span id="txtBottom small-regular">Central de ajuda</span>
         </a>
