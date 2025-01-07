@@ -778,7 +778,7 @@ export default {
   outline: none;
 
 
-  padding: 12px 0; /* Aumenta o hitbox vertical */
+  padding: 11px 0; /* Aumenta o hitbox vertical */
 
 }
 
