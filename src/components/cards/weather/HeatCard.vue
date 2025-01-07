@@ -1,30 +1,31 @@
 <template>
-      <Card
-        v-for="(item, index) in data"
-        :key="index"
-        :title="item.title"
-        :subtitle="item.subtitle"
-        :value="item.value" class="value-heat"
-      />
-  </template>
-  
-  <script>
-  import Card from "@/components/cards/Card.vue";
-  
-  export default {
-    name: "HeatCard",
-    components: {
-      Card,
+  <CardBase
+    v-for="(item, index) in data"
+    :key="index"
+    :title="item.title"
+    :subtitle="item.subtitle"
+    :value="item.value"
+    class="value-heat"
+  />
+</template>
+
+<script>
+import CardBase from '@/components/cards/Card.vue';
+
+export default {
+  name: 'HeatCard',
+  components: {
+    CardBase,
+  },
+  props: {
+    data: {
+      type: Array, // Define que 'data' é um array
+      required: true,
     },
-    props: {
-      data: {
-        type: Array, // Define que 'data' é um array
-        required: true,
-      },
-    },
-  };
-  </script>
-  
+  },
+};
+</script>
+
   <style scoped>
   .card-content {
     display: flex;
@@ -32,7 +33,7 @@
     align-items: flex-start;
     gap: 16px; /* Espaçamento entre os elementos */
   }
-  
+
   .value-heat {
     color: var(--Green-500, #198754);
     text-align: center;
@@ -46,5 +47,4 @@
     line-height: 48px;
   }
 
-  
   </style>

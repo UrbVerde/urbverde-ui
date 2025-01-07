@@ -1,37 +1,37 @@
 <template>
-    <div class="dashboard">  
-        <HeatCard :data="cardData"/> 
-    </div>
+  <div class="dashboard">
+    <HeatCard :data="cardData"/>
+  </div>
 </template>
 
 <script>
 import HeatCard from './HeatCard.vue';
 
 export default{
-    components: {
-        HeatCard,
-    },
-    data(){
-        return {
-            cardData: []
-        }
-    },
-    mounted (){
-        this.fetchData(3520707,'2020')
-    },
-    methods: {
-        async fetchData(city, year) {
-        try {
-            const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/heat?city=${city}&year=${year}`);
-            const data = await response.json();
-            this.cardData= data
+  components: {
+    HeatCard,
+  },
+  data(){
+    return {
+      cardData: []
+    };
+  },
+  mounted(){
+    this.fetchData(3520707,'2020');
+  },
+  methods: {
+    async fetchData(city, year) {
+      try {
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/heat?city=${city}&year=${year}`);
+        const data = await response.json();
+        this.cardData= data;
 
-        } catch (error) {
-            console.error('Error fetching cards data:', error);
-        }
-        }
+      } catch (error) {
+        console.error('Error fetching cards data:', error);
+      }
     }
-}
+  }
+};
 </script>
 
 <style scoped>
@@ -51,6 +51,5 @@ export default{
   margin: 20px;
   align-items: flex-start; /* Alinha os cards no topo */
 }
-
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <Card :title="title" :subtitle="subtitle">
+  <CardBase :title="title" :subtitle="subtitle">
     <div class="sections">
       <div class="section" v-for="(section, index) in data" :key="index">
         <p class="section-title">{{ section.title }}</p>
@@ -9,38 +9,35 @@
         </p>
       </div>
     </div>
-  </Card>
+  </CardBase>
 </template>
 
-
 <script>
-import Card from "@/components/cards/Card.vue"; 
+import CardBase from '@/components/cards/Card.vue';
 
 export default {
-  name: "RankingCard",
+  name: 'RankingCard',
   components: {
-    Card, 
+    CardBase,
   },
   props: {
     title: {
-      type: String, 
-      required: false, 
+      type: String,
+      required: false,
     },
     subtitle: {
-      type: String, 
-      required: false, 
+      type: String,
+      required: false,
     },
     data: {
-      type: Array, 
+      type: Array,
       required: true,
-      validator: (value) => {
-        return value.every(
-          (item) =>
-            typeof item.title === "string" &&
-            typeof item.value === "string" && 
-            (typeof item.total === "string" || item.total === undefined) 
-        );
-      },
+      validator: (value) => value.every(
+        (item) =>
+          typeof item.title === 'string' &&
+            typeof item.value === 'string' &&
+            (typeof item.total === 'string' || item.total === undefined)
+      ),
     },
   },
 };
@@ -89,10 +86,10 @@ export default {
 }
 
 .value {
-  color: #28a745; 
+  color: #28a745;
 }
 
 .total {
-  color: #6c757d; 
+  color: #6c757d;
 }
 </style>

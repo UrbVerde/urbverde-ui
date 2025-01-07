@@ -18,19 +18,19 @@
 
 <script>
 export default {
-  name: "Card",
+  name: 'Card-base',
   props: {
     title: {
       type: String,
-      required: false, 
+      required: false,
     },
     value: {
       type: String,
-      required: false, 
+      required: false,
     },
     subtitle: {
       type: String,
-      required: false, 
+      required: false,
     },
   },
 };
@@ -50,14 +50,14 @@ export default {
 .card-image-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
 }
 
 .card-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
 }
 
 .titulo {
@@ -66,7 +66,7 @@ export default {
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 120%; 
+  line-height: 120%;
   margin-bottom: 4px;
 }
 
