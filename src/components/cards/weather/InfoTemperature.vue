@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/InfoTemperature.vue -->
 <template>
   <div>
     <Card
