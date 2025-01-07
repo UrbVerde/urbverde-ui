@@ -1,36 +1,83 @@
 {
   "categories": [
     {
-      "id": "clima",
+      "id": "climate",
       "name": "Clima",
       "icon": "bi bi-cloud-sun",
       "layers": [
-      {"id": "temp_sup", "name": "Temperatura de superfície", "isActive": false, "isNew": true},
-      {"id": "temp_max", "name": "Temperatura máxima de superfície", "isActive": false, "isNew": false},
-      {"id": "ilha_calor", "name": "Nível de exposição à ilha de calor", "isActive": false, "isNew": false}
+        {"id": "surface_temp", "name": "Temperatura de superfície", "isActive": false, "isNew": true},
+        {"id": "max_surface_temp", "name": "Temperatura máxima de superfície", "isActive": false, "isNew": false},
+        {"id": "heat_island", "name": "Nível de exposição à ilha de calor", "isActive": false, "isNew": false}
       ]
     },
     {
-    "id": "vegetacao",
-    "name": "Vegetação",
-    "icon": "bi bi-tree",
-    "layers": [
-      {"id": "pcv", "name": "Coberta vegetal (PCV)", "isActive": false, "isNew": false},
-      {"id": "icv", "name": "Cobertura vegetal por habitante (ICV)", "isActive": false, "isNew": false},
-      {"id": "idsa", "name": "Desigualdade sociambiental (IDSA)", "isActive": false, "isNew": false},
-      {"id": "cvp", "name": "Cobertura vegetal por pixel", "isActive": false, "isNew": false},
-      {"id": "ndvi", "name": "Vigor da vegetação (NDVI)", "isActive": false, "isNew": false}
-    ]
+      "id": "vegetation",
+      "name": "Vegetação",
+      "icon": "bi bi-tree",
+      "layers": [
+        {"id": "pcv", "name": "Coberta vegetal (PCV)", "isActive": false, "isNew": false},
+        {"id": "icv", "name": "Cobertura vegetal por habitante (ICV)", "isActive": false, "isNew": false},
+        {"id": "idsa", "name": "Desigualdade sociambiental (IDSA)", "isActive": false, "isNew": false},
+        {"id": "cvp", "name": "Cobertura vegetal por pixel", "isActive": false, "isNew": false},
+        {"id": "ndvi", "name": "Vigor da vegetação (NDVI)", "isActive": false, "isNew": false}
+      ]
     },
     {
-    "id": "parques",
-    "name": "Parques e Praças",
-    "icon": "bi bi-bicycle",
-    "layers": [
-      {"id": "dist_parques", "name": "Distribuição dos parques", "isActive": false, "isNew": false},
-      {"id": "area_verde", "name": "Área verde por habitante", "isActive": false, "isNew": false},
-      {"id": "acess_areas", "name": "Acessibilidade a áreas verdes", "isActive": false, "isNew": false}
-    ]
+      "id": "parks",
+      "name": "Parques e Praças",
+      "icon": "bi bi-bicycle",
+      "layers": [
+        {"id": "park_distribution", "name": "Distribuição dos parques", "isActive": false, "isNew": false},
+        {"id": "green_area_per_capita", "name": "Área verde por habitante", "isActive": false, "isNew": false},
+        {"id": "green_area_accessibility", "name": "Acessibilidade a áreas verdes", "isActive": false, "isNew": false}
+      ]
+    },
+    {
+      "id": "water",
+      "name": "Águas",
+      "icon": "bi bi-water",
+      "layers": [
+        {"id": "flood_areas", "name": "Áreas Inundáveis", "isActive": false, "isNew": true},
+        {"id": "dam_flood_areas", "name": "Mapa da Lama", "isActive": false, "isNew": true}
+      ]
+    },
+    {
+      "id": "emissions",
+      "name": "Emissões",
+      "icon": "bi bi-building",
+      "layers": [
+        {"id": "co2_emissions", "name": "Emissões de CO2", "isActive": false, "isNew": true},
+        {"id": "co2_capture", "name": "Captura Emissões de CO2 per capita", "isActive": false, "isNew": false},
+        {"id": "co2_emissions", "name": "Poluição do ar", "isActive": false, "isNew": false}
+      ]
+    },
+    {
+      "id": "transport",
+      "name": "Transporte",
+      "icon": "bi bi-bus-front",
+      "layers": [
+        {"id": "bike_lanes", "name": "Ciclovias", "isActive": false, "isNew": true}
+      ]
+    },
+    {
+      "id": "sociodemographics",
+      "name": "Sociodemográficos",
+      "icon": "bi bi-people",
+      "layers": [
+        {"id": "population", "name": "População", "isActive": false, "isNew": false},
+        {"id": "revenue", "name": "Renda per capita", "isActive": false, "isNew": false},
+        {"id": "age", "name": "Idade", "isActive": false, "isNew": false},
+        {"id": "gender", "name": "Sexo", "isActive": false, "isNew": false},
+        {"id": "race", "name": "Raça/Cor", "isActive": false, "isNew": false}
+      ]
+    },
+    {
+      "id": "others",
+      "name": "Outros",
+      "icon": "bi bi-lightbulb",
+      "layers": [
+        {"id": "public_lighting", "name": "Iluminação Pública", "isActive": false, "isNew": false}
+      ]
     }
   ]
-  }
+}

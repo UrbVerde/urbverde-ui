@@ -4,8 +4,61 @@ import { API_URLS } from '@/constants/endpoints';
 import cities from './responses/cities.json';
 import categoriesResponse from './responses/categories.json';
 
-export const handlers = [
+// Function to filter categories based on location code and type
+const filterCategories = (code, type) => {
+  if (!code || type !== 'city') {
+    return { categories: [] };
+  }
+
+  // Deep clone the categories to avoid modifying the original
+  const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
+
+  if (!code || type !== 'city') {
+    // Return only parks and sociodemographics if no code or not city type
+    return {
+      categories: categories.filter(category => 
+        category.id === 'parks' || category.id === 'sociodemographics'
+      )
+    };
+  }
+    
+  // Check if it starts with 35 (São Paulo state)
+  const isSaoPauloState = code.startsWith('35');
+
+  if (isSaoPauloState) {
+    if (code === '3534708') {
+      // The exclusive layer to be added to two categories
+      const exclusiveLayer = {
+        "id": "tree_inventory",
+        "name": "Inventário de Árvores",
+        "isActive": false,
+        "isNew": true
+      };
+      // Find vegetation category and add the layer at the beginning
+      const vegetationCategory = categories.find(cat => cat.id === 'vegetation');
+      if (vegetationCategory) {
+        vegetationCategory.layers.unshift({ ...exclusiveLayer });
+      }
+      // Find parks category and add the same layer at the beginning
+      const parksCategory = categories.find(cat => cat.id === 'parks');
+      if (parksCategory) {
+        parksCategory.layers.unshift({ ...exclusiveLayer });
+      }
+    }
+    
+    return { categories };
+  }
   
+  // For all other cases, return only parks and sociodemographics
+  return {
+    categories: categories.filter(category => 
+      category.id === 'parks' || category.id === 'sociodemographics'
+    )
+  };
+};
+
+export const handlers = [
+
   // Handler for address suggestions
   http.get('*/v1/address/suggestions', ({ request }) => {
     const url = new URL(request.url);
@@ -71,7 +124,15 @@ export const handlers = [
     }
   }),
 
-  http.get(API_URLS.CATEGORIES, () => HttpResponse.json(categoriesResponse))
+   // Modified categories handler
+   http.get(API_URLS.CATEGORIES, async ({ request }) => {
+    const url = new URL(request.url);
+    const cityCode = url.searchParams.get('cityCode');
+    const code = url.searchParams.get('code');
+    const type = url.searchParams.get('type') || 'city';
+    
+    return HttpResponse.json(filterCategories(code,type));
+  })
 ];
 
 
