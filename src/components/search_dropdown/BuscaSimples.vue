@@ -24,7 +24,11 @@
         </button>
 
         <button class="search-button" @click="submit">
-          <i class="bi bi-search" id="imgIcon" width="16" height="16"></i>
+
+          <i v-if="!isLoading" class="bi bi-search" id="imgIcon" width="16" height="16"></i>
+          <div v-else class="spinner-border text-primary spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </button>
       </div>
     </div>
@@ -55,11 +59,11 @@
 
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-          <li :class="{'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0}" 
-              v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
-              @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-              @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-              :ref="`suggestionItem-${index}`">
+          <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
+            v-for="(suggestion, index) in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)"
+            tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
+            :ref="`suggestionItem-${index}`">
 
             <i :class=getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
 
@@ -95,6 +99,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       locationData: null,
       defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
       citiesWithCodes: {}, // Will store { display_name: cd_mun } mapping
@@ -201,6 +206,21 @@ export default {
 
 
   methods: {
+    async loadAnimation() {
+      if (!this.inputValue) {
+        alert('Por favor, insira um local.');
+        return;
+      }
+      this.isLoading = true; // Ativa o spinner
+      try {
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simula a chamada de uma API ou lógica de submissão
+        console.log('Busca concluída com sucesso!');
+      } catch (error) {
+        console.error('Erro durante a busca:', error);
+      } finally {
+        this.isLoading = false; // Desativa o spinner
+      }
+    },
     getMatchedPart(text) {
       if (!this.inputValue) return '';
       const input = this.inputValue.toLowerCase();
@@ -485,7 +505,10 @@ export default {
       this.addToHistory(suggestion.text);
       this.dropdown = false;
       this.locationChosen = suggestion.text;
+      this.updateSuggestions();
+      this.loadAnimation();
       this.fetchCoordinates(this.locationChosen);
+
     },
     submit() {
       if (this.inputValue && this.suggestions.length > 0) {
@@ -495,10 +518,21 @@ export default {
           // Only add to history if not already handled by selectSuggestion
           if (!this.locationChosen) {
             this.addToHistory(suggestion.text);
+
           }
         }
+        this.inputValue = suggestion.text;
+        this.visibleInput = suggestion.text;
+        this.highlightedText = '';
+        this.dropdown = false;
+        
       }
+
+
+
       // this.suggestions = [];
+
+      this.loadAnimation();
       this.fetchCoordinates(this.locationChosen); // Chama a função para buscar coordenadas
     },
     handleEnter() {
@@ -645,6 +679,12 @@ export default {
 </script>
 
 <style scoped>
+.spinner-border {
+  width: 16px;
+  height: 16px;
+  color: black;
+}
+
 .search-wrapper {
   position: relative;
   width: 100%;
