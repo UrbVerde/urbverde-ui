@@ -37,7 +37,6 @@ export default{
 
 <style scoped>
 
-/* Global reset for box-sizing *
 /* Global reset for box-sizing */
 * {
   box-sizing: border-box;
