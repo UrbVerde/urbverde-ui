@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/TemperatureCard.vue -->
 <template>
   <CardBase
     v-for="(item, index) in data"
