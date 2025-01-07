@@ -4,11 +4,13 @@
 
     <search-user-location @location-updated="updateLocationData" />
 
-    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
+    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }" @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
-          class="input-field small-regular" />
+          class="input-field small-regular"
+          :disabled="!isInputActive" 
+          @click="activateInput"/>
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
           <span class="suggestion-text small-regular">
             <span class="invisible ">{{ visibleInput }}</span>
@@ -33,7 +35,7 @@
       </div>
     </div>
 
-    <div v-if="debug" class="button-debug">
+    <div v-if="true" class="button-debug">
       <span>{{ suggestions.length }} sugestão(ões)</span>
       <span>Cache: {{ cachedCities.length }} item(ns)</span>
       <span>Histórico: {{ searchHistory.length }} item(ns)</span>
@@ -99,6 +101,7 @@ export default {
 
   data() {
     return {
+      isInputActive: true,
       isLoading: false,
       locationData: null,
       defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
@@ -146,10 +149,13 @@ export default {
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
     const filterButton = this.$refs.filterButtonContainer;
-    // Show dropdown after 2s delay
+    // Show dropdown after 2.5s delay
     setTimeout(() => {
-      this.dropdown = true;
-      this.dropdown = true;
+      if (!this.dropdown) {
+        this.dropdown = true;
+        this.activateInput();
+      }
+      
     }, 2500);
   },
   beforeUnmount() {
@@ -206,6 +212,13 @@ export default {
 
 
   methods: {
+    activateInput() {
+      this.isInputActive = true;
+      // Use nextTick to ensure the DOM has updated before focusing
+      this.$nextTick(() => {
+        this.$refs.inputField.focus();
+      });
+    },
     async loadAnimation() {
       if (!this.inputValue) {
         alert('Por favor, insira um local.');
@@ -701,6 +714,8 @@ export default {
   gap: 12px;
   padding: 0px 16px 0px 24px;
   /* padding: 0px 9px 0px 16px;  */
+
+  cursor: text;
 }
 
 .input-container {
@@ -720,6 +735,8 @@ export default {
 
   outline: 2px solid #418377;
   outline-offset: -2px;
+
+  
 
   
 
@@ -758,7 +775,6 @@ export default {
   outline: none;
 
 
-   /* Aumenta o hitbox vertical */
 
 }
 
@@ -785,6 +801,7 @@ export default {
   pointer-events: none;
   background: transparent;
 }
+
 
 .invisible {
   visibility: hidden;

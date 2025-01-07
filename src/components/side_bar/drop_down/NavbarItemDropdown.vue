@@ -18,9 +18,9 @@
             :class="{ 'dropdown-menu-item-active': layer.isActive }" @click="toggleLayerActive(index, $event)">
 
             <span class="dropdown-item-text small-regular">{{ layer.name }}</span>
-            
-              <i :class="iconNew" v-if="layer.isNew" class="bi" id="imgIcon"></i>
-            
+            <div class="new-layout" v-if="layer.isNew">
+              <i :class="iconNew" v-if="layer.isNew" class="bi" id="imgIconNew"></i>
+            </div>
           </li>
 
         </ul>
@@ -122,8 +122,40 @@ const toggleLayerActive = (index, event) => {
   display: flex;
   align-items: center;
   justify-content: center;
+  
 
 }
+
+#imgIconNew {
+
+font-size: 14px;
+height: 14px;
+width: 14px;
+/* Ajuste o tamanho do ícone */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
+
+
+
+}
+.new-layout {
+  font-size: 22px;
+height: 22px;
+width: 22px;
+/* Ajuste o tamanho do ícone */
+display: inline-flex;
+padding: 4px;
+align-items: center;
+gap: 10px;
+
+border-radius: 4px;
+background: var(--Primary-Fade-100, #D2E8DD);;
+
+}
+
 
 
 
