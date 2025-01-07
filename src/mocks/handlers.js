@@ -6,24 +6,22 @@ import categoriesResponse from './responses/categories.json';
 
 // Function to filter categories based on location code and type
 const filterCategories = (code, type) => {
+  console.log('Received code:', code, 'type:', typeof code);
+  code = String(code);
+  // Return only parks and sociodemographics if no code or not city type
   if (!code || type !== 'city') {
-    return { categories: [] };
-  }
-
-  // Deep clone the categories to avoid modifying the original
-  const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
-
-  if (!code || type !== 'city') {
-    // Return only parks and sociodemographics if no code or not city type
     return {
       categories: categories.filter(category => 
         category.id === 'parks' || category.id === 'sociodemographics'
       )
     };
   }
+  
+  // Deep clone the categories to avoid modifying the original
+  const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
     
   // Check if it starts with 35 (São Paulo state)
-  const isSaoPauloState = code.startsWith('35');
+  const isSaoPauloState = String(code).startsWith('35');
 
   if (isSaoPauloState) {
     if (code === '3534708') {
@@ -49,12 +47,6 @@ const filterCategories = (code, type) => {
     return { categories };
   }
   
-  // For all other cases, return only parks and sociodemographics
-  return {
-    categories: categories.filter(category => 
-      category.id === 'parks' || category.id === 'sociodemographics'
-    )
-  };
 };
 
 export const handlers = [
@@ -124,13 +116,14 @@ export const handlers = [
     }
   }),
 
-   // Modified categories handler
-   http.get(API_URLS.CATEGORIES, async ({ request }) => {
+  // Modified categories handler
+  http.get('*/v1/address/categories', async ({ request }) => {
     const url = new URL(request.url);
     const cityCode = url.searchParams.get('cityCode');
     const code = url.searchParams.get('code');
     const type = url.searchParams.get('type') || 'city';
     
+    console.log('MSW Categories Handler Called', {code, type}); // Debug log
     return HttpResponse.json(filterCategories(code,type));
   })
 ];

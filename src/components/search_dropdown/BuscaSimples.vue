@@ -89,7 +89,6 @@
 <script>
 import { debounce } from 'lodash';
 import axios from 'axios';
-
 import { API_URLS } from '@/constants/endpoints';
 
 import SearchUserLocation from './SearchUserLocation.vue';
@@ -105,7 +104,7 @@ export default {
       isLoading: false,
       locationData: null,
       defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
-      LocationCodes: {}, // Will store { display_name: code } mapping
+      codes: {}, // Will store { display_name: code } mapping
       coordinates: null,
       inputValue: '',
       previousInputValue: '',
@@ -281,12 +280,21 @@ export default {
 
         // Store both display_name and code
         data.forEach(item => {
-          // Store with the full display format (including state)
+          // Create full display name (with state)
           const displayName = item.state_abbreviation ?
             `${item.display_name} - ${item.state_abbreviation}` :
             item.display_name;
 
+          // Store in cached city data
           this.cachedCityData[displayName] = {
+            code: item.cd_mun,
+            type: 'city',
+            lat: item.coordinates?.lat,
+            lng: item.coordinates?.lng,
+          };
+
+          // Also store the mapping without state abbreviation
+          this.cachedCityData[item.display_name] = {
             code: item.cd_mun,
             type: 'city',
             lat: item.coordinates?.lat,
@@ -294,27 +302,29 @@ export default {
           };
         });
 
-        // Also update your existing data structures
-        this.LocationCodes = data.reduce((acc, item) => {
+        // Update codes with both formats
+        this.codes = data.reduce((acc, item) => {
           const displayName = item.state_abbreviation ?
-          `${item.display_name} - ${item.state_abbreviation}` :
-          item.display_name;
-          acc[displayName] = item.cd_mun;
+            `${item.display_name} - ${item.state_abbreviation}` :
+            item.display_name;
+          
+          acc[displayName] = item.cd_mun; // Store with state
+          acc[item.display_name] = item.cd_mun; // Store without state
           return acc;
         }, {});
 
-        // Update cache with display_names including state abbreviations
+        // Update cached cities list
         const cities = data.map(item => 
           item.state_abbreviation ?
             `${item.display_name} - ${item.state_abbreviation}` :
             item.display_name
-          );
-          this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+        );
+        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
           
-          // IMPORTANT: persist to localStorage
-          localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
+        // IMPORTANT: persist to localStorage
+        localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
 
-        } catch (error) {
+      } catch (error) {
         console.error('Error fetching cities:', error);
       }
     },
@@ -323,17 +333,16 @@ export default {
 
       // Parse the address to get city name without state abbreviation
       const { city } = this.parseCityState(address);
-
-      // If you are also storing lat/lng, you can do:
       const cached = this.cachedCityData[address];
+
       if (cached && cached.lat && cached.lng) {
         // we already have coordinates, skip fetch
         this.coordinates = { lat: cached.lat, lng: cached.lng };
         this.$emit('location-updated', {
           lat: cached.lat,
           lng: cached.lng,
-          code: cached.code,
-          type: 'city'
+          code: cached.code.toString(),
+          type: cached.type,
         });
         return;
       }
@@ -341,25 +350,22 @@ export default {
       // Otherwise, if you must still fetch from API (for the lat/lng):
       try {
         // Get the code from our stored mapping
-        const code = this.LocationCodes[address];
+        const code = this.codes[address];
 
         if (!code) {
           // If not found, try fetching cities first
           await this.fetchCities(city);
           // Try getting the code again after fetching
-          const newcode = this.LocationCodes[address];
-          if (!newcode) {
+          const code = this.codes[address];  // Changed from newcode
+          if (!code) {
             this.handleLocationFailure();
-            console.error('City code not found for:', address);
+            console.error('Code not found for:', address);
             return;
           }
         }
 
-        // Use the code we have from LocationCodes
-        const currentCode = this.LocationCodes[address];
-
         // Use the mock API with code
-        const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${currentCode}`);
+        const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${code}`);
         const data = await response.json();
 
         if (data && data.length > 0) {
@@ -376,7 +382,7 @@ export default {
             // Emit both coordinates and code
             this.$emit('location-updated', {
               ...coordinates,
-              code: currentCode,
+              code,
               type: 'city'
             });
           } else {
@@ -615,8 +621,15 @@ export default {
       let defaultSuggestions = [];
 
       if (international || city === 'error' || state === 'error' || city === null) {
+        // Pre-defined default suggestions
+        const defaultCity = 'Rio de Janeiro - RJ';
+        // Fetch the data for Rio de Janeiro if not already cached
+        if (!this.cachedCityData[defaultCity]) {
+          this.fetchCities('Rio de Janeiro');
+        }
+
         defaultSuggestions = [
-          { text: 'Rio de Janeiro - RJ', type: 'city' },
+          { text: defaultCity, type: 'city' },
           { text: 'São Paulo', type: 'state' },
           { text: 'Brasil', type: 'country' }
         ];

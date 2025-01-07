@@ -7,10 +7,17 @@
         <MinimizeButton @click="toggleSidebar" />
       </div>
       <div v-show="showContent" class="search-area">
-        <BuscaSimples @api-error="$emit('api-error')" @location-updated="onLocationUpdated"/>
+        <BuscaSimples 
+          @api-error="$emit('api-error')" 
+          @location-updated="onLocationUpdated"
+        />
       </div>
       <div v-show="showContent" class="middle-area">
-        <DropDown v-if="isSearchDone" :categories="categories" />
+        <DropDown 
+          v-if="isSearchDone" 
+          :code="code"
+          :type="type"
+        />
       </div>
       <div v-show="showContent" class="bottom-area">
         <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
@@ -27,24 +34,37 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-
+import { ref } from 'vue';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import DropDown from './drop_down/NavbarDropdown.vue';
 
-const emit = defineEmits(['update-coordinates', 'toggle-sidebar', 'toggle-sidebar', 'update-coordinates', 'api-error']);
+// Define emits with clear names
+const emit = defineEmits([
+  'update-coordinates', 
+  'toggle-sidebar', 
+  'api-error'
+]);
 
+// Component state
 const isSearchDone = ref(false);
 const isOpen = ref(true);
 const showContent = ref(true);
+const code = ref(null);
+const type = ref(null);
 
+// Location update handler
 function onLocationUpdated(coordinates) {
-  isSearchDone.value = true;
-  emit('update-coordinates', coordinates);
-};
+  if (coordinates?.code) {
+    isSearchDone.value = true;
+    code.value = coordinates.code;
+    type.value = coordinates.type;
+    emit('update-coordinates', coordinates);
+  }
+}
 
+// Sidebar toggle handler with animation
 async function toggleSidebar() {
   if (isOpen.value) {
     // When closing, hide content immediately
@@ -139,7 +159,7 @@ async function toggleSidebar() {
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  gap: 8px;
+  /* gap: 8px; */
   align-self: stretch;
   padding: 16px 24px;
   margin-top: auto;
@@ -152,7 +172,7 @@ async function toggleSidebar() {
   text-decoration: none;
   color: var(--Primary-Color, black);
   display: flex;
-  padding: 4px 8px;
+  padding: 8px 8px;
   justify-content: start;
   align-items: center;
   gap: 16px;
