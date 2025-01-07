@@ -59,8 +59,8 @@
             @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
             @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
             :ref="`suggestionItem-${index}`">
-          
-            <i :class= getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
+
+            <i :class=getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
 
             <span class="item-text small-regular">
               <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
@@ -85,8 +85,6 @@ import axios from 'axios';
 
 import { API_URLS } from '@/constants/endpoints';
 
-import historyIcon from '../../assets/icons/history.svg';
-import locationIcon from '../../assets/icons/location.svg';
 import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
@@ -486,7 +484,6 @@ export default {
       this.addToHistory(suggestion.text);
       this.dropdown = false;
       this.locationChosen = suggestion.text;
-      this.fetchCoordinates(suggestion.text); // Chama a função para buscar coordenadas
       this.submit();
     },
     submit() {
@@ -501,14 +498,16 @@ export default {
         }
       }
       // this.suggestions = [];
+      this.fetchCoordinates(this.locationChosen); // Chama a função para buscar coordenadas
     },
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
         this.$refs.inputField.blur();
+        this.submit();
         // Removed setTimeout/submit since selectSuggestion already handles it
         // setTimeout(() => {
-        //   this.submit();
+        //   
         // }, 1000);
       }
     },
@@ -645,8 +644,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .search-wrapper {
   position: relative;
   width: 100%;
