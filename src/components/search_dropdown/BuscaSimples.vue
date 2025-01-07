@@ -706,6 +706,8 @@ export default {
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
+
+  
 }
 
 .input-container-dropdown {
@@ -718,6 +720,8 @@ export default {
 
   outline: 2px solid #418377;
   outline-offset: -2px;
+
+  
 
 
 
@@ -752,6 +756,10 @@ export default {
   background: var(--Gray-100, #F8F9FA);
   border: none;
   outline: none;
+
+
+  padding: 12px 0; /* Aumenta o hitbox vertical */
+
 }
 
 .input-overlay {
