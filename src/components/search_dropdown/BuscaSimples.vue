@@ -485,7 +485,7 @@ export default {
       this.addToHistory(suggestion.text);
       this.dropdown = false;
       this.locationChosen = suggestion.text;
-      this.submit();
+      this.fetchCoordinates(this.locationChosen);
     },
     submit() {
       if (this.inputValue && this.suggestions.length > 0) {
