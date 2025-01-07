@@ -259,7 +259,6 @@ const toggleLayerActive = (index, event) => {
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-
   color: var(--Body-Text-Body-Color, #212529);
 }
 

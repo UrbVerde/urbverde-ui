@@ -653,16 +653,13 @@ export default {
 .input-container-dropdown {
   display: flex;
   align-items: center;
-  gap: 12px;
   align-self: stretch;
-
   height: 48px;
-  padding: 0px 16px 0px 24px;
-
-  /* alinhar texto digitado com sugestão */
   position: relative;
   z-index: 1;
-  /* Garante que o input fique acima do restante */
+  gap: 12px;
+  padding: 0px 16px 0px 24px;
+  /* padding: 0px 9px 0px 16px;  */
 }
 
 .input-container {
