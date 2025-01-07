@@ -211,7 +211,43 @@
           </div>
 
         </div>
+
       </div>
+
+      <!-- Products content-->
+      <div class="products">
+        <div class="title container">
+          <h2>Ferramentas para uma gestão sustentável</h2>
+        </div>
+        <div class="products-content container">
+          <div class="product">
+            <div class="image-wrapper">
+              <img src="@/assets/images/homepage/product-bg-1.png" class="image-bg">
+              <img src="@/assets/images/homepage/product-bg-2.png" class="image-front"> 
+            </div>
+            <div class="product-text">
+              <div class="title">
+                <h3 class="heading-h2">
+                  Mapas ambientais e sociais
+                </h3>
+                <h4 class="normal-regular">
+                  Explore mapas detalhados sobre vegetação, temperatura, parques e praças para entender melhor a sua cidade!
+                </h4>
+              </div>
+              <router-link to="/mapa" class="button-primary-link">
+              <PrimaryButton
+                label="Acessar"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+                />
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -359,6 +395,110 @@ export default {
 
   <style scoped lang="scss">
 
+  .products{
+    background-color: #146C43;
+    display: flex;
+    padding: 128px 128px 200px 128px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 120px;
+    align-self: stretch;
+  }
+
+  .products .title{
+    display: flex;
+    max-width: 1184px;
+    padding: 0px 128px;
+    flex-direction: column;
+    align-items: center;
+    gap: 21px;
+    align-self: stretch;
+  }
+
+  .products .title h2{
+    color: map-get($gray, white);
+    text-align: center;
+    font-family: Inter;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 57.6px */
+  }
+
+  .products .products-content{
+    display: flex;
+    max-width: 1184px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 120px;
+    align-self: stretch;
+  }
+
+  .products .products-content .product{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    align-self: stretch;
+  }
+
+  .products .products-content .product .image-wrapper{
+    width: 530.531px;
+    height: 397.257px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .products .products-content .product .image-bg{
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    position: absolute;
+  }
+
+  .products .products-content .product .image-front{
+    display: flex;
+    width: 305px;
+    height: 186px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: absolute;
+    bottom: 52px;
+    left: 282px;
+  }
+
+  .products .products-content .product .product-text{
+    display: flex;
+    padding: 0px 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 56px;
+    flex: 1 0 0;
+  }
+
+  .products .products-content .product .product-text .title{
+    display: flex;
+    flex-direction: column;
+    padding: 0px 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+    color: map-get($gray, white);
+    text-align: center;
+  }
+
+  .products .products-content .product .product-text .button-primary-link{
+  }
+
+
+
+
+
+
+
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -371,7 +511,7 @@ export default {
     padding: 0;
     overflow: hidden;
     position: relative;
-    height: 3000px;
+    height: 5000px;
   }
 
   .content {
@@ -392,7 +532,7 @@ export default {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-color: map-get($urbverde-gray-colors, "white");
+    background-color: map-get($gray, "white");
   }
 
   .image-background img {
@@ -581,7 +721,7 @@ export default {
         display: block;
         border-radius: 32px;
         border: 1px solid var(--Gray-300, #DEE2E6);
-        background: map-get($urbverde-gray-colors, "white");
+        background: map-get($gray, "white");
         transition: transform 0.2s ease-out;
         will-change: transform;
       }
@@ -611,7 +751,7 @@ export default {
     flex: 1 1 calc(33.333% - 24px);
     border-radius: 16px;
     border: 1px solid #E9ECEF;
-    background: map-get($urbverde-gray-colors, "white");
+    background: map-get($gray, "white");
     max-width: 100%;
     min-width: 280px;
     gap: 24px;
@@ -624,7 +764,7 @@ export default {
   }
 
   .cards .top-content{
-    color: $urbverde-text-color-body;
+    color: $body-text;
   }
 
   .cards .top-content p{
@@ -682,7 +822,7 @@ export default {
   }
 
   .cards .bottom-content .title{
-    color: $urbverde-text-color-body;
+    color: $body-text;
     display: flex;
     flex-direction: column;
     justify-content: center;

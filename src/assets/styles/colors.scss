@@ -13,14 +13,14 @@
 
   2) USANDO MAPAS DE CORES (map-get):
     - Para buscar uma cor dentro do mapa, use: 
-        color: map-get($urbverde-theme-colors, "primary"); 
+        color: map-get($urbverde-theme-colors, primary); 
         color: map-get($urbverde-primary-fade-colors, 800);
 */
 
 @use 'bootstrap/scss/bootstrap' as *;
 
 // Cores Tema 
-$urbverde-theme-colors: (
+$theme: (
   "primary": #025949,
   "secondary": #6C757D,
   "success": #198754,
@@ -33,10 +33,10 @@ $urbverde-theme-colors: (
   "hitbox": #FFFFFF,
 );
 
-$urbverde-text-color-body: #212529;     
+$body-text: #212529;     
 
 // Primary Fade Colors
-$urbverde-primary-fade-colors: (
+$primary-fade: (
   50: #F2F8F5,
   100: #D2EBDD,
   200: #ABE1C6,
@@ -50,7 +50,7 @@ $urbverde-primary-fade-colors: (
 );
 
 // Gray Colors
-$urbverde-gray-colors: (
+$gray: (
   white: #FFFFFF,
   100: #F8F9FA,
   200: #E9ECEF,
@@ -66,7 +66,7 @@ $urbverde-gray-colors: (
 );
 
 // Blue Colors
-$urbverde-blue-colors: (
+$blue: (
   100: #E7F1FF,
   200: #9EC5FE,
   300: #6EA8FE,
@@ -76,4 +76,28 @@ $urbverde-blue-colors: (
   700: #084298,
   800: #052C65,
   900: #031633
+);
+
+$green: (
+  100: #D1E7DD,
+  200: #A3CFBB,
+  300: #75B798,
+  400: #479F76,
+  500: #198754,
+  600: #146C43,
+  700: #0F5132,
+  800: #0A3622,
+  900: #051B11
+);
+
+$teal: (
+  100: #D2F4EA,
+  200: #A6E9D5,
+  300: #79DFC1,
+  400: #4DD4AC,
+  500: #20C997,
+  600: #1AA179,
+  700: #13795B,
+  800: #0D503C,
+  900: #06281E
 );

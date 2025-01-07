@@ -124,7 +124,7 @@ export default {
     padding: 8px 12px;
     align-items: center;
     text-decoration: none;
-    color: $urbverde-text-color-body;
+    color: $body-text;
     text-align: center;
     border-radius: 4px;
   }
