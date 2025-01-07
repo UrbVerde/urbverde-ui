@@ -3,32 +3,40 @@
   <div class="search-wrapper">
 
     <search-user-location @location-updated="updateLocationData" />
-
+    
     <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
           @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
           class="input-field small-regular" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
-          <span class="suggestion-text small-regular">
-            <span class="invisible ">{{ visibleInput }}</span>
-            <span class="highlight ">{{ highlightedText }}</span>
+          <span class="suggestion-text">
+            <span class="invisible small-regular">{{ visibleInput }}</span>
+            <span class="highlight small-regular">{{ highlightedText }}</span>
           </span>
         </div>
       </div>
 
       <div class="button-container">
-        <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-          @click="clearInput">
-          <i class="bi bi-x-lg" id="imgIcon" width="16" height="16"></i>
+        <button
+          :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
+          @click="clearInput"
+        >
+          <img
+            id="imgIcon"
+            src="../../assets/icons/clean.svg"
+            width="16"
+            height="16"
+          />
         </button>
 
         <button class="search-button" @click="submit">
-
-          <i v-if="!isLoading" class="bi bi-search" id="imgIcon" width="16" height="16"></i>
-          <div v-else class="spinner-border text-primary spinner-border-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
+          <img
+            id="imgIcon"
+            src="../../assets/icons/search.svg"
+            width="16"
+            height="16"
+          />
         </button>
       </div>
     </div>
@@ -45,32 +53,23 @@
         <div class="filter-container">
           <div class="filter-button-container" ref="filterButtonContainer" @mousedown="startDrag" @mousemove="onDrag"
             @mouseup="endDrag" @mouseleave="endDrag">
-            <button
-              :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
+            <button :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
               @click="toggleAll">Todos</button>
-            <button
-              :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
+            <button :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
               @click="toggleCity">Municípios</button>
-            <button
-              :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
+            <button :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
               @click="toggleState">Estados</button>
           </div>
         </div>
 
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
-          <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
-            v-for="(suggestion, index) in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)"
-            tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
+          <li class="suggestion-item" v-for="(suggestion, index) in visibleSuggestions" :key="suggestion"
+            @click="selectSuggestion(suggestion)" tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
             @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
             :ref="`suggestionItem-${index}`">
-
-            <i :class=getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
-
-            <span class="item-text small-regular">
-              <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
-              <span>{{ getUnmatchedPart(suggestion.text) }}</span>
-            </span>
+            <img :src="getImageSource(suggestion.type)" width="20" height="20" />
+            <span class="item-text small-regular">{{ suggestion.text }}</span>
           </li>
         </ul>
       </div>
@@ -90,6 +89,8 @@ import axios from 'axios';
 
 import { API_URLS } from '@/constants/endpoints';
 
+import historyIcon from '../../assets/icons/history.svg';
+import locationIcon from '../../assets/icons/location.svg';
 import SearchUserLocation from './SearchUserLocation.vue';
 
 export default {
@@ -99,7 +100,6 @@ export default {
 
   data() {
     return {
-      isLoading: false,
       locationData: null,
       defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
       citiesWithCodes: {}, // Will store { display_name: cd_mun } mapping
@@ -136,22 +136,12 @@ export default {
 
   created() {
     // this.debouncedFetchCities = debounce(this.fetchCities, 100);
-
-    // Load cached data immediately
     this.loadSearchHistory();
+    
     this.generateDefaultSuggestions();
-
     this.updateSuggestions();
-
-    // Watch for location data changes 
-    // no futuro, vai ter um botão de pegar minha localização no mapa, 
-    // por isso usaremos esse watch e ele vai atualizar isso daqui)
-    this.$watch('locationData', (newVal) => {
-      if (newVal) {
-        this.generateDefaultSuggestions();
-      }
-    }, { immediate: true });
   },
+
 
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
@@ -188,10 +178,10 @@ export default {
     },
     visibleSuggestions() {
       const suggestions = this.filteredSuggestions;
-
+      
       // Find first state suggestion
       const firstStateIndex = suggestions.findIndex(s => s.type === 'state');
-
+      
       if (firstStateIndex === -1) {
         // No states found, return first 5 items
         return suggestions.slice(0, 5);
@@ -216,49 +206,12 @@ export default {
 
 
   methods: {
-    async loadAnimation() {
-      if (!this.inputValue) {
-        alert('Por favor, insira um local.');
-        return;
-      }
-      this.isLoading = true; // Ativa o spinner
-      try {
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Simula a chamada de uma API ou lógica de submissão
-        console.log('Busca concluída com sucesso!');
-      } catch (error) {
-        console.error('Erro durante a busca:', error);
-      } finally {
-        this.isLoading = false; // Desativa o spinner
-      }
-    },
-    getMatchedPart(text) {
-      if (!this.inputValue) return '';
-      const input = this.inputValue.toLowerCase();
-      const suggestion = text.toLowerCase();
-      return suggestion.startsWith(input) ? text.substring(0, this.inputValue.length) : '';
-    },
-    getUnmatchedPart(text) {
-      if (!this.inputValue) return text;
-      const input = this.inputValue.toLowerCase();
-      const suggestion = text.toLowerCase();
-      return suggestion.startsWith(input) ? text.substring(this.inputValue.length) : text;
-    },
-
     updateLocationData(location) {
       this.locationData = location;
       console.log("Dados de localização atualizados:", location);
-      // Immediately cache the city
       this.cacheCities([location.city]);
-    
-      // Immediately regenerate suggestions with new location
-      this.generateDefaultSuggestions();
-    
-      // Force update dropdown if it's open
-      if (this.dropdown) {
-        this.updateSuggestions();
-      }
     },
-
+    
     parseCityState(text) {
       // Check if the text contains a state abbreviation
       const parts = text.split(' - ');
@@ -284,12 +237,12 @@ export default {
         // const response = await fetch(`/v1/address/suggestions?query=${query}`); // Local MSW API
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`); // Online API
         const data = await response.json();
-
+        
         // Store both display_name and cd_mun
         data.forEach(item => {
           // Store with the full display format (including state)
-          const displayName = item.state_abbreviation ?
-            `${item.display_name} - ${item.state_abbreviation}` :
+          const displayName = item.state_abbreviation ? 
+            `${item.display_name} - ${item.state_abbreviation}` : 
             item.display_name;
 
           this.cachedCityData[displayName] = {
@@ -304,25 +257,25 @@ export default {
 
         // Also update your existing data structures
         this.citiesWithCodes = data.reduce((acc, item) => {
-          const displayName = item.state_abbreviation ?
-            `${item.display_name} - ${item.state_abbreviation}` :
+          const displayName = item.state_abbreviation ? 
+            `${item.display_name} - ${item.state_abbreviation}` : 
             item.display_name;
           acc[displayName] = item.cd_mun;
           return acc;
         }, {});
 
-        // Update cache with display_names including state abbreviations
-        const cities = data.map(item => item.state_abbreviation ?
-          `${item.display_name} - ${item.state_abbreviation}` :
-          item.display_name
-        );
-        this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
+      // Update cache with display_names including state abbreviations
+      const cities = data.map(item => item.state_abbreviation ? 
+        `${item.display_name} - ${item.state_abbreviation}` : 
+        item.display_name
+      );
+      this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
 
       } catch (error) {
         console.error('Error fetching cities:', error);
       }
     },
-
+    
     async fetchCoordinates(address) {
 
       // Parse the address to get city name without state abbreviation
@@ -333,10 +286,10 @@ export default {
       if (cached && cached.lat && cached.lng) {
         // we already have coordinates, skip fetch
         this.coordinates = { lat: cached.lat, lng: cached.lng };
-        this.$emit('location-updated', {
-          lat: cached.lat,
-          lng: cached.lng,
-          cd_mun: cached.cd_mun
+        this.$emit('location-updated', { 
+          lat: cached.lat, 
+          lng: cached.lng, 
+          cd_mun: cached.cd_mun 
         });
         return;
       }
@@ -345,7 +298,7 @@ export default {
       try {
         // Get the cd_mun from our stored mapping
         const cityCode = this.citiesWithCodes[address];
-
+        
         if (!cityCode) {
           // If not found, try fetching cities first
           await this.fetchCities(city);
@@ -361,22 +314,22 @@ export default {
         // Use the mock API with cd_mun
         const response = await fetch(`/v1/address/suggestions?query=${cityCode}`);
         const data = await response.json();
-
+        
         if (data && data.length > 0) {
           if (data[0].error) {
             this.handleLocationFailure();
             console.error('Location error:', data[0].error);
             return;
           }
-
+          
           const location = data[0].coordinates;
           if (location && location.lat && location.lng) {
             const coordinates = { lat: location.lat, lng: location.lng };
             this.coordinates = coordinates;
             // Emit both coordinates and cd_mun
-            this.$emit('location-updated', {
-              ...coordinates,
-              cd_mun: cityCode
+            this.$emit('location-updated', { 
+              ...coordinates, 
+              cd_mun: cityCode 
             });
           } else {
             this.handleLocationFailure();
@@ -391,7 +344,7 @@ export default {
         this.handleLocationFailure();
       }
     },
-
+    
     handleLocationFailure() {
       this.coordinates = null;
       this.$emit('location-updated', null);
@@ -524,10 +477,8 @@ export default {
       this.addToHistory(suggestion.text);
       this.dropdown = false;
       this.locationChosen = suggestion.text;
-      this.updateSuggestions();
-      this.loadAnimation();
-      this.fetchCoordinates(this.locationChosen);
-
+      this.fetchCoordinates(suggestion.text); // Chama a função para buscar coordenadas
+      this.submit();
     },
     submit() {
       if (this.inputValue && this.suggestions.length > 0) {
@@ -537,31 +488,18 @@ export default {
           // Only add to history if not already handled by selectSuggestion
           if (!this.locationChosen) {
             this.addToHistory(suggestion.text);
-
           }
         }
-        this.inputValue = suggestion.text;
-        this.visibleInput = suggestion.text;
-        this.highlightedText = '';
-        this.dropdown = false;
-        
       }
-
-
-
       // this.suggestions = [];
-
-      this.loadAnimation();
-      this.fetchCoordinates(this.locationChosen); // Chama a função para buscar coordenadas
     },
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
         this.$refs.inputField.blur();
-        this.submit();
         // Removed setTimeout/submit since selectSuggestion already handles it
         // setTimeout(() => {
-        //   
+        //   this.submit();
         // }, 1000);
       }
     },
@@ -620,7 +558,6 @@ export default {
       } else {
 
         const locationText = `${city} - ${stateAbbreviation}`;
-        
         // Check if location is in history to determine type
         const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
 
@@ -641,7 +578,7 @@ export default {
     },
 
     getImageSource(type) {
-      return type === 'history' ? 'bi bi-clock-history' : 'bi bi-geo-alt';
+      return type === 'history' ? historyIcon : locationIcon;
     },
     getCachedData() {
       return {
@@ -699,10 +636,12 @@ export default {
 </script>
 
 <style scoped>
-.spinner-border {
-  width: 16px;
-  height: 16px;
-  color: black;
+#imgIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
 }
 
 .search-wrapper {
@@ -714,20 +653,21 @@ export default {
 .input-container-dropdown {
   display: flex;
   align-items: center;
+  gap: 12px;
   align-self: stretch;
+
   height: 48px;
+  padding: 0px 16px 0px 24px;
+
+  /* alinhar texto digitado com sugestão */
   position: relative;
   z-index: 1;
-  gap: 12px;
-  padding: 0px 16px 0px 24px;
-  /* padding: 0px 9px 0px 16px;  */
+  /* Garante que o input fique acima do restante */
 }
 
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-
-  
 }
 
 .input-container-dropdown {
@@ -740,8 +680,6 @@ export default {
 
   outline: 2px solid #418377;
   outline-offset: -2px;
-
-  
 
 
 
@@ -776,10 +714,6 @@ export default {
   background: var(--Gray-100, #F8F9FA);
   border: none;
   outline: none;
-
-
-  padding: 12px 0; /* Aumenta o hitbox vertical */
-
 }
 
 .input-overlay {
@@ -812,9 +746,9 @@ export default {
 
 .highlight {
   color: var(--Gray-500, #ADB5BD);
-
+  
   color: var(--Gray-500, #ADB5BD);
-
+  
 }
 
 .button-container {
@@ -862,11 +796,11 @@ export default {
   gap: 10px;
   
 */
-  border: none;
-  padding: 8px 8px 8px 8px;
-  gap: 10px;
-  border-radius: 99px;
-  opacity: 0px;
+border: none;
+padding: 8px 8px 8px 8px;
+gap: 10px;
+border-radius: 99px;
+opacity: 0px;
 }
 
 .filter-button {
@@ -957,10 +891,6 @@ export default {
   background-color: #E9ECEF;
 }
 
-.first-suggestion {
-  background-color: #E9ECEF;
-}
-
 .suggestion-item {
   display: flex;
   height: 32px;
@@ -983,8 +913,7 @@ export default {
 
 .item-text {
   display: -webkit-box;
-  -webkit-box-orient: vertical;
-  /*evita quebra de linha*/
+  -webkit-box-orient: vertical;/*evita quebra de linha*/ 
   -webkit-line-clamp: 1;
   line-clamp: 1;
 
@@ -992,7 +921,7 @@ export default {
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
 
-
+  
   /* Body/Small/Regular 
     font-family: Inter;
 
@@ -1004,11 +933,12 @@ export default {
   font-weight: 400;
   line-height: 150%;
   /* 21px */
+  
 
-}
 
-.text-highlight {
-  font-weight: bold;
+  
+
+
 }
 
 .suggestion-count {
@@ -1031,25 +961,5 @@ export default {
 
 .button-debug {
   display: none;
-}
-
-#imgIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Add a specific style for suggestion icons */
-.suggestion-item .bi {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-/* Keep separate styles for other icons if needed */
-.button-container .bi {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
 }
 </style>
