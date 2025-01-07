@@ -130,12 +130,22 @@ export default {
 
   created() {
     // this.debouncedFetchCities = debounce(this.fetchCities, 100);
+
+    // Load cached data immediately
     this.loadSearchHistory();
-
     this.generateDefaultSuggestions();
-    this.updateSuggestions();
-  },
 
+    this.updateSuggestions();
+
+    // Watch for location data changes 
+    // no futuro, vai ter um botão de pegar minha localização no mapa, 
+    // por isso usaremos esse watch e ele vai atualizar isso daqui)
+    this.$watch('locationData', (newVal) => {
+      if (newVal) {
+        this.generateDefaultSuggestions();
+      }
+    }, { immediate: true });
+  },
 
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
@@ -216,7 +226,16 @@ export default {
     updateLocationData(location) {
       this.locationData = location;
       console.log("Dados de localização atualizados:", location);
+      // Immediately cache the city
       this.cacheCities([location.city]);
+    
+      // Immediately regenerate suggestions with new location
+      this.generateDefaultSuggestions();
+    
+      // Force update dropdown if it's open
+      if (this.dropdown) {
+        this.updateSuggestions();
+      }
     },
 
     parseCityState(text) {
@@ -566,6 +585,7 @@ export default {
       } else {
 
         const locationText = `${city} - ${stateAbbreviation}`;
+        
         // Check if location is in history to determine type
         const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
 
