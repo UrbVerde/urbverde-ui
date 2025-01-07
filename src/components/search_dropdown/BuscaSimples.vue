@@ -501,7 +501,6 @@ export default {
       // this.suggestions = [];
       this.fetchCoordinates(this.locationChosen); // Chama a função para buscar coordenadas
     },
-    
     handleEnter() {
       if (this.suggestions.length > 0) {
         this.selectSuggestion(this.suggestions[0]);
