@@ -958,7 +958,7 @@ export default {
     gap: 40px;
     align-self: center;
     flex-wrap: wrap;
-    justify-content: center; 
+    justify-content: center;
   }
 
   .products .products-content .product .image-wrapper{

@@ -52,8 +52,8 @@ export default {
 
   setup() {
 
-        // Configuração das meta tags de SEO
-      useHead({
+    // Configuração das meta tags de SEO
+    useHead({
       title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
       meta: [
         {
@@ -77,7 +77,6 @@ export default {
         },
       ],
     });
-
 
     const coordinates = ref({ lat: null, lng: null });
     const statsSection = ref(null);
