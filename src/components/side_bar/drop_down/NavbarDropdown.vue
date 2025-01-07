@@ -5,7 +5,7 @@
 
     <div class="options">
       <NavbarItem v-for="(category, index) in categories" :key="category.id" :isSelectedItem="category.isSelected"
-        :itemName="category.name" :icon="category.icon" :layers="category.layers" @update:isSelectedItem="handleSelectionChange(index)" />
+        :itemName="category.name" :icon="category.icon" :isNew="category.isNew" :layers="category.layers" @update:isSelectedItem="handleSelectionChange(index)" />
     </div>
   </div>
 </template>

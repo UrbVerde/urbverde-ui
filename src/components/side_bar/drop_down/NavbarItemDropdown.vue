@@ -18,9 +18,9 @@
             :class="{ 'dropdown-menu-item-active': layer.isActive }" @click="toggleLayerActive(index, $event)">
 
             <span class="dropdown-item-text small-regular">{{ layer.name }}</span>
-            <div class="" v-if="layer.isActive">
-              <i :class="iconNew" class="bi" id="imgIcon"></i>
-            </div>
+            
+              <i :class="iconNew" v-if="layer.isNew" class="bi" id="imgIcon"></i>
+            
           </li>
 
         </ul>
@@ -252,11 +252,7 @@ const toggleLayerActive = (index, event) => {
   background: var(--Primary-Fade-100, #D2E8DD);
 }
 
-.dropdown-menu-slot {}
-
-
 .dropdown-item-text {
-
 
   display: flex;
   flex-direction: column;
@@ -266,12 +262,6 @@ const toggleLayerActive = (index, event) => {
 
   color: var(--Body-Text-Body-Color, #212529);
 }
-
-
-
-.dropdown-item {}
-
-
 
 .notActive {
   padding: 0px 0px;

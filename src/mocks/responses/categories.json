@@ -1,36 +1,36 @@
 {
-    "categories": [
-        {
-          "id": "clima",
-          "name": "Clima",
-          "icon": "bi bi-cloud-sun",
-          "layers": [
-            {"id": "temp_sup", "name": "Temperatura de superfície", "isActive": false},
-            {"id": "temp_max", "name": "Temperatura máxima de superfície", "isActive": false},
-            {"id": "ilha_calor", "name": "Nível de exposição à ilha de calor", "isActive": false}
-          ]
-        },
-      {
-        "id": "vegetacao",
-        "name": "Vegetação",
-        "icon": "bi bi-tree",
-        "layers": [
-          {"id": "pcv", "name": "Coberta vegetal (PCV)", "isActive": false},
-          {"id": "icv", "name": "Cobertura vegetal por habitante (ICV)", "isActive": false},
-          {"id": "idsa", "name": "Desigualdade sociambiental (IDSA)", "isActive": false},
-          {"id": "cvp", "name": "Cobertura vegetal por pixel", "isActive": false},
-          {"id": "ndvi", "name": "Vigor da vegetação (NDVI)", "isActive": false}
-        ]
-      },
-      {
-        "id": "parques",
-        "name": "Parques e Praças",
-        "icon": "bi bi-bicycle",
-        "layers": [
-          {"id": "dist_parques", "name": "Distribuição dos parques", "isActive": false},
-          {"id": "area_verde", "name": "Área verde por habitante", "isActive": false},
-          {"id": "acess_areas", "name": "Acessibilidade a áreas verdes", "isActive": false}
-        ]
-      }
+  "categories": [
+    {
+      "id": "clima",
+      "name": "Clima",
+      "icon": "bi bi-cloud-sun",
+      "layers": [
+      {"id": "temp_sup", "name": "Temperatura de superfície", "isActive": false, "isNew": true},
+      {"id": "temp_max", "name": "Temperatura máxima de superfície", "isActive": false, "isNew": false},
+      {"id": "ilha_calor", "name": "Nível de exposição à ilha de calor", "isActive": false, "isNew": false}
+      ]
+    },
+    {
+    "id": "vegetacao",
+    "name": "Vegetação",
+    "icon": "bi bi-tree",
+    "layers": [
+      {"id": "pcv", "name": "Coberta vegetal (PCV)", "isActive": false, "isNew": false},
+      {"id": "icv", "name": "Cobertura vegetal por habitante (ICV)", "isActive": false, "isNew": false},
+      {"id": "idsa", "name": "Desigualdade sociambiental (IDSA)", "isActive": false, "isNew": false},
+      {"id": "cvp", "name": "Cobertura vegetal por pixel", "isActive": false, "isNew": false},
+      {"id": "ndvi", "name": "Vigor da vegetação (NDVI)", "isActive": false, "isNew": false}
     ]
+    },
+    {
+    "id": "parques",
+    "name": "Parques e Praças",
+    "icon": "bi bi-bicycle",
+    "layers": [
+      {"id": "dist_parques", "name": "Distribuição dos parques", "isActive": false, "isNew": false},
+      {"id": "area_verde", "name": "Área verde por habitante", "isActive": false, "isNew": false},
+      {"id": "acess_areas", "name": "Acessibilidade a áreas verdes", "isActive": false, "isNew": false}
+    ]
+    }
+  ]
   }
