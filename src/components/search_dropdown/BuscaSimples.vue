@@ -355,8 +355,11 @@ export default {
           }
         }
 
+        // Use the code we have from LocationCodes
+        const currentCode = this.LocationCodes[address];
+
         // Use the mock API with code
-        const response = await fetch(`/v1/address/suggestions?query=${code}`);
+        const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${currentCode}`);
         const data = await response.json();
 
         if (data && data.length > 0) {
@@ -373,7 +376,7 @@ export default {
             // Emit both coordinates and code
             this.$emit('location-updated', {
               ...coordinates,
-              code: cd_mun,
+              code: currentCode,
               type: 'city'
             });
           } else {
