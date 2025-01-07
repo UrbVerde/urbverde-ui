@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/Card.vue -->
 <template>
   <div class="custom-card">
     <div class="card-image-wrapper" v-if="$slots['custom-content']">
