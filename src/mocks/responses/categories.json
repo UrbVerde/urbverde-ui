@@ -25,7 +25,7 @@
     {
       "id": "parks",
       "name": "Parques e Praças",
-      "icon": "bi bi-bicycle",
+      "icon": "pineTree.svg",
       "layers": [
         {"id": "park_distribution", "name": "Distribuição dos parques", "isActive": false, "isNew": false},
         {"id": "green_area_per_capita", "name": "Área verde por habitante", "isActive": false, "isNew": false},
