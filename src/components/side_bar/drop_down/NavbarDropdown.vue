@@ -101,8 +101,6 @@ const handleSelectionChange = (selectedIndex) => {
   const selectedCategory = categories.value[selectedIndex];
   locationStore.setSelectedCategory(selectedCategory);
 };
-  
-};
 </script>
 
 <style scoped>
