@@ -33,18 +33,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
-// Reactive variable for badge text
-const txtBadge = ref('');
-
-// Reactive variable to track dropdown open state
 const isDropdownOpen = ref(false);
 
-// Computed property for new layer icon
-const iconNew = computed(() => {
-  return 'bi bi-stars'; // Icon for new layer
-});
+const iconNew = computed(() => 'bi bi-stars');
 
-// Define component props
 const props = defineProps({
   isSelectedItem: {
     type: Boolean,
@@ -64,13 +56,16 @@ const props = defineProps({
   },
 });
 
-// Reactive variable to track if dropdown item is selected
+// Computed property para controlar a visibilidade do badge
+const txtBadge = computed(() => {
+  const hasActiveLayers = props.layers.some(layer => layer.isActive);
+  return (!isDropdownOpen.value && hasActiveLayers) ? '1' : '';
+});
+
 const isDropdownSelected = ref(props.isSelectedItem);
 
-// Emit event to update selected item state
 const emit = defineEmits(['update:isSelectedItem']);
 
-// Function to close dropdown when clicking outside
 const closeDropdownOnOutsideClick = (event) => {
   const dropdownElement = document.querySelector('.dropdown');
   if (!isDropdownSelected.value && isDropdownOpen.value) {
@@ -80,42 +75,35 @@ const closeDropdownOnOutsideClick = (event) => {
   }
 };
 
-// Add event listener on component mount
 onMounted(() => {
   document.addEventListener('click', closeDropdownOnOutsideClick);
 });
 
-// Remove event listener on component unmount
 onUnmounted(() => {
   document.removeEventListener('click', closeDropdownOnOutsideClick);
 });
 
-// Function to toggle dropdown open state
 const toggleDropdown = (event) => {
   event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
-
-  if (!isDropdownOpen.value && isDropdownSelected.value) {
-    txtBadge.value = '1';
-  }
-  /* if (isDropdownOpen.value) { 
-  txtBadge.value = '';
-  }*/
 };
 
-// Function to toggle layer active state
 const toggleLayerActive = (index, event) => {
   event.stopPropagation();
-  if (props.layers[index].isActive) {
+  const currentLayer = props.layers[index];
+  
+  if (currentLayer.isActive) {
+    // Se desativar a layer
     isDropdownSelected.value = false;
-    txtBadge.value = '';
-    props.layers[index].isActive = !props.layers[index].isActive;
+    currentLayer.isActive = false;
+    emit('update:isSelectedItem', false);
   } else {
+    // Se ativar a layer
     isDropdownSelected.value = true;
-    emit('update:isSelectedItem', !props.isSelectedItem);
     props.layers.forEach((layer, i) => {
       layer.isActive = i === index;
     });
+    emit('update:isSelectedItem', true);
   }
 };
 </script>

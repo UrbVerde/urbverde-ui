@@ -83,14 +83,25 @@ async function fetchCategories(code, type) {
 // Update selected state of categories - only one category can be selected at a time,
 // this maps through all categories and sets isSelected true only for the clicked index
 const handleSelectionChange = (selectedIndex) => {
-  categories.value = categories.value.map((category, index) => ({
-    ...category,
-    isSelected: index === selectedIndex
-  }));
+  categories.value = categories.value.map((category, index) => {
+    // Reset all layers' active state for non-selected categories
+    if (index !== selectedIndex) {
+      category.layers = category.layers.map(layer => ({
+        ...layer,
+        isActive: false
+      }));
+    }
+    return {
+      ...category,
+      isSelected: index === selectedIndex
+    };
+  });
   
   // Update the store with the selected category
   const selectedCategory = categories.value[selectedIndex];
   locationStore.setSelectedCategory(selectedCategory);
+};
+  
 };
 </script>
 
