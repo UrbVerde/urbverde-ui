@@ -66,15 +66,19 @@ const isDropdownSelected = ref(props.isSelectedItem);
 
 const emit = defineEmits(['update:isSelectedItem']);
 
+const hasActiveLayers = () => {
+  return props.layers.some(layer => layer.isActive);
+};
+
 const closeDropdownOnOutsideClick = (event) => {
   const dropdownElement = document.querySelector('.dropdown');
-  if (!isDropdownSelected.value && isDropdownOpen.value) {
-    if (dropdownElement && !dropdownElement.contains(event.target)) {
+  if (isDropdownOpen.value && dropdownElement && !dropdownElement.contains(event.target)) {
+    // Only close the dropdown if there are no active layers
+    if (!hasActiveLayers()) {
       isDropdownOpen.value = false;
     }
   }
 };
-
 onMounted(() => {
   document.addEventListener('click', closeDropdownOnOutsideClick);
 });
@@ -93,19 +97,24 @@ const toggleLayerActive = (index, event) => {
   const currentLayer = props.layers[index];
   
   if (currentLayer.isActive) {
-    // Se desativar a layer
+    // When deactivating a layer
     isDropdownSelected.value = false;
     currentLayer.isActive = false;
     emit('update:isSelectedItem', false);
   } else {
-    // Se ativar a layer
+    // When activating a layer
     isDropdownSelected.value = true;
     props.layers.forEach((layer, i) => {
-      layer.isActive = i === index;
+      if (i === index) {
+        layer.isActive = true;
+      } else if (layer.isActive) {
+        layer.isActive = false;
+      }
     });
     emit('update:isSelectedItem', true);
   }
 };
+
 </script>
 
 <style scoped>
