@@ -28,7 +28,11 @@
       <div class="legend">
         <Legenda />
       </div>
-      <div ref="statsSection" class="box" />
+      <div ref="statsSection" class="box" >
+        <TemperatureSection />
+        <HeatSection/>
+        <RankSection/>
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +43,9 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
+//import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
+import RankSection from '@/components/cards/weather/RankSection.vue';
+//import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 
 export default {
@@ -47,7 +54,10 @@ export default {
     Sidebar,
     MapBox,
     Navbar,
-    Legenda
+    Legenda,
+    //TemperatureSection,
+    //HeatSection,
+    RankSection
   },
 
   setup() {
