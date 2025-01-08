@@ -35,7 +35,7 @@ export default {
 }
 
 .logo-text {
-  color: map-get($primary-fade, 800);
+  color: map-get($primary-fade, 700);
   font-family: Inter, sans-serif;
   font-size: 20px;
   font-style: normal;
