@@ -1,26 +1,24 @@
-<!-- urbverde-ui/src/components/buttons/MinimizeButton.vue -->
 <template>
   <div class="alling-button">
-  <button @click="changeButton" :class="['btn', 'btn-light', 'minimize-btn', minimized ? 'btn-closed' : 'btn-open']">
-    <i :class="['bi', minimized ? 'bi-chevron-right' : 'bi-chevron-left']" style="font-size: 20px"></i>
-  </button>
-</div>
+    <button 
+      @click="changeButton" 
+      :class="['btn', 'btn-light', 'minimize-btn', minimized ? 'btn-closed' : 'btn-open']"
+    >
+      <i :class="['bi', minimized ? 'bi-chevron-right' : 'bi-chevron-left']" style="font-size: 20px"></i>
+    </button>
+  </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      minimized: false
-    };
-  },
-  methods: {
-    changeButton() {
-      this.$emit('changed-state');
-      this.minimized = !this.minimized;
-    }
-  }
-};
+<script setup>
+import { ref } from 'vue'
+
+const minimized = ref(false)
+const emit = defineEmits(['changed-state'])
+
+function changeButton() {
+  emit('changed-state')
+  minimized.value = !minimized.value
+}
 </script>
 
 <style scoped>
@@ -30,8 +28,6 @@ export default {
   align-items: center;
   gap: 10px;
   transition: 0.3s;
-
-  
 }
 
 .minimize-btn i {
@@ -51,7 +47,5 @@ export default {
 .btn-closed {
   background: var(--Gray-100, #F8F9FA);
   border-color: var(--Gray-100, #F8F9FA);
-
-  
 }
 </style>
