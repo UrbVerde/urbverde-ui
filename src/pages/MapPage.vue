@@ -92,9 +92,9 @@ export default {
     const isSidebarOpen = ref(true);
     
     // Computed properties from store
-    const category = computed(() => locationStore.category || '?');
-    const currentLayer = computed(() => locationStore.layer || '?');
-    const cityName = computed(() => locationStore.nm_mun || '?');
+    const category = computed(() => locationStore.category || 'category?');
+    const currentLayer = computed(() => locationStore.layer || 'layer?');
+    const cityName = computed(() => locationStore.nm_mun || 'city?');
 
     const sections = {
       map: null,

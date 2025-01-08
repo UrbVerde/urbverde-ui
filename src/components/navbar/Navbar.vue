@@ -51,8 +51,8 @@ export default {
     const locationStore = useLocationStore();
 
     // Computed properties from store
-    const currentLayer = computed(() => locationStore.layer || 'Temperatura de superfície');
-    const cityName = computed(() => locationStore.nm_mun || 'São Carlos');
+    const currentLayer = computed(() => locationStore.layer || 'layer?');
+    const cityName = computed(() => locationStore.nm_mun || 'city?');
 
     return {
       currentLayer,
