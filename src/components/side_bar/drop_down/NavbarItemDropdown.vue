@@ -106,13 +106,18 @@ const toggleDropdown = (event) => {
 // Function to toggle layer active state
 const toggleLayerActive = (index, event) => {
   event.stopPropagation();
-  if (props.layers[index].isActive) {
+  const currentLayer = props.layers[index];
+  
+  if (currentLayer.isActive) {
+    // If clicking an active layer, deactivate it
     isDropdownSelected.value = false;
     txtBadge.value = '';
-    props.layers[index].isActive = !props.layers[index].isActive;
+    currentLayer.isActive = false;
+    emit('update:isSelectedItem', false);
   } else {
+    // If clicking an inactive layer, activate it and deactivate others
     isDropdownSelected.value = true;
-    emit('update:isSelectedItem', !props.isSelectedItem);
+    emit('update:isSelectedItem', true);
     props.layers.forEach((layer, i) => {
       layer.isActive = i === index;
     });
