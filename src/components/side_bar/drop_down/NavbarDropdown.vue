@@ -1,5 +1,6 @@
 <!-- urbverde-ui/src/components/side_bar/drop_down/NavbarDropdown.vue -->
 <template>
+  
   <div class="container">
     <span class="text caption-medium">CAMADAS</span>
     <div class="options">
@@ -87,6 +88,7 @@ const handleSelectionChange = (selectedIndex) => {
 </script>
 
 <style scoped>
+
 .container {
   padding: 0px 0px;
   display: flex;
@@ -96,6 +98,12 @@ const handleSelectionChange = (selectedIndex) => {
   align-self: stretch;
   flex: 1 0 0;
   /*background: var(--HitBox, rgba(255, 255, 255, 0.00));*/
+
+   /* padding: 16px; /* Mantém o padding para o layout interno */
+  flex: 1;
+  overflow: auto;
+
+  
 }
 
 .options {
@@ -104,7 +112,12 @@ const handleSelectionChange = (selectedIndex) => {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
+
+  padding: 0px 0px;
+  
 }
+
+
 
 .text {
   color: var(--Theme-Secondary, #6C757D);
@@ -112,5 +125,14 @@ const handleSelectionChange = (selectedIndex) => {
   align-items: center;
   gap: 8px;
   align-self: stretch;
+
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: white;
+  
+  border-bottom: 8px solid var(--Theme-Border, #FFFFFF); /* Borda colorida */
+  margin-top: -8px; /* Compensa a altura da borda */
+  
 }
 </style>

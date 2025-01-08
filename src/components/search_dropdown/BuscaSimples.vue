@@ -149,7 +149,7 @@ export default {
     const filterButton = this.$refs.filterButtonContainer;
     // Show dropdown after 2.5s delay
     setTimeout(() => {
-      if (!this.dropdown) {
+      if (!this.dropdown && this.inputValue === '') {
         this.dropdown = true;
         this.activateInput();
       }
