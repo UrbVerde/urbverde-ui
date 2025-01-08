@@ -22,7 +22,7 @@ export const useLocationStore = defineStore('locationStore', {
       this.uf = uf ?? null
       this.category = category ?? '?'
       this.layer = data[0]?.slug ?? '?';
-      this.scale = scale ?? 'intraurbana'
+      this.scale = scale ?? '?'
     },
 
     setCoordinates({ lat, lng }) {

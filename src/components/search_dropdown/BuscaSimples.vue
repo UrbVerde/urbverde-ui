@@ -2,9 +2,10 @@
 <template>
   <div class="search-wrapper">
     <GetUserLocation 
-      :ip-data-api-key="fca7ec8cb54f07bfacf5cb76321d92aef545786dc5699a77c09f3f31"
+      :ip-data-api-key="IPDATA_API_KEY"
       @location-updated="updateLocationData"
       @location-error="handleLocationFailure"
+      @click="handleMenuInteraction"
     />
     
       <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
@@ -90,6 +91,7 @@
 
 <script>
 import GetUserLocation from './GetUserLocation.vue';  // Verify the path is correct
+import { API_URLS } from '@/constants/endpoints';
 
 export default {
   name: 'BuscaSimples',
@@ -210,12 +212,43 @@ export default {
 
 
   methods: {
+      // Update the selectSuggestion method
+    selectSuggestion(suggestion) {
+      this.inputValue = suggestion.text;
+      this.visibleInput = suggestion.text;
+      this.highlightedText = '';
+      this.dropdown = false;
+      this.locationChosen = suggestion.text;
+
+      this.loadAnimation();
+      this.addToHistory(suggestion.text);
+      this.updateSuggestions();
+      
+      // Get city name without state abbreviation
+      const { city } = this.parseCityState(suggestion.text);
+      
+      // Update store with the new location
+      const locationStore = useLocationStore();
+      locationStore.setLocation({
+        nm_mun: city,
+        cd_mun: this.codes[suggestion.text], // Use the code if available
+      });
+
+      this.fetchCoordinates(this.locationChosen);
+    },
     activateInput() {
       this.isInputActive = true;
-      // Use nextTick to ensure the DOM has updated before focusing
+      this.$emit('menu-interaction') // Emit event for menu interaction
       this.$nextTick(() => {
         this.$refs.inputField.focus();
       });
+    },
+    handleFocus(event) {
+      if (this.dropdown !== true) {
+        this.dropdown = true
+        this.$emit('menu-interaction') // Emit when dropdown opens
+      }
+      event.stopPropagation()
     },
     async loadAnimation() {
       if (!this.inputValue) {
@@ -245,12 +278,25 @@ export default {
       return suggestion.startsWith(input) ? text.substring(this.inputValue.length) : text;
     },
 
+    // Update the location data handler to preserve existing data when appropriate
     updateLocationData(location) {
-      this.locationData = location;
-      console.log('Location updated:', location);
-      this.cacheCities([location.city]);
-      this.generateDefaultSuggestions();
-    },
+        // If this is a geolocation update (source is 'geolocation'), 
+        // it should override existing data
+        if (location.source === 'geolocation' || !this.locationData) {
+          this.locationData = location
+          console.log('Location updated from:', location.source)
+          this.cacheCities([location.city])
+          this.generateDefaultSuggestions()
+        }
+        // If we already have data and this isn't geolocation,
+        // only update if we don't have any existing data
+        else if (!this.locationData.city) {
+          this.locationData = location
+          console.log('Initial location set from:', location.source)
+          this.cacheCities([location.city])
+          this.generateDefaultSuggestions()
+        }
+      },
 
     generateDefaultSuggestions() {
       if (!this.locationData) return;

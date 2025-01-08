@@ -1,11 +1,11 @@
-<!-- src/components/navbar/Navbar.vue -->
+# src/components/navbar/Navbar.vue
 <template>
   <div class="navbar">
     <div class="response">
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
         <div class="header-left">
-          <h5>[ Temperatura de Superfície ] em [ São Carlos ]</h5>
+          <h5>[ {{ currentLayer }} ] em [ {{ cityName }} ]</h5>
         </div>
         <div class="header-right">
           <button @click="shareMap" class="share-button">
@@ -35,6 +35,9 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useLocationStore } from '@/stores/locationStore';
+
 export default {
   name: 'AppNavbar',
   props: {
@@ -43,23 +46,39 @@ export default {
       required: true
     }
   },
+  
+  setup() {
+    const locationStore = useLocationStore();
+
+    // Computed properties from store
+    const currentLayer = computed(() => locationStore.layer || 'Temperatura de superfície');
+    const cityName = computed(() => locationStore.nm_mun || 'São Carlos');
+
+    return {
+      currentLayer,
+      cityName
+    };
+  },
+
   data() {
     return {
       tabs: [
         { id: 'map', label: 'Mapa' },
         { id: 'stats', label: 'Estatísticas' },
-        // { id: 'vulnerable', label: 'Vulnerabilidade' },
         { id: 'ranking', label: 'Ranking' },
-        // { id: 'data', label: 'Dados' }
       ]
     };
   },
+
   methods: {
     navigateTo(sectionId) {
       this.$emit('navigate-to', sectionId);
     },
     shareMap() {
-      alert('Compartilhar mapa');
+      // Get current URL with query params for sharing
+      const url = window.location.href;
+      // You could implement a share dialog here
+      alert(`Compartilhar: ${url}`);
     },
     layerInfo() {
       alert('Info do dado');
