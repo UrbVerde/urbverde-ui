@@ -1,20 +1,18 @@
 <!-- urbverde-ui/src/components/buttons/LogoButton.vue -->
 <template>
   <div>
-    <router-link to="/" class="logo-button">
-      <img
-        src="../../../assets/images/logo-white.png"
-        alt="Logo"
-        class="logo"
-      />
-      <span class="text">URBVERDE</span>
-    </router-link>
+    <LogoRouterLink />
   </div>
 </template>
 
 <script>
+import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
+
 export default {
-  name: 'LogoButton'
+  name: 'LogoButton',
+  components: {
+    LogoRouterLink,
+  },
 };
 </script>
 
@@ -29,7 +27,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
-  text-decoration: none; /* Remove underline for link */
+  text-decoration: none;
 }
 
 .logo {
