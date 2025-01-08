@@ -8,14 +8,6 @@ import categoriesResponse from './responses/categories.json';
 const filterCategories = (code, type) => {
   console.log('Received code:', code, 'type:', typeof code);
   code = String(code);
-  // Return only parks and sociodemographics if no code or not city type
-  if (!code || type !== 'city') {
-    return {
-      categories: categories.filter(category => 
-        category.id === 'parks' || category.id === 'sociodemographics'
-      )
-    };
-  }
   
   // Deep clone the categories to avoid modifying the original
   const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
@@ -45,6 +37,12 @@ const filterCategories = (code, type) => {
     }
     
     return { categories };
+  } else {
+    return {
+      categories: categories.filter(category => 
+        category.id === 'parks' || category.id === 'sociodemographics'
+      )
+    };
   }
   
 };

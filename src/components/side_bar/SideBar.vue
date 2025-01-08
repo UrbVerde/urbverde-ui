@@ -141,6 +141,7 @@ async function toggleSidebar() {
   gap: 16px;
   flex: 1 0 0;
   align-self: stretch;
+  overflow: auto;
 }
 
 .search-area {
