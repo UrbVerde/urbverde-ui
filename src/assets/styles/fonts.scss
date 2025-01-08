@@ -10,28 +10,6 @@
 
 @use 'bootstrap/scss/bootstrap' as *;
 
-// Reset de padding e margens para fontes
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-// Estilos específicos para cabeçalhos
-.heading-h1, .heading-h2, .heading-h3, .heading-h4, .heading-h5, .heading-h6 {
-  margin: 0; // Remove margens padrão dos títulos
-  padding: 0; // Remove paddings padrão
-}
-
-// Outros elementos de texto
-p, .body-normal-regular, .body-normal-light, 
-.body-caption-regular, .body-small-regular, 
-.body-other-lead, .body-other-blockquote {
-  margin: 0; // Remove margens padrão de parágrafos e estilos específicos
-  padding: 0; // Remove paddings padrão
-}
-
-// Estilos de fonte para Caption
 .body-caption-regular {
   font-family: 'Inter', sans-serif;
   font-weight: 400; // Regular
@@ -60,8 +38,6 @@ p, .body-normal-regular, .body-normal-light,
   line-height: 150%;
 }
 
-
-// Estilos de fonte para Small
 .body-small-regular {
   font-family: 'Inter', sans-serif;
   font-weight: 400; // Regular
@@ -90,7 +66,6 @@ p, .body-normal-regular, .body-normal-light,
   line-height: 150%;
 }
 
-// Estilos de fonte para Normal
 .body-normal-light {
   font-family: 'Inter Light', sans-serif;
   font-weight: 300; // Light
@@ -126,7 +101,6 @@ p, .body-normal-regular, .body-normal-light,
   line-height: 150%;
 }
 
-// Estilos de fonte adicionais
 .body-normal-italic {
   font-family: 'Inter', sans-serif;
   font-style: italic;
@@ -148,14 +122,12 @@ p, .body-normal-regular, .body-normal-light,
   text-decoration: line-through;
 }
 
-// Estilo de fonte para código
 .body-other-code {
   font-family: 'Consolas', monospace;
   font-size: 14px;
   line-height: 150%;
 }
 
-// Estilo de fonte para Lead
 .body-other-lead {
   font-family: 'Inter Light', sans-serif;
   font-weight: 300; // Light
@@ -163,7 +135,6 @@ p, .body-normal-regular, .body-normal-light,
   line-height: 150%;
 }
 
-// Estilo de fonte para Blockquote
 .body-other-blockquote {
   font-family: 'Inter', sans-serif;
   font-size: 20px;
@@ -173,8 +144,6 @@ p, .body-normal-regular, .body-normal-light,
   padding-left: 15px;
 }
 
-
-// Estilos de fonte para Cabeçalho
 .heading-h1 {
   font-family: 'Inter', sans-serif;
   font-size: 40px;
@@ -217,9 +186,6 @@ p, .body-normal-regular, .body-normal-light,
   font-weight: 500; // Medium
 }
 
-
-
-// Components - Badge H1 a H6
 .components-badge-h1 {
   font-family: 'Inter Bold', sans-serif;
   font-size: 30px;
@@ -262,7 +228,6 @@ p, .body-normal-regular, .body-normal-light,
   font-weight: 700; // Bold
 }
 
-// Components - Dropdowns (Item Header e Dropdown Header)
 .components-dropdown-item-header {
   font-family: 'Inter Medium', sans-serif;
   font-size: 14px;

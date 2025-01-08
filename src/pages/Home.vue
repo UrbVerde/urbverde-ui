@@ -8,7 +8,7 @@
 
       <!-- Background fixo e atrás dos contents -->
       <div class="image-background">
-        <img src="@/assets/images/homepage/homepage-background.png" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
+        <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
       </div>
 
       <!-- Hero content -->
@@ -53,7 +53,7 @@
               @mouseleave="resetZoom"
             >
               <div class="overlay"></div>
-              <img src="@/assets/images/homepage/platform.png" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
+              <img src="@/assets/images/homepage/platform.svg" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
             </div>
           </router-link>
 
@@ -67,7 +67,7 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-1.png" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
+                  <img src="@\assets\images\homepage\image-card-1.svg" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
                   <h3 class="title body-small-bold">
@@ -87,7 +87,7 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-2.png" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
+                  <img src="@\assets\images\homepage\image-card-2.svg" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
                   <h3 class="title body-small-bold">
@@ -108,7 +108,7 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-3.png" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
+                  <img src="@\assets\images\homepage\image-card-3.svg" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
                   <h3 class="title body-small-bold">
@@ -157,7 +157,7 @@
         <div class="institutes-awards">
 
           <div class="award">
-            <img src="@/assets/images/homepage/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-1.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
             <div class="award-label">
               <h5>
                 2024
@@ -171,11 +171,11 @@
                 </p>
               </div>
             </div>
-            <img src="@/assets/images/homepage/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-2.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
           </div>
 
           <div class="award">
-            <img src="@/assets/images/homepage/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-1.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
             <div class="award-label">
               <h5>
                 2024
@@ -189,11 +189,11 @@
                 </p>
               </div>
             </div>
-            <img src="@/assets/images/homepage/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-2.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
           </div>
 
           <div class="award">
-            <img src="@/assets/images/homepage/awards-1.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-1.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
             <div class="award-label">
               <h5>
                 2024
@@ -207,7 +207,7 @@
                 </p>
               </div>
             </div>
-            <img src="@/assets/images/homepage/awards-2.png" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
+            <img src="@/assets/images/homepage/awards-2.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
           </div>
 
         </div>
@@ -270,7 +270,7 @@
                 loading="lazy"
               />
               <img
-                src="@/assets/images/homepage/product-bg-4.png"
+                src="@/assets/images/homepage/product-bg-4.svg"
                 class="image-front shadow-lg"
                 alt="Cartão estatístico destacando média da cobertura vegetal de 20%"
                 loading="lazy"
@@ -309,25 +309,25 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 
 // Importação das logos
-import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.png';
-import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.png';
-import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.png';
-import logo4 from '@/assets/images/homepage/institutes-logo/logo-04.png';
-import logo5 from '@/assets/images/homepage/institutes-logo/logo-05.png';
-import logo6 from '@/assets/images/homepage/institutes-logo/logo-06.png';
-import logo7 from '@/assets/images/homepage/institutes-logo/logo-07.png';
-import logo8 from '@/assets/images/homepage/institutes-logo/logo-08.png';
-import logo9 from '@/assets/images/homepage/institutes-logo/logo-09.png';
-import logo10 from '@/assets/images/homepage/institutes-logo/logo-10.png';
-import logo11 from '@/assets/images/homepage/institutes-logo/logo-11.png';
-import logo12 from '@/assets/images/homepage/institutes-logo/logo-12.png';
-import logo13 from '@/assets/images/homepage/institutes-logo/logo-13.png';
-import logo14 from '@/assets/images/homepage/institutes-logo/logo-14.png';
-import logo15 from '@/assets/images/homepage/institutes-logo/logo-15.png';
-import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.png';
-import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.png';
-import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.png';
-import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.png';
+import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
+import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.svg';
+import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.svg';
+import logo4 from '@/assets/images/homepage/institutes-logo/logo-04.svg';
+import logo5 from '@/assets/images/homepage/institutes-logo/logo-05.svg';
+import logo6 from '@/assets/images/homepage/institutes-logo/logo-06.svg';
+import logo7 from '@/assets/images/homepage/institutes-logo/logo-07.svg';
+import logo8 from '@/assets/images/homepage/institutes-logo/logo-08.svg';
+import logo9 from '@/assets/images/homepage/institutes-logo/logo-09.svg';
+import logo10 from '@/assets/images/homepage/institutes-logo/logo-10.svg';
+import logo11 from '@/assets/images/homepage/institutes-logo/logo-11.svg';
+import logo12 from '@/assets/images/homepage/institutes-logo/logo-12.svg';
+import logo13 from '@/assets/images/homepage/institutes-logo/logo-13.svg';
+import logo14 from '@/assets/images/homepage/institutes-logo/logo-14.svg';
+import logo15 from '@/assets/images/homepage/institutes-logo/logo-15.svg';
+import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.svg';
+import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.svg';
+import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.svg';
+import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.svg';
 
 // Para criação de meta tags de SEO
 import { useHead } from '@vueuse/head';
@@ -1014,7 +1014,7 @@ export default {
   }
 
   .products .products-content .product .product-text .button-primary-link{
-    color: #013C31;
+    color: map-get($green, 600);
   }
 
   </style>

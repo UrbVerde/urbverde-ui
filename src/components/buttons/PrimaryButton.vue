@@ -103,7 +103,8 @@ export default{
   .filled {
     border: none;
     background: radial-gradient(48.28% 48.28% at 51.72% 100%, #146C43 0%, #198754 100%);
-    box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.25) inset;      color: map-get($gray, white);
+    box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.25) inset;
+    color: map-get($gray, white);
   }
 
   .filled:hover {

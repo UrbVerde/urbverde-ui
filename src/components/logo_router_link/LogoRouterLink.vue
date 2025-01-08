@@ -1,6 +1,6 @@
 <template>
   <router-link :to="to" class="container">
-    <img src="@/assets/images/logo-white.png" alt="Logo Homepage" class="logo" />
+    <img src="@/assets/images/logo-white.svg" alt="Logo Homepage" class="logo" />
     <span class="logo-text">URBVERDE</span>
   </router-link>
 </template>
@@ -17,7 +17,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   background: none;
   border: none;
@@ -35,14 +35,12 @@ export default {
 }
 
 .logo-text {
-  color: var(--Theme-Primary, #025949);
+  color: map-get($primary-fade, 800);
   font-family: Inter, sans-serif;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%;
   letter-spacing: 1px;
-  leading-trim: both;
-  text-edge: cap;
 }
 </style>
