@@ -21,7 +21,9 @@
 import NavbarItem from '@/components/side_bar/drop_down/NavbarItemDropdown.vue';
 import { ref, watch } from 'vue';
 import { API_URLS } from '@/constants/endpoints';
+import { useLocationStore } from '@/stores/locationStore';
 
+const locationStore = useLocationStore();
 const categories = ref([]);
 
 // Props with validation
@@ -54,10 +56,21 @@ async function fetchCategories(code, type) {
     const data = await response.json();
     
     if (data && data.categories) {
+      // Initialize categories with selection state
       categories.value = data.categories.map(category => ({
         ...category,
         isSelected: false
       }));
+
+      // Update store
+      locationStore.setCategories(categories.value);
+      
+      // Set initial selected category if none is selected
+      const initialSelected = categories.value.find(cat => cat.isSelected);
+      if (initialSelected) {
+        locationStore.setSelectedCategory(initialSelected);
+      }
+      
       console.log('Categories loaded:', categories.value);
     } else {
       console.warn('No categories received:', data);
@@ -74,6 +87,10 @@ const handleSelectionChange = (selectedIndex) => {
     ...category,
     isSelected: index === selectedIndex
   }));
+  
+  // Update the store with the selected category
+  const selectedCategory = categories.value[selectedIndex];
+  locationStore.setSelectedCategory(selectedCategory);
 };
 </script>
 

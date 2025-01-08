@@ -6,24 +6,40 @@ export const useLocationStore = defineStore('locationStore', {
     cd_mun: null,
     nm_mun: null,
     uf: null,
-    category: 'Clima',
+    category: null,
     layer: null,
-    scale: 'intraurbana',
+    scale: null,
     coordinates: { lat: null, lng: null },
+    bbox: null,
     zoom: null,
+    categories: [], 
+    selectedCategory: null,
   }),
   actions: {
     setLocation({ cd_mun, nm_mun, uf, category, layer, scale }) {
       this.cd_mun = cd_mun ?? null
       this.nm_mun = nm_mun ?? null
       this.uf = uf ?? null
-      this.category = category ?? 'clima'
-      this.layer = data[0]?.slug ?? 'Temperatura de superfície';
+      this.category = category ?? '?'
+      this.layer = data[0]?.slug ?? '?';
       this.scale = scale ?? 'intraurbana'
     },
+
     setCoordinates({ lat, lng }) {
       this.coordinates.lat = lat
       this.coordinates.lng = lng
+    },
+
+    setCategories(categories) {
+      this.categories = categories
+    },
+
+    setSelectedCategory(category) {
+      this.selectedCategory = category
+      this.category = category.name // Update the existing category field
+      if (category.layers && category.layers.length > 0) {
+        this.layer = category.layers[0].slug // Update layer if available
+      }
     },
 
     // Example: a method to fetch coordinates by cd_mun or nm_mun
@@ -54,5 +70,12 @@ export const useLocationStore = defineStore('locationStore', {
         console.error('Failed to fetch coords by name:', err)
       }
     },
+  },
+
+  getters: {
+    // Add some useful getters
+    getCurrentCategory: (state) => state.selectedCategory,
+    getCategoryName: (state) => state.category,
+    getCurrentLayer: (state) => state.layer,
   },
 })

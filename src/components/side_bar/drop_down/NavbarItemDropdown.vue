@@ -225,7 +225,7 @@ const toggleLayerActive = (index, event) => {
   padding: 8px 0px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  /* gap: 8px; */
   align-self: stretch;
   border-radius: 4px;
   background: var(--Gray-100, #F8F9FA);

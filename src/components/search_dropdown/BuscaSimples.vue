@@ -1,10 +1,13 @@
 <!-- urbverde-ui/src/components/search_dropdown/BuscaSimples.vue -->
 <template>
   <div class="search-wrapper">
-
-    <search-user-location @location-updated="updateLocationData" />
-
-    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+    <GetUserLocation 
+      :ip-data-api-key="fca7ec8cb54f07bfacf5cb76321d92aef545786dc5699a77c09f3f31"
+      @location-updated="updateLocationData"
+      @location-error="handleLocationFailure"
+    />
+    
+      <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
       @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
@@ -86,29 +89,26 @@
 </template>
 
 <script>
-import { debounce } from 'lodash';
-import axios from 'axios';
-import { API_URLS } from '@/constants/endpoints';
-
-import SearchUserLocation from './SearchUserLocation.vue';
+import GetUserLocation from './GetUserLocation.vue';  // Verify the path is correct
 
 export default {
+  name: 'BuscaSimples',
   components: {
-    SearchUserLocation
+    GetUserLocation
   },
-
   data() {
     return {
-      isInputActive: true,
       isLoading: false,
+      inputValue: '',
       locationData: null,
+      isInputActive: true,
+      suggestions: [],
+      dropdown: false,
       defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
       codes: {}, // Will store { display_name: code } mapping
       coordinates: null,
-      inputValue: '',
       previousInputValue: '',
       visibleInput: '',
-      suggestions: [],
       highlightedText: '',
       locationChosen: '',
       states: [
@@ -121,7 +121,6 @@ export default {
       cachedCities: [],
       cachedCityData: {}, // Will store { [cityName]: { code: number, type: string, lat: number, lng: number } }
       searchHistory: [],
-      dropdown: false,
       showSuggestions: false, // Controla a exibição das sugestões
       debug: false,
       lastInputLength: 0,
@@ -131,6 +130,7 @@ export default {
       isDragging: false,
       startX: 0,
       scrollLeft: 0,
+      IPDATA_API_KEY: import.meta.env.VITE_IPDATA_API_KEY,
     };
   },
 
@@ -247,8 +247,22 @@ export default {
 
     updateLocationData(location) {
       this.locationData = location;
-      console.log("Dados de localização atualizados:", location);
+      console.log('Location updated:', location);
       this.cacheCities([location.city]);
+      this.generateDefaultSuggestions();
+    },
+
+    generateDefaultSuggestions() {
+      if (!this.locationData) return;
+      const { city, state, stateAbbreviation } = this.locationData;
+
+      this.suggestions = [
+        { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
+        { text: state, type: 'state' },
+        { text: 'Brasil', type: 'country' },
+      ];
+
+      this.dropdown = true;
     },
 
     parseCityState(text) {
@@ -277,7 +291,13 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`); // Online API
         const data = await response.json();
 
-        // Store both display_name and code
+        if (!data || data.length === 0) {
+          // Show "No Results" so user sees there's nothing valid
+          this.suggestions = [{ text: 'No Results', type: 'noresults' }];
+          return;
+        }
+        
+        //Otherwise, procceed: Store both display_name and code
         data.forEach(item => {
           // Create full display name (with state)
           const displayName = item.state_abbreviation ?
@@ -445,12 +465,14 @@ export default {
 
     handleInput() {
       if (this.inputValue !== this.previousInputValue) {
+        this.dropdown = this.inputValue !== '';
         this.updateSuggestions();
         // this.previousInputValue = this.inputValue;
       }
     },
 
-    async updateSuggestions() {
+    async updateSuggestions(forceUpdate = false) {
+      if (!forceUpdate && this.inputValue === this.previousInputValue) return;
       // Only proceed if input actually changed
       if (this.inputValue === this.previousInputValue) return;
 
@@ -464,20 +486,15 @@ export default {
         // Make the API call
         await this.fetchCities(this.inputValue);
 
-        // Then update suggestions with everything (including new cities)
+        // Build suggestion arrays
         const inputLower = this.inputValue.toLowerCase();
         const historySuggestions = this.filterHistory(inputLower);
         const stateSuggestions = this.filterStates(inputLower);
         const citySuggestions = this.filterCities(inputLower);
 
-        // Fetch cities immediately when input changes
-        // Debounce waits 300ms after last keypress before making API call
-        // This prevents excessive API calls while typing
-        // this.debouncedFetchCities(this.inputValue);
-        this.fetchCities(this.inputValue);
+        // this.previousInputValue = this.inputValue; // Update previous value
 
-        this.previousInputValue = this.inputValue; // Update previous value
-
+        // Combine them
         this.suggestions = [
           ...historySuggestions.map(item => ({ text: item, type: 'history' })),
           ...citySuggestions.map(item => ({ text: item, type: 'city' })),
@@ -703,9 +720,11 @@ export default {
       this.filterAll = true;
       this.filterCity = false;
       this.filterState = false;
-      if (this.inputValue !== '') {
-        this.updateHighlightedText();
-      }
+      this.updateHighlightedText();
+      this.dropdown = true;
+      // if (this.inputValue !== '') {
+      //   this.updateHighlightedText();
+      // }
     },
     toggleCity() {
       this.filterAll = false;

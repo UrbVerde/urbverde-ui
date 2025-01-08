@@ -63,8 +63,16 @@
       ]
     },
     {
-      "id": "sociodemographics",
-      "name": "Sociodemográficos",
+      "id": "agriculture",
+      "name": "Agricultura Urbana",
+      "icon": "bi-basket2-fill",
+      "layers": [
+        {"id": "urban_garden", "name": "Horta Urbana", "isActive": false, "isNew": true}
+      ]
+    },
+    {
+      "id": "census",
+      "name": "Censo",
       "icon": "bi bi-people",
       "layers": [
         {"id": "population", "name": "População", "isActive": false, "isNew": false},

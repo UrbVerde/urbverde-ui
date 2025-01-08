@@ -34,13 +34,26 @@ const filterCategories = (code, type) => {
       if (parksCategory) {
         parksCategory.layers.unshift({ ...exclusiveLayer });
       }
-    }
+    } else if (code === '3548906') {
+        // The exclusive layer to be added to two categories
+        const exclusiveLayer = {
+          "id": "fruit_trees",
+          "name": "Pés de Fruta",
+          "isActive": false,
+          "isNew": true
+        };
+        // Find vegetation category and add the layer at the beginning
+        const agricultureCategory = categories.find(cat => cat.id === 'agriculture');
+        if (agricultureCategory) {
+          agricultureCategory.layers.unshift({ ...exclusiveLayer });
+        }
+      }
     
     return { categories };
   } else {
     return {
       categories: categories.filter(category => 
-        category.id === 'parks' || category.id === 'sociodemographics'
+        category.id === 'parks' || category.id === 'census' || category.id === 'transport'
       )
     };
   }
