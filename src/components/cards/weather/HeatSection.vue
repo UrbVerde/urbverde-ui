@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/HeatSection.vue -->
 <template>
   <div class="dashboard">
     <HeatCard :data="cardData"/>
@@ -36,7 +37,6 @@ export default{
 
 <style scoped>
 
-/* Global reset for box-sizing *
 /* Global reset for box-sizing */
 * {
   box-sizing: border-box;
