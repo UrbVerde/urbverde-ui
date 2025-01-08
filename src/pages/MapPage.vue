@@ -39,6 +39,7 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
+import { useHead } from '@vueuse/head';
 
 export default {
   name: 'MapPage',
@@ -48,7 +49,35 @@ export default {
     Navbar,
     Legenda
   },
+
   setup() {
+
+    // Configuração das meta tags de SEO
+    useHead({
+      title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
+        },
+        {
+          name: 'keywords',
+          content:
+            'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
+        },
+        {
+          property: 'og:title',
+          content: 'Plataforma UrbVerde - Ferramenta de Dados para Sustentabilidade Urbana',
+        },
+        {
+          property: 'og:description',
+          content:
+            'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
+        },
+      ],
+    });
+
     const coordinates = ref({ lat: null, lng: null });
     const statsSection = ref(null);
     const isSidebarOpen = ref(true);
