@@ -161,7 +161,7 @@ async function toggleSidebar() {
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  /* gap: 8px; */
+  gap: 8px;
   align-self: stretch;
   padding: 16px 24px;
   margin-top: auto;

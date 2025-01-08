@@ -5,7 +5,7 @@
       <div class="dropdown" data-bs-auto-close="false">
         <a href="#" class="nav-item nav-link" :class="{ 'dropdown-active': isDropdownOpen }" role="button"
           data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
-          <i :class="icon" class="bi" id="imgIcon"></i>
+          <IconComponent :name="icon" :size="20" />
           <span class="textItem small-regular">{{ props.itemName }}</span>
           <div class="badge-right-menu" v-if="txtBadge">
             <span class="textBadge caption-medium">{{ txtBadge }}</span>
@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import IconComponent from '@/components/icons/IconComponent.vue';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
 const isDropdownOpen = ref(false);
@@ -222,7 +223,7 @@ const toggleLayerActive = (index, event) => {
   padding: 8px 0px;
   flex-direction: column;
   align-items: flex-start;
-  /* gap: 8px; */
+  gap: 8px;
   align-self: stretch;
   border-radius: 4px;
   background: var(--Gray-100, #F8F9FA);

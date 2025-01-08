@@ -1025,7 +1025,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  /* gap: 8px; */
+  gap: 8px;
   align-self: stretch;
   cursor: pointer;
 }
