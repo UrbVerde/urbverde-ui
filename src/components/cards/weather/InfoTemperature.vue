@@ -14,7 +14,7 @@
 
 <script>
 import Card from '@/components/cards/Card.vue';
-import Ilustracao from '@/assets/images/cards/globalwarming.png';
+import Ilustracao from '@/assets/images/cards/globalwarming.svg';
 
 export default {
   name: 'InfoTemperature',
