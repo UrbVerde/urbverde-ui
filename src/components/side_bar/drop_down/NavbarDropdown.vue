@@ -107,18 +107,17 @@ const handleSelectionChange = (selectedIndex) => {
 <style scoped>
 
 .container {
-  padding: 0px 0px;
+  padding: 0px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 16px;
   align-self: stretch;
   flex: 1 0 0;
-  /*background: var(--HitBox, rgba(255, 255, 255, 0.00));*/
+  overflow-y: auto; /* Permite scroll apenas na vertical */
+  height: 100%; /* Garante que o elemento ocupe a altura do pai */
 
-   /* padding: 16px; /* Mantém o padding para o layout interno */
-  flex: 1;
-  overflow: auto;
+   
 
   
 }
@@ -131,7 +130,7 @@ const handleSelectionChange = (selectedIndex) => {
   align-self: stretch;
 
   padding: 0px 0px;
-  
+
 }
 
 

@@ -996,7 +996,7 @@ export default {
   width: 100%;
   display: flex;
   height: 40px;
-  padding: 8px 16px; /* 0px 8px; */
+  padding: 8px 8px; /* 0px 8px; */
   align-items: center;
   gap: 10px; /* This gap is for internal elements like icon and text */
   align-self: stretch;

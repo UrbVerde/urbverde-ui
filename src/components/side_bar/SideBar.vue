@@ -101,6 +101,7 @@ async function toggleSidebar() {
   flex-shrink: 0;
   background: var(--Gray-White, #FFF);
   transition: 0.3s;
+  height: 100%; /* Garante que o sidebar ocupe a tela */
 }
 
 /* Rest of the styles remain unchanged */
