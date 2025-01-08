@@ -255,10 +255,12 @@ export default {
     parseCityState(text) {
       // Check if the text contains a state abbreviation
       const parts = text.split(' - ');
+      //alert(parts[0]);//está sendo chamado 3x
       if (parts.length === 2) {
         return {
           city: parts[0],
           state: parts[1]
+          
         };
       }
       return {
