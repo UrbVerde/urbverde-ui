@@ -4,8 +4,12 @@
 
     <div class="content-wrapper">
       <!-- Sidebar -->
-      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" />
+      <Sidebar 
+        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" 
+        :is-open="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar" 
+        @update-coordinates="updateCoordinates" 
+      />
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
@@ -29,22 +33,23 @@
 
           <!-- Stats Section (scroll target) -->
           <div id="stats" ref="statsSection" class="box" style="height:476px; ">
-            Estatísticas do [ Clima ] em [ São Carlos ]
+            Estatísticas do {{ category }} em {{ cityName }}
           </div>
 
           <!-- Pop Vulnerável -->
           <div id="vulnerable" ref="vulnerableSection" class="box" style="height:666px; border-top: 1px solid black">
             Quem é o mais afetado pelo calor extremo?
+            <!-- Quem é o mais afetado pelo {{ currentLayer }} em {{ cityName }}? -->
           </div>
 
           <!-- Ranking -->
           <div id="ranking" ref="rankingSection" class="box" style="height:1082px; border-top: 1px solid black">
-            [São Carlos] no ranking dos municípios
+            {{ cityName }} no ranking dos municípios
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
           <div id="data" ref="dataSection" class="box" style="height:636px; border-top: 1px solid black">
-            Veja mais sobre [São Carlos]
+            Veja mais sobre {{ cityName }}
           </div>
 
           <!-- Footer -->
@@ -64,7 +69,7 @@
  * instead of <script setup> the new recommended approach 
  * in Vue 3.2+ for clean, concise code.
 */
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed  } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import { useLocationStore } from '@/stores/locationStore'
 import Sidebar from '../components/side_bar/SideBar.vue';
@@ -74,38 +79,46 @@ import Legenda from '../components/map/Legenda.vue';
 
 export default {
   name: 'MapPage',
-  components: {Sidebar,MapBox,Navbar,Legenda},
+  components: { Sidebar, MapBox, Navbar, Legenda },
+  
   setup() {
     const route = useRoute()
     const router = useRouter()
-
     const locationStore = useLocationStore()
 
-    // Any existing refs in your code
+    // Refs
     const coordinates = ref({ lat: null, lng: null });
     const activeSection = ref('map');
     const isSidebarOpen = ref(true);
+    
+    // Computed properties from store
+    const category = computed(() => locationStore.category || '?');
+    const currentLayer = computed(() => locationStore.layer || '?');
+    const cityName = computed(() => locationStore.nm_mun || '?');
+
     const sections = {
       map: null,
       stats: null,
       ranking: null,
     };
 
-    // Existing methods
+
+    // Methods
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
     };
 
     const updateCoordinates = (newCoordinates) => {
       coordinates.value = newCoordinates;
+      locationStore.setCoordinates(newCoordinates);
     };
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const navbarHeight = 100; // Adjust this value based on your navbar height
-
-      // Get all section elements
-      const sectionElements = document.querySelectorAll('[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]');
+      const sectionElements = document.querySelectorAll(
+        '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
+      );
 
       for (const element of sectionElements) {
         const rect = element.getBoundingClientRect();
@@ -147,11 +160,18 @@ export default {
         })
       }
 
-      // If your store has coordinates or you want to fetch them, do so here
-      //    e.g. locationStore.fetchCoordinatesByCdMun(cd_mun)
-
-      // Restore or set the coordinates in local MapPage refs from store if needed
-      // e.g. coordinates.value = locationStore.coordinates
+      // Set coordinates from store if available
+      if (locationStore.coordinates?.lat && locationStore.coordinates?.lng) {
+        coordinates.value = locationStore.coordinates;
+      }
+      // Otherwise fetch them if we have cd_mun
+      else if (cd_mun) {
+        locationStore.fetchCoordinatesByCdMun(cd_mun);
+      }
+      // Or by name if we have nm_mun
+      else if (nm_mun) {
+        locationStore.fetchCoordinatesByName(nm_mun);
+      }
 
       window.addEventListener('scroll', handleScroll);
       if (window.location.hash) {
@@ -166,11 +186,19 @@ export default {
     });
 
     return {
+      // Refs
       coordinates,
-      updateCoordinates,
       activeSection,
-      scrollToSection,
       isSidebarOpen,
+      
+      // Computed properties
+      category,
+      currentLayer,
+      cityName,
+      
+      // Methods
+      updateCoordinates,
+      scrollToSection,
       toggleSidebar,
     };
   }
