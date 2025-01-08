@@ -2,5 +2,5 @@
 export const API_URLS = {
   SUGGESTIONS: '/v1/address/suggestions',
   GEOCODE: '/v1/geocode',
-  CATEGORIES: '/api/categories'
+  CATEGORIES: '/v1/address/categories'
 };

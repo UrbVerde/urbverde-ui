@@ -288,7 +288,7 @@ export default {
   data() {
     return {
       // Palavras para transição
-      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente'], // Palavras para rotação
+      rotatingWords: ['+Inclusivo', '+Verde', '+Resiliente'], // Palavras para rotação
       currentWordIndex: 0,
 
       // Imagens das logos das instituições
@@ -780,13 +780,13 @@ export default {
     max-height: 80px; // tamanho máximo das logos
     object-fit: contain;
   }
-
   @keyframes scroll-logos {
-    0% {
-      transform: translateX(0);
-    }
     100% {
-      transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
+      transform: translateY(0);
+    }
+    0% {
+      // transform: translateY(calc(-100% - 30px)); // Move toda a altura da lista duplicada para baixo e 30px para corrigir
+      transform: translateY(calc(+100% + 30px)); // Move para cima
     }
   }
 
