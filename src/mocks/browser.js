@@ -5,12 +5,12 @@ import { handlers } from './handlers';
 const worker = setupWorker(...handlers);
 
 // Single start configuration
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.MODE === 'development') {
   worker.start({
-    onUnhandledRequest: 'bypass', // Silently bypass any unhandled requests
+    onUnhandledRequest: 'bypass',
     serviceWorker: {
-      url: '/mockServiceWorker.js' // Make sure this path is correct
-    }
+      url: '/mockServiceWorker.js',
+    },
   }).catch(console.error);
 }
 

@@ -217,8 +217,6 @@
 </template>
 
 <script>
-import { useLocationStore } from '@/stores/locationStore.js';
-import { useRouter } from 'vue-router';
 
 // Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
@@ -332,11 +330,11 @@ export default {
 
   methods: {
 
-    // Handler for location updates from BuscaSimples component
-    onLocationUpdated(locationData) {
-      // Handle the location data here
-      console.log('Location updated:', locationData);
-    },
+    // // Handler for location updates from BuscaSimples component
+    // onLocationUpdated(locationData) {
+    //   // Handle the location data here
+    //   console.log('Location updated:', locationData);
+    // },
 
     // Método para rotação das palavras
     startWordRotation() {

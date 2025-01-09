@@ -134,8 +134,8 @@ async function initializeLocation() {
     if (ipLocation.status === 'fulfilled') {
       processIPLocationData(ipLocation.value);
     }
-  } catch (err) {
-    handleError(err);
+  } catch (error) {
+    handleError(error);
   }
 }
 
@@ -151,19 +151,19 @@ function getGeolocation() {
     function handleError(error) {
       switch(error.code) {
       case error.PERMISSION_DENIED:
-        console.log('Usuário não autorizou a geolocalização');
+        console.error('Usuário não autorizou a geolocalização');
         reject(new Error('Permissão para geolocalização negada pelo usuário'));
         break;
       case error.POSITION_UNAVAILABLE:
-        console.log('Informações de localização indisponíveis');
+        console.error('Informações de localização indisponíveis');
         reject(new Error('Informações de localização indisponíveis'));
         break;
       case error.TIMEOUT:
-        console.log('Tempo limite excedido para obter localização');
+        console.error('Tempo limite excedido para obter localização');
         reject(new Error('Tempo limite excedido para obter localização'));
         break;
       default:
-        console.log('Erro desconhecido ao obter localização:', error.message);
+        console.error('Erro desconhecido ao obter localização:', error.message);
         reject(new Error('Erro ao obter localização'));
       }
     }
@@ -188,7 +188,7 @@ async function getIPLocation() {
     );
 
     return response.data;
-  } catch (err) {
+  } catch {
     throw new Error('Erro ao obter localização por IP');
   }
 }
@@ -208,7 +208,7 @@ async function processGeolocationData(position) {
       country: data.address.country,
       source: 'geolocation'
     });
-  } catch (error) {
+  } catch {
     throw new Error('Erro ao processar dados de geolocalização');
   }
 }
@@ -220,7 +220,7 @@ function processIPLocationData(data) {
     throw new Error('No IP data received');
   }
 
-  console.log('Raw IP data:', data); // Debug log
+  // Debug log: Raw IP data
 
   // Extract the required fields from ipdata response
   const locationInfo = {
@@ -236,7 +236,7 @@ function processIPLocationData(data) {
     }
   };
 
-  console.log('Processed location info:', locationInfo); // Debug log
+  // Debug log: Processed location info
 
   // Check if city exists in municipios list if provided
   if (props.municipios && props.municipios.length > 0 && !props.municipios.includes(data.city)) {
@@ -249,7 +249,7 @@ function processIPLocationData(data) {
 
 // Update reactive object, cache, and emit
 function updateLocationData(data) {
-  console.log('Updating location data with:', data); // Debug log
+  // Debug log: Updating location data with
 
   // Merge data into locationData
   Object.assign(locationData, {
@@ -263,7 +263,7 @@ function updateLocationData(data) {
     international: data.country !== 'Brasil' && data.country !== 'Brazil'
   });
 
-  console.log('Updated location data:', locationData); // Debug log
+  // Debug log: Updated location data
 
   // Cache the location data
   cacheLocationData();
@@ -302,7 +302,7 @@ function emitLocationUpdate() {
       lng: locationData.coordinates?.lng || 0
     }
   };
-  console.log('Emitting location update:', locationUpdate); // Debug log
+  // Debug log: Emitting location update
   emit('location-updated', locationUpdate);
   loading.value = false;
 }

@@ -1,12 +1,11 @@
 // urbverde-ui/src/mocks/handlers.js
 import { http, HttpResponse } from 'msw';
-import { API_URLS } from '@/constants/endpoints';
+// import { API_URLS } from '@/constants/endpoints';
 import cities from './responses/cities.json';
 import categoriesResponse from './responses/categories.json';
 
 // Function to filter categories based on location code and type
-const filterCategories = (code, type) => {
-  console.log('Received code:', code, 'type:', typeof code);
+const filterCategories = (code) => {
   code = String(code);
 
   // Deep clone the categories to avoid modifying the original
@@ -132,12 +131,11 @@ export const handlers = [
   // Modified categories handler
   http.get('*/v1/address/categories', async({ request }) => {
     const url = new URL(request.url);
-    const cityCode = url.searchParams.get('cityCode');
-    const code = url.searchParams.get('code');
-    const type = url.searchParams.get('type') || 'city';
+    const code = url.searchParams.get('cityCode');
+    // const type = url.searchParams.get('type') || 'city';
 
-    console.log('MSW Categories Handler Called', {code, type}); // Debug log
+    // console.log('MSW Categories Handler Called', { code, type }); // Debug log
 
-    return HttpResponse.json(filterCategories(code,type));
+    return HttpResponse.json(filterCategories(code));
   })
 ];

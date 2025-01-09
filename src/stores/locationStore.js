@@ -7,7 +7,7 @@ export const useLocationStore = defineStore('locationStore', {
     nm_mun: null,
     uf: null,
     category: null,
-    // layer: null,
+    layer: null,
     scale: null,
     coordinates: { lat: null, lng: null },
     bbox: null,
@@ -16,12 +16,12 @@ export const useLocationStore = defineStore('locationStore', {
     selectedCategory: null,
   }),
   actions: {
-    setLocation({ cd_mun, nm_mun, uf, category, layer, scale }) {
+    setLocation({ cd_mun, nm_mun, uf, category, scale }) {
       this.cd_mun = cd_mun ?? null;
       this.nm_mun = nm_mun ?? null;
       this.uf = uf ?? null;
       this.category = category ?? '?';
-      this.layer = data[0]?.slug ?? '?';
+      this.layer = this.categories[0]?.slug ?? '?';
       this.scale = scale ?? '?';
     },
 

@@ -115,6 +115,7 @@
 <script>
 import GetUserLocation from './GetUserLocation.vue';  // Verify the path is correct
 import { API_URLS } from '@/constants/endpoints';
+import { useLocationStore } from '@/stores/locationStore'; // Adjust the path as necessary
 
 export default {
   name: 'BuscaSimples',
@@ -232,6 +233,7 @@ export default {
   },
 
   methods: {
+
     // Update the selectSuggestion method
     selectSuggestion(suggestion) {
       this.inputValue = suggestion.text;
@@ -279,7 +281,7 @@ export default {
       this.isLoading = true; // Ativa o spinner
       try {
         await new Promise(resolve => setTimeout(resolve, 2000)); // Simula a chamada de uma API ou lógica de submissão
-        console.log('Busca concluída com sucesso!');
+        // console.log('Busca concluída com sucesso!');
       } catch (error) {
         console.error('Erro durante a busca:', error);
       } finally {
@@ -307,7 +309,7 @@ export default {
       // it should override existing data
       if (location.source === 'geolocation' || !this.locationData) {
         this.locationData = location;
-        console.log('Location updated from:', location.source);
+        // console.log('Location updated from:', location.source);
         this.cacheCities([location.city]);
         this.generateDefaultSuggestions();
       }
@@ -315,23 +317,10 @@ export default {
       // only update if we don't have any existing data
       else if (!this.locationData.city) {
         this.locationData = location;
-        console.log('Initial location set from:', location.source);
+        // console.log('Initial location set from:', location.source);
         this.cacheCities([location.city]);
         this.generateDefaultSuggestions();
       }
-    },
-
-    generateDefaultSuggestions() {
-      if (!this.locationData) {return;}
-      const { city, state, stateAbbreviation } = this.locationData;
-
-      this.suggestions = [
-        { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
-        { text: state, type: 'state' },
-        { text: 'Brasil', type: 'country' },
-      ];
-
-      this.dropdown = true;
     },
 
     parseCityState(text) {
@@ -529,12 +518,6 @@ export default {
         this.dropdown = false;
       }
     },
-    handleFocus(event) {
-      if (this.dropdown !== true) {
-        this.dropdown = true;
-      }
-      event.stopPropagation();
-    },
     cacheCities(cities) {
       this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
       this.updateSuggestions();
@@ -619,19 +602,7 @@ export default {
       }
       this.highlightedText = '';
     },
-    selectSuggestion(suggestion) {
-      this.inputValue = suggestion.text;
-      this.visibleInput = suggestion.text;
-      this.highlightedText = '';
-      this.dropdown = false;
-      this.locationChosen = suggestion.text;
 
-      this.loadAnimation();
-      this.addToHistory(suggestion.text);
-      this.updateSuggestions();
-      this.fetchCoordinates(this.locationChosen);
-
-    },
     submit() {
       const suggestion = this.suggestions[0];
       if (this.inputValue) {
@@ -672,7 +643,7 @@ export default {
           //alert('aqui2.');
           // Only add to history if not already handled by selectSuggestion
           if (!this.locationChosen) {
-
+            return;
           }
         }
 
@@ -736,45 +707,18 @@ export default {
         this.cachedCityData = JSON.parse(savedCache);
       }
     },
+
     generateDefaultSuggestions() {
-      const cachedData = this.getCachedData();
-      const { city, state, stateAbbreviation, international } = cachedData;
+      if (!this.locationData) {return;}
+      const { city, state, stateAbbreviation } = this.locationData;
 
-      let defaultSuggestions = [];
+      this.suggestions = [
+        { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
+        { text: state, type: 'state' },
+        { text: 'Brasil', type: 'country' },
+      ];
 
-      if (international || city === 'error' || state === 'error' || city === null) {
-        // Pre-defined default suggestions
-        const defaultCity = 'Rio de Janeiro - RJ';
-        // Fetch the data for Rio de Janeiro if not already cached
-        if (!this.cachedCityData[defaultCity]) {
-          this.fetchCities('Rio de Janeiro');
-        }
-
-        defaultSuggestions = [
-          { text: defaultCity, type: 'city' },
-          { text: 'São Paulo', type: 'state' },
-          { text: 'Brasil', type: 'country' }
-        ];
-      } else {
-
-        const locationText = `${city} - ${stateAbbreviation}`;
-        // Check if location is in history to determine type
-        const locationType = this.searchHistory.includes(locationText) ? 'history' : 'city';
-
-        defaultSuggestions = [
-          { text: locationText, type: locationType }, // Use the determined type
-          { text: state, type: 'state' },
-          { text: 'Brasil', type: 'country' }
-        ];
-      }
-
-      const historySuggestions = this.searchHistory
-        .slice(0, 2)
-        .filter(item => !defaultSuggestions.some(def => def.text === item))
-        .map(item => ({ text: item, type: 'history' }));
-
-      this.suggestions = [...historySuggestions, ...defaultSuggestions];
-      this.updateHighlightedText();
+      this.dropdown = true;
     },
 
     getImageSource(type) {

@@ -84,7 +84,7 @@ export default {
       });
 
       this.map.on('load', () => {
-        console.log('Map loaded successfully');
+        // console.log('Map loaded successfully');
 
         // First make the container visible
         this.mapVisible = true;
@@ -136,8 +136,8 @@ export default {
   },
   watch: {
     coordinates: {
-      handler(newCoordinates) {
-        console.log('MapBox received new coordinates:', newCoordinates);
+      handler() {
+        // console.log('MapBox received new coordinates:', newCoordinates);
         this.updateMapCenter();
       },
       deep: true
@@ -148,7 +148,7 @@ export default {
       this.mapVisible = false;
       setTimeout(() => {
         this.map.remove();
-        console.log('Map removed');
+        // console.log('Map removed');
       }, 300);
     }
   }

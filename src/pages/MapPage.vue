@@ -84,7 +84,7 @@
  * in Vue 3.2+ for clean, concise code.
 */
 import { ref, onMounted, onUnmounted, computed  } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
@@ -97,7 +97,7 @@ export default {
 
   setup() {
     const route = useRoute();
-    const router = useRouter();
+    // const router = useRouter();
     const locationStore = useLocationStore();
 
     // Refs
@@ -110,11 +110,11 @@ export default {
     const currentLayer = computed(() => locationStore.layer || 'layer?');
     const cityName = computed(() => locationStore.nm_mun || 'city?');
 
-    const sections = {
-      map: null,
-      stats: null,
-      ranking: null,
-    };
+    // const sections = {
+    //   map: null,
+    //   stats: null,
+    //   ranking: null,
+    // };
 
     // Methods
     const toggleSidebar = () => {

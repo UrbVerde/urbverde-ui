@@ -50,7 +50,7 @@ watch(
 // Function to fetch categories based on location code
 async function fetchCategories(code, type) {
   try {
-    console.log('Fetching categories:', { code, type });
+    // console.log('Fetching categories:', { code, type });
     const response = await fetch(`${API_URLS.CATEGORIES}?code=${code}&type=${type}`);
     const data = await response.json();
 
@@ -70,7 +70,7 @@ async function fetchCategories(code, type) {
         locationStore.setSelectedCategory(initialSelected);
       }
 
-      console.log('Categories loaded:', categories.value);
+      // console.log('Categories loaded:', categories.value);
     } else {
       console.warn('No categories received:', data);
     }
