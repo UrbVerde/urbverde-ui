@@ -1,29 +1,28 @@
-<!-- urbverde-ui/src/components/buttons/LogoButton.vue -->
 <template>
-  <div>
-    <LogoRouterLink />
-  </div>
+  <router-link :to="to" class="container">
+    <img src="@/assets/images/logo-white.svg" alt="Logo Homepage" class="logo" />
+    <span class="logo-text">URBVERDE</span>
+  </router-link>
 </template>
 
 <script>
-import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
-
 export default {
-  name: 'LogoButton',
-  components: {
-    LogoRouterLink,
+  name: 'NavbarLogo',
+  props: {
+    to: {
+      type: String,
+      default: '/',
+    },
   },
 };
 </script>
 
-<style scoped>
-.logo-button {
+<style scoped lang="scss">
+.container {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  width: 190px;
-  height: 56px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -35,15 +34,13 @@ export default {
   height: 32px;
 }
 
-.text {
-  color: var(--Theme-Primary, #025949);
+.logo-text {
+  color: map-get($primary-fade, 700);
   font-family: Inter, sans-serif;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%;
   letter-spacing: 1px;
-  leading-trim: both;
-  text-edge: cap;
 }
 </style>

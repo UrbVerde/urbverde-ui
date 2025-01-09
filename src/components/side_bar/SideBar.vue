@@ -109,7 +109,7 @@ async function toggleSidebar() {
   display: flex;
   height: 88px;
   padding: 16px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
   align-self: stretch;

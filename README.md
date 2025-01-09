@@ -1,7 +1,8 @@
 <!-- urbverde-ui/README.md  -->
 <p align="center">
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-        <img src="src/assets/images/logo-white.png" alt="UrbVerde" width="200" height="200">
+        <img src="src/assets/images/logo-white.svg" alt="UrbVerde" width="200" height="200">
+
     </a>
 </p>
 
@@ -43,8 +44,7 @@
 
 <p align="justify">
 
-This is the official repository of [UrbVerde](https://urbverde.com), a free Web-GIS platform dedicated to developing technologies to **accelerate cities climate adaptation**. Using state-of-the-art remote sensing, promoting _Open-Source_ academic research, and offering advanced analysis tools focused on user experience, [UrbVerde](https://urbverde.com.br) empowers public managers, researchers, journalists, and citizens to change their surroundings for a future of **more sustainable, resilient, and inclusive cities**.
-
+This is the official repository of [UrbVerde](https://urbverde.com), a free Web-GIS platform dedicated to developing technologies to **accelerate climate adaptation in Brazilian cities**. Using state-of-the-art remote sensing, promoting _Open-Source_ academic research, and offering advanced analysis tools focused on user experience, [UrbVerde](https://urbverde.com.br) empowers public managers, researchers, journalists, and citizens to change their surroundings for a future of **more sustainable, resilient, and inclusive cities**.
 </p>
 
 <br>
@@ -149,4 +149,3 @@ Contact us
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/urb.verde)
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/urbverde/)
 [![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:comunica.urbverde@usp.br)
-

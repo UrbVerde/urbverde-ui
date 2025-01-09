@@ -1,13 +1,8 @@
-<!-- src/components/navbar/NavbarHomepage.vue -->
 <template>
   <div>
-    <!-- Navbar  -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <!-- Logo -->
-        <router-link to="/" class="navbar-logo-homepage">
-          <img src="@/assets/images/logo-homepage.png" alt="Logo Homepage" />
-        </router-link>
+        <LogoRouterLink />
 
         <!-- Botão para collapse (responsivo para telas menores) -->
         <button
@@ -22,25 +17,22 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Links e Botão -->
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- Links de navegação -->
           <ul class="navbar-nav">
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">Seja Parceiro</a>
+              <a href="#" class="body-small-regular">Seja Parceiro</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">Quem Somos</a>
+              <a href="#" class="body-small-regular">Quem Somos</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">Transparência</a>
+              <a href="#" class="body-small-regular">Transparência</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="small-regular">UrbVerde Educa</a>
+              <a href="#" class="body-small-regular">UrbVerde Educa</a>
             </li>
           </ul>
 
-          <!-- PrimaryButton -->
           <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">
             <PrimaryButton
               label="Acessar a plataforma"
@@ -58,11 +50,13 @@
 
 <script>
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
 
 export default {
   name: 'NavbarHomepage',
   components: {
     PrimaryButton,
+    LogoRouterLink,
   },
   methods: {
     handleOutsideClick(event) {
@@ -84,11 +78,9 @@ export default {
     },
   },
   mounted() {
-    // Adiciona o listener ao clicar fora
     document.addEventListener('click', this.handleOutsideClick);
   },
   beforeUnmount() {
-    // Remove o listener ao desmontar o componente
     document.removeEventListener('click', this.handleOutsideClick);
   },
 };
@@ -103,19 +95,19 @@ export default {
     z-index: 2;
   }
 
-  .navbar .navbar-logo-homepage:hover{
+  .navbar .navbar-logo-homepage:hover {
     background-color: transparent;
   }
 
-  .navbar .navbar-toggler{
+  .navbar .navbar-toggler {
     border: transparent;
   }
 
-  .navbar .navbar-toggler.collapsed{
+  .navbar .navbar-toggler.collapsed {
     border: transparent;
   }
 
-  .navbar .navbar-toggler-icon{
+  .navbar .navbar-toggler-icon {
     font-size: 16px;
     color: var(--bs-green-500)
   }
@@ -127,12 +119,12 @@ export default {
     gap: 8px;
   }
 
-  .navbar .navbar-nav .nav-item a{
+  .navbar .navbar-nav .nav-item a {
     display: flex;
     padding: 8px 12px;
     align-items: center;
     text-decoration: none;
-    color: $urbverde-text-color-body;
+    color: map-get($body-text, body-color);
     text-align: center;
     border-radius: 4px;
   }
@@ -146,7 +138,7 @@ export default {
     transition: height 0.3s ease, padding 0.3s ease;
   }
 
-  .navbar .navbar-collapse.collapsing{
+  .navbar .navbar-collapse.collapsing {
     position: absolute;
     z-index: 3;
     top: 100%;
@@ -157,11 +149,11 @@ export default {
     padding: 0 32px;
   }
 
-  .navbar .navbar-collapse.collapsing .navbar-nav{
+  .navbar .navbar-collapse.collapsing .navbar-nav {
     padding: 12px 6px 56px 6px;
   }
 
-  .navbar .navbar-collapse.collapse.show{
+  .navbar .navbar-collapse.collapse.show {
     position: absolute;
     height: auto;
     z-index: 3;
@@ -173,19 +165,21 @@ export default {
     padding: 12px 32px 64px;
   }
 
-  .navbar .navbar-collapse.collapse.show .navbar-nav{
+  .navbar .navbar-collapse.collapse.show .navbar-nav {
     padding: 12px 6px 56px 6px;
   }
 
-  .container-fluid{
+  .container-fluid {
     padding: 0;
   }
 
-  .container-fluid a{
+  .container-fluid a {
     padding: 0;
+    width: auto;
+    margin: 0;
   }
 
-  .button-primary-link{
+  .button-primary-link {
     text-decoration: none;
   }
 
