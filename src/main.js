@@ -18,10 +18,6 @@ async function prepareApp() {
     process.env.NODE_ENV === 'test'
   ) {
     const { worker } = await import('./mocks/browser');
-    console.log('test');
-    console.log('test');
-
-    console.log('test');
 
     return worker.start();
   }
