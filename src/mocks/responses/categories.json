@@ -95,7 +95,8 @@
       "name": "Outros",
       "icon": "bi bi-lightbulb",
       "layers": [
-        {"id": "public_lighting", "name": "Iluminação Pública", "isActive": false, "isNew": false}
+        {"id": "public_lighting", "name": "Iluminação Pública", "isActive": false, "isNew": false},
+        {"id": "institutional_areas", "name": "Áreas Institucionais", "isActive": false, "isNew": false}
       ]
     }
   ]
