@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import "./assets/main.css";
+import './assets/main.css';
 import '@/assets/styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
@@ -18,7 +18,9 @@ async function prepareApp() {
     process.env.NODE_ENV === 'test'
   ) {
     const { worker } = await import('./mocks/browser');
-    console.log('test')
+    console.log('test');
+    console.log('test');
+
     return worker.start();
   }
 
