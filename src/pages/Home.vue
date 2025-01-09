@@ -869,19 +869,12 @@ export default {
   }
 
   @keyframes scroll-logos {
-    100% {
-      transform: translateY(0);
-    }
     0% {
-      // transform: translateY(calc(-100% - 30px)); // Move toda a altura da lista duplicada para baixo e 30px para corrigir
-      transform: translateY(calc(+100% + 30px)); 
+      transform: translateX(0);
     }
-    // 0% {
-    //   transform: translateX(0);
-    // }
-    // 100% {
-    //   transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
-    // }
+    100% {
+      transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
+    }
   }
 
   .institutes-awards{
@@ -1041,5 +1034,6 @@ export default {
   .products .products-content .product .product-text .button-primary-link{
     color: map-get($green, 600);
   }
+
 
 </style>
