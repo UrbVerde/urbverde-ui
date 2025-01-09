@@ -7,7 +7,7 @@ export const useLocationStore = defineStore('locationStore', {
     nm_mun: null,
     uf: null,
     category: null,
-    layer: null,
+    // layer: null,
     scale: null,
     coordinates: { lat: null, lng: null },
     bbox: null,
