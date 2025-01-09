@@ -35,25 +35,27 @@
           <div id="stats"
                ref="statsSection"
                class="box"
-               style="height:476px; ">
+          >
             Estatísticas do {{ category }} em {{ cityName }}
+            <TemperatureSection />
           </div>
 
           <!-- Pop Vulnerável -->
           <div id="vulnerable"
                ref="vulnerableSection"
                class="box"
-               style="height:666px; border-top: 1px solid black">
-            Quem é o mais afetado pelo calor extremo?
-            <!-- Quem é o mais afetado pelo {{ currentLayer }} em {{ cityName }}? -->
+               style="border-top: 1px solid black">
+            Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
+            <HeatSection/>
           </div>
 
           <!-- Ranking -->
           <div id="ranking"
                ref="rankingSection"
                class="box"
-               style="height:1082px; border-top: 1px solid black">
+               style="border-top: 1px solid black">
             {{ cityName }} no ranking dos municípios
+            <RankSection/>
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
@@ -62,6 +64,7 @@
                class="box"
                style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
+
           </div>
 
           <!-- Footer -->
@@ -73,11 +76,8 @@
           </div>
         </div>
       </div>
-      <div ref="statsSection" class="box" >
-        <TemperatureSection />
-        <HeatSection/>
-        <RankSection/>
-      </div>
+      <!-- <div ref="statsSection" class="box" >
+      </div> -->
     </div>
   </div>
 </template>
@@ -95,9 +95,9 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
-//import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
+import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
 import RankSection from '@/components/cards/weather/RankSection.vue';
-//import HeatSection from '@/components/cards/weather/HeatSection.vue';
+import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 
 export default {
@@ -107,8 +107,8 @@ export default {
     MapBox,
     Navbar,
     Legenda,
-    //TemperatureSection,
-    //HeatSection,
+    TemperatureSection,
+    HeatSection,
     RankSection
   },
 
