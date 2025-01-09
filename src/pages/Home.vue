@@ -303,6 +303,7 @@
 </template>
 
 <script>
+
 // Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
@@ -372,7 +373,7 @@ export default {
   data() {
     return {
       // Palavras para transição
-      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente'], // Palavras para rotação
+      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
 
       // Imagens das logos das instituições
@@ -415,6 +416,13 @@ export default {
   },
 
   methods: {
+
+    // // Handler for location updates from BuscaSimples component
+    // onLocationUpdated(locationData) {
+    //   // Handle the location data here
+    //   console.log('Location updated:', locationData);
+    // },
+
     // Método para rotação das palavras
     startWordRotation() {
       this.wordRotationInterval = setInterval(() => {
@@ -443,7 +451,7 @@ export default {
 };
 </script>
 
-  <style scoped lang="scss">
+<style scoped lang="scss">
 
   a {
     text-decoration: none;
@@ -851,13 +859,13 @@ export default {
     max-height: 80px; // tamanho máximo das logos
     object-fit: contain;
   }
-
   @keyframes scroll-logos {
-    0% {
-      transform: translateX(0);
-    }
     100% {
-      transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
+      transform: translateY(0);
+    }
+    0% {
+      // transform: translateY(calc(-100% - 30px)); // Move toda a altura da lista duplicada para baixo e 30px para corrigir
+      transform: translateY(calc(+100% + 30px)); // Move para cima
     }
   }
 
@@ -1017,4 +1025,4 @@ export default {
     color: map-get($green, 600);
   }
 
-  </style>
+ </style>

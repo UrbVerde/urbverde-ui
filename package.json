@@ -16,6 +16,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "maplibre-gl": "^4.7.1",
+    "pinia": "^2.3.0",
     "vue": "^3.4.29",
     "vue-google-autocomplete": "^1.1.4",
     "vue-meta": "^2.4.0",
