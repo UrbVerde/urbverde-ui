@@ -1,4 +1,7 @@
 <!-- urbverde-ui/src/components/search_dropdown/GetUserLocation.vue -->
+<template>
+  <div></div>
+</template>
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import axios from 'axios';

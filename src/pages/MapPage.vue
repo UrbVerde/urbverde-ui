@@ -258,90 +258,90 @@ export default {
 };
 </script>
 
-<style>
-.global {
-  background-color: #F8F9FACC;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+<style scoped>
+  .global {
+    background-color: #F8F9FACC;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-/* Flex container to hold sidebar (left) and main content (right) */
-.content-wrapper {
-  flex: 1;
-  display: flex;
-}
+  /* Flex container to hold sidebar (left) and main content (right) */
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+  }
 
-/* Sidebar “collapsed” style (if you want a narrower width) */
-.sidebar-collapsed {
-  width: 72px;
-  transition: width 0.3s;
-}
+  /* Sidebar “collapsed” style (if you want a narrower width) */
+  .sidebar-collapsed {
+    width: 72px;
+    transition: width 0.3s;
+  }
 
-/* Main content takes the rest of the horizontal space */
-.main-wrapper {
-  flex: 1;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow-y: auto;
-}
+  /* Main content takes the rest of the horizontal space */
+  .main-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+  }
 
-.content-area {
-  flex: 1;
-  position: relative;
-  display: flex;
-}
+  .content-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+  }
 
-.map-box {
-  flex: 1;
-  position: relative;
-}
+  .map-box {
+    flex: 1;
+    position: relative;
+  }
 
-.legend-wrapper {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 264px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
+  .legend-wrapper {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 264px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    z-index: 10;
+  }
 
-/* Center the placeholder vertically and horizontally */
-.placeholder-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  margin-top: 3%;
-}
+  /* Center the placeholder vertically and horizontally */
+  .placeholder-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 3%;
+  }
 
-/* Placeholder image if coordinates are not set */
-.map-placeholder {
-  display: block;
-  margin: 40px auto;
-  opacity: 0.45;
-}
+  /* Placeholder image if coordinates are not set */
+  .map-placeholder {
+    display: block;
+    margin: 40px auto;
+    opacity: 0.45;
+  }
 
-/* Just a section to hold stats or other elements */
-.box {
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-  gap: 16px;
-  margin-top: 0px;
-  justify-content: center;
-  padding: 32px 40px;
-  justify-content: space-between;
-  width: 100%;
-  color: var(--Body-Text-Body-Color, #212529);
-  font-family: Inter, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 24px;
-}
+  /* Just a section to hold stats or other elements */
+  .box {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    gap: 16px;
+    margin-top: 0px;
+    justify-content: center;
+    padding: 32px 40px;
+    justify-content: space-between;
+    width: 100%;
+    color: var(--Body-Text-Body-Color, #212529);
+    font-family: Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+  }
 </style>

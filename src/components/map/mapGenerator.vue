@@ -76,6 +76,9 @@ export default {
 
       this.map.on('styleimagemissing', (e) => {
         const id = e.id;
+        if (!id || this.map.hasImage(id)) {
+          return;
+        }
         const placeholder = new Image(1, 1);
         placeholder.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==';
         placeholder.onload = () => {

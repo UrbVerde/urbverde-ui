@@ -22,6 +22,10 @@ export default {
       type: Array,
       required: true,
     },
+    value: {
+      type: Number,
+      required: true,
+    },
   },
 };
 </script>

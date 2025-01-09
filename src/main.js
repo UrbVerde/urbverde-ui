@@ -19,8 +19,7 @@ async function prepareApp() {
     process.env.NODE_ENV === 'development' ||
     process.env.NODE_ENV === 'test'
   ) {
-    await import('./mocks/browser').then(({ worker }) => worker.start());
-    // return worker.start();
+    await import('./mocks/browser'); // No need to call `worker.start()` here
   }
 
   return Promise.resolve();

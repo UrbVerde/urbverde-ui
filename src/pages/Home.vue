@@ -213,7 +213,6 @@
         </div>
       </div>
 
-      
       <!-- Products content -->
       <div class="products">
         <div class="title container">
@@ -414,6 +413,13 @@ export default {
   },
 
   methods: {
+    onLocationUpdated() {
+      // This will be called whenever the child component emits "location-updated"
+      return;
+      // console.log('Location updated in Home.vue!', payload);
+      // Do something with the payload:
+      // e.g., store it in data(), navigate somewhere, etc.
+    },
     // Método para rotação das palavras
     startWordRotation() {
       this.wordRotationInterval = setInterval(() => {
@@ -1034,6 +1040,5 @@ export default {
   .products .products-content .product .product-text .button-primary-link{
     color: map-get($green, 600);
   }
-
 
 </style>

@@ -15,7 +15,7 @@ const filterCategories = (code) => {
   const isSaoPauloState = String(code).startsWith('35');
 
   if (isSaoPauloState) {
-    if (code === '3534708') {
+    if (code === '3534708') { //Ourinhos
       // The exclusive layer to be added to two categories
       const exclusiveLayer = {
         'id': 'tree_inventory',
@@ -33,7 +33,7 @@ const filterCategories = (code) => {
       if (parksCategory) {
         parksCategory.layers.unshift({ ...exclusiveLayer });
       }
-    } else if (code === '3548906') {
+    } else if (code === '3548906') { //São Carlos
       // The exclusive layer to be added to two categories
       const exclusiveLayer = {
         'id': 'fruit_trees',
@@ -45,6 +45,19 @@ const filterCategories = (code) => {
       const agricultureCategory = categories.find(cat => cat.id === 'agriculture');
       if (agricultureCategory) {
         agricultureCategory.layers.unshift({ ...exclusiveLayer });
+      }
+    } else if (code === '3552205') { //Sorocaba
+      // The exclusive layer to be added to two categories
+      const exclusiveLayer = {
+        'id': 'innundation_points',
+        'name': 'Pontos de inundação',
+        'isActive': false,
+        'isNew': true
+      };
+        // Find vegetation category and add the layer at the beginning
+      const waterCategory = categories.find(cat => cat.id === 'water');
+      if (waterCategory) {
+        waterCategory.layers.unshift({ ...exclusiveLayer });
       }
     }
 
@@ -133,7 +146,6 @@ export const handlers = [
     const url = new URL(request.url);
     const code = url.searchParams.get('cityCode');
     // const type = url.searchParams.get('type') || 'city';
-
     // console.log('MSW Categories Handler Called', { code, type }); // Debug log
 
     return HttpResponse.json(filterCategories(code));

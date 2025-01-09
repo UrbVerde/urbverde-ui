@@ -5,7 +5,7 @@
       <InfoTemperature />
     </div>
     <div class="right-panel">
-      <TemperatureCard  :data="cardData" class="temperature-card"/>
+      <TemperatureCard  :data="cardData" :class="temperature-card"/>
     </div>
   </div>
 </template>
