@@ -5,7 +5,7 @@
                      @location-updated="updateLocationData"
                      @location-error="handleLocationFailure" />
 
-    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+    <div ref="inputContainer" :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
@@ -55,7 +55,7 @@
       <button @click="clearHistory">Limpar Histórico</button>
     </div>
 
-    <div :class="{ 'suggestion-container shadow': dropdown, 'suggestion-container-hidden': !dropdown }">
+    <div ref="suggestionContainerEl" :class="{ 'suggestion-container shadow': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="suggestion-grid">
         <div class="filter-container">
           <div class="filter-button-container" ref="filterButtonContainer">
@@ -71,7 +71,7 @@
           </div>
         </div>
 
-        <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
+        <ul v-if="dropdown" class="suggestions-list" ref="dropdownEl">
           <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
               v-for="(suggestion, index) in visibleSuggestions"
               :key="suggestion"
@@ -111,6 +111,11 @@ import GetUserLocation from './GetUserLocation.vue';
 import { API_URLS } from '@/constants/endpoints';
 
 const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
+
+const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
+const props = defineProps({
+  IPDATA_API_KEY: String
+});
 
 // All this shouldnt be hardcorded here in the next versions (!)
 const states = [
@@ -243,7 +248,6 @@ function selectSuggestion(suggestion) {
 
   fetchCoordinates(locationChosen.value);
 }
-
 function activateInput() {
   isInputActive.value = true;
   // emit('menu-interaction'); // Emit event for menu interaction
@@ -353,6 +357,45 @@ async function fetchCities(query) {
       type: 'city',
       // Include other necessary fields if required
     }));
+
+    data.forEach(item => {
+      const displayName = item.state_abbreviation
+        ? `${item.display_name} - ${item.state_abbreviation}`
+        : item.display_name;
+
+      cachedCityData.value[displayName] = {
+        code: item.cd_mun,
+        type: 'city',
+        lat: item.coordinates?.lat,
+        lng: item.coordinates?.lng,
+      };
+
+      cachedCityData.value[item.display_name] = {
+        code: item.cd_mun,
+        type: 'city',
+        lat: item.coordinates?.lat,
+        lng: item.coordinates?.lng,
+      };
+
+      codes.value[displayName] = item.cd_mun;
+      codes.value[item.display_name] = item.cd_mun;
+    });
+
+    suggestions.value = data.map(item => ({
+      text: item.state_abbreviation
+        ? `${item.display_name} - ${item.state_abbreviation}`
+        : item.display_name,
+      type: 'city'
+    }));
+
+    const newCities = data.map(item =>
+      item.state_abbreviation
+        ? `${item.display_name} - ${item.state_abbreviation}`
+        : item.display_name
+    );
+    cachedCities.value = [...new Set([...cachedCities.value, ...newCities])];
+
+
 
     // if (!data || data.length === 0) {
     //   suggestions.value = [{ text: 'No Results', type: 'noresults' }];
@@ -702,7 +745,7 @@ function generateDefaultSuggestions() {
     { text: state, type: 'state' },
     { text: 'Brasil', type: 'country' },
   ];
-  dropdown.value = true;
+  
 }
 
 function getImageSource(type) {
@@ -759,8 +802,7 @@ function emitLocationUpdate(payload) {
   // emit('location-updated', payload);
   //
   // Or for your code sample:
-  const event = new CustomEvent('location-updated', { detail: payload });
-  window.dispatchEvent(event);
+  emit('location-updated', payload);
 }
 // this.suggestions = [];
 
