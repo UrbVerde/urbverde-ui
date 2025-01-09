@@ -1,4 +1,4 @@
-# src/components/navbar/Navbar.vue
+<!-- src/components/navbar/Navbar.vue -->
 <template>
   <div class="navbar">
     <div class="response">
