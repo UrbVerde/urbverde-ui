@@ -1,19 +1,25 @@
 <!-- urbverde-ui/src/components/search_dropdown/BuscaSimples.vue -->
 <template>
   <div class="search-wrapper">
-    <GetUserLocation 
+    <GetUserLocation
       :ip-data-api-key="IPDATA_API_KEY"
       @location-updated="updateLocationData"
       @location-error="handleLocationFailure"
       @click="handleMenuInteraction"
     />
-    
-      <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
-      @click="activateInput">
+
+    <div :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+         @click="activateInput">
       <div class="input-overlay">
-        <input ref="inputField" v-model="inputValue" @input="handleInput" @focus="handleFocus"
-          @keydown.enter="handleEnter" :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
-          class="input-field small-regular" :disabled="!isInputActive" @click="activateInput" />
+        <input ref="inputField"
+               v-model="inputValue"
+               @input="handleInput"
+               @focus="handleFocus"
+               @keydown.enter="handleEnter"
+               :placeholder="!inputValue && !highlightedText ? 'Procure um local :)' : ''"
+               class="input-field small-regular"
+               :disabled="!isInputActive"
+               @click="activateInput" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
           <span class="suggestion-text small-regular">
             <span class="invisible ">{{ visibleInput }}</span>
@@ -24,13 +30,20 @@
 
       <div class="button-container">
         <button :class="{ 'clean-button': inputValue !== '', 'clean-button-hidden': inputValue === '' }"
-          @click="clearInput">
-          <i class="bi bi-x-lg" id="imgIcon" width="16" height="16"></i>
+                @click="clearInput">
+          <i class="bi bi-x-lg"
+             id="imgIcon"
+             width="16"
+             height="16"></i>
         </button>
 
         <button class="search-button" @click.stop="submit">
 
-          <i v-if="!isLoading" class="bi bi-search" id="imgIcon" width="16" height="16"></i>
+          <i v-if="!isLoading"
+             class="bi bi-search"
+             id="imgIcon"
+             width="16"
+             height="16"></i>
           <div v-else class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
@@ -48,8 +61,12 @@
     <div :class="{ 'suggestion-container shadow': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="suggestion-grid">
         <div class="filter-container">
-          <div class="filter-button-container" ref="filterButtonContainer" @mousedown="startDrag" @mousemove="onDrag"
-            @mouseup="endDrag" @mouseleave="endDrag">
+          <div class="filter-button-container"
+               ref="filterButtonContainer"
+               @mousedown="startDrag"
+               @mousemove="onDrag"
+               @mouseup="endDrag"
+               @mouseleave="endDrag">
             <button
               :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
               @click="toggleAll">Todos</button>
@@ -62,15 +79,21 @@
           </div>
         </div>
 
-
         <ul v-if="dropdown" class="suggestions-list" ref="dropdown">
           <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
-            v-for="(suggestion, index) in visibleSuggestions" :key="suggestion" @click="selectSuggestion(suggestion)"
-            tabindex="0" @keydown.enter="selectSuggestion(suggestion)"
-            @keydown.up.prevent="focusPreviousSuggestion(index)" @keydown.down.prevent="focusNextSuggestion(index)"
-            :ref="`suggestionItem-${index}`">
+              v-for="(suggestion, index) in visibleSuggestions"
+              :key="suggestion"
+              @click="selectSuggestion(suggestion)"
+              tabindex="0"
+              @keydown.enter="selectSuggestion(suggestion)"
+              @keydown.up.prevent="focusPreviousSuggestion(index)"
+              @keydown.down.prevent="focusNextSuggestion(index)"
+              :ref="`suggestionItem-${index}`">
 
-            <i :class=getImageSource(suggestion.type) id="imgIcon" width="20" height="20"></i>
+            <i :class=getImageSource(suggestion.type)
+               id="imgIcon"
+               width="20"
+               height="20"></i>
 
             <span class="item-text small-regular">
               <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
@@ -136,7 +159,6 @@ export default {
     };
   },
 
-
   created() {
     // this.debouncedFetchCities = debounce(this.fetchCities, 100);
     this.loadSearchHistory();
@@ -144,7 +166,6 @@ export default {
     this.generateDefaultSuggestions();
     this.updateSuggestions();
   },
-
 
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
@@ -163,7 +184,6 @@ export default {
     const filterButton = this.$refs.filterButtonContainer;
   },
 
-
   computed: {
     filteredSuggestions() {
       if (this.filterAll) {
@@ -180,6 +200,7 @@ export default {
           (suggestion.type === 'history' && this.states.includes(suggestion.text))
         );
       }
+
       return this.suggestions; // fallback para todos os casos
     },
     visibleSuggestions() {
@@ -210,9 +231,8 @@ export default {
     }
   },
 
-
   methods: {
-      // Update the selectSuggestion method
+    // Update the selectSuggestion method
     selectSuggestion(suggestion) {
       this.inputValue = suggestion.text;
       this.visibleInput = suggestion.text;
@@ -223,10 +243,10 @@ export default {
       this.loadAnimation();
       this.addToHistory(suggestion.text);
       this.updateSuggestions();
-      
+
       // Get city name without state abbreviation
       const { city } = this.parseCityState(suggestion.text);
-      
+
       // Update store with the new location
       const locationStore = useLocationStore();
       locationStore.setLocation({
@@ -238,21 +258,22 @@ export default {
     },
     activateInput() {
       this.isInputActive = true;
-      this.$emit('menu-interaction') // Emit event for menu interaction
+      this.$emit('menu-interaction'); // Emit event for menu interaction
       this.$nextTick(() => {
         this.$refs.inputField.focus();
       });
     },
     handleFocus(event) {
       if (this.dropdown !== true) {
-        this.dropdown = true
-        this.$emit('menu-interaction') // Emit when dropdown opens
+        this.dropdown = true;
+        this.$emit('menu-interaction'); // Emit when dropdown opens
       }
-      event.stopPropagation()
+      event.stopPropagation();
     },
     async loadAnimation() {
       if (!this.inputValue) {
         alert('Por favor, insira um local.');
+
         return;
       }
       this.isLoading = true; // Ativa o spinner
@@ -266,40 +287,42 @@ export default {
       }
     },
     getMatchedPart(text) {
-      if (!this.inputValue) return '';
+      if (!this.inputValue) {return '';}
       const input = this.inputValue.toLowerCase();
       const suggestion = text.toLowerCase();
+
       return suggestion.startsWith(input) ? text.substring(0, this.inputValue.length) : '';
     },
     getUnmatchedPart(text) {
-      if (!this.inputValue) return text;
+      if (!this.inputValue) {return text;}
       const input = this.inputValue.toLowerCase();
       const suggestion = text.toLowerCase();
+
       return suggestion.startsWith(input) ? text.substring(this.inputValue.length) : text;
     },
 
     // Update the location data handler to preserve existing data when appropriate
     updateLocationData(location) {
-        // If this is a geolocation update (source is 'geolocation'), 
-        // it should override existing data
-        if (location.source === 'geolocation' || !this.locationData) {
-          this.locationData = location
-          console.log('Location updated from:', location.source)
-          this.cacheCities([location.city])
-          this.generateDefaultSuggestions()
-        }
-        // If we already have data and this isn't geolocation,
-        // only update if we don't have any existing data
-        else if (!this.locationData.city) {
-          this.locationData = location
-          console.log('Initial location set from:', location.source)
-          this.cacheCities([location.city])
-          this.generateDefaultSuggestions()
-        }
-      },
+      // If this is a geolocation update (source is 'geolocation'),
+      // it should override existing data
+      if (location.source === 'geolocation' || !this.locationData) {
+        this.locationData = location;
+        console.log('Location updated from:', location.source);
+        this.cacheCities([location.city]);
+        this.generateDefaultSuggestions();
+      }
+      // If we already have data and this isn't geolocation,
+      // only update if we don't have any existing data
+      else if (!this.locationData.city) {
+        this.locationData = location;
+        console.log('Initial location set from:', location.source);
+        this.cacheCities([location.city]);
+        this.generateDefaultSuggestions();
+      }
+    },
 
     generateDefaultSuggestions() {
-      if (!this.locationData) return;
+      if (!this.locationData) {return;}
       const { city, state, stateAbbreviation } = this.locationData;
 
       this.suggestions = [
@@ -319,9 +342,10 @@ export default {
         return {
           city: parts[0],
           state: parts[1]
-          
+
         };
       }
+
       return {
         city: text,
         state: null
@@ -330,7 +354,7 @@ export default {
 
     async fetchCities(query) {
       try {
-        // !to-do: gambiarra momentânea, deverá ser feito pela API 
+        // !to-do: gambiarra momentânea, deverá ser feito pela API
         // Parse the query in case it contains state abbreviation
         const { city } = this.parseCityState(query);
 
@@ -342,9 +366,10 @@ export default {
         if (!data || data.length === 0) {
           // Show "No Results" so user sees there's nothing valid
           this.suggestions = [{ text: 'No Results', type: 'noresults' }];
+
           return;
         }
-        
+
         //Otherwise, procceed: Store both display_name and code
         data.forEach(item => {
           // Create full display name (with state)
@@ -374,20 +399,21 @@ export default {
           const displayName = item.state_abbreviation ?
             `${item.display_name} - ${item.state_abbreviation}` :
             item.display_name;
-          
+
           acc[displayName] = item.cd_mun; // Store with state
           acc[item.display_name] = item.cd_mun; // Store without state
+
           return acc;
         }, {});
 
         // Update cached cities list
-        const cities = data.map(item => 
+        const cities = data.map(item =>
           item.state_abbreviation ?
             `${item.display_name} - ${item.state_abbreviation}` :
             item.display_name
         );
         this.cachedCities = [...new Set([...this.cachedCities, ...cities])];
-          
+
         // IMPORTANT: persist to localStorage
         localStorage.setItem('cachedCityData', JSON.stringify(this.cachedCityData));
 
@@ -411,6 +437,7 @@ export default {
           code: cached.code.toString(),
           type: cached.type,
         });
+
         return;
       }
 
@@ -427,6 +454,7 @@ export default {
           if (!code) {
             this.handleLocationFailure();
             console.error('Code not found for:', address);
+
             return;
           }
         }
@@ -439,6 +467,7 @@ export default {
           if (data[0].error) {
             this.handleLocationFailure();
             console.error('Location error:', data[0].error);
+
             return;
           }
 
@@ -520,13 +549,14 @@ export default {
     },
 
     async updateSuggestions(forceUpdate = false) {
-      if (!forceUpdate && this.inputValue === this.previousInputValue) return;
+      if (!forceUpdate && this.inputValue === this.previousInputValue) {return;}
       // Only proceed if input actually changed
-      if (this.inputValue === this.previousInputValue) return;
+      if (this.inputValue === this.previousInputValue) {return;}
 
       if (this.inputValue === '') {
         this.generateDefaultSuggestions();
         this.highlightedText = '';
+
         return;
       }
 
@@ -557,14 +587,14 @@ export default {
         console.error('Error fetching cities:', error);
       }
       // Before: Only fetched cities after 3 characters
-      // This was limiting immediate suggestions 
+      // This was limiting immediate suggestions
       // Purely based on especulations that the API could overcharge
       // if (this.inputValue.length === 3 && this.lastInputLength !== 3) {
       //   this.fetchCities(this.inputValue);
       //   this.lastInputLength = 3;  // Atualiza o comprimento anterior
       // } else if (this.inputValue.length !== 3 && this.lastInputLength === 3) {
       //   this.lastInputLength = this.inputValue.length;  // Atualiza o comprimento se sair de 3 caracteres
-      // }   
+      // }
     },
     filterHistory(query) {
       return this.searchHistory.filter(item => item.toLowerCase().startsWith(query));
@@ -583,6 +613,7 @@ export default {
         if (firstSuggestion.toLowerCase().startsWith(this.inputValue.toLowerCase())) {
           this.visibleInput = this.inputValue;
           this.highlightedText = firstSuggestion.slice(this.inputValue.length);
+
           return;
         }
       }
@@ -620,6 +651,7 @@ export default {
           this.highlightedText = '';
           this.dropdown = false;
         }
+
         return;
       }
 
@@ -635,13 +667,11 @@ export default {
           this.dropdown = false;
           this.locationChosen = suggestion.text;
 
-
           this.updateSuggestions();
           this.fetchCoordinates(this.locationChosen);
           //alert('aqui2.');
           // Only add to history if not already handled by selectSuggestion
           if (!this.locationChosen) {
-
 
           }
         }
@@ -649,11 +679,7 @@ export default {
       } else {
         this.dropdown = false;
 
-
       }
-
-
-
 
     },
     // this.suggestions = [];
@@ -666,7 +692,7 @@ export default {
         this.submit();
         // Removed setTimeout/submit since selectSuggestion already handles it
         // setTimeout(() => {
-        //   
+        //
         // }, 1000);
       }
     },
@@ -805,10 +831,8 @@ export default {
       this.isDragging = false;
     },
 
-
-
   }
-}
+};
 </script>
 
 <style scoped>
@@ -844,7 +868,6 @@ export default {
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-
 
 }
 
@@ -1065,7 +1088,7 @@ export default {
   overflow: hidden;
   color: var(--Body-Text-Body-Color, #212529);
   text-overflow: ellipsis;
-  /* Body/Small/Regular 
+  /* Body/Small/Regular
     font-family: Inter;
   font-size: 14px;
   font-style: normal;

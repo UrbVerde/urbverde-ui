@@ -3,8 +3,13 @@
   <div class="option">
     <ul class="inline-nav-item navbar-nav">
       <div class="dropdown" data-bs-auto-close="false">
-        <a href="#" class="nav-item nav-link" :class="{ 'dropdown-active': isDropdownOpen }" role="button"
-          data-bs-toggle="dropdown" aria-expanded="false" @click="toggleDropdown">
+        <a href="#"
+           class="nav-item nav-link"
+           :class="{ 'dropdown-active': isDropdownOpen }"
+           role="button"
+           data-bs-toggle="dropdown"
+           aria-expanded="false"
+           @click="toggleDropdown">
           <IconComponent :name="icon" :size="20" />
           <span class="textItem small-regular">{{ props.itemName }}</span>
           <div class="badge-right-menu" v-if="txtBadge">
@@ -15,12 +20,18 @@
 
         <ul class="dropdown-menu-hidden" :class="{ 'dropdown-menu-show': isDropdownOpen }">
 
-          <li class="dropdown-menu-item" v-for="(layer, index) in props.layers" :key="layer.id"
-            :class="{ 'dropdown-menu-item-active': layer.isActive }" @click="toggleLayerActive(index, $event)">
+          <li class="dropdown-menu-item"
+              v-for="(layer, index) in props.layers"
+              :key="layer.id"
+              :class="{ 'dropdown-menu-item-active': layer.isActive }"
+              @click="toggleLayerActive(index, $event)">
 
             <span class="dropdown-item-text small-regular">{{ layer.name }}</span>
             <div class="new-layout" v-if="layer.isNew">
-              <i :class="iconNew" v-if="layer.isNew" class="bi" id="imgIconNew"></i>
+              <i :class="iconNew"
+                 v-if="layer.isNew"
+                 class="bi"
+                 id="imgIconNew"></i>
             </div>
           </li>
 
@@ -60,6 +71,7 @@ const props = defineProps({
 // Computed property para controlar a visibilidade do badge
 const txtBadge = computed(() => {
   const hasActiveLayers = props.layers.some(layer => layer.isActive);
+
   return (!isDropdownOpen.value && hasActiveLayers) ? '1' : '';
 });
 
@@ -67,9 +79,7 @@ const isDropdownSelected = ref(props.isSelectedItem);
 
 const emit = defineEmits(['update:isSelectedItem']);
 
-const hasActiveLayers = () => {
-  return props.layers.some(layer => layer.isActive);
-};
+const hasActiveLayers = () => props.layers.some(layer => layer.isActive);
 
 const closeDropdownOnOutsideClick = (event) => {
   const dropdownElement = document.querySelector('.dropdown');
@@ -96,7 +106,7 @@ const toggleDropdown = (event) => {
 const toggleLayerActive = (index, event) => {
   event.stopPropagation();
   const currentLayer = props.layers[index];
-  
+
   if (currentLayer.isActive) {
     // When deactivating a layer
     isDropdownSelected.value = false;
@@ -195,7 +205,6 @@ const toggleLayerActive = (index, event) => {
   background-color: black;
   align-self: stretch;
 }
-
 
 .nav-item {
   display: flex;

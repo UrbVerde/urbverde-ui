@@ -8,7 +8,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { createHead } from '@vueuse/head';
 import { createApp } from 'vue';
-import { createPinia } from 'pinia'; 
+import { createPinia } from 'pinia';
 import axios from 'axios';
 
 import App from './App.vue';
@@ -28,7 +28,7 @@ async function prepareApp() {
 }
 
 const app = createApp(App);
-const pinia = createPinia(); 
+const pinia = createPinia();
 const head = createHead();
 
 prepareApp().then(() => {

@@ -4,11 +4,11 @@
 
     <div class="content-wrapper">
       <!-- Sidebar -->
-      <Sidebar 
-        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" 
+      <Sidebar
+        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
         :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar" 
-        @update-coordinates="updateCoordinates" 
+        @toggle-sidebar="toggleSidebar"
+        @update-coordinates="updateCoordinates"
       />
 
       <!-- Main content (navbar, map, etc.) -->
@@ -19,10 +19,10 @@
         </div>
 
         <div v-else>
-          <Navbar 
-            :class="{ 'navbar-collapsed': !isSidebarOpen }" 
+          <Navbar
+            :class="{ 'navbar-collapsed': !isSidebarOpen }"
             :active-section="activeSection"
-            @navigate-to="scrollToSection" 
+            @navigate-to="scrollToSection"
           />
 
           <div id="map" ref="Mapa" class="content-area">
@@ -32,29 +32,43 @@
           </div>
 
           <!-- Stats Section (scroll target) -->
-          <div id="stats" ref="statsSection" class="box" style="height:476px; ">
+          <div id="stats"
+               ref="statsSection"
+               class="box"
+               style="height:476px; ">
             Estatísticas do {{ category }} em {{ cityName }}
           </div>
 
           <!-- Pop Vulnerável -->
-          <div id="vulnerable" ref="vulnerableSection" class="box" style="height:666px; border-top: 1px solid black">
+          <div id="vulnerable"
+               ref="vulnerableSection"
+               class="box"
+               style="height:666px; border-top: 1px solid black">
             Quem é o mais afetado pelo calor extremo?
             <!-- Quem é o mais afetado pelo {{ currentLayer }} em {{ cityName }}? -->
           </div>
 
           <!-- Ranking -->
-          <div id="ranking" ref="rankingSection" class="box" style="height:1082px; border-top: 1px solid black">
+          <div id="ranking"
+               ref="rankingSection"
+               class="box"
+               style="height:1082px; border-top: 1px solid black">
             {{ cityName }} no ranking dos municípios
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
-          <div id="data" ref="dataSection" class="box" style="height:636px; border-top: 1px solid black">
+          <div id="data"
+               ref="dataSection"
+               class="box"
+               style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
           </div>
 
           <!-- Footer -->
-          <div id="newsletter" ref="newsletterSection" class="box"
-            style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
+          <div id="newsletter"
+               ref="newsletterSection"
+               class="box"
+               style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
             RECEBA AS NOVIDADES POR EMAIL
           </div>
         </div>
@@ -65,13 +79,13 @@
 
 <script>
 /**
- * We are still using the Options API (classic) 
- * instead of <script setup> the new recommended approach 
+ * We are still using the Options API (classic)
+ * instead of <script setup> the new recommended approach
  * in Vue 3.2+ for clean, concise code.
 */
 import { ref, onMounted, onUnmounted, computed  } from 'vue';
-import { useRoute, useRouter } from 'vue-router'
-import { useLocationStore } from '@/stores/locationStore'
+import { useRoute, useRouter } from 'vue-router';
+import { useLocationStore } from '@/stores/locationStore';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
@@ -80,17 +94,17 @@ import Legenda from '../components/map/Legenda.vue';
 export default {
   name: 'MapPage',
   components: { Sidebar, MapBox, Navbar, Legenda },
-  
+
   setup() {
-    const route = useRoute()
-    const router = useRouter()
-    const locationStore = useLocationStore()
+    const route = useRoute();
+    const router = useRouter();
+    const locationStore = useLocationStore();
 
     // Refs
     const coordinates = ref({ lat: null, lng: null });
     const activeSection = ref('map');
     const isSidebarOpen = ref(true);
-    
+
     // Computed properties from store
     const category = computed(() => locationStore.category || 'category?');
     const currentLayer = computed(() => locationStore.layer || 'layer?');
@@ -101,7 +115,6 @@ export default {
       stats: null,
       ranking: null,
     };
-
 
     // Methods
     const toggleSidebar = () => {
@@ -152,12 +165,12 @@ export default {
 
     onMounted(() => {
       // Check if URL has ?nm_mun=..., ?cd_mun=...
-      const { nm_mun, cd_mun } = route.query
+      const { nm_mun, cd_mun } = route.query;
       if (nm_mun || cd_mun) {
         locationStore.setLocation({
           cd_mun: cd_mun ?? null,
           nm_mun: nm_mun ?? null,
-        })
+        });
       }
 
       // Set coordinates from store if available
@@ -190,12 +203,12 @@ export default {
       coordinates,
       activeSection,
       isSidebarOpen,
-      
+
       // Computed properties
       category,
       currentLayer,
       cityName,
-      
+
       // Methods
       updateCoordinates,
       scrollToSection,

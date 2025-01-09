@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/search_dropdown/GetUserLocation.vue -->
 <template>
   <div>
-    <!-- 
+    <!--
       <p v-if="locationData.city">
         Você está em: {{ locationData.city }}, {{ locationData.stateAbbreviation }} ({{ locationData.state }}), {{ locationData.country }}
       </p>
@@ -11,8 +11,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
-import axios from 'axios'
+import { ref, onMounted, reactive } from 'vue';
+import axios from 'axios';
 
 // Using defineProps and defineEmits for <script setup>
 const props = defineProps({
@@ -24,13 +24,13 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-})
+});
 
-const emit = defineEmits(['location-updated', 'location-error'])
+const emit = defineEmits(['location-updated', 'location-error']);
 
 // Reactive state
-const loading = ref(true)
-const error = ref(null)
+const loading = ref(true);
+const error = ref(null);
 
 // We can store all location data in a reactive object:
 const locationData = reactive({
@@ -75,21 +75,23 @@ const locationData = reactive({
     { name: 'Sergipe', abbreviation: 'SE' },
     { name: 'Tocantins', abbreviation: 'TO' },
   ],
-})
+});
 
 onMounted(() => {
-  initializeLocation()
-})
+  initializeLocation();
+});
 
 // Checking the localStorage cache
 function checkCachedLocation() {
-  const cachedTimestamp = localStorage.getItem('cachedTimestamp')
-  const cacheDuration = 24 * 60 * 60 * 1000
+  const cachedTimestamp = localStorage.getItem('cachedTimestamp');
+  const cacheDuration = 24 * 60 * 60 * 1000;
   if (cachedTimestamp && (Date.now() - cachedTimestamp) <= cacheDuration) {
-    loadCachedLocation()
-    return true
+    loadCachedLocation();
+
+    return true;
   }
-  return false
+
+  return false;
 }
 
 // Loading data from localStorage
@@ -106,34 +108,34 @@ function loadCachedLocation() {
       lat: Number(localStorage.getItem('cachedLatitude')),
       lng: Number(localStorage.getItem('cachedLongitude'))
     }
-  }
-  Object.assign(locationData, cached)
-  emitLocationUpdate()
-  loading.value = false
+  };
+  Object.assign(locationData, cached);
+  emitLocationUpdate();
+  loading.value = false;
 }
 
 // Wrapper to run geolocation + IP location
 async function initializeLocation() {
   if (checkCachedLocation()) {
-    return
+    return;
   }
   try {
     // Parallel calls: geolocation + IP
     const [geoLocation, ipLocation] = await Promise.allSettled([
       getGeolocation(),
       getIPLocation()
-    ])
-    
+    ]);
+
     // If geolocation succeeded, process it
     if (geoLocation.status === 'fulfilled') {
-      processGeolocationData(geoLocation.value)
+      processGeolocationData(geoLocation.value);
     }
     // If IP location succeeded, process it
     if (ipLocation.status === 'fulfilled') {
-      processIPLocationData(ipLocation.value)
+      processIPLocationData(ipLocation.value);
     }
   } catch (err) {
-    handleError(err)
+    handleError(err);
   }
 }
 
@@ -141,40 +143,41 @@ async function initializeLocation() {
 function getGeolocation() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      reject(new Error('Geolocalização não suportada'))
-      return
+      reject(new Error('Geolocalização não suportada'));
+
+      return;
     }
 
     function handleError(error) {
       switch(error.code) {
-        case error.PERMISSION_DENIED:
-          console.log('Usuário não autorizou a geolocalização')
-          reject(new Error('Permissão para geolocalização negada pelo usuário'))
-          break
-        case error.POSITION_UNAVAILABLE:
-          console.log('Informações de localização indisponíveis')
-          reject(new Error('Informações de localização indisponíveis'))
-          break
-        case error.TIMEOUT:
-          console.log('Tempo limite excedido para obter localização')
-          reject(new Error('Tempo limite excedido para obter localização'))
-          break
-        default:
-          console.log('Erro desconhecido ao obter localização:', error.message)
-          reject(new Error('Erro ao obter localização'))
+      case error.PERMISSION_DENIED:
+        console.log('Usuário não autorizou a geolocalização');
+        reject(new Error('Permissão para geolocalização negada pelo usuário'));
+        break;
+      case error.POSITION_UNAVAILABLE:
+        console.log('Informações de localização indisponíveis');
+        reject(new Error('Informações de localização indisponíveis'));
+        break;
+      case error.TIMEOUT:
+        console.log('Tempo limite excedido para obter localização');
+        reject(new Error('Tempo limite excedido para obter localização'));
+        break;
+      default:
+        console.log('Erro desconhecido ao obter localização:', error.message);
+        reject(new Error('Erro ao obter localização'));
       }
     }
 
     navigator.geolocation.getCurrentPosition(
       resolve,
       handleError,
-      { 
+      {
         timeout: 5000,
         enableHighAccuracy: true,
         maximumAge: 0
       }
-    )
-  })
+    );
+  });
 }
 
 // IP-based location
@@ -182,30 +185,31 @@ async function getIPLocation() {
   try {
     const response = await axios.get(
       `https://api.ipdata.co/?api-key=${props.ipDataApiKey}` //fca7ec8cb54f07bfacf5cb76321d92aef545786dc5699a77c09f3f31
-    )
-    return response.data
+    );
+
+    return response.data;
   } catch (err) {
-    throw new Error('Erro ao obter localização por IP')
+    throw new Error('Erro ao obter localização por IP');
   }
 }
 
 // Process the geolocation data (reverse geocode with OSM)
 async function processGeolocationData(position) {
   try {
-    const { latitude, longitude } = position.coords
+    const { latitude, longitude } = position.coords;
     const response = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-    )
-    const data = await response.json()
+    );
+    const data = await response.json();
 
     updateLocationData({
       city: data.address.city || data.address.town || data.address.village,
       state: data.address.state,
       country: data.address.country,
       source: 'geolocation'
-    })
+    });
   } catch (error) {
-    throw new Error('Erro ao processar dados de geolocalização')
+    throw new Error('Erro ao processar dados de geolocalização');
   }
 }
 
@@ -213,10 +217,10 @@ async function processGeolocationData(position) {
 // Process IP location data
 function processIPLocationData(data) {
   if (!data) {
-    throw new Error('No IP data received')
+    throw new Error('No IP data received');
   }
 
-  console.log('Raw IP data:', data) // Debug log
+  console.log('Raw IP data:', data); // Debug log
 
   // Extract the required fields from ipdata response
   const locationInfo = {
@@ -230,23 +234,23 @@ function processIPLocationData(data) {
       lat: data.latitude,
       lng: data.longitude
     }
-  }
+  };
 
-  console.log('Processed location info:', locationInfo) // Debug log
+  console.log('Processed location info:', locationInfo); // Debug log
 
   // Check if city exists in municipios list if provided
   if (props.municipios && props.municipios.length > 0 && !props.municipios.includes(data.city)) {
-    console.warn(`${data.city} não encontrada na lista de municípios`)
+    console.warn(`${data.city} não encontrada na lista de municípios`);
   }
 
   // Update the location data with all fields
-  updateLocationData(locationInfo)
+  updateLocationData(locationInfo);
 }
 
 // Update reactive object, cache, and emit
 function updateLocationData(data) {
-  console.log('Updating location data with:', data) // Debug log
-  
+  console.log('Updating location data with:', data); // Debug log
+
   // Merge data into locationData
   Object.assign(locationData, {
     city: data.city,
@@ -257,14 +261,14 @@ function updateLocationData(data) {
     source: data.source,
     coordinates: data.coordinates,
     international: data.country !== 'Brasil' && data.country !== 'Brazil'
-  })
-  
-  console.log('Updated location data:', locationData) // Debug log
-  
+  });
+
+  console.log('Updated location data:', locationData); // Debug log
+
   // Cache the location data
-  cacheLocationData()
+  cacheLocationData();
   // Emit the update
-  emitLocationUpdate()
+  emitLocationUpdate();
 }
 
 // Save to localStorage
@@ -280,13 +284,13 @@ function cacheLocationData() {
     cachedLatitude: locationData.coordinates?.lat?.toString(),
     cachedLongitude: locationData.coordinates?.lng?.toString(),
     cachedTimestamp: Date.now().toString()
-  }
-  
+  };
+
   Object.entries(items).forEach(([key, value]) => {
     if (value !== null && value !== undefined) {
-      localStorage.setItem(key, value)
+      localStorage.setItem(key, value);
     }
-  })
+  });
 }
 
 // Emit final object to the parent
@@ -297,16 +301,16 @@ function emitLocationUpdate() {
       lat: locationData.coordinates?.lat || 0,
       lng: locationData.coordinates?.lng || 0
     }
-  }
-  console.log('Emitting location update:', locationUpdate) // Debug log
-  emit('location-updated', locationUpdate)
-  loading.value = false
+  };
+  console.log('Emitting location update:', locationUpdate); // Debug log
+  emit('location-updated', locationUpdate);
+  loading.value = false;
 }
 
 // Error handler
 function handleError(err) {
-  console.error('Location Error:', err)
-  error.value = err.message || 'Erro ao obter localização'
-  emit('location-error', error.value)
+  console.error('Location Error:', err);
+  error.value = err.message || 'Erro ao obter localização';
+  emit('location-error', error.value);
 }
 </script>

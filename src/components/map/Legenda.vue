@@ -104,7 +104,7 @@ export default {
   max-height: calc(100% - 40px); /* Prevents it from exceeding the map's height */
   border-radius: 16px 0px 0px 16px;
   background-color: #ffffff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 1; /* Ensure it stays above the map */
   transition: opacity 0.3s ease-in-out;

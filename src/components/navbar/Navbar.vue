@@ -20,8 +20,8 @@
 
       <!-- Segunda linha: Navegação -->
       <div class="tabs">
-        <button 
-          v-for="tab in tabs" 
+        <button
+          v-for="tab in tabs"
           :key="tab.id"
           @click="navigateTo(tab.id)"
           :class="{ 'active-tab': activeSection === tab.id }"
@@ -46,7 +46,7 @@ export default {
       required: true
     }
   },
-  
+
   setup() {
     const locationStore = useLocationStore();
 
@@ -90,13 +90,13 @@ export default {
 <style scoped>
 .navbar {
   width: 100%;
-  position: sticky;  
+  position: sticky;
   top: 0;
   z-index: 10;
   background-color: #F8F9FACC;
   box-sizing: border-box;
   padding: 32px 40px;
-  display: block; 
+  display: block;
 }
 
 .response {

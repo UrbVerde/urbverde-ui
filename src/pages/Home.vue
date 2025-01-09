@@ -59,7 +59,7 @@
 
           <!-- Cards de comentários sobre a UrbVerde -->
           <div class="wrapper-cards">
- 
+
             <div class="cards shadow-lg">
               <div class="top-content small-regular">
                 <p>“ Iniciativas como a UrbVerde [...] fornecem a esperança de que
@@ -217,8 +217,8 @@
 </template>
 
 <script>
-import { useLocationStore } from '@/stores/locationStore.js'
-import { useRouter } from 'vue-router'
+import { useLocationStore } from '@/stores/locationStore.js';
+import { useRouter } from 'vue-router';
 
 // Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';

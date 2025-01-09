@@ -7,21 +7,21 @@
         <MinimizeButton @click="toggleSidebar" />
       </div>
       <div v-show="showContent" class="search-area">
-        <BuscaSimples 
-          @api-error="$emit('api-error')" 
+        <BuscaSimples
+          @api-error="$emit('api-error')"
           @location-updated="onLocationUpdated"
         />
       </div>
       <div v-show="showContent" class="middle-area">
-        <DropDown 
-          v-if="isSearchDone" 
+        <DropDown
+          v-if="isSearchDone"
           :code="code"
           :type="type"
         />
       </div>
       <div v-show="showContent" class="bottom-area">
         <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
-            <i class="bi bi-upload" tag="imgIcon"></i>
+          <i class="bi bi-upload" tag="imgIcon"></i>
           <span id="txtBottom small-regular">Colaborar com dados</span>
         </a>
         <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
@@ -42,8 +42,8 @@ import DropDown from './drop_down/NavbarDropdown.vue';
 
 // Define emits with clear names
 const emit = defineEmits([
-  'update-coordinates', 
-  'toggle-sidebar', 
+  'update-coordinates',
+  'toggle-sidebar',
   'api-error'
 ]);
 
@@ -142,7 +142,7 @@ async function toggleSidebar() {
   gap: 16px;
   flex: 1 0 0;
   align-self: stretch;
-  
+
 }
 
 .search-area {

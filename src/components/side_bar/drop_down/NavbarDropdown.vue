@@ -3,15 +3,15 @@
   <div class="container">
     <span class="text caption-medium">CAMADAS</span>
     <div class="options">
-      <NavbarItem 
-        v-for="(category, index) in categories" 
-        :key="category.id" 
+      <NavbarItem
+        v-for="(category, index) in categories"
+        :key="category.id"
         :isSelectedItem="category.isSelected"
-        :itemName="category.name" 
-        :icon="category.icon" 
-        :isNew="category.isNew" 
-        :layers="category.layers" 
-        @update:isSelectedItem="handleSelectionChange(index)" 
+        :itemName="category.name"
+        :icon="category.icon"
+        :isNew="category.isNew"
+        :layers="category.layers"
+        @update:isSelectedItem="handleSelectionChange(index)"
       />
     </div>
   </div>
@@ -38,11 +38,10 @@ const props = defineProps({
   }
 });
 
-
 // Watch for changes in code
 watch(
   [() => props.code, () => props.type],
-  async ([newCode, newType]) => {
+  async([newCode, newType]) => {
     await fetchCategories(newCode, newType);
   },
   { immediate: true }
@@ -54,7 +53,7 @@ async function fetchCategories(code, type) {
     console.log('Fetching categories:', { code, type });
     const response = await fetch(`${API_URLS.CATEGORIES}?code=${code}&type=${type}`);
     const data = await response.json();
-    
+
     if (data && data.categories) {
       // Initialize categories with selection state
       categories.value = data.categories.map(category => ({
@@ -64,13 +63,13 @@ async function fetchCategories(code, type) {
 
       // Update store
       locationStore.setCategories(categories.value);
-      
+
       // Set initial selected category if none is selected
       const initialSelected = categories.value.find(cat => cat.isSelected);
       if (initialSelected) {
         locationStore.setSelectedCategory(initialSelected);
       }
-      
+
       console.log('Categories loaded:', categories.value);
     } else {
       console.warn('No categories received:', data);
@@ -91,12 +90,13 @@ const handleSelectionChange = (selectedIndex) => {
         isActive: false
       }));
     }
+
     return {
       ...category,
       isSelected: index === selectedIndex
     };
   });
-  
+
   // Update the store with the selected category
   const selectedCategory = categories.value[selectedIndex];
   locationStore.setSelectedCategory(selectedCategory);

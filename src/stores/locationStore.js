@@ -1,5 +1,5 @@
 // src/stores/locationStore.js
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
@@ -12,33 +12,33 @@ export const useLocationStore = defineStore('locationStore', {
     coordinates: { lat: null, lng: null },
     bbox: null,
     zoom: null,
-    categories: [], 
+    categories: [],
     selectedCategory: null,
   }),
   actions: {
     setLocation({ cd_mun, nm_mun, uf, category, layer, scale }) {
-      this.cd_mun = cd_mun ?? null
-      this.nm_mun = nm_mun ?? null
-      this.uf = uf ?? null
-      this.category = category ?? '?'
+      this.cd_mun = cd_mun ?? null;
+      this.nm_mun = nm_mun ?? null;
+      this.uf = uf ?? null;
+      this.category = category ?? '?';
       this.layer = data[0]?.slug ?? '?';
-      this.scale = scale ?? '?'
+      this.scale = scale ?? '?';
     },
 
     setCoordinates({ lat, lng }) {
-      this.coordinates.lat = lat
-      this.coordinates.lng = lng
+      this.coordinates.lat = lat;
+      this.coordinates.lng = lng;
     },
 
     setCategories(categories) {
-      this.categories = categories
+      this.categories = categories;
     },
 
     setSelectedCategory(category) {
-      this.selectedCategory = category
-      this.category = category.name // Update the existing category field
+      this.selectedCategory = category;
+      this.category = category.name; // Update the existing category field
       if (category.layers && category.layers.length > 0) {
-        this.layer = category.layers[0].slug // Update layer if available
+        this.layer = category.layers[0].slug; // Update layer if available
       }
     },
 
@@ -46,28 +46,28 @@ export const useLocationStore = defineStore('locationStore', {
     async fetchCoordinatesByCdMun(cd_mun) {
       try {
         // Example fetch
-        const response = await fetch(`/v1/address/suggestions?query=${cd_mun}`)
-        const data = await response.json()
+        const response = await fetch(`/v1/address/suggestions?query=${cd_mun}`);
+        const data = await response.json();
         if (data && data.length && data[0].coordinates) {
-          this.setCoordinates(data[0].coordinates)
+          this.setCoordinates(data[0].coordinates);
         }
       } catch (err) {
-        console.error('Failed to fetch coords by cd_mun:', err)
+        console.error('Failed to fetch coords by cd_mun:', err);
       }
     },
 
     async fetchCoordinatesByName(nm_mun) {
       try {
         // Or your actual API call for city name
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${nm_mun}`)
-        const data = await response.json()
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${nm_mun}`);
+        const data = await response.json();
         // pick the first or best match
         if (data && data.length && data[0].coordinates) {
-          this.setCoordinates(data[0].coordinates)
-          this.cd_mun = data[0].cd_mun ?? this.cd_mun
+          this.setCoordinates(data[0].coordinates);
+          this.cd_mun = data[0].cd_mun ?? this.cd_mun;
         }
       } catch (err) {
-        console.error('Failed to fetch coords by name:', err)
+        console.error('Failed to fetch coords by name:', err);
       }
     },
   },
@@ -78,4 +78,4 @@ export const useLocationStore = defineStore('locationStore', {
     getCategoryName: (state) => state.category,
     getCurrentLayer: (state) => state.layer,
   },
-})
+});

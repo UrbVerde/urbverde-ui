@@ -1,7 +1,7 @@
 <template>
   <div class="alling-button">
-    <button 
-      @click="changeButton" 
+    <button
+      @click="changeButton"
       :class="['btn', 'btn-light', 'minimize-btn', minimized ? 'btn-closed' : 'btn-open']"
     >
       <i :class="['bi', minimized ? 'bi-chevron-right' : 'bi-chevron-left']" style="font-size: 20px"></i>
@@ -10,14 +10,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const minimized = ref(false)
-const emit = defineEmits(['changed-state'])
+const minimized = ref(false);
+const emit = defineEmits(['changed-state']);
 
 function changeButton() {
-  emit('changed-state')
-  minimized.value = !minimized.value
+  emit('changed-state');
+  minimized.value = !minimized.value;
 }
 </script>
 

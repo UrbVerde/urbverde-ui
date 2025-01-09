@@ -23,9 +23,7 @@ export default {
       type: Object,
       required: true,
       default: () => ({ lat: 0, lng: 0 }),
-      validator: (value) => {
-        return typeof value.lat === 'number' && typeof value.lng === 'number';
-      },
+      validator: (value) => typeof value.lat === 'number' && typeof value.lng === 'number',
     },
   },
   data() {
@@ -45,20 +43,21 @@ export default {
   },
   methods: {
     checkCoordinates() {
-      if (!this.coordinates || 
-          !this.coordinates.lat || 
-          !this.coordinates.lng || 
-          this.coordinates.lat === 0 || 
+      if (!this.coordinates ||
+          !this.coordinates.lat ||
+          !this.coordinates.lng ||
+          this.coordinates.lat === 0 ||
           this.coordinates.lng === 0) {
         this.showError = true;
+
         return;
       }
-      
+
       this.showError = false;
       this.initializeMap();
     },
     initializeMap() {
-      if (this.showError) return;
+      if (this.showError) {return;}
 
       // Reset states
       this.mapLoaded = false;
@@ -83,10 +82,10 @@ export default {
           this.map.addImage(id, placeholder);
         };
       });
-      
+
       this.map.on('load', () => {
         console.log('Map loaded successfully');
-        
+
         // First make the container visible
         this.mapVisible = true;
 
@@ -99,7 +98,7 @@ export default {
             duration: this.MAP_ANIMATION_DURATION,
             essential: true
           });
-          
+
           this.mapLoaded = true;
         }, 300); // Wait for fade-in to complete
       });
@@ -114,12 +113,14 @@ export default {
             this.map = null;
           }, 300); // Wait for fade-out
         }
+
         return;
       }
 
       if (this.showError) {
         this.showError = false;
         this.initializeMap();
+
         return;
       }
 
@@ -160,7 +161,7 @@ export default {
   width: calc(100% - 48px);
   height: calc(100vh - 35px - 144px);
   border-radius: 15px;
-  margin: 0px 24px 0; 
+  margin: 0px 24px 0;
   background: #F8F9FA;
   cursor: pointer; /* Change cursor to hand */
 }

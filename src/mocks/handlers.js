@@ -8,10 +8,10 @@ import categoriesResponse from './responses/categories.json';
 const filterCategories = (code, type) => {
   console.log('Received code:', code, 'type:', typeof code);
   code = String(code);
-  
+
   // Deep clone the categories to avoid modifying the original
   const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
-    
+
   // Check if it starts with 35 (São Paulo state)
   const isSaoPauloState = String(code).startsWith('35');
 
@@ -19,10 +19,10 @@ const filterCategories = (code, type) => {
     if (code === '3534708') {
       // The exclusive layer to be added to two categories
       const exclusiveLayer = {
-        "id": "tree_inventory",
-        "name": "Inventário de Árvores",
-        "isActive": false,
-        "isNew": true
+        'id': 'tree_inventory',
+        'name': 'Inventário de Árvores',
+        'isActive': false,
+        'isNew': true
       };
       // Find vegetation category and add the layer at the beginning
       const vegetationCategory = categories.find(cat => cat.id === 'vegetation');
@@ -35,29 +35,29 @@ const filterCategories = (code, type) => {
         parksCategory.layers.unshift({ ...exclusiveLayer });
       }
     } else if (code === '3548906') {
-        // The exclusive layer to be added to two categories
-        const exclusiveLayer = {
-          "id": "fruit_trees",
-          "name": "Pés de Fruta",
-          "isActive": false,
-          "isNew": true
-        };
+      // The exclusive layer to be added to two categories
+      const exclusiveLayer = {
+        'id': 'fruit_trees',
+        'name': 'Pés de Fruta',
+        'isActive': false,
+        'isNew': true
+      };
         // Find vegetation category and add the layer at the beginning
-        const agricultureCategory = categories.find(cat => cat.id === 'agriculture');
-        if (agricultureCategory) {
-          agricultureCategory.layers.unshift({ ...exclusiveLayer });
-        }
+      const agricultureCategory = categories.find(cat => cat.id === 'agriculture');
+      if (agricultureCategory) {
+        agricultureCategory.layers.unshift({ ...exclusiveLayer });
       }
-    
+    }
+
     return { categories };
   } else {
     return {
-      categories: categories.filter(category => 
+      categories: categories.filter(category =>
         category.id === 'parks' || category.id === 'census' || category.id === 'transport'
       )
     };
   }
-  
+
 };
 
 export const handlers = [
@@ -84,12 +84,12 @@ export const handlers = [
 
       // Handle states
       // Handle states separately
-    const isState = ['acre', 'alagoas', 'amapá', 'amazonas', 'bahia', 'ceará', 
-      'distrito federal', 'espírito santo', 'goiás', 'maranhão', 'mato grosso', 
-      'mato grosso do sul', 'minas gerais', 'pará', 'paraíba', 'paraná', 
-      'pernambuco', 'piauí', 'rio de janeiro', 'rio grande do norte', 
-      'rio grande do sul', 'rondônia', 'roraima', 'santa catarina', 'são paulo', 
-      'sergipe', 'tocantins', 'brasil'].includes(query);
+      const isState = ['acre', 'alagoas', 'amapá', 'amazonas', 'bahia', 'ceará',
+        'distrito federal', 'espírito santo', 'goiás', 'maranhão', 'mato grosso',
+        'mato grosso do sul', 'minas gerais', 'pará', 'paraíba', 'paraná',
+        'pernambuco', 'piauí', 'rio de janeiro', 'rio grande do norte',
+        'rio grande do sul', 'rondônia', 'roraima', 'santa catarina', 'são paulo',
+        'sergipe', 'tocantins', 'brasil'].includes(query);
       if (isState) {
         return HttpResponse.json([{
           display_name: query,
@@ -100,6 +100,7 @@ export const handlers = [
       // Search by city name
       const filteredCities = cities.filter(city => {
         const fullName = `${city.name} - ${city.state}`.toLowerCase();
+
         return fullName.startsWith(query);
       }).slice(0, 5);
 
@@ -120,6 +121,7 @@ export const handlers = [
       })));
     } catch (error) {
       console.error('Error in mock handler:', error);
+
       return HttpResponse.json([{
         display_name: query,
         error: 'INTERNAL_ERROR'
@@ -128,16 +130,14 @@ export const handlers = [
   }),
 
   // Modified categories handler
-  http.get('*/v1/address/categories', async ({ request }) => {
+  http.get('*/v1/address/categories', async({ request }) => {
     const url = new URL(request.url);
     const cityCode = url.searchParams.get('cityCode');
     const code = url.searchParams.get('code');
     const type = url.searchParams.get('type') || 'city';
-    
+
     console.log('MSW Categories Handler Called', {code, type}); // Debug log
+
     return HttpResponse.json(filterCategories(code,type));
   })
 ];
-
-
-    
