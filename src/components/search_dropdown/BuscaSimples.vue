@@ -5,7 +5,8 @@
                      @location-updated="updateLocationData"
                      @location-error="handleLocationFailure" />
 
-    <div ref="inputContainer" :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+    <div ref="inputContainer"
+         :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
@@ -113,9 +114,9 @@ import { API_URLS } from '@/constants/endpoints';
 const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
 
 const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
-const props = defineProps({
-  IPDATA_API_KEY: String
-});
+// const props = defineProps({
+//   IPDATA_API_KEY: String
+// });
 
 // All this shouldnt be hardcorded here in the next versions (!)
 const states = [
@@ -394,8 +395,6 @@ async function fetchCities(query) {
         : item.display_name
     );
     cachedCities.value = [...new Set([...cachedCities.value, ...newCities])];
-
-
 
     // if (!data || data.length === 0) {
     //   suggestions.value = [{ text: 'No Results', type: 'noresults' }];
@@ -745,7 +744,7 @@ function generateDefaultSuggestions() {
     { text: state, type: 'state' },
     { text: 'Brasil', type: 'country' },
   ];
-  
+
 }
 
 function getImageSource(type) {
