@@ -1,15 +1,4 @@
 <!-- urbverde-ui/src/components/search_dropdown/GetUserLocation.vue -->
-<template>
-  <div>
-    <!--
-      <p v-if="locationData.city">
-        Você está em: {{ locationData.city }}, {{ locationData.stateAbbreviation }} ({{ locationData.state }}), {{ locationData.country }}
-      </p>
-      <p v-else>Obtendo sua localização...</p>
-    -->
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import axios from 'axios';
@@ -72,6 +61,7 @@ const locationData = reactive({
     { name: 'Roraima', abbreviation: 'RR' },
     { name: 'Santa Catarina', abbreviation: 'SC' },
     { name: 'São Paulo', abbreviation: 'SP' },
+    { name: 'Sao Paulo', abbreviation: 'SP' },
     { name: 'Sergipe', abbreviation: 'SE' },
     { name: 'Tocantins', abbreviation: 'TO' },
   ],
@@ -213,7 +203,6 @@ async function processGeolocationData(position) {
   }
 }
 
-// Process IP location
 // Process IP location data
 function processIPLocationData(data) {
   if (!data) {

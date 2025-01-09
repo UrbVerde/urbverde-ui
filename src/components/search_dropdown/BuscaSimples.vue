@@ -712,6 +712,17 @@ export default {
       if (!this.locationData) {return;}
       const { city, state, stateAbbreviation } = this.locationData;
 
+      // let defaultSuggestions = [];
+
+      // if (international || city === 'error' || state === 'error' || city === null) {
+      //   // Pre-defined default suggestions
+      //   const defaultCity = 'Rio de Janeiro - RJ';
+      //   // Fetch the data for Rio de Janeiro if not already cached
+      //   if (!this.cachedCityData[defaultCity]) {
+      //     this.fetchCities('Rio de Janeiro');
+      //   }
+      // }
+
       this.suggestions = [
         { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
         { text: state, type: 'state' },
