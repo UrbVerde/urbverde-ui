@@ -595,7 +595,7 @@ async function updateSuggestions(forceUpdate = false) {
       ...historySuggestions.map(item => ({ text: item, type: 'history' })),
       ...citySuggestions.map(item => ({ text: item, type: 'city' })),
       // { type: 'separator' }, // Add separator after history items
-      ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
+      ...stateSuggestions.map(item => ({ text: item, type: 'stateAbbreviation' })),
     ];
 
     // Update these after everything is done
