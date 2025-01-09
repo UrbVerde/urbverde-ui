@@ -113,7 +113,8 @@ export default {
   },
 
   setup() {
-
+    const route = useRoute();
+    const locationStore = useLocationStore();
     // Configuração das meta tags de SEO
     useHead({
       title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',

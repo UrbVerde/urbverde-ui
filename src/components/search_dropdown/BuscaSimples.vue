@@ -62,11 +62,7 @@
       <div class="suggestion-grid">
         <div class="filter-container">
           <div class="filter-button-container"
-               ref="filterButtonContainer"
-               @mousedown="startDrag"
-               @mousemove="onDrag"
-               @mouseup="endDrag"
-               @mouseleave="endDrag">
+               ref="filterButtonContainer">
             <button
               :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
               @click="toggleAll">Todos</button>
@@ -153,7 +149,7 @@ export default {
       filterAll: true,
       filterCity: false,
       filterState: false,
-      isDragging: false,
+      // isDragging: false,
       startX: 0,
       scrollLeft: 0,
       IPDATA_API_KEY: import.meta.env.VITE_IPDATA_API_KEY,
@@ -170,7 +166,7 @@ export default {
 
   mounted() {
     document.addEventListener('mousedown', this.handleClickOutside);
-    const filterButton = this.$refs.filterButtonContainer;
+    // const filterButton = this.$refs.filterButtonContainer;
     // Show dropdown after 2.5s delay
     setTimeout(() => {
       if (!this.dropdown && this.inputValue === '') {
@@ -182,7 +178,7 @@ export default {
   },
   beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
-    const filterButton = this.$refs.filterButtonContainer;
+    // const filterButton = this.$refs.filterButtonContainer;
   },
 
   computed: {
@@ -771,20 +767,21 @@ export default {
         this.updateHighlightedText();
       }
     },
-    startDrag(event) {
-      this.isDragging = true;
-      this.startX = event.pageX || event.touches[0].pageX;
-      this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
-    },
-    onDrag(event) {
-      if (!this.isDragging) { return; }
-      const x = event.pageX || event.touches[0].pageX;
-      const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
-      this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
-    },
-    endDrag() {
-      this.isDragging = false;
-    },
+    // startDrag(event) {
+    //   this.isDragging = true;
+    //   this.startX = event.pageX || event.touches[0].pageX;
+    //   // this.scrollLeft = this.$refs.filterButtonContainer.scrollLeft;
+    // },
+    // onDrag(event) {
+    //   if (!this.isDragging) { return; }
+    //   // const x = event.pageX || event.touches[0].pageX;
+    //   // const walk = (x - this.startX) * 1.5; // Ajuste o fator de multiplicação para a velocidade
+    //   // this.$refs.filterButtonContainer.scrollLeft = this.scrollLeft - walk;
+    //   // return
+    // },
+    // endDrag() {
+    //   this.isDragging = false;
+    // },
 
   }
 };
