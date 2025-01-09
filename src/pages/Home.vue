@@ -373,7 +373,7 @@ export default {
   data() {
     return {
       // Palavras para transição
-      rotatingWords: ['+Inclusivo', '+Verde', '+Resiliente'], // Palavras para rotação
+      rotatingWords: 'Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
 
       // Imagens das logos das instituições
