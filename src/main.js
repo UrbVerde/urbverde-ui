@@ -20,6 +20,7 @@ async function prepareApp() {
     const { worker } = await import('./mocks/browser');
     console.log('test');
     console.log('test');
+
     console.log('test');
 
     return worker.start();
