@@ -1,0 +1,28 @@
+# UrbVerde Platform
+
+> UrbVerde is a web platform for visualizing and analyzing environmental data in urban areas, with a focus on surface temperature and vegetation mapping. The platform consists of a Vue.js frontend (urbverde-ui) and a Go backend service (urbverde-bff).
+
+The platform integrates various mapping services and environmental data sources to provide insights about urban environmental conditions. The frontend uses Vue 3, Bootstrap, and MapLibre GL for visualization, while the backend provides REST APIs for data access and address search functionality.
+
+## Core Documentation
+
+- [Frontend Architecture](src/main.js.md): Main Vue.js application configuration and setup
+- [Component Documentation](src/components/README.md): Documentation for all Vue components including buttons, navigation, and map elements
+- [Backend API Documentation](docs/api/swagger.md): Complete API documentation for the urbverde-bff service
+
+## Technical Stack
+
+- [Frontend Dependencies](package.json.md): Vue.js dependencies and build configuration
+- [Backend Dependencies](go.mod.md): Go module dependencies and versions
+- [Deployment Configuration](deploy.yml.md): GitHub Actions workflow for automated deployment
+
+## Map Features
+
+- [Map Component](src/components/map/mapGenerator.vue.md): Core map visualization component using MapLibre GL
+- [Legend Component](src/components/map/Legenda.vue.md): Map legend implementation with layer controls
+
+## Optional
+
+- [Style Documentation](src/assets/styles/README.md): Detailed styling documentation including colors, fonts, and components
+- [Development Setup](README.md): Local development environment setup instructions
+- [Contributing Guidelines](CONTRIBUTING.md): Guidelines for contributing to the project

@@ -3,67 +3,80 @@
   <div>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
-        <LogoButton v-show="isOpen" />
-        <!-- Emite o evento para alternar o estado da sidebar -->
+        <LogoButton v-show="showContent" />
         <MinimizeButton @click="toggleSidebar" />
       </div>
-      <div v-show="isOpen" class="search-area">
-        <BuscaSimples @location-updated="onLocationUpdated"/>
+      <div v-show="showContent" class="search-area">
+        <BuscaSimples
+          @api-error="$emit('api-error')"
+          @location-updated="onLocationUpdated"
+        />
       </div>
-      <div v-show="isOpen" class="middle-area">
-        <DropDown v-if="isSearchDone" :options="options" />
+      <div v-show="showContent" class="middle-area">
+        <DropDown
+          v-if="isSearchDone"
+          :code="code"
+          :type="type"
+        />
       </div>
-      <div v-show="isOpen" class="bottom-area">
-        <a class="link-button">
-          <img class="d-inline-block"
-               id="imgIcon"
-               src="../../assets/icons/export.svg"
-               width="20"
-               height="20" />
-          <span id="txtBottom">Colabore com dados</span>
+      <div v-show="showContent" class="bottom-area">
+        <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
+          <i class="bi bi-upload" tag="imgIcon"></i>
+          <span id="txtBottom small-regular">Colaborar com dados</span>
         </a>
-        <a class="link-button">
-          <img class="d-inline-block"
-               id="imgIcon"
-               src="../../assets/icons/help.svg"
-               width="20"
-               height="20" />
-          <span id="txtBottom">Central de ajuda</span>
+        <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
+          <i class="bi bi-question-circle" tag="imgIcon"></i>
+          <span id="txtBottom small-regular">Central de ajuda</span>
         </a>
       </div>
-
     </div>
   </div>
-
 </template>
 
 <script setup>
 import { ref } from 'vue';
-
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import DropDown from './drop_down/NavbarDropdown.vue';
 
-// defineEmits é uma macro: não precisa de import!
-const emit = defineEmits(['update-coordinates', 'toggle-sidebar']);
+// Define emits with clear names
+const emit = defineEmits([
+  'update-coordinates',
+  'toggle-sidebar',
+  'api-error'
+]);
 
-// Variável para controlar se a busca foi feita
+// Component state
 const isSearchDone = ref(false);
-
-// Variável para controlar se a sidebar fica aberta
 const isOpen = ref(true);
+const showContent = ref(true);
+const code = ref(null);
+const type = ref(null);
 
-// to-do: axios request from the api, what categories and layers exist for that specific cd_mun
-const options = ref(['Clima', 'Vegetação', 'Parques e Praças']);
-
+// Location update handler
 function onLocationUpdated(coordinates) {
-  isSearchDone.value = true;
-  emit('update-coordinates', coordinates);
-};
+  if (coordinates?.code) {
+    isSearchDone.value = true;
+    code.value = coordinates.code;
+    type.value = coordinates.type;
+    emit('update-coordinates', coordinates);
+  }
+}
 
-function toggleSidebar() {
-  isOpen.value = !isOpen.value;
+// Sidebar toggle handler with animation
+async function toggleSidebar() {
+  if (isOpen.value) {
+    // When closing, hide content immediately
+    showContent.value = false;
+    isOpen.value = false;
+  } else {
+    // When opening, first expand the sidebar
+    isOpen.value = true;
+    // Wait 0.2 second before showing content
+    await new Promise(resolve => setTimeout(resolve, 200));
+    showContent.value = true;
+  }
   localStorage.setItem('sidebarOpen', isOpen.value);
 };
 
@@ -74,26 +87,24 @@ function toggleSidebar() {
   width: 72px;
   height: 100vh;
   transition: 0.3s;
-  position: fixed;
-  top: 0;
-  left: 0;
   overflow: hidden;
   background: var(--Gray-White, #FFF);
-  box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
+  box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
   z-index: 100;
 }
 
 .sidebar-open {
-  width: 272px;  /* 280px*/
+  width: 301px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
-  align-self: stretch;
-  position: fixed;
-  z-index: 100;
+  background: var(--Gray-White, #FFF);
+  transition: 0.3s;
+  height: 100%; /* Garante que o sidebar ocupe a tela */
 }
 
+/* Rest of the styles remain unchanged */
 .top-area {
   display: flex;
   height: 88px;
@@ -135,15 +146,14 @@ function toggleSidebar() {
 }
 
 .search-area {
-
   display: flex;
   padding: 0px 16px;
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
-  height: auto; /* Allow it to adjust to content */
-  min-height: 48px; /* Minimum height to match the input field */
-  overflow: visible; /* Allow content to overflow */
+  height: auto;
+  min-height: 48px;
+  overflow: visible;
 }
 
 .bottom-area {
@@ -155,7 +165,6 @@ function toggleSidebar() {
   align-self: stretch;
   padding: 16px 24px;
   margin-top: auto;
-  /* Empurra a área inferior para o fim */
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   border-top: 1px solid rgba(0, 0, 0, 0.13);
   background: var(--White, #FFF);
@@ -164,10 +173,9 @@ function toggleSidebar() {
 .link-button {
   text-decoration: none;
   color: var(--Primary-Color, black);
-  font-weight: bold;
   display: flex;
-  padding: 4px 8px;
-  justify-content: center;
+  padding: 8px 8px;
+  justify-content: start;
   align-items: center;
   gap: 16px;
   align-self: stretch;
@@ -181,7 +189,14 @@ function toggleSidebar() {
   flex: 1 0 0;
   font-family: Inter, sans-serif;
   font-size: small;
-
 }
 
+#imgIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
 </style>

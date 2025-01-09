@@ -1,29 +1,24 @@
-<!-- urbverde-ui/src/components/buttons/MinimizeButton.vue -->
 <template>
-  <button @click="changeButton" :class="['btn', 'btn-light', 'minimize-btn', { 'btn-open': !minimized, 'btn-closed': minimized }]">
-    <img :src="minimized ?  maximize : minimize" alt="" />
-  </button>
+  <div class="alling-button">
+    <button
+      @click="changeButton"
+      :class="['btn', 'btn-light', 'minimize-btn', minimized ? 'btn-closed' : 'btn-open']"
+    >
+      <i :class="['bi', minimized ? 'bi-chevron-right' : 'bi-chevron-left']" style="font-size: 20px"></i>
+    </button>
+  </div>
 </template>
 
-<script>
-import minimizeImage from '@/assets/icons/minimize.svg';
-import maximizeImage from '@/assets/icons/maximize.svg';
+<script setup>
+import { ref } from 'vue';
 
-export default {
-  methods: {
-    changeButton() {
-      this.$emit('changed-state');
-      this.minimized=!this.minimized;
-    }
-  },
-  data() {
-    return {
-      minimized:false,
-      minimize: minimizeImage,
-      maximize: maximizeImage
-    };
-  }
-};
+const minimized = ref(false);
+const emit = defineEmits(['changed-state']);
+
+function changeButton() {
+  emit('changed-state');
+  minimized.value = !minimized.value;
+}
 </script>
 
 <style scoped>
@@ -33,6 +28,15 @@ export default {
   align-items: center;
   gap: 10px;
   transition: 0.3s;
+}
+
+.minimize-btn i {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }
 
 .btn-open {

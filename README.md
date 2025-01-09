@@ -2,6 +2,7 @@
 <p align="center">
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.svg" alt="UrbVerde" width="200" height="200">
+
     </a>
 </p>
 
@@ -96,7 +97,7 @@ This is the official repository of [UrbVerde](https://urbverde.com), a free Web-
 ## 🎯 To-Do
 - [x] ✅ _Completed_ - 📄 Translate README and interface to other languages (internationalization).
 - [x] ✅ _Completed_ - 🏷️ Include badges and tags to highlight project metrics and participation.
-- [ ] 📅 _In progress_ - 📄 Create CONTRIBUTING.md  
+- [ ] 🚧 _In progress_ - 📄 Create CONTRIBUTING.md  
 - [ ] 📅 _Planned_ - 🛠️ Open community and add discord chat badge.
 - [ ] 📅 _Planned_ - 📄 Create enhanced README with logo, GIFs, and video tutorials.
 - [ ] 📅 _Planned_ - 🎨 Add links to design files in Figma.
