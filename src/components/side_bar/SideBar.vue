@@ -6,6 +6,9 @@
         <LogoButton v-show="showContent" />
         <MinimizeButton @click="toggleSidebar" />
       </div>
+
+      <!-- componente painel: brasil / políticas públicas -->
+
       <div v-show="showContent" class="search-area">
         <BuscaSimples
           @api-error="$emit('api-error')"
