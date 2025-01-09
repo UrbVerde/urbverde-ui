@@ -97,6 +97,8 @@ export default {
   box-sizing: border-box;
   padding: 32px 40px;
   display: block;
+  background: rgba(248, 249, 250, 0.80);
+  backdrop-filter: blur(10px);
 }
 
 .response {
