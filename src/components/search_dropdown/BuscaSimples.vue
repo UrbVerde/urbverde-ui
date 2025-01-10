@@ -266,7 +266,7 @@ function handleFocus(event) {
 }
 
 async function loadAnimation() {
-  if (!inputValue.value) {
+  if (!inputValue.value && !locationChosen.value) {
     alert('Por favor, insira um local.');
 
     return;

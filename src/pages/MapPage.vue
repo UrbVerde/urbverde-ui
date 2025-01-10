@@ -4,12 +4,8 @@
 
     <div class="content-wrapper">
       <!-- Sidebar -->
-      <Sidebar
-        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
-        :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar"
-        @update-coordinates="updateCoordinates"
-      />
+      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" :is-open="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" />
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
@@ -19,11 +15,8 @@
         </div>
 
         <div v-else>
-          <Navbar
-            :class="{ 'navbar-collapsed': !isSidebarOpen }"
-            :active-section="activeSection"
-            @navigate-to="scrollToSection"
-          />
+          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }" :active-section="activeSection"
+            @navigate-to="scrollToSection" />
 
           <div id="map" ref="Mapa" class="content-area">
             <MapBox :coordinates="coordinates" class="map-box">
@@ -32,46 +25,37 @@
           </div>
 
           <!-- Stats Section (scroll target) -->
-          <div id="stats"
-               ref="statsSection"
-               class="box"
-          >
-            Estatísticas do {{ category }} em {{ cityName }}
+          <div id="stats" ref="statsSection" class="box">
+            <div class="top-statistics-container">
+              <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName }}</span>
+              <!-- <div class="date-picker-container"></div> -->
+              <DatePicker />
+
+            </div>
             <TemperatureSection />
           </div>
 
           <!-- Pop Vulnerável -->
-          <div id="vulnerable"
-               ref="vulnerableSection"
-               class="box"
-               style="border-top: 1px solid black">
+          <div id="vulnerable" ref="vulnerableSection" class="box" style="border-top: 1px solid black">
             Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
-            <HeatSection/>
+            <HeatSection />
           </div>
 
           <!-- Ranking -->
-          <div id="ranking"
-               ref="rankingSection"
-               class="box"
-               style="border-top: 1px solid black">
+          <div id="ranking" ref="rankingSection" class="box" style="border-top: 1px solid black">
             {{ cityName }} no ranking dos municípios
-            <RankSection/>
+            <RankSection />
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
-          <div id="data"
-               ref="dataSection"
-               class="box"
-               style="height:636px; border-top: 1px solid black">
+          <div id="data" ref="dataSection" class="box" style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
 
           </div>
 
           <!-- Footer -->
-          <div id="newsletter"
-               ref="newsletterSection"
-               class="box"
-               style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
+          <div id="newsletter" ref="newsletterSection" class="box"
+            style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
             RECEBA AS NOVIDADES POR EMAIL
           </div>
         </div>
@@ -88,7 +72,7 @@
  * instead of <script setup> the new recommended approach
  * in Vue 3.2+ for clean, concise code.
 */
-import { ref, onMounted, onUnmounted, computed  } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import Sidebar from '../components/side_bar/SideBar.vue';
@@ -99,6 +83,8 @@ import TemperatureSection from '@/components/cards/weather/TemperatureSection.vu
 import RankSection from '@/components/cards/weather/RankSection.vue';
 import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
+import DatePicker from '@/components/cards/weather/DatePicker.vue'; // Caminho para o Datepicker.vue
+
 
 export default {
   name: 'MapPage',
@@ -109,7 +95,8 @@ export default {
     Legenda,
     TemperatureSection,
     HeatSection,
-    RankSection
+    RankSection,
+    DatePicker,
   },
 
   setup() {
@@ -259,77 +246,113 @@ export default {
 </script>
 
 <style scoped>
-  .global {
-    background-color: #F8F9FACC;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+.global {
+  background-color: #F8F9FACC;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-  /* Flex container to hold sidebar (left) and main content (right) */
-  .content-wrapper {
-    flex: 1;
-    display: flex;
-  }
+/* Flex container to hold sidebar (left) and main content (right) */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+}
 
-  /* Sidebar “collapsed” style (if you want a narrower width) */
-  .sidebar-collapsed {
-    width: 72px;
-    transition: width 0.3s;
-  }
+/* Sidebar “collapsed” style (if you want a narrower width) */
+.sidebar-collapsed {
+  width: 72px;
+  transition: width 0.3s;
+}
 
-  /* Main content takes the rest of the horizontal space */
-  .main-wrapper {
-    flex: 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto;
-  }
+/* Main content takes the rest of the horizontal space */
+.main-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
 
-  .content-area {
-    flex: 1;
-    position: relative;
-    display: flex;
-  }
+.content-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
 
-  .map-box {
-    flex: 1;
-    position: relative;
-  }
+.map-box {
+  flex: 1;
+  position: relative;
+}
 
-  .legend-wrapper {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 264px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-    z-index: 10;
-  }
+.legend-wrapper {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 264px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  z-index: 10;
+}
 
-  /* Center the placeholder vertically and horizontally */
-  .placeholder-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 3%;
-  }
+/* Center the placeholder vertically and horizontally */
+.placeholder-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 3%;
+}
 
-  /* Placeholder image if coordinates are not set */
-  .map-placeholder {
-    display: block;
-    margin: 40px auto;
-    opacity: 0.45;
-  }
+/* Placeholder image if coordinates are not set */
+.map-placeholder {
+  display: block;
+  margin: 40px auto;
+  opacity: 0.45;
+}
 
-  /* Just a section to hold stats or other elements */
-  .box {
-    display: flex;
+.top-statistics-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  align-self: stretch;
+}
+
+.title-statistics-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+}
+
+.date-picker-container{
+  /* display: flex;
+height: 32px;
+padding: 5px 9px;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+border-radius: 3.2px;
+border: 1px solid var(--Gray-400, #CED4DA);
+background: var(--Gray-White, #FFF); */
+
+}
+/* Just a section to hold stats or other elements */
+.box {
+
+  display: flex;
+  max-width: 1376px;
+  padding: 40px 48px 32px 48px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+  
+  /* display: flex;
     flex-direction: column;
     gap: 80px;
     gap: 16px;
@@ -338,10 +361,11 @@ export default {
     padding: 32px 40px;
     justify-content: space-between;
     width: 100%;
+
     color: var(--Body-Text-Body-Color, #212529);
     font-family: Inter, sans-serif;
     font-size: 20px;
     font-weight: 500;
-    line-height: 24px;
-  }
+    line-height: 24px; */
+}
 </style>
