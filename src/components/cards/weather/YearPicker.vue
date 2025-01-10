@@ -184,13 +184,14 @@ onBeforeUnmount(() => {
     background-color: white;
     max-width: 107px;
     gap: 4px;
-    transition: all 0.2s ease-in-out;
+    /* transition: all 0.2s ease-in-out; */
 }
 
 .input-container.year-modified {
-    background: var(--Gray-100, #F8F9FA) !important;
-    outline: 2px solid #418377 !important;
-    border-color: transparent !important;
+
+    outline: 2px solid #418377 ;
+    outline-offset: -2px;
+    /* border-color: transparent !important; */
 }
 
 .nav-button {
