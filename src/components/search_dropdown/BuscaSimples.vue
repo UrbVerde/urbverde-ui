@@ -571,7 +571,7 @@ function handleInput() {
 }
 
 async function updateSuggestions(forceUpdate = false) {
-  alert('updateSuggestions');
+  // alert('updateSuggestions');
   if (!forceUpdate && inputValue.value === previousInputValue.value) {return;}
   // Only proceed if input actually changed
   if (inputValue.value === '') {
@@ -740,7 +740,7 @@ function generateDefaultSuggestions() {
   //   }
   // }
   // If you have a fallback city, you can define it here:
-  alert(stateAbbreviation);
+  // alert(stateAbbreviation);
   suggestions.value = [
     { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
     { text: state, type: 'state' },
