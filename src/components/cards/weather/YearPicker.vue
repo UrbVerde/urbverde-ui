@@ -1,16 +1,40 @@
 <!-- YearPicker.vue -->
 <template>
     <div class="date-picker">
-        <div class="input-container" @click="showYearSelector" >
-            <input 
-                class="input-text body-small-regular" 
-                :value="formattedYear"
-                @focus="showYearSelector" 
-                placeholder="" 
-                readonly
-            />
-            <span class="icon-yearpicker" @click="showYearSelector">
-                <i class="bi bi-chevron-down" tag="icon"></i>
+        <div class="input-wrapper">
+            <span 
+                class="nav-button" 
+                @click="navigateYear(-1)" 
+                :class="{ 
+                    'disabled': !canNavigateBack,
+                    'invisible': !canNavigateBack
+                }"
+            >
+                <i class="bi bi-chevron-left"></i>
+            </span>
+            
+            <div class="input-container" @click="showYearSelector">
+                <input 
+                    class="input-text body-small-regular" 
+                    :value="formattedYear"
+                    @focus="showYearSelector" 
+                    placeholder="" 
+                    readonly
+                />
+                <span class="icon-datepicker">
+                    <i class="bi bi-chevron-down" tag="icon"></i>
+                </span>
+            </div>
+
+            <span 
+                class="nav-button" 
+                @click="navigateYear(1)" 
+                :class="{ 
+                    'disabled': !canNavigateForward,
+                    'invisible': !canNavigateForward
+                }"
+            >
+                <i class="bi bi-chevron-right"></i>
             </span>
         </div>
 
@@ -60,6 +84,15 @@ export default {
         },
         formattedYear() {
             return this.selectedYear ? `Ano: ${this.selectedYear}` : '';
+        },
+        currentYearIndex() {
+            return this.availableYears.indexOf(this.selectedYear);
+        },
+        canNavigateBack() {
+            return this.currentYearIndex > 0;
+        },
+        canNavigateForward() {
+            return this.currentYearIndex < this.availableYears.length - 1;
         }
     },
     watch: {
@@ -91,6 +124,13 @@ export default {
         },
         isSelected(year) {
             return year === this.selectedYear;
+        },
+        navigateYear(direction) {
+            const newIndex = this.currentYearIndex + direction;
+            if (newIndex >= 0 && newIndex < this.availableYears.length) {
+                const newYear = this.availableYears[newIndex];
+                this.selectYear(newYear);
+            }
         }
     },
     beforeUnmount() {
@@ -105,6 +145,22 @@ export default {
     display: inline-block;
 }
 
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.input-wrapper .nav-button {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    visibility: visible;
+}
+
+.input-wrapper:hover .nav-button:not(.invisible) {
+    opacity: 1;
+}
+
 .input-container {
     border-radius: 7px;
     cursor: pointer;
@@ -117,7 +173,31 @@ export default {
     gap: 4px;
 }
 
-.icon-yearpicker {
+.nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #6C757D;
+}
+
+.nav-button:hover:not(.disabled) {
+    background-color: #f0f0f0;
+}
+
+.nav-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.nav-button.invisible {
+    visibility: hidden;
+}
+
+.icon-datepicker {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -127,7 +207,7 @@ export default {
     cursor: pointer;
 }
 
-.icon-yearpicker i {
+.icon-datepicker i {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -150,8 +230,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 2fr);
     gap: 8px;
- 
-    
 }
 
 .year-item {
@@ -159,13 +237,10 @@ export default {
     padding: 0px 8px;
     cursor: pointer;
     border-radius: 4px;
-    
 }
 
 .year-item:hover {
-
     background-color: #f0f0f0;
-
 }
 
 .year-item.selected {
@@ -181,6 +256,9 @@ export default {
     margin-top: 5px;
     border-radius: 7px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    
+    
+
 }
 
 .calendar {
