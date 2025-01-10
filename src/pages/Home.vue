@@ -7,8 +7,10 @@
     <div class="content">
 
       <!-- Background fixo e atrás dos contents -->
-      <div class="image-background">
-        <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
+      <div class="image-background-wrapper">
+        <div class="image-background">
+          <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
+        </div>
       </div>
 
       <!-- Hero content -->
@@ -557,42 +559,32 @@ export default {
   }
 
   .homepage {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
     position: relative;
-    height: 10000px;
+    overflow-x: hidden;
   }
 
-  .content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    width: 100%;
-    height: 100vh;
-    top: -72px;
-    padding-top: 1px;
-  }
-
-  .image-background {
-    position: absolute;
+  .image-background-wrapper {
+    position: absolute; 
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-color: map-get($gray, white);
+    width: 100%; 
+    height: 100vh;
+    z-index: -1; // Imagem fica abaixo de todo o conteúdo da página
+    overflow: hidden;
   }
 
   .image-background img {
-    width: 100%;
-    height: 100%;
+    width: 100%; 
+    height: 100%; 
     object-fit: cover;
-    opacity: 1;
-    display: block;
+    position: absolute; 
+    top: 0;
+    top: -72px; 
+  }
+
+  .content {
+    position: relative; 
+    z-index: 1; // Conteúdo acima da imagem de fundo e abaixo do NavbarHomepage
   }
 
   .container {
@@ -605,7 +597,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 312px;
+    padding-top: 240px;
     gap: 240px;
   }
 
