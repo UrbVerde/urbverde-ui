@@ -13,7 +13,10 @@
                 <i class="bi bi-chevron-left"></i>
             </span>
             
-            <div class="input-container" @click="showYearSelector">
+            <div 
+                class="input-container" 
+                :class="{ 'year-modified': yearModified }"
+                @click="showYearSelector">
                 <input 
                     class="input-text body-small-regular" 
                     :value="formattedYear"
@@ -38,105 +41,115 @@
             </span>
         </div>
 
-        <div v-if="isVisible" class="calendar-overlay">
-            <div class="calendar card">
-                <div class="card-body p-2">
-                    <div class="year-grid">
-                        <div 
-                            v-for="year in availableYears" 
-                            :key="year"
-                            class="year-item"
-                            :class="{ 'selected': isSelected(year) }"
-                            @click="selectYear(year)"
-                        >
-                            {{ year }}
+        <Transition name="fade">
+            <div v-if="isVisible" class="calendar-overlay">
+                <div class="calendar card">
+                    <div class="card-body p-2">
+                        <div class="year-grid">
+                            <div 
+                                v-for="year in availableYears" 
+                                :key="year"
+                                class="year-item"
+                                :class="{ 'selected': isSelected(year) }"
+                                @click="selectYear(year)"
+                            >
+                                {{ year }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Transition>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'YearPicker',
-    props: {
-        modelValue: {
-            type: Number,
-            default: null
-        },
-        years: {
-            type: Array,
-            required: true,
-            default: () => []
-        }
+<script setup>
+import { ref, computed, watch, onBeforeUnmount } from 'vue';
+
+const props = defineProps({
+    modelValue: {
+        type: Number,
+        default: null
     },
-    data() {
-        return {
-            isVisible: false,
-            selectedYear: this.modelValue
-        }
-    },
-    computed: {
-        availableYears() {
-            return [...this.years].sort((a, b) => a - b);
-        },
-        formattedYear() {
-            return this.selectedYear ? `Ano: ${this.selectedYear}` : '';
-        },
-        currentYearIndex() {
-            return this.availableYears.indexOf(this.selectedYear);
-        },
-        canNavigateBack() {
-            return this.currentYearIndex > 0;
-        },
-        canNavigateForward() {
-            return this.currentYearIndex < this.availableYears.length - 1;
-        }
-    },
-    watch: {
-        modelValue: {
-            handler(newValue) {
-                this.selectedYear = newValue;
-            },
-            immediate: true
-        }
-    },
-    methods: {
-        showYearSelector() {
-            this.isVisible = true;
-            document.addEventListener('click', this.handleClickOutside);
-        },
-        hideYearSelector() {
-            this.isVisible = false;
-            document.removeEventListener('click', this.handleClickOutside);
-        },
-        handleClickOutside(event) {
-            if (!this.$el.contains(event.target)) {
-                this.hideYearSelector();
-            }
-        },
-        selectYear(year) {
-            this.selectedYear = year;
-            this.$emit('update:modelValue', year);
-            this.hideYearSelector();
-        },
-        isSelected(year) {
-            return year === this.selectedYear;
-        },
-        navigateYear(direction) {
-            const newIndex = this.currentYearIndex + direction;
-            if (newIndex >= 0 && newIndex < this.availableYears.length) {
-                const newYear = this.availableYears[newIndex];
-                this.selectYear(newYear);
-            }
-        }
-    },
-    beforeUnmount() {
-        document.removeEventListener('click', this.handleClickOutside);
+    years: {
+        type: Array,
+        required: true,
+        default: () => []
     }
-}
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const isVisible = ref(false);
+const defaultYear = ref(props.modelValue);
+const currentYear = ref(props.modelValue);
+const yearModified = ref(false);
+
+// Initialize defaultYear with the initial modelValue, but don't watch for changes
+defaultYear.value = props.modelValue;
+
+// Watch for changes in modelValue to update currentYear only
+watch(() => props.modelValue, (newValue) => {
+    currentYear.value = newValue;
+}, { immediate: true });
+
+// Watch for changes in currentYear to update yearModified
+watch(currentYear, (newValue) => {
+    yearModified.value = newValue !== defaultYear.value;
+});
+
+const availableYears = computed(() => [...props.years].sort((a, b) => a - b));
+
+const formattedYear = computed(() => 
+    currentYear.value ? `Ano: ${currentYear.value}` : ''
+);
+
+const currentYearIndex = computed(() => 
+    availableYears.value.indexOf(currentYear.value)
+);
+
+const canNavigateBack = computed(() => currentYearIndex.value > 0);
+
+const canNavigateForward = computed(() => 
+    currentYearIndex.value < availableYears.value.length - 1
+);
+
+const showYearSelector = () => {
+    isVisible.value = true;
+    document.addEventListener('click', handleClickOutside);
+};
+
+const hideYearSelector = () => {
+    isVisible.value = false;
+    document.removeEventListener('click', handleClickOutside);
+};
+
+const handleClickOutside = (event) => {
+    const element = event.target;
+    if (!element.closest('.date-picker')) {
+        hideYearSelector();
+    }
+};
+
+const selectYear = (year) => {
+    currentYear.value = year;
+    emit('update:modelValue', year);
+    hideYearSelector();
+};
+
+const isSelected = (year) => year === currentYear.value;
+
+const navigateYear = (direction) => {
+    const newIndex = currentYearIndex.value + direction;
+    if (newIndex >= 0 && newIndex < availableYears.value.length) {
+        const newYear = availableYears.value[newIndex];
+        selectYear(newYear);
+    }
+};
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
@@ -171,6 +184,13 @@ export default {
     background-color: white;
     max-width: 107px;
     gap: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-container.year-modified {
+    background: var(--Gray-100, #F8F9FA) !important;
+    outline: 2px solid #418377 !important;
+    border-color: transparent !important;
 }
 
 .nav-button {
@@ -255,13 +275,22 @@ export default {
     z-index: 1000;
     margin-top: 5px;
     border-radius: 7px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-    
-    
-
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .calendar {
     min-width: 200px;
+}
+
+/* Transition styles */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 </style>
