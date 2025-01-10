@@ -71,6 +71,10 @@ const props = defineProps({
         type: Number,
         default: null
     },
+    defaultYear: {
+        type: Number,
+        required: true
+    },
     years: {
         type: Array,
         required: true,
@@ -156,6 +160,7 @@ onBeforeUnmount(() => {
 .date-picker {
     position: relative;
     display: inline-block;
+    
 }
 
 .input-wrapper {
@@ -182,8 +187,11 @@ onBeforeUnmount(() => {
     align-items: center;
     border: 1px solid var(--Gray-400, #CED4DA);
     background-color: white;
-    max-width: 107px;
-    gap: 4px;
+    max-width: 120px;
+    height: 40px;
+    gap: 5px;
+    
+    
     /* transition: all 0.2s ease-in-out; */
 }
 
@@ -245,6 +253,7 @@ onBeforeUnmount(() => {
     box-sizing: content-box;
     padding: 0;
     margin: 0;
+    
 }
 
 .year-grid {

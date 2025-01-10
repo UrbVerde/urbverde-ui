@@ -37,6 +37,7 @@ export default {
       } catch (error) {
         console.error('Error fetching cards data:', error);
       }
+      
     }
   }
 };

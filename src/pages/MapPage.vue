@@ -102,8 +102,16 @@ export default {
   },
   data() {
     return {
-      selectedYear: 2021,
-      availableYears: [2020, 2021, 2022, 2023, 2024] // Anos específicos que você quer disponibilizar
+      selectedYear: 2021, // This will be the current year and will be updated by the child
+      defaultYear: 2021, // This will be used to update the child's default
+      availableYears: [2020, 2021, 2022, 2023, 2024]
+    }
+  },
+
+  watch: {
+    // Watch for changes in defaultYear to update selectedYear
+    defaultYear(newValue) {
+      this.selectedYear = newValue;
     }
   },
 
