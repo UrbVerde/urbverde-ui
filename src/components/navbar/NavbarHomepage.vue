@@ -29,8 +29,16 @@
               <a href="#" class="body-small-regular">Transparência</a>
             </li>
             <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">UrbVerde Educa</a>
+              <a
+                href="https://urbverde-educa.tawk.help/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="body-small-regular"
+              >
+                UrbVerde Educa
+              </a>
             </li>
+
           </ul>
 
           <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">

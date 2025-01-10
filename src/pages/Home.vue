@@ -7,8 +7,10 @@
     <div class="content">
 
       <!-- Background fixo e atrás dos contents -->
-      <div class="image-background">
-        <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
+      <div class="image-background-wrapper">
+        <div class="image-background">
+          <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
+        </div>
       </div>
 
       <!-- Hero content -->
@@ -297,6 +299,105 @@
           </div>
         </div>
       </div>
+
+      <!-- Mission and Urbverde Educa content -->
+      <div class="mission-educa container">
+        <div class="mission">
+          <div class="label-content">
+            <p class="heading-h5">
+              Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong>
+              para todo o Brasil, para ajudar cidadãos e gestores a tomar
+              decisões conscientes e enfrentar os desafios climáticos
+            </p>
+            <router-link to="/sobre" class="button-primary-link">
+              <PrimaryButton
+                label="Saiba quem somos"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
+            </router-link>
+          </div>
+          <img src="@/assets/images/homepage/urbverde-mission.png">
+        </div>
+        <div class="educa">
+          <div class="title">
+            <h2 class="heading-h2">
+              Explore mais tópicos no UrbVerde Educa
+            </h2>
+            <a
+              href="https://urbverde-educa.tawk.help/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="button-primary-link"
+            >
+              <PrimaryButton
+                label="Explore todos os artigos"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
+            </a>
+          </div>
+          <div class="educa-topics">
+
+            <!--Link para Reportagens e notícias-->
+            <a
+              href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <UrbVerdeEducaTopics
+                imageSrc="src\assets\images\homepage\urbverde-educa-topics-marcel.png"
+                imageAlt="Reportagens e notícias"
+                title="Reportagens e notícias"
+              />
+            </a>
+
+            <!--Documentos-->
+            <a
+              href="https://urbverde-educa.tawk.help/category/documentos"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <UrbVerdeEducaTopics
+                imageSrc="src\assets\images\homepage\urbverde-educa-topics-notebook.png"
+                imageAlt="Documentos"
+                title="Documentos"
+              />
+            </a>
+
+            <!--Métodologias-->
+            <a
+              href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <UrbVerdeEducaTopics
+                imageSrc="src\assets\images\homepage\urbverde-educa-topics-edu.png"
+                imageAlt="Métodologias"
+                title="Métodologias"
+              />
+            </a>
+
+            <!--Principais dúvidas-->
+            <a
+              href="https://urbverde-educa.tawk.help/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <UrbVerdeEducaTopics
+                imageSrc="src\assets\images\homepage\urbverde-educa-topics-breno.png"
+                imageAlt="Principais dúvidas"
+                title="Principais dúvidas"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -307,6 +408,7 @@
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 
 // Importação das logos
 import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
@@ -338,6 +440,7 @@ export default {
     NavbarHomepage,
     PrimaryButton,
     BuscaSimples,
+    UrbVerdeEducaTopics,
   },
 
   // Configuração das meta tags de SEO
@@ -453,43 +556,38 @@ export default {
     border-radius: 4px;
   }
 
-  .homepage {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
+  p{
     padding: 0;
-    overflow: hidden;
-    position: relative;
-    height: 5000px;
+    margin: 0;
   }
 
-  .content {
+  .homepage {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    width: 100%;
-    height: 100vh;
-    top: -72px;
-    padding-top: 1px;
+    overflow-x: hidden;
   }
 
-  .image-background {
+  .image-background-wrapper {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-color: map-get($gray, white);
+    height: 100vh;
+    z-index: -1; // Imagem fica abaixo de todo o conteúdo da página
+    overflow: hidden;
   }
 
   .image-background img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 1;
-    display: block;
+    position: absolute;
+    top: 0;
+    top: -72px;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1; // Conteúdo acima da imagem de fundo e abaixo do NavbarHomepage
   }
 
   .container {
@@ -502,7 +600,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 312px;
+    padding-top: 240px;
     gap: 240px;
   }
 
@@ -1039,6 +1137,83 @@ export default {
 
   .products .products-content .product .product-text .button-primary-link{
     color: map-get($green, 600);
+  }
+
+  .mission-educa{
+    display: flex;
+    padding: 128px 0px 90px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 184px;
+    align-self: stretch;
+  }
+
+  .mission-educa .button-primary-link{
+    color: map-get($green, 600);
+  }
+
+  .mission-educa .mission{
+    display: flex;
+    flex-direction: row;
+    padding: 0px 24px;
+    align-items: center;
+    gap: 40px;
+    align-self: stretch;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+  }
+
+  .mission-educa .mission .label-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex: 1 0 0;
+    color: map-get($primary-fade, 800);
+    text-align: center;
+  }
+
+  .mission-educa .mission img{
+    width: 421px;
+    height: 259px;
+    border-radius: 24px;
+    border: 1px solid map-get($gray, 200);
+    background: url(<path-to-image>) lightgray -160.678px -42.218px / 156.09% 117.148% no-repeat;
+  }
+
+  .educa{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 64px;
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .educa .title{
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .educa .title h2{
+    color: map-get($primary-fade, 800);
+    margin: 0;
+  }
+
+  .educa .educa-topics{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    gap: 16px;
+    align-self: stretch;
+    overflow-x: auto;
+    width: 100%;
   }
 
 </style>

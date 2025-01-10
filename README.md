@@ -2,7 +2,7 @@
 <p align="center">
     <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <img src="src/assets/images/logo-white.svg" alt="UrbVerde" width="200" height="200">
-
+        <img src="src/assets/images/logo-white.svg" alt="UrbVerde" width="200" height="200">
     </a>
 </p>
 
