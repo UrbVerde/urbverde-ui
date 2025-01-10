@@ -350,7 +350,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-marcel.png"
+                :imageSrc="imageMarcel"
                 imageAlt="Reportagens e notícias"
                 title="Reportagens e notícias"
               />
@@ -363,7 +363,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-notebook.png"
+                :imageSrc="imageNotebook"
                 imageAlt="Documentos"
                 title="Documentos"
               />
@@ -376,7 +376,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-edu.png"
+                :imageSrc="imageEdu"
                 imageAlt="Métodologias"
                 title="Métodologias"
               />
@@ -389,7 +389,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-breno.png"
+                :imageSrc="imageBreno"
                 imageAlt="Principais dúvidas"
                 title="Principais dúvidas"
               />
@@ -430,6 +430,12 @@ import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.svg';
 import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.svg';
 import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.svg';
 import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.svg';
+
+// Importação das imagens para seção UrbVerde Educa
+import imageMarcel from '@/assets/images/homepage/urbverde-educa-topics-marcel.png';
+import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebook.png';
+import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
+import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
 
 // Para criação de meta tags de SEO
 import { useHead } from '@vueuse/head';
@@ -473,6 +479,12 @@ export default {
 
   data() {
     return {
+      // Return das imagens para seção UrbVerde Educa
+      imageMarcel,
+      imageNotebook,
+      imageEdu,
+      imageBreno,
+
       // Palavras para transição
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
