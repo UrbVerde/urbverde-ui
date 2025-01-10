@@ -28,8 +28,8 @@ export default defineConfig({
     },
   },
 
-  server: {
-    host: '0.0.0.0', // Permite acesso via IP
-    port: 5173, // Porta padrão, você pode alterar se necessário
-  },
+  // server: {
+  //   host: '0.0.0.0', // Permite acesso via IP
+  //   port: 5173, // Porta padrão, você pode alterar se necessário
+  // },
 });
