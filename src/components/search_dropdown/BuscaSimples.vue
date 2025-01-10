@@ -1069,7 +1069,7 @@ onUpdated(() => {
   }
 
   .first-suggestion {
-    background-color: #E9ECEF;
+    background-color: #1171d1;
   }
 
   .suggestion-item {
