@@ -1065,8 +1065,8 @@ onUpdated(() => {
   }
 
   .suggestions-list li:hover {
-    /* background-color: #E9ECEF; */
-    background-color: #1171d1;
+    background-color: #E9ECEF;
+
   }
 
   .first-suggestion {
