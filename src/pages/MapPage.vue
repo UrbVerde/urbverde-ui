@@ -167,6 +167,7 @@ export default {
     const updateCoordinates = (newCoordinates) => {
       coordinates.value = newCoordinates;
       locationStore.setCoordinates(newCoordinates);
+
     };
 
     const handleScroll = () => {

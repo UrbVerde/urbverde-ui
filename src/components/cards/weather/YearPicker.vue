@@ -49,7 +49,7 @@
                             <div 
                                 v-for="year in availableYears" 
                                 :key="year"
-                                class="year-item"
+                                class="year-item body-small-regular"
                                 :class="{ 'selected': isSelected(year) }"
                                 @click="selectYear(year)"
                             >
@@ -263,10 +263,14 @@ onBeforeUnmount(() => {
 }
 
 .year-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     padding: 0px 8px;
     cursor: pointer;
     border-radius: 4px;
+    height: 30px;
 }
 
 .year-item:hover {
