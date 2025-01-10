@@ -41,7 +41,7 @@ import { ref } from 'vue';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
-import DropDown from './drop_down/NavbarDropdown.vue';
+import DropDown from './drop_down/CategoriesDropdown.vue';
 
 // Define emits with clear names
 const emit = defineEmits([

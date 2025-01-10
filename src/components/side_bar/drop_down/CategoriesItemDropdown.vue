@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/side_bar/drop_down/NavbarItemDropdown.vue -->
+<!-- urbverde-ui/src/components/side_bar/drop_down/categoriesItemDropdown.vue -->
 <template>
   <div class="option">
     <ul class="inline-nav-item navbar-nav">

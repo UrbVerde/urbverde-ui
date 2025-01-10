@@ -1,9 +1,9 @@
-<!-- urbverde-ui/src/components/side_bar/drop_down/NavbarDropdown.vue -->
+<!-- urbverde-ui/src/components/side_bar/drop_down/categoriesDropdown.vue -->
 <template>
   <div class="container">
     <span class="text caption-medium">CAMADAS</span>
     <div class="options">
-      <NavbarItem
+      <categoriesItem
         v-for="(category, index) in categories"
         :key="category.id"
         :isSelectedItem="category.isSelected"
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import NavbarItem from '@/components/side_bar/drop_down/NavbarItemDropdown.vue';
+import categoriesItem from '@/components/side_bar/drop_down/categoriesItemDropdown.vue';
 import { ref, watch } from 'vue';
 import { API_URLS } from '@/constants/endpoints';
 import { useLocationStore } from '@/stores/locationStore';

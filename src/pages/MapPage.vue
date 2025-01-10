@@ -32,12 +32,9 @@
           </div>
 
           <!-- Stats Section (scroll target) -->
-          <div id="stats"
-               ref="statsSection"
-               class="box"
-          >
+          <div id="stats" ref="statsSection" class="box">
             Estatísticas do {{ category }} em {{ cityName }}
-            <TemperatureSection />
+            <!-- <TemperatureSection /> -->
           </div>
 
           <!-- Pop Vulnerável -->
@@ -46,7 +43,7 @@
                class="box"
                style="border-top: 1px solid black">
             Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
-            <HeatSection/>
+            <!-- <HeatSection/> -->
           </div>
 
           <!-- Ranking -->
@@ -55,7 +52,7 @@
                class="box"
                style="border-top: 1px solid black">
             {{ cityName }} no ranking dos municípios
-            <RankSection/>
+            <!-- <RankSection/> -->
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
@@ -64,7 +61,6 @@
                class="box"
                style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
-
           </div>
 
           <!-- Footer -->
@@ -82,180 +78,140 @@
   </div>
 </template>
 
-<script>
-/**
- * We are still using the Options API (classic)
- * instead of <script setup> the new recommended approach
- * in Vue 3.2+ for clean, concise code.
-*/
-import { ref, onMounted, onUnmounted, computed  } from 'vue';
-import { useRoute } from 'vue-router';
+<script setup>
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
-import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
-import RankSection from '@/components/cards/weather/RankSection.vue';
-import HeatSection from '@/components/cards/weather/HeatSection.vue';
+// import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
+// import RankSection from '@/components/cards/weather/RankSection.vue';
+// import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 
-export default {
-  name: 'MapPage',
-  components: {
-    Sidebar,
-    MapBox,
-    Navbar,
-    Legenda,
-    TemperatureSection,
-    HeatSection,
-    RankSection
-  },
+// SEO Configuration
+useHead({
+  title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
+    },
+    {
+      name: 'keywords',
+      content:
+        'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
+    },
+    {
+      property: 'og:title',
+      content: 'Plataforma UrbVerde - Ferramenta de Dados para Sustentabilidade Urbana',
+    },
+    {
+      property: 'og:description',
+      content:
+        'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
+    },
+  ],
+});
 
-  setup() {
-    const route = useRoute();
-    const locationStore = useLocationStore();
-    // Configuração das meta tags de SEO
-    useHead({
-      title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
-      meta: [
-        {
-          name: 'description',
-          content:
-            'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
-        },
-        {
-          name: 'keywords',
-          content:
-            'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
-        },
-        {
-          property: 'og:title',
-          content: 'Plataforma UrbVerde - Ferramenta de Dados para Sustentabilidade Urbana',
-        },
-        {
-          property: 'og:description',
-          content:
-            'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
-        },
-      ],
-    });
+// Store and router setup
+const route = useRoute();
+const router = useRouter();
+const locationStore = useLocationStore();
 
-    const coordinates = ref({ lat: null, lng: null });
-    const activeSection = ref('map');
-    const isSidebarOpen = ref(true);
+// Refs and Computed Properties
+const coordinates = ref({ lat: null, lng: null });
+const activeSection = ref('map');
+const isSidebarOpen = ref(true);
 
-    // Computed properties from store
-    const category = computed(() => locationStore.category || 'category?');
-    const currentLayer = computed(() => locationStore.layer || 'layer?');
-    const cityName = computed(() => locationStore.nm_mun || 'city?');
+const category = computed(() => locationStore.category || 'category?');
+// const currentLayer = computed(() => locationStore.layer || 'layer?');
+const cityName = computed(() => locationStore.nm_mun || 'city?');
 
-    // const sections = {
-    //   map: null,
-    //   stats: null,
-    //   ranking: null,
-    // };
+// Methods
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
 
-    // Methods
-    const toggleSidebar = () => {
-      isSidebarOpen.value = !isSidebarOpen.value;
-    };
+const updateCoordinates = (newCoordinates) => {
+  coordinates.value = newCoordinates;
+  locationStore.setCoordinates(newCoordinates);
+};
 
-    const updateCoordinates = (newCoordinates) => {
-      coordinates.value = newCoordinates;
-      locationStore.setCoordinates(newCoordinates);
-    };
+const handleScroll = () => {
+  const scrollPosition = window.scrollY;
+  const navbarHeight = 100; // Adjust based on your navbar height
+  const sectionElements = document.querySelectorAll(
+    '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
+  );
 
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const navbarHeight = 100; // Adjust this value based on your navbar height
-      const sectionElements = document.querySelectorAll(
-        '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
-      );
+  for (const element of sectionElements) {
+    const rect = element.getBoundingClientRect();
+    const top = rect.top + scrollPosition - navbarHeight;
+    const bottom = top + rect.height;
 
-      for (const element of sectionElements) {
-        const rect = element.getBoundingClientRect();
-        const top = rect.top + scrollPosition - navbarHeight;
-        const bottom = top + rect.height;
-
-        if (scrollPosition >= top && scrollPosition < bottom) {
-          activeSection.value = element.id;
-          history.replaceState(null, null, `#${element.id}`);
-          break;
-        }
-      }
-    };
-
-    const scrollToSection = (sectionId) => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const navbarHeight = 100; // Adjust this value based on your navbar height
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-
-        activeSection.value = sectionId;
-        history.pushState(null, null, `#${sectionId}`);
-      }
-    };
-
-    onMounted(() => {
-      // Check if URL has ?nm_mun=..., ?cd_mun=...
-      const { nm_mun, cd_mun } = route.query;
-      if (nm_mun || cd_mun) {
-        locationStore.setLocation({
-          cd_mun: cd_mun ?? null,
-          nm_mun: nm_mun ?? null,
-        });
-      }
-
-      // Set coordinates from store if available
-      if (locationStore.coordinates?.lat && locationStore.coordinates?.lng) {
-        coordinates.value = locationStore.coordinates;
-      }
-      // Otherwise fetch them if we have cd_mun
-      else if (cd_mun) {
-        locationStore.fetchCoordinatesByCdMun(cd_mun);
-      }
-      // Or by name if we have nm_mun
-      else if (nm_mun) {
-        locationStore.fetchCoordinatesByName(nm_mun);
-      }
-
-      window.addEventListener('scroll', handleScroll);
-      if (window.location.hash) {
-        const sectionId = window.location.hash.substring(1);
-        setTimeout(() => scrollToSection(sectionId), 100);
-      }
-      handleScroll();
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener('scroll', handleScroll);
-    });
-
-    return {
-      // Refs
-      coordinates,
-      activeSection,
-      isSidebarOpen,
-
-      // Computed properties
-      category,
-      currentLayer,
-      cityName,
-
-      // Methods
-      updateCoordinates,
-      scrollToSection,
-      toggleSidebar,
-    };
+    if (scrollPosition >= top && scrollPosition < bottom) {
+      activeSection.value = element.id;
+      history.replaceState(null, null, `#${element.id}`);
+      break;
+    }
   }
 };
+
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    const navbarHeight = 100; // Adjust based on your navbar height
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
+
+    activeSection.value = sectionId;
+    history.pushState(null, null, `#${sectionId}`);
+  }
+};
+
+const syncStoreWithQuery = () => {
+  const query = route.query;
+  locationStore.updateFromQueryParams(query);
+
+  // Update query params in the URL if they are missing or outdated
+  const updatedQuery = locationStore.urlParams;
+  if (JSON.stringify(query) !== JSON.stringify(updatedQuery)) {
+    router.replace({ query: updatedQuery });
+  }
+};
+
+// Lifecycle hooks
+
+onMounted(() => {
+  syncStoreWithQuery();
+  window.addEventListener('scroll', handleScroll);
+
+  if (window.location.hash) {
+    const sectionId = window.location.hash.substring(1);
+    setTimeout(() => scrollToSection(sectionId), 100);
+  }
+  handleScroll();
+});
+
+watch(
+  () => route.query,
+  (newQuery) => {
+    locationStore.updateFromQueryParams(newQuery);
+  }
+);
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <style scoped>
