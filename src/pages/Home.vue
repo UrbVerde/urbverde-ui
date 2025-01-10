@@ -325,7 +325,12 @@
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
             </h2>
-            <router-link to="/sobre" class="button-primary-link">
+            <a 
+              href="https://urbverde-educa.tawk.help/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="button-primary-link"
+            > 
               <PrimaryButton
                 label="Explore todos os artigos"
                 :filled="false"
@@ -333,7 +338,7 @@
                 icon="bi bi-arrow-right"
                 iconPosition="right"
               />
-            </router-link>
+            </a>
           </div>
           <div class="educa-topics">
             topicos
@@ -510,6 +515,11 @@ export default {
     margin: 0;
   }
 
+
+
+
+
+  
 
   .mission-educa{
     display: flex;
