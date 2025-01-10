@@ -298,6 +298,49 @@
           </div>
         </div>
       </div>
+
+      <!-- Mission and Urbverde Educa content -->
+      <div class="mission-educa container">
+        <div class="mission">
+          <div class="label-content">
+            <p class="heading-h5">
+              Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong> 
+              para todo o Brasil, para ajudar cidadãos e gestores a tomar 
+              decisões conscientes e enfrentar os desafios climáticos
+            </p>
+            <router-link to="/sobre" class="button-primary-link">
+              <PrimaryButton
+                label="Saiba quem somos"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
+            </router-link>
+          </div>
+          <img src="@/assets/images/homepage/urbverde-mission.png">
+        </div>
+        <div class="educa">
+          <div class="title">
+            <h2 class="heading-h2">
+              Explore mais tópicos no UrbVerde Educa
+            </h2>
+            <router-link to="/sobre" class="button-primary-link">
+              <PrimaryButton
+                label="Explore todos os artigos"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
+            </router-link>
+          </div>
+          <div class="educa-topics">
+            topicos
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -445,9 +488,80 @@ export default {
 
   <style scoped lang="scss">
 
+  .educa{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 64px;
+    align-self: stretch;
+  }
+
+  .educa .title{
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .educa .title h2{
+    color: map-get($primary-fade, 800);
+    margin: 0;
+  }
+
+
+  .mission-educa{
+    display: flex;
+    padding: 128px 0px 90px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 184px;
+    align-self: stretch;
+  }
+
+  .mission-educa .button-primary-link{
+    color: map-get($green, 600);
+  }
+
+  .mission-educa .mission{
+    display: flex;
+    flex-direction: row;
+    padding: 0px 24px;
+    align-items: center;
+    gap: 40px;
+    align-self: stretch;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+  }
+
+  .mission-educa .mission .label-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex: 1 0 0;
+    color: map-get($primary-fade, 800);
+    text-align: center;
+  }
+
+  .mission-educa .mission img{
+    width: 421px;
+    height: 259px;
+    border-radius: 24px;
+    border: 1px solid map-get($gray, 200);
+    background: url(<path-to-image>) lightgray -160.678px -42.218px / 156.09% 117.148% no-repeat;
+  }
+
   a {
     text-decoration: none;
     border-radius: 4px;
+  }
+
+  p{
+    padding: 0;
+    margin: 0;
   }
 
   .homepage {
@@ -457,7 +571,7 @@ export default {
     padding: 0;
     overflow: hidden;
     position: relative;
-    height: 5000px;
+    height: 10000px;
   }
 
   .content {
