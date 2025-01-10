@@ -1,3 +1,6 @@
+// urbverde-ui/src/constants/endpoints.js
 export const API_URLS = {
-  OPENCAGEDATA: import.meta.env.VITE_OPENCAGEDATA_API_URL,
+  SUGGESTIONS: '/v1/address/suggestions',
+  GEOCODE: '/v1/geocode',
+  CATEGORIES: '/v1/address/categories'
 };

@@ -1,44 +1,103 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="global">
-    <Sidebar
-      :is-open="isSidebarOpen"
-      @toggle-sidebar="toggleSidebar"
-      @update-coordinates="updateCoordinates"
-    />
-    <div v-if="!coordinates.lat || !coordinates.lng">
-      <img
-        src="../assets/images/setLocation.png"
-        alt="Imagem de espera"
-        class="map-placeholder"
-      >
-    </div>
-    <div
-      :class="['painel', { 'painel-collapsed': !isSidebarOpen }]"
-      v-else
-    >
-      <Navbar
-        :class="{ 'navbar-collapsed': !isSidebarOpen }"
-        @scroll-to-stats="scrollToStats"
-        @scroll-to-map="scrollToMap"
+
+    <div class="content-wrapper">
+      <!-- Sidebar -->
+      <Sidebar
+        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
+        :is-open="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar"
+        @update-coordinates="updateCoordinates"
       />
-      <div ref="mapSection">
-        <MapBox :coordinates="coordinates" />
+
+      <!-- Main content (navbar, map, etc.) -->
+      <div class="main-wrapper">
+        <!-- If no coordinates, show a placeholder -->
+        <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
+          <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
+        </div>
+
+        <div v-else>
+          <Navbar
+            :class="{ 'navbar-collapsed': !isSidebarOpen }"
+            :active-section="activeSection"
+            @navigate-to="scrollToSection"
+          />
+
+          <div id="map" ref="Mapa" class="content-area">
+            <MapBox :coordinates="coordinates" class="map-box">
+              <Legenda />
+            </MapBox>
+          </div>
+
+          <!-- Stats Section (scroll target) -->
+          <div id="stats"
+               ref="statsSection"
+               class="box"
+          >
+            Estatísticas do {{ category }} em {{ cityName }}
+            <TemperatureSection />
+          </div>
+
+          <!-- Pop Vulnerável -->
+          <div id="vulnerable"
+               ref="vulnerableSection"
+               class="box"
+               style="border-top: 1px solid black">
+            Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
+            <HeatSection/>
+          </div>
+
+          <!-- Ranking -->
+          <div id="ranking"
+               ref="rankingSection"
+               class="box"
+               style="border-top: 1px solid black">
+            {{ cityName }} no ranking dos municípios
+            <RankSection/>
+          </div>
+
+          <!-- Dados Gerais e Baixar Relatório -->
+          <div id="data"
+               ref="dataSection"
+               class="box"
+               style="height:636px; border-top: 1px solid black">
+            Veja mais sobre {{ cityName }}
+
+          </div>
+
+          <!-- Footer -->
+          <div id="newsletter"
+               ref="newsletterSection"
+               class="box"
+               style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
+            RECEBA AS NOVIDADES POR EMAIL
+          </div>
+        </div>
       </div>
-      <div class="legend">
-        <Legenda />
-      </div>
-      <div ref="statsSection" class="box" />
+      <!-- <div ref="statsSection" class="box" >
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+/**
+ * We are still using the Options API (classic)
+ * instead of <script setup> the new recommended approach
+ * in Vue 3.2+ for clean, concise code.
+*/
+import { ref, onMounted, onUnmounted, computed  } from 'vue';
+import { useRoute } from 'vue-router';
+import { useLocationStore } from '@/stores/locationStore';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
+import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
+import RankSection from '@/components/cards/weather/RankSection.vue';
+import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 
 export default {
@@ -47,11 +106,15 @@ export default {
     Sidebar,
     MapBox,
     Navbar,
-    Legenda
+    Legenda,
+    TemperatureSection,
+    HeatSection,
+    RankSection
   },
 
   setup() {
-
+    const route = useRoute();
+    const locationStore = useLocationStore();
     // Configuração das meta tags de SEO
     useHead({
       title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
@@ -79,81 +142,206 @@ export default {
     });
 
     const coordinates = ref({ lat: null, lng: null });
-    const statsSection = ref(null);
+    const activeSection = ref('map');
     const isSidebarOpen = ref(true);
 
+    // Computed properties from store
+    const category = computed(() => locationStore.category || 'category?');
+    const currentLayer = computed(() => locationStore.layer || 'layer?');
+    const cityName = computed(() => locationStore.nm_mun || 'city?');
+
+    // const sections = {
+    //   map: null,
+    //   stats: null,
+    //   ranking: null,
+    // };
+
+    // Methods
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
     };
 
     const updateCoordinates = (newCoordinates) => {
       coordinates.value = newCoordinates;
+      locationStore.setCoordinates(newCoordinates);
     };
 
-    const scrollToStats = () => {
-      if (statsSection.value) {
-        statsSection.value.scrollIntoView({ behavior: 'smooth' });
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const navbarHeight = 100; // Adjust this value based on your navbar height
+      const sectionElements = document.querySelectorAll(
+        '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
+      );
+
+      for (const element of sectionElements) {
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + scrollPosition - navbarHeight;
+        const bottom = top + rect.height;
+
+        if (scrollPosition >= top && scrollPosition < bottom) {
+          activeSection.value = element.id;
+          history.replaceState(null, null, `#${element.id}`);
+          break;
+        }
       }
     };
 
-    const scrollToMap = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    const scrollToSection = (sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const navbarHeight = 100; // Adjust this value based on your navbar height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        activeSection.value = sectionId;
+        history.pushState(null, null, `#${sectionId}`);
+      }
     };
 
+    onMounted(() => {
+      // Check if URL has ?nm_mun=..., ?cd_mun=...
+      const { nm_mun, cd_mun } = route.query;
+      if (nm_mun || cd_mun) {
+        locationStore.setLocation({
+          cd_mun: cd_mun ?? null,
+          nm_mun: nm_mun ?? null,
+        });
+      }
+
+      // Set coordinates from store if available
+      if (locationStore.coordinates?.lat && locationStore.coordinates?.lng) {
+        coordinates.value = locationStore.coordinates;
+      }
+      // Otherwise fetch them if we have cd_mun
+      else if (cd_mun) {
+        locationStore.fetchCoordinatesByCdMun(cd_mun);
+      }
+      // Or by name if we have nm_mun
+      else if (nm_mun) {
+        locationStore.fetchCoordinatesByName(nm_mun);
+      }
+
+      window.addEventListener('scroll', handleScroll);
+      if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => scrollToSection(sectionId), 100);
+      }
+      handleScroll();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
+
     return {
+      // Refs
       coordinates,
-      updateCoordinates,
-      scrollToStats,
-      scrollToMap,
-      statsSection,
+      activeSection,
       isSidebarOpen,
-      toggleSidebar
+
+      // Computed properties
+      category,
+      currentLayer,
+      cityName,
+
+      // Methods
+      updateCoordinates,
+      scrollToSection,
+      toggleSidebar,
     };
   }
 };
 </script>
 
-<style>
-.global {
-  background-color: #F8F9FACC;
-  width: 100%;
-  height: 100vh;
-}
+<style scoped>
+  .global {
+    background-color: #F8F9FACC;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-.map-placeholder {
-  display: flex;
-  justify-self: center;
-  transform: translate(-10%, 160%);
-  width: 280px;
-  height: 175px;
-  margin-left: 252px;
-}
+  /* Flex container to hold sidebar (left) and main content (right) */
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+  }
 
-.painel {
-  transition: 0.6s ease;
-}
+  /* Sidebar “collapsed” style (if you want a narrower width) */
+  .sidebar-collapsed {
+    width: 72px;
+    transition: width 0.3s;
+  }
 
-.painel-collapsed {
-  margin-left: -100px;
-  transition: 0.6s ease;
-}
+  /* Main content takes the rest of the horizontal space */
+  .main-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+  }
 
-.legend {
-  position: absolute;
-  top: 170px;
-  right: 60px;
-}
+  .content-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+  }
 
-.box {
-  display: flex;
-  gap: 80px;
-  margin-top: 110px;
-  justify-content: center;
-}
+  .map-box {
+    flex: 1;
+    position: relative;
+  }
 
-.static {
-  padding: 26px 30px;
-  background-color: rgb(176, 171, 171);
-  border-radius: 16px;
-}
+  .legend-wrapper {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 264px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    z-index: 10;
+  }
+
+  /* Center the placeholder vertically and horizontally */
+  .placeholder-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 3%;
+  }
+
+  /* Placeholder image if coordinates are not set */
+  .map-placeholder {
+    display: block;
+    margin: 40px auto;
+    opacity: 0.45;
+  }
+
+  /* Just a section to hold stats or other elements */
+  .box {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    gap: 16px;
+    margin-top: 0px;
+    justify-content: center;
+    padding: 32px 40px;
+    justify-content: space-between;
+    width: 100%;
+    color: var(--Body-Text-Body-Color, #212529);
+    font-family: Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+  }
 </style>

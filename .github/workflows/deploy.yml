@@ -20,7 +20,8 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
+    - id: build_and_push
+      name: Build and Push Docker Image
       run: |
         # Create a timestamp tag
         TIMESTAMP=$(date +%Y%m%d-%H%M%S)
@@ -31,6 +32,7 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/urbverde-ui:$TIMESTAMP
         # Save the timestamp for the deployment step
         echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+        echo "::set-output name=timestamp::$TIMESTAMP"
         
     - name: Deploy to Production Server
       uses: appleboy/ssh-action@v0.1.7
@@ -48,8 +50,7 @@ jobs:
             echo "Previous version was: $PREV_VERSION"
           fi
           
-          # Store the new version
-          echo "${{ env.TIMESTAMP }}" > urbverde-ui-version.txt
+          echo "${{ steps.build_and_push.outputs.timestamp }}" > urbverde-ui-version.txt
           
           # Clone or update repository
           if [ ! -d "urbverde-ui" ]; then

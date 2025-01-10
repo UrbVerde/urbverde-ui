@@ -69,7 +69,7 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-1.svg" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
+                  <img src="@/assets/images/homepage/image-card-1.svg" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
                   <h3 class="title body-small-bold">
@@ -89,7 +89,7 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-2.svg" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
+                  <img src="@/assets/images/homepage/image-card-2.svg" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
                   <h3 class="title body-small-bold">
@@ -110,7 +110,7 @@
               </div>
               <div class="bottom-content">
                 <div>
-                  <img src="@\assets\images\homepage\image-card-3.svg" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
+                  <img src="@/assets/images/homepage/image-card-3.svg" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
                 </div>
                 <div class="wrapper-bottom-content">
                   <h3 class="title body-small-bold">
@@ -213,7 +213,6 @@
           </div>
 
         </div>
-
       </div>
 
       <!-- Products content -->
@@ -404,6 +403,7 @@
 </template>
 
 <script>
+
 // Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
@@ -443,9 +443,8 @@ export default {
     UrbVerdeEducaTopics,
   },
 
+  // Configuração das meta tags de SEO
   setup() {
-
-    // Configuração das meta tags de SEO
     useHead({
       title: 'UrbVerde: Dados gratuitos para cidades mais verdes e sustentáveis',
       meta: [
@@ -475,7 +474,7 @@ export default {
   data() {
     return {
       // Palavras para transição
-      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente'], // Palavras para rotação
+      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
 
       // Imagens das logos das instituições
@@ -508,7 +507,6 @@ export default {
       return this.rotatingWords[this.currentWordIndex];
     },
   },
-
   mounted() {
     this.startWordRotation();
   },
@@ -518,6 +516,13 @@ export default {
   },
 
   methods: {
+    onLocationUpdated() {
+      // This will be called whenever the child component emits "location-updated"
+      return;
+      // console.log('Location updated in Home.vue!', payload);
+      // Do something with the payload:
+      // e.g., store it in data(), navigate somewhere, etc.
+    },
     // Método para rotação das palavras
     startWordRotation() {
       this.wordRotationInterval = setInterval(() => {
@@ -535,7 +540,6 @@ export default {
 
       const centerX = (offsetX / rect.width - 0.5) * 5; // Calcula deslocamento X
       const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
-
       image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
     },
     resetZoom() {
@@ -546,8 +550,7 @@ export default {
 };
 </script>
 
-  <style scoped lang="scss">
-
+<style scoped lang="scss">
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -630,9 +633,11 @@ export default {
 
   .h1-text {
     color: map-get($primary-fade, 800);
-
+    // color: var(--Primary-Fade-800, #013C31);
+    // font-family: Inter;
     font-size: 48px;
     font-weight: 700;
+    // line-height: 120%;
   }
 
   //Transição aplicada pelo <transition name="fade" mode="out-in">
@@ -664,8 +669,11 @@ export default {
   .h1-lasttext {
     display: inline-block;
     color: map-get($green, 500);
+    // color: var(--Green-500, #198754);
+    // font-family: Inter;
     font-size: 48px;
     font-weight: 700;
+    // line-height: 120%;
     width: 200px; // Tamanho fixo para evitar movimentação horizontal brusca
     text-align: left;
   }
@@ -674,6 +682,7 @@ export default {
     width: 520px;
     max-width: 100%;
     color: map-get($theme, secondary);
+    // color: #6C757D;
   }
 
   .search {
@@ -684,7 +693,9 @@ export default {
   }
 
   .search .input-container{
+    // border: 2px solid var(--Primary-Fade-500, #418377) !important; // Não funcionando, ajustar depois
     border-radius: 14px;
+    // background: var(--Gray-100, #F8F9FA);
     background: map-get($gray, 100);
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
   }
@@ -762,6 +773,8 @@ export default {
         border-radius: 32px;
         border: 1px solid map-get($gray, 300);
         background: map-get($gray, "white");
+        // border: 1px solid var(--Gray-300, #DEE2E6);
+        // background: map-get($gray, white);
         transition: transform 0.2s ease-out;
         will-change: transform;
       }
@@ -791,7 +804,7 @@ export default {
     flex: 1 1 calc(33.333% - 24px);
     border-radius: 16px;
     border: 1px solid #E9ECEF;
-    background: map-get($gray, "white");
+    // background: map-get($gray, white);
     max-width: 100%;
     min-width: 280px;
     gap: 24px;
@@ -805,6 +818,7 @@ export default {
 
   .cards .top-content{
     color: map-get($body-text, body-color);
+    // color: map-get($body-text, "body-color"); // #212529
   }
 
   .cards .top-content p{
@@ -814,6 +828,7 @@ export default {
 
   .cards .top-content p .highlight{
     background-color: map-get($green, 100);
+    // background-color: var(--Green-100, #D1E7DD);
     padding: 0 4px;
     border-radius: 4px;
     line-height: 150%;
@@ -848,6 +863,7 @@ export default {
     height: 56px;
     border-radius: 56px;
     border: 1px solid map-get($gray, 400);
+    // border: 1px solid var(--Gray-400, #CED4DA);
     background: url(<path-to-image>) lightgray 50% / cover no-repeat;
   }
 
@@ -862,6 +878,7 @@ export default {
   }
 
   .cards .bottom-content .title{
+    // color: map-get($body-text, "body-color"); // #212529
     color: map-get($body-text, body-color);
     display: flex;
     flex-direction: column;
@@ -900,20 +917,25 @@ export default {
 
   .institutes .institutes-header h2{
     color: map-get($primary-fade, 800);
+    // color: var(--Primary-Fade-800, #013C31);
+    font-family: Inter;
     font-size: 48px;
     font-style: normal;
     font-weight: 600;
+    line-height: 120%;
     align-self: stretch;
     margin: 0;
   }
 
   .institutes .institutes-header h4{
     color: map-get($gray, 600);
+    // color: var(--Gray-600, #6C757D);
     margin: 0;
   }
 
   .institutes .institutes-header a{
     color: map-get($green, 500);
+    // color: var(--Green-500, #198754);
     text-decoration-line: underline;
     text-underline-position: from-font;
   }
@@ -1004,10 +1026,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    // color: var(--Primary-Fade-700, #025949);
     color: map-get($primary-fade, 700);
   }
 
   .institutes-awards .award .award-label .award-label-text p:last-child{
+    // color: var(--Primary-Fade-700, #025949);
     color: map-get($primary-fade, 700);
     font-size: 10px;
   }
