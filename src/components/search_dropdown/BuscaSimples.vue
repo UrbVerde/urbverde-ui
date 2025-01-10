@@ -73,7 +73,7 @@
         </div>
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdownEl">
-          <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
+            <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
               v-for="(suggestion, index) in visibleSuggestions"
               :key="suggestion"
               @click="selectSuggestion(suggestion)"
@@ -1065,11 +1065,12 @@ onUpdated(() => {
   }
 
   .suggestions-list li:hover {
-    background-color: #E9ECEF;
+    /* background-color: #E9ECEF; */
+    background-color: #1171d1;
   }
 
   .first-suggestion {
-    background-color: #1171d1;
+    background-color: #E9ECEF !important;
   }
 
   .suggestion-item {
