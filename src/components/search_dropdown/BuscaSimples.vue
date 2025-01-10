@@ -165,16 +165,16 @@ onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside);
   // //this.debouncedFetchCities = debounce(this.fetchCities, 100);
   loadSearchHistory();
-  generateDefaultSuggestions();
+  // generateDefaultSuggestions();
   updateSuggestions();
 
-  // Show dropdown after 2.5s delay
+  // Show dropdown after 2s delay
   setTimeout(() => {
     if (!dropdown.value && inputValue.value === '') {
       dropdown.value = true;
       activateInput();
     }
-  }, 2500);
+  }, 2000);
 });
 
 onBeforeUnmount(() => {
@@ -571,6 +571,7 @@ function handleInput() {
 }
 
 async function updateSuggestions(forceUpdate = false) {
+  // alert('updateSuggestions');
   if (!forceUpdate && inputValue.value === previousInputValue.value) {return;}
   // Only proceed if input actually changed
   if (inputValue.value === '') {
@@ -739,6 +740,7 @@ function generateDefaultSuggestions() {
   //   }
   // }
   // If you have a fallback city, you can define it here:
+  // alert(stateAbbreviation);
   suggestions.value = [
     { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
     { text: state, type: 'state' },

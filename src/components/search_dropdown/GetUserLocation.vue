@@ -194,13 +194,23 @@ async function processGeolocationData(position) {
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
     );
     const data = await response.json();
+    // Find state abbreviation from the states list
+    const stateFound = locationData.statesBrazil.find(
+      state => state.name === data.address.state
+    );
 
     updateLocationData({
       city: data.address.city || data.address.town || data.address.village,
       state: data.address.state,
+      stateAbbreviation: stateFound ? stateFound.abbreviation : null,
       country: data.address.country,
-      source: 'geolocation'
+      source: 'geolocation',
+      coordinates: {
+        lat: latitude,
+        lng: longitude
+      }
     });
+
   } catch {
     throw new Error('Erro ao processar dados de geolocalização');
   }
