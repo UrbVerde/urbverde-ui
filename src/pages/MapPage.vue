@@ -29,7 +29,9 @@
             <div class="top-statistics-container">
               <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName }}</span>
               <!-- <div class="date-picker-container"></div> -->
-              <DatePicker />
+              <YearPicker 
+              v-model="selectedYear"
+              :years="availableYears"/>
 
             </div>
             <TemperatureSection />
@@ -83,7 +85,7 @@ import TemperatureSection from '@/components/cards/weather/TemperatureSection.vu
 import RankSection from '@/components/cards/weather/RankSection.vue';
 import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
-import DatePicker from '@/components/cards/weather/DatePicker.vue'; // Caminho para o Datepicker.vue
+import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
 
 
 export default {
@@ -96,7 +98,13 @@ export default {
     TemperatureSection,
     HeatSection,
     RankSection,
-    DatePicker,
+    YearPicker,
+  },
+  data() {
+    return {
+      selectedYear: 2021,
+      availableYears: [2020, 2021, 2022, 2023, 2024] // Anos específicos que você quer disponibilizar
+    }
   },
 
   setup() {
