@@ -305,8 +305,8 @@
         <div class="mission">
           <div class="label-content">
             <p class="heading-h5">
-              Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong> 
-              para todo o Brasil, para ajudar cidadãos e gestores a tomar 
+              Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong>
+              para todo o Brasil, para ajudar cidadãos e gestores a tomar
               decisões conscientes e enfrentar os desafios climáticos
             </p>
             <router-link to="/sobre" class="button-primary-link">
@@ -326,12 +326,12 @@
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
             </h2>
-            <a 
-              href="https://urbverde-educa.tawk.help/" 
-              target="_blank" 
+            <a
+              href="https://urbverde-educa.tawk.help/"
+              target="_blank"
               rel="noopener noreferrer"
               class="button-primary-link"
-            > 
+            >
               <PrimaryButton
                 label="Explore todos os artigos"
                 :filled="false"
@@ -344,54 +344,54 @@
           <div class="educa-topics">
 
             <!--Link para Reportagens e notícias-->
-            <a 
-              href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias" 
-              target="_blank" 
+            <a
+              href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias"
+              target="_blank"
               rel="noopener noreferrer"
-            > 
-              <UrbVerdeEducaTopics 
+            >
+              <UrbVerdeEducaTopics
                 imageSrc="src\assets\images\homepage\urbverde-educa-topics-marcel.png"
-                imageAlt="Reportagens e notícias" 
-                title="Reportagens e notícias" 
+                imageAlt="Reportagens e notícias"
+                title="Reportagens e notícias"
               />
             </a>
 
             <!--Documentos-->
-            <a 
-              href="https://urbverde-educa.tawk.help/category/documentos" 
-              target="_blank" 
+            <a
+              href="https://urbverde-educa.tawk.help/category/documentos"
+              target="_blank"
               rel="noopener noreferrer"
-            > 
-              <UrbVerdeEducaTopics 
+            >
+              <UrbVerdeEducaTopics
                 imageSrc="src\assets\images\homepage\urbverde-educa-topics-notebook.png"
-                imageAlt="Documentos" 
-                title="Documentos" 
+                imageAlt="Documentos"
+                title="Documentos"
               />
             </a>
 
             <!--Métodologias-->
-            <a 
-              href="https://urbverde-educa.tawk.help/category/categorias-e-camadas" 
-              target="_blank" 
+            <a
+              href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+              target="_blank"
               rel="noopener noreferrer"
-            > 
-              <UrbVerdeEducaTopics 
+            >
+              <UrbVerdeEducaTopics
                 imageSrc="src\assets\images\homepage\urbverde-educa-topics-edu.png"
-                imageAlt="Métodologias" 
-                title="Métodologias" 
+                imageAlt="Métodologias"
+                title="Métodologias"
               />
             </a>
 
             <!--Principais dúvidas-->
-            <a 
-              href="https://urbverde-educa.tawk.help/" 
-              target="_blank" 
+            <a
+              href="https://urbverde-educa.tawk.help/"
+              target="_blank"
               rel="noopener noreferrer"
-            > 
-              <UrbVerdeEducaTopics 
+            >
+              <UrbVerdeEducaTopics
                 imageSrc="src\assets\images\homepage\urbverde-educa-topics-breno.png"
-                imageAlt="Principais dúvidas" 
-                title="Principais dúvidas" 
+                imageAlt="Principais dúvidas"
+                title="Principais dúvidas"
               />
             </a>
           </div>
@@ -567,26 +567,26 @@ export default {
   }
 
   .image-background-wrapper {
-    position: absolute; 
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100%; 
+    width: 100%;
     height: 100vh;
     z-index: -1; // Imagem fica abaixo de todo o conteúdo da página
     overflow: hidden;
   }
 
   .image-background img {
-    width: 100%; 
-    height: 100%; 
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    position: absolute; 
+    position: absolute;
     top: 0;
-    top: -72px; 
+    top: -72px;
   }
 
   .content {
-    position: relative; 
+    position: relative;
     z-index: 1; // Conteúdo acima da imagem de fundo e abaixo do NavbarHomepage
   }
 

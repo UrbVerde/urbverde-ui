@@ -29,16 +29,15 @@
               <a href="#" class="body-small-regular">Transparência</a>
             </li>
             <li class="nav-item d-flex">
-              <a 
-              href="https://urbverde-educa.tawk.help/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="body-small-regular"
+              <a
+                href="https://urbverde-educa.tawk.help/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="body-small-regular"
               >
-              UrbVerde Educa 
+                UrbVerde Educa
               </a>
             </li>
-            
 
           </ul>
 
