@@ -29,7 +29,7 @@ const categories = ref([]);
 // Props with validation
 const props = defineProps({
   code: {
-    type: String,
+    type: Number,
     default: null
   },
   type: {

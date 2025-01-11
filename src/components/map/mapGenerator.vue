@@ -52,14 +52,32 @@ export default {
 
         return;
       }
-
       this.showError = false;
       this.initializeMap();
+    },
+    handleMissingImage(e) {
+      const imageId = e.id ? e.id.trim() : null;
+      if (!imageId || imageId === '') {
+        // console.warn('Imagem ausente detectada, mas sem ID válido ou ID vazio.');
+        return;
+      }
+
+      if (!this.map.hasImage(imageId)) {
+        console.warn(`Adicionando imagem de placeholder para: ${imageId}`);
+        const placeholder = {
+          width: 1,
+          height: 1,
+          data: new Uint8Array(4).fill(0), // RGBA transparente
+        };
+        this.map.addImage(imageId, placeholder);
+      } else {
+        return;
+        // console.warn(`Imagem com ID ${imageId} já existe.`);
+      }
     },
     initializeMap() {
       if (this.showError) {return;}
 
-      // Reset states
       this.mapLoaded = false;
       this.mapVisible = false;
 
@@ -70,40 +88,24 @@ export default {
         pitch: 20,
         zoom: this.MAP_ZOOM_START,
         attributionControl: false,
-        NavigationControl: true,
-        fadeDuration: 0
+        fadeDuration: 0,
       });
 
-      this.map.on('styleimagemissing', (e) => {
-        const id = e.id;
-        if (!id || this.map.hasImage(id)) {
-          return;
-        }
-        const placeholder = new Image(1, 1);
-        placeholder.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==';
-        placeholder.onload = () => {
-          this.map.addImage(id, placeholder);
-        };
-      });
+      // Listener para imagens ausentes
+      this.map.on('styleimagemissing', this.handleMissingImage);
 
       this.map.on('load', () => {
-        // console.log('Map loaded successfully');
-
-        // First make the container visible
         this.mapVisible = true;
 
-        // Wait a brief moment for fade-in to start
         setTimeout(() => {
-          // Then start the fly animation
           this.map.flyTo({
             center: [this.coordinates.lng, this.coordinates.lat],
             zoom: this.MAP_ZOOM_FINAL,
             duration: this.MAP_ANIMATION_DURATION,
-            essential: true
+            essential: true,
           });
-
           this.mapLoaded = true;
-        }, 300); // Wait for fade-in to complete
+        }, 300);
       });
     },
     updateMapCenter() {
@@ -114,7 +116,7 @@ export default {
           setTimeout(() => {
             this.map.remove();
             this.map = null;
-          }, 300); // Wait for fade-out
+          }, 300);
         }
 
         return;
@@ -132,15 +134,14 @@ export default {
           center: [this.coordinates.lng, this.coordinates.lat],
           zoom: this.MAP_ZOOM_FINAL,
           duration: this.MAP_ANIMATION_DURATION,
-          essential: true
+          essential: true,
         });
       }
-    }
+    },
   },
   watch: {
     coordinates: {
       handler() {
-        // console.log('MapBox received new coordinates:', newCoordinates);
         this.updateMapCenter();
       },
       deep: true
@@ -151,7 +152,6 @@ export default {
       this.mapVisible = false;
       setTimeout(() => {
         this.map.remove();
-        // console.log('Map removed');
       }, 300);
     }
   }

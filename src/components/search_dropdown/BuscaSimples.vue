@@ -111,15 +111,9 @@ import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { API_URLS } from '@/constants/endpoints';
 
+// Constants
 const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
-
-const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
-// const props = defineProps({
-//   IPDATA_API_KEY: String
-// });
-
-// All this shouldnt be hardcorded here in the next versions (!)
-const states = [
+const states = [ // All this shouldnt be hardcorded here in the next versions (!)
   'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
   'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
   'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
@@ -127,7 +121,24 @@ const states = [
   'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
 ];
 
-/* ------------ Reactive State ------------ */
+// Props and Emits
+const props = defineProps({
+  forceOpenTimeout: {
+    type: Number,
+    default: null, // No timeout by default
+  }
+});
+
+const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
+
+// Refs for DOM elements
+const inputField = ref(null);
+const dropdownEl = ref(null);
+const inputContainer = ref(null);
+const suggestionContainerEl = ref(null);
+const suggestionItems = ref([]);
+
+// Reactive State
 const isLoading = ref(false);
 const inputValue = ref('');
 const locationData = ref(null);
@@ -149,40 +160,43 @@ const filterAll = ref(true);
 const filterCity = ref(false);
 const filterState = ref(false);
 
+// Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
 
-// showSuggestions: false, // Controla a exibição das sugestões
-// lastInputLength: 0,
-// // isDragging: false,
-// startX: 0,
-// scrollLeft: 0,
-// IPDATA_API_KEY: import.meta.env.VITE_IPDATA_API_KEY,
-// defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
-
-/* ------------ Lifecycle ------------ */
+// Lifecycle Hooks
 onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside);
-  // //this.debouncedFetchCities = debounce(this.fetchCities, 100);
   loadSearchHistory();
   // generateDefaultSuggestions();
   updateSuggestions();
 
-  // Show dropdown after 2s delay
-  setTimeout(() => {
-    if (!dropdown.value && inputValue.value === '') {
-      dropdown.value = true;
-      activateInput();
-    }
-  }, 2000);
+  // Only add delay if forceOpenTimeout is provided
+  if (props.forceOpenTimeout !== null) {
+    setTimeout(() => {
+      if (!dropdown.value && inputValue.value === '') {
+        dropdown.value = true;
+        activateInput();
+      }
+    }, props.forceOpenTimeout);
+  }
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousedown', handleClickOutside);
-  // //const filterButton = this.$refs.filterButtonContainer;
 });
 
-/* ------------ Computed Properties ------------ */
+onBeforeUpdate(() => {
+  suggestionItems.value = [];
+});
+
+onUpdated(() => {
+  suggestionItems.value = visibleSuggestions.value.map(
+    (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
+  );
+});
+
+// Computed Properties
 const filteredSuggestions = computed(() => {
   if (filterAll.value) {
     return suggestions.value;
@@ -207,7 +221,6 @@ const filteredSuggestions = computed(() => {
 
 const visibleSuggestions = computed(() => {
   const list = filteredSuggestions.value;
-
   // Find first state suggestion
   const firstStateIndex = list.findIndex(s => s.type === 'state');
   if (firstStateIndex === -1) {
@@ -217,7 +230,6 @@ const visibleSuggestions = computed(() => {
   // separate cities from states
   const citiesBefore = list.slice(0, firstStateIndex);
   const statesAfter = list.slice(firstStateIndex);
-
   // ensure at least one state
   const totalItems = Math.min(5, list.length);
   const citiesCount = Math.min(citiesBefore.length, totalItems - 1); // Reserve 1 spot for state
@@ -228,7 +240,14 @@ const visibleSuggestions = computed(() => {
   ];
 });
 
-/* ------------ Methods (Composition Functions) ------------ */
+// Core Functions (in order of execution)
+function activateInput() {
+  isInputActive.value = true;
+  // emit('menu-interaction'); // Emit event for menu interaction
+  nextTick(() => {
+    if (inputField.value) {inputField.value.focus();}
+  });
+}
 function selectSuggestion(suggestion) {
   inputValue.value = suggestion.text;
   visibleInput.value = suggestion.text;
@@ -248,13 +267,6 @@ function selectSuggestion(suggestion) {
   });
 
   fetchCoordinates(locationChosen.value);
-}
-function activateInput() {
-  isInputActive.value = true;
-  // emit('menu-interaction'); // Emit event for menu interaction
-  nextTick(() => {
-    if (inputField.value) {inputField.value.focus();}
-  });
 }
 
 function handleFocus(event) {
@@ -686,6 +698,7 @@ function handleEnter() {
 }
 
 function addToHistory(item) {
+  if (item === 'No Results') {return;}
   const itemLower = item.toLowerCase();
   const historyLower = searchHistory.value.map(h => h.toLowerCase());
 
@@ -808,24 +821,6 @@ function emitLocationUpdate(payload) {
 // this.suggestions = [];
 
 /* ------------ Template Refs ------------ */
-
-// Refs for DOM elements
-const inputField = ref(null);
-const dropdownEl = ref(null);
-const inputContainer = ref(null);
-const suggestionContainerEl = ref(null);
-const suggestionItems = ref([]);
-
-// On each update, re-map the suggestion items
-onBeforeUpdate(() => {
-  suggestionItems.value = [];
-});
-
-onUpdated(() => {
-  suggestionItems.value = visibleSuggestions.value.map(
-    (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
-  );
-});
 
 /*
   The code above tries to approximate your event system.

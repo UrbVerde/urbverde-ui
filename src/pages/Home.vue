@@ -309,7 +309,7 @@
               para todo o Brasil, para ajudar cidadãos e gestores a tomar
               decisões conscientes e enfrentar os desafios climáticos
             </p>
-            <router-link to="/sobre" class="button-primary-link">
+            <router-link to="" class="button-primary-link">
               <PrimaryButton
                 label="Saiba quem somos"
                 :filled="false"
