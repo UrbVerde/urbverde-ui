@@ -39,17 +39,23 @@
 
           <!-- Pop Vulnerável -->
           <div id="vulnerable" ref="vulnerableSection" class="box" style="border-top: 1px solid black">
-            Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
+            <div class="top-statistics-container">
+            <span class="title-statistics-container heading-h5">Quem é o mais afetado pelo [calor extremo] em {{
+              cityName }}?</span>
             <YearPicker v-model="secondSelectedYear" :default-year="defaultYear" :city-code="cityCode"
-                @update:modelValue="handleSecondYearChange" />
+              @update:modelValue="handleSecondYearChange" />
+            </div>
             <HeatSection :city-code="cityCode" :selected-year="secondSelectedYear" />
           </div>
 
           <!-- Ranking -->
           <div id="ranking" ref="rankingSection" class="box" style="border-top: 1px solid black">
-            {{ cityName }} no ranking dos municípios
+            <div class="top-statistics-container">
+            <span class="title-statistics-container heading-h5">
+              {{ cityName }} no ranking dos municípios</span>
             <YearPicker v-model="thirdSelectedYear" :default-year="defaultYear" :city-code="cityCode"
-                @update:modelValue="handleThirdYearChange" />
+              @update:modelValue="handleThirdYearChange" />
+            </div>
             <RankSection :city-code="cityCode" :selected-year="thirdSelectedYear" />
           </div>
 
@@ -123,7 +129,8 @@ export default {
       this.firstSelectedYear = newValue;
       this.secondSelectedYear = newValue;
       this.thirdSelectedYear = newValue;
-      alert(newValue);
+      // alert(newValue);
+
     },
 
     firstSelectedYear(newValue) {
@@ -140,23 +147,23 @@ export default {
     },
 
   },
-  methods: {
-    handleFirstYearChange(newYear) {
-      this.firstSelectedYear = newYear;
-      alert(newYear);
-    },
-    handleSecondSelectedYear(newYear) {
-      this.secondSelectedYear = newYear;
-      alert(newYear);
-    },
-    handleThirdSelectedYear(newYear) {
-      this.thirdSelectedYear = newYear;
-      alert(newYear);
-    },
+  // methods: {
+  //   handleFirstYearChange(newYear) {
+  //     this.firstSelectedYear = newYear;
+  //     // alert(newYear);
+      
+  //   },
+  //   handleSecondYearChange(newYear) {
+  //     this.secondSelectedYear = newYear;
+  //     // alert(newYear);
+  //   },
+  //   handleThirdYearChange(newYear) {
+  //     this.thirdSelectedYear = newYear;
+  //     // alert(newYear);
+  //   },
 
 
-
-  },
+  // },
 
   setup() {
     const route = useRoute();
