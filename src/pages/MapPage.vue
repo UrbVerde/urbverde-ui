@@ -4,10 +4,8 @@
 
     <div class="content-wrapper">
       <!-- Sidebar -->
-      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
-               :is-open="isSidebarOpen"
-               @toggle-sidebar="toggleSidebar"
-               @update-coordinates="updateCoordinates" />
+      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" :is-open="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" />
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
@@ -17,9 +15,8 @@
         </div>
 
         <div v-else>
-          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }"
-                  :active-section="activeSection"
-                  @navigate-to="scrollToSection" />
+          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }" :active-section="activeSection"
+            @navigate-to="scrollToSection" />
 
           <div id="map" ref="Mapa" class="content-area">
             <MapBox :coordinates="coordinates" class="map-box">
@@ -31,63 +28,46 @@
           <div id="stats" ref="statsSection" class="box">
             <div class="statistics-container">
               <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName
-              }}</span>
+                }}</span>
               <!-- <div class="date-picker-container"></div> -->
-              <YearPicker v-model="firstSelectedYear"
-                          :default-year="defaultYear"
-                          :city-code="cityCode"
-                          @update:modelValue="handleFirstYearChange" />
+              <YearPicker v-model="firstSelectedYear" :default-year="defaultYear" :city-code="cityCode"
+                @update:modelValue="handleFirstYearChange" />
 
             </div>
             <TemperatureSection :city-code="cityCode" :selected-year="firstSelectedYear" />
           </div>
 
           <!-- Pop Vulnerável -->
-          <div id="vulnerable"
-               ref="vulnerableSection"
-               class="box"
-               style="border-top: 1px solid black">
+          <div id="vulnerable" ref="vulnerableSection" class="box" style="border-top: 1px solid black">
             <div class="statistics-container">
               <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
                 cityName }}?</span>
-              <YearPicker v-model="secondSelectedYear"
-                          :default-year="defaultYear"
-                          :city-code="cityCode"
-                          @update:modelValue="handleSecondYearChange" />
+              <YearPicker v-model="secondSelectedYear" :default-year="defaultYear" :city-code="cityCode"
+                @update:modelValue="handleSecondYearChange" />
             </div>
             <HeatSection :city-code="cityCode" :selected-year="secondSelectedYear" />
           </div>
 
           <!-- Ranking -->
-          <div id="ranking"
-               ref="rankingSection"
-               class="box"
-               style="border-top: 1px solid black">
+          <div id="ranking" ref="rankingSection" class="box" style="border-top: 1px solid black">
             <div class="statistics-container">
               <span class="title-statistics-container heading-h5">
                 {{ cityName }} no Ranking dos Municípios</span>
-              <YearPicker v-model="thirdSelectedYear"
-                          :default-year="defaultYear"
-                          :city-code="cityCode"
-                          @update:modelValue="handleThirdYearChange" />
+              <YearPicker v-model="thirdSelectedYear" :default-year="defaultYear" :city-code="cityCode"
+                @update:modelValue="handleThirdYearChange" />
             </div>
             <RankSection :city-code="cityCode" :selected-year="thirdSelectedYear" />
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
-          <div id="data"
-               ref="dataSection"
-               class="box"
-               style="height:636px; border-top: 1px solid black">
+          <div id="data" ref="dataSection" class="box" style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
 
           </div>
 
           <!-- Footer -->
-          <div id="newsletter"
-               ref="newsletterSection"
-               class="box"
-               style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
+          <div id="newsletter" ref="newsletterSection" class="box"
+            style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
             RECEBA AS NOVIDADES POR EMAIL
           </div>
         </div>
@@ -131,17 +111,19 @@ export default {
   },
   data() {
     return {
-      defaultYear: 2021, // This will be used to update the child's (yearpicker) default
-      firstSelectedYear: 2021,// This will be the current year and will be updated by the child
-      secondSelectedYear: 2021, // This will be the current year and will be updated by the child
-      thirdSelectedYear: 2021, // This will be the current year and will be updated by the child
-      selectedYear: 2021, // This will be the current year and will be updated by the child
+      defaultYear: null, // This will be used to update the child's (yearpicker) default
+      firstSelectedYear: null,// This will be the current year and will be updated by the child
+      secondSelectedYear: null, // This will be the current year and will be updated by the child
+      thirdSelectedYear: null, // This will be the current year and will be updated by the child
 
       // availableYears: [2020, 2021, 2022, 2023, 2024],
       cityCode: 3547809
     };
   },
-
+  created() {
+    // Inicializa os anos quando o componente é criado
+    this.initializeYears(2020); // ou qualquer outro ano default que você desejar
+  },
   watch: {
     // Watch for changes in defaultYear to update selectedYear
     defaultYear(newValue) {
@@ -166,7 +148,16 @@ export default {
     },
 
   },
-  // methods: {
+  methods: {
+
+    initializeYears(defaultYear = new Date().getFullYear()) {
+      this.defaultYear = defaultYear;
+      this.firstSelectedYear = defaultYear;
+      this.secondSelectedYear = defaultYear;
+      this.thirdSelectedYear = defaultYear;
+    }
+
+  },
   //   handleFirstYearChange(newYear) {
   //     this.firstSelectedYear = newYear;
   //     // alert(newYear);
@@ -229,6 +220,7 @@ export default {
 
     // Methods
 
+
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
     };
@@ -284,6 +276,8 @@ export default {
           cd_mun: cd_mun ?? null,
           nm_mun: nm_mun ?? null,
         });
+
+
       }
 
       // Set coordinates from store if available
