@@ -8,25 +8,55 @@
 <script>
 import HeatCard from './HeatCard.vue';
 
-export default{
+export default {
+  name: 'HeatSection',
+  
   components: {
     HeatCard,
   },
-  data(){
+
+  props: {
+    cityCode: {
+      type: Number,
+      required: true
+    },
+    selectedYear: {
+      type: Number,
+      required: true
+    }
+  },
+
+  data() {
     return {
       cardData: []
     };
   },
-  mounted(){
-    this.fetchData(3520707,'2020');
+
+  watch: {
+    // Watch both cityCode and selectedYear
+    cityCode: {
+      handler: 'fetchDataOnChange',
+      immediate: true
+    },
+    selectedYear: {
+      handler: 'fetchDataOnChange',
+      immediate: true
+    }
   },
+
   methods: {
+    fetchDataOnChange() {
+      // Only fetch if both values are available
+      if (this.cityCode && this.selectedYear) {
+        this.fetchData(this.cityCode, this.selectedYear.toString());
+      }
+    },
+
     async fetchData(city, year) {
       try {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/heat?city=${city}&year=${year}`);
         const data = await response.json();
-        this.cardData= data;
-
+        this.cardData = data;
       } catch (error) {
         console.error('Error fetching cards data:', error);
       }
@@ -36,7 +66,6 @@ export default{
 </script>
 
 <style scoped>
-
 /* Global reset for box-sizing */
 * {
   box-sizing: border-box;
@@ -51,5 +80,4 @@ export default{
   margin: 20px;
   align-items: flex-start; /* Alinha os cards no topo */
 }
-
 </style>

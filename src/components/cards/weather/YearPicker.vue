@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount, onMounted } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -75,10 +75,9 @@ const props = defineProps({
         type: Number,
         required: true
     },
-    years: {
-        type: Array,
-        required: true,
-        default: () => []
+    cityCode: {
+        type: Number,
+        required: true
     }
 });
 
@@ -88,6 +87,7 @@ const isVisible = ref(false);
 const defaultYear = ref(props.modelValue);
 const currentYear = ref(props.modelValue);
 const yearModified = ref(false);
+const years = ref([]);
 
 // Initialize defaultYear with the initial modelValue, but don't watch for changes
 defaultYear.value = props.modelValue;
@@ -97,12 +97,34 @@ watch(() => props.modelValue, (newValue) => {
     currentYear.value = newValue;
 }, { immediate: true });
 
+// Watch for changes in cityCode to fetch new years
+watch(() => props.cityCode, async (newCityCode) => {
+    await fetchYears(newCityCode);
+}, { immediate: true });
+
 // Watch for changes in currentYear to update yearModified
 watch(currentYear, (newValue) => {
     yearModified.value = newValue !== defaultYear.value;
 });
 
-const availableYears = computed(() => [...props.years].sort((a, b) => a - b));
+const fetchYears = async (cityCode) => {
+    try {
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`);
+        // alert(cityCode);
+        if (!response.ok) {
+            throw new Error('Failed to fetch years');
+            
+        }
+        const data = await response.json();
+        years.value = data;
+    } catch (error) {
+        console.error('Error fetching years:', error);
+        years.value = [];
+        
+    }
+};
+
+const availableYears = computed(() => [...years.value].sort((a, b) => a - b));
 
 const formattedYear = computed(() => 
     currentYear.value ? `Ano: ${currentYear.value}` : ''
@@ -151,6 +173,10 @@ const navigateYear = (direction) => {
     }
 };
 
+onMounted(async () => {
+    await fetchYears(props.cityCode);
+});
+
 onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside);
 });
@@ -160,7 +186,6 @@ onBeforeUnmount(() => {
 .date-picker {
     position: relative;
     display: inline-block;
-    
 }
 
 .input-wrapper {
@@ -190,16 +215,11 @@ onBeforeUnmount(() => {
     max-width: 120px;
     height: 40px;
     gap: 5px;
-    
-    
-    /* transition: all 0.2s ease-in-out; */
 }
 
 .input-container.year-modified {
-
-    outline: 2px solid #418377 ;
+    outline: 2px solid #418377;
     outline-offset: -2px;
-    /* border-color: transparent !important; */
 }
 
 .nav-button {
@@ -253,7 +273,6 @@ onBeforeUnmount(() => {
     box-sizing: content-box;
     padding: 0;
     margin: 0;
-    
 }
 
 .year-grid {
@@ -296,7 +315,6 @@ onBeforeUnmount(() => {
     min-width: 200px;
 }
 
-/* Transition styles */
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.3s ease, transform 0.3s ease;

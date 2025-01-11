@@ -27,26 +27,30 @@
           <!-- Stats Section (scroll target) -->
           <div id="stats" ref="statsSection" class="box">
             <div class="top-statistics-container">
-              <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName }}</span>
+              <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName
+                }}</span>
               <!-- <div class="date-picker-container"></div> -->
-              <YearPicker 
-              v-model="selectedYear"
-              :years="availableYears"/>
+              <YearPicker v-model="firstSelectedYear" :default-year="defaultYear" :city-code="cityCode"
+                @update:modelValue="handleFirstYearChange" />
 
             </div>
-            <TemperatureSection />
+            <TemperatureSection :city-code="cityCode" :selected-year="firstSelectedYear" />
           </div>
 
           <!-- Pop Vulnerável -->
           <div id="vulnerable" ref="vulnerableSection" class="box" style="border-top: 1px solid black">
             Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
-            <HeatSection />
+            <YearPicker v-model="secondSelectedYear" :default-year="defaultYear" :city-code="cityCode"
+                @update:modelValue="handleSecondYearChange" />
+            <HeatSection :city-code="cityCode" :selected-year="secondSelectedYear" />
           </div>
 
           <!-- Ranking -->
           <div id="ranking" ref="rankingSection" class="box" style="border-top: 1px solid black">
             {{ cityName }} no ranking dos municípios
-            <RankSection />
+            <YearPicker v-model="thirdSelectedYear" :default-year="defaultYear" :city-code="cityCode"
+                @update:modelValue="handleThirdYearChange" />
+            <RankSection :city-code="cityCode" :selected-year="thirdSelectedYear" />
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
@@ -102,17 +106,56 @@ export default {
   },
   data() {
     return {
+      defaultYear: 2021, // This will be used to update the child's (yearpicker) default
+      firstSelectedYear: 2021,// This will be the current year and will be updated by the child
+      secondSelectedYear: 2021, // This will be the current year and will be updated by the child
+      thirdSelectedYear: 2021, // This will be the current year and will be updated by the child
       selectedYear: 2021, // This will be the current year and will be updated by the child
-      defaultYear: 2021, // This will be used to update the child's default
-      availableYears: [2020, 2021, 2022, 2023, 2024]
+
+      // availableYears: [2020, 2021, 2022, 2023, 2024],
+      cityCode: 3547809
     }
   },
 
   watch: {
     // Watch for changes in defaultYear to update selectedYear
     defaultYear(newValue) {
-      this.selectedYear = newValue;
-    }
+      this.firstSelectedYear = newValue;
+      this.secondSelectedYear = newValue;
+      this.thirdSelectedYear = newValue;
+      alert(newValue);
+    },
+
+    firstSelectedYear(newValue) {
+      // Handle any side effects when selectedYear changes
+      console.log('Selected year changed to:', newValue);
+    },
+    secondSelectedYear(newValue) {
+      // Handle any side effects when selectedYear changes
+      console.log('Selected year changed to:', newValue);
+    },
+    thirdSelectedYear(newValue) {
+      // Handle any side effects when selectedYear changes
+      console.log('Selected year changed to:', newValue);
+    },
+
+  },
+  methods: {
+    handleFirstYearChange(newYear) {
+      this.firstSelectedYear = newYear;
+      alert(newYear);
+    },
+    handleSecondSelectedYear(newYear) {
+      this.secondSelectedYear = newYear;
+      alert(newYear);
+    },
+    handleThirdSelectedYear(newYear) {
+      this.thirdSelectedYear = newYear;
+      alert(newYear);
+    },
+
+
+
   },
 
   setup() {
@@ -160,6 +203,8 @@ export default {
     // };
 
     // Methods
+
+
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
     };
@@ -346,7 +391,7 @@ export default {
   flex: 1 0 0;
 }
 
-.date-picker-container{
+.date-picker-container {
   /* display: flex;
 height: 32px;
 padding: 5px 9px;
@@ -358,6 +403,7 @@ border: 1px solid var(--Gray-400, #CED4DA);
 background: var(--Gray-White, #FFF); */
 
 }
+
 /* Just a section to hold stats or other elements */
 .box {
 
@@ -368,7 +414,7 @@ background: var(--Gray-White, #FFF); */
   align-items: flex-start;
   gap: 32px;
   align-self: stretch;
-  
+
   /* display: flex;
     flex-direction: column;
     gap: 80px;

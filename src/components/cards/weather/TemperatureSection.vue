@@ -5,7 +5,7 @@
       <InfoTemperature />
     </div>
     <div class="right-panel">
-      <TemperatureCard :data="cardData" :class="temperature - card" />
+      <TemperatureCard :data="cardData" :class="temperature-card" />
     </div>
   </div>
 </template>
@@ -19,25 +19,45 @@ export default {
     InfoTemperature,
     TemperatureCard
   },
+
+  props: {
+    cityCode: {
+      type: Number,
+      required: true
+    },
+    selectedYear: {
+      type: Number,
+      required: true
+    }
+  },
+
   data() {
     return {
       cardData: []
     };
   },
-  mounted() {
-    this.fetchData('3520707', '2020');
+
+  watch: {
+    // Watch both props for changes
+    cityCode: {
+      handler: 'fetchData',
+      immediate: true
+    },
+    selectedYear: {
+      handler: 'fetchData',
+      immediate: true
+    }
   },
+
   methods: {
-    async fetchData(city, year) {
+    async fetchData() {
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${city}&year=${year}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${this.cityCode}&year=${this.selectedYear}`);
         const data = await response.json();
         this.cardData = data;
-
       } catch (error) {
         console.error('Error fetching cards data:', error);
       }
-      
     }
   }
 };
