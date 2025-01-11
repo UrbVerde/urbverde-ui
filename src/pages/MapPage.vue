@@ -26,7 +26,7 @@
 
           <!-- Stats Section (scroll target) -->
           <div id="stats" ref="statsSection" class="box">
-            <div class="top-statistics-container">
+            <div class="statistics-container">
               <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName
                 }}</span>
               <!-- <div class="date-picker-container"></div> -->
@@ -39,8 +39,8 @@
 
           <!-- Pop Vulnerável -->
           <div id="vulnerable" ref="vulnerableSection" class="box" style="border-top: 1px solid black">
-            <div class="top-statistics-container">
-            <span class="title-statistics-container heading-h5">Quem é o mais afetado pelo [calor extremo] em {{
+            <div class="statistics-container">
+            <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
               cityName }}?</span>
             <YearPicker v-model="secondSelectedYear" :default-year="defaultYear" :city-code="cityCode"
               @update:modelValue="handleSecondYearChange" />
@@ -50,9 +50,9 @@
 
           <!-- Ranking -->
           <div id="ranking" ref="rankingSection" class="box" style="border-top: 1px solid black">
-            <div class="top-statistics-container">
+            <div class="statistics-container">
             <span class="title-statistics-container heading-h5">
-              {{ cityName }} no ranking dos municípios</span>
+              {{ cityName }} no Ranking dos Municípios</span>
             <YearPicker v-model="thirdSelectedYear" :default-year="defaultYear" :city-code="cityCode"
               @update:modelValue="handleThirdYearChange" />
             </div>
@@ -383,7 +383,7 @@ export default {
   opacity: 0.45;
 }
 
-.top-statistics-container {
+.statistics-container {
   display: flex;
   align-items: center;
   gap: 24px;
