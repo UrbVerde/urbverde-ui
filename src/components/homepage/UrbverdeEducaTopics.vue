@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "UrbVerdeEducaTopics",
+  name: 'UrbVerdeEducaTopics',
   props: {
     imageSrc: {
       type: String,
@@ -22,7 +22,7 @@ export default {
     },
     imageAlt: {
       type: String,
-      default: "Imagem relacionada",
+      default: 'Imagem relacionada',
     },
     title: {
       type: String,

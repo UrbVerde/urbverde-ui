@@ -404,190 +404,189 @@
         <img src="@/assets/images/homepage/cta-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
 
         <div class="cta-label container">
-            <h2>
-              <span class="h2-cta heading-h1">Conheça mais sobre sua cidade!</span>
-            </h2>
-            <div class="search">
-              <div class="search-button">
-                <BuscaSimples @location-updated="onLocationUpdated" />
-              </div>
-              <router-link to="/mapa" class="button-primary-link">
-                <PrimaryButton
-                  label="Acessar"
-                  :filled="true"
-                  iconType="bootstrap"
-                  icon="bi bi-arrow-right"
-                  iconPosition="right"
-                />
-              </router-link>
+          <h2>
+            <span class="h2-cta heading-h1">Conheça mais sobre sua cidade!</span>
+          </h2>
+          <div class="search">
+            <div class="search-button">
+              <BuscaSimples @location-updated="onLocationUpdated" />
             </div>
+            <router-link to="/mapa" class="button-primary-link">
+              <PrimaryButton
+                label="Acessar"
+                :filled="true"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
+            </router-link>
+          </div>
         </div>
       </div>
 
-
-      </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
+<script>
 
-  // Importação de componentes
-  import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
-  import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-  import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
-  import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
+// Importação de componentes
+import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 
-  // Importação das logos
-  import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
-  import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.svg';
-  import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.svg';
-  import logo4 from '@/assets/images/homepage/institutes-logo/logo-04.svg';
-  import logo5 from '@/assets/images/homepage/institutes-logo/logo-05.svg';
-  import logo6 from '@/assets/images/homepage/institutes-logo/logo-06.svg';
-  import logo7 from '@/assets/images/homepage/institutes-logo/logo-07.svg';
-  import logo8 from '@/assets/images/homepage/institutes-logo/logo-08.svg';
-  import logo9 from '@/assets/images/homepage/institutes-logo/logo-09.svg';
-  import logo10 from '@/assets/images/homepage/institutes-logo/logo-10.svg';
-  import logo11 from '@/assets/images/homepage/institutes-logo/logo-11.svg';
-  import logo12 from '@/assets/images/homepage/institutes-logo/logo-12.svg';
-  import logo13 from '@/assets/images/homepage/institutes-logo/logo-13.svg';
-  import logo14 from '@/assets/images/homepage/institutes-logo/logo-14.svg';
-  import logo15 from '@/assets/images/homepage/institutes-logo/logo-15.svg';
-  import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.svg';
-  import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.svg';
-  import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.svg';
-  import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.svg';
+// Importação das logos
+import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
+import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.svg';
+import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.svg';
+import logo4 from '@/assets/images/homepage/institutes-logo/logo-04.svg';
+import logo5 from '@/assets/images/homepage/institutes-logo/logo-05.svg';
+import logo6 from '@/assets/images/homepage/institutes-logo/logo-06.svg';
+import logo7 from '@/assets/images/homepage/institutes-logo/logo-07.svg';
+import logo8 from '@/assets/images/homepage/institutes-logo/logo-08.svg';
+import logo9 from '@/assets/images/homepage/institutes-logo/logo-09.svg';
+import logo10 from '@/assets/images/homepage/institutes-logo/logo-10.svg';
+import logo11 from '@/assets/images/homepage/institutes-logo/logo-11.svg';
+import logo12 from '@/assets/images/homepage/institutes-logo/logo-12.svg';
+import logo13 from '@/assets/images/homepage/institutes-logo/logo-13.svg';
+import logo14 from '@/assets/images/homepage/institutes-logo/logo-14.svg';
+import logo15 from '@/assets/images/homepage/institutes-logo/logo-15.svg';
+import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.svg';
+import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.svg';
+import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.svg';
+import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.svg';
 
-  // Importação das imagens para seção UrbVerde Educa
-  import imageMarcel from '@/assets/images/homepage/urbverde-educa-topics-marcel.png';
-  import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebook.png';
-  import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
-  import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
+// Importação das imagens para seção UrbVerde Educa
+import imageMarcel from '@/assets/images/homepage/urbverde-educa-topics-marcel.png';
+import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebook.png';
+import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
+import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
 
-  // Para criação de meta tags de SEO
-  import { useHead } from '@vueuse/head';
+// Para criação de meta tags de SEO
+import { useHead } from '@vueuse/head';
 
-  export default {
-    name: 'HomePage',
-    components: {
-      NavbarHomepage,
-      PrimaryButton,
-      BuscaSimples,
-      UrbVerdeEducaTopics,
-    },
+export default {
+  name: 'HomePage',
+  components: {
+    NavbarHomepage,
+    PrimaryButton,
+    BuscaSimples,
+    UrbVerdeEducaTopics,
+  },
 
-    // Configuração das meta tags de SEO
-    setup() {
-      useHead({
-        title: 'UrbVerde: Dados gratuitos para cidades mais verdes e sustentáveis',
-        meta: [
-          {
-            name: 'description',
-            content:
+  // Configuração das meta tags de SEO
+  setup() {
+    useHead({
+      title: 'UrbVerde: Dados gratuitos para cidades mais verdes e sustentáveis',
+      meta: [
+        {
+          name: 'description',
+          content:
               'Conheça a UrbVerde, uma iniciativa dedicada a democratizar o acesso a dados ambientais e sociais gratuitos de todos os municípios brasileiros. Planeje cidades mais verdes e inclusivas com informações confiáveis.',
-          },
-          {
-            name: 'keywords',
-            content:
+        },
+        {
+          name: 'keywords',
+          content:
               'dados sociais gratuitos, dados ambientais, sustentabilidade, cidades verdes, planejamento urbano, smart cities, desenvolvimento sustentável, acesso gratuito, dados municipais, UrbVerde, página inicial',
-          },
-          {
-            property: 'og:title',
-            content: 'UrbVerde - Dados Sociais e Ambientais Gratuitos do seu Município',
-          },
-          {
-            property: 'og:description',
-            content:
+        },
+        {
+          property: 'og:title',
+          content: 'UrbVerde - Dados Sociais e Ambientais Gratuitos do seu Município',
+        },
+        {
+          property: 'og:description',
+          content:
               'Explore informações sociais e ambientais completas de municípios brasileiros com a UrbVerde, contribuindo para cidades mais resilientes e sustentáveis.',
-          },
-        ],
-      });
+        },
+      ],
+    });
+  },
+
+  data() {
+    return {
+      // Return das imagens para seção UrbVerde Educa
+      imageMarcel,
+      imageNotebook,
+      imageEdu,
+      imageBreno,
+
+      // Palavras para transição
+      rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
+      currentWordIndex: 0,
+
+      // Imagens das logos das instituições
+      logos: [
+        { src: logo1, alt: 'Logo da Instituição 1' },
+        { src: logo2, alt: 'Logo da Instituição 2' },
+        { src: logo3, alt: 'Logo da Instituição 3' },
+        { src: logo4, alt: 'Logo da Instituição 4' },
+        { src: logo5, alt: 'Logo da Instituição 5' },
+        { src: logo6, alt: 'Logo da Instituição 6' },
+        { src: logo7, alt: 'Logo da Instituição 7' },
+        { src: logo8, alt: 'Logo da Instituição 8' },
+        { src: logo9, alt: 'Logo da Instituição 9' },
+        { src: logo10, alt: 'Logo da Instituição 10' },
+        { src: logo11, alt: 'Logo da Instituição 11' },
+        { src: logo12, alt: 'Logo da Instituição 12' },
+        { src: logo13, alt: 'Logo da Instituição 13' },
+        { src: logo14, alt: 'Logo da Instituição 14' },
+        { src: logo15, alt: 'Logo da Instituição 15' },
+        { src: logo16, alt: 'Logo da Instituição 16' },
+        { src: logo17, alt: 'Logo da Instituição 17' },
+        { src: logo18, alt: 'Logo da Instituição 18' },
+        { src: logo19, alt: 'Logo da Instituição 19' },
+      ],
+    };
+  },
+
+  computed: {
+    currentWord() {
+      return this.rotatingWords[this.currentWordIndex];
+    },
+  },
+  mounted() {
+    this.startWordRotation();
+  },
+
+  beforeUnmount() {
+    clearInterval(this.wordRotationInterval);
+  },
+
+  methods: {
+    onLocationUpdated() {
+      // This will be called whenever the child component emits "location-updated"
+      return;
+      // console.log('Location updated in Home.vue!', payload);
+      // Do something with the payload:
+      // e.g., store it in data(), navigate somewhere, etc.
+    },
+    // Método para rotação das palavras
+    startWordRotation() {
+      this.wordRotationInterval = setInterval(() => {
+        this.currentWordIndex = (this.currentWordIndex + 1) % this.rotatingWords.length;
+      }, 4000); // Intervalo de 4 segundos
     },
 
-    data() {
-      return {
-        // Return das imagens para seção UrbVerde Educa
-        imageMarcel,
-        imageNotebook,
-        imageEdu,
-        imageBreno,
+    // Manipulação da imagem da plataforma
+    handleMouseMove(event) {
+      const image = this.$refs.zoomImage;
+      const rect = image.getBoundingClientRect();
 
-        // Palavras para transição
-        rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
-        currentWordIndex: 0,
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
 
-        // Imagens das logos das instituições
-        logos: [
-          { src: logo1, alt: 'Logo da Instituição 1' },
-          { src: logo2, alt: 'Logo da Instituição 2' },
-          { src: logo3, alt: 'Logo da Instituição 3' },
-          { src: logo4, alt: 'Logo da Instituição 4' },
-          { src: logo5, alt: 'Logo da Instituição 5' },
-          { src: logo6, alt: 'Logo da Instituição 6' },
-          { src: logo7, alt: 'Logo da Instituição 7' },
-          { src: logo8, alt: 'Logo da Instituição 8' },
-          { src: logo9, alt: 'Logo da Instituição 9' },
-          { src: logo10, alt: 'Logo da Instituição 10' },
-          { src: logo11, alt: 'Logo da Instituição 11' },
-          { src: logo12, alt: 'Logo da Instituição 12' },
-          { src: logo13, alt: 'Logo da Instituição 13' },
-          { src: logo14, alt: 'Logo da Instituição 14' },
-          { src: logo15, alt: 'Logo da Instituição 15' },
-          { src: logo16, alt: 'Logo da Instituição 16' },
-          { src: logo17, alt: 'Logo da Instituição 17' },
-          { src: logo18, alt: 'Logo da Instituição 18' },
-          { src: logo19, alt: 'Logo da Instituição 19' },
-        ],
-      };
+      const centerX = (offsetX / rect.width - 0.5) * 5; // Calcula deslocamento X
+      const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
+      image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
     },
-
-    computed: {
-      currentWord() {
-        return this.rotatingWords[this.currentWordIndex];
-      },
+    resetZoom() {
+      const image = this.$refs.zoomImage;
+      image.style.transform = 'scale(1) translate(0, 0)';
     },
-    mounted() {
-      this.startWordRotation();
-    },
-
-    beforeUnmount() {
-      clearInterval(this.wordRotationInterval);
-    },
-
-    methods: {
-      onLocationUpdated() {
-        // This will be called whenever the child component emits "location-updated"
-        return;
-        // console.log('Location updated in Home.vue!', payload);
-        // Do something with the payload:
-        // e.g., store it in data(), navigate somewhere, etc.
-      },
-      // Método para rotação das palavras
-      startWordRotation() {
-        this.wordRotationInterval = setInterval(() => {
-          this.currentWordIndex = (this.currentWordIndex + 1) % this.rotatingWords.length;
-        }, 4000); // Intervalo de 4 segundos
-      },
-
-      // Manipulação da imagem da plataforma
-      handleMouseMove(event) {
-        const image = this.$refs.zoomImage;
-        const rect = image.getBoundingClientRect();
-
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
-
-        const centerX = (offsetX / rect.width - 0.5) * 5; // Calcula deslocamento X
-        const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
-        image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
-      },
-      resetZoom() {
-        const image = this.$refs.zoomImage;
-        image.style.transform = 'scale(1) translate(0, 0)';
-      },
-    },
-  };
-  </script>
+  },
+};
+</script>
 
   <style scoped lang="scss">
   a {
