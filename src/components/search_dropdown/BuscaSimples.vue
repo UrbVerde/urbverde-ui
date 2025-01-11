@@ -73,7 +73,7 @@
         </div>
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdownEl">
-            <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
+          <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
               v-for="(suggestion, index) in visibleSuggestions"
               :key="suggestion"
               @click="selectSuggestion(suggestion)"

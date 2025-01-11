@@ -1,84 +1,84 @@
 <!-- YearPicker.vue -->
 <template>
-    <div class="date-picker">
-        <div class="input-wrapper">
-            <span 
-                class="nav-button" 
-                @click="navigateYear(-1)" 
-                :class="{ 
-                    'disabled': !canNavigateBack,
-                    'invisible': !canNavigateBack
-                }"
-            >
-                <i class="bi bi-chevron-left"></i>
-            </span>
-            
-            <div 
-                class="input-container" 
-                :class="{ 'year-modified': yearModified }"
-                @click="showYearSelector">
-                <input 
-                    class="input-text body-small-regular" 
-                    :value="formattedYear"
-                    @focus="showYearSelector" 
-                    placeholder="" 
-                    readonly
-                />
-                <span class="icon-datepicker">
-                    <i class="bi bi-chevron-down" tag="icon"></i>
-                </span>
-            </div>
+  <div class="date-picker">
+    <div class="input-wrapper">
+      <span
+        class="nav-button"
+        @click="navigateYear(-1)"
+        :class="{
+          'disabled': !canNavigateBack,
+          'invisible': !canNavigateBack
+        }"
+      >
+        <i class="bi bi-chevron-left"></i>
+      </span>
 
-            <span 
-                class="nav-button" 
-                @click="navigateYear(1)" 
-                :class="{ 
-                    'disabled': !canNavigateForward,
-                    'invisible': !canNavigateForward
-                }"
-            >
-                <i class="bi bi-chevron-right"></i>
-            </span>
-        </div>
+      <div
+        class="input-container"
+        :class="{ 'year-modified': yearModified }"
+        @click="showYearSelector">
+        <input
+          class="input-text body-small-regular"
+          :value="formattedYear"
+          @focus="showYearSelector"
+          placeholder=""
+          readonly
+        />
+        <span class="icon-datepicker">
+          <i class="bi bi-chevron-down" tag="icon"></i>
+        </span>
+      </div>
 
-        <Transition name="fade">
-            <div v-if="isVisible" class="calendar-overlay">
-                <div class="calendar card">
-                    <div class="card-body p-2">
-                        <div class="year-grid">
-                            <div 
-                                v-for="year in availableYears" 
-                                :key="year"
-                                class="year-item body-small-regular"
-                                :class="{ 'selected': isSelected(year) }"
-                                @click="selectYear(year)"
-                            >
-                                {{ year }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Transition>
+      <span
+        class="nav-button"
+        @click="navigateYear(1)"
+        :class="{
+          'disabled': !canNavigateForward,
+          'invisible': !canNavigateForward
+        }"
+      >
+        <i class="bi bi-chevron-right"></i>
+      </span>
     </div>
+
+    <Transition name="fade">
+      <div v-if="isVisible" class="calendar-overlay">
+        <div class="calendar card">
+          <div class="card-body p-2">
+            <div class="year-grid">
+              <div
+                v-for="year in availableYears"
+                :key="year"
+                class="year-item body-small-regular"
+                :class="{ 'selected': isSelected(year) }"
+                @click="selectYear(year)"
+              >
+                {{ year }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, onBeforeUnmount, onMounted } from 'vue';
 
 const props = defineProps({
-    modelValue: {
-        type: Number,
-        default: null
-    },
-    defaultYear: {
-        type: Number,
-        required: true
-    },
-    cityCode: {
-        type: Number,
-        required: true
-    }
+  modelValue: {
+    type: Number,
+    default: null
+  },
+  defaultYear: {
+    type: Number,
+    required: true
+  },
+  cityCode: {
+    type: Number,
+    required: true
+  }
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -94,91 +94,91 @@ defaultYear.value = props.modelValue;
 
 // Watch for changes in modelValue to update currentYear only
 watch(() => props.modelValue, (newValue) => {
-    currentYear.value = newValue;
+  currentYear.value = newValue;
 }, { immediate: true });
 
 // Watch for changes in cityCode to fetch new years
-watch(() => props.cityCode, async (newCityCode) => {
-    await fetchYears(newCityCode);
+watch(() => props.cityCode, async(newCityCode) => {
+  await fetchYears(newCityCode);
 }, { immediate: true });
 
 // Watch for changes in currentYear to update yearModified
 watch(currentYear, (newValue) => {
-    yearModified.value = newValue !== defaultYear.value;
+  yearModified.value = newValue !== defaultYear.value;
 });
 
-const fetchYears = async (cityCode) => {
-    try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`);
-        // alert(cityCode);
-        if (!response.ok) {
-            throw new Error('Failed to fetch years');
-            
-        }
-        const data = await response.json();
-        years.value = data;
-    } catch (error) {
-        console.error('Error fetching years:', error);
-        years.value = [];
-        
+const fetchYears = async(cityCode) => {
+  try {
+    const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`);
+    // alert(cityCode);
+    if (!response.ok) {
+      throw new Error('Failed to fetch years');
+
     }
+    const data = await response.json();
+    years.value = data;
+  } catch (error) {
+    console.error('Error fetching years:', error);
+    years.value = [];
+
+  }
 };
 
 const availableYears = computed(() => [...years.value].sort((a, b) => a - b));
 
-const formattedYear = computed(() => 
-    currentYear.value ? `Ano: ${currentYear.value}` : ''
+const formattedYear = computed(() =>
+  currentYear.value ? `Ano: ${currentYear.value}` : ''
 );
 
-const currentYearIndex = computed(() => 
-    availableYears.value.indexOf(currentYear.value)
+const currentYearIndex = computed(() =>
+  availableYears.value.indexOf(currentYear.value)
 );
 
 const canNavigateBack = computed(() => currentYearIndex.value > 0);
 
-const canNavigateForward = computed(() => 
-    currentYearIndex.value < availableYears.value.length - 1
+const canNavigateForward = computed(() =>
+  currentYearIndex.value < availableYears.value.length - 1
 );
 
 const showYearSelector = () => {
-    isVisible.value = true;
-    document.addEventListener('click', handleClickOutside);
+  isVisible.value = true;
+  document.addEventListener('click', handleClickOutside);
 };
 
 const hideYearSelector = () => {
-    isVisible.value = false;
-    document.removeEventListener('click', handleClickOutside);
+  isVisible.value = false;
+  document.removeEventListener('click', handleClickOutside);
 };
 
 const handleClickOutside = (event) => {
-    const element = event.target;
-    if (!element.closest('.date-picker')) {
-        hideYearSelector();
-    }
+  const element = event.target;
+  if (!element.closest('.date-picker')) {
+    hideYearSelector();
+  }
 };
 
 const selectYear = (year) => {
-    currentYear.value = year;
-    emit('update:modelValue', year);
-    hideYearSelector();
+  currentYear.value = year;
+  emit('update:modelValue', year);
+  hideYearSelector();
 };
 
 const isSelected = (year) => year === currentYear.value;
 
 const navigateYear = (direction) => {
-    const newIndex = currentYearIndex.value + direction;
-    if (newIndex >= 0 && newIndex < availableYears.value.length) {
-        const newYear = availableYears.value[newIndex];
-        selectYear(newYear);
-    }
+  const newIndex = currentYearIndex.value + direction;
+  if (newIndex >= 0 && newIndex < availableYears.value.length) {
+    const newYear = availableYears.value[newIndex];
+    selectYear(newYear);
+  }
 };
 
-onMounted(async () => {
-    await fetchYears(props.cityCode);
+onMounted(async() => {
+  await fetchYears(props.cityCode);
 });
 
 onBeforeUnmount(() => {
-    document.removeEventListener('click', handleClickOutside);
+  document.removeEventListener('click', handleClickOutside);
 });
 </script>
 

@@ -10,7 +10,7 @@ import HeatCard from './HeatCard.vue';
 
 export default {
   name: 'HeatSection',
-  
+
   components: {
     HeatCard,
   },

@@ -82,9 +82,9 @@ export default {
   display: flex;
   align-items: flex-start;
   gap: 24px;
-  align-self: stretch; 
+  align-self: stretch;
   /* justify-content: space-between; */
- 
+
 }
 
 .right-panel {

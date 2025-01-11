@@ -4,8 +4,10 @@
 
     <div class="content-wrapper">
       <!-- Sidebar -->
-      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar" @update-coordinates="updateCoordinates" />
+      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
+               :is-open="isSidebarOpen"
+               @toggle-sidebar="toggleSidebar"
+               @update-coordinates="updateCoordinates" />
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper">
@@ -15,8 +17,9 @@
         </div>
 
         <div v-else>
-          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }" :active-section="activeSection"
-            @navigate-to="scrollToSection" />
+          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }"
+                  :active-section="activeSection"
+                  @navigate-to="scrollToSection" />
 
           <div id="map" ref="Mapa" class="content-area">
             <MapBox :coordinates="coordinates" class="map-box">
@@ -28,46 +31,63 @@
           <div id="stats" ref="statsSection" class="box">
             <div class="statistics-container">
               <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName
-                }}</span>
+              }}</span>
               <!-- <div class="date-picker-container"></div> -->
-              <YearPicker v-model="firstSelectedYear" :default-year="defaultYear" :city-code="cityCode"
-                @update:modelValue="handleFirstYearChange" />
+              <YearPicker v-model="firstSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleFirstYearChange" />
 
             </div>
             <TemperatureSection :city-code="cityCode" :selected-year="firstSelectedYear" />
           </div>
 
           <!-- Pop Vulnerável -->
-          <div id="vulnerable" ref="vulnerableSection" class="box" style="border-top: 1px solid black">
+          <div id="vulnerable"
+               ref="vulnerableSection"
+               class="box"
+               style="border-top: 1px solid black">
             <div class="statistics-container">
-            <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
-              cityName }}?</span>
-            <YearPicker v-model="secondSelectedYear" :default-year="defaultYear" :city-code="cityCode"
-              @update:modelValue="handleSecondYearChange" />
+              <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
+                cityName }}?</span>
+              <YearPicker v-model="secondSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleSecondYearChange" />
             </div>
             <HeatSection :city-code="cityCode" :selected-year="secondSelectedYear" />
           </div>
 
           <!-- Ranking -->
-          <div id="ranking" ref="rankingSection" class="box" style="border-top: 1px solid black">
+          <div id="ranking"
+               ref="rankingSection"
+               class="box"
+               style="border-top: 1px solid black">
             <div class="statistics-container">
-            <span class="title-statistics-container heading-h5">
-              {{ cityName }} no Ranking dos Municípios</span>
-            <YearPicker v-model="thirdSelectedYear" :default-year="defaultYear" :city-code="cityCode"
-              @update:modelValue="handleThirdYearChange" />
+              <span class="title-statistics-container heading-h5">
+                {{ cityName }} no Ranking dos Municípios</span>
+              <YearPicker v-model="thirdSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleThirdYearChange" />
             </div>
             <RankSection :city-code="cityCode" :selected-year="thirdSelectedYear" />
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
-          <div id="data" ref="dataSection" class="box" style="height:636px; border-top: 1px solid black">
+          <div id="data"
+               ref="dataSection"
+               class="box"
+               style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
 
           </div>
 
           <!-- Footer -->
-          <div id="newsletter" ref="newsletterSection" class="box"
-            style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
+          <div id="newsletter"
+               ref="newsletterSection"
+               class="box"
+               style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
             RECEBA AS NOVIDADES POR EMAIL
           </div>
         </div>
@@ -97,7 +117,6 @@ import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
 
-
 export default {
   name: 'MapPage',
   components: {
@@ -120,7 +139,7 @@ export default {
 
       // availableYears: [2020, 2021, 2022, 2023, 2024],
       cityCode: 3547809
-    }
+    };
   },
 
   watch: {
@@ -151,7 +170,7 @@ export default {
   //   handleFirstYearChange(newYear) {
   //     this.firstSelectedYear = newYear;
   //     // alert(newYear);
-      
+
   //   },
   //   handleSecondYearChange(newYear) {
   //     this.secondSelectedYear = newYear;
@@ -161,7 +180,6 @@ export default {
   //     this.thirdSelectedYear = newYear;
   //     // alert(newYear);
   //   },
-
 
   // },
 
@@ -210,7 +228,6 @@ export default {
     // };
 
     // Methods
-
 
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
@@ -396,19 +413,6 @@ export default {
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-}
-
-.date-picker-container {
-  /* display: flex;
-height: 32px;
-padding: 5px 9px;
-flex-direction: column;
-justify-content: center;
-align-items: flex-start;
-border-radius: 3.2px;
-border: 1px solid var(--Gray-400, #CED4DA);
-background: var(--Gray-White, #FFF); */
-
 }
 
 /* Just a section to hold stats or other elements */

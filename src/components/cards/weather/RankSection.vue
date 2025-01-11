@@ -37,7 +37,8 @@ export default {
   },
   methods: {
     transformItems(items) {
-      if (!items) return [];
+      if (!items) {return [];}
+
       return items.map(item => ({
         title: item.type,
         value: item.number.toString(),
