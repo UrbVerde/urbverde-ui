@@ -413,7 +413,7 @@ export default {
 .box {
 
   display: flex;
-  max-width: 100%;
+  /* max-width: 1376px; */
   padding: 40px 48px 32px 48px;
   flex-direction: column;
   align-items: flex-start;
