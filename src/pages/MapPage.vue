@@ -372,12 +372,12 @@ export default {
   flex-direction: column;
 /*   height: 100vh; */
 /*   overflow-y: auto; */
-  margin-left: 72px;            
-  transition: margin-left 0.3s;  
+  margin-left: 72px;
+  transition: margin-left 0.3s;
 }
 
 .main-wrapper.sidebar-open {
-  margin-left: 301px;            
+  margin-left: 301px;
 }
 
 .content-area {
@@ -407,8 +407,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  margin-top: 3%;
+  height: 100vh;
+  /* margin-top: 3%; */
 }
 
 /* Placeholder image if coordinates are not set */
