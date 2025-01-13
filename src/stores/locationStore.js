@@ -8,103 +8,152 @@ export const useLocationStore = defineStore('locationStore', {
     uf: null,
     category: null,
     layer: null,
-    year: new Date().getFullYear(),
+    year: null,
     type: null,
     scale: null,
-    coordinates: { lat: null, lng: null },
     bbox: null,
-    zoom: null,
     categories: [],
   }),
+  
+  getters: {
+    currentCategoryName: (state) => state.category,
+    currentLayerSlug: (state) => state.layer,
+    urlParams: (state) => {
+      const params = {};
+      if (state.cd_mun) params.code = state.cd_mun;
+      if (state.type) params.type = state.type;
+      if (state.year) params.year = state.year;
+      if (state.category) params.category = state.category;
+      if (state.layer) params.layer = state.layer;
+      if (state.scale) params.scale = state.scale;
+      return params;
+    }
+  },
 
   actions: {
-    setLocation({ cd_mun, nm_mun, uf, category, layer, type, year, scale }) {
-      this.cd_mun = cd_mun ?? null;
-      this.nm_mun = nm_mun ?? null;
-      this.uf = uf ?? null;
-      this.category = category ?? this.category;
-      this.layer = layer ?? this.layer;
-      this.scale = scale ?? this.scale;
-      this.type = type ?? this.type;
-      this.year = year ?? this.year;
-    },
-
-    // Method to initialize state from URL query params
-    updateFromQueryParams(query) {
-      if (query) {
-        this.uf = query.state ?? this.uf;
-        this.cd_mun = parseInt(query.code) ?? this.cd_mun;
-        this.type = query.type ?? this.type;
-        this.year = parseInt(query.year) ?? this.year; // Add parseInt for year
-        this.category = query.category ?? this.category;
-        this.layer = query.layer ?? this.layer;
+    async updateLocationData(location) {
+      // If we have valid location data, update the store
+      if (location.city && location.stateAbbreviation) {
+        const cityWithState = `${location.city} - ${location.stateAbbreviation}`;
+        const code = await this.fetchAndStoreCityCode(location.city);
+        
+        this.setLocation({
+          cd_mun: code,
+          nm_mun: location.city,
+          uf: location.stateAbbreviation,
+          type: 'city',
+          year: new Date().getFullYear()
+        });
       }
     },
 
-    setCoordinates({ lat, lng }) {
-      this.coordinates.lat = lat;
-      this.coordinates.lng = lng;
+    setLocation({ cd_mun, nm_mun, uf, category, layer, type, year, scale }) {
+      console.log('setLocation called with:', { cd_mun, nm_mun, uf, category, layer, type, year, scale });
+      if (cd_mun !== undefined) this.cd_mun = cd_mun;
+      if (nm_mun !== undefined) this.nm_mun = nm_mun;
+      if (uf !== undefined) this.uf = uf;
+      if (category !== undefined) this.category = category;
+      if (layer !== undefined) this.layer = layer;
+      if (type !== undefined) this.type = type;
+      if (year !== undefined) this.year = year;
+      if (scale !== undefined) this.scale = scale;
+    },
+
+    async fetchAndStoreCityCode(city) {
+      try {
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
+        const data = await response.json();
+        
+        if (data && data.length > 0 && !data[0].error) {
+          return data[0].cd_mun;
+        }
+      } catch (error) {
+        console.error('Error fetching city code:', error);
+      }
+      return null;
+    },
+
+    updateFromQueryParams(query) {
+      if (!query) return;
+      if (query.code && query.code !== 'null') this.cd_mun = parseInt(query.code);
+      if (query.type && query.type !== 'null') this.type = query.type;
+      if (query.year && query.year !== 'null') this.year = parseInt(query.year);
+      if (query.category && query.category !== 'null') this.category = query.category;
+      if (query.layer && query.layer !== 'null') this.layer = query.layer;
+      if (query.scale && query.scale !== 'null') this.scale = query.scale;
     },
 
     setCategories(categories) {
       this.categories = categories;
     },
 
-    // setSelectedCategory(category) {
-    //   this.selectedCategory = category;
-    //   this.category = category.name; // Update the existing category field
-    //   if (category.layers && category.layers.length > 0) {
-    //     this.layer = category.layers[0].slug; // Update layer if available
-    //   }
-    // },
+    setSelectedCategory(category) {
+      this.selectedCategory = category;
+      this.category = category.name;
+      // Always set first layer when category changes
+      if (category.layers && category.layers.length > 0) {
+        this.layer = category.layers[0].slug;
+      }
+    },
 
-    // Example: a method to fetch coordinates by cd_mun or nm_mun
-    async fetchCoordinatesByCdMun(cd_mun) {
+    // Fetch coordinates by municipal code
+    async fetchCoordinatesByCode(cd_mun) {
+      console.log('localStore.js -> fetchCoordinatesByCode:', cd_mun);
+      if (!cd_mun) return null;
+      
       try {
-        // Example fetch
         const response = await fetch(`/v1/address/suggestions?query=${cd_mun}`);
         const data = await response.json();
 
         if (data && data.length && data[0].coordinates) {
-          this.setCoordinates(data[0].coordinates);
+          return data[0].coordinates;
         }
       } catch (err) {
         console.error('Failed to fetch coords by cd_mun:', err);
       }
+      return null;
     },
 
+    // Fetch coordinates by city name
     async fetchCoordinatesByName(nm_mun) {
+      console.log('localStore.js -> fetchCoordinatesByName:', nm_mun);
+      if (!nm_mun) return null;
+
       try {
-        // Or your actual API call for city name
         const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${nm_mun}`);
         const data = await response.json();
 
-        // pick the first or best match
         if (data?.[0]) {
-          if (data[0].coordinates) {
-            this.setCoordinates(data[0].coordinates);
-          }
+          // If we got coordinates, update municipal code too
           if (data[0].cd_mun) {
             this.cd_mun = data[0].cd_mun;
+          }
+          if (data[0].coordinates) {
+            return data[0].coordinates;
           }
         }
       } catch (err) {
         console.error('Failed to fetch coords by name:', err);
       }
+      return null;
     },
-  },
 
-  getters: {
-    currentCategoryName: (state) => state.category,
-    currentLayerSlug: (state) => state.layer,
-    // Add useful getters for URL params
-    urlParams: (state) => ({
-      state: state.uf,
-      code: state.cd_mun,
-      type: state.type,
-      year: state.year,
-      category: state.category,
-      layer: state.layer,
-    }),
+    // Clear all location data
+    clearLocation() {
+      this.cd_mun = null;
+      this.nm_mun = null;
+      this.uf = null;
+      this.category = null;
+      this.layer = null;
+      this.type = null;
+      this.scale = null;
+      this.bbox = null;
+    },
+
+    // Reset to initial state
+    reset() {
+      this.clearLocation();
+      this.categories = [];
+    }
   },
 });

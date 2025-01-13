@@ -7,34 +7,26 @@
            class="nav-item nav-link"
            :class="{ 'dropdown-active': isDropdownOpen }"
            role="button"
-           data-bs-toggle="dropdown"
-           aria-expanded="false"
            @click="toggleDropdown">
           <IconComponent :name="icon" :size="20" />
-          <span class="textItem small-regular">{{ props.itemName }}</span>
-          <div class="badge-right-menu" v-if="txtBadge">
-            <span class="textBadge caption-medium">{{ txtBadge }}</span>
+          <span class="textItem small-regular">{{ itemName }}</span>
+          <div class="badge-right-menu" v-if="hasActiveLayer">
+            <span class="textBadge caption-medium">1</span>
           </div>
-          <i :class="isDropdownOpen ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" width="14" height="14"></i>
+          <i :class="isDropdownOpen ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" />
         </a>
 
         <ul class="dropdown-menu-hidden" :class="{ 'dropdown-menu-show': isDropdownOpen }">
-
           <li class="dropdown-menu-item"
-              v-for="(layer, index) in props.layers"
+              v-for="(layer, index) in layers"
               :key="layer.id"
               :class="{ 'dropdown-menu-item-active': layer.isActive }"
-              @click="toggleLayerActive(index, $event)">
-
+              @click="selectLayer(layer)">
             <span class="dropdown-item-text small-regular">{{ layer.name }}</span>
             <div class="new-layout" v-if="layer.isNew">
-              <i :class="iconNew"
-                 v-if="layer.isNew"
-                 class="bi"
-                 id="imgIconNew"></i>
+              <i :class="'bi bi-stars'" class="bi" id="imgIconNew"></i>
             </div>
           </li>
-
         </ul>
       </div>
     </ul>
@@ -45,87 +37,69 @@
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
+const props = defineProps({
+  itemName: { type: String, required: true },
+  icon: { type: String, default: 'bi bi-exclamation-circle' },
+  layers: { type: Array, required: true }
+});
+
+const emit = defineEmits(['layerSelected']);
+
 const isDropdownOpen = ref(false);
 
-const iconNew = computed(() => 'bi bi-stars');
+// Automatically open dropdown if there's an active layer
+const hasActiveLayer = computed(() => props.layers.some(layer => layer.isActive));
 
-const props = defineProps({
-  isSelectedItem: {
-    type: Boolean,
-    default: false,
-  },
-  itemName: {
-    type: String,
-    default: '',
-  },
-  layers: {
-    type: Array,
-    default: () => [],
-  },
-  icon: {
-    type: String,
-    default: 'bi bi-exclamation-circle',
-  },
-});
-
-// Computed property para controlar a visibilidade do badge
-const txtBadge = computed(() => {
-  const hasActiveLayers = props.layers.some(layer => layer.isActive);
-
-  return (!isDropdownOpen.value && hasActiveLayers) ? '1' : '';
-});
-
-const isDropdownSelected = ref(props.isSelectedItem);
-
-const emit = defineEmits(['update:isSelectedItem']);
-
-const hasActiveLayers = () => props.layers.some(layer => layer.isActive);
-
-const closeDropdownOnOutsideClick = (event) => {
-  const dropdownElement = document.querySelector('.dropdown');
-  if (isDropdownOpen.value && dropdownElement && !dropdownElement.contains(event.target)) {
-    // Only close the dropdown if there are no active layers
-    if (!hasActiveLayers()) {
-      isDropdownOpen.value = false;
-    }
-  }
-};
 onMounted(() => {
-  document.addEventListener('click', closeDropdownOnOutsideClick);
+  if (hasActiveLayer.value) {
+    isDropdownOpen.value = true;
+  }
+  document.addEventListener('click', handleOutsideClick);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', closeDropdownOnOutsideClick);
+  document.removeEventListener('click', handleOutsideClick);
 });
 
-const toggleDropdown = (event) => {
+function handleOutsideClick(event) {
+  const dropdownEl = event.target.closest('.dropdown');
+  if (!dropdownEl && isDropdownOpen.value) {
+    // Only close if no active layers
+    if (!hasActiveLayer.value) {
+      isDropdownOpen.value = false;
+    }
+  }
+}
+
+function toggleDropdown(event) {
+  event.preventDefault();
   event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
-};
 
-const toggleLayerActive = (index, event) => {
-  event.stopPropagation();
-  const currentLayer = props.layers[index];
+  // Close other dropdowns
+  document.querySelectorAll('.dropdown-menu-show').forEach(el => {
+    if (!el.closest('.dropdown').contains(event.target)) {
+      el.classList.remove('dropdown-menu-show');
+    }
+  });
+}
 
-  if (currentLayer.isActive) {
-    // When deactivating a layer
-    isDropdownSelected.value = false;
-    currentLayer.isActive = false;
-    emit('update:isSelectedItem', false);
-  } else {
-    // When activating a layer
-    isDropdownSelected.value = true;
-    props.layers.forEach((layer, i) => {
-      if (i === index) {
-        layer.isActive = true;
-      } else if (layer.isActive) {
-        layer.isActive = false;
-      }
-    });
-    emit('update:isSelectedItem', true);
-  }
-};
+function selectLayer(layer) {
+  // Deactivate all other layers across all categories
+  document.querySelectorAll('.dropdown-menu-item-active').forEach(el => {
+    el.classList.remove('dropdown-menu-item-active');
+  });
 
+  // Set the new active layer
+  props.layers.forEach(l => {
+    l.isActive = l.id === layer.id;
+  });
+
+  emit('layerSelected', {
+    layer,
+    categoryName: props.itemName
+  });
+}
 </script>
 
 <style scoped>

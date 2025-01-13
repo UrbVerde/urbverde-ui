@@ -1,21 +1,21 @@
 // urbverde-ui/src/mocks/handlers.js
 import { http, HttpResponse } from 'msw';
-// import { API_URLS } from '@/constants/endpoints';
+import { API_URLS } from '@/constants/endpoints';
 import cities from './responses/cities.json';
 import categoriesResponse from './responses/categories.json';
 
 // Function to filter categories based on location code and type
 const filterCategories = (code) => {
-  code = String(code);
-
+  console.log(code, typeof code); // Debug log
+  
   // Deep clone the categories to avoid modifying the original
   const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
 
   // Check if it starts with 35 (São Paulo state)
   const isSaoPauloState = String(code).startsWith('35');
-
+  console.log('Is São Paulo state?', isSaoPauloState); // Debug log
   if (isSaoPauloState) {
-    if (code === '3534708') { //Ourinhos
+    if (code === '3534708') { //Ourinhos-SP
       // The exclusive layer to be added to two categories
       const exclusiveLayer = {
         'id': 'tree_inventory',
@@ -82,7 +82,7 @@ export const handlers = [
     try {
       // Check if the query is a city code
       if (!isNaN(query)) {
-        const cityByCode = cities.find(city => city.code.toString() === query);
+        const cityByCode = cities.find(city => city.code === query);
         if (cityByCode) {
           return HttpResponse.json([{
             display_name: `${cityByCode.name} - ${cityByCode.state}`,
@@ -95,7 +95,6 @@ export const handlers = [
       }
 
       // Handle states
-      // Handle states separately
       const isState = ['acre', 'alagoas', 'amapá', 'amazonas', 'bahia', 'ceará',
         'distrito federal', 'espírito santo', 'goiás', 'maranhão', 'mato grosso',
         'mato grosso do sul', 'minas gerais', 'pará', 'paraíba', 'paraná',
@@ -141,13 +140,9 @@ export const handlers = [
     }
   }),
 
-  // Modified categories handler
   http.get('*/v1/address/categories', async({ request }) => {
     const url = new URL(request.url);
-    const code = url.searchParams.get('cityCode');
-    // const type = url.searchParams.get('type') || 'city';
-    // console.log('MSW Categories Handler Called', { code, type }); // Debug log
-
+    const code = url.searchParams.get('code'); //should use locationStore pinia value instead
     return HttpResponse.json(filterCategories(code));
   })
 ];

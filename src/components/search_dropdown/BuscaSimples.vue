@@ -1,10 +1,7 @@
 <!-- urbverde-ui/src/components/search_dropdown/BuscaSimples.vue -->
 <template>
+  <GetUserLocation @location-updated="updateLocationData" @location-error="handleLocationFailure" />
   <div class="search-wrapper">
-    <GetUserLocation :ip-data-api-key="IPDATA_API_KEY"
-                     @location-updated="updateLocationData"
-                     @location-error="handleLocationFailure" />
-
     <div ref="inputContainer"
          :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
          @click="activateInput">
@@ -110,6 +107,9 @@ import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, on
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { API_URLS } from '@/constants/endpoints';
+import { useRoute } from 'vue-router';
+
+const debug = ref(false);
 
 // Constants
 const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
@@ -120,14 +120,6 @@ const states = [ // All this shouldnt be hardcorded here in the next versions (!
   'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
   'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
 ];
-
-// Props and Emits
-const props = defineProps({
-  forceOpenTimeout: {
-    type: Number,
-    default: null, // No timeout by default
-  }
-});
 
 const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
 
@@ -153,32 +145,49 @@ const locationChosen = ref('');
 const cachedCities = ref([]);
 const cachedCityData = ref({});
 const searchHistory = ref([]);
-const debug = ref(false);
 
-// Filter States
-const filterAll = ref(true);
-const filterCity = ref(false);
-const filterState = ref(false);
 
 // Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
 
 // Lifecycle Hooks
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('mousedown', handleClickOutside);
   loadSearchHistory();
-  // generateDefaultSuggestions();
-  updateSuggestions();
 
-  // Only add delay if forceOpenTimeout is provided
-  if (props.forceOpenTimeout !== null) {
+  // Initialize from Pinia store if values exist
+  const locationStore = useLocationStore();
+  const route = useRoute(); // Add this to get route access
+
+  // Check if we have URL parameters first
+  if (Object.keys(route.query).length > 0) {
+    locationStore.updateFromQueryParams(route.query);
+  }
+
+  // Now initialize if we have store values
+  if (locationStore.cd_mun && locationStore.nm_mun && locationStore.uf) {
+    const cityText = `${locationStore.nm_mun} - ${locationStore.uf}`;
+    inputValue.value = cityText;
+    visibleInput.value = cityText; // Add this line
+    locationChosen.value = cityText;
+    codes.value[cityText] = locationStore.cd_mun;
+    
+    // Add to cached cities
+    if (!cachedCities.value.includes(cityText)) {
+      cachedCities.value.push(cityText);
+    }
+    
+    // Fetch coordinates for the stored location
+    await fetchCoordinates(cityText);
+  } else {
+    // Only show dropdown after delay if no location is set
     setTimeout(() => {
       if (!dropdown.value && inputValue.value === '') {
         dropdown.value = true;
         activateInput();
       }
-    }, props.forceOpenTimeout);
+    }, 2000);
   }
 });
 
@@ -190,13 +199,16 @@ onBeforeUpdate(() => {
   suggestionItems.value = [];
 });
 
-onUpdated(() => {
-  suggestionItems.value = visibleSuggestions.value.map(
-    (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
-  );
-});
-
+// onUpdated(() => {
+  //   suggestionItems.value = visibleSuggestions.value.map(
+    //     (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
+    //   );
+    // });
+    
 // Computed Properties
+const filterAll = ref(true);
+const filterCity = ref(false);
+const filterState = ref(false);
 const filteredSuggestions = computed(() => {
   if (filterAll.value) {
     return suggestions.value;
@@ -215,7 +227,6 @@ const filteredSuggestions = computed(() => {
         (suggestion.type === 'history' && states.includes(suggestion.text))
     );
   }
-
   return suggestions.value;
 });
 
@@ -248,25 +259,32 @@ function activateInput() {
     if (inputField.value) {inputField.value.focus();}
   });
 }
+
 function selectSuggestion(suggestion) {
+  console.log('selectSuggestion:', suggestion);
   inputValue.value = suggestion.text;
   visibleInput.value = suggestion.text;
   highlightedText.value = '';
   dropdown.value = false;
   locationChosen.value = suggestion.text;
-
-  loadAnimation();
-  addToHistory(suggestion.text);
-  updateSuggestions();
-
-  const { city } = parseCityState(suggestion.text);
+  
+  const { city, state } = parseCityState(suggestion.text);
+  const code = codes.value[suggestion.text];
+  const stateAbbrev = suggestion.text.split(' - ')[1];
+  
   const locationStore = useLocationStore();
   locationStore.setLocation({
+    cd_mun: code,
     nm_mun: city,
-    cd_mun: codes.value[suggestion.text],
+    uf: stateAbbrev,
+    type: 'city',
+    year: new Date().getFullYear()
   });
 
   fetchCoordinates(locationChosen.value);
+  loadAnimation();
+  updateSuggestions();
+  addToHistory(suggestion.text);
 }
 
 function handleFocus(event) {
@@ -316,9 +334,12 @@ function getUnmatchedPart(text) {
 
 // Update the location data handler to preserve existing data when appropriate
 function updateLocationData(location) {
+  // console.log('1 - updateLocationData', location);
+
   // If geolocation or no locationData yet, override
   if (location.source === 'geolocation' || !locationData.value) {
     locationData.value = location;
+    // console.log(locationData.value);
     // console.log('Location updated from:', location.source);
     cacheCities([location.city]);
     generateDefaultSuggestions();
@@ -346,127 +367,42 @@ function parseCityState(text) {
   return { city: text, state: null };
 }
 
-// gambiarra momentânea, deverá ser tudo feito pela API
 async function fetchCities(query) {
-  try {
-    // quick fix for city without state abbreviation
-    const { city } = parseCityState(query);
-    // const response = await fetch(`/v1/address/suggestions?query=${city}`); // Local MSW
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
-    const data = await response.json();
+  // console.log('1 - fetchCities', query);
+  const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${parseCityState(query).city}`);
+  const data = await response.json();
+  // console.log('1 - fetchCities', data);
 
-    if (!data || data.length === 0) {
-      suggestions.value = [{ text: 'No Results', type: 'noresults' }];
+  // console.log('suggestion before', JSON.parse(JSON.stringify(suggestions.value)))
+  suggestions.value = data
+  .filter(item => !item.error)
+  .map(item => {
+    // console.log('1 - fetchCities', item);
+    const textKey = item.state_abbreviation
+      ? `${item.display_name} - ${item.state_abbreviation}`
+      : item.display_name;
+    codes.value[textKey] = item.cd_mun;
 
-      return;
-    }
-
-    suggestions.value = data.map(item => ({
-      text: item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name,
+    return {
+      text: textKey,
       lat: item.coordinates?.lat,
       lng: item.coordinates?.lng,
       type: 'city',
-      // Include other necessary fields if required
-    }));
-
-    data.forEach(item => {
-      const displayName = item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name;
-
-      cachedCityData.value[displayName] = {
-        code: item.cd_mun,
-        type: 'city',
-        lat: item.coordinates?.lat,
-        lng: item.coordinates?.lng,
-      };
-
-      cachedCityData.value[item.display_name] = {
-        code: item.cd_mun,
-        type: 'city',
-        lat: item.coordinates?.lat,
-        lng: item.coordinates?.lng,
-      };
-
-      codes.value[displayName] = item.cd_mun;
-      codes.value[item.display_name] = item.cd_mun;
-    });
-
-    suggestions.value = data.map(item => ({
-      text: item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name,
-      type: 'city'
-    }));
-
-    const newCities = data.map(item =>
-      item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name
-    );
-    cachedCities.value = [...new Set([...cachedCities.value, ...newCities])];
-
-    // if (!data || data.length === 0) {
-    //   suggestions.value = [{ text: 'No Results', type: 'noresults' }];
-    //   return;
-    // }
-
-    // data.forEach(item => {
-    //   const displayName = item.state_abbreviation
-    //     ? `${item.display_name} - ${item.state_abbreviation}`
-    //     : item.display_name;
-
-    // store in cache
-    // cachedCityData.value[displayName] = {
-    //   code: item.cd_mun,
-    //   type: 'city',
-    //   lat: item.coordinates?.lat,
-    //   lng: item.coordinates?.lng,
-    // };
-
-    // also store without abbreviation (???)
-    // cachedCityData.value[item.display_name] = {
-    //   code: item.cd_mun,
-    //   type: 'city',
-    //   lat: item.coordinates?.lat,
-    //   lng: item.coordinates?.lng,
-    // };
-    // });
-
-    // update codes
-    // const newCodes = data.reduce((acc, item) => {
-    //   const displayName = item.state_abbreviation
-    //     ? `${item.display_name} - ${item.state_abbreviation}`
-    //     : item.display_name;
-    //   acc[displayName] = item.cd_mun; // with state
-    //   acc[item.display_name] = item.cd_mun; // without state
-    //   return acc;
-    // }, {});
-
-    // codes.value = { ...codes.value, ...newCodes };
-
-    // // update cached cities list
-    // const newCities = data.map(item =>
-    //   item.state_abbreviation
-    //     ? `${item.display_name} - ${item.state_abbreviation}`
-    //     : item.display_name
-    // );
-    // cachedCities.value = [...new Set([...cachedCities.value, ...newCities])];
-
-    // persist to localStorage
-    localStorage.setItem('cachedCityData', JSON.stringify(cachedCityData.value));
-    // console.log('Cached city data:', cachedCityData);
-  } catch (error) {
-    console.error('Error fetching cities:', error);
-  }
+    };
+  });
+  // console.log('suggestion after', JSON.parse(JSON.stringify(suggestions.value)))
+  
+  // console.log('1 - fetchCitiescachedCities before',cachedCities.value);
+  cachedCities.value = suggestions.value.map(s => s.text);
+  // console.log('1 - fetchCitiescachedCities after',cachedCities.value);
 }
 
 async function fetchCoordinates(address) {
-  // Parse the address to get city name without state abbreviation
+  // console.log('1 - fetchCoordinates', address);
   const { city } = parseCityState(address);
-  const cached = cachedCityData.value[address];
+  const cached = cachedCityData.value[address];  
+  // console.log('fetchCoordinates cachedCities',cachedCities.value)
+  // console.log('cached',cached)
 
   // If already cached with coords, skip API
   if (cached && cached.lat && cached.lng) {
@@ -474,35 +410,38 @@ async function fetchCoordinates(address) {
     emitLocationUpdate({
       lat: cached.lat,
       lng: cached.lng,
-      code: cached.code.toString(),
+      code: cached.code,
       type: cached.type,
     });
-
     return;
   }
+
   // Otherwise, if you must still fetch from API (for the lat/lng):
   try {
     let codeValue = codes.value[address];
     if (!codeValue) {
       await fetchCities(city);
       codeValue = codes.value[address];
-      if (!codeValue) {
+    }
+
+    // If we still don't have a code, try to get it from the store
+    if (!codeValue) {
+      const locationStore = useLocationStore();
+      if (locationStore.cd_mun) {
+        codeValue = locationStore.cd_mun;
+      } else {
         handleLocationFailure();
         console.error('Code not found for:', address);
-
         return;
       }
     }
 
-    // Use the mock API with code
-    const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${codeValue}`);
+    const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${city}`);
     const data = await response.json();
 
     if (data && data.length > 0) {
       if (data[0].error) {
         handleLocationFailure();
-        console.error('Location error:', data[0].error);
-
         return;
       }
       const loc = data[0].coordinates;
@@ -513,13 +452,15 @@ async function fetchCoordinates(address) {
           code: codeValue,
           type: 'city',
         });
-      } else {
-        handleLocationFailure();
-        console.error('Invalid coordinates in response');
+        
+        // Cache the coordinates for future use
+        cachedCityData.value[address] = {
+          lat: loc.lat,
+          lng: loc.lng,
+          code: codeValue,
+          type: 'city'
+        };
       }
-    } else {
-      handleLocationFailure();
-      console.error('No coordinates found');
     }
   } catch (error) {
     console.error('Error fetching coordinates:', error);
@@ -570,11 +511,15 @@ function handleClickOutside(event) {
 }
 
 function cacheCities(citiesArr) {
+  // console.log('\n 1 - cacheCities', citiesArr);
+  // console.log('cachedCities before',cachedCities.value);
   cachedCities.value = [...new Set([...cachedCities.value, ...citiesArr])];
+  // console.log('cachedCities before',cachedCities.value);
   updateSuggestions();
 }
 
 function handleInput() {
+  // console.log('1 - handleInput');
   if (inputValue.value !== previousInputValue.value) {
     dropdown.value = inputValue.value !== '';
     updateSuggestions();
@@ -583,6 +528,7 @@ function handleInput() {
 }
 
 async function updateSuggestions(forceUpdate = false) {
+  // console.log('1 - updateSuggestions');
   // alert('updateSuggestions');
   if (!forceUpdate && inputValue.value === previousInputValue.value) {return;}
   // Only proceed if input actually changed
@@ -653,40 +599,24 @@ function updateHighlightedText() {
 }
 
 function submit() {
-  // If there's user input
   if (inputValue.value) {
-    // locationChosen -> first suggestion
     const suggestion = suggestions.value[0];
     if (suggestion && suggestion.text) {
-      loadAnimation();
-      addToHistory(suggestion.text);
-
-      inputValue.value = suggestion.text;
-      visibleInput.value = suggestion.text;
-      highlightedText.value = '';
-      dropdown.value = false;
-      locationChosen.value = suggestion.text;
-
-      updateSuggestions();
-      fetchCoordinates(locationChosen.value);
+      selectSuggestion(suggestion); // This will handle all the syncing
     }
+  } else if (locationChosen.value) {
+    const suggestion = {
+      text: locationChosen.value,
+      type: 'city' // Default type if not known
+    };
+    selectSuggestion(suggestion);
   } else {
-    // If no input, just restore from locationChosen if present
-    if (locationChosen.value) {
-      fetchCoordinates(locationChosen.value);
-      loadAnimation();
-      inputValue.value = locationChosen.value;
-      visibleInput.value = locationChosen.value;
-      highlightedText.value = '';
-      dropdown.value = false;
-    } else {
-      // Show dropdown if user tries to submit with empty input
-      isInputActive.value = true;
-      dropdown.value = true;
-      alert('Por favor, insira um local.');
-    }
+    isInputActive.value = true;
+    dropdown.value = true;
+    alert('Por favor, insira um local.');
   }
 }
+
 
 // Chama a função para buscar coordenadas
 function handleEnter() {
@@ -699,6 +629,7 @@ function handleEnter() {
 
 function addToHistory(item) {
   if (item === 'No Results') {return;}
+  if (!codes.value[item]) return;
   const itemLower = item.toLowerCase();
   const historyLower = searchHistory.value.map(h => h.toLowerCase());
 
@@ -740,26 +671,31 @@ function loadSearchHistory() {
   }
 }
 
-function generateDefaultSuggestions() {
-  if (!locationData.value) {return;}
+async function generateDefaultSuggestions() {
+  if (!locationData.value) return;
+  
   const { city, state, stateAbbreviation } = locationData.value;
-  // let defaultSuggestions = [];
-  // if (international || city === 'error' || state === 'error' || city === null) {
-  //   // Pre-defined default suggestions
-  //   const defaultCity = 'Rio de Janeiro - RJ';
-  //   // Fetch the data for Rio de Janeiro if not already cached
-  //   if (!this.cachedCityData[defaultCity]) {
-  //     this.fetchCities('Rio de Janeiro');
-  //   }
-  // }
-  // If you have a fallback city, you can define it here:
-  // alert(stateAbbreviation);
+  const cityWithState = `${city} - ${stateAbbreviation || state}`;
+  
+  // Fetch city data if we don't have the code
+  if (!codes.value[cityWithState]) {
+    try {
+      const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${city}`);
+      const data = await response.json();
+      
+      if (data && data.length > 0 && !data[0].error) {
+        codes.value[cityWithState] = data[0].cd_mun;
+      }
+    } catch (error) {
+      console.error('Error fetching city code:', error);
+    }
+  }
+
   suggestions.value = [
-    { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
+    { text: cityWithState, type: 'city' },
     { text: state, type: 'state' },
     { text: 'Brasil', type: 'country' },
   ];
-
 }
 
 function getImageSource(type) {

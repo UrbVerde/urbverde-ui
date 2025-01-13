@@ -7,7 +7,7 @@
         <MinimizeButton @click="toggleSidebar" />
       </div>
 
-      <!-- componente painel: brasil / políticas públicas -->
+      <!-- componente botão de painel: brasil / políticas públicas -->
 
       <div v-show="showContent" class="search-area">
         <BuscaSimples

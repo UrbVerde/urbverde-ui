@@ -5,7 +5,7 @@
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
         <div class="header-left">
-          <h5>[ {{ currentLayer }} ] em {{ cityName }} </h5>
+          <h5> {{ layer }} em {{ cityName }} - {{ uf }} </h5>
         </div>
         <div class="header-right">
           <button @click="shareMap" class="share-button">
@@ -50,13 +50,17 @@ export default {
   setup() {
     const locationStore = useLocationStore();
 
-    // Computed properties from store
-    const currentLayer = computed(() => locationStore.layer || 'layer?');
-    const cityName = computed(() => locationStore.nm_mun || 'city?');
+    const layer = computed(() => {
+      console.log('Navbar computed - current layer:', locationStore.layer);
+      return locationStore.layer;
+    });
+    const cityName = computed(() => locationStore.nm_mun);
+    const uf = computed(() => locationStore.uf);
 
     return {
-      currentLayer,
-      cityName
+      layer,
+      cityName,
+      uf
     };
   },
 

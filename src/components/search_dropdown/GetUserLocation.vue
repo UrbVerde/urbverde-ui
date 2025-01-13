@@ -8,10 +8,6 @@ import axios from 'axios';
 
 // Using defineProps and defineEmits for <script setup>
 const props = defineProps({
-  ipDataApiKey: {
-    type: String,
-    required: true
-  },
   municipios: {
     type: Array,
     default: () => []
@@ -83,7 +79,7 @@ function checkCachedLocation() {
 
     return true;
   }
-
+  console.log('No valid cache found');
   return false;
 }
 
@@ -104,11 +100,13 @@ function loadCachedLocation() {
   };
   Object.assign(locationData, cached);
   emitLocationUpdate();
+  console.log('Loaded cached location data:', locationData);
   loading.value = false;
 }
 
 // Wrapper to run geolocation + IP location
 async function initializeLocation() {
+  console.log('Initializing location');
   if (checkCachedLocation()) {
     return;
   }
@@ -177,7 +175,7 @@ function getGeolocation() {
 async function getIPLocation() {
   try {
     const response = await axios.get(
-      `https://api.ipdata.co/?api-key=${props.ipDataApiKey}` //fca7ec8cb54f07bfacf5cb76321d92aef545786dc5699a77c09f3f31
+      `https://api.ipdata.co/?api-key=fca7ec8cb54f07bfacf5cb76321d92aef545786dc5699a77c09f3f31` 
     );
 
     return response.data;
@@ -251,8 +249,6 @@ function processIPLocationData(data) {
 
 // Update reactive object, cache, and emit
 function updateLocationData(data) {
-  // Debug log: Updating location data with
-
   // Merge data into locationData
   Object.assign(locationData, {
     city: data.city,
