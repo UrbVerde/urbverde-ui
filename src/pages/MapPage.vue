@@ -10,7 +10,7 @@
                @update-coordinates="updateCoordinates" />
 
       <!-- Main content (navbar, map, etc.) -->
-      <div class="main-wrapper">
+      <div class="main-wrapper" :class="{ 'sidebar-open': isSidebarOpen }">
         <!-- If no coordinates, show a placeholder -->
         <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
           <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
@@ -347,7 +347,7 @@ export default {
 .global {
   background-color: #F8F9FACC;
   width: 100%;
-  height: 100vh;
+/*   height: 100vh; */
   display: flex;
   flex-direction: column;
 }
@@ -370,8 +370,14 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow-y: auto;
+/*   height: 100vh; */
+/*   overflow-y: auto; */
+  margin-left: 72px;            
+  transition: margin-left 0.3s;  
+}
+
+.main-wrapper.sidebar-open {
+  margin-left: 301px;            
 }
 
 .content-area {
