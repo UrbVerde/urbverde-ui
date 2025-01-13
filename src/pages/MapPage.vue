@@ -139,7 +139,7 @@ export default {
     };
   },
   created() {
-    
+
     this.initializeYears(2020);
   },
   watch: {
@@ -147,16 +147,6 @@ export default {
       this.firstSelectedYear = newValue;
       this.secondSelectedYear = newValue;
       this.thirdSelectedYear = newValue;
-    },
-
-    firstSelectedYear(newValue) {
-      console.log('Selected year changed to:', newValue);
-    },
-    secondSelectedYear(newValue) {
-      console.log('Selected year changed to:', newValue);
-    },
-    thirdSelectedYear(newValue) {
-      console.log('Selected year changed to:', newValue);
     },
 
   },

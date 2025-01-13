@@ -91,7 +91,6 @@ const years = ref([]);
 
 defaultYear.value = props.modelValue;
 
-
 watch(() => props.modelValue, (newValue) => {
   currentYear.value = newValue;
 }, { immediate: true });
@@ -115,7 +114,7 @@ const fetchYears = async(cityCode) => {
     const data = await response.json();
     years.value = data;
   } catch (error) {
-    console.error('Error fetching years:', error);
+
     years.value = [];
 
   }
