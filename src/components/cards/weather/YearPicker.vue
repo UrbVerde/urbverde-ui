@@ -114,7 +114,7 @@ const fetchYears = async(cityCode) => {
     const data = await response.json();
     years.value = data;
   } catch (error) {
-
+    console.error('Error fetching years:', error);
     years.value = [];
 
   }
