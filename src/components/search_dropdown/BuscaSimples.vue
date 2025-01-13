@@ -1066,11 +1066,10 @@ onUpdated(() => {
 
   .suggestions-list li:hover {
     background-color: #E9ECEF;
-
   }
 
-  .first-suggestion {
-    background-color: #E9ECEF !important;
+  .suggestions-list .first-suggestion {
+  background-color: #E9ECEF;
   }
 
   .suggestion-item {

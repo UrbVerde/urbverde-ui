@@ -131,39 +131,31 @@ export default {
   },
   data() {
     return {
-      defaultYear: null, // This will be used to update the child's (yearpicker) default
-      firstSelectedYear: null,// This will be the current year and will be updated by the child
-      secondSelectedYear: null, // This will be the current year and will be updated by the child
-      thirdSelectedYear: null, // This will be the current year and will be updated by the child
-
-      // availableYears: [2020, 2021, 2022, 2023, 2024],
+      defaultYear: null,
+      firstSelectedYear: null,
+      secondSelectedYear: null,
+      thirdSelectedYear: null,
       cityCode: 3547809
     };
   },
   created() {
-    // Inicializa os anos quando o componente é criado
-    this.initializeYears(2020); // ou qualquer outro ano default que você desejar
+    
+    this.initializeYears(2020);
   },
   watch: {
-    // Watch for changes in defaultYear to update selectedYear
     defaultYear(newValue) {
       this.firstSelectedYear = newValue;
       this.secondSelectedYear = newValue;
       this.thirdSelectedYear = newValue;
-      // alert(newValue);
-
     },
 
     firstSelectedYear(newValue) {
-      // Handle any side effects when selectedYear changes
       console.log('Selected year changed to:', newValue);
     },
     secondSelectedYear(newValue) {
-      // Handle any side effects when selectedYear changes
       console.log('Selected year changed to:', newValue);
     },
     thirdSelectedYear(newValue) {
-      // Handle any side effects when selectedYear changes
       console.log('Selected year changed to:', newValue);
     },
 
@@ -178,22 +170,6 @@ export default {
     }
 
   },
-  //   handleFirstYearChange(newYear) {
-  //     this.firstSelectedYear = newYear;
-  //     // alert(newYear);
-
-  //   },
-  //   handleSecondYearChange(newYear) {
-  //     this.secondSelectedYear = newYear;
-  //     // alert(newYear);
-  //   },
-  //   handleThirdYearChange(newYear) {
-  //     this.thirdSelectedYear = newYear;
-  //     // alert(newYear);
-  //   },
-
-  // },
-
   setup() {
     const route = useRoute();
     const locationStore = useLocationStore();
@@ -437,7 +413,7 @@ export default {
 .box {
 
   display: flex;
-  max-width: 1376px;
+  max-width: 100%;
   padding: 40px 48px 32px 48px;
   flex-direction: column;
   align-items: flex-start;

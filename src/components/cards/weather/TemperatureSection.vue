@@ -38,7 +38,7 @@ export default {
   },
 
   watch: {
-    // Watch both props for changes
+
     cityCode: {
       handler: 'fetchData',
       immediate: true

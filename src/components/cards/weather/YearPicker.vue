@@ -89,20 +89,17 @@ const currentYear = ref(props.modelValue);
 const yearModified = ref(false);
 const years = ref([]);
 
-// Initialize defaultYear with the initial modelValue, but don't watch for changes
 defaultYear.value = props.modelValue;
 
-// Watch for changes in modelValue to update currentYear only
+
 watch(() => props.modelValue, (newValue) => {
   currentYear.value = newValue;
 }, { immediate: true });
 
-// Watch for changes in cityCode to fetch new years
 watch(() => props.cityCode, async(newCityCode) => {
   await fetchYears(newCityCode);
 }, { immediate: true });
 
-// Watch for changes in currentYear to update yearModified
 watch(currentYear, (newValue) => {
   yearModified.value = newValue !== defaultYear.value;
 });
@@ -110,7 +107,7 @@ watch(currentYear, (newValue) => {
 const fetchYears = async(cityCode) => {
   try {
     const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`);
-    // alert(cityCode);
+
     if (!response.ok) {
       throw new Error('Failed to fetch years');
 
