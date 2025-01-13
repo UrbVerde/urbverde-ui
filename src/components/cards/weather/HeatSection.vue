@@ -33,7 +33,6 @@ export default {
   },
 
   watch: {
-    // Watch both cityCode and selectedYear
     cityCode: {
       handler: 'fetchDataOnChange',
       immediate: true
@@ -46,7 +45,6 @@ export default {
 
   methods: {
     fetchDataOnChange() {
-      // Only fetch if both values are available
       if (this.cityCode && this.selectedYear) {
         this.fetchData(this.cityCode, this.selectedYear.toString());
       }
