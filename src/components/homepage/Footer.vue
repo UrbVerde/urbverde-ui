@@ -114,6 +114,10 @@
   </script>
   
   <style scoped lang="scss">
+  a{
+    text-decoration: none;
+  }
+  
   .footer {
     display: flex;
     padding: 0px 80px;
