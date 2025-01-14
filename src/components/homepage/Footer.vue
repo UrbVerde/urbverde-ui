@@ -3,10 +3,9 @@
     <div class="newsletter">
       <h4 class="heading-h4">Receba as novidades por e-mail!</h4>
 
-      <!-- Formulário -->
       <div class="form">
         <form class="input-group body-small-medium" @submit.prevent="onSubmit">
-          <!-- Campo de e-mail -->
+
           <input
             type="email"
             class="form-control"
@@ -17,7 +16,6 @@
             v-model.trim="email"
           />
 
-          <!-- Botão (com ícones e transições) -->
           <button
             :class="['button-base', buttonStateClass]"
             :style="{ minWidth: '56px' }"
@@ -26,12 +24,12 @@
             id="button-addon2"
           >
             <span class="icon-holder">
-              <transition name="icon-fade" mode="out-in">
+              <transition name="icon-fade" mode="out-in"> 
                 <i
                   v-if="success"
                   key="success"
                   class="bi bi-check-lg"
-                  style="font-size: 24px;"
+                  style="font-size: 26px;"
                 ></i>
                 <span
                   v-else-if="loading"
@@ -159,7 +157,7 @@ export default {
   },
   computed: {
     isEmailValid() {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Validação simples do formato do e-mail
       return emailRegex.test(this.email.trim());
     },
     buttonStateClass() {
@@ -256,11 +254,11 @@ a{
 }
 .button-valid {
   background-color: map-get($gray, 100);
-  color: map-get($green, 700);
+  color: map-get($green, 500);
 }
 .button-loading {
   background-color: map-get($gray, 100);
-  color: map-get($green, 700);
+  color: map-get($green, 500);
 }
 .button-success {
   background-color: map-get($gray, 100);
@@ -277,22 +275,35 @@ a{
   overflow: hidden; 
 }
 
-.icon-fade-enter-active,
-.icon-fade-leave-active {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in;
-}
-
-.icon-fade-enter-from,
+.icon-fade-enter,
 .icon-fade-leave-to {
   opacity: 0;
-  transform: scale(0.7); 
+}
+.icon-fade-enter-to,
+.icon-fade-leave {
+  opacity: 1;
+}
+.icon-fade-enter-active,
+.icon-fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.icon-fade-enter:not(.spinner-border),
+.icon-fade-leave-to:not(.spinner-border) {
+  transform: scale(0.7);
+}
+.icon-fade-enter-to:not(.spinner-border),
+.icon-fade-leave:not(.spinner-border) {
+  transform: scale(1);
+}
+.icon-fade-enter-active:not(.spinner-border),
+.icon-fade-leave-active:not(.spinner-border) {
+  transition: opacity 0.3s ease-in-out, transform 0.15s ease-in-out;
 }
 
 .spinner-border {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
+  margin: 0 !important;
+  transform-origin: center center;
 }
 
 .footer {
