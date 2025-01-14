@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "TipsCard",
+  name: 'TipsCard',
 };
 </script>
 

@@ -1,9 +1,9 @@
 <template>
   <div class="rank-section">
-    <RankingCard 
-      v-for="(card, index) in rankCards" 
-      :key="index" 
-      :data="card" 
+    <RankingCard
+      v-for="(card, index) in rankCards"
+      :key="index"
+      :data="card"
       class="rank-card"
     />
     <p v-if="!rankCards || rankCards.length === 0" class="no-data">

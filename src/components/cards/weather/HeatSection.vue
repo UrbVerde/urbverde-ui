@@ -5,7 +5,6 @@
       <HeatCard :data="cardData"/>
     </div>
 
-
     <div class="tips-card-section">
       <TipsCard />
     </div>
@@ -98,6 +97,5 @@ export default {
   display: flex;
   justify-content: center; /* Centraliza o TipsCard horizontalmente */
 }
-
 
 </style>

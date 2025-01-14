@@ -27,7 +27,7 @@ export default {
       titulo: 'O que são ilhas de calor?',
       descricao:
         'São as áreas mais quentes das cidades, causadas por materiais como asfalto e concreto que retêm calor.',
-      value: null, 
+      value: null,
       image: Ilustracao,
     };
   },

@@ -30,7 +30,7 @@ export default {
     data: {
       type: Object,
       required: true,
-      validator: (value) => 
+      validator: (value) =>
         typeof value.title === 'string' &&
         typeof value.subtitle === 'string' &&
         Array.isArray(value.items) &&
