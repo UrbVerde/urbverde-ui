@@ -14,6 +14,7 @@
             aria-describedby="button-addon2"
             required
             v-model.trim="email"
+            :disabled="loading"
           />
 
           <button
@@ -24,7 +25,7 @@
             id="button-addon2"
           >
             <span class="icon-holder">
-              <transition name="icon-fade" mode="out-in"> 
+              <transition name="icon-fade" mode="out-in">
                 <i
                   v-if="success"
                   key="success"
@@ -104,7 +105,11 @@
             alt="WhatsApp Link"
           />
         </a>
-        <a href="mailto:comunica.urbverde@usp.br" target="_blank" rel="noopener noreferrer">
+        <a
+          href="mailto:comunica.urbverde@usp.br"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img
             src="@/assets/images/homepage/media-links/media-link-02.svg"
             alt="E-mail Link"
@@ -147,10 +152,10 @@
 
 <script>
 export default {
-  name: "Footer",
+  name: 'UrbVerdeFooter',
   data() {
     return {
-      email: "",
+      email: '',
       loading: false,
       success: false
     };
@@ -158,16 +163,26 @@ export default {
   computed: {
     isEmailValid() {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Validação simples do formato do e-mail
+
       return emailRegex.test(this.email.trim());
     },
     buttonStateClass() {
       if (this.success) {
-        return "button-success";
+        return 'button-success';
       }
       if (this.loading) {
-        return "button-loading";
+        return 'button-loading';
       }
-      return this.isEmailValid ? "button-valid" : "button-invalid";
+
+      return this.isEmailValid ? 'button-valid' : 'button-invalid';
+    }
+  },
+  watch: {
+    // Se o usuário modificar o e-mail após ter sucesso, zera o estado de sucesso para permitir outro envio
+    email(newVal, oldVal) {
+      if (this.success && newVal !== oldVal) {
+        this.success = false;
+      }
     }
   },
   mounted() {
@@ -181,41 +196,38 @@ export default {
       if (!this.isEmailValid) {
         return;
       }
-
       this.loading = true;
       try {
         const formData = new FormData();
-        formData.append("email", this.email.trim());
+        formData.append('email', this.email.trim());
 
         const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbxXwPCAHpHFhr2C1mkhsbbzUbCbXfaS2EwooF6-bmaOUXXXZsuFMCMMOHKcZbLpoKtb/exec",
+          'https://script.google.com/macros/s/AKfycbxXwPCAHpHFhr2C1mkhsbbzUbCbXfaS2EwooF6-bmaOUXXXZsuFMCMMOHKcZbLpoKtb/exec',
           {
-            method: "POST",
+            method: 'POST',
             body: formData
           }
         );
 
         if (!response.ok) {
           this.loading = false;
-          throw new Error("Não foi possível salvar o e-mail, tente novamente.");
+          throw new Error('Não foi possível salvar o e-mail, tente novamente.');
         }
 
         const result = await response.json();
-        if (result.status !== "success") {
+        if (result.status !== 'success') {
           this.loading = false;
-          throw new Error("Retorno inesperado do servidor, tente novamente.");
+          throw new Error('Retorno inesperado do servidor, tente novamente.');
         }
 
         // Sucesso
         this.loading = false;
         this.success = true;
-        // this.email = ""; -> Para limpar o e-mail quando enviar com sucesso
-      } 
-      
-        catch (error) {
-          this.loading = false;
-          alert("Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.");
-          console.error(error);
+      }
+      catch (error) {
+        this.loading = false;
+        alert('Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.');
+        console.error(error);
       }
     }
   }
@@ -224,12 +236,12 @@ export default {
 
 <style scoped lang="scss">
 
-input:-webkit-autofill {
+input:-webkit-autofill { // Para retirar a cor de preenchimento automático do navegador
   -webkit-box-shadow: 0 0 0px 1000px map-get($gray, white) inset !important;
   box-shadow: 0 0 0px 1000px map-get($gray, white) inset !important;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
@@ -270,14 +282,15 @@ a{
   color: map-get($green, 500);
 }
 
+/* Ícones */
 .icon-holder {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
-  height: 24px; 
+  height: 24px;
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .icon-fade-enter,
@@ -309,6 +322,13 @@ a{
 .spinner-border {
   margin: 0 !important;
   transform-origin: center center;
+}
+
+.form-control:disabled { // Utilizado durante o loading
+  cursor: default;
+  pointer-events: none;
+  opacity: 1;
+  background-color: map-get($gray, white);
 }
 
 .footer {
@@ -356,7 +376,6 @@ a{
         .form-control {
           flex: 1;
           height: 40px;
-          padding: px;
           border-radius: 8px !important;
           border: transparent;
         }

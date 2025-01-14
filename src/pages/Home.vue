@@ -425,7 +425,7 @@
       </div>
 
       <!-- Footer -->
-      <Footer />
+      <UrbVerdeFooter />
     </div>
   </div>
 </template>
@@ -437,7 +437,7 @@ import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
-import Footer from '@/components/homepage/Footer.vue';
+import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
 // Importação das logos
 import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
@@ -476,7 +476,7 @@ export default {
     PrimaryButton,
     BuscaSimples,
     UrbVerdeEducaTopics,
-    Footer,
+    UrbVerdeFooter,
   },
 
   // Configuração das meta tags de SEO
