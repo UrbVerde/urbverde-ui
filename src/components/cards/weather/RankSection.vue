@@ -1,12 +1,12 @@
 <template>
   <div class="rank-section">
     <RankingCard 
-      v-for="(card, index) in cardData" 
+      v-for="(card, index) in rankCards" 
       :key="index" 
       :data="card" 
       class="rank-card"
     />
-    <p v-if="!cardData || cardData.length === 0" class="no-data">
+    <p v-if="!rankCards || rankCards.length === 0" class="no-data">
       Carregando dados do ranking...
     </p>
   </div>
@@ -14,32 +14,59 @@
 
 <script>
 import RankingCard from './RankingCard.vue';
+import axios from 'axios';
 
 export default {
+  name: 'RankSection',
   components: {
     RankingCard,
   },
+  props: {
+    cityCode: {
+      type: String,
+      required: true
+    },
+    selectedYear: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      cardData: [], 
+      rankCards: [],
     };
   },
-  mounted() {
-    this.fetchData('3520707', '2020'); 
-  },
   methods: {
-    async fetchData(city, year) {
-      try {
-        const response = await fetch(
-          `https://api.urbverde.com.br/v1/cards/weather/ranking?city=${city}&year=${year}`
-        );
-        const data = await response.json();
-        console.log("Dados recebidos da API:", data); 
-        this.cardData = data; 
-      } catch (error) {
-        console.error('Error fetching cards data:', error);
-      }
+    transformItems(items) {
+      if (!items) {return [];}
+
+      return items.map(item => ({
+        title: item.type,
+        value: item.number.toString(),
+        total: item.of.toString()
+      }));
     },
+    async fetchRankingData() {
+      try {
+        const response = await axios.get(
+          `https://api.urbverde.com.br/v1/cards/weather/ranking?city=${this.cityCode}&year=${this.selectedYear}`
+        );
+        this.rankCards = response.data;
+      } catch (error) {
+        console.error('Error fetching ranking data:', error);
+        this.rankCards = [];
+      }
+    }
+  },
+  watch: {
+    cityCode: {
+      handler: 'fetchRankingData',
+      immediate: true
+    },
+    selectedYear: {
+      handler: 'fetchRankingData',
+      immediate: true
+    }
   },
 };
 </script>
