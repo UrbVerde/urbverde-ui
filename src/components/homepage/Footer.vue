@@ -19,10 +19,32 @@
           <!-- Botão de envio -->
           <button
             :class="buttonClass"
+            :style="{ minWidth: '110px' }"
+            :disabled="loading || success || submissionsCount >= maxSubmissions"
             type="submit"
             id="button-addon2"
           >
-            Enviar
+            <!-- PRIORIDADE: Se "success" for true, mostramos o check + "Enviado" -->
+            <template v-if="success">
+              <i class="bi bi-check-circle" style="margin-right: 6px;"></i>
+              Enviado
+            </template>
+
+            <!-- Se estivermos carregando E o e-mail for válido, mostra o spinner + "Carregando" -->
+            <template v-else-if="loading && isEmailValid">
+              <span
+                class="spinner-border spinner-border-sm"
+                style="width: 16px; height: 16px; margin-right: 6px;"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Carregando
+            </template>
+
+            <!-- Caso contrário, mostra "Enviar" -->
+            <template v-else>
+              Enviar
+            </template>
           </button>
         </form>
 
@@ -32,7 +54,7 @@
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Divider e Footer (INALTERADOS) -->
     <span class="divider"></span>
     <div class="footer-bottom">
       <router-link to="/mapa" class="button-primary-link">
@@ -127,7 +149,8 @@ export default {
     return {
       email: "",
       submissionsCount: 0,
-      maxSubmissions: 3,   // limite máximo de envios
+      loading: false,
+      success: false
     };
   },
   computed: {
@@ -135,14 +158,12 @@ export default {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // validação básica do e-mail
       return emailRegex.test(this.email.trim());
     },
-
     /**
      * Classe do botão conforme estado:
      * - 'button-limit' quando atingiu limite de envios
      * - 'button-valid' quando o e-mail é válido
      * - 'button-invalid' caso contrário
      */
-    
     buttonClass() {
       if (this.submissionsCount >= this.maxSubmissions) {
         return "button-limit";
@@ -160,39 +181,60 @@ export default {
 
   methods: {
     async onSubmit() {
+      // Se e-mail inválido, não faz nada.
       if (!this.isEmailValid) {
         return;
       }
 
+      // Se já atingiu o limite, exibe alerta e sai.
       if (this.submissionsCount >= this.maxSubmissions) {
         alert(`Parece que você enviou ${this.maxSubmissions} vezes. Tente novamente mais tarde.`);
         return;
       }
 
+      // Inicia o "carregando"
+      this.loading = true;
+
       try {
         const formData = new FormData();
         formData.append('email', this.email.trim());
 
-        const response = await fetch("https://script.google.com/macros/s/AKfycbxXwPCAHpHFhr2C1mkhsbbzUbCbXfaS2EwooF6-bmaOUXXXZsuFMCMMOHKcZbLpoKtb/exec", {
-          method: "POST",
-          body: formData
-        });
+        const response = await fetch(
+          "https://script.google.com/macros/s/AKfycbxXwPCAHpHFhr2C1mkhsbbzUbCbXfaS2EwooF6-bmaOUXXXZsuFMCMMOHKcZbLpoKtb/exec",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
 
         if (!response.ok) {
+          this.loading = false;
           throw new Error("Não foi possível salvar o e-mail, tente novamente.");
         }
 
         const result = await response.json();
         if (result.status !== "success") {
+          this.loading = false;
           throw new Error("Retorno inesperado do servidor, tente novamente.");
         }
 
-        alert("Sucesso! Seu e-mail foi cadastrado na Newsletter.");
+        // *** SE CHEGOU AQUI, ENVIO FOI BEM-SUCEDIDO ***
+        // Em vez de alert, definimos success = true e limpamos loading
+        this.loading = false;
+        this.success = true;
+
+        // Limpamos o campo e incrementamos count
         this.email = "";
         this.submissionsCount++;
         window.localStorage.setItem('submissionsCount', this.submissionsCount);
 
+        // Se quiser impedir completamente qualquer novo envio,
+        // o :disabled="success" já faz isso. Sem alert, sem nada.
+        // "Se quiser enviar novamente, teria que recarregar a página."
+
       } catch (error) {
+        // Se caiu em qualquer exceção, paramos o carregando e alertamos erro
+        this.loading = false;
         alert("Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.");
         console.error(error);
       }
@@ -230,7 +272,6 @@ export default {
   border-radius: 0px 4px 4px 0px;
 }
 
-
 .button-valid {
   background-color: map-get($green, 700);
   color: map-get($gray, white);
@@ -238,6 +279,7 @@ export default {
   cursor: pointer;
   border-radius: 0px 4px 4px 0px;
 }
+
 a {
   text-decoration: none;
 }
