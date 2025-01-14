@@ -148,7 +148,7 @@ function selectLayer(layer, categoryObj) {
   // 3) Update pinia
   locationStore.setLocation({
     category: categoryObj.name,
-    layer: layer.slug || layer.id // fallback
+    layer: layer.name || layer.id // fallback
   });
 }
 
