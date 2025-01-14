@@ -4,26 +4,22 @@
 
     <div class="content-wrapper">
       <!-- Sidebar -->
-      <Sidebar
-        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
-        :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar"
-        @update-coordinates="updateCoordinates"
-      />
+      <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
+               :is-open="isSidebarOpen"
+               @toggle-sidebar="toggleSidebar"
+               @update-coordinates="updateCoordinates" />
 
       <!-- Main content (navbar, map, etc.) -->
-      <div class="main-wrapper">
+      <div class="main-wrapper" :class="{ 'sidebar-open': isSidebarOpen }">
         <!-- If no coordinates, show a placeholder -->
         <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
           <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
         </div>
 
         <div v-else>
-          <Navbar
-            :class="{ 'navbar-collapsed': !isSidebarOpen }"
-            :active-section="activeSection"
-            @navigate-to="scrollToSection"
-          />
+          <Navbar :class="{ 'navbar-collapsed': !isSidebarOpen }"
+                  :active-section="activeSection"
+                  @navigate-to="scrollToSection" />
 
           <div id="map" ref="Mapa" class="content-area">
             <MapBox :coordinates="coordinates" class="map-box">
@@ -32,12 +28,18 @@
           </div>
 
           <!-- Stats Section (scroll target) -->
-          <div id="stats"
-               ref="statsSection"
-               class="box"
-          >
-            Estatísticas do {{ category }} em {{ cityName }}
-            <TemperatureSection />
+          <div id="stats" ref="statsSection" class="box">
+            <div class="statistics-container">
+              <span class="title-statistics-container heading-h5">Estatísticas do {{ category }} em {{ cityName
+              }}</span>
+              <!-- <div class="date-picker-container"></div> -->
+              <YearPicker v-model="firstSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleFirstYearChange" />
+
+            </div>
+            <TemperatureSection :city-code="cityCode" :selected-year="firstSelectedYear" />
           </div>
 
           <!-- Pop Vulnerável -->
@@ -45,8 +47,15 @@
                ref="vulnerableSection"
                class="box"
                style="border-top: 1px solid black">
-            Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
-            <HeatSection/>
+            <div class="statistics-container">
+              <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
+                cityName }}?</span>
+              <YearPicker v-model="secondSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleSecondYearChange" />
+            </div>
+            <HeatSection :city-code="cityCode" :selected-year="secondSelectedYear" />
           </div>
 
           <!-- Ranking -->
@@ -54,8 +63,15 @@
                ref="rankingSection"
                class="box"
                style="border-top: 1px solid black">
-            {{ cityName }} no ranking dos municípios
-            <RankSection/>
+            <div class="statistics-container">
+              <span class="title-statistics-container heading-h5">
+                {{ cityName }} no Ranking dos Municípios</span>
+              <YearPicker v-model="thirdSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleThirdYearChange" />
+            </div>
+            <RankSection :city-code="cityCode" :selected-year="thirdSelectedYear" />
           </div>
 
           <!-- Dados Gerais e Baixar Relatório -->
@@ -88,7 +104,7 @@
  * instead of <script setup> the new recommended approach
  * in Vue 3.2+ for clean, concise code.
 */
-import { ref, onMounted, onUnmounted, computed  } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import Sidebar from '../components/side_bar/SideBar.vue';
@@ -99,6 +115,7 @@ import TemperatureSection from '@/components/cards/weather/TemperatureSection.vu
 import RankSection from '@/components/cards/weather/RankSection.vue';
 import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
+import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
 
 export default {
   name: 'MapPage',
@@ -109,9 +126,40 @@ export default {
     Legenda,
     TemperatureSection,
     HeatSection,
-    RankSection
+    RankSection,
+    YearPicker,
   },
+  data() {
+    return {
+      defaultYear: null,
+      firstSelectedYear: null,
+      secondSelectedYear: null,
+      thirdSelectedYear: null,
+      cityCode: 3547809
+    };
+  },
+  created() {
 
+    this.initializeYears(2020);
+  },
+  watch: {
+    defaultYear(newValue) {
+      this.firstSelectedYear = newValue;
+      this.secondSelectedYear = newValue;
+      this.thirdSelectedYear = newValue;
+    },
+
+  },
+  methods: {
+
+    initializeYears(defaultYear = new Date().getFullYear()) {
+      this.defaultYear = defaultYear;
+      this.firstSelectedYear = defaultYear;
+      this.secondSelectedYear = defaultYear;
+      this.thirdSelectedYear = defaultYear;
+    }
+
+  },
   setup() {
     const route = useRoute();
     const locationStore = useLocationStore();
@@ -157,6 +205,7 @@ export default {
     // };
 
     // Methods
+
     const toggleSidebar = () => {
       isSidebarOpen.value = !isSidebarOpen.value;
     };
@@ -164,6 +213,7 @@ export default {
     const updateCoordinates = (newCoordinates) => {
       coordinates.value = newCoordinates;
       locationStore.setCoordinates(newCoordinates);
+
     };
 
     const handleScroll = () => {
@@ -211,6 +261,7 @@ export default {
           cd_mun: cd_mun ?? null,
           nm_mun: nm_mun ?? null,
         });
+
       }
 
       // Set coordinates from store if available
@@ -259,77 +310,107 @@ export default {
 </script>
 
 <style scoped>
-  .global {
-    background-color: #F8F9FACC;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+.global {
+  background-color: #F8F9FACC;
+  width: 100%;
+/*   height: 100vh; */
+  display: flex;
+  flex-direction: column;
+}
 
-  /* Flex container to hold sidebar (left) and main content (right) */
-  .content-wrapper {
-    flex: 1;
-    display: flex;
-  }
+/* Flex container to hold sidebar (left) and main content (right) */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+}
 
-  /* Sidebar “collapsed” style (if you want a narrower width) */
-  .sidebar-collapsed {
-    width: 72px;
-    transition: width 0.3s;
-  }
+/* Sidebar “collapsed” style (if you want a narrower width) */
+.sidebar-collapsed {
+  width: 72px;
+  transition: width 0.3s;
+}
 
-  /* Main content takes the rest of the horizontal space */
-  .main-wrapper {
-    flex: 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto;
-  }
+/* Main content takes the rest of the horizontal space */
+.main-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+/*   height: 100vh; */
+/*   overflow-y: auto; */
+  margin-left: 72px;
+  transition: margin-left 0.3s;
+}
 
-  .content-area {
-    flex: 1;
-    position: relative;
-    display: flex;
-  }
+.main-wrapper.sidebar-open {
+  margin-left: 301px;
+}
 
-  .map-box {
-    flex: 1;
-    position: relative;
-  }
+.content-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
 
-  .legend-wrapper {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 264px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-    z-index: 10;
-  }
+.map-box {
+  flex: 1;
+  position: relative;
+}
 
-  /* Center the placeholder vertically and horizontally */
-  .placeholder-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 3%;
-  }
+.legend-wrapper {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 264px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  z-index: 10;
+}
 
-  /* Placeholder image if coordinates are not set */
-  .map-placeholder {
-    display: block;
-    margin: 40px auto;
-    opacity: 0.45;
-  }
+/* Center the placeholder vertically and horizontally */
+.placeholder-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* margin-top: 3%; */
+}
 
-  /* Just a section to hold stats or other elements */
-  .box {
-    display: flex;
+/* Placeholder image if coordinates are not set */
+.map-placeholder {
+  display: block;
+  margin: 40px auto;
+  opacity: 0.45;
+}
+
+.statistics-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  align-self: stretch;
+}
+
+.title-statistics-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+}
+
+/* Just a section to hold stats or other elements */
+.box {
+
+  display: flex;
+  /* max-width: 1376px; */
+  padding: 40px 48px 32px 48px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+
+  /* display: flex;
     flex-direction: column;
     gap: 80px;
     gap: 16px;
@@ -338,10 +419,11 @@ export default {
     padding: 32px 40px;
     justify-content: space-between;
     width: 100%;
+
     color: var(--Body-Text-Body-Color, #212529);
     font-family: Inter, sans-serif;
     font-size: 20px;
     font-weight: 500;
-    line-height: 24px;
-  }
+    line-height: 24px; */
+}
 </style>
