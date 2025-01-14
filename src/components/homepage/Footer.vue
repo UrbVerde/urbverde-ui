@@ -21,18 +21,17 @@
           <button
             :class="['button-base', buttonStateClass]"
             :style="{ minWidth: '56px' }"
-            :disabled="loading || success || submissionsCount >= maxSubmissions"
+            :disabled="loading || success"
             type="submit"
             id="button-addon2"
           >
-            <!-- Container fixo para não “pular” entre ícones -->
-            <span class="icon-holder"> 
-              <transition name="icon-fade">
+            <span class="icon-holder">
+              <transition name="icon-fade" mode="out-in">
                 <i
                   v-if="success"
                   key="success"
                   class="bi bi-check-lg"
-                  style="font-size: 26px;"
+                  style="font-size: 24px;"
                 ></i>
                 <span
                   v-else-if="loading"
@@ -154,8 +153,6 @@ export default {
   data() {
     return {
       email: "",
-      submissionsCount: 0,
-      maxSubmissions: 3, // caso queira manter
       loading: false,
       success: false
     };
@@ -184,10 +181,6 @@ export default {
   methods: {
     async onSubmit() {
       if (!this.isEmailValid) {
-        return;
-      }
-      if (this.submissionsCount >= this.maxSubmissions) {
-        alert(`Parece que você enviou ${this.maxSubmissions} vezes. Tente novamente mais tarde.`);
         return;
       }
 
@@ -232,6 +225,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+a{
+  text-decoration: none;
+}
+
 .divider {
   display: flex;
   flex-direction: column;
@@ -243,14 +241,6 @@ export default {
   background-color: map-get($green, 600);
 }
 
-.icon-holder {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
 .button-base {
   border-radius: 8px !important;
   border: 1px solid map-get($gray, 400);
@@ -260,7 +250,6 @@ export default {
   justify-content: center;
 }
 
-/* Estados do botão */
 .button-invalid {
   background-color: map-get($gray, 100);
   color: map-get($gray, 500);
@@ -278,13 +267,32 @@ export default {
   color: map-get($green, 500);
 }
 
+.icon-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px; 
+  position: relative;
+  overflow: hidden; 
+}
+
 .icon-fade-enter-active,
 .icon-fade-leave-active {
-  transition: opacity 0.1s ease-in-out;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in;
 }
+
 .icon-fade-enter-from,
 .icon-fade-leave-to {
   opacity: 0;
+  transform: scale(0.7); 
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
 }
 
 .footer {
