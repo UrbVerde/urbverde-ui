@@ -1,8 +1,7 @@
-<!-- urbverde-ui/src/components/cards/Card.vue -->
 <template>
-  <div class="custom-card">
-    <div class="card-image-wrapper" v-if="$slots['custom-content']">
-      <slot name="custom-content"></slot>
+  <div class="custom-card" :class="size">
+    <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
+      <slot name="image"></slot>
     </div>
 
     <div class="card-header">
@@ -11,15 +10,27 @@
       <p v-if="subtitle" class="textodescritivo">{{ subtitle }}</p>
     </div>
 
+    <div class="card-image-wrapper" v-if="imagePosition === 'middle' && imageSlot">
+      <slot name="image"></slot>
+    </div>
+
     <div class="card-content" v-if="$slots.default">
       <slot></slot>
+    </div>
+
+    <div class="card-image-wrapper" v-if="imagePosition === 'bottom' && imageSlot">
+      <slot name="image"></slot>
+    </div>
+
+    <div class="card-footer" v-if="$slots.footer">
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Card-base',
+  name: 'CardBase',
   props: {
     title: {
       type: String,
@@ -33,6 +44,21 @@ export default {
       type: String,
       required: false,
     },
+    size: {
+      type: String,
+      default: 'medium',
+      validator: value => ['small', 'medium', 'large'].includes(value),
+    },
+    imagePosition: {
+      type: String,
+      default: 'top',
+      validator: value => ['top', 'middle', 'bottom'].includes(value),
+    },
+  },
+  computed: {
+    imageSlot() {
+      return !!this.$slots.image;
+    },
   },
 };
 </script>
@@ -43,9 +69,12 @@ export default {
   border: 1px solid var(--Gray-200, #E9ECEF);
   background: var(--Gray-White, #FFF);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
-  width: 285px;
+  width: 100%;
   padding: 24px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .card-image-wrapper {
@@ -65,7 +94,6 @@ export default {
   color: var(--Body-Text-Body-Color, #212529);
   font-family: Inter;
   font-size: 16px;
-  font-style: normal;
   font-weight: 500;
   line-height: 120%;
   margin-bottom: 4px;
@@ -82,7 +110,6 @@ export default {
   color: var(--Gray-600, #6C757D);
   font-family: Inter;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
 }
@@ -91,5 +118,24 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* Size variants */
+.custom-card.small {
+  width: 200px;
+}
+
+.custom-card.medium {
+  width: 285px;
+}
+
+.custom-card.large {
+  width: 400px;
 }
 </style>

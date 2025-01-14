@@ -1,14 +1,19 @@
 <!-- urbverde-ui/src/components/cards/weather/RankingCard.vue -->
 <template>
-  <CardBase :title="title" :subtitle="subtitle">
-    <div class="sections">
-      <div class="section" v-for="(section, index) in data" :key="index">
-        <p class="section-title">{{ section.title }}</p>
+  <CardBase :title="data.title || 'Título não disponível'" :subtitle="data.subtitle || 'Subtítulo não disponível'">
+
+    <div v-if="data.items && data.items.length > 0" class="sections">
+      <div class="section" v-for="(item, index) in data.items" :key="index">
+        <p class="section-title">{{ item.type }}</p>
         <p class="section-value">
-          <span class="value">{{ section.value }}</span>
-          <span v-if="section.total" class="total"> de {{ section.total }}</span>
+          <span class="value">{{ item.number }}</span>
+          <span v-if="item.of" class="total"> de {{ item.of }}</span>
         </p>
       </div>
+    </div>
+
+    <div v-else class="no-data">
+      <p>Nenhum dado disponível para exibir.</p>
     </div>
   </CardBase>
 </template>
@@ -22,23 +27,19 @@ export default {
     CardBase,
   },
   props: {
-    title: {
-      type: String,
-      required: false,
-    },
-    subtitle: {
-      type: String,
-      required: false,
-    },
     data: {
-      type: Array,
+      type: Object,
       required: true,
-      validator: (value) => value.every(
-        (item) =>
-          typeof item.title === 'string' &&
-            typeof item.value === 'string' &&
-            (typeof item.total === 'string' || item.total === undefined)
-      ),
+      validator: (value) => 
+        typeof value.title === 'string' &&
+        typeof value.subtitle === 'string' &&
+        Array.isArray(value.items) &&
+        value.items.every(
+          (item) =>
+            typeof item.type === 'string' &&
+            typeof item.number === 'number' &&
+            (typeof item.of === 'number' || item.of === undefined)
+        ),
     },
   },
 };
