@@ -63,6 +63,7 @@ export default {
           this.coordinates.lat === 0 ||
           this.coordinates.lng === 0) {
         this.showError = true;
+
         return;
       }
       this.showError = false;
@@ -70,7 +71,7 @@ export default {
     },
     handleMissingImage(e) {
       const imageId = e.id ? e.id.trim() : null;
-      if (!imageId || imageId === '') return;
+      if (!imageId || imageId === '') {return;}
 
       if (!this.map.hasImage(imageId)) {
         const placeholder = {
@@ -94,7 +95,7 @@ export default {
       }
       if (this.locationStore.scale !== newScale) {
         this.locationStore.setLocation({ scale: newScale });
-        
+
         // Get current hash and preserve it
         const currentHash = window.location.hash;
         this.router.replace({
@@ -111,38 +112,38 @@ export default {
       }
     },
     initializeMap() {
-      if (this.showError) return;
+      if (this.showError) {return;}
 
       this.mapLoaded = false;
       this.mapVisible = false;
 
       // Check for hash coordinates first
-      let initialState = { 
-          center: [this.coordinates.lng, this.coordinates.lat],
-          zoom: this.MAP_ZOOM_START,
-          pitch: 20 
+      let initialState = {
+        center: [this.coordinates.lng, this.coordinates.lat],
+        zoom: this.MAP_ZOOM_START,
+        pitch: 20
       };
 
       // Parse hash if it exists
       const hash = window.location.hash.slice(1);
       if (hash) {
-          const match = hash.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*),(\d+\.?\d*)z(?:,(\d+)b,(\d+)p)?/);
-          if (match) {
-              initialState = {
-                  center: [parseFloat(match[2]), parseFloat(match[1])],
-                  zoom: parseFloat(match[3]),
-                  pitch: match[5] ? parseInt(match[5]) : 20,
-                  bearing: match[4] ? parseInt(match[4]) : 0
-              };
-          }
+        const match = hash.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*),(\d+\.?\d*)z(?:,(\d+)b,(\d+)p)?/);
+        if (match) {
+          initialState = {
+            center: [parseFloat(match[2]), parseFloat(match[1])],
+            zoom: parseFloat(match[3]),
+            pitch: match[5] ? parseInt(match[5]) : 20,
+            bearing: match[4] ? parseInt(match[4]) : 0
+          };
+        }
       }
 
       this.map = new maplibregl.Map({
-          container: this.$refs.mapContainer,
-          style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
-          ...initialState,
-          attributionControl: false,
-          fadeDuration: 0,
+        container: this.$refs.mapContainer,
+        style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+        ...initialState,
+        attributionControl: false,
+        fadeDuration: 0,
       });
 
       // Initialize custom hash
@@ -171,7 +172,7 @@ export default {
             });
           }
           this.mapLoaded = true;
-          
+
           // Set initial scale based on current zoom
           this.updateScaleBasedOnZoom(this.map.getZoom());
         }, 300);
@@ -187,12 +188,14 @@ export default {
             this.map = null;
           }, 300);
         }
+
         return;
       }
 
       if (this.showError) {
         this.showError = false;
         this.initializeMap();
+
         return;
       }
 

@@ -103,16 +103,17 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, onUpdated } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { API_URLS } from '@/constants/endpoints';
 import { useRoute } from 'vue-router';
+//, onUpdated } from 'vue';
 
 const debug = ref(false);
 
 // Constants
-const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
+// const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
 const states = [ // All this shouldnt be hardcorded here in the next versions (!)
   'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
   'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
@@ -146,13 +147,12 @@ const cachedCities = ref([]);
 const cachedCityData = ref({});
 const searchHistory = ref([]);
 
-
 // Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
 
 // Lifecycle Hooks
-onMounted(async () => {
+onMounted(async() => {
   document.addEventListener('mousedown', handleClickOutside);
   loadSearchHistory();
 
@@ -172,12 +172,12 @@ onMounted(async () => {
     visibleInput.value = cityText; // Add this line
     locationChosen.value = cityText;
     codes.value[cityText] = locationStore.cd_mun;
-    
+
     // Add to cached cities
     if (!cachedCities.value.includes(cityText)) {
       cachedCities.value.push(cityText);
     }
-    
+
     // Fetch coordinates for the stored location
     await fetchCoordinates(cityText);
   } else {
@@ -200,11 +200,11 @@ onBeforeUpdate(() => {
 });
 
 // onUpdated(() => {
-  //   suggestionItems.value = visibleSuggestions.value.map(
-    //     (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
-    //   );
-    // });
-    
+//   suggestionItems.value = visibleSuggestions.value.map(
+//     (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
+//   );
+// });
+
 // Computed Properties
 const filterAll = ref(true);
 const filterCity = ref(false);
@@ -227,6 +227,7 @@ const filteredSuggestions = computed(() => {
         (suggestion.type === 'history' && states.includes(suggestion.text))
     );
   }
+
   return suggestions.value;
 });
 
@@ -261,17 +262,17 @@ function activateInput() {
 }
 
 function selectSuggestion(suggestion) {
-  console.log('selectSuggestion:', suggestion);
+  // console.log('selectSuggestion:', suggestion);
   inputValue.value = suggestion.text;
   visibleInput.value = suggestion.text;
   highlightedText.value = '';
   dropdown.value = false;
   locationChosen.value = suggestion.text;
-  
-  const { city, state } = parseCityState(suggestion.text);
+
+  const { city } = parseCityState(suggestion.text);
   const code = codes.value[suggestion.text];
   const stateAbbrev = suggestion.text.split(' - ')[1];
-  
+
   const locationStore = useLocationStore();
   locationStore.setLocation({
     cd_mun: code,
@@ -296,7 +297,7 @@ function handleFocus(event) {
 }
 
 async function loadAnimation() {
-  if (!inputValue.value) {
+  if (!inputValue.value && !locationChosen.value) {
     alert('Por favor, insira um local.');
 
     return;
@@ -375,23 +376,23 @@ async function fetchCities(query) {
 
   // console.log('suggestion before', JSON.parse(JSON.stringify(suggestions.value)))
   suggestions.value = data
-  .filter(item => !item.error)
-  .map(item => {
+    .filter(item => !item.error)
+    .map(item => {
     // console.log('1 - fetchCities', item);
-    const textKey = item.state_abbreviation
-      ? `${item.display_name} - ${item.state_abbreviation}`
-      : item.display_name;
-    codes.value[textKey] = item.cd_mun;
+      const textKey = item.state_abbreviation
+        ? `${item.display_name} - ${item.state_abbreviation}`
+        : item.display_name;
+      codes.value[textKey] = item.cd_mun;
 
-    return {
-      text: textKey,
-      lat: item.coordinates?.lat,
-      lng: item.coordinates?.lng,
-      type: 'city',
-    };
-  });
+      return {
+        text: textKey,
+        lat: item.coordinates?.lat,
+        lng: item.coordinates?.lng,
+        type: 'city',
+      };
+    });
   // console.log('suggestion after', JSON.parse(JSON.stringify(suggestions.value)))
-  
+
   // console.log('1 - fetchCitiescachedCities before',cachedCities.value);
   cachedCities.value = suggestions.value.map(s => s.text);
   // console.log('1 - fetchCitiescachedCities after',cachedCities.value);
@@ -400,7 +401,7 @@ async function fetchCities(query) {
 async function fetchCoordinates(address) {
   // console.log('1 - fetchCoordinates', address);
   const { city } = parseCityState(address);
-  const cached = cachedCityData.value[address];  
+  const cached = cachedCityData.value[address];
   // console.log('fetchCoordinates cachedCities',cachedCities.value)
   // console.log('cached',cached)
 
@@ -413,6 +414,7 @@ async function fetchCoordinates(address) {
       code: cached.code,
       type: cached.type,
     });
+
     return;
   }
 
@@ -432,6 +434,7 @@ async function fetchCoordinates(address) {
       } else {
         handleLocationFailure();
         console.error('Code not found for:', address);
+
         return;
       }
     }
@@ -442,6 +445,7 @@ async function fetchCoordinates(address) {
     if (data && data.length > 0) {
       if (data[0].error) {
         handleLocationFailure();
+
         return;
       }
       const loc = data[0].coordinates;
@@ -452,7 +456,7 @@ async function fetchCoordinates(address) {
           code: codeValue,
           type: 'city',
         });
-        
+
         // Cache the coordinates for future use
         cachedCityData.value[address] = {
           lat: loc.lat,
@@ -617,7 +621,6 @@ function submit() {
   }
 }
 
-
 // Chama a função para buscar coordenadas
 function handleEnter() {
   if (suggestions.value.length > 0) {
@@ -629,7 +632,7 @@ function handleEnter() {
 
 function addToHistory(item) {
   if (item === 'No Results') {return;}
-  if (!codes.value[item]) return;
+  if (!codes.value[item]) {return;}
   const itemLower = item.toLowerCase();
   const historyLower = searchHistory.value.map(h => h.toLowerCase());
 
@@ -672,17 +675,17 @@ function loadSearchHistory() {
 }
 
 async function generateDefaultSuggestions() {
-  if (!locationData.value) return;
-  
+  if (!locationData.value) {return;}
+
   const { city, state, stateAbbreviation } = locationData.value;
   const cityWithState = `${city} - ${stateAbbreviation || state}`;
-  
+
   // Fetch city data if we don't have the code
   if (!codes.value[cityWithState]) {
     try {
       const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${city}`);
       const data = await response.json();
-      
+
       if (data && data.length > 0 && !data[0].error) {
         codes.value[cityWithState] = data[0].cd_mun;
       }
@@ -999,8 +1002,8 @@ function emitLocationUpdate(payload) {
     background-color: #E9ECEF;
   }
 
-  .first-suggestion {
-    background-color: #E9ECEF;
+  .suggestions-list .first-suggestion {
+  background-color: #E9ECEF;
   }
 
   .suggestion-item {

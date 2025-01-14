@@ -1,19 +1,19 @@
 // urbverde-ui/src/mocks/handlers.js
 import { http, HttpResponse } from 'msw';
-import { API_URLS } from '@/constants/endpoints';
+// import { API_URLS } from '@/constants/endpoints';
 import cities from './responses/cities.json';
 import categoriesResponse from './responses/categories.json';
 
 // Function to filter categories based on location code and type
 const filterCategories = (code) => {
-  console.log(code, typeof code); // Debug log
-  
+  // console.log(code, typeof code); // Debug log
+
   // Deep clone the categories to avoid modifying the original
   const categories = JSON.parse(JSON.stringify(categoriesResponse.categories));
 
   // Check if it starts with 35 (São Paulo state)
   const isSaoPauloState = String(code).startsWith('35');
-  console.log('Is São Paulo state?', isSaoPauloState); // Debug log
+  // console.log('Is São Paulo state?', isSaoPauloState); // Debug log
   if (isSaoPauloState) {
     if (code === '3534708') { //Ourinhos-SP
       // The exclusive layer to be added to two categories
@@ -143,6 +143,7 @@ export const handlers = [
   http.get('*/v1/address/categories', async({ request }) => {
     const url = new URL(request.url);
     const code = url.searchParams.get('code'); //should use locationStore pinia value instead
+
     return HttpResponse.json(filterCategories(code));
   })
 ];

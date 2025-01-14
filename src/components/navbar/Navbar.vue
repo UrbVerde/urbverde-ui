@@ -50,10 +50,11 @@ export default {
   setup() {
     const locationStore = useLocationStore();
 
-    const layer = computed(() => {
-      console.log('Navbar computed - current layer:', locationStore.layer);
-      return locationStore.layer;
-    });
+    const layer = computed(() =>
+    // console.log('Navbar computed - current layer:', locationStore.layer);
+
+      locationStore.layer
+    );
     const cityName = computed(() => locationStore.nm_mun);
     const uf = computed(() => locationStore.uf);
 

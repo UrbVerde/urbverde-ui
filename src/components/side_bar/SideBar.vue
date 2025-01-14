@@ -87,6 +87,9 @@ async function toggleSidebar() {
 
 <style scoped>
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 72px;
   height: 100vh;
   transition: 0.3s;
@@ -98,13 +101,13 @@ async function toggleSidebar() {
 
 .sidebar-open {
   width: 301px;
+  transition: 0.3s;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
-  background: var(--Gray-White, #FFF);
-  transition: 0.3s;
-  height: 100%; /* Garante que o sidebar ocupe a tela */
+  /* background: var(--Gray-White, #FFF); */
+  /* height: 100%; Garante que o sidebar ocupe a tela */
 }
 
 /* Rest of the styles remain unchanged */
@@ -143,7 +146,9 @@ async function toggleSidebar() {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  flex: 1 0 0;
+  flex: 1 0 auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
   align-self: stretch;
 
 }

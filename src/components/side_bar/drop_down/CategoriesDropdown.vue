@@ -1,10 +1,11 @@
+<!-- urbverde-ui\src\components\side_bar\drop_down\CategoriesDropdown.vue -->
 <template>
   <div class="container">
     <span class="header-title caption-medium">CAMADAS</span>
 
     <div class="categories-list">
       <div
-        v-for="(category, catIdx) in categories"
+        v-for="(category) in categories"
         :key="category.id"
         class="category-dropdown"
       >
@@ -23,9 +24,9 @@
           </div>
 
           <i
-            :class="openCategoryId === category.id 
-                      ? 'bi bi-chevron-up' 
-                      : 'bi bi-chevron-down'"
+            :class="openCategoryId === category.id
+              ? 'bi bi-chevron-up'
+              : 'bi bi-chevron-down'"
           />
         </div>
 
@@ -35,7 +36,7 @@
           class="layers-list"
         >
           <li
-            v-for="(layer, layerIdx) in category.layers"
+            v-for="(layer) in category.layers"
             :key="layer.id"
             :class="['layer-item', { 'active-layer': layer.isActive }]"
             @click="selectLayer(layer, category)"
@@ -53,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { API_URLS } from '@/constants/endpoints';
