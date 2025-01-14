@@ -27,8 +27,8 @@
 
             <div id="map" ref="Mapa" class="content-area">
               <MapBox :coordinates="coordinates" class="map-box">
-                <Legenda />
               </MapBox>
+              <Legenda />
             </div>
 
             <!-- 
@@ -38,7 +38,7 @@
             
             <!-- Stats Section (scroll target) -->
             <div id="stats" ref="statsSection" class="box">
-              Estatísticas do {{ category }} em {{ cityName }}
+              Estatísticas do {{ category }} em {{ cityName }}/{{ uf }}
               <!-- <TemperatureSection /> -->
             </div>
 
@@ -47,7 +47,7 @@
                 ref="vulnerableSection"
                 class="box"
                 style="border-top: 1px solid black">
-              Quem é o mais afetado pelo [calor extremo] em {{ cityName }}?
+              Quem é o mais afetado pelo [calor extremo] em {{ cityName }}/{{ uf }} ?
               <!-- <HeatSection/> -->
             </div>
 
@@ -65,7 +65,7 @@
                 ref="dataSection"
                 class="box"
                 style="height:636px; border-top: 1px solid black">
-              Veja mais sobre {{ cityName }}
+              Veja mais sobre {{ cityName }}/{{ uf }}
             </div>
 
             <!-- Footer -->
@@ -88,6 +88,7 @@
   import { watchEffect } from 'vue'; 
   import { useRoute, useRouter } from 'vue-router';
   import { useLocationStore } from '@/stores/locationStore';
+  import { API_URLS } from '@/constants/endpoints';
   import Sidebar from '../components/side_bar/SideBar.vue';
   import Navbar from '../components/navbar/Navbar.vue';
   import MapBox from '../components/map/mapGenerator.vue';
@@ -136,6 +137,7 @@
   const category = computed(() => locationStore.category || 'category?');
   const currentLayer = computed(() => locationStore.layer || 'layer?');
   const cityName = computed(() => locationStore.nm_mun || 'city?');
+  const uf = computed(() => locationStore.uf || 'uf?');
 
   // Methods
   const toggleSidebar = () => {
@@ -291,7 +293,7 @@
       background-color: #ffffff;
       border-radius: 16px;
       /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-      z-index: 10;
+      z-index: 1;
     }
 
     /* Center the placeholder vertically and horizontally */

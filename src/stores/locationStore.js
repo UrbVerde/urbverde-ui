@@ -92,7 +92,7 @@ export const useLocationStore = defineStore('locationStore', {
       this.category = category.name;
       // Always set first layer when category changes
       if (category.layers && category.layers.length > 0) {
-        this.layer = category.layers[0].slug;
+        this.layer = category.layers[0].id;
       }
     },
 

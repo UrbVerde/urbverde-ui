@@ -69,7 +69,7 @@ export default {
   name: 'MapLegend',
   data() {
     return {
-      isOpen: false,
+      isOpen: true,
       selectedYear: 2021,
       availableYears: [2021, 2020, 2019, 2018], // Exemplo de anos disponíveis
     };

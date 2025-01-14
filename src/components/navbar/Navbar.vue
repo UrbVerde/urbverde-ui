@@ -5,7 +5,7 @@
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
         <div class="header-left">
-          <h5> {{ layer }} em {{ cityName }} - {{ uf }} </h5>
+          <h5> {{ layer }} em {{ cityName }}/{{ uf }} </h5>
         </div>
         <div class="header-right">
           <button @click="shareMap" class="share-button">
