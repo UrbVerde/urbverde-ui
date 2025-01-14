@@ -209,13 +209,13 @@ export default {
         // Sucesso
         this.loading = false;
         this.success = true;
-        this.email = "";
-        this.submissionsCount++;
-        window.localStorage.setItem('submissionsCount', this.submissionsCount);
-      } catch (error) {
-        this.loading = false;
-        alert("Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.");
-        console.error(error);
+        // this.email = ""; -> Para limpar o e-mail quando enviar com sucesso
+      } 
+      
+        catch (error) {
+          this.loading = false;
+          alert("Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.");
+          console.error(error);
       }
     }
   }
@@ -223,6 +223,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px map-get($gray, white) inset !important;
+  box-shadow: 0 0 0px 1000px map-get($gray, white) inset !important;
+}
 
 a{
   text-decoration: none;
@@ -355,6 +360,7 @@ a{
           border-radius: 8px !important;
           border: transparent;
         }
+
         .form-control:focus {
           box-shadow: 0 0 0 0.25rem rgba(13, 253, 133, 0.25);
           border-color: transparent;
