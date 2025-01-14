@@ -33,6 +33,7 @@
     </div>
 
     <!-- Footer -->
+    <span class="divider"></span>
     <div class="footer-bottom">
       <router-link to="/mapa" class="button-primary-link">
         <div class="logo-button">
@@ -125,7 +126,7 @@ export default {
   data() {
     return {
       email: "",
-      submissionsCount: 0, // quantidade de envios já feitos
+      submissionsCount: 0,
       maxSubmissions: 3,   // limite máximo de envios
     };
   },
@@ -168,7 +169,6 @@ export default {
         return;
       }
 
-      // faz o envio ao Google Apps Script
       try {
         const formData = new FormData();
         formData.append('email', this.email.trim());
@@ -178,7 +178,6 @@ export default {
           body: formData
         });
 
-        // Se não tiver 200~299, lança erro
         if (!response.ok) {
           throw new Error("Não foi possível salvar o e-mail, tente novamente.");
         }
@@ -203,6 +202,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.divider{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  height: 1px;
+  width: 100%;
+  background-color: map-get($green, 600);
+}
 
 .button-limit, .button-invalid {
   background-color: map-get($gray , 200);
