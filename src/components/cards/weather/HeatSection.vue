@@ -72,10 +72,13 @@ export default {
 }
 
 .dashboard {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Configura 4 colunas iguais */
-  gap: 20px; /* Espaçamento entre os cards */
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  /* grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
   margin: 20px;
-  align-items: flex-start; /* Alinha os cards no topo */
+  align-items: flex-start; Alinha os cards no topo */
 }
 </style>

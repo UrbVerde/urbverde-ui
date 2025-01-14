@@ -188,7 +188,7 @@ function getActiveLayerInCategory(category) {
 }
 
 .category-dropdown {
-  border-bottom: 1px solid #dee2e6;
+  /* border-bottom: 1px solid #dee2e6; */
   padding-bottom: 8px;
 }
 

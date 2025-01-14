@@ -1,4 +1,4 @@
-  <!-- urbverde-ui/src/pages/MapPage.vue -->
+<!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="global">
 
@@ -27,18 +27,19 @@
             <Legenda />
           </div>
 
-          <!--
-              Criar componente de widgets daqui pra frente:
-                procedural
-          -->
-
           <!-- Stats Section (scroll target) -->
-          <div id="stats"
-               ref="statsSection"
-               class="box"
-          >
-            Estatísticas do {{ category }} em {{ cityName }}/{{ uf }}
-            <TemperatureSection />
+          <div id="stats" ref="statsSection" class="box">
+            <div class="statistics-container">
+              <span class="title-statistics-container heading-h5">
+                Estatísticas de {{ category }} em {{ cityName}}</span>
+              <!-- <div class="date-picker-container"></div> -->
+              <YearPicker v-model="firstSelectedYear"
+                          :default-year="defaultYear"
+                          :city-code="cityCode"
+                          @update:modelValue="handleFirstYearChange" />
+
+            </div>
+            <TemperatureSection :city-code="cityCode" :selected-year="firstSelectedYear" />
           </div>
 
           <!-- Pop Vulnerável -->
@@ -48,7 +49,7 @@
                style="border-top: 1px solid black">
             <div class="statistics-container">
               <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
-                cityName }}/{{ uf }}?</span>
+                cityName }}?</span>
               <YearPicker v-model="secondSelectedYear"
                           :default-year="defaultYear"
                           :city-code="cityCode"
@@ -78,7 +79,8 @@
                ref="dataSection"
                class="box"
                style="height:636px; border-top: 1px solid black">
-            Veja mais sobre {{ cityName }}/{{ uf }}
+            Veja mais sobre {{ cityName }}
+
           </div>
 
           <!-- Footer -->
@@ -91,16 +93,20 @@
         </div>
       </div>
       <!-- <div ref="statsSection" class="box" >
-        </div> -->
+      </div> -->
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted, onUnmounted, watchEffect} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+<script>
+/**
+ * We are still using the Options API (classic)
+ * instead of <script setup> the new recommended approach
+ * in Vue 3.2+ for clean, concise code.
+*/
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
-import { API_URLS } from '@/constants/endpoints';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
@@ -111,154 +117,199 @@ import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
 
-// Store and router setup
-const route = useRoute();
-const router = useRouter();
-const locationStore = useLocationStore();
+export default {
+  name: 'MapPage',
+  components: {
+    Sidebar,
+    MapBox,
+    Navbar,
+    Legenda,
+    TemperatureSection,
+    HeatSection,
+    RankSection,
+    YearPicker,
+  },
+  data() {
+    return {
+      defaultYear: null,
+      firstSelectedYear: null,
+      secondSelectedYear: null,
+      thirdSelectedYear: null,
+      cityCode: 3547809
+    };
+  },
+  created() {
 
-// Refs and Computed Properties
-const coordinates = ref({ lat: null, lng: null });
-const activeSection = ref('map');
-const isSidebarOpen = ref(true);
+    this.initializeYears(2020);
+  },
+  watch: {
+    defaultYear(newValue) {
+      this.firstSelectedYear = newValue;
+      this.secondSelectedYear = newValue;
+      this.thirdSelectedYear = newValue;
+    },
 
-const category = computed(() => locationStore.category || 'category?');
-// const currentLayer = computed(() => locationStore.layer || 'layer?');
-const cityName = computed(() => locationStore.nm_mun || 'city?');
-const uf = computed(() => locationStore.uf || 'uf?');
+  },
+  methods: {
 
-// Data
-const defaultYear = ref(null);
-// const firstSelectedYear = ref(null);
-const secondSelectedYear = ref(null);
-const thirdSelectedYear = ref(null);
-const cityCode = ref(3547809);
-
-// Methods
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
-};
-
-const updateCoordinates = (newCoordinates) => {
-  coordinates.value = newCoordinates;
-  // locationStore.setCoordinates(newCoordinates);
-};
-
-const handleScroll = () => {
-  const scrollPosition = window.scrollY;
-  const navbarHeight = 100; // Adjust based on your navbar height
-  const sectionElements = document.querySelectorAll(
-    '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
-  );
-
-  for (const element of sectionElements) {
-    const rect = element.getBoundingClientRect();
-    const top = rect.top + scrollPosition - navbarHeight;
-    const bottom = top + rect.height;
-
-    if (scrollPosition >= top && scrollPosition < bottom) {
-      activeSection.value = element.id;
-      history.replaceState(null, null, `#${element.id}`);
-      break;
+    initializeYears(defaultYear = new Date().getFullYear()) {
+      this.defaultYear = defaultYear;
+      this.firstSelectedYear = defaultYear;
+      this.secondSelectedYear = defaultYear;
+      this.thirdSelectedYear = defaultYear;
     }
-  }
-};
 
-const scrollToSection = (sectionId) => {
-  const element = document.getElementById(sectionId);
-  if (element) {
-    const navbarHeight = 100; // Adjust based on your navbar height
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth',
+  },
+  setup() {
+    const route = useRoute();
+    const locationStore = useLocationStore();
+    // Configuração das meta tags de SEO
+    useHead({
+      title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
+        },
+        {
+          name: 'keywords',
+          content:
+            'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
+        },
+        {
+          property: 'og:title',
+          content: 'Plataforma UrbVerde - Ferramenta de Dados para Sustentabilidade Urbana',
+        },
+        {
+          property: 'og:description',
+          content:
+            'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
+        },
+      ],
     });
 
-    activeSection.value = sectionId;
-    history.pushState(null, null, `#${sectionId}`);
-  }
-};
+    const coordinates = ref({ lat: null, lng: null });
+    const activeSection = ref('map');
+    const isSidebarOpen = ref(true);
 
-const syncStoreWithQuery = async() => {
-  const query = route.query;
-  // console.log('Syncing store with query:', query);
+    // Computed properties from store
+    const category = computed(() => locationStore.category || 'category?');
+    const currentLayer = computed(() => locationStore.layer || 'layer?');
+    const cityName = computed(() => locationStore.nm_mun || 'city?');
 
-  if (Object.keys(query).length > 0) {
-    locationStore.updateFromQueryParams(query);
+    // const sections = {
+    //   map: null,
+    //   stats: null,
+    //   ranking: null,
+    // };
 
-    // If we have a municipal code and coordinates aren't set, fetch them
-    if (locationStore.cd_mun && (!coordinates.value?.lat || !coordinates.value?.lng)) {
-      try {
-        const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${locationStore.nm_mun}`);
-        const data = await response.json();
+    // Methods
 
-        if (data && data.length > 0 && data[0].coordinates) {
-          coordinates.value = data[0].coordinates;
-          locationStore.setCoordinates(data[0].coordinates);
+    const toggleSidebar = () => {
+      isSidebarOpen.value = !isSidebarOpen.value;
+    };
+
+    const updateCoordinates = (newCoordinates) => {
+      coordinates.value = newCoordinates;
+      locationStore.setCoordinates(newCoordinates);
+
+    };
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const navbarHeight = 100; // Adjust this value based on your navbar height
+      const sectionElements = document.querySelectorAll(
+        '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
+      );
+
+      for (const element of sectionElements) {
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + scrollPosition - navbarHeight;
+        const bottom = top + rect.height;
+
+        if (scrollPosition >= top && scrollPosition < bottom) {
+          activeSection.value = element.id;
+          history.replaceState(null, null, `#${element.id}`);
+          break;
         }
-      } catch (error) {
-        console.error('Error fetching coordinates:', error);
       }
-    }
+    };
+
+    const scrollToSection = (sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const navbarHeight = 100; // Adjust this value based on your navbar height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        activeSection.value = sectionId;
+        history.pushState(null, null, `#${sectionId}`);
+      }
+    };
+
+    onMounted(() => {
+      // Check if URL has ?nm_mun=..., ?cd_mun=...
+      const { nm_mun, cd_mun } = route.query;
+      if (nm_mun || cd_mun) {
+        locationStore.setLocation({
+          cd_mun: cd_mun ?? null,
+          nm_mun: nm_mun ?? null,
+        });
+
+      }
+
+      // Set coordinates from store if available
+      if (locationStore.coordinates?.lat && locationStore.coordinates?.lng) {
+        coordinates.value = locationStore.coordinates;
+      }
+      // Otherwise fetch them if we have cd_mun
+      else if (cd_mun) {
+        locationStore.fetchCoordinatesByCdMun(cd_mun);
+      }
+      // Or by name if we have nm_mun
+      else if (nm_mun) {
+        locationStore.fetchCoordinatesByName(nm_mun);
+      }
+
+      window.addEventListener('scroll', handleScroll);
+      if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => scrollToSection(sectionId), 100);
+      }
+      handleScroll();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
+
+    const computedMaxWidth = computed(() => `calc(100% - ${isSidebarOpen.value ? 301 : 72}px)`);
+
+    return {
+      // Refs
+      coordinates,
+      activeSection,
+      isSidebarOpen,
+      computedMaxWidth,
+
+      // Computed properties
+      category,
+      currentLayer,
+      cityName,
+
+      // Methods
+      updateCoordinates,
+      scrollToSection,
+      toggleSidebar,
+    };
   }
 };
-
-// Lifecycle hooks
-onMounted(() => {
-  syncStoreWithQuery();
-  window.addEventListener('scroll', handleScroll);
-
-  if (window.location.hash) {
-    const sectionId = window.location.hash.substring(1);
-    setTimeout(() => scrollToSection(sectionId), 100);
-  }
-  handleScroll();
-});
-
-watchEffect(() => {
-  const storeParams = locationStore.urlParams;
-  const currentQuery = route.query;
-  if (Object.keys(storeParams).length > 0 &&
-        JSON.stringify(storeParams) !== JSON.stringify(currentQuery)) {
-    const currentHash = window.location.hash;
-    router.replace({
-      path: '/mapa',
-      query: storeParams,
-      hash: currentHash
-    });
-  }
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
-
-// Configuração das meta tags de SEO
-useHead({
-  title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
-  meta: [
-    {
-      name: 'description',
-      content:
-          'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
-    },
-    {
-      name: 'keywords',
-      content:
-          'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
-    },
-    {
-      property: 'og:title',
-      content: 'Plataforma UrbVerde - Ferramenta de Dados para Sustentabilidade Urbana',
-    },
-    {
-      property: 'og:description',
-      content:
-          'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
-    },
-  ],
-});
 </script>
 
 <style scoped>
@@ -296,6 +347,7 @@ useHead({
 
 .main-wrapper.sidebar-open {
   margin-left: 301px;
+  width: calc(100% - 301px);
 }
 
 .content-area {
@@ -351,11 +403,10 @@ useHead({
   flex: 1 0 0;
 }
 
-/* Just a section to hold stats or other elements */
 .box {
-
   display: flex;
-  /* max-width: 1376px; */
+  /* max-width: v-bind('computedMaxWidth'); */
+  /* max-width: calc(100% - (isSidebarOpen ? 301px : 72px)); */
   padding: 40px 48px 32px 48px;
   flex-direction: column;
   align-items: flex-start;
