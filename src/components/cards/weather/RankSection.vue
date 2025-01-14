@@ -6,40 +6,66 @@
       :key="'rank-' + index"
       :title="rank.title"
       :subtitle="rank.subtitle"
-      :data="rank.data"
+      :data="transformItems(rank.items)"
     />
   </div>
 </template>
 
 <script>
 import RankingCard from './RankingCard.vue';
+import axios from 'axios';
 
 export default {
+  name: 'RankSection',
   components: {
     RankingCard,
   },
+  props: {
+    cityCode: {
+      type: String,
+      required: true
+    },
+    selectedYear: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      rankCards: [
-        {
-          title: 'Municípios do Brasil',
-          subtitle: 'Posição do seu município entre os 5568 do Brasil',
-          data: [
-            { title: 'Nível de ilha de calor', value: '2862', total: '5568' },
-            { title: 'Temperatura média da superfície', value: '298', total: '5568' },
-            { title: 'Temperatura máxima da superfície', value: '698', total: '5568' },
-          ],
-        },
-        {
-          title: 'Ranking Global',
-          subtitle: 'Posição no ranking mundial de sustentabilidade',
-          data: [
-            { title: 'Índice de Sustentabilidade', value: '45', total: '100' },
-            { title: 'Impacto de Carbono', value: '30', total: '50' },
-          ],
-        },
-      ],
+      rankCards: [],
     };
+  },
+  methods: {
+    transformItems(items) {
+      if (!items) {return [];}
+
+      return items.map(item => ({
+        title: item.type,
+        value: item.number.toString(),
+        total: item.of.toString()
+      }));
+    },
+    async fetchRankingData() {
+      try {
+        const response = await axios.get(
+          `https://api.urbverde.com.br/v1/cards/weather/ranking?city=${this.cityCode}&year=${this.selectedYear}`
+        );
+        this.rankCards = response.data;
+      } catch (error) {
+        console.error('Error fetching ranking data:', error);
+        this.rankCards = [];
+      }
+    }
+  },
+  watch: {
+    cityCode: {
+      handler: 'fetchRankingData',
+      immediate: true
+    },
+    selectedYear: {
+      handler: 'fetchRankingData',
+      immediate: true
+    }
   },
 };
 </script>

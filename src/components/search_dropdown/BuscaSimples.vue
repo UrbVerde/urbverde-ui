@@ -266,7 +266,7 @@ function handleFocus(event) {
 }
 
 async function loadAnimation() {
-  if (!inputValue.value) {
+  if (!inputValue.value && !locationChosen.value) {
     alert('Por favor, insira um local.');
 
     return;
@@ -1068,8 +1068,8 @@ onUpdated(() => {
     background-color: #E9ECEF;
   }
 
-  .first-suggestion {
-    background-color: #E9ECEF;
+  .suggestions-list .first-suggestion {
+  background-color: #E9ECEF;
   }
 
   .suggestion-item {
