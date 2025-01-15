@@ -1,5 +1,8 @@
 <template>
   <div class="homepage">
+
+    <TawkTo />
+
     <!-- Navbar -->
     <NavbarHomepage />
 
@@ -436,6 +439,7 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
+import TawkTo from '@/components/homepage/TawkTo.vue';
 import { useHead } from '@vueuse/head'; // Metas tags de SEO
 
 import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
@@ -463,16 +467,6 @@ import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebo
 import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
 import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
 
-// Tawk-to pop-up chat
-(function(){
-  const s1=document.createElement('script'),s0=document.getElementsByTagName('script')[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/665004409a809f19fb344c19/1huk917ia';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-})();
-
 export default {
   name: 'HomePage',
   components: {
@@ -481,6 +475,7 @@ export default {
     BuscaSimples,
     UrbVerdeEducaTopics,
     UrbVerdeFooter,
+    TawkTo,
   },
 
   // Configuração das meta tags de SEO
@@ -552,7 +547,6 @@ export default {
   },
   mounted() {
     this.startWordRotation();
-    this.loadTawkTo();
   },
 
   beforeUnmount() {
@@ -587,19 +581,6 @@ export default {
     resetZoom() {
       const image = this.$refs.zoomImage;
       image.style.transform = 'scale(1) translate(0, 0)';
-    },
-
-    // Carregar o script do Tawk.to
-    loadTawkTo() {
-      if (!document.getElementById('tawk-script')) {
-        const script = document.createElement('script');
-        script.id = 'tawk-script';
-        script.async = true;
-        script.src = 'https://embed.tawk.to/665004409a809f19fb344c19/1huk917ia';
-        script.charset = 'UTF-8';
-        script.setAttribute('crossorigin', '*');
-        document.head.appendChild(script);
-      }
     },
   },
 };
