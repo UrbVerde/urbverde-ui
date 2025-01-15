@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-/* Global reset for box-sizing */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -72,33 +72,25 @@ export default {
 }
 
 .dashboard {
-  /* display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 20px;
-  margin: 20px;
-  align-items: flex-start;
-   */
+
 
   display: flex;
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
-  /* justify-content: space-between; */
+
 
 }
 
 .right-panel {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* Duas colunas para os cards */
   gap: 20px;
 }
 
 .temperature-card {
-  /* Adicione qualquer estilo necessário para os cards */
+
   background-color: #f0f0f0;
-  /* Exemplo de estilo */
   padding: 20px;
-  /* Adicione algum espaçamento interno se necessário */
 }
 </style>
