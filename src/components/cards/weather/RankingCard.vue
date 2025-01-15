@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards/weather/RankingCard.vue -->
 <template>
-  <CardBase 
+  <CardBase
     v-bind="{
       ...(data.title && { title: data.title }),
       ...(data.subtitle && { subtitle: data.subtitle })

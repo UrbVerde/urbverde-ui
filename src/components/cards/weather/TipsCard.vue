@@ -19,7 +19,7 @@
       <PrimaryButton
         label="Ver mais dicas"
         :filled="true"
-        icon="bi-info-circle" 
+        icon="bi-info-circle"
         iconType="bootstrap"
         iconPosition="right"
         class="tips-card-button"
@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import PrimaryButton from "@/components/buttons/PrimaryButton.vue";
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 
 export default {
-  name: "TipsCard",
+  name: 'TipsCard',
   components: {
     PrimaryButton,
   },

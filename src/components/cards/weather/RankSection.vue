@@ -73,16 +73,16 @@ export default {
 
 <style scoped>
 .rank-section {
-  display: flex;  
-  flex-wrap: wrap; 
-  justify-content: space-between; 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 16px;
-  padding: 16px; 
+  padding: 16px;
 }
 
 .rank-card {
-  flex: 1 1 calc(33.333% - 16px); 
-  max-width: calc(33.333% - 16px); 
-  box-sizing: border-box; 
+  flex: 1 1 calc(33.333% - 16px);
+  max-width: calc(33.333% - 16px);
+  box-sizing: border-box;
 }
 </style>
