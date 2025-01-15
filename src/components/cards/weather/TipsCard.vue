@@ -16,7 +16,14 @@
           Implementação de políticas públicas que promovem áreas verdes.
         </li>
       </ul>
-      <button class="tips-card-button">Ver mais dicas</button>
+      <PrimaryButton
+        label="Ver mais dicas"
+        :filled="true"
+        icon="bi-info-circle" 
+        iconType="bootstrap"
+        iconPosition="right"
+        class="tips-card-button"
+      />
     </div>
     <div class="tips-card-image">
       <img
@@ -28,8 +35,13 @@
 </template>
 
 <script>
+import PrimaryButton from "@/components/buttons/PrimaryButton.vue";
+
 export default {
-  name: 'TipsCard',
+  name: "TipsCard",
+  components: {
+    PrimaryButton,
+  },
 };
 </script>
 
@@ -51,7 +63,7 @@ export default {
 
 .tips-card-content {
   flex: 1;
-  margin-right: 24px; /* Altere para "margin-right" */
+  margin-right: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,18 +111,6 @@ export default {
 
 .tips-card-button {
   margin-top: 16px;
-  padding: 10px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
-  background-color: #10b981;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
   align-self: flex-start;
-}
-
-.tips-card-button:hover {
-  background-color: #0f9b77;
 }
 </style>

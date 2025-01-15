@@ -73,16 +73,16 @@ export default {
 
 <style scoped>
 .rank-section {
-  display: flex; /* Exibe os itens em linha */
-  flex-wrap: wrap; /* Garante que os itens se ajustem, se necessário */
-  justify-content: space-between; /* Espaçamento uniforme entre os cards */
-  gap: 16px; /* Espaço fixo entre os cards */
-  padding: 16px; /* Margem interna para o container */
+  display: flex;  
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+  gap: 16px;
+  padding: 16px; 
 }
 
 .rank-card {
-  flex: 1 1 calc(33.333% - 16px); /* Cards ocupam 1/3 do espaço com espaçamento */
-  max-width: calc(33.333% - 16px); /* Previne o card de ultrapassar o limite */
-  box-sizing: border-box; /* Garante que padding seja incluído no tamanho total */
+  flex: 1 1 calc(33.333% - 16px); 
+  max-width: calc(33.333% - 16px); 
+  box-sizing: border-box; 
 }
 </style>

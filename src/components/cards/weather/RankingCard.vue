@@ -1,7 +1,11 @@
 <!-- urbverde-ui/src/components/cards/weather/RankingCard.vue -->
 <template>
-  <CardBase :title="data.title || 'Título não disponível'" :subtitle="data.subtitle || 'Subtítulo não disponível'">
-
+  <CardBase 
+    v-bind="{
+      ...(data.title && { title: data.title }),
+      ...(data.subtitle && { subtitle: data.subtitle })
+    }"
+  >
     <div v-if="data.items && data.items.length > 0" class="sections">
       <div class="section" v-for="(item, index) in data.items" :key="index">
         <p class="section-title">{{ item.type }}</p>
@@ -11,13 +15,8 @@
         </p>
       </div>
     </div>
-
-    <div v-else class="no-data">
-      <p>Nenhum dado disponível para exibir.</p>
-    </div>
   </CardBase>
 </template>
-
 <script>
 import CardBase from '@/components/cards/Card.vue';
 
