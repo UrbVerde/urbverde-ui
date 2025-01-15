@@ -431,15 +431,13 @@
 </template>
 
 <script>
-
-// Importação de componentes
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
+import { useHead } from '@vueuse/head'; // Metas tags de SEO
 
-// Importação das logos
 import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
 import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.svg';
 import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.svg';
@@ -460,14 +458,10 @@ import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.svg';
 import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.svg';
 import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.svg';
 
-// Importação das imagens para seção UrbVerde Educa
 import imageMarcel from '@/assets/images/homepage/urbverde-educa-topics-marcel.png';
 import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebook.png';
 import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
 import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
-
-// Para criação de meta tags de SEO
-import { useHead } from '@vueuse/head';
 
 export default {
   name: 'HomePage',
@@ -509,17 +503,14 @@ export default {
 
   data() {
     return {
-      // Return das imagens para seção UrbVerde Educa
       imageMarcel,
       imageNotebook,
       imageEdu,
       imageBreno,
 
-      // Palavras para transição
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
 
-      // Imagens das logos das instituições
       logos: [
         { src: logo1, alt: 'Logo da Instituição 1' },
         { src: logo2, alt: 'Logo da Instituição 2' },
@@ -559,11 +550,7 @@ export default {
 
   methods: {
     onLocationUpdated() {
-      // This will be called whenever the child component emits "location-updated"
       return;
-      // console.log('Location updated in Home.vue!', payload);
-      // Do something with the payload:
-      // e.g., store it in data(), navigate somewhere, etc.
     },
     // Método para rotação das palavras
     startWordRotation() {
@@ -676,14 +663,10 @@ export default {
 
   .h1-text {
     color: map-get($primary-fade, 800);
-    // color: var(--Primary-Fade-800, #013C31);
-    // font-family: Inter;
     font-size: 48px;
     font-weight: 700;
-    // line-height: 120%;
   }
 
-  //Transição aplicada pelo <transition name="fade" mode="out-in">
   .fade-enter-active,
   .fade-leave-active {
     transition: transform 0.5s ease, opacity 0.5s ease;
@@ -712,12 +695,9 @@ export default {
   .h1-lasttext {
     display: inline-block;
     color: map-get($green, 500);
-    // color: var(--Green-500, #198754);
-    // font-family: Inter;
     font-size: 48px;
     font-weight: 700;
-    // line-height: 120%;
-    width: 200px; // Tamanho fixo para evitar movimentação horizontal brusca
+    width: 200px;
     text-align: left;
   }
 
@@ -725,7 +705,6 @@ export default {
     width: 520px;
     max-width: 100%;
     color: map-get($theme, secondary);
-    // color: #6C757D;
   }
 
   .search {
@@ -736,9 +715,7 @@ export default {
   }
 
   .search .input-container{
-    // border: 2px solid var(--Primary-Fade-500, #418377) !important; // Não funcionando, ajustar depois
     border-radius: 14px;
-    // background: var(--Gray-100, #F8F9FA);
     background: map-get($gray, 100);
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
   }
@@ -816,8 +793,6 @@ export default {
         border-radius: 32px;
         border: 1px solid map-get($gray, 300);
         background: map-get($gray, "white");
-        // border: 1px solid var(--Gray-300, #DEE2E6);
-        // background: map-get($gray, white);
         transition: transform 0.2s ease-out;
         will-change: transform;
       }
@@ -847,7 +822,6 @@ export default {
     flex: 1 1 calc(33.333% - 24px);
     border-radius: 16px;
     border: 1px solid #E9ECEF;
-    // background: map-get($gray, white);
     max-width: 100%;
     min-width: 280px;
     gap: 24px;
@@ -861,7 +835,6 @@ export default {
 
   .cards .top-content{
     color: map-get($body-text, body-color);
-    // color: map-get($body-text, "body-color"); // #212529
   }
 
   .cards .top-content p{
@@ -871,7 +844,6 @@ export default {
 
   .cards .top-content p .highlight{
     background-color: map-get($green, 100);
-    // background-color: var(--Green-100, #D1E7DD);
     padding: 0 4px;
     border-radius: 4px;
     line-height: 150%;
@@ -906,7 +878,6 @@ export default {
     height: 56px;
     border-radius: 56px;
     border: 1px solid map-get($gray, 400);
-    // border: 1px solid var(--Gray-400, #CED4DA);
     background: url(<path-to-image>) lightgray 50% / cover no-repeat;
   }
 
@@ -921,7 +892,6 @@ export default {
   }
 
   .cards .bottom-content .title{
-    // color: map-get($body-text, "body-color"); // #212529
     color: map-get($body-text, body-color);
     display: flex;
     flex-direction: column;
@@ -944,7 +914,7 @@ export default {
   .institutes {
     display: flex;
     flex-direction: column;
-    padding: 200px 0 184px 0; // Uso de Padding pois o margin não está funcionando
+    padding: 200px 0 184px 0;
     gap: 128px;
   }
 
@@ -960,7 +930,6 @@ export default {
 
   .institutes .institutes-header h2{
     color: map-get($primary-fade, 800);
-    // color: var(--Primary-Fade-800, #013C31);
     font-family: Inter;
     font-size: 48px;
     font-style: normal;
@@ -972,13 +941,11 @@ export default {
 
   .institutes .institutes-header h4{
     color: map-get($gray, 600);
-    // color: var(--Gray-600, #6C757D);
     margin: 0;
   }
 
   .institutes .institutes-header a{
     color: map-get($green, 500);
-    // color: var(--Green-500, #198754);
     text-decoration-line: underline;
     text-underline-position: from-font;
   }
@@ -988,7 +955,6 @@ export default {
   }
 
   // Animação das logos de instituições
-
   .institutes-logo-carousel {
     overflow: hidden;
     position: relative;
@@ -1062,19 +1028,17 @@ export default {
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
-    line-height: 150%; /* 30px */
+    line-height: 150%;
   }
 
   .institutes-awards .award .award-label .award-label-text{
     display: flex;
     flex-direction: column;
     align-items: center;
-    // color: var(--Primary-Fade-700, #025949);
     color: map-get($primary-fade, 700);
   }
 
   .institutes-awards .award .award-label .award-label-text p:last-child{
-    // color: var(--Primary-Fade-700, #025949);
     color: map-get($primary-fade, 700);
     font-size: 10px;
   }

@@ -235,12 +235,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-input:-webkit-autofill { // Para retirar a cor de preenchimento automático do navegador
-  -webkit-box-shadow: 0 0 0px 1000px map-get($gray, white) inset !important;
-  box-shadow: 0 0 0px 1000px map-get($gray, white) inset !important;
-}
-
 a {
   text-decoration: none;
 }
@@ -282,7 +276,6 @@ a {
   color: map-get($green, 500);
 }
 
-/* Ícones */
 .icon-holder {
   display: flex;
   align-items: center;
