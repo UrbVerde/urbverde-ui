@@ -465,7 +465,7 @@ import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png
 
 // Tawk-to pop-up chat
 (function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  const s1=document.createElement('script'),s0=document.getElementsByTagName('script')[0];
   s1.async=true;
   s1.src='https://embed.tawk.to/665004409a809f19fb344c19/1huk917ia';
   s1.charset='UTF-8';
