@@ -1,5 +1,8 @@
 <template>
   <div class="homepage">
+
+    <TawkTo />
+
     <!-- Navbar -->
     <NavbarHomepage />
 
@@ -377,8 +380,8 @@
             >
               <UrbVerdeEducaTopics
                 :imageSrc="imageEdu"
-                imageAlt="Métodologias"
-                title="Métodologias"
+                imageAlt="Metodologias"
+                title="Metodologias"
               />
             </a>
 
@@ -436,6 +439,7 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
+import TawkTo from '@/components/homepage/TawkTo.vue';
 import { useHead } from '@vueuse/head'; // Metas tags de SEO
 
 import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
@@ -471,6 +475,7 @@ export default {
     BuscaSimples,
     UrbVerdeEducaTopics,
     UrbVerdeFooter,
+    TawkTo,
   },
 
   // Configuração das meta tags de SEO
@@ -552,6 +557,7 @@ export default {
     onLocationUpdated() {
       return;
     },
+
     // Método para rotação das palavras
     startWordRotation() {
       this.wordRotationInterval = setInterval(() => {
@@ -571,6 +577,7 @@ export default {
       const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
       image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
     },
+
     resetZoom() {
       const image = this.$refs.zoomImage;
       image.style.transform = 'scale(1) translate(0, 0)';
