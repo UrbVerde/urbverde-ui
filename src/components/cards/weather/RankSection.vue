@@ -1,13 +1,14 @@
-<!-- urbverde-ui/src/components/cards/weather/RankSection.vue -->
 <template>
-  <div>
+  <div class="rank-section">
     <RankingCard
-      v-for="(rank, index) in rankCards"
-      :key="'rank-' + index"
-      :title="rank.title"
-      :subtitle="rank.subtitle"
-      :data="transformItems(rank.items)"
+      v-for="(card, index) in rankCards"
+      :key="index"
+      :data="card"
+      class="rank-card"
     />
+    <p v-if="!rankCards || rankCards.length === 0" class="no-data">
+      Carregando dados do ranking...
+    </p>
   </div>
 </template>
 
@@ -69,3 +70,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.rank-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+}
+
+.rank-card {
+  flex: 1 1 calc(33.333% - 16px);
+  max-width: calc(33.333% - 16px);
+  box-sizing: border-box;
+}
+</style>

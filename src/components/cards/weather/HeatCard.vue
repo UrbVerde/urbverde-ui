@@ -20,7 +20,7 @@ export default {
   },
   props: {
     data: {
-      type: Array, // Define que 'data' é um array
+      type: Array,
       required: true,
     },
   },
@@ -32,14 +32,13 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px; /* Espaçamento entre os elementos */
+    gap: 16px;
   }
 
   .value-heat {
     color: var(--Green-500, #198754);
     text-align: center;
 
-    /* Small Shadow */
     text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
     font-family: Montserrat;
     font-size: 40px;

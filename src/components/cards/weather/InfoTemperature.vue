@@ -1,12 +1,12 @@
-<!-- urbverde-ui/src/components/cards/weather/InfoTemperature.vue -->
 <template>
   <div>
     <Card
       :title="titulo"
       :subtitle="descricao"
       :value="value"
+      imagePosition="top"
     >
-      <template #custom-content>
+      <template #image>
         <img :src="image" alt="Ilustração" class="card-image" />
       </template>
     </Card>
@@ -22,11 +22,12 @@ export default {
   components: {
     Card,
   },
-
   data() {
     return {
-      titulo: 'O que sao ilhas de calor?',
-      descricao: 'São as áreas mais quentes das cidades, causadas por materiais como asfalto e concreto que retêm calor.',
+      titulo: 'O que são ilhas de calor?',
+      descricao:
+        'São as áreas mais quentes das cidades, causadas por materiais como asfalto e concreto que retêm calor.',
+      value: null,
       image: Ilustracao,
     };
   },
