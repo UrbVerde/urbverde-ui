@@ -84,12 +84,7 @@
           </div>
 
           <!-- Footer -->
-          <div id="newsletter"
-               ref="newsletterSection"
-               class="box"
-               style="height:341px; align-items: center; justify-content: none;background: linear-gradient(180deg, #146C43 0%, #0F5132 100%); border: 1px solid black; color:white">
-            RECEBA AS NOVIDADES POR EMAIL
-          </div>
+          <UrbVerdeFooter />
         </div>
       </div>
       <!-- <div ref="statsSection" class="box" >
@@ -116,6 +111,7 @@ import RankSection from '@/components/cards/weather/RankSection.vue';
 import HeatSection from '@/components/cards/weather/HeatSection.vue';
 import { useHead } from '@vueuse/head';
 import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
+import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
 export default {
   name: 'MapPage',
@@ -128,6 +124,7 @@ export default {
     HeatSection,
     RankSection,
     YearPicker,
+    UrbVerdeFooter,
   },
   data() {
     return {

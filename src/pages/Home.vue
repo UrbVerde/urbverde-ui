@@ -377,8 +377,8 @@
             >
               <UrbVerdeEducaTopics
                 :imageSrc="imageEdu"
-                imageAlt="Métodologias"
-                title="Métodologias"
+                imageAlt="Metodologias"
+                title="Metodologias"
               />
             </a>
 
@@ -463,6 +463,16 @@ import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebo
 import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
 import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
 
+// Tawk-to pop-up chat
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/665004409a809f19fb344c19/1huk917ia';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+
 export default {
   name: 'HomePage',
   components: {
@@ -542,6 +552,7 @@ export default {
   },
   mounted() {
     this.startWordRotation();
+    this.loadTawkTo();
   },
 
   beforeUnmount() {
@@ -552,6 +563,7 @@ export default {
     onLocationUpdated() {
       return;
     },
+
     // Método para rotação das palavras
     startWordRotation() {
       this.wordRotationInterval = setInterval(() => {
@@ -571,9 +583,23 @@ export default {
       const centerY = (offsetY / rect.height - 0.5) * 5; // Calcula deslocamento Y
       image.style.transform = `scale(1.05) translate(${centerX}%, ${centerY}%)`; // Zoom dinâmico na imagem
     },
+
     resetZoom() {
       const image = this.$refs.zoomImage;
       image.style.transform = 'scale(1) translate(0, 0)';
+    },
+
+    // Carregar o script do Tawk.to
+    loadTawkTo() {
+      if (!document.getElementById('tawk-script')) {
+        const script = document.createElement('script');
+        script.id = 'tawk-script';
+        script.async = true;
+        script.src = 'https://embed.tawk.to/665004409a809f19fb344c19/1huk917ia';
+        script.charset = 'UTF-8';
+        script.setAttribute('crossorigin', '*');
+        document.head.appendChild(script);
+      }
     },
   },
 };
