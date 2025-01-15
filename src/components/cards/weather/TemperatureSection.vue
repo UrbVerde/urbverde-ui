@@ -73,12 +73,10 @@ export default {
 
 .dashboard {
 
-
   display: flex;
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
-
 
 }
 

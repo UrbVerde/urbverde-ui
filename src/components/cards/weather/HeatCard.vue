@@ -20,7 +20,7 @@ export default {
   },
   props: {
     data: {
-      type: Array, 
+      type: Array,
       required: true,
     },
   },
@@ -32,7 +32,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px; 
+    gap: 16px;
   }
 
   .value-heat {
