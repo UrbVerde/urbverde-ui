@@ -55,48 +55,48 @@ export const logos = [
 ];
 
 export const homepageImages = {
-    marcel: {
-      src: marcel,
-      alt: 'Imagem mostrando Marcel Fantin',
-    },
-    notebook: {
-      src: notebook,
-      alt: 'Imagem de um notebook',
-    },
-    edu: {
-      src: edu,
-      alt: 'Imagem mostrando membros da UrbVerde',
-    },
-    breno: {
-      src: breno,
-      alt: 'Imagem sobre as principais dúvidas',
-    },
-    nalini: {
-      src: nalini,
-      alt: 'Foto de José Renato Nalini, Secretário Executivo de São Paulo',
-    },
-    juliana: {
-      src: juliana,
-      alt: 'Foto de Juliana Domingos de Lima, Jornalista do Estadão',
-    },
-    marcela: {
-      src: marcela,
-      alt: 'Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto',
-    },
-    productBg1: {
-      src: productBg1,
-      alt: 'Vista aérea mostrando contraste entre bairros residenciais e áreas verdes com quadras de esportes',
-    },
-    productBg2: {
-      src: productBg2,
-      alt: 'Mapa de calor detalhando variações de temperatura e vegetação em áreas urbanas',
-    },
-    productBg3: {
-      src: productBg3,
-      alt: 'Mapa representando índices de cobertura vegetal por região em tons de verde',
-    },
-    productBg4: {
-      src: productBg4,
-      alt: 'Cartão estatístico destacando média da cobertura vegetal de 20%',
-    },
-  };
+  marcel: {
+    src: marcel,
+    alt: 'Imagem mostrando Marcel Fantin',
+  },
+  notebook: {
+    src: notebook,
+    alt: 'Imagem de um notebook',
+  },
+  edu: {
+    src: edu,
+    alt: 'Imagem mostrando membros da UrbVerde',
+  },
+  breno: {
+    src: breno,
+    alt: 'Imagem sobre as principais dúvidas',
+  },
+  nalini: {
+    src: nalini,
+    alt: 'Foto de José Renato Nalini, Secretário Executivo de São Paulo',
+  },
+  juliana: {
+    src: juliana,
+    alt: 'Foto de Juliana Domingos de Lima, Jornalista do Estadão',
+  },
+  marcela: {
+    src: marcela,
+    alt: 'Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto',
+  },
+  productBg1: {
+    src: productBg1,
+    alt: 'Vista aérea mostrando contraste entre bairros residenciais e áreas verdes com quadras de esportes',
+  },
+  productBg2: {
+    src: productBg2,
+    alt: 'Mapa de calor detalhando variações de temperatura e vegetação em áreas urbanas',
+  },
+  productBg3: {
+    src: productBg3,
+    alt: 'Mapa representando índices de cobertura vegetal por região em tons de verde',
+  },
+  productBg4: {
+    src: productBg4,
+    alt: 'Cartão estatístico destacando média da cobertura vegetal de 20%',
+  },
+};

@@ -306,7 +306,7 @@ import HomeProduct from '@/components/homepage/HomeProduct.vue';
 import HomeCta from '@/components/homepage/HomeCta.vue';
 
 // Import para as imagens da página utilizados em componentes
-import { logos, homepageImages } from '@/constants/images-homepage.js'; 
+import { logos, homepageImages } from '@/constants/images-homepage.js';
 
 // Metas tags de SEO
 import { useHead } from '@vueuse/head';
@@ -356,7 +356,7 @@ export default {
 
   data() {
     return {
-      
+
       // Imagens retornando de images-homepage.js
       logos,
       homepageImages,
