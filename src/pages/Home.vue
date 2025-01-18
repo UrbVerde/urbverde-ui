@@ -12,7 +12,10 @@
       <section class="content">
 
         <!-- Background fixo e atrás dos contents -->
-        <div class="image-background-wrapper" data-aos="fade" data-aos-duration="750" data-aos-delay="500">
+        <div class="image-background-wrapper"
+             data-aos="fade"
+             data-aos-duration="750"
+             data-aos-delay="500">
           <div class="image-background">
             <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
           </div>
@@ -20,7 +23,10 @@
 
         <!-- Hero content -->
         <section class="hero-content container">
-          <header class="hero-top" data-aos="zoom-in-up" data-aos-duration="750" data-aos-delay="500">
+          <header class="hero-top"
+                  data-aos="zoom-in-up"
+                  data-aos-duration="750"
+                  data-aos-delay="500">
             <div class="hero-text">
               <h1>
                 <span class="h1-text heading-h1">Mapeando um Futuro </span>
@@ -50,7 +56,10 @@
             </form>
           </header>
 
-          <section class="wrapper-platform" data-aos="fade-up" data-aos-offset="0" data-aos-delay="1000">
+          <section class="wrapper-platform"
+                   data-aos="fade-up"
+                   data-aos-offset="0"
+                   data-aos-delay="1000">
 
             <!-- Imagem da plataforma -->
             <router-link to="/mapa" class="platform-link" aria-label="Acessar a plataforma da UrbVerde">
@@ -65,7 +74,10 @@
             </router-link>
 
             <!-- Cards de comentários sobre a UrbVerde -->
-            <div class="wrapper-cards" data-aos="fade-up" data-aos-duration="750" data-aos-offset="1000">
+            <div class="wrapper-cards"
+                 data-aos="fade-up"
+                 data-aos-duration="750"
+                 data-aos-offset="1000">
               <article>
                 <CardComments
                   quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
@@ -105,7 +117,10 @@
 
         <!-- Institutes content-->
         <section class="institutes container">
-          <header class="institutes-header" data-aos="fade-up" data-aos-duration="750" data-aos-offset="925">
+          <header class="institutes-header"
+                  data-aos="fade-up"
+                  data-aos-duration="750"
+                  data-aos-offset="925">
             <h2 class="heading-h2">
               Da universidade para a sociedade
             </h2>
@@ -119,7 +134,10 @@
             </h4>
           </header>
 
-          <div class="institutes-logo-carousel" data-aos="fade-up" data-aos-duration="750" data-aos-offset="900">
+          <div class="institutes-logo-carousel"
+               data-aos="fade-up"
+               data-aos-duration="750"
+               data-aos-offset="900">
             <div class="logo-track">
               <!-- Primeira lista de logos -->
               <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
@@ -142,7 +160,10 @@
 
       <!-- Products content -->
       <section class="products">
-        <div class="title container" data-aos="fade-up" data-aos-duration="750" data-aos-offset="1000">
+        <div class="title container"
+             data-aos="fade-up"
+             data-aos-duration="750"
+             data-aos-offset="1000">
           <h2 class="heading-h2">
             Ferramentas para uma gestão sustentável
           </h2>
@@ -184,7 +205,10 @@
 
       <!-- Mission and Urbverde Educa content -->
       <section class="mission-educa container">
-        <div class="mission" data-aos="fade-up" data-aos-duration="750" data-aos-offset="1000">
+        <div class="mission"
+             data-aos="fade-up"
+             data-aos-duration="750"
+             data-aos-offset="1000">
           <div class="label-content">
             <p class="heading-h5">
               Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong>
@@ -203,7 +227,10 @@
           </div>
           <img src="@/assets/images/homepage/urbverde-mission.png">
         </div>
-        <div class="educa" data-aos="fade-up" data-aos-duration="750" data-aos-offset="1000">
+        <div class="educa"
+             data-aos="fade-up"
+             data-aos-duration="750"
+             data-aos-offset="1000">
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
