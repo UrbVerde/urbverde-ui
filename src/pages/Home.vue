@@ -1,225 +1,145 @@
 <template>
   <div class="homepage">
-
     <TawkTo />
 
     <!-- Navbar -->
-    <NavbarHomepage />
+    <header>
+      <NavbarHomepage />
+    </header>
 
-    <!-- Content -->
-    <div class="content">
+    <main>
+      <!-- Content -->
+      <section class="content">
 
-      <!-- Background fixo e atrás dos contents -->
-      <div class="image-background-wrapper">
-        <div class="image-background">
-          <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
-        </div>
-      </div>
-
-      <!-- Hero content -->
-      <section class="hero-content container">
-        <div class="hero-top">
-          <div class="hero-text">
-            <h1>
-              <span class="h1-text heading-h1">Mapeando um Futuro </span>
-              <transition name="fade" mode="out-in">
-                <span class="h1-lasttext heading-h1" :key="currentWord">{{ currentWord }}</span>
-              </transition>
-            </h1>
-            <h4 class="subtitle body-normal-medium">
-              Acesse dados sociais e ambientais completos de seu município,
-              de forma totalmente gratuita!
-            </h4>
+        <!-- Background fixo e atrás dos contents -->
+        <div class="image-background-wrapper">
+          <div class="image-background">
+            <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
           </div>
-          <div class="search">
-            <div class="search-button">
-              <BuscaSimples @location-updated="onLocationUpdated" />
+        </div>
+
+        <!-- Hero content -->
+        <section class="hero-content container">
+          <header class="hero-top">
+            <div class="hero-text">
+              <h1>
+                <span class="h1-text heading-h1">Mapeando um Futuro </span>
+                <transition name="fade" mode="out-in">
+                  <span class="h1-lasttext heading-h1" :key="currentWord">{{ currentWord }}</span>
+                </transition>
+              </h1>
+              <h4 class="subtitle body-normal-medium">
+                Acesse dados sociais e ambientais completos de seu município,
+                de forma totalmente gratuita!
+              </h4>
             </div>
-            <router-link to="/mapa" class="button-primary-link">
-              <PrimaryButton
-                label="Acessar"
-                :filled="true"
-                iconType="bootstrap"
-                icon="bi bi-arrow-right"
-                iconPosition="right"
-              />
+            <form class="search">
+              <div class="search-button">
+                <BuscaSimples @location-updated="onLocationUpdated" />
+              </div>
+              <router-link to="/mapa" class="button-primary-link">
+                <PrimaryButton
+                  label="Acessar"
+                  :filled="true"
+                  iconType="bootstrap"
+                  icon="bi bi-arrow-right"
+                  iconPosition="right"
+                />
+              </router-link>
+
+            </form>
+          </header>
+
+          <section class="wrapper-platform">
+
+            <!-- Imagem da plataforma -->
+            <router-link to="/mapa" class="platform-link" aria-label="Acessar a plataforma da UrbVerde">
+              <div
+                class="platform"
+                @mousemove="handleMouseMove"
+                @mouseleave="resetZoom"
+              >
+                <div class="overlay"></div>
+                <img src="@/assets/images/homepage/platform.svg" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
+              </div>
             </router-link>
 
-          </div>
-        </div>
-
-        <div class="wrapper-platform">
-
-          <!-- Imagem da plataforma -->
-          <router-link to="/mapa" class="platform-link" aria-label="Acessar a plataforma da UrbVerde">
-            <div
-              class="platform"
-              @mousemove="handleMouseMove"
-              @mouseleave="resetZoom"
-            >
-              <div class="overlay"></div>
-              <img src="@/assets/images/homepage/platform.svg" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
+            <!-- Cards de comentários sobre a UrbVerde -->
+            <div class="wrapper-cards">
+              <article>
+                <CardComments
+                  quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
+                  highlight="o mundo ainda tem jeito"
+                  quoteAfterHighlight="."
+                  :imageSrc="homepageImages.nalini.src"
+                  :imageAlt="homepageImages.nalini.alt"
+                  author="José Renato Nalini"
+                  role="Secretário Executivo de São Paulo"
+                />
+              </article>
+              <article>
+                <CardComments
+                  quoteBeforeHighlight="A UrbVerde foi desenvolvida para fornecer dados ao "
+                  highlight="poder público e aos cidadãos"
+                  quoteAfterHighlight="."
+                  :imageSrc="homepageImages.juliana.src"
+                  :imageAlt="homepageImages.juliana.alt"
+                  author="Juliana Domingos de Lima"
+                  role="Jornalista do Estadão"
+                />
+              </article>
+              <article>
+                <CardComments
+                  quoteBeforeHighlight="É uma "
+                  highlight="plataforma que caiu do céu"
+                  quoteAfterHighlight=" [...] ajuda a ler a cidade de uma forma clara."
+                  :imageSrc="homepageImages.marcela.src"
+                  :imageAlt="homepageImages.marcela.alt"
+                  author="Marcela Cury Petenusci"
+                  role="Professora de Ribeirão Preto"
+                />
+              </article>
             </div>
-          </router-link>
+          </section>
+        </section>
 
-          <!-- Cards de comentários sobre a UrbVerde -->
-          <div class="wrapper-cards">
+        <!-- Institutes content-->
+        <section class="institutes container">
+          <header class="institutes-header">
+            <h2 class="heading-h2">
+              Da universidade para a sociedade
+            </h2>
+            <h4 class="body-normal-medium">
+              A UrbVerde é fruto de uma colaboração entre diversas instituições públicas,
+              por meio do financiamento do CNPq e do PPPP da FAPESP.
+              <a href="#" class="body-normal-medium">
+                Leia mais
+                <i class="bi bi-arrow-up-right"></i>
+              </a>
+            </h4>
+          </header>
 
-            <div class="cards shadow-lg">
-              <div class="top-content body-small-regular">
-                <p>“ Iniciativas como a UrbVerde [...] fornecem a esperança de que
-                  <span class="highlight body-small-bold">o mundo ainda tem jeito</span>. ”</p>
+          <div class="institutes-logo-carousel">
+            <div class="logo-track">
+              <!-- Primeira lista de logos -->
+              <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
+                <img :src="logo.src" :alt="logo.alt" loading="lazy" />
               </div>
-              <div class="bottom-content">
-                <div>
-                  <img src="@/assets/images/homepage/image-card-1.svg" alt="Foto de José Renato Nalini, Secretário Executivo de São Paulo" loading="lazy">
-                </div>
-                <div class="wrapper-bottom-content">
-                  <h3 class="title body-small-bold">
-                    José Renato Nalini
-                  </h3>
-                  <h4 class="subtitle body-small-regular">
-                    Secretário Executivo de São Paulo
-                  </h4>
-                </div>
-              </div>
-            </div>
-
-            <div class="cards shadow-lg">
-              <div class="top-content body-small-regular">
-                <p>“ A UrbVerde foi desenvolvida para fornecer dados ao
-                  <span class="highlight body-small-bold">poder público e aos cidadãos</span>. ” </p>
-              </div>
-              <div class="bottom-content">
-                <div>
-                  <img src="@/assets/images/homepage/image-card-2.svg" alt="Foto de Juliana Domingos de Lima, Jornalista do Estadão" loading="lazy">
-                </div>
-                <div class="wrapper-bottom-content">
-                  <h3 class="title body-small-bold">
-                    Juliana Domingos de Lima
-                  </h3>
-                  <h4 class="subtitle body-small-regular">
-                    Jornalista do Estadão
-                  </h4>
-                </div>
-              </div>
-            </div>
-
-            <div class="cards shadow-lg">
-              <div class="top-content body-small-regular">
-                <p>“ É uma
-                  <span class="highlight body-small-bold">plataforma que caiu do céu.</span>
-                  […] ajuda a ler a cidade de uma forma clara. ”</p>
-              </div>
-              <div class="bottom-content">
-                <div>
-                  <img src="@/assets/images/homepage/image-card-3.svg" alt="Foto de Marcela Cury Petenusci, Professora de Ribeirão Preto" loading="lazy">
-                </div>
-                <div class="wrapper-bottom-content">
-                  <h3 class="title body-small-bold">
-                    Marcela Cury Petenusci
-                  </h3>
-                  <h4 class="subtitle body-small-regular">
-                    Professora de Ribeirão Preto
-                  </h4>
-                </div>
+              <!-- Segunda lista de logos para criar o loop contínuo -->
+              <div class="logo-item" v-for="(logo, index) in logos" :key="`duplicate-${index}`">
+                <img :src="logo.src" :alt="logo.alt" loading="lazy" />
               </div>
             </div>
           </div>
-        </div>
+
+          <!-- Lista de prêmios -->
+          <HomeAwards :awards="awardsList" />
+
+        </section>
       </section>
 
-      <!-- Institutes content-->
-      <div class="institutes container">
-
-        <div class="institutes-header">
-          <h2 class="heading-h2">
-            Da universidade para a sociedade
-          </h2>
-          <h4 class="body-normal-medium">
-            A UrbVerde é fruto de uma colaboração entre diversas instituições públicas,
-            por meio do financiamento do CNPq e do PPPP da FAPESP.
-            <a href="#" class="body-normal-medium">
-              Leia mais
-              <i class="bi bi-arrow-up-right"></i>
-            </a>
-          </h4>
-        </div>
-
-        <div class="institutes-logo-carousel">
-          <div class="logo-track">
-            <!-- Primeira lista de logos -->
-            <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
-              <img :src="logo.src" :alt="logo.alt" loading="lazy" />
-            </div>
-            <!-- Segunda lista de logos para criar o loop contínuo -->
-            <div class="logo-item" v-for="(logo, index) in logos" :key="`duplicate-${index}`">
-              <img :src="logo.src" :alt="logo.alt" loading="lazy" />
-            </div>
-          </div>
-        </div>
-
-        <div class="institutes-awards">
-
-          <div class="award">
-            <img src="@/assets/images/homepage/awards-1.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
-            <div class="award-label">
-              <h5>
-                2024
-              </h5>
-              <div class="award-label-text">
-                <p class="body-caption-bold">
-                  Prêmio USP Impacto Social
-                </p>
-                <p class="body-caption-medium">
-                  Cidades e Comunidades Sustentáveis
-                </p>
-              </div>
-            </div>
-            <img src="@/assets/images/homepage/awards-2.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
-          </div>
-
-          <div class="award">
-            <img src="@/assets/images/homepage/awards-1.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
-            <div class="award-label">
-              <h5>
-                2024
-              </h5>
-              <div class="award-label-text">
-                <p class="body-caption-bold">
-                  Prêmio Promoção de Justiça Climática
-                </p>
-                <p class="body-caption-medium">
-                  Instituto de Arquitetos do Brasil - IAB
-                </p>
-              </div>
-            </div>
-            <img src="@/assets/images/homepage/awards-2.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
-          </div>
-
-          <div class="award">
-            <img src="@/assets/images/homepage/awards-1.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
-            <div class="award-label">
-              <h5>
-                2024
-              </h5>
-              <div class="award-label-text">
-                <p class="body-caption-bold">
-                  Excelência em Design
-                </p>
-                <p class="body-caption-medium">
-                  Competição de Design, Simpósio IHC
-                </p>
-              </div>
-            </div>
-            <img src="@/assets/images/homepage/awards-2.svg" alt="Imagem de folha de premiação da UrbVerde" loading="lazy">
-          </div>
-
-        </div>
-      </div>
-
       <!-- Products content -->
-      <div class="products">
+      <section class="products">
         <div class="title container">
           <h2 class="heading-h2">
             Ferramentas para uma gestão sustentável
@@ -227,84 +147,37 @@
         </div>
 
         <div class="products-content container">
-          <!-- Primeiro produto -->
-          <div class="product">
-            <div class="image-wrapper">
-              <img
-                src="@/assets/images/homepage/product-bg-1.png"
-                class="image-bg shadow-lg"
-                alt="Vista aérea mostrando contraste entre bairros residenciais e áreas verdes com quadras de esportes"
-                loading="lazy"
-              />
-              <img
-                src="@/assets/images/homepage/product-bg-2.png"
-                class="image-front"
-                alt="Mapa de calor detalhando variações de temperatura e vegetação em áreas urbanas"
-                loading="lazy"
-              />
-            </div>
-            <div class="product-text">
-              <div class="title">
-                <h3 class="heading-h2">
-                  Mapas ambientais e sociais
-                </h3>
-                <h4 class="body-normal-regular">
-                  Explore mapas detalhados sobre vegetação, temperatura, parques e praças para entender melhor a sua cidade!
-                </h4>
-              </div>
-              <router-link to="/mapa" class="button-primary-link">
-                <PrimaryButton
-                  label="Acessar"
-                  :filled="false"
-                  iconType="bootstrap"
-                  icon="bi bi-arrow-right"
-                  iconPosition="right"
-                />
-              </router-link>
-            </div>
-          </div>
-
-          <!-- Segundo produto -->
-          <div class="product">
-            <div class="image-wrapper">
-              <img
-                src="@/assets/images/homepage/product-bg-3.png"
-                class="image-bg shadow-lg"
-                alt="Mapa representando índices de cobertura vegetal por região em tons de verde"
-                loading="lazy"
-              />
-              <img
-                src="@/assets/images/homepage/product-bg-4.svg"
-                class="image-front shadow-lg"
-                alt="Cartão estatístico destacando média da cobertura vegetal de 20%"
-                loading="lazy"
-              />
-            </div>
-            <div class="product-text">
-              <div class="title">
-                <h3 class="heading-h2">
-                  Dados estatísticos completos
-                </h3>
-                <h4 class="body-normal-regular">
-                  Descubra informações completas sobre seu município e compare com todo o Brasil!
-                </h4>
-              </div>
-              <router-link to="/mapa" class="button-primary-link">
-                <PrimaryButton
-                  label="Acessar"
-                  :filled="false"
-                  iconType="bootstrap"
-                  icon="bi bi-arrow-right"
-                  iconPosition="right"
-                />
-              </router-link>
-            </div>
-          </div>
+          <HomeProduct
+            :imageBgSrc="homepageImages.productBg1.src"
+            :imageBgAlt="homepageImages.productBg1.alt"
+            :imageFrontSrc="homepageImages.productBg2.src"
+            :imageFrontAlt="homepageImages.productBg2.alt"
+            title="Mapas ambientais e sociais"
+            description="Explore mapas detalhados sobre vegetação, temperatura, parques e praças para entender melhor a sua cidade!"
+            buttonLabel="Acessar"
+            :filled="false"
+            :icon=" 'bi bi-arrow-right' "
+            :iconType=" 'bootstrap' "
+            buttonRoute="/mapa"
+          />
+          <HomeProduct
+            :imageBgSrc="homepageImages.productBg3.src"
+            :imageBgAlt="homepageImages.productBg3.alt"
+            :imageFrontSrc="homepageImages.productBg4.src"
+            :imageFrontAlt="homepageImages.productBg2.alt"
+            title="Dados estatísticos completos"
+            description="Descubra informações completas sobre seu município e compare com todo o Brasil!"
+            buttonLabel="Acessar"
+            :filled="false"
+            :icon=" 'bi bi-arrow-right' "
+            :iconType=" 'bootstrap' "
+            buttonRoute="/mapa"
+          />
         </div>
-      </div>
+      </section>
 
       <!-- Mission and Urbverde Educa content -->
-      <div class="mission-educa container">
+      <section class="mission-educa container">
         <div class="mission">
           <div class="label-content">
             <p class="heading-h5">
@@ -353,8 +226,8 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                :imageSrc="imageMarcel"
-                imageAlt="Reportagens e notícias"
+                :imageSrc="homepageImages.marcel.src"
+                :imageAlt="homepageImages.marcel.alt"
                 title="Reportagens e notícias"
               />
             </a>
@@ -366,8 +239,8 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                :imageSrc="imageNotebook"
-                imageAlt="Documentos"
+                :imageSrc="homepageImages.notebook.src"
+                :imageAlt="homepageImages.notebook.alt"
                 title="Documentos"
               />
             </a>
@@ -379,8 +252,8 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                :imageSrc="imageEdu"
-                imageAlt="Metodologias"
+                :imageSrc="homepageImages.edu.src"
+                :imageAlt="homepageImages.edu.alt"
                 title="Metodologias"
               />
             </a>
@@ -392,44 +265,31 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                :imageSrc="imageBreno"
-                imageAlt="Principais dúvidas"
+                :imageSrc="homepageImages.breno.src"
+                :imageAlt="homepageImages.breno.alt"
                 title="Principais dúvidas"
               />
             </a>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- CTA content -->
-      <div class="cta-content">
+      <section>
+        <HomeCta
+          @location-updated="onLocationUpdated"
+          :title="'Conheça mais sobre sua cidade!'"
+          :buttonLabel="'Acessar'"
+          :buttonRoute="'/mapa'"
+          :filled="true"
+        />
+      </section>
+    </main>
 
-        <img src="@/assets/images/homepage/cta-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
-
-        <div class="cta-label container">
-          <h2>
-            <span class="h2-cta heading-h1">Conheça mais sobre sua cidade!</span>
-          </h2>
-          <div class="search">
-            <div class="search-button">
-              <BuscaSimples @location-updated="onLocationUpdated" />
-            </div>
-            <router-link to="/mapa" class="button-primary-link">
-              <PrimaryButton
-                label="Acessar"
-                :filled="true"
-                iconType="bootstrap"
-                icon="bi bi-arrow-right"
-                iconPosition="right"
-              />
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer -->
+    <!-- Footer -->
+    <footer>
       <UrbVerdeFooter />
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -440,32 +300,16 @@ import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 import TawkTo from '@/components/homepage/TawkTo.vue';
-import { useHead } from '@vueuse/head'; // Metas tags de SEO
+import CardComments from '@/components/homepage/CardComments.vue';
+import HomeAwards from '@/components/homepage/HomeAwards.vue';
+import HomeProduct from '@/components/homepage/HomeProduct.vue';
+import HomeCta from '@/components/homepage/HomeCta.vue';
 
-import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';
-import logo2 from '@/assets/images/homepage/institutes-logo/logo-02.svg';
-import logo3 from '@/assets/images/homepage/institutes-logo/logo-03.svg';
-import logo4 from '@/assets/images/homepage/institutes-logo/logo-04.svg';
-import logo5 from '@/assets/images/homepage/institutes-logo/logo-05.svg';
-import logo6 from '@/assets/images/homepage/institutes-logo/logo-06.svg';
-import logo7 from '@/assets/images/homepage/institutes-logo/logo-07.svg';
-import logo8 from '@/assets/images/homepage/institutes-logo/logo-08.svg';
-import logo9 from '@/assets/images/homepage/institutes-logo/logo-09.svg';
-import logo10 from '@/assets/images/homepage/institutes-logo/logo-10.svg';
-import logo11 from '@/assets/images/homepage/institutes-logo/logo-11.svg';
-import logo12 from '@/assets/images/homepage/institutes-logo/logo-12.svg';
-import logo13 from '@/assets/images/homepage/institutes-logo/logo-13.svg';
-import logo14 from '@/assets/images/homepage/institutes-logo/logo-14.svg';
-import logo15 from '@/assets/images/homepage/institutes-logo/logo-15.svg';
-import logo16 from '@/assets/images/homepage/institutes-logo/logo-16.svg';
-import logo17 from '@/assets/images/homepage/institutes-logo/logo-17.svg';
-import logo18 from '@/assets/images/homepage/institutes-logo/logo-18.svg';
-import logo19 from '@/assets/images/homepage/institutes-logo/logo-19.svg';
+// Import para as imagens da página utilizados em componentes
+import { logos, homepageImages } from '@/constants/images-homepage.js';
 
-import imageMarcel from '@/assets/images/homepage/urbverde-educa-topics-marcel.png';
-import imageNotebook from '@/assets/images/homepage/urbverde-educa-topics-notebook.png';
-import imageEdu from '@/assets/images/homepage/urbverde-educa-topics-edu.png';
-import imageBreno from '@/assets/images/homepage/urbverde-educa-topics-breno.png';
+// Metas tags de SEO
+import { useHead } from '@vueuse/head';
 
 export default {
   name: 'HomePage',
@@ -476,6 +320,10 @@ export default {
     UrbVerdeEducaTopics,
     UrbVerdeFooter,
     TawkTo,
+    CardComments,
+    HomeAwards,
+    HomeProduct,
+    HomeCta,
   },
 
   // Configuração das meta tags de SEO
@@ -508,34 +356,30 @@ export default {
 
   data() {
     return {
-      imageMarcel,
-      imageNotebook,
-      imageEdu,
-      imageBreno,
+
+      // Imagens retornando de images-homepage.js
+      logos,
+      homepageImages,
 
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
 
-      logos: [
-        { src: logo1, alt: 'Logo da Instituição 1' },
-        { src: logo2, alt: 'Logo da Instituição 2' },
-        { src: logo3, alt: 'Logo da Instituição 3' },
-        { src: logo4, alt: 'Logo da Instituição 4' },
-        { src: logo5, alt: 'Logo da Instituição 5' },
-        { src: logo6, alt: 'Logo da Instituição 6' },
-        { src: logo7, alt: 'Logo da Instituição 7' },
-        { src: logo8, alt: 'Logo da Instituição 8' },
-        { src: logo9, alt: 'Logo da Instituição 9' },
-        { src: logo10, alt: 'Logo da Instituição 10' },
-        { src: logo11, alt: 'Logo da Instituição 11' },
-        { src: logo12, alt: 'Logo da Instituição 12' },
-        { src: logo13, alt: 'Logo da Instituição 13' },
-        { src: logo14, alt: 'Logo da Instituição 14' },
-        { src: logo15, alt: 'Logo da Instituição 15' },
-        { src: logo16, alt: 'Logo da Instituição 16' },
-        { src: logo17, alt: 'Logo da Instituição 17' },
-        { src: logo18, alt: 'Logo da Instituição 18' },
-        { src: logo19, alt: 'Logo da Instituição 19' },
+      awardsList: [
+        {
+          year: '2024',
+          title: 'Prêmio USP Impacto Social',
+          subtitle: 'Cidades e Comunidades Sustentáveis',
+        },
+        {
+          year: '2024',
+          title: 'Prêmio Promoção de Justiça Climática',
+          subtitle: 'Instituto de Arquitetos do Brasil - IAB',
+        },
+        {
+          year: '2024',
+          title: 'Excelência em Design',
+          subtitle: 'Competição de Design, Simpósio IHC',
+        },
       ],
     };
   },
@@ -822,102 +666,6 @@ export default {
     margin: 0 auto;
   }
 
-  .wrapper-cards .cards{
-    display: flex;
-    padding: 24px;
-    flex-direction: column;
-    flex: 1 1 calc(33.333% - 24px);
-    border-radius: 16px;
-    border: 1px solid #E9ECEF;
-    max-width: 100%;
-    min-width: 280px;
-    gap: 24px;
-  }
-
-  .wrapper-cards .cards {
-    flex: 1 1 calc(33.333% - 24px); // Cards ocupando 1/3 do espaço do pai
-    min-width: 280px;
-    max-width: 100%;
-  }
-
-  .cards .top-content{
-    color: map-get($body-text, body-color);
-  }
-
-  .cards .top-content p{
-    padding: 0;
-    margin: 0;
-  }
-
-  .cards .top-content p .highlight{
-    background-color: map-get($green, 100);
-    padding: 0 4px;
-    border-radius: 4px;
-    line-height: 150%;
-  }
-
-  .cards .bottom-content{
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    align-self: stretch;
-    flex: 1;
-    width: 100%;
-  }
-
-  .cards .bottom-content p{
-    padding: 0;
-    margin: 0;
-  }
-
-  .cards .bottom-content h3{
-    padding: 0;
-    margin: 0;
-  }
-
-  .cards .bottom-content h4{
-    padding: 0;
-    margin: 0;
-  }
-
-  .cards .bottom-content img{
-    width: 56px;
-    height: 56px;
-    border-radius: 56px;
-    border: 1px solid map-get($gray, 400);
-    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
-  }
-
-  .cards .bottom-content .wrapper-bottom-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    align-self: stretch;
-    width: 100%;
-  }
-
-  .cards .bottom-content .title{
-    color: map-get($body-text, body-color);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    align-self: stretch;
-    width: 100%;
-  }
-
-  .cards .bottom-content .subtitle{
-    color: #6C757D;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    align-self: stretch;
-    width: 100%;
-  }
-
   .institutes {
     display: flex;
     flex-direction: column;
@@ -972,7 +720,7 @@ export default {
     display: flex;
     gap: 56px;
     width: max-content;
-    animation: scroll-logos 50s linear infinite;
+    animation: scroll-logos 60s linear infinite;
   }
 
   .logo-item {
@@ -995,59 +743,6 @@ export default {
     100% {
       transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
     }
-  }
-
-  .institutes-awards{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 56px;
-  }
-
-  .institutes-awards p,
-  .institutes-awards h4,
-  .institutes-awards h5 {
-    margin: 0;
-  }
-
-  .institutes-awards .award{
-    display: flex;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .institutes-awards .award img{
-    width: 32px;
-    height: 80px;
-  }
-
-  .institutes-awards .award .award-label{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    align-self: stretch;
-  }
-
-  .institutes-awards .award .award-label h5{
-    color: #013C31;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 150%;
-  }
-
-  .institutes-awards .award .award-label .award-label-text{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: map-get($primary-fade, 700);
-  }
-
-  .institutes-awards .award .award-label .award-label-text p:last-child{
-    color: map-get($primary-fade, 700);
-    font-size: 10px;
   }
 
   .products{
@@ -1086,71 +781,6 @@ export default {
     align-items: flex-start;
     gap: 120px;
     align-self: center;
-  }
-
-  .products .products-content .product{
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    align-self: center;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .products .products-content .product .image-wrapper{
-    width: 530.531px;
-    height: 397.257px;
-    flex-shrink: 0;
-    position: relative;
-    margin-right: 52px;
-  }
-
-  .products .products-content .product .image-bg{
-    width: 100%;
-    height: 100%;
-    flex-shrink: 0;
-    position: absolute;
-    border-radius: 21px;
-  }
-
-  .products .products-content .product .image-front{
-    display: flex;
-    width: 305px;
-    height: 186px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    position: absolute;
-    bottom: 52px;
-    left: 282px;
-    border-radius: 21px;
-    box-shadow: -20px -20px 48px 0px rgba(0, 0, 0, 0.40);
-  }
-
-  .products .products-content .product .product-text{
-    display: flex;
-    padding: 0px 40px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 56px;
-    flex: 1 0 0;
-  }
-
-  .products .products-content .product .product-text .title{
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    align-self: stretch;
-    color: map-get($gray, white);
-    text-align: center;
-  }
-
-  .products .products-content .product .product-text .button-primary-link{
-    color: map-get($green, 600);
   }
 
   .mission-educa{
@@ -1228,47 +858,5 @@ export default {
     align-self: stretch;
     overflow-x: auto;
     width: 100%;
-  }
-
-  .cta-content {
-    position: relative;
-    width: 100vw; /* Ocupa toda a largura da tela */
-    height: 700px; /* Altura fixa */
-    overflow: hidden; /* Esconde partes da imagem que ultrapassam os limites */
-  }
-
-  .cta-content img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: auto; /* Largura automática */
-    height: 100%; /* Altura total do container */
-    transform: translate(-50%, -50%); /* Centraliza a imagem */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
-  }
-
-  .cta-content .cta-label{
-    max-width: 698px;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 72px;
-    top: 240px;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    margin: 0;
-    padding: 0;
-  }
-
-  .cta-content .cta-label .h2-cta{
-    padding: 0;
-    margin: 0;
-    color: map-get($primary-fade, 800);
-    text-align: center;
-    font-size: 48px;
-    font-weight: 700;
-    display: flex;
   }
 </style>
