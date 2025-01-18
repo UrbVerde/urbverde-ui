@@ -1,48 +1,44 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
-  <div class="global">
-    <div class="content-wrapper">
-      <!-- Sidebar -->
-      <Sidebar 
-        :class="[{ 'sidebar-collapsed': !isSidebarOpen }]" 
-        :is-open="isSidebarOpen"
-        @toggle-sidebar="toggleSidebar" 
-        @update-coordinates="updateCoordinates" 
-      />
-
-      <!-- Main content (navbar, map, etc.) -->
-      <div class="main-wrapper" :class="{ 'sidebar-open': isSidebarOpen }">
-        <!-- If no coordinates, show a placeholder -->
-        <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
-          <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
-        </div>
-
-        <div v-else>
-          <Navbar 
-            :class="{ 'navbar-collapsed': !isSidebarOpen }" 
-            :active-section="activeSection"
-            @navigate-to="scrollToSection" 
-          />
-
-          <div id="map" ref="Mapa" class="content-area">
-            <MapBox :coordinates="coordinates" class="map-box">
-              <Legenda />
-            </MapBox>
-          </div>
-          
-          <WidgetsSection 
-            :default-year="defaultYear"
-            :city-code="cityCode"
-            @first-year-change="handleFirstYearChange"
-            @second-year-change="handleSecondYearChange"
-            @third-year-change="handleThirdYearChange"
-          />
-
-          <!-- Footer -->
-          <UrbVerdeFooter />
-        </div>
+  <div class="layout-container">
+    <Sidebar 
+      :is-open="isSidebarOpen"
+      @toggle-sidebar="toggleSidebar" 
+      @update-coordinates="updateCoordinates" 
+    />
+    <!-- Main content (navbar, map, etc.) -->
+    <main 
+      class="main-content"
+      :class="{ 'content-expanded': !isSidebarOpen }"
+    >
+      <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
+        <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
       </div>
-    </div>
+
+      <div v-else class="content-wrapper">
+        <Navbar 
+          :class="{ 'navbar-collapsed': !isSidebarOpen }" 
+          :active-section="activeSection"
+          @navigate-to="scrollToSection" 
+        />
+
+        <div id="map" ref="Mapa" class="map-container">
+          <MapBox :coordinates="coordinates" class="map-box">
+            <Legenda />
+          </MapBox>
+        </div>
+        
+        <WidgetsSection 
+          :default-year="defaultYear"
+          :city-code="cityCode"
+          @first-year-change="handleFirstYearChange"
+          @second-year-change="handleSecondYearChange"
+          @third-year-change="handleThirdYearChange"
+        />
+
+        <UrbVerdeFooter />
+      </div>
+    </main>
   </div>
 </template>
 
@@ -212,45 +208,38 @@ export default {
 </script>
 
 <style scoped>
-.global {
-  background-color: #F8F9FACC;
+.layout-container {
+  position: relative;
+  min-height: 100vh;
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  background-color: #F8F9FACC;
+}
+
+.main-content {
+  position: relative;
+  min-height: 100vh;
+  margin-left: 301px;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.content-expanded {
+  margin-left: 72px;
 }
 
 .content-wrapper {
-  flex: 1;
-  display: flex;
-}
-
-.sidebar-collapsed {
-  width: 72px;
-  transition: width 0.3s;
-}
-
-.main-wrapper {
-  flex: 1;
-  position: relative;
   display: flex;
   flex-direction: column;
-  margin-left: 72px;
-  transition: margin-left 0.3s;
+  min-height: 100vh;
 }
 
-.main-wrapper.sidebar-open {
-  margin-left: 301px;
-}
-
-.content-area {
-  flex: 1;
+.map-container {
   position: relative;
+  flex: 1;
   display: flex;
 }
 
 .map-box {
   flex: 1;
-  position: relative;
 }
 
 .placeholder-container {
