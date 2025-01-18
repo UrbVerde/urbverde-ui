@@ -4,12 +4,18 @@
 
     <div class="cta-label container">
       <h2>
-        <span class="h2-cta heading-h1" data-aos="zoom-in-up" data-aos-duration="750" data-aos-offset="850">{{ title }}</span>
+        <span class="h2-cta heading-h1"
+              data-aos="zoom-in-up"
+              data-aos-duration="750"
+              data-aos-offset="850">{{ title }}</span>
       </h2>
 
-      <div class="search" data-aos="zoom-in-up" data-aos-duration="750" data-aos-offset="850">
+      <div class="search"
+           data-aos="zoom-in-up"
+           data-aos-duration="750"
+           data-aos-offset="850">
         <div class="search-button">
-          <!--<BuscaSimples @location-updated="onLocationUpdated" /> TIRAR COMENTÁRIO AO AJUSTAR A BUSCA-->
+          <BuscaSimples @location-updated="onLocationUpdated" />
         </div>
         <router-link :to="buttonRoute" class="button-primary-link">
           <PrimaryButton class="button-primary-link"
