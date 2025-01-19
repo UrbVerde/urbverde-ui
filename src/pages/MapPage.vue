@@ -1,13 +1,13 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="layout-container">
-    <Sidebar 
+    <Sidebar
       :is-open="isSidebarOpen"
-      @toggle-sidebar="toggleSidebar" 
-      @update-coordinates="updateCoordinates" 
+      @toggle-sidebar="toggleSidebar"
+      @update-coordinates="updateCoordinates"
     />
     <!-- Main content (navbar, map, etc.) -->
-    <main 
+    <main
       class="main-content"
       :class="{ 'content-expanded': !isSidebarOpen }"
     >
@@ -16,10 +16,10 @@
       </div>
 
       <div v-else class="content-wrapper">
-        <Navbar 
-          :class="{ 'navbar-collapsed': !isSidebarOpen }" 
+        <Navbar
+          :class="{ 'navbar-collapsed': !isSidebarOpen }"
           :active-section="activeSection"
-          @navigate-to="scrollToSection" 
+          @navigate-to="scrollToSection"
         />
 
         <div id="map" ref="Mapa" class="map-container">
@@ -27,8 +27,8 @@
             <Legenda />
           </MapBox>
         </div>
-        
-        <WidgetsSection 
+
+        <WidgetsSection
           :default-year="defaultYear"
           :city-code="cityCode"
           @first-year-change="handleFirstYearChange"
@@ -73,7 +73,7 @@ export default {
   setup() {
     const route = useRoute();
     const locationStore = useLocationStore();
-    
+
     useHead({
       title: 'Plataforma UrbVerde: Explore dados ambientais e sociais do seu município',
       meta: [
@@ -193,17 +193,7 @@ export default {
       toggleSidebar,
     };
   },
-  methods: {
-    handleFirstYearChange(year) {
-      // Handle first year change if needed
-    },
-    handleSecondYearChange(year) {
-      // Handle second year change if needed
-    },
-    handleThirdYearChange(year) {
-      // Handle third year change if needed
-    }
-  }
+
 };
 </script>
 

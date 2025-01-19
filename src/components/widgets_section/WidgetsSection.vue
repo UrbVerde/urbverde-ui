@@ -1,8 +1,8 @@
 # src/components/widgets/WidgetsSection.vue
 <template>
   <div class="widgets-section">
-    <div 
-      v-for="(section, index) in sections" 
+    <div
+      v-for="(section, index) in sections"
       :key="section.id"
       :ref="section.ref"
       class="box"
@@ -12,16 +12,16 @@
         <span class="title-statistics-container heading-h5">
           {{ section.title }}
         </span>
-        <YearPicker 
-          v-model="selectedYears[index]" 
-          :default-year="defaultYear" 
+        <YearPicker
+          v-model="selectedYears[index]"
+          :default-year="defaultYear"
           :city-code="cityCode"
-          @update:modelValue="(value) => handleYearChange(value, index)" 
+          @update:modelValue="(value) => handleYearChange(value, index)"
         />
       </div>
-      <component 
+      <component
         :is="section.component"
-        :city-code="cityCode" 
+        :city-code="cityCode"
         :selected-year="selectedYears[index]"
       />
     </div>
@@ -58,13 +58,13 @@ export default {
     const locationStore = useLocationStore();
     const category = computed(() => locationStore.category || 'category?');
     const cityName = computed(() => locationStore.nm_mun || 'city?');
-    
+
     // Estado para controlar a camada selecionada
     const selectedLayer = ref('temperatura');
-    
+
     // Número de subseções
     const numSections = ref(3);
-    
+
     // Array para armazenar os anos selecionados
     const selectedYears = ref(Array(numSections.value).fill(props.defaultYear));
 

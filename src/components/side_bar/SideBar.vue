@@ -5,10 +5,10 @@
       <LogoButton v-show="showContent" />
       <MinimizeButton @click="toggleSidebar" />
     </div>
-<!-- componente painel: brasil / políticas públicas -->
+    <!-- componente painel: brasil / políticas públicas -->
     <div v-show="showContent" class="search-area">
       <BuscaSimples
-        :openDelay="2000" 
+        :openDelay="2000"
         @api-error="$emit('api-error')"
         @location-updated="onLocationUpdated"
       />
@@ -34,8 +34,6 @@
     </div>
   </aside>
 </template>
-
-
 
 <style scoped>
 .sidebar {
