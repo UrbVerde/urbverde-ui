@@ -11,7 +11,7 @@
 
       <div v-show="showContent" class="search-area">
         <BuscaSimples
-          :openDelay="2000" 
+          :openDelay="2000"
           @api-error="$emit('api-error')"
           @location-updated="onLocationUpdated"
         />
