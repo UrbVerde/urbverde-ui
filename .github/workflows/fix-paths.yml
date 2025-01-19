@@ -63,7 +63,7 @@ jobs:
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "fix: corrected first-line file path comments via GitHub Actions"
+            git commit -m "🤖 AUTOMATIC CORRECTION: added first-line filepath comments (GitHub Action)"
             git push
           else
             echo "No path corrections needed."
