@@ -258,6 +258,7 @@ onBeforeUnmount(() => {
     align-items: center;
     padding: 1px;
     color: #6C757D;
+    color: azure;
 }
 
 .input-text {
