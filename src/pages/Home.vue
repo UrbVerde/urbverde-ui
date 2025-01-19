@@ -3,7 +3,7 @@
     <TawkTo />
 
     <!-- Navbar -->
-    <header>
+    <header data-aos="fade-down">
       <NavbarHomepage />
     </header>
 
@@ -12,7 +12,10 @@
       <section class="content">
 
         <!-- Background fixo e atrás dos contents -->
-        <div class="image-background-wrapper">
+        <div class="image-background-wrapper"
+             data-aos="fade"
+             data-aos-duration="750"
+             data-aos-delay="500">
           <div class="image-background">
             <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
           </div>
@@ -20,7 +23,10 @@
 
         <!-- Hero content -->
         <section class="hero-content container">
-          <header class="hero-top">
+          <header class="hero-top"
+                  data-aos="zoom-in-up"
+                  data-aos-duration="750"
+                  data-aos-delay="500">
             <div class="hero-text">
               <h1>
                 <span class="h1-text heading-h1">Mapeando um Futuro </span>
@@ -50,7 +56,10 @@
             </form>
           </header>
 
-          <section class="wrapper-platform">
+          <section class="wrapper-platform"
+                   data-aos="fade-up"
+                   data-aos-offset="0"
+                   data-aos-delay="1000">
 
             <!-- Imagem da plataforma -->
             <router-link to="/mapa" class="platform-link" aria-label="Acessar a plataforma da UrbVerde">
@@ -65,7 +74,10 @@
             </router-link>
 
             <!-- Cards de comentários sobre a UrbVerde -->
-            <div class="wrapper-cards">
+            <div class="wrapper-cards"
+                 data-aos="fade-up"
+                 data-aos-duration="750"
+                 data-aos-offset="1000">
               <article>
                 <CardComments
                   quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
@@ -105,7 +117,10 @@
 
         <!-- Institutes content-->
         <section class="institutes container">
-          <header class="institutes-header">
+          <header class="institutes-header"
+                  data-aos="fade-up"
+                  data-aos-duration="750"
+                  data-aos-offset="925">
             <h2 class="heading-h2">
               Da universidade para a sociedade
             </h2>
@@ -119,7 +134,10 @@
             </h4>
           </header>
 
-          <div class="institutes-logo-carousel">
+          <div class="institutes-logo-carousel"
+               data-aos="fade-up"
+               data-aos-duration="750"
+               data-aos-offset="900">
             <div class="logo-track">
               <!-- Primeira lista de logos -->
               <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
@@ -133,52 +151,64 @@
           </div>
 
           <!-- Lista de prêmios -->
-          <HomeAwards :awards="awardsList" />
+          <div data-aos="fade-up" data-aos-duration="750" data-aos-offset="975">
+            <HomeAwards :awards="awardsList" />
+          </div>
 
         </section>
       </section>
 
       <!-- Products content -->
       <section class="products">
-        <div class="title container">
+        <div class="title container"
+             data-aos="fade-up"
+             data-aos-duration="750"
+             data-aos-offset="1000">
           <h2 class="heading-h2">
             Ferramentas para uma gestão sustentável
           </h2>
         </div>
 
         <div class="products-content container">
-          <HomeProduct
-            :imageBgSrc="homepageImages.productBg1.src"
-            :imageBgAlt="homepageImages.productBg1.alt"
-            :imageFrontSrc="homepageImages.productBg2.src"
-            :imageFrontAlt="homepageImages.productBg2.alt"
-            title="Mapas ambientais e sociais"
-            description="Explore mapas detalhados sobre vegetação, temperatura, parques e praças para entender melhor a sua cidade!"
-            buttonLabel="Acessar"
-            :filled="false"
-            :icon=" 'bi bi-arrow-right' "
-            :iconType=" 'bootstrap' "
-            buttonRoute="/mapa"
-          />
-          <HomeProduct
-            :imageBgSrc="homepageImages.productBg3.src"
-            :imageBgAlt="homepageImages.productBg3.alt"
-            :imageFrontSrc="homepageImages.productBg4.src"
-            :imageFrontAlt="homepageImages.productBg2.alt"
-            title="Dados estatísticos completos"
-            description="Descubra informações completas sobre seu município e compare com todo o Brasil!"
-            buttonLabel="Acessar"
-            :filled="false"
-            :icon=" 'bi bi-arrow-right' "
-            :iconType=" 'bootstrap' "
-            buttonRoute="/mapa"
-          />
+          <div data-aos="fade-up" data-aos-duration="750" data-aos-offset="1050">
+            <HomeProduct
+              :imageBgSrc="homepageImages.productBg1.src"
+              :imageBgAlt="homepageImages.productBg1.alt"
+              :imageFrontSrc="homepageImages.productBg2.src"
+              :imageFrontAlt="homepageImages.productBg2.alt"
+              title="Mapas ambientais e sociais"
+              description="Explore mapas detalhados sobre vegetação, temperatura, parques e praças para entender melhor a sua cidade!"
+              buttonLabel="Acessar"
+              :filled="false"
+              :icon=" 'bi bi-arrow-right' "
+              :iconType=" 'bootstrap' "
+              buttonRoute="/mapa"
+            />
+          </div>
+          <div data-aos="fade-up" data-aos-duration="750" data-aos-offset="1050">
+            <HomeProduct
+              :imageBgSrc="homepageImages.productBg3.src"
+              :imageBgAlt="homepageImages.productBg3.alt"
+              :imageFrontSrc="homepageImages.productBg4.src"
+              :imageFrontAlt="homepageImages.productBg2.alt"
+              title="Dados estatísticos completos"
+              description="Descubra informações completas sobre seu município e compare com todo o Brasil!"
+              buttonLabel="Acessar"
+              :filled="false"
+              :icon=" 'bi bi-arrow-right' "
+              :iconType=" 'bootstrap' "
+              buttonRoute="/mapa"
+            />
+          </div>
         </div>
       </section>
 
       <!-- Mission and Urbverde Educa content -->
       <section class="mission-educa container">
-        <div class="mission">
+        <div class="mission"
+             data-aos="fade-up"
+             data-aos-duration="750"
+             data-aos-offset="1000">
           <div class="label-content">
             <p class="heading-h5">
               Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong>
@@ -197,7 +227,10 @@
           </div>
           <img src="@/assets/images/homepage/urbverde-mission.png">
         </div>
-        <div class="educa">
+        <div class="educa"
+             data-aos="fade-up"
+             data-aos-duration="750"
+             data-aos-offset="1000">
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
@@ -311,6 +344,10 @@ import { logos, homepageImages } from '@/constants/images-homepage.js';
 // Metas tags de SEO
 import { useHead } from '@vueuse/head';
 
+// Animate on Scroll Library
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 export default {
   name: 'HomePage',
   components: {
@@ -391,6 +428,7 @@ export default {
   },
   mounted() {
     this.startWordRotation();
+    AOS.init();
   },
 
   beforeUnmount() {

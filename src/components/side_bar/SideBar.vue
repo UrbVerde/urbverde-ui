@@ -1,5 +1,6 @@
 <!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
+
   <aside class="sidebar" :class="{ 'collapsed': !isOpen }">
     <div class="top-area">
       <LogoButton v-show="showContent" />
@@ -12,6 +13,7 @@
         @api-error="$emit('api-error')"
         @location-updated="onLocationUpdated"
       />
+
     </div>
 
     <div v-show="showContent" class="middle-area">
