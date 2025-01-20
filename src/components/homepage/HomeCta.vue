@@ -4,16 +4,10 @@
 
     <div class="cta-label container">
       <h2>
-        <span class="h2-cta heading-h1"
-              data-aos="zoom-in-up"
-              data-aos-duration="750"
-              data-aos-offset="850">{{ title }}</span>
+        <span class="h2-cta heading-h1">{{ title }}</span>
       </h2>
 
-      <div class="search"
-           data-aos="zoom-in-up"
-           data-aos-duration="750"
-           data-aos-offset="850">
+      <div class="search">
         <div class="search-button">
           <BuscaSimples @location-updated="onLocationUpdated" />
         </div>
@@ -35,9 +29,6 @@
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import CtaBackground from '@/assets/images/homepage/cta-background.svg';
-
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
 export default {
   name: 'HomeCta',
@@ -86,9 +77,6 @@ export default {
     onLocationUpdated(location) {
       this.$emit('location-updated', location);
     },
-  },
-  mounted() {
-    AOS.init();
   },
 };
 </script>
