@@ -1,6 +1,6 @@
 <!-- urbverde-ui\src\components\side_bar\drop_down\CategoriesDropdown.vue -->
 <template>
-  <div class="container">
+  <div class="container" ref="containerRef">
     <span class="header-title caption-medium">CAMADAS</span>
 
     <div class="categories-list">
@@ -12,19 +12,22 @@
         <!-- Category Title -->
         <div
           class="category-header"
-          :class="{ 'open': openCategoryId === category.id }"
+          :class="{ 'open': openCategoryIds.includes(category.id) || getActiveLayerInCategory(category)}"
           @click="toggleCategory(category.id)"
         >
           <IconComponent :name="category.icon" :size="20" />
           <span class="category-name small-regular">{{ category.name }}</span>
 
-          <!-- Show “1” if there is an active layer in that category -->
-          <div class="badge-right-menu" v-if="getActiveLayerInCategory(category)">
+          <!-- Show "1" if there is an active layer in that category -->
+          <div
+            class="badge-right-menu"
+            v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)"
+          >
             <span class="textBadge caption-medium">1</span>
           </div>
 
           <i
-            :class="openCategoryId === category.id
+            :class="openCategoryIds.includes(category.id)
               ? 'bi bi-chevron-up'
               : 'bi bi-chevron-down'"
           />
@@ -32,7 +35,7 @@
 
         <!-- Layers inside this category -->
         <ul
-          v-show="openCategoryId === category.id"
+          v-show="openCategoryIds.includes(category.id)"
           class="layers-list"
         >
           <li
@@ -54,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { API_URLS } from '@/constants/endpoints';
@@ -70,18 +73,41 @@ const locationStore = useLocationStore();
 
 // LOCAL STATE
 const categories = ref([]);
-const openCategoryId = ref(null);
+const openCategoryIds = ref([]);
+const containerRef = ref(null);
 
 // LIFECYCLE
 onMounted(() => {
   // fetch categories immediately
   fetchCategories(props.code, props.type);
+
+  // Add click event listener to document
+  document.addEventListener('click', handleOutsideClick);
 });
+
+// Remove event listener when component is unmounted
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick);
+});
+
+function handleOutsideClick(event) {
+  // If the click is outside the container
+  if (containerRef.value && !containerRef.value.contains(event.target)) {
+    // Close categories without active layers
+    const updatedOpenCategoryIds = openCategoryIds.value.filter(categoryId => {
+      const category = categories.value.find(c => c.id === categoryId);
+
+      return category && category.layers.some(layer => layer.isActive);
+    });
+
+    openCategoryIds.value = updatedOpenCategoryIds;
+  }
+}
 
 /**
  * Fetch categories from your API (or mock),
- * then set them in local state. Optionally
- * set the first layer if nothing is active.
+ * then set them in local state.
+ * Open the category of the initially selected layer.
  */
 async function fetchCategories(code, type) {
   try {
@@ -91,22 +117,35 @@ async function fetchCategories(code, type) {
     if (data && data.categories) {
       categories.value = data.categories;
 
-      // Optionally, check if locationStore.layer is set.
-      // If it’s not set, we can set the first available layer:
-      if (!locationStore.layer) {
+      // If a layer is already selected in the store
+      if (locationStore.layer) {
+        // Find the category with the selected layer
+        const categoryWithActiveLayer = categories.value.find(category =>
+          category.layers.some(layer =>
+            layer.slug === locationStore.layer || layer.id === locationStore.layer
+          )
+        );
+
+        // If found, open the category and mark the layer as active
+        if (categoryWithActiveLayer) {
+          openCategoryIds.value.push(categoryWithActiveLayer.id);
+        }
+
+        markActiveLayer();
+      } else {
+        // If no layer is selected, set the first layer
         const firstCategory = categories.value[0];
         if (firstCategory?.layers?.length > 0) {
-          // Set the first layer if none is chosen
           const firstLayer = firstCategory.layers[0];
           firstLayer.isActive = true;
           locationStore.setLocation({
             category: firstCategory.name,
-            layer: firstLayer.slug || firstLayer.id // fallback
+            layer: firstLayer.slug || firstLayer.id
           });
+
+          // Open the first category
+          openCategoryIds.value.push(firstCategory.id);
         }
-      } else {
-        // if locationStore.layer is already set, mark that as active if it appears
-        markActiveLayer();
       }
     }
   } catch (error) {
@@ -130,9 +169,16 @@ function markActiveLayer() {
 }
 
 function toggleCategory(categoryId) {
-  openCategoryId.value = (openCategoryId.value === categoryId)
-    ? null
-    : categoryId;
+  // Check if the category is already open
+  const categoryIndex = openCategoryIds.value.indexOf(categoryId);
+
+  if (categoryIndex > -1) {
+    // If open, remove it
+    openCategoryIds.value.splice(categoryIndex, 1);
+  } else {
+    // If not open, add it
+    openCategoryIds.value.push(categoryId);
+  }
 }
 
 function selectLayer(layer, categoryObj) {
@@ -175,7 +221,6 @@ function getActiveLayerInCategory(category) {
   top: 0;
   z-index: 2;
   background-color: white;
-  border-bottom: 8px solid var(--Theme-Border, #FFFFFF);
   margin-top: -8px;
 }
 
@@ -188,7 +233,6 @@ function getActiveLayerInCategory(category) {
 }
 
 .category-dropdown {
-  border-bottom: 1px solid #dee2e6;
   padding-bottom: 8px;
 }
 
