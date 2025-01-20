@@ -4,46 +4,31 @@
     <span class="header-title caption-medium">CAMADAS</span>
 
     <div class="categories-list">
-      <div
-        v-for="(category) in categories"
-        :key="category.id"
-        class="category-dropdown"
-      >
+      <div v-for="(category) in categories" :key="category.id" class="category-dropdown">
         <!-- Category Title -->
-        <div
-          class="category-header"
-          :class="{ 'open': openCategoryIds.includes(category.id) || getActiveLayerInCategory(category)}"
-          @click="toggleCategory(category.id)"
-        >
+        <div class="category-header"
+             :class="{ 'open': openCategoryIds.includes(category.id) || getActiveLayerInCategory(category) }"
+             @click="toggleCategory(category.id)">
           <IconComponent :name="category.icon" :size="20" />
           <span class="category-name small-regular">{{ category.name }}</span>
 
           <!-- Show "1" if there is an active layer in that category -->
-          <div
-            class="badge-right-menu"
-            v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)"
-          >
+          <div class="badge-right-menu"
+               v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)">
             <span class="textBadge caption-medium">1</span>
           </div>
 
-          <i
-            :class="openCategoryIds.includes(category.id)
-              ? 'bi bi-chevron-up'
-              : 'bi bi-chevron-down'"
-          />
+          <i :class="openCategoryIds.includes(category.id)
+            ? 'bi bi-chevron-up'
+            : 'bi bi-chevron-down'" />
         </div>
 
         <!-- Layers inside this category -->
-        <ul
-          v-show="openCategoryIds.includes(category.id)"
-          class="layers-list"
-        >
-          <li
-            v-for="(layer) in category.layers"
-            :key="layer.id"
-            :class="['layer-item', { 'active-layer': layer.isActive }]"
-            @click="selectLayer(layer, category)"
-          >
+        <ul v-show="openCategoryIds.includes(category.id)" class="layers-list">
+          <li v-for="(layer) in category.layers"
+              :key="layer.id"
+              :class="['layer-item', { 'active-layer': layer.isActive }]"
+              @click="selectLayer(layer, category)">
             <span class="layer-name small-regular">{{ layer.name }}</span>
 
             <div class="new-layer-tag" v-if="layer.isNew">
@@ -222,6 +207,8 @@ function getActiveLayerInCategory(category) {
   z-index: 2;
   background-color: white;
   margin-top: -8px;
+  margin-bottom: -4px;
+  border-bottom: 4px solid white;
 }
 
 .categories-list {
@@ -253,6 +240,10 @@ function getActiveLayerInCategory(category) {
   background: var(--Primary-Fade-100, #F8F9FA);
 }
 
+.category-header.open:hover {
+  background: var(--Gray-200, #E9ECEF);
+}
+
 .category-name {
   flex: 1;
 }
@@ -265,24 +256,50 @@ function getActiveLayerInCategory(category) {
   border-radius: 4px;
   color: var(--Theme-Primary, #025949);
   background: var(--Primary-Fade-100, #D2E8DD);
+  width: 22px;
+  height: 22px;
+  justify-content: center;
+}
+
+.textBadge {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+}
+
+#imgIconNew{
+
 }
 
 .layers-list {
   list-style-type: none;
-  margin: 0;
-  padding: 8px 0 0 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0px 0px 0px 0px;
+  border-top: 4px solid white;
   display: flex;
   flex-direction: column;
+  border-radius: 8px;
+
+  background: var(--Primary-Fade-100, #F8F9FA);
+
   gap: 8px;
+
 }
 
 .layer-item {
   cursor: pointer;
   display: flex;
-  padding: 8px 24px;
+
   align-items: center;
   gap: 10px;
-  border-radius: 4px;
+
+  padding: 8px 16px 8px 24px;
+
+  align-self: stretch;
+
 }
 
 .layer-item:hover {
@@ -299,14 +316,15 @@ function getActiveLayerInCategory(category) {
 }
 
 .new-layer-tag {
-  font-size: 22px;
-  height: 22px;
-  width: 22px;
-  display: inline-flex;
-  padding: 4px;
+  display: flex;
   align-items: center;
+  padding: 2px 8px;
   gap: 10px;
   border-radius: 4px;
+  color: var(--Theme-Primary, #025949);
   background: var(--Primary-Fade-100, #D2E8DD);
+  width: 22px;
+  height: 22px;
+  justify-content: center;
 }
 </style>
