@@ -80,6 +80,7 @@
                class="box"
                style="height:636px; border-top: 1px solid black">
             Veja mais sobre {{ cityName }}
+            <SeeMoreSection :city-code="cityCode"/>
 
           </div>
 
@@ -111,11 +112,13 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
-import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
-import RankSection from '@/components/cards/weather/RankSection.vue';
-import HeatSection from '@/components/cards/weather/HeatSection.vue';
+import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
+import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
+import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
+import SeeMoreSection from '@/components/cards/weather/seeMore/SeeMoreSection.vue';
 import { useHead } from '@vueuse/head';
 import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
+
 
 export default {
   name: 'MapPage',
@@ -127,6 +130,7 @@ export default {
     TemperatureSection,
     HeatSection,
     RankSection,
+    SeeMoreSection,
     YearPicker,
   },
   data() {

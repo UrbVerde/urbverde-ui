@@ -1,11 +1,14 @@
 <template>
-  <div class="custom-card" :class="size">
+  <div class="custom-card">
     <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
       <slot name="image"></slot>
     </div>
 
     <div class="card-header">
       <h1 v-if="title" class="titulo">{{ title }}</h1>
+    </div>
+
+    <div class="content-wrapper">
       <h2 v-if="value" class="value">{{ value }}</h2>
       <p v-if="subtitle" class="textodescritivo">{{ subtitle }}</p>
     </div>
@@ -44,11 +47,6 @@ export default {
       type: String,
       required: false,
     },
-    size: {
-      type: String,
-      default: 'medium',
-      validator: value => ['small', 'medium', 'large'].includes(value),
-    },
     imagePosition: {
       type: String,
       default: 'top',
@@ -63,79 +61,70 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .custom-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  width: 100%; 
   border-radius: 16px;
   border: 1px solid var(--Gray-200, #E9ECEF);
   background: var(--Gray-White, #FFF);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  padding: 24px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
 }
 
 .card-image-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
 }
 
 .card-header {
   display: flex;
-  flex-direction: column;
+  justify-content: justify;
   align-items: flex-start;
-  margin-bottom: 16px;
+  align-self: stretch;
 }
 
-.titulo {
+.content-wraper{
+  display: flex;
+  padding-bottom: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+.card-header .titulo {
   color: var(--Body-Text-Body-Color, #212529);
   font-family: Inter;
   font-size: 16px;
-  font-weight: 500;
-  line-height: 120%;
-  margin-bottom: 4px;
+  font-style: normal;
+  font-weight: 500; 
+  line-height: 120%; /* 19.2px */
 }
 
 .value {
-  font-size: 28px;
-  font-weight: bold;
   color: var(--Green-500, #198754);
-  margin: 8px 0;
 }
 
-.textodescritivo {
+.content-wraper .textodescritivo{
   color: var(--Gray-600, #6C757D);
   font-family: Inter;
   font-size: 14px;
+  font-style: normal;
   font-weight: 500;
-  line-height: 150%;
+  line-height: 150%; /* 21px */
 }
 
 .card-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .card-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 16px;
-}
-
-/* Size variants */
-.custom-card.small {
-  width: 200px;
-}
-
-.custom-card.medium {
-  width: 285px;
-}
-
-.custom-card.large {
-  width: 400px;
 }
 </style>
