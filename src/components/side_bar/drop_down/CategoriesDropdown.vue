@@ -9,7 +9,10 @@
         <div class="category-header"
              :class="{ 'open': openCategoryIds.includes(category.id) || getActiveLayerInCategory(category) }"
              @click="toggleCategory(category.id)">
-          <IconComponent :name="category.icon" :size="20" />
+
+          <div class="category-icon">
+            <IconComponent :name="category.icon" :size="20" />
+          </div>
           <span class="category-name small-regular">{{ category.name }}</span>
 
           <!-- Show "1" if there is an active layer in that category -->
@@ -269,7 +272,15 @@ function getActiveLayerInCategory(category) {
 
 }
 
-#imgIconNew{
+.category-icon{
+
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 
 }
 
