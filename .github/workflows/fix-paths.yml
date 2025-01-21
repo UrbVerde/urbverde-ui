@@ -2,17 +2,18 @@ name: Fix FilePath First-Line Comments
 
 on:
   pull_request:
-    types:
+    types: 
       - opened
 
 jobs:
   fix_paths:
     name: Correct First-Line FilePath Comments
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup Git User
         run: |
@@ -64,7 +65,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add .
             git commit -m "🤖 AUTOMATIC CORRECTION: added first-line filepath comments (GitHub Action)"
-            git push
+            git push origin ${{ github.head_ref }}
           else
             echo "No path corrections needed."
           fi
