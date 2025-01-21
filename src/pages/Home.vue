@@ -3,7 +3,7 @@
     <TawkTo />
 
     <!-- Navbar -->
-    <header data-aos="fade-down">
+    <header data-aos="fade-down" data-aos-duration="400">
       <NavbarHomepage />
     </header>
 
@@ -15,7 +15,7 @@
         <div class="image-background-wrapper"
              data-aos="fade"
              data-aos-duration="750"
-             data-aos-delay="500">
+             data-aos-delay="300">
           <div class="image-background">
             <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
           </div>
@@ -25,7 +25,7 @@
         <section class="hero-content container">
           <header class="hero-top"
                   data-aos="zoom-in-up"
-                  data-aos-duration="750"
+                  data-aos-duration="1000"
                   data-aos-delay="500">
             <div class="hero-text">
               <h1>
@@ -56,28 +56,33 @@
             </form>
           </header>
 
-          <section class="wrapper-platform"
-                   data-aos="fade-up"
-                   data-aos-offset="0"
-                   data-aos-delay="1000">
+          <section class="wrapper-platform">
 
             <!-- Imagem da plataforma -->
-            <router-link to="/mapa" class="platform-link" aria-label="Acessar a plataforma da UrbVerde">
+            <router-link
+              to="/mapa"
+              class="platform-link"
+              aria-label="Acessar a plataforma da UrbVerde"
+              data-aos="fade-up"
+              data-aos-delay="1500"
+              data-aos-duration="750"
+            >
               <div
                 class="platform"
                 @mousemove="handleMouseMove"
                 @mouseleave="resetZoom"
               >
                 <div class="overlay"></div>
-                <img src="@/assets/images/homepage/platform.svg" alt="Interface da plataforma UrbVerde exibindo dados ambientais" ref="zoomImage" />
+                <img
+                  ref="zoomImage"
+                  src="@/assets/images/homepage/platform.svg"
+                  alt="Interface da plataforma UrbVerde exibindo dados ambientais"
+                />
               </div>
             </router-link>
 
             <!-- Cards de comentários sobre a UrbVerde -->
-            <div class="wrapper-cards"
-                 data-aos="fade-up"
-                 data-aos-duration="750"
-                 data-aos-offset="1000">
+            <div class="wrapper-cards">
               <article>
                 <CardComments
                   quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
@@ -117,10 +122,7 @@
 
         <!-- Institutes content-->
         <section class="institutes container">
-          <header class="institutes-header"
-                  data-aos="fade-up"
-                  data-aos-duration="750"
-                  data-aos-offset="925">
+          <header class="institutes-header">
             <h2 class="heading-h2">
               Da universidade para a sociedade
             </h2>
@@ -134,10 +136,7 @@
             </h4>
           </header>
 
-          <div class="institutes-logo-carousel"
-               data-aos="fade-up"
-               data-aos-duration="750"
-               data-aos-offset="900">
+          <div class="institutes-logo-carousel">
             <div class="logo-track">
               <!-- Primeira lista de logos -->
               <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
@@ -151,7 +150,7 @@
           </div>
 
           <!-- Lista de prêmios -->
-          <div data-aos="fade-up" data-aos-duration="750" data-aos-offset="975">
+          <div>
             <HomeAwards :awards="awardsList" />
           </div>
 
@@ -160,17 +159,14 @@
 
       <!-- Products content -->
       <section class="products">
-        <div class="title container"
-             data-aos="fade-up"
-             data-aos-duration="750"
-             data-aos-offset="1000">
+        <div class="title container">
           <h2 class="heading-h2">
             Ferramentas para uma gestão sustentável
           </h2>
         </div>
 
         <div class="products-content container">
-          <div data-aos="fade-up" data-aos-duration="750" data-aos-offset="1050">
+          <div>
             <HomeProduct
               :imageBgSrc="homepageImages.productBg1.src"
               :imageBgAlt="homepageImages.productBg1.alt"
@@ -185,7 +181,7 @@
               buttonRoute="/mapa"
             />
           </div>
-          <div data-aos="fade-up" data-aos-duration="750" data-aos-offset="1050">
+          <div>
             <HomeProduct
               :imageBgSrc="homepageImages.productBg3.src"
               :imageBgAlt="homepageImages.productBg3.alt"
@@ -205,10 +201,7 @@
 
       <!-- Mission and Urbverde Educa content -->
       <section class="mission-educa container">
-        <div class="mission"
-             data-aos="fade-up"
-             data-aos-duration="750"
-             data-aos-offset="1000">
+        <div class="mission">
           <div class="label-content">
             <p class="heading-h5">
               Nossa missão é gerar dados <strong>socioambientais acessíveis e gratuitos</strong>
@@ -227,10 +220,7 @@
           </div>
           <img src="@/assets/images/homepage/urbverde-mission.png">
         </div>
-        <div class="educa"
-             data-aos="fade-up"
-             data-aos-duration="750"
-             data-aos-offset="1000">
+        <div class="educa">
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
@@ -428,7 +418,11 @@ export default {
   },
   mounted() {
     this.startWordRotation();
-    AOS.init();
+    AOS.init({
+      offset: 0,
+      threshold: 0,
+      once: false
+    });
   },
 
   beforeUnmount() {
@@ -684,6 +678,7 @@ export default {
         background: map-get($gray, "white");
         transition: transform 0.2s ease-out;
         will-change: transform;
+        object-fit: cover;
       }
 
       &:hover img {
@@ -702,6 +697,7 @@ export default {
     width: 100%;
     max-width: 1184px;
     margin: 0 auto;
+    overflow: visible;
   }
 
   .institutes {

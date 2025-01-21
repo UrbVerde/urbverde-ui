@@ -2,22 +2,31 @@ name: Fix FilePath First-Line Comments
 
 on:
   pull_request:
-    types:
+    types: 
       - opened
+  workflow_dispatch:
 
 jobs:
   fix_paths:
     name: Correct First-Line FilePath Comments
     runs-on: ubuntu-latest
-
     steps:
+      - name: Get branch name
+        id: branch-name
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.branch-name.outputs.branch }}
+          fetch-depth: 0
 
       - name: Setup Git User
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
+          git checkout ${{ steps.branch-name.outputs.branch }}
 
       - name: Run Pathme Logic Inline
         run: |
@@ -64,7 +73,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add .
             git commit -m "🤖 AUTOMATIC CORRECTION: added first-line filepath comments (GitHub Action)"
-            git push
+            git push origin ${{ steps.branch-name.outputs.branch }}
           else
             echo "No path corrections needed."
           fi
