@@ -111,6 +111,13 @@ import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { API_URLS } from '@/constants/endpoints';
 
+const props = defineProps({
+  openDelay: {
+    type: Number,
+    default: 0 // 0 means no auto-open
+  }
+});
+
 const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
 
 const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
@@ -168,13 +175,15 @@ onMounted(() => {
   // generateDefaultSuggestions();
   updateSuggestions();
 
-  // Show dropdown after 2s delay
-  setTimeout(() => {
-    if (!dropdown.value && inputValue.value === '') {
-      dropdown.value = true;
-      activateInput();
-    }
-  }, 2000);
+  // Show dropdown after delay only if openDelay > 0
+  if (props.openDelay > 0) {
+    setTimeout(() => {
+      if (!dropdown.value && inputValue.value === '') {
+        dropdown.value = true;
+        activateInput();
+      }
+    }, props.openDelay);
+  }
 });
 
 onBeforeUnmount(() => {
