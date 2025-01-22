@@ -47,8 +47,8 @@ export default {
 
 <style scoped>
 .tips-card {
-  width: 960px;
-  height: 266px;
+  width: 1056px;
+  height: 354px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,23 +63,27 @@ export default {
 
 .tips-card-content {
   flex: 1;
-  margin-right: 24px;
+  padding: 40px 40px 48px 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .tips-card-image img {
-  width: 250px;
-  height: auto;
+  width: 306px;
+  height: 266px;
   object-fit: contain;
 }
 
 .tips-card-title {
-  font-size: 22px;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 16px;
+  color: var(--Body-Text-Body-Color, #212529);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%; /* 24px */
+  align-self: stretch;
+  margin-bottom: 32px;
 }
 
 .tips-card-list {
@@ -100,13 +104,19 @@ export default {
   width: 32px;
   height: 32px;
   background-color: #e7f6e8;
-  color: #10b981;
   font-weight: bold;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 8px;
+
+color: var(--Green-700, #0F5132);
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 150%; /* 21px */
 }
 
 .tips-card-button {

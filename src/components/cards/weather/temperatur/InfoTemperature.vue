@@ -56,6 +56,17 @@ export default {
 
 }
 
+.info-temperature-card .textodescritivo {
+  color: var(--Theme-Secondary, #525960);
+
+/* Body/Small/Medium */
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 150%; /* 21px */
+}
+
 .card-image {
   width: 233px;
   height: 168px;

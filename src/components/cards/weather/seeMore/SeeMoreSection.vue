@@ -1,17 +1,24 @@
 <template>
-  <div class="see-more-cards">
-    <SeeMoreCard v-if="cardData.length" :data="cardData" />
+  <div class="content">
+    <div class="see-more-cards">
+      <SeeMoreCard v-if="cardData.length" :data="cardData" />
+    </div>
+    <div class="download-card">
+      <DownloadCard/>
+    </div>
   </div>
 </template>
 
 <script>
 import SeeMoreCard from '../../SeeMoreCard.vue';
+import DownloadCard from '../../DownloadCard.vue';
 
 export default {
   name: 'SeeMoreSection',
 
   components: {
-    SeeMoreCard
+    SeeMoreCard,
+    DownloadCard
   },
 
   props: {
@@ -61,17 +68,17 @@ export default {
   padding: 0;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Espaçamento vertical entre os elementos */
+}
+
 .see-more-cards {
   display: flex;
   flex-direction: row; /* Cards lado a lado */
   gap: 20px; /* Espaço entre os cards */
   margin: 20px;
   flex-wrap: wrap; /* Permite quebrar linha se não houver espaço suficiente */
-}
-
-.heat-cards p {
-  grid-column: 1 / -1; /* Centraliza a mensagem quando visível */
-  text-align: center;
-  color: gray;
 }
 </style>

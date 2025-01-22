@@ -109,22 +109,9 @@ export default {
   color: var(--Green-500, #198754);
 }
 
-.content-wraper .textodescritivo{
-  color: var(--Gray-600, #6C757D);
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 21px */
-}
-
 .card-content {
   display: flex;
   flex-direction: column;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: flex-end;
-}
 </style>

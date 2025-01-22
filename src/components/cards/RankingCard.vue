@@ -1,9 +1,11 @@
 <!-- urbverde-ui/src/components/cards/weather/RankingCard.vue -->
 <template>
-  <CardBase
+  <CardBase 
     v-bind="{
       ...(data.title && { title: data.title }),
-      ...(data.subtitle && { subtitle: data.subtitle })
+      ...(data.subtitle && { subtitle: data.subtitle }),
+      titleClass: 'rank-card-title',
+      subtitleClass: 'rank-card-subtitle'
     }"
   >
     <div v-if="data.items && data.items.length > 0" class="sections">
@@ -46,22 +48,31 @@ export default {
 
 <style scoped>
 .rank-card {
-  padding: 16px;
-  border-radius: 8px;
+  height: 516px;
+  width: 428px;
+  border-radius: 16px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
+  margin-top: 32px;
 }
 
-.title {
+.rank-card-title {
+  color: var(--Body-Text-Body-Color, #212529);
+
+  /* Heading/H5 */
+  font-family: Inter;
   font-size: 20px;
-  font-weight: bold;
-  color: #343a40;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%; /* 24px */
+  padding: 32px 24px 32px 24px;
 }
 
 .subtitle {
   font-size: 14px;
   color: #6c757d;
   margin-bottom: 16px;
+  padding: 0px 24px 16px 24px;
 }
 
 .sections {

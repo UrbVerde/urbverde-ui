@@ -29,33 +29,52 @@ export default {
 
 <style>
 .second-card {
+  width: 246px;
+  height: 208px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px; /* Ajuste de espaçamento entre elementos */
-  padding: 16px; /* Espaçamento interno */
+  flex: 1 0 0;
+  align-self: stretch;
 }
 
-.second-card .subtitle {
+.second-card .titulo {
+  display: flex;
+  padding: 24px 24px 16px 24px;
+  align-items: center;
+  gap: 12px;
   align-self: stretch;
+}
+
+.second-card .textodescritivo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  padding: 16px 24px 24px 24px;
+  text-align: justify;
   color: var(--Gray-600, #6C757D);
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%;
-  margin: 4px 0; /* Ajuste de margem superior e inferior */
+  line-height: 150%; /* 21px */
 }
 
 .second-card .value {
+  display: flex;
+  padding: 0px 32px;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
   color: var(--Green-500, #198754);
-  text-align: left; /* Alinha o valor ao lado esquerdo */
+  text-align: center;
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
   font-family: Montserrat;
   font-size: 40px;
   font-style: normal;
   font-weight: 700;
-  line-height: 48px;
-  margin-bottom: 8px; /* Adiciona espaçamento inferior */
+  line-height: 120%;
 }
 </style>

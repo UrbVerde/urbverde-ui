@@ -56,11 +56,11 @@ export default {
   padding: 0 32px;
 }
 
-.first-card .subtitulo{
+.first-card .textodescritivo {
   display: flex;
   padding: 16px 24px 24px 24px;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
   background: var(--HitBox, rgba(255, 255, 255, 0.00));
@@ -69,6 +69,5 @@ export default {
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 21px; /* 21px */
 }
 </style>

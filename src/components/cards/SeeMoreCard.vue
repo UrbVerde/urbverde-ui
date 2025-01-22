@@ -8,13 +8,15 @@
   >
     <template #footer>
       <PrimaryButton
-        label="Ver no Mapa"
-        :filled="false"
-        icon="bi-map" 
-        iconType="bootstrap"
-        iconPosition="left"
-        class="card-button"
-      />
+      label="Ver no Mapa"
+      :filled="false"
+      icon="bi-map" 
+      iconType="bootstrap"
+      iconPosition="left"
+      class="card-button"
+      @mounted="console.log($el.classList)"
+    />
+
     </template>
   </CardBase>
 </template>
@@ -38,46 +40,48 @@ export default {
 };
 </script>
 
-<style scoped>
-.see-more-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+<style>
+.see-card {
+  height: 187px;
+  width: 336px;
 }
 
-.value-info {
+.see-card .titulo {
+  padding: 24px 24px 16px 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  border: 1px solid var(--Gray-200, #E9ECEF);
-  border-radius: 16px;
-  background-color: white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  align-self: stretch;
+  color: var(--Body-Text-Body-Color, #212529);
+
+  /* Heading/H6 */
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%; /* 19.2px */
 }
 
-.card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.value-display {
+.see-card .value {
+  padding: 0px 32px;
   color: var(--Green-500, #198754);
-  font-family: Montserrat, sans-serif;
-  font-size: 40px;
-  font-weight: 700;
   text-align: center;
-  margin-bottom: 16px;
-}
 
+  /* Small Shadow */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  font-family: Montserrat;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 48px */
+}
 .card-button {
   margin-top: 16px;
-  align-self: center;
+  padding: 8px 32px; /* Ajuste do espaçamento interno */
+  display: inline-flex; /* Garante alinhamento do conteúdo */
+  justify-content: center; /* Centraliza texto e ícone */
+  align-items: center; /* Centraliza verticalmente */
 }
+
 
 .empty-message {
   text-align: center;
