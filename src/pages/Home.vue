@@ -3,7 +3,10 @@
     <TawkTo />
 
     <!-- Navbar -->
-    <header data-aos="fade-down" data-aos-duration="400">
+    <header class="no-transform"
+            data-aos="fade"
+            data-aos-delay="100"
+            data-aos-duration="400">
       <NavbarHomepage />
     </header>
 
@@ -473,6 +476,10 @@ export default {
     margin: 0;
   }
 
+  .no-transform[data-aos] {
+    transform: none;
+  }
+
   .homepage {
     position: relative;
     overflow-x: hidden;
@@ -513,8 +520,8 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 240px;
-    gap: 240px;
+    padding-top: 20vh;
+    gap: 20vh;
   }
 
   .hero-top {
