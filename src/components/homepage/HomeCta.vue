@@ -7,53 +7,26 @@
         <span class="h2-cta heading-h1">{{ title }}</span>
       </h2>
 
-      <div class="search">
-        <div class="search-button">
-          <BuscaSimples @location-updated="onLocationUpdated" />
-        </div>
-
-        <!-- Botão para largura maiores que 1025px -->
-        <router-link
-          v-if="windowWidth >= 1026"
-          :to="buttonRoute"
-          class="button-primary-link">
-          <PrimaryButton class="button-primary-link"
-                         :label="buttonLabel"
-                         :filled="filled"
-                         :iconType="iconType"
-                         :icon="icon"
-                         iconPosition="right"
-          />
-        </router-link>
-
-        <!-- Botão para largura menores que 1025px -->
-        <router-link
-          v-else
-          :to="buttonRoute"
-          class="button-primary-link-mobile">
-          <PrimaryButton class="button-primary-link-mobile"
-                         :filled="filled"
-                         :iconType="iconType"
-                         :icon="icon"
-                         iconPosition="right"
-          />
-        </router-link>
-
-      </div>
+      <HomeSearch
+        @location-updated="onLocationUpdated"
+        :buttonRoute="buttonRoute"
+        :buttonLabel="buttonLabel"
+        :filled="filled"
+        :iconType="iconType"
+        :icon="icon"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+import HomeSearch from './HomeSearch.vue';
 import CtaBackground from '@/assets/images/homepage/cta-background.svg';
 
 export default {
   name: 'HomeCta',
   components: {
-    PrimaryButton,
-    BuscaSimples,
+    HomeSearch,
   },
 
   return: {
@@ -168,31 +141,6 @@ export default {
     font-size: 48px;
     font-weight: 700;
     display: flex;
-  }
-
-  .search {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    flex-direction: row;
-  }
-
-  .button-primary-link {
-    width: 143px;
-    height: 48px;
-    text-decoration: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .button-primary-link-mobile {
-    width: 56px;
-    height: 48px;
-    text-decoration: none;
-    margin: 0;
-    padding: 0;
   }
 
   // Desktop screen large

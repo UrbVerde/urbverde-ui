@@ -42,21 +42,14 @@
                 de forma totalmente gratuita!
               </h4>
             </div>
-            <form class="search">
-              <div class="search-button">
-                <BuscaSimples @location-updated="onLocationUpdated" />
-              </div>
-              <router-link to="/mapa" class="button-primary-link">
-                <PrimaryButton
-                  label="Acessar"
-                  :filled="true"
-                  iconType="bootstrap"
-                  icon="bi bi-arrow-right"
-                  iconPosition="right"
-                />
-              </router-link>
-
-            </form>
+            <HomeSearch
+              @location-updated="onLocationUpdated"
+              buttonRoute="/mapa"
+              buttonLabel="Acessar"
+              :filled="true"
+              iconType="bootstrap"
+              icon="bi bi-arrow-right"
+            />
           </header>
 
           <section class="wrapper-platform">
@@ -322,13 +315,13 @@
 <script>
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 import TawkTo from '@/components/homepage/TawkTo.vue';
 import CardComments from '@/components/homepage/CardComments.vue';
 import HomeAwards from '@/components/homepage/HomeAwards.vue';
 import HomeProduct from '@/components/homepage/HomeProduct.vue';
+import HomeSearch from '@/components/homepage/HomeSearch.vue';
 import HomeCta from '@/components/homepage/HomeCta.vue';
 
 // Import para as imagens da página utilizados em componentes
@@ -346,13 +339,13 @@ export default {
   components: {
     NavbarHomepage,
     PrimaryButton,
-    BuscaSimples,
     UrbVerdeEducaTopics,
     UrbVerdeFooter,
     TawkTo,
     CardComments,
     HomeAwards,
     HomeProduct,
+    HomeSearch,
     HomeCta,
   },
 
@@ -595,29 +588,6 @@ export default {
     width: 520px;
     max-width: 100%;
     color: map-get($theme, secondary);
-  }
-
-  .search {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    flex-direction: row;
-  }
-
-  .search .input-container{
-    border-radius: 14px;
-    background: map-get($gray, 100);
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-  }
-
-  .search .button-primary-link{
-    margin: 0;
-    padding: 0;
-  }
-
-  .search .button-primary-link .primary-button{
-    width: 143px;
-    height: 48px;
   }
 
   .wrapper-platform{
