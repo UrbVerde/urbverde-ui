@@ -900,4 +900,35 @@ export default {
     overflow-x: auto;
     width: 100%;
   }
+
+  // Desktop screen extra large
+  @media screen and (min-width: 1922px) {
+
+  }
+
+  // Desktop screen large
+  @media screen and (max-width: 1921px) {
+
+  }
+
+  // Desktop screen small
+  @media screen and (max-width: 1281px) {
+
+  }
+
+  // Tablet screen
+  @media screen and (max-width: 1026px) {
+
+  }
+
+  // Mobile screen large
+  @media screen and (max-width: 601px) {
+
+  }
+
+  // Mobile screen small
+  @media screen and (max-width: 481px) {
+
+  }
+
 </style>

@@ -11,7 +11,12 @@
         <div class="search-button">
           <BuscaSimples @location-updated="onLocationUpdated" />
         </div>
-        <router-link :to="buttonRoute" class="button-primary-link">
+
+        <!-- Botão para largura maiores que 1025px -->
+        <router-link
+          v-if="windowWidth >= 1026"
+          :to="buttonRoute"
+          class="button-primary-link">
           <PrimaryButton class="button-primary-link"
                          :label="buttonLabel"
                          :filled="filled"
@@ -20,6 +25,20 @@
                          iconPosition="right"
           />
         </router-link>
+
+        <!-- Botão para largura menores que 1025px -->
+        <router-link
+          v-else
+          :to="buttonRoute"
+          class="button-primary-link-mobile">
+          <PrimaryButton class="button-primary-link-mobile"
+                         :filled="filled"
+                         :iconType="iconType"
+                         :icon="icon"
+                         iconPosition="right"
+          />
+        </router-link>
+
       </div>
     </div>
   </div>
@@ -36,9 +55,17 @@ export default {
     PrimaryButton,
     BuscaSimples,
   },
+
   return: {
     CtaBackground,
   },
+
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+    };
+  },
+
   props: {
     bgSrc: {
       type: String,
@@ -73,30 +100,44 @@ export default {
       default: 'bi bi-arrow-right',
     },
   },
+
   methods: {
     onLocationUpdated(location) {
       this.$emit('location-updated', location);
     },
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
   },
+
+  mounted() {
+    window.addEventListener('resize', this.updateWindowWidth);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
+  },
+
 };
+
 </script>
 
   <style scoped lang="scss">
   .cta-content {
     position: relative;
-    width: 100vw; /* Ocupa toda a largura da tela */
-    height: 700px; /* Altura fixa */
-    overflow: hidden; /* Esconde partes da imagem que ultrapassam os limites */
+    width: 100vw;
+    height: 700px;
+    overflow: hidden;
   }
 
   .cta-content img {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: auto; /* Largura automática */
-    height: 100%; /* Altura total do container */
-    transform: translate(-50%, -50%); /* Centraliza a imagem */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
+    width: auto;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
   }
 
   .cta-label {
@@ -107,9 +148,14 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 72px;
-    top: 240px;
+    top: 220px;
     transform: translate(-50%, -50%);
     left: 50%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cta-label h2{
     margin: 0;
     padding: 0;
   }
@@ -140,4 +186,84 @@ export default {
     margin: 0;
     padding: 0;
   }
+
+  .button-primary-link-mobile {
+    width: 56px;
+    height: 48px;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Desktop screen large
+  @media screen and (min-width: 1922px) {
+
+    .cta-content {
+      height: 800px;
+    }
+
+    .cta-content img{
+      width: 100%;
+      object-position: bottom;
+    }
+
+  }
+
+  // Desktop screen small
+  @media screen and (max-width: 1281px) {
+
+    .h2-cta {
+      font-size: 40px;
+    }
+
+    .cta-content {
+      height: 650px;
+    }
+
+    .cta-label {
+      top: 200px;
+    }
+
+  }
+
+  // Tablet screen
+  @media screen and (max-width: 1026px) {
+
+    .h2-cta {
+      font-size: 36px;
+    }
+
+    .cta-content {
+      height: 600px;
+    }
+
+    .cta-label {
+      top: 180px;
+      padding: 0px 24px;
+    }
+
+  }
+
+  // Mobile screen large
+  @media screen and (max-width: 601px) {
+
+    .cta-content {
+      height: 550px;
+    }
+
+    .cta-label {
+      top: 160px;
+    }
+
+  }
+
+  // Mobile screen small
+  @media screen and (max-width: 481px) {
+
+    .h2-cta {
+      font-size: 32px;
+    }
+
+  }
+
   </style>
