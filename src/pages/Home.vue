@@ -117,45 +117,47 @@
                 />
               </div>
             </router-link>
-
-            <!-- Cards de comentários sobre a UrbVerde -->
-            <div class="wrapper-cards">
-              <article>
-                <CardComments
-                  quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
-                  highlight="o mundo ainda tem jeito"
-                  quoteAfterHighlight="."
-                  :imageSrc="homepageImages.nalini.src"
-                  :imageAlt="homepageImages.nalini.alt"
-                  author="José Nalini"
-                  role="Secretário de São Paulo"
-                />
-              </article>
-              <article>
-                <CardComments
-                  quoteBeforeHighlight="A UrbVerde foi desenvolvida para fornecer dados ao "
-                  highlight="poder público e aos cidadãos"
-                  quoteAfterHighlight="."
-                  :imageSrc="homepageImages.juliana.src"
-                  :imageAlt="homepageImages.juliana.alt"
-                  author="Juliana de Lima"
-                  role="Jornalista do Estadão"
-                />
-              </article>
-              <article>
-                <CardComments
-                  quoteBeforeHighlight="É uma "
-                  highlight="plataforma que caiu do céu"
-                  quoteAfterHighlight=" [...] ajuda a ler a cidade de uma forma clara."
-                  :imageSrc="homepageImages.marcela.src"
-                  :imageAlt="homepageImages.marcela.alt"
-                  author="Marcela Petenusci"
-                  role="Professora de Ribeirão Preto"
-                />
-              </article>
-            </div>
           </section>
         </section>
+
+        <!-- Cards de comentários sobre a UrbVerde -->
+        <div class="block-cards">
+          <div class="wrapper-cards">
+            <article>
+              <CardComments
+                quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
+                highlight="o mundo ainda tem jeito"
+                quoteAfterHighlight="."
+                :imageSrc="homepageImages.nalini.src"
+                :imageAlt="homepageImages.nalini.alt"
+                author="José Nalini"
+                role="Secretário de São Paulo"
+              />
+            </article>
+            <article>
+              <CardComments
+                quoteBeforeHighlight="A UrbVerde foi desenvolvida para fornecer dados ao "
+                highlight="poder público e aos cidadãos"
+                quoteAfterHighlight="."
+                :imageSrc="homepageImages.juliana.src"
+                :imageAlt="homepageImages.juliana.alt"
+                author="Juliana de Lima"
+                role="Jornalista do Estadão"
+              />
+            </article>
+            <article>
+              <CardComments
+                quoteBeforeHighlight="É uma "
+                highlight="plataforma que caiu do céu"
+                quoteAfterHighlight=" [...] ajuda a ler a cidade de uma forma clara."
+                :imageSrc="homepageImages.marcela.src"
+                :imageAlt="homepageImages.marcela.alt"
+                author="Marcela Petenusci"
+                role="Professora de Ribeirão Preto"
+              />
+            </article>
+          </div>
+        </div>
 
         <!-- Institutes content-->
         <section class="institutes container">
@@ -817,20 +819,34 @@ export default {
     }
   }
 
+  .block-cards {
+    width: 100%;
+    margin: 0 auto;
+    overflow: visible;
+    position: relative;
+  }
+
   .wrapper-cards {
     display: flex;
     gap: 24px;
     align-self: stretch;
     width: 100%;
-    max-width: 1184px;
+    max-width: 1200px;
     margin: 0 auto;
     overflow: visible;
+    overflow-x: auto;
+    padding: 80px 16px 24px 16px;
+    scroll-behavior: smooth;
+  }
+
+  .wrapper-cards::-webkit-scrollbar {
+    display: none;
   }
 
   .institutes {
     display: flex;
     flex-direction: column;
-    padding: 200px 0 184px 0;
+    padding: 176px 0 184px 0;
     gap: 128px;
   }
 
@@ -1042,8 +1058,13 @@ export default {
       gap: 20vh;
     }
 
+    .wrapper-cards {
+      max-width: 1200px;
+      padding: 80px 80px 24px 80px;
+    }
+
     .institutes {
-      padding: 176px 0 176px 0;
+      padding: 152px 0 176px 0;
       gap: 120px;
     }
 
@@ -1080,6 +1101,14 @@ export default {
 
   }
 
+  // Screen for Card Comments section
+  @media screen and (max-width: 1200px) {
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 80px 64px 24px 64px;
+    }
+  }
+
   // Tablet screen
   @media screen and (max-width: 1026px) {
 
@@ -1091,13 +1120,18 @@ export default {
       font-size: 40px;
     }
 
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 80px 40px 24px 40px;
+    }
+
     .hero-content {
       padding: 18vh 40px 0 40px;
       gap: 18vh;
     }
 
     .institutes {
-      padding: 152px 0 152px 0;
+      padding: 128px 0 152px 0;
       gap: 96px;
     }
 
@@ -1197,8 +1231,13 @@ export default {
       object-position: top left;
     }
 
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 48px 24px 24px 24px;
+    }
+
     .institutes {
-      padding: 152px 0 152px 0;
+      padding: 128px 0 152px 0;
       gap: 80px;
     }
 
@@ -1266,6 +1305,11 @@ export default {
   // Mobile screen small
   @media screen and (max-width: 481px) {
 
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 48px 24px 24px 24px;
+    }
+
     .hero-content {
       padding: 13vh 24px 0 24px;
       gap: 13vh;
@@ -1276,7 +1320,7 @@ export default {
     }
 
     .institutes {
-      padding: 112px 0 112px 0;
+      padding: 88px 0 112px 0;
       gap: 72px;
     }
 

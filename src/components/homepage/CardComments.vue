@@ -1,5 +1,5 @@
 <template>
-  <div class="cards shadow-lg">
+  <div class="cards shadow">
     <div class="top-content body-small-regular">
       <p>
         “ {{ quoteBeforeHighlight }}
@@ -75,10 +75,14 @@ export default {
     max-width: 100%;
     min-width: 280px;
     gap: 24px;
+    max-height: 190px;
+    height: 100%;
+    background-color: map-get($gray, white);
   }
 
   .top-content {
     color: map-get($body-text, body-color);
+    height: 100%;
   }
 
   .top-content p {
@@ -156,8 +160,9 @@ export default {
   }
 
   // Mobile screen large
-  @media screen and (max-width: 601px) {
+  @media screen and (max-width: 1026px) {
     .cards {
+      padding: 20px;
       font-size: 12px;
       gap: 16px;
     }
@@ -173,10 +178,5 @@ export default {
       width: 48px;
       height: 48px;
     }
-  }
-
-  // Mobile screen small
-  @media screen and (max-width: 481px) {
-
   }
   </style>
