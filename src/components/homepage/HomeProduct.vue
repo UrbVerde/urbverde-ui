@@ -1,5 +1,8 @@
 <template>
-  <div class="product">
+  <div
+    class="product"
+    v-if="windowWidth >= 600"
+  >
     <div class="image-wrapper">
       <!-- Imagem de fundo (bg) -->
       <img
@@ -43,6 +46,55 @@
       </router-link>
     </div>
   </div>
+
+  <div
+    class="product"
+    v-else
+  >
+    <div class="product-text">
+      <div class="title">
+        <h3 class="heading-h2">
+          {{ title }}
+        </h3>
+      </div>
+    </div>
+
+    <div class="image-wrapper">
+      <!-- Imagem de fundo (bg) -->
+      <img
+        :src="imageBgSrc"
+        :alt="imageBgAlt"
+        class="image-bg shadow-lg"
+        loading="lazy"
+      />
+
+      <!-- Imagem frontal (front) -->
+      <img
+        :src="imageFrontSrc"
+        :alt="imageFrontAlt"
+        class="image-front shadow-lg"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="product-text">
+
+      <!-- Botão que utiliza rota (Vue Router) -->
+      <router-link
+        :to="buttonRoute"
+        class="button-primary-link"
+      >
+        <PrimaryButton
+          :label="buttonLabel"
+          :filled="filled"
+          :icon="icon"
+          :iconType="iconType"
+          iconPosition="right"
+        />
+      </router-link>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -53,6 +105,27 @@ export default {
   components: {
     PrimaryButton,
   },
+
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+    };
+  },
+
+  methods: {
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
+  },
+
+  mounted() {
+    window.addEventListener('resize', this.updateWindowWidth);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
+  },
+
   props: {
     imageBgSrc: {
       type: String,
@@ -112,8 +185,8 @@ export default {
   }
 
   .image-wrapper {
-    width: 530.531px;
-    height: 397.257px;
+    width: 530px;
+    height: 397px;
     flex-shrink: 0;
     position: relative;
     margin-right: 52px;
@@ -147,7 +220,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 56px;
+    gap: 40px;
     flex: 1 0 0;
   }
 
@@ -163,8 +236,89 @@ export default {
     text-align: center;
   }
 
+  .product-text .title h3{
+    padding: 0;
+    margin: 0;
+  }
+
+  .product-text .title h4{
+    padding: 0;
+    margin: 0;
+  }
+
   .button-primary-link {
     color: map-get($green, 600);
     text-decoration: none;
   }
+
+  // Desktop screen small
+  @media screen and (max-width: 1281px) {
+
+    .image-wrapper{
+      width: 375px;
+      height: 281px;
+      margin-right: 44px;
+    }
+
+    .image-front{
+      width: 216px;
+      height: 131px;
+      left: 200px;
+      bottom: 37px;
+    }
+
+    .product-text .title h3{
+      font-size: 28px;
+    }
+
+  }
+
+  // Tablet screen
+  @media screen and (max-width: 1026px) {
+
+    .image-wrapper{
+      width: 311px;
+      height: 233px;
+      margin-right: 36px;
+    }
+
+    .image-front{
+      width: 180px;
+      height: 110px;
+      left: 165px;
+      bottom: 30px;
+    }
+
+    .product-text .title h3{
+      font-size: 24px;
+    }
+
+  }
+
+  // Mobile screen small
+  @media screen and (max-width: 481px) {
+
+    .product{
+      gap: 32px
+    }
+
+    .image-wrapper{
+      width: 250px;
+      height: 186px;
+      margin-right: 30px;
+    }
+
+    .image-front{
+      width: 140px;
+      height: 90px;
+      left: 130px;
+      bottom: 24px;
+    }
+
+    .product-text .title h3{
+      font-size: 20px;
+    }
+
+  }
+
   </style>

@@ -879,11 +879,11 @@ export default {
   .products .title{
     display: flex;
     max-width: 1184px;
-    padding: 0px 128px;
     flex-direction: column;
     align-items: center;
     gap: 21px;
     align-self: center;
+    padding: 0;
   }
 
   .products .title h2{
@@ -892,15 +892,17 @@ export default {
     font-size: 48px;
     font-style: normal;
     font-weight: 700;
+    margin: 0;
   }
 
   .products .products-content{
     display: flex;
     max-width: 1184px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 120px;
     align-self: center;
+    padding: 0;
   }
 
   .mission-educa{
@@ -989,6 +991,19 @@ export default {
   // Desktop screen small
   @media screen and (max-width: 1281px) {
 
+    .products{
+      padding: 104px 64px 120px 64px;
+      gap: 96px;
+    }
+
+    .products .products-content{
+      gap: 104px;
+    }
+
+    .products .title h2{
+      font-size: 40px;
+    }
+
     .mission-educa {
       padding: 128px 64px 88px 64px;
     }
@@ -1002,6 +1017,19 @@ export default {
 
   // Tablet screen
   @media screen and (max-width: 1026px) {
+
+    .products{
+      padding: 80px 40px 104px 40px;
+      gap: 80px;
+    }
+
+    .products .products-content{
+      gap: 80px;
+    }
+
+    .products .title h2{
+      font-size: 36px;
+    }
 
     .mission-educa {
       padding: 104px 0px;
@@ -1041,6 +1069,19 @@ export default {
 
   // Mobile screen large
   @media screen and (max-width: 601px) {
+
+    .products{
+      padding: 80px 24px 96px 24px;
+      gap: 80px;
+    }
+
+    .products .products-content{
+      gap: 88px;
+    }
+
+    .products .title h2{
+      font-size: 36px;
+    }
 
     .mission-educa .mission{
       padding: 0px 32px;
@@ -1083,6 +1124,19 @@ export default {
 
   // Mobile screen small
   @media screen and (max-width: 481px) {
+
+    .products{
+      padding: 72px 24px 96px 24px;
+      gap: 64px;
+    }
+
+    .products .products-content{
+      gap: 88px;
+    }
+
+    .products .title h2{
+      font-size: 32px;
+    }
 
     .mission-educa .educa .title h2{
       font-size: 24px;
