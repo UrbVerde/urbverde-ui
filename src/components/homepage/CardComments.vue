@@ -154,4 +154,29 @@ export default {
     align-self: stretch;
     width: 100%;
   }
+
+  // Mobile screen large
+  @media screen and (max-width: 601px) {
+    .cards {
+      font-size: 12px;
+      gap: 16px;
+    }
+
+    .highlight,
+    .cards p,
+    .cards h3,
+    .cards h4 {
+      font-size: 12px;
+    }
+
+    .bottom-content img{
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  // Mobile screen small
+  @media screen and (max-width: 481px) {
+
+  }
   </style>

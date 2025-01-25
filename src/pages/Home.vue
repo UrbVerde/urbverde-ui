@@ -73,7 +73,7 @@
 
             <!-- Imagem da plataforma -->
             <router-link
-              v-if = "windowWidth >= 601"
+              v-if="windowWidth >= 601"
               to="/mapa"
               class="platform-link"
               aria-label="Acessar a plataforma da UrbVerde"
@@ -127,8 +127,8 @@
                   quoteAfterHighlight="."
                   :imageSrc="homepageImages.nalini.src"
                   :imageAlt="homepageImages.nalini.alt"
-                  author="José Renato Nalini"
-                  role="Secretário Executivo de São Paulo"
+                  author="José Nalini"
+                  role="Secretário de São Paulo"
                 />
               </article>
               <article>
@@ -138,7 +138,7 @@
                   quoteAfterHighlight="."
                   :imageSrc="homepageImages.juliana.src"
                   :imageAlt="homepageImages.juliana.alt"
-                  author="Juliana Domingos de Lima"
+                  author="Juliana de Lima"
                   role="Jornalista do Estadão"
                 />
               </article>
@@ -149,7 +149,7 @@
                   quoteAfterHighlight=" [...] ajuda a ler a cidade de uma forma clara."
                   :imageSrc="homepageImages.marcela.src"
                   :imageAlt="homepageImages.marcela.alt"
-                  author="Marcela Cury Petenusci"
+                  author="Marcela Petenusci"
                   role="Professora de Ribeirão Preto"
                 />
               </article>
@@ -817,9 +817,8 @@ export default {
     }
   }
 
-  .wrapper-cards{
+  .wrapper-cards {
     display: flex;
-    align-items: center;
     gap: 24px;
     align-self: stretch;
     width: 100%;
