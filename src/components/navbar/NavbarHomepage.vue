@@ -191,17 +191,36 @@ export default {
     text-decoration: none;
   }
 
-  @media (max-width: 768px) {
+  // Desktop screen small
+  @media screen and (max-width: 1281px) {
+
+    ::v-deep(.logo-text) {
+      display: none;
+    }
+
     .navbar {
-      padding: 16px 24px;
+      padding: 16px 64px;
     }
 
-    .navbar-nav {
-      margin-bottom: 16px;
+  }
+
+  // Screen when the navbar is collapsed
+  @media screen and (max-width: 991px) {
+
+    ::v-deep(.logo-text) {
+      display: flex;
     }
 
-    .navbar-button {
-      margin-top: 0;
+    .navbar {
+      padding: 16px 48px
+    }
+
+  }
+
+  // Mobile screen large
+  @media screen and (max-width: 601px) {
+    .navbar {
+      padding: 16px 32px;
     }
   }
 
