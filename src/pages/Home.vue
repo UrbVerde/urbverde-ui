@@ -30,7 +30,9 @@
                   data-aos="zoom-in-up"
                   data-aos-duration="1000"
                   data-aos-delay="500">
-            <div class="hero-text">
+
+            <div class="hero-text"
+                 v-if="windowWidth >= 1026">
               <h1>
                 <span class="h1-text heading-h1">Mapeando um Futuro </span>
                 <transition name="fade" mode="out-in">
@@ -42,6 +44,21 @@
                 de forma totalmente gratuita!
               </h4>
             </div>
+
+            <div class="hero-text"
+                 v-else>
+              <h1>
+                <span class="h1-text heading-h1">Mapeando um Futuro</span>
+                <transition name="fade" mode="out-in">
+                  <span class="h1-lasttext heading-h1" :key="currentWord">{{ currentWord }}</span>
+                </transition>
+              </h1>
+              <h4 class="subtitle body-normal-medium">
+                Acesse dados sociais e ambientais completos de seu município,
+                de forma totalmente gratuita!
+              </h4>
+            </div>
+
             <HomeSearch
               @location-updated="onLocationUpdated"
               buttonRoute="/mapa"
@@ -56,6 +73,7 @@
 
             <!-- Imagem da plataforma -->
             <router-link
+              v-if = "windowWidth >= 601"
               to="/mapa"
               class="platform-link"
               aria-label="Acessar a plataforma da UrbVerde"
@@ -72,6 +90,29 @@
                 <img
                   ref="zoomImage"
                   src="@/assets/images/homepage/platform.svg"
+                  alt="Interface da plataforma UrbVerde exibindo dados ambientais"
+                />
+              </div>
+            </router-link>
+
+            <router-link
+              v-else
+              to="/mapa"
+              class="platform-link"
+              aria-label="Acessar a plataforma da UrbVerde"
+              data-aos="fade-up"
+              data-aos-delay="1500"
+              data-aos-duration="750"
+            >
+              <div
+                class="platform"
+                @mousemove="handleMouseMove"
+                @mouseleave="resetZoom"
+              >
+                <div class="overlay"></div>
+                <img
+                  ref="zoomImage"
+                  src="@/assets/images/homepage/platform_small.svg"
                   alt="Interface da plataforma UrbVerde exibindo dados ambientais"
                 />
               </div>
@@ -146,7 +187,7 @@
           </div>
 
           <!-- Lista de prêmios -->
-          <div>
+          <div class="award-wrapper">
             <HomeAwards :awards="awardsList" />
           </div>
 
@@ -620,19 +661,21 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 20vh;
+    padding: 20vh 0 0 0;
     gap: 20vh;
   }
 
   .hero-top {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 74px;
+    gap: 72px;
     align-items: center;
     justify-content: center;
   }
 
   .hero-text {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -642,6 +685,7 @@ export default {
   }
 
   .hero-text h1 {
+    width: 100%;
     margin: 0;
     display: inline-block;
     white-space: nowrap;
@@ -793,12 +837,13 @@ export default {
 
   .institutes .institutes-header {
     display: flex;
-    padding: 0px 128px;
+    max-width: 928px;
     flex-direction: column;
     align-items: center;
     gap: 24px;
     align-self: stretch;
     text-align: center;
+    margin: auto;
   }
 
   .institutes .institutes-header h2{
@@ -831,7 +876,7 @@ export default {
   .institutes-logo-carousel {
     overflow: hidden;
     position: relative;
-    margin: 0 24px;
+    margin: 0;
   }
 
   .logo-track {
@@ -983,13 +1028,34 @@ export default {
     padding-bottom: 24px;
   }
 
-  // Desktop screen large
-  @media screen and (max-width: 1921px) {
-
-  }
-
   // Desktop screen small
   @media screen and (max-width: 1281px) {
+    .h1-text {
+      font-size: 40px;
+    }
+
+    .h1-lasttext{
+      font-size: 40px;
+    }
+
+    .hero-content {
+      padding: 20vh 64px 0 64px;
+      gap: 20vh;
+    }
+
+    .institutes {
+      padding: 176px 0 176px 0;
+      gap: 120px;
+    }
+
+    .institutes .institutes-header h2{
+      margin: 0 64px;
+      font-size: 40px;
+    }
+
+    .institutes .institutes-header h4{
+      margin: 0 64px;
+    }
 
     .products{
       padding: 104px 64px 120px 64px;
@@ -1017,6 +1083,53 @@ export default {
 
   // Tablet screen
   @media screen and (max-width: 1026px) {
+
+    .h1-text {
+      font-size: 40px;
+    }
+
+    .h1-lasttext{
+      font-size: 40px;
+    }
+
+    .hero-content {
+      padding: 18vh 40px 0 40px;
+      gap: 18vh;
+    }
+
+    .institutes {
+      padding: 152px 0 152px 0;
+      gap: 96px;
+    }
+
+    .institutes .institutes-header h2{
+      margin: 0 40px;
+      font-size: 36px;
+    }
+
+    .institutes .institutes-header h4{
+      margin: 0 40px;
+      font-size: 14px;
+    }
+
+    .institutes .award-wrapper{
+      display: none;
+    }
+
+    .h1-lasttext {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .hero-text h1 {
+      width: 100%;
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      white-space: wrap;
+    }
 
     .products{
       padding: 80px 40px 104px 40px;
@@ -1069,6 +1182,35 @@ export default {
 
   // Mobile screen large
   @media screen and (max-width: 601px) {
+    .hero-content {
+      padding: 15vh 24px 0 24px;
+      gap: 15vh;
+    }
+
+    .wrapper-platform {
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .platform-link .platform img {
+      width: 700px;
+      height: 500px;
+      object-position: top left;
+    }
+
+    .institutes {
+      padding: 152px 0 152px 0;
+      gap: 80px;
+    }
+
+    .institutes .institutes-header h2{
+      margin: 0 24px;
+      font-size: 32px;
+    }
+
+    .institutes .institutes-header h4{
+      margin: 0 24px;
+    }
 
     .products{
       padding: 80px 24px 96px 24px;
@@ -1125,6 +1267,20 @@ export default {
   // Mobile screen small
   @media screen and (max-width: 481px) {
 
+    .hero-content {
+      padding: 13vh 24px 0 24px;
+      gap: 13vh;
+    }
+
+    .hero-top{
+      gap: 64px;
+    }
+
+    .institutes {
+      padding: 112px 0 112px 0;
+      gap: 72px;
+    }
+
     .products{
       padding: 72px 24px 96px 24px;
       gap: 64px;
@@ -1143,6 +1299,31 @@ export default {
       text-align: center;
     }
 
+  }
+
+  // Mobile screen extra small
+  @media screen and (max-width: 375px) {
+
+    .h1-text {
+      font-size: 36px;
+    }
+
+    .h1-lasttext{
+      font-size: 36px;
+    }
+
+    .subtitle{
+      font-size: 14px;
+    }
+
+    .hero-top{
+      gap: 40px;
+    }
+
+    .hero-content {
+      padding: 13vh 24px 0 24px;
+      gap: 13vh;
+    }
   }
 
 </style>
