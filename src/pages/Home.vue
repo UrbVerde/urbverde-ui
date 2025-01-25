@@ -216,7 +216,9 @@
           </div>
           <img src="@/assets/images/homepage/urbverde-mission.png">
         </div>
-        <div class="educa">
+        <div class="educa"
+             v-if="windowWidth >= 600"
+        >
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
@@ -228,7 +230,7 @@
               class="button-primary-link"
             >
               <PrimaryButton
-                label="Explore todos os artigos"
+                label="Explorar artigos"
                 :filled="false"
                 iconType="bootstrap"
                 icon="bi bi-arrow-right"
@@ -287,6 +289,86 @@
                 :imageSrc="homepageImages.breno.src"
                 :imageAlt="homepageImages.breno.alt"
                 title="Principais dúvidas"
+              />
+            </a>
+          </div>
+        </div>
+
+        <div class="educa"
+             v-else
+        >
+          <div class="title">
+            <h2 class="heading-h2">
+              Explore mais tópicos no UrbVerde Educa
+            </h2>
+          </div>
+          <div class="topics-button-wrapper">
+            <div class="educa-topics">
+
+              <!--Link para Reportagens e notícias-->
+              <a
+                href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.marcel.src"
+                  :imageAlt="homepageImages.marcel.alt"
+                  title="Reportagens e notícias"
+                />
+              </a>
+
+              <!--Documentos-->
+              <a
+                href="https://urbverde-educa.tawk.help/category/documentos"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.notebook.src"
+                  :imageAlt="homepageImages.notebook.alt"
+                  title="Documentos"
+                />
+              </a>
+
+              <!--Métodologias-->
+              <a
+                href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.edu.src"
+                  :imageAlt="homepageImages.edu.alt"
+                  title="Metodologias"
+                />
+              </a>
+
+              <!--Principais dúvidas-->
+              <a
+                href="https://urbverde-educa.tawk.help/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.breno.src"
+                  :imageAlt="homepageImages.breno.alt"
+                  title="Principais dúvidas"
+                />
+              </a>
+            </div>
+            <a
+              href="https://urbverde-educa.tawk.help/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="button-primary-link"
+            >
+              <PrimaryButton
+                label="Explorar artigos"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
               />
             </a>
           </div>
@@ -383,6 +465,7 @@ export default {
       // Imagens retornando de images-homepage.js
       logos,
       homepageImages,
+      windowWidth: window.innerWidth,
 
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
@@ -414,20 +497,30 @@ export default {
   },
   mounted() {
     this.startWordRotation();
+
     AOS.init({
       offset: 0,
       threshold: 0,
       once: false
     });
+
+    window.addEventListener('resize', this.updateWindowWidth);
   },
 
   beforeUnmount() {
     clearInterval(this.wordRotationInterval);
+
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
 
   methods: {
     onLocationUpdated() {
       return;
+    },
+
+    // Método para atualizar a largura da janela
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
     },
 
     // Método para rotação das palavras
@@ -477,6 +570,20 @@ export default {
     position: relative;
     overflow-x: hidden;
     background-color: #FCFDFC;
+
+    ::-webkit-scrollbar{
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: map-get($primary-fade, 400);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: map-get($primary-fade, 100);
+      border-radius: 4px;
+    }
   }
 
   .image-background-wrapper {
@@ -748,12 +855,14 @@ export default {
   }
 
   @keyframes scroll-logos {
+
     0% {
       transform: translateX(0);
     }
     100% {
       transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
     }
+
   }
 
   .products{
@@ -796,7 +905,7 @@ export default {
 
   .mission-educa{
     display: flex;
-    padding: 128px 0px 90px 0px;
+    padding: 104px 0px 90px 0px;
     flex-direction: column;
     align-items: flex-start;
     gap: 184px;
@@ -869,11 +978,7 @@ export default {
     align-self: stretch;
     overflow-x: auto;
     width: 100%;
-  }
-
-  // Desktop screen extra large
-  @media screen and (min-width: 1922px) {
-
+    padding-bottom: 24px;
   }
 
   // Desktop screen large
@@ -884,20 +989,105 @@ export default {
   // Desktop screen small
   @media screen and (max-width: 1281px) {
 
+    .mission-educa {
+      padding: 128px 64px 88px 64px;
+    }
+
+    .mission-educa .educa .educa-topics{
+      overflow-x: auto;
+      scroll-behavior: smooth;
+    }
+
   }
 
   // Tablet screen
   @media screen and (max-width: 1026px) {
+
+    .mission-educa {
+      padding: 104px 0px;
+      gap: 120px;
+    }
+
+    .mission-educa .mission{
+      padding: 0px 64px;
+      gap: 56px;
+    }
+
+    .mission-educa .mission img{
+      width: 345px;
+      height: 212px;
+    }
+
+    .mission-educa .educa .title{
+      padding: 0 40px;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mission-educa .educa .educa-topics{
+      padding: 0 40px 0 40px;
+      scroll-behavior: smooth;
+    }
+
+    .mission-educa .educa button.primary-button {
+      width: 184px;
+    }
+
+    .mission-educa .educa .educa-topics::-webkit-scrollbar {
+      display: none;
+    }
 
   }
 
   // Mobile screen large
   @media screen and (max-width: 601px) {
 
+    .mission-educa .mission{
+      padding: 0px 32px;
+      gap: 56px;
+    }
+
+    .mission-educa .educa .title{
+      padding: 0 24px;
+    }
+
+    .mission-educa .educa .educa-topics{
+      padding: 0 24px 0 24px;
+    }
+
+    .mission-educa .educa{
+      justify-content: center;
+      align-items: center;
+      gap: 56px;
+    }
+
+    .mission-educa .mission img{
+      width: 100%;
+      height: auto;
+    }
+
+    .mission-educa .educa .topics-button-wrapper{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      align-self: stretch;
+    }
+
+    .mission-educa .educa .title h2{
+      font-size: 32px;
+      text-align: center;
+    }
+
   }
 
   // Mobile screen small
   @media screen and (max-width: 481px) {
+
+    .mission-educa .educa .title h2{
+      font-size: 24px;
+      text-align: center;
+    }
 
   }
 

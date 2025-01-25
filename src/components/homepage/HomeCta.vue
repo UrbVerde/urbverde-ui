@@ -78,19 +78,7 @@ export default {
     onLocationUpdated(location) {
       this.$emit('location-updated', location);
     },
-    updateWindowWidth() {
-      this.windowWidth = window.innerWidth;
-    },
   },
-
-  mounted() {
-    window.addEventListener('resize', this.updateWindowWidth);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('resize', this.updateWindowWidth);
-  },
-
 };
 
 </script>
