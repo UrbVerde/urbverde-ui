@@ -3,6 +3,7 @@
     class="product"
     v-if="windowWidth >= 600"
   >
+    <span class="effect-product"></span>
     <div class="image-wrapper">
       <!-- Imagem de fundo (bg) -->
       <img
@@ -51,6 +52,7 @@
     class="product"
     v-else
   >
+    <span class="effect-product"></span>
     <div class="product-text">
       <div class="title">
         <h3 class="heading-h2">
@@ -182,6 +184,22 @@ export default {
     gap: 40px;
     flex-wrap: wrap;
     justify-content: center;
+    position: relative;
+  }
+
+  .effect-product {
+    width: 931px;
+    height: 753px;
+    display: block;
+    background: radial-gradient(26.73% 25.49% at 72.8% 24.58%, rgba(0, 255, 166, 0.20) 0%, rgba(68, 255, 0, 0.14) 100%);
+    opacity: 75%;
+    filter: blur(200px);
+    transform: rotate(-28deg);
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
   }
 
   .image-wrapper {
@@ -244,6 +262,7 @@ export default {
   .product-text .title h4{
     padding: 0;
     margin: 0;
+    opacity: 0.75;
   }
 
   .button-primary-link {
@@ -271,6 +290,13 @@ export default {
       font-size: 28px;
     }
 
+    .effect-product {
+      width: 766px;
+      height: 620px;
+      top: 50%;
+      left: 25%;
+    }
+
   }
 
   // Tablet screen
@@ -293,9 +319,28 @@ export default {
       font-size: 24px;
     }
 
+    .effect-product {
+      width: 660px;
+      height: 533px;
+      top: 50%;
+      left: 50%;
+    }
+
   }
 
-  // Mobile screen small
+  // Mobile screen large
+  @media screen and (max-width: 601px) {
+
+    .effect-product {
+      width: 594px;
+      height: 480px;
+      top: 50%;
+      left: 50%;
+    }
+
+  }
+
+  // Mobile screen medium
   @media screen and (max-width: 481px) {
 
     .product{
@@ -317,6 +362,13 @@ export default {
 
     .product-text .title h3{
       font-size: 20px;
+    }
+
+    .effect-product {
+      width: 520px;
+      height: 420px;
+      top: 50%;
+      left: 50%;
     }
 
   }
