@@ -95,6 +95,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .navbar {
     padding: 0;
     min-height: 72px;
@@ -191,17 +193,34 @@ export default {
     text-decoration: none;
   }
 
-  @media (max-width: 768px) {
+  @include breakpoint-down('desktop-small') {
+
+    ::v-deep(.logo-text) {
+      display: none;
+    }
+
     .navbar {
-      padding: 16px 24px;
+      padding: 16px 64px;
     }
 
-    .navbar-nav {
-      margin-bottom: 16px;
+  }
+
+  // Specific media
+  @media screen and (max-width: 991px) {
+
+    ::v-deep(.logo-text) {
+      display: flex;
     }
 
-    .navbar-button {
-      margin-top: 0;
+    .navbar {
+      padding: 16px 48px
+    }
+
+  }
+
+  @include breakpoint-down('mobile-large') {
+    .navbar {
+      padding: 16px 32px;
     }
   }
 

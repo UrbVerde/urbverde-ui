@@ -49,7 +49,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 56px;
+  gap: 48px;
 }
 
 .institutes-awards p,

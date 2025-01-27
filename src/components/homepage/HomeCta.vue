@@ -7,38 +7,38 @@
         <span class="h2-cta heading-h1">{{ title }}</span>
       </h2>
 
-      <div class="search">
-        <div class="search-button">
-          <BuscaSimples @location-updated="onLocationUpdated" />
-        </div>
-        <router-link :to="buttonRoute" class="button-primary-link">
-          <PrimaryButton class="button-primary-link"
-                         :label="buttonLabel"
-                         :filled="filled"
-                         :iconType="iconType"
-                         :icon="icon"
-                         iconPosition="right"
-          />
-        </router-link>
-      </div>
+      <HomeSearch
+        @location-updated="onLocationUpdated"
+        :buttonRoute="buttonRoute"
+        :buttonLabel="buttonLabel"
+        :filled="filled"
+        :iconType="iconType"
+        :icon="icon"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+import HomeSearch from './HomeSearch.vue';
 import CtaBackground from '@/assets/images/homepage/cta-background.svg';
 
 export default {
   name: 'HomeCta',
   components: {
-    PrimaryButton,
-    BuscaSimples,
+    HomeSearch,
   },
+
   return: {
     CtaBackground,
   },
+
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+    };
+  },
+
   props: {
     bgSrc: {
       type: String,
@@ -73,30 +73,34 @@ export default {
       default: 'bi bi-arrow-right',
     },
   },
+
   methods: {
     onLocationUpdated(location) {
       this.$emit('location-updated', location);
     },
   },
 };
+
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .cta-content {
     position: relative;
-    width: 100vw; /* Ocupa toda a largura da tela */
-    height: 700px; /* Altura fixa */
-    overflow: hidden; /* Esconde partes da imagem que ultrapassam os limites */
+    width: 100vw;
+    height: 700px;
+    overflow: hidden;
   }
 
   .cta-content img {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: auto; /* Largura automática */
-    height: 100%; /* Altura total do container */
-    transform: translate(-50%, -50%); /* Centraliza a imagem */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
+    width: auto;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
   }
 
   .cta-label {
@@ -107,9 +111,14 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 72px;
-    top: 240px;
+    top: 220px;
     transform: translate(-50%, -50%);
     left: 50%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cta-label h2{
     margin: 0;
     padding: 0;
   }
@@ -124,20 +133,70 @@ export default {
     display: flex;
   }
 
-  .search {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    flex-direction: row;
+  @include breakpoint-up('desktop-large') {
+
+    .cta-content {
+      height: 800px;
+    }
+
+    .cta-content img{
+      width: 100%;
+      object-position: bottom;
+    }
+
   }
 
-  .button-primary-link {
-    width: 143px;
-    height: 48px;
-    text-decoration: none;
-    margin: 0;
-    padding: 0;
+  @include breakpoint-down('desktop-small') {
+
+    .h2-cta {
+      font-size: 40px;
+    }
+
+    .cta-content {
+      height: 650px;
+    }
+
+    .cta-label {
+      top: 200px;
+    }
+
   }
+
+  @include breakpoint-down('tablet') {
+
+    .h2-cta {
+      font-size: 36px;
+    }
+
+    .cta-content {
+      height: 600px;
+    }
+
+    .cta-label {
+      top: 180px;
+      padding: 0px 24px;
+    }
+
+  }
+
+  @include breakpoint-down('mobile-large') {
+
+    .cta-content {
+      height: 550px;
+    }
+
+    .cta-label {
+      top: 160px;
+    }
+
+  }
+
+  @include breakpoint-down('mobile-medium') {
+
+    .h2-cta {
+      font-size: 32px;
+    }
+
+  }
+
   </style>

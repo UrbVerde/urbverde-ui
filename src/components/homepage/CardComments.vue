@@ -1,5 +1,5 @@
 <template>
-  <div class="cards shadow-lg">
+  <div class="cards shadow">
     <div class="top-content body-small-regular">
       <p>
         “ {{ quoteBeforeHighlight }}
@@ -65,6 +65,8 @@ export default {
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .cards {
     display: flex;
     padding: 24px;
@@ -75,10 +77,14 @@ export default {
     max-width: 100%;
     min-width: 280px;
     gap: 24px;
+    max-height: 190px;
+    height: 100%;
+    background-color: map-get($gray, white);
   }
 
   .top-content {
     color: map-get($body-text, body-color);
+    height: 100%;
   }
 
   .top-content p {
@@ -153,5 +159,25 @@ export default {
     align-items: flex-start;
     align-self: stretch;
     width: 100%;
+  }
+
+  @include breakpoint-down('tablet') {
+    .cards {
+      padding: 20px;
+      font-size: 12px;
+      gap: 16px;
+    }
+
+    .highlight,
+    .cards p,
+    .cards h3,
+    .cards h4 {
+      font-size: 12px;
+    }
+
+    .bottom-content img{
+      width: 48px;
+      height: 48px;
+    }
   }
   </style>
