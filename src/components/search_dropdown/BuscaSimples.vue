@@ -109,7 +109,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, onUpdated } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
-import { API_URLS } from '@/constants/endpoints';
+// import { API_URLS } from '@/constants/endpoints';
 
 const props = defineProps({
   openDelay: {
@@ -492,7 +492,7 @@ async function fetchCoordinates(address) {
     }
 
     // Use the mock API with code
-    const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${codeValue}`);
+    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${codeValue}`);
     const data = await response.json();
 
     if (data && data.length > 0) {

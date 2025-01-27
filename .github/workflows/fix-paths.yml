@@ -6,10 +6,15 @@ on:
       - opened
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   fix_paths:
     name: Correct First-Line FilePath Comments
     runs-on: ubuntu-latest
+    
     steps:
       - name: Get branch name
         id: branch-name
@@ -21,11 +26,12 @@ jobs:
         with:
           ref: ${{ steps.branch-name.outputs.branch }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}  # Explicitly use GITHUB_TOKEN
 
       - name: Setup Git User
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout ${{ steps.branch-name.outputs.branch }}
 
       - name: Run Pathme Logic Inline
@@ -38,8 +44,13 @@ jobs:
           fi
 
           (echo ".gitignore"; git ls-files) | while read -r FILE; do
+            # Skip if file doesn't exist or is empty
+            [ ! -f "$FILE" ] && continue
+            [ ! -s "$FILE" ] && continue
+
             EXT="${FILE##*.}"
             BASENAME="$(basename "$FILE")"
+
             if [[ "$BASENAME" == ".gitignore" || "$EXT" =~ ^(go|js|ts|html|vue|css|sh|env|yml|yaml|dockerfile|md)$ ]]; then
               if [[ "$BASENAME" == ".gitignore" ]]; then
                 COMMENT="# $PARENT_NAME/$BASENAME"
@@ -53,17 +64,15 @@ jobs:
                 COMMENT="// $PARENT_NAME/$FILE"
               fi
 
-              if [[ -s "$FILE" ]]; then
-                FIRST_LINE="$(head -n 1 "$FILE" 2>/dev/null)"
-                if [[ "$FIRST_LINE" =~ ^([/#<!*]+).*[/[:alnum:]]+/$BASENAME ]]; then
-                  if [[ "$FIRST_LINE" != "$COMMENT" ]]; then
-                    sed -i "1s|.*|$COMMENT|" "$FILE"
-                    echo "Updated wrong path: $FILE"
-                  fi
-                elif ! grep -q "^$COMMENT" "$FILE" 2>/dev/null; then
-                  echo -e "$COMMENT\n$(cat "$FILE")" > "$FILE"
-                  echo "Inserted missing path: $FILE"
+              FIRST_LINE="$(head -n 1 "$FILE" 2>/dev/null)"
+              if [[ "$FIRST_LINE" =~ ^([/#<!*]+).*[/[:alnum:]]+/$BASENAME ]]; then
+                if [[ "$FIRST_LINE" != "$COMMENT" ]]; then
+                  sed -i "1s|.*|$COMMENT|" "$FILE"
+                  echo "Updated wrong path: $FILE"
                 fi
+              elif ! grep -q "^$COMMENT" "$FILE" 2>/dev/null; then
+                echo -e "$COMMENT\n$(cat "$FILE")" > "$FILE"
+                echo "Inserted missing path: $FILE"
               fi
             fi
           done
