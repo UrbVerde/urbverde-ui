@@ -6,7 +6,6 @@ on:
       - opened
   workflow_dispatch:
 
-# Add these permissions
 permissions:
   contents: write
   pull-requests: write
