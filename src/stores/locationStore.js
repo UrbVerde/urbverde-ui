@@ -104,7 +104,7 @@ export const useLocationStore = defineStore('locationStore', {
       if (!cd_mun) {return null;}
 
       try {
-        const response = await fetch(`/v1/address/suggestions?query=${cd_mun}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${cd_mun}`);
         const data = await response.json();
 
         if (data && data.length && data[0].coordinates) {

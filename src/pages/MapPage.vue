@@ -190,7 +190,7 @@ const syncStoreWithQuery = async() => {
     // If we have a municipal code and coordinates aren't set, fetch them
     if (locationStore.cd_mun && (!coordinates.value?.lat || !coordinates.value?.lng)) {
       try {
-        const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${locationStore.nm_mun}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${locationStore.nm_mun}`);
         const data = await response.json();
 
         if (data && data.length > 0 && data[0].coordinates) {
