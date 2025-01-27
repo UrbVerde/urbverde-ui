@@ -99,7 +99,7 @@ function handleOutsideClick(event) {
  */
 async function fetchCategories(code, type) {
   try {
-    const response = await fetch(`${API_URLS.CATEGORIES}?code=${code}&type=${type}`);
+    const response = await fetch(`${API_URLS.CATEGORIES}?code=${code}`);
     const data = await response.json();
 
     if (data && data.categories) {
