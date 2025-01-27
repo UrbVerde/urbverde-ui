@@ -95,6 +95,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .navbar {
     padding: 0;
     min-height: 72px;
@@ -191,8 +193,7 @@ export default {
     text-decoration: none;
   }
 
-  // Desktop screen small
-  @media screen and (max-width: 1281px) {
+  @include breakpoint-down('desktop-small') {
 
     ::v-deep(.logo-text) {
       display: none;
@@ -204,7 +205,7 @@ export default {
 
   }
 
-  // Screen when the navbar is collapsed
+  // Specific media
   @media screen and (max-width: 991px) {
 
     ::v-deep(.logo-text) {
@@ -217,8 +218,7 @@ export default {
 
   }
 
-  // Mobile screen large
-  @media screen and (max-width: 601px) {
+  @include breakpoint-down('mobile-large') {
     .navbar {
       padding: 16px 32px;
     }

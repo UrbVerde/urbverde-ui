@@ -235,6 +235,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 a {
   text-decoration: none;
 }
@@ -441,7 +443,7 @@ a {
   }
 }
 
-// Tablet screen
+// Specific media
 @media screen and (max-width: 1100px) {
 
   .footer {
@@ -454,7 +456,7 @@ a {
 
 }
 
-// Screen where the footer is displayed in a single column
+// Specific media where the footer is displayed in a single column
 @media screen and (max-width: 720px) {
 
   .footer .newsletter .heading-h4{
@@ -488,8 +490,7 @@ a {
   }
 }
 
-// Mobile screen large
-@media screen and (max-width: 601px) {
+@include breakpoint-down('mobile-large') {
 
   .footer .newsletter .form {
     width: 100%;

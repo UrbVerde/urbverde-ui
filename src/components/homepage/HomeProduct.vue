@@ -178,6 +178,8 @@ export default {
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .product {
     display: flex;
     align-items: center;
@@ -270,8 +272,7 @@ export default {
     text-decoration: none;
   }
 
-  // Desktop screen small
-  @media screen and (max-width: 1281px) {
+  @include breakpoint-down('desktop-small') {
 
     .image-wrapper{
       width: 375px;
@@ -299,8 +300,7 @@ export default {
 
   }
 
-  // Tablet screen
-  @media screen and (max-width: 1026px) {
+  @include breakpoint-down('tablet') {
 
     .image-wrapper{
       width: 311px;
@@ -328,8 +328,7 @@ export default {
 
   }
 
-  // Mobile screen large
-  @media screen and (max-width: 601px) {
+  @include breakpoint-down('mobile-large') {
 
     .effect-product {
       width: 594px;
@@ -340,8 +339,7 @@ export default {
 
   }
 
-  // Mobile screen medium
-  @media screen and (max-width: 481px) {
+  @include breakpoint-down('mobile-medium') {
 
     .product{
       gap: 32px

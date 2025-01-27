@@ -1,0 +1,47 @@
+$breakpoints: (
+  'mobile-small': 375px,
+  'mobile-medium': 481px,
+  'mobile-large': 601px,
+  'tablet': 1026px,
+  'desktop-small': 1281px,
+  'desktop-large': 1921px
+);
+
+@mixin breakpoint-up($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media screen and (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "O breakpoint '#{$breakpoint}' não foi encontrado no mapa $breakpoints.";
+  }
+}
+
+@mixin breakpoint-down($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media screen and (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "O breakpoint '#{$breakpoint}' não foi encontrado no mapa $breakpoints.";
+  }
+}
+
+@mixin breakpoint-between($lower, $upper) {
+  @if map-has-key($breakpoints, $lower) and map-has-key($breakpoints, $upper) {
+    @media screen and (min-width: map-get($breakpoints, $lower)) and (max-width: map-get($breakpoints, $upper)) {
+      @content;
+    }
+  } @else {
+    @warn "Um ou ambos os breakpoints não foram encontrados no mapa $breakpoints.";
+  }
+}
+
+:export {
+  mobileSm: map-get($breakpoints, 'mobile-small');
+  mobileMd: map-get($breakpoints, 'mobile-medium');
+  mobileLg: map-get($breakpoints, 'mobile-large');
+  tablet: map-get($breakpoints, 'tablet');
+  desktopSm: map-get($breakpoints, 'desktop-small');
+  desktopLg: map-get($breakpoints, 'desktop-large');
+}

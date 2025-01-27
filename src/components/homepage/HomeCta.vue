@@ -84,6 +84,8 @@ export default {
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .cta-content {
     position: relative;
     width: 100vw;
@@ -131,8 +133,7 @@ export default {
     display: flex;
   }
 
-  // Desktop screen large
-  @media screen and (min-width: 1922px) {
+  @include breakpoint-up('desktop-large') {
 
     .cta-content {
       height: 800px;
@@ -145,8 +146,7 @@ export default {
 
   }
 
-  // Desktop screen small
-  @media screen and (max-width: 1281px) {
+  @include breakpoint-down('desktop-small') {
 
     .h2-cta {
       font-size: 40px;
@@ -162,8 +162,7 @@ export default {
 
   }
 
-  // Tablet screen
-  @media screen and (max-width: 1026px) {
+  @include breakpoint-down('tablet') {
 
     .h2-cta {
       font-size: 36px;
@@ -180,8 +179,7 @@ export default {
 
   }
 
-  // Mobile screen large
-  @media screen and (max-width: 601px) {
+  @include breakpoint-down('mobile-large') {
 
     .cta-content {
       height: 550px;
@@ -193,8 +191,7 @@ export default {
 
   }
 
-  // Mobile screen small
-  @media screen and (max-width: 481px) {
+  @include breakpoint-down('mobile-medium') {
 
     .h2-cta {
       font-size: 32px;

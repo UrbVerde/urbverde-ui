@@ -65,6 +65,8 @@ export default {
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .cards {
     display: flex;
     padding: 24px;
@@ -159,8 +161,7 @@ export default {
     width: 100%;
   }
 
-  // Mobile screen large
-  @media screen and (max-width: 1026px) {
+  @include breakpoint-down('tablet') {
     .cards {
       padding: 20px;
       font-size: 12px;

@@ -607,6 +607,8 @@ export default {
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -1137,8 +1139,7 @@ export default {
     padding-bottom: 24px;
   }
 
-  // Desktop screen small
-  @media screen and (max-width: 1281px) {
+  @include breakpoint-down('desktop-small') {
     .h1-text {
       font-size: 40px;
     }
@@ -1226,7 +1227,7 @@ export default {
 
   }
 
-  // Screen for Card Comments section
+  // Specific media
   @media screen and (max-width: 1200px) {
     .wrapper-cards {
       max-width: 1184px;
@@ -1234,8 +1235,7 @@ export default {
     }
   }
 
-  // Tablet screen
-  @media screen and (max-width: 1026px) {
+  @include breakpoint-down('tablet') {
 
     .h1-text {
       font-size: 40px;
@@ -1369,8 +1369,7 @@ export default {
 
   }
 
-  // Mobile screen large
-  @media screen and (max-width: 601px) {
+  @include breakpoint-down('mobile-large') {
     .hero-content {
       padding: 15vh 24px 0 24px;
       gap: 15vh;
@@ -1489,8 +1488,7 @@ export default {
 
   }
 
-  // Mobile screen medium
-  @media screen and (max-width: 481px) {
+  @include breakpoint-down('mobile-medium') {
 
     .wrapper-cards {
       max-width: 1184px;
@@ -1562,8 +1560,7 @@ export default {
 
   }
 
-  // Mobile screen small
-  @media screen and (max-width: 375px) {
+  @include breakpoint-down('mobile-small') {
 
     .h1-text {
       font-size: 36px;
