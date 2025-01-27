@@ -106,7 +106,6 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
-import { API_URLS } from '@/constants/endpoints';
 import { useRoute } from 'vue-router';
 //, onUpdated } from 'vue';
 
@@ -439,7 +438,7 @@ async function fetchCoordinates(address) {
       }
     }
 
-    const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${city}`);
+    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
     const data = await response.json();
 
     if (data && data.length > 0) {
@@ -683,7 +682,7 @@ async function generateDefaultSuggestions() {
   // Fetch city data if we don't have the code
   if (!codes.value[cityWithState]) {
     try {
-      const response = await fetch(`${API_URLS.SUGGESTIONS}?query=${city}`);
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
       const data = await response.json();
 
       if (data && data.length > 0 && !data[0].error) {

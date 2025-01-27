@@ -100,7 +100,6 @@
 import { ref, computed, onMounted, onUnmounted, watchEffect} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
-import { API_URLS } from '@/constants/endpoints';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';

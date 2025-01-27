@@ -1,6 +1,5 @@
 // urbverde-ui/src/mocks/handlers.js
 import { http, HttpResponse } from 'msw';
-// import { API_URLS } from '@/constants/endpoints';
 import cities from './responses/cities.json';
 import categoriesResponse from './responses/categories.json';
 

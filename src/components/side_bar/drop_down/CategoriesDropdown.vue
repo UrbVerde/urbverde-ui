@@ -48,7 +48,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
-import { API_URLS } from '@/constants/endpoints';
 
 // PROPS
 const props = defineProps({
@@ -99,6 +98,7 @@ function handleOutsideClick(event) {
  */
 async function fetchCategories(code, type) {
   try {
+    console.log('Fetching categories:', { code, type });
     const response = await fetch(`https://api.urbverde.com.br/v1/address/categories?code=${code}`);
     const data = await response.json();
 
