@@ -6,18 +6,18 @@
     :value="item.value"
     class="see-card"
   >
-    <template #footer>
-      <PrimaryButton
-      label="Ver no Mapa"
-      :filled="false"
-      icon="bi-map" 
-      iconType="bootstrap"
-      iconPosition="left"
-      class="card-button"
-      @mounted="console.log($el.classList)"
-    />
+    <div class="botao">
 
-    </template>
+      <PrimaryButton
+        label="Ver no Mapa"
+        :filled="false"
+        icon="bi-map"
+        iconType="bootstrap"
+        iconPosition="left"
+        class="card-button"
+      />
+
+    </div>
   </CardBase>
 </template>
 
@@ -44,48 +44,40 @@ export default {
 .see-card {
   height: 187px;
   width: 336px;
-}
-
-.see-card .titulo {
-  padding: 24px 24px 16px 24px;
   display: flex;
-  align-items: center;
-  align-self: stretch;
-  color: var(--Body-Text-Body-Color, #212529);
-
-  /* Heading/H6 */
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 120%; /* 19.2px */
+  flex-direction: column;
+  align-items: flex-start;
+}
+.see-card .titulo {
+  padding:  24px 24px 16px 24px;
 }
 
-.see-card .value {
-  padding: 0px 32px;
-  color: var(--Green-500, #198754);
-  text-align: center;
+.see-card .card-cantent {
+  text-align: left; /* Garante alinhamento à esquerda */
+  margin: 0px 32px; /* Remove margens padrão */
+}
 
-  /* Small Shadow */
-  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+.card-cantent {
+  text-align: left; /* Garante alinhamento à esquerda */
+  margin: 0px 32px; /* Remove margens padrão */
+}
+.see-card .value {
   font-family: Montserrat;
   font-size: 40px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 48px */
+  color: var(--Green-500, #198754);
+  text-align: left; /* Garante alinhamento à esquerda */
+  margin: 0px 32px; /* Remove margens padrão */
+  gap: 16px;
 }
-.card-button {
-  margin-top: 16px;
-  padding: 8px 32px; /* Ajuste do espaçamento interno */
-  display: inline-flex; /* Garante alinhamento do conteúdo */
-  justify-content: center; /* Centraliza texto e ícone */
-  align-items: center; /* Centraliza verticalmente */
+.botao {
+  padding: 16px 32px 24px 32px;
 }
 
-
-.empty-message {
-  text-align: center;
-  font-size: 16px;
-  color: #6B7280; /* Cinza médio */
+.see-card .card-button {
+  padding: 16px 32px 24px 32px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

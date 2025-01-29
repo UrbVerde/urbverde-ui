@@ -3,7 +3,7 @@
     class="first-card"
     v-for="(item, index) in data"
     :key="index"
-    :title="item.title" 
+    :title="item.title"
     :subtitle="item.subtitle"
     :value="item.value"
   >
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import CardBase from './Card.vue'
+import CardBase from './Card.vue';
 
 export default {
   name: 'FirstCard',
@@ -30,19 +30,13 @@ export default {
 <style>
 .first-card {
   width: 322px;
-  height: 162px;
+  height: 175px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
-}
-
-.first-card .titulo {
-  display: flex;
-  align-items: center;
-  align-self: stretch;
-  padding: 24px 24px 16px 24px;
+  justify-content: space-betwee
 }
 
 .first-card .value {
@@ -56,18 +50,13 @@ export default {
   padding: 0 32px;
 }
 
+.first-card .titulo{
+  padding:  24px 24px 16px 24px;
+}
+
 .first-card .textodescritivo {
-  display: flex;
-  padding: 16px 24px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1 0 0;
-  background: var(--HitBox, rgba(255, 255, 255, 0.00));
   color: var(--Gray-600, #6C757D);
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
+  padding: 16px 24px 24px 24px;
+  min-height: 48px;
 }
 </style>

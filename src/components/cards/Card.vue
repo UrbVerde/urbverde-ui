@@ -5,12 +5,12 @@
     </div>
 
     <div class="card-header">
-      <h1 v-if="title" class="titulo">{{ title }}</h1>
+      <h1 v-if="title" class="titulo heading-h6">{{ title }}</h1>
     </div>
 
     <div class="content-wrapper">
       <h2 v-if="value" class="value">{{ value }}</h2>
-      <p v-if="subtitle" class="textodescritivo">{{ subtitle }}</p>
+      <p v-if="subtitle" class="textodescritivo body-small-medium">{{ subtitle }}</p>
     </div>
 
     <div class="card-image-wrapper" v-if="imagePosition === 'middle' && imageSlot">
@@ -68,7 +68,7 @@ export default {
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
-  width: 100%; 
+  width: 100%;
   border-radius: 16px;
   border: 1px solid var(--Gray-200, #E9ECEF);
   background: var(--Gray-White, #FFF);
@@ -82,27 +82,28 @@ export default {
 
 .card-header {
   display: flex;
-  justify-content: justify;
-  align-items: flex-start;
+  align-items: center;
   align-self: stretch;
 }
 
 .content-wraper{
-  display: flex;
   padding-bottom: 24px;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
 }
-.card-header .titulo {
-  color: var(--Body-Text-Body-Color, #212529);
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500; 
-  line-height: 120%; /* 19.2px */
+
+.content-wraper .textodescritivo{
+  color: var(--Gray-600, #6C757D);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+
 }
 
 .value {

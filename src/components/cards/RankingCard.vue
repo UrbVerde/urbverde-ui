@@ -1,107 +1,120 @@
-<!-- urbverde-ui/src/components/cards/weather/RankingCard.vue -->
 <template>
-  <CardBase 
-    v-bind="{
-      ...(data.title && { title: data.title }),
-      ...(data.subtitle && { subtitle: data.subtitle }),
-      titleClass: 'rank-card-title',
-      subtitleClass: 'rank-card-subtitle'
-    }"
-  >
-    <div v-if="data.items && data.items.length > 0" class="sections">
-      <div class="section" v-for="(item, index) in data.items" :key="index">
-        <p class="section-title">{{ item.type }}</p>
-        <p class="section-value">
-          <span class="value">{{ item.number }}</span>
-          <span v-if="item.of" class="total"> de {{ item.of }}</span>
-        </p>
+  <CardBase>
+    <div class="rank-card-container">
+      <div class="rank-card-header">
+        <h3 class="rank-card-title heading-h5">{{ data.title }}</h3>
+        <p class="rank-card-subtitle body-small-medium">{{ data.subtitle }}</p>
+      </div>
+
+      <div v-if="data.items && data.items.length > 0" class="rank-card-sections">
+        <div class="rank-card-section" v-for="(item, index) in data.items" :key="index">
+          <div class="rank-card-section-title">{{ item.type }}</div>
+          <div class="rank-card-section-value">
+            <span class="rank-card-number">{{ item.number }}</span>
+            <span class="rank-card-separator"> de </span>
+            <span class="rank-card-total">{{ item.of }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </CardBase>
 </template>
+
 <script>
 import CardBase from '@/components/cards/Card.vue';
 
 export default {
-  name: 'RankingCard',
-  components: {
-    CardBase,
-  },
+  components: { CardBase },
   props: {
     data: {
       type: Object,
-      required: true,
-      validator: (value) =>
-        typeof value.title === 'string' &&
-        typeof value.subtitle === 'string' &&
-        Array.isArray(value.items) &&
-        value.items.every(
-          (item) =>
-            typeof item.type === 'string' &&
-            typeof item.number === 'number' &&
-            (typeof item.of === 'number' || item.of === undefined)
-        ),
-    },
-  },
+      required: true
+    }
+  }
 };
 </script>
 
 <style scoped>
-.rank-card {
-  height: 516px;
-  width: 428px;
-  border-radius: 16px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
-  margin-top: 32px;
+.rank-card-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.rank-card-title {
-  color: var(--Body-Text-Body-Color, #212529);
+.rank-card-header {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px 16px 32px;
+  gap: 12px;
+  align-self: stretch;
+}
 
-  /* Heading/H5 */
+.rank-card-section-title{
+  text-align: left;
+  align-self: stretch;
+  color: var(--Body-Text-Body-Color, #212529);
   font-family: Inter;
-  font-size: 20px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 120%; /* 24px */
-  padding: 32px 24px 32px 24px;
+  line-height: 120%; /* 19.2px */
 }
 
-.subtitle {
-  font-size: 14px;
-  color: #6c757d;
-  margin-bottom: 16px;
-  padding: 0px 24px 16px 24px;
+.rank-card-subtitle {
+  color: var(--Gray-600, #6C757D);
+  align-self: stretch
 }
 
-.sections {
+.rank-card-sections {
+  display: flex;
+  padding: 16px 32px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+}
+
+.rank-card-section {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 16px;
+  align-self: stretch;
 }
 
-.section {
+.rank-card-section-value {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex: 1 0 0;
 }
 
-.section-title {
-  font-size: 16px;
-  color: #6c757d;
+.rank-card-number {
+  color: var(--Green-500, #198754);
+
+  /* Small Shadow */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  font-family: Montserrat;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 33.6px */
 }
 
-.section-value {
-  font-size: 24px;
-  font-weight: bold;
-  color: #007bff;
+.rank-card-separator {
+  color: var(--Green-500, #198754);
+font-family: Montserrat;
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 120%;
 }
 
-.value {
-  color: #28a745;
-}
-
-.total {
-  color: #6c757d;
+.rank-card-total {
+  color: var(--Green-500, #198754);
+font-family: Montserrat;
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 120%;
 }
 </style>

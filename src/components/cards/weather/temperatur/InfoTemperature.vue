@@ -6,6 +6,7 @@
       imagePosition="top"
       class="info-card"
     >
+
       <template #image>
         <img :src="image" alt="Ilustração" class="card-image" />
       </template>
@@ -34,12 +35,6 @@ export default {
 </script>
 
 <style>
-.info-temperature-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-}
 
 .info-card {
   width: 365px;
@@ -52,32 +47,19 @@ export default {
   align-self: stretch;
   background-color: var(--Gray-White, #FFF);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-  padding: 48px 40px 24px 40px;
-
+  padding: 48px 40px 48px 40px;
 }
 
 .info-temperature-card .textodescritivo {
+  margin-top: 12px;
   color: var(--Theme-Secondary, #525960);
-
-/* Body/Small/Medium */
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 150%; /* 21px */
 }
 
 .card-image {
   width: 233px;
   height: 168px;
-  align-self: center; /* Centraliza a imagem */
-  margin-bottom: 54px; /* Espaçamento entre imagem e conteúdo */
-}
-
-.info-temperature-card .titulo {
-  align-self: stretch;
-  text-align: justify;
-  margin-bottom: 8px; /* Espaçamento inferior */
+  align-self: center;
+  margin-bottom: 54px;
 }
 
 </style>

@@ -27,7 +27,7 @@ export default {
 };
 </script>
 
-<style>
+<style scooped>
 .second-card {
   width: 246px;
   height: 208px;
@@ -38,12 +38,8 @@ export default {
   align-self: stretch;
 }
 
-.second-card .titulo {
-  display: flex;
-  padding: 24px 24px 16px 24px;
-  align-items: center;
-  gap: 12px;
-  align-self: stretch;
+.second-card .titulo{
+  padding:  24px 24px 16px 24px;
 }
 
 .second-card .textodescritivo {
@@ -55,11 +51,6 @@ export default {
   padding: 16px 24px 24px 24px;
   text-align: justify;
   color: var(--Gray-600, #6C757D);
-  font-family: Inter;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 21px */
 }
 
 .second-card .value {

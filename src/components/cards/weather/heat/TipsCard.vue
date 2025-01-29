@@ -1,27 +1,24 @@
 <template>
   <div class="tips-card">
     <div class="tips-card-content">
-      <h2 class="tips-card-title">Como podemos tornar as cidades mais frescas?</h2>
+      <h2 class="tips-card-title heading-h5">Como podemos tornar as cidades mais frescas?</h2>
       <ul class="tips-card-list">
         <li class="tips-card-item">
           <span class="tips-card-number">1</span>
-          Árvores ajudam a reduzir o calor e melhorar a qualidade do ar.
+          <b>Árvores</b>&nbsp;ajudam a reduzir o calor e melhorar a qualidade do ar.
         </li>
         <li class="tips-card-item">
           <span class="tips-card-number">2</span>
-          Rios e lagos ajudam a resfriar o clima urbano.
+          <b>Rios e lagos</b>&nbsp;ajudam a resfriar o clima urbano.
         </li>
         <li class="tips-card-item">
           <span class="tips-card-number">3</span>
-          Implementação de políticas públicas que promovem áreas verdes.
+          Implementação de &nbsp;<b>políticas públicas</b>&nbsp;que podem promover mais áreas verdes nas cidades.
         </li>
       </ul>
       <PrimaryButton
         label="Ver mais dicas"
         :filled="true"
-        icon="bi-info-circle"
-        iconType="bootstrap"
-        iconPosition="right"
         class="tips-card-button"
       />
     </div>
@@ -76,12 +73,6 @@ export default {
 }
 
 .tips-card-title {
-  color: var(--Body-Text-Body-Color, #212529);
-  font-family: Inter;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 120%; /* 24px */
   align-self: stretch;
   margin-bottom: 32px;
 }
@@ -95,14 +86,14 @@ export default {
 .tips-card-item {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   color: #374151;
   margin-bottom: 12px;
 }
 
 .tips-card-number {
-  width: 32px;
-  height: 32px;
+  width: 21px;
+  height: 21px;
   background-color: #e7f6e8;
   font-weight: bold;
   border-radius: 50%;
@@ -111,12 +102,12 @@ export default {
   justify-content: center;
   margin-right: 8px;
 
-color: var(--Green-700, #0F5132);
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 150%; /* 21px */
+  color: var(--Green-700, #0F5132);
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21px */
 }
 
 .tips-card-button {
