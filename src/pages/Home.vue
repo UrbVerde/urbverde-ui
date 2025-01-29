@@ -3,7 +3,10 @@
     <TawkTo />
 
     <!-- Navbar -->
-    <header data-aos="fade-down" data-aos-duration="400">
+    <header class="no-transform"
+            data-aos="fade"
+            data-aos-delay="100"
+            data-aos-duration="400">
       <NavbarHomepage />
     </header>
 
@@ -27,7 +30,9 @@
                   data-aos="zoom-in-up"
                   data-aos-duration="1000"
                   data-aos-delay="500">
-            <div class="hero-text">
+
+            <div class="hero-text"
+                 v-if="windowWidth >= 1026">
               <h1>
                 <span class="h1-text heading-h1">Mapeando um Futuro </span>
                 <transition name="fade" mode="out-in">
@@ -39,27 +44,36 @@
                 de forma totalmente gratuita!
               </h4>
             </div>
-            <form class="search">
-              <div class="search-button">
-                <BuscaSimples @location-updated="onLocationUpdated" />
-              </div>
-              <router-link to="/mapa" class="button-primary-link">
-                <PrimaryButton
-                  label="Acessar"
-                  :filled="true"
-                  iconType="bootstrap"
-                  icon="bi bi-arrow-right"
-                  iconPosition="right"
-                />
-              </router-link>
 
-            </form>
+            <div class="hero-text"
+                 v-else>
+              <h1>
+                <span class="h1-text heading-h1">Mapeando um Futuro</span>
+                <transition name="fade" mode="out-in">
+                  <span class="h1-lasttext heading-h1" :key="currentWord">{{ currentWord }}</span>
+                </transition>
+              </h1>
+              <h4 class="subtitle body-normal-medium">
+                Acesse dados sociais e ambientais completos de seu município,
+                de forma totalmente gratuita!
+              </h4>
+            </div>
+
+            <HomeSearch
+              @location-updated="onLocationUpdated"
+              buttonRoute="/mapa"
+              buttonLabel="Acessar"
+              :filled="true"
+              iconType="bootstrap"
+              icon="bi bi-arrow-right"
+            />
           </header>
 
           <section class="wrapper-platform">
 
             <!-- Imagem da plataforma -->
             <router-link
+              v-if="windowWidth >= 601"
               to="/mapa"
               class="platform-link"
               aria-label="Acessar a plataforma da UrbVerde"
@@ -81,44 +95,69 @@
               </div>
             </router-link>
 
-            <!-- Cards de comentários sobre a UrbVerde -->
-            <div class="wrapper-cards">
-              <article>
-                <CardComments
-                  quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
-                  highlight="o mundo ainda tem jeito"
-                  quoteAfterHighlight="."
-                  :imageSrc="homepageImages.nalini.src"
-                  :imageAlt="homepageImages.nalini.alt"
-                  author="José Renato Nalini"
-                  role="Secretário Executivo de São Paulo"
+            <router-link
+              v-else
+              to="/mapa"
+              class="platform-link"
+              aria-label="Acessar a plataforma da UrbVerde"
+              data-aos="fade-up"
+              data-aos-delay="1500"
+              data-aos-duration="750"
+            >
+              <div
+                class="platform"
+                @mousemove="handleMouseMove"
+                @mouseleave="resetZoom"
+              >
+                <div class="overlay"></div>
+                <img
+                  ref="zoomImage"
+                  src="@/assets/images/homepage/platform_small.svg"
+                  alt="Interface da plataforma UrbVerde exibindo dados ambientais"
                 />
-              </article>
-              <article>
-                <CardComments
-                  quoteBeforeHighlight="A UrbVerde foi desenvolvida para fornecer dados ao "
-                  highlight="poder público e aos cidadãos"
-                  quoteAfterHighlight="."
-                  :imageSrc="homepageImages.juliana.src"
-                  :imageAlt="homepageImages.juliana.alt"
-                  author="Juliana Domingos de Lima"
-                  role="Jornalista do Estadão"
-                />
-              </article>
-              <article>
-                <CardComments
-                  quoteBeforeHighlight="É uma "
-                  highlight="plataforma que caiu do céu"
-                  quoteAfterHighlight=" [...] ajuda a ler a cidade de uma forma clara."
-                  :imageSrc="homepageImages.marcela.src"
-                  :imageAlt="homepageImages.marcela.alt"
-                  author="Marcela Cury Petenusci"
-                  role="Professora de Ribeirão Preto"
-                />
-              </article>
-            </div>
+              </div>
+            </router-link>
           </section>
         </section>
+
+        <!-- Cards de comentários sobre a UrbVerde -->
+        <div class="block-cards">
+          <div class="wrapper-cards">
+            <article>
+              <CardComments
+                quoteBeforeHighlight="Iniciativas como a UrbVerde [...] fornecem a esperança de que "
+                highlight="o mundo ainda tem jeito"
+                quoteAfterHighlight="."
+                :imageSrc="homepageImages.nalini.src"
+                :imageAlt="homepageImages.nalini.alt"
+                author="José Nalini"
+                role="Secretário de São Paulo"
+              />
+            </article>
+            <article>
+              <CardComments
+                quoteBeforeHighlight="A UrbVerde foi desenvolvida para fornecer dados ao "
+                highlight="poder público e aos cidadãos"
+                quoteAfterHighlight="."
+                :imageSrc="homepageImages.juliana.src"
+                :imageAlt="homepageImages.juliana.alt"
+                author="Juliana de Lima"
+                role="Jornalista do Estadão"
+              />
+            </article>
+            <article>
+              <CardComments
+                quoteBeforeHighlight="É uma "
+                highlight="plataforma que caiu do céu"
+                quoteAfterHighlight=" [...] ajuda a ler a cidade de uma forma clara."
+                :imageSrc="homepageImages.marcela.src"
+                :imageAlt="homepageImages.marcela.alt"
+                author="Marcela Petenusci"
+                role="Professora de Ribeirão Preto"
+              />
+            </article>
+          </div>
+        </div>
 
         <!-- Institutes content-->
         <section class="institutes container">
@@ -150,7 +189,7 @@
           </div>
 
           <!-- Lista de prêmios -->
-          <div>
+          <div class="award-wrapper">
             <HomeAwards :awards="awardsList" />
           </div>
 
@@ -159,12 +198,24 @@
 
       <!-- Products content -->
       <section class="products">
-        <div class="title container">
-          <h2 class="heading-h2">
-            Ferramentas para uma gestão sustentável
-          </h2>
+        <div class="title-image">
+          <div class="world-image">
+            <img
+              src="@/assets/images/homepage/product-world.png"
+              alt="Imagem do planeta terra">
+            <img src="@/assets/images/homepage/product-satellite.png" alt="Imagem de um satélite que fica em volta do planeta terra">
+          </div>
+          <div class="title container">
+            <h2 class="heading-h2">
+              Ferramentas para uma gestão inteligente
+            </h2>
+            <h4 class="heading-h4">
+              Por meio de imagens de satélite, fornecemos informações que ajudam sua cidade a enfrentar os desafios climáticos
+            </h4>
+          </div>
         </div>
-
+        <span class="effect"></span>
+        <img src="@/assets/images/homepage/product-effect-star.svg" class="star" alt="Fundo de estrelas">
         <div class="products-content container">
           <div>
             <HomeProduct
@@ -220,7 +271,9 @@
           </div>
           <img src="@/assets/images/homepage/urbverde-mission.png">
         </div>
-        <div class="educa">
+        <div class="educa"
+             v-if="windowWidth >= 600"
+        >
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
@@ -232,7 +285,7 @@
               class="button-primary-link"
             >
               <PrimaryButton
-                label="Explore todos os artigos"
+                label="Explorar artigos"
                 :filled="false"
                 iconType="bootstrap"
                 icon="bi bi-arrow-right"
@@ -295,6 +348,86 @@
             </a>
           </div>
         </div>
+
+        <div class="educa"
+             v-else
+        >
+          <div class="title">
+            <h2 class="heading-h2">
+              Explore mais tópicos no UrbVerde Educa
+            </h2>
+          </div>
+          <div class="topics-button-wrapper">
+            <div class="educa-topics">
+
+              <!--Link para Reportagens e notícias-->
+              <a
+                href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.marcel.src"
+                  :imageAlt="homepageImages.marcel.alt"
+                  title="Reportagens e notícias"
+                />
+              </a>
+
+              <!--Documentos-->
+              <a
+                href="https://urbverde-educa.tawk.help/category/documentos"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.notebook.src"
+                  :imageAlt="homepageImages.notebook.alt"
+                  title="Documentos"
+                />
+              </a>
+
+              <!--Métodologias-->
+              <a
+                href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.edu.src"
+                  :imageAlt="homepageImages.edu.alt"
+                  title="Metodologias"
+                />
+              </a>
+
+              <!--Principais dúvidas-->
+              <a
+                href="https://urbverde-educa.tawk.help/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <UrbVerdeEducaTopics
+                  :imageSrc="homepageImages.breno.src"
+                  :imageAlt="homepageImages.breno.alt"
+                  title="Principais dúvidas"
+                />
+              </a>
+            </div>
+            <a
+              href="https://urbverde-educa.tawk.help/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="button-primary-link"
+            >
+              <PrimaryButton
+                label="Explorar artigos"
+                :filled="false"
+                iconType="bootstrap"
+                icon="bi bi-arrow-right"
+                iconPosition="right"
+              />
+            </a>
+          </div>
+        </div>
       </section>
 
       <!-- CTA content -->
@@ -319,13 +452,13 @@
 <script>
 import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
 import UrbVerdeEducaTopics from '@/components/homepage/UrbverdeEducaTopics.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 import TawkTo from '@/components/homepage/TawkTo.vue';
 import CardComments from '@/components/homepage/CardComments.vue';
 import HomeAwards from '@/components/homepage/HomeAwards.vue';
 import HomeProduct from '@/components/homepage/HomeProduct.vue';
+import HomeSearch from '@/components/homepage/HomeSearch.vue';
 import HomeCta from '@/components/homepage/HomeCta.vue';
 
 // Import para as imagens da página utilizados em componentes
@@ -343,13 +476,13 @@ export default {
   components: {
     NavbarHomepage,
     PrimaryButton,
-    BuscaSimples,
     UrbVerdeEducaTopics,
     UrbVerdeFooter,
     TawkTo,
     CardComments,
     HomeAwards,
     HomeProduct,
+    HomeSearch,
     HomeCta,
   },
 
@@ -387,6 +520,7 @@ export default {
       // Imagens retornando de images-homepage.js
       logos,
       homepageImages,
+      windowWidth: window.innerWidth,
 
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
@@ -418,20 +552,30 @@ export default {
   },
   mounted() {
     this.startWordRotation();
+
     AOS.init({
       offset: 0,
       threshold: 0,
       once: false
     });
+
+    window.addEventListener('resize', this.updateWindowWidth);
   },
 
   beforeUnmount() {
     clearInterval(this.wordRotationInterval);
+
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
 
   methods: {
     onLocationUpdated() {
       return;
+    },
+
+    // Método para atualizar a largura da janela
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
     },
 
     // Método para rotação das palavras
@@ -463,6 +607,8 @@ export default {
 </script>
 
   <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   a {
     text-decoration: none;
     border-radius: 4px;
@@ -473,10 +619,28 @@ export default {
     margin: 0;
   }
 
+  .no-transform[data-aos] {
+    transform: none;
+  }
+
   .homepage {
     position: relative;
     overflow-x: hidden;
     background-color: #FCFDFC;
+
+    ::-webkit-scrollbar{
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: map-get($primary-fade, 400);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: map-get($primary-fade, 100);
+      border-radius: 4px;
+    }
   }
 
   .image-background-wrapper {
@@ -513,19 +677,21 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 240px;
-    gap: 240px;
+    padding: 20vh 0 0 0;
+    gap: 20vh;
   }
 
   .hero-top {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 74px;
+    gap: 72px;
     align-items: center;
     justify-content: center;
   }
 
   .hero-text {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -535,6 +701,7 @@ export default {
   }
 
   .hero-text h1 {
+    width: 100%;
     margin: 0;
     display: inline-block;
     white-space: nowrap;
@@ -588,29 +755,6 @@ export default {
     width: 520px;
     max-width: 100%;
     color: map-get($theme, secondary);
-  }
-
-  .search {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    flex-direction: row;
-  }
-
-  .search .input-container{
-    border-radius: 14px;
-    background: map-get($gray, 100);
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-  }
-
-  .search .button-primary-link{
-    margin: 0;
-    padding: 0;
-  }
-
-  .search .button-primary-link .primary-button{
-    width: 143px;
-    height: 48px;
   }
 
   .wrapper-platform{
@@ -689,32 +833,46 @@ export default {
     }
   }
 
-  .wrapper-cards{
+  .block-cards {
+    width: 100%;
+    margin: 0 auto;
+    overflow: visible;
+    position: relative;
+  }
+
+  .wrapper-cards {
     display: flex;
-    align-items: center;
     gap: 24px;
     align-self: stretch;
     width: 100%;
-    max-width: 1184px;
+    max-width: 1200px;
     margin: 0 auto;
     overflow: visible;
+    overflow-x: auto;
+    padding: 80px 16px 24px 16px;
+    scroll-behavior: smooth;
+  }
+
+  .wrapper-cards::-webkit-scrollbar {
+    display: none;
   }
 
   .institutes {
     display: flex;
     flex-direction: column;
-    padding: 200px 0 184px 0;
+    padding: 176px 0 184px 0;
     gap: 128px;
   }
 
   .institutes .institutes-header {
     display: flex;
-    padding: 0px 128px;
+    max-width: 928px;
     flex-direction: column;
     align-items: center;
     gap: 24px;
     align-self: stretch;
     text-align: center;
+    margin: auto;
   }
 
   .institutes .institutes-header h2{
@@ -747,7 +905,7 @@ export default {
   .institutes-logo-carousel {
     overflow: hidden;
     position: relative;
-    margin: 0 24px;
+    margin: 0;
   }
 
   .logo-track {
@@ -771,33 +929,109 @@ export default {
   }
 
   @keyframes scroll-logos {
+
     0% {
       transform: translateX(0);
     }
     100% {
       transform: translateX(calc(-50% - 30px)); // Move metade da largura da lista duplicada e 30px para corrigir
     }
+
   }
 
   .products{
-    background-color: map-get($green, 600);
+    background-color: map-get($green, 700);
     display: flex;
-    padding: 128px 128px 200px 128px;
+    padding: 128px 128px 240px 128px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 120px;
+    gap: 176px;
     align-self: stretch;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .products .effect {
+    width: 812px;
+    height: 688px;
+    display: block;
+    background: radial-gradient(30.23% 28.09% at 72.7% 28.29%, rgba(11, 201, 134, 0.85) 0%, rgba(60, 255, 0, 0.59) 100%);
+    filter: blur(200px);
+    transform: rotate(-28deg);
+    position: absolute;
+    margin: auto;
+    top: -480px;
+    z-index: 1;
+  }
+
+  .products .star {
+    position: absolute;
+    z-index: 1;
+    top: -140px;
+    width: 826px;
+    height: 517px;
+    margin: auto;
+  }
+
+  .products .title-image{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    align-self: stretch;
+    position: relative;
+    z-index: 2;
+  }
+
+  .products .title-image .world-image {
+    position: relative;
+    display: flex;
+    height: auto;
+    filter: drop-shadow(0px 16px 48px rgba(0, 0, 0, 0.5));
+    z-index: 2;
+
+    .img{
+      background-color: #fff;
+    }
+
+    img:first-child {
+      -webkit-mask-image: url('@/assets/images/homepage/product-world.png'); /* Certifique-se do caminho correto */
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url('@/assets/images/homepage/product-world.png');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      background-color: transparent;
+      position: relative;
+      height: 120px;
+      width: 120px;
+    }
+
+    img:last-child {
+      -webkit-mask-image: url('@/assets/images/homepage/product-satellite.png'); /* Certifique-se do caminho correto */
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url('@/assets/images/homepage/product-satellite.png');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      background-color: transparent;
+      position: absolute;
+      right: -37px;
+      top: -37px;
+      height: 48px;
+      width: 48px;
+    }
   }
 
   .products .title{
     display: flex;
     max-width: 1184px;
-    padding: 0px 128px;
     flex-direction: column;
     align-items: center;
-    gap: 21px;
+    gap: 32px;
     align-self: center;
+    padding: 0;
   }
 
   .products .title h2{
@@ -806,20 +1040,30 @@ export default {
     font-size: 48px;
     font-style: normal;
     font-weight: 700;
+    margin: 0;
+  }
+
+  .products .title h4{
+    color: map-get($gray, white);
+    opacity: 80%;
+    text-align: center;
+    font-style: normal;
+    margin: 0;
   }
 
   .products .products-content{
     display: flex;
     max-width: 1184px;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 120px;
+    align-items: center;
+    gap: 160px;
     align-self: center;
+    padding: 0;
   }
 
   .mission-educa{
     display: flex;
-    padding: 128px 0px 90px 0px;
+    padding: 104px 0px 90px 0px;
     flex-direction: column;
     align-items: flex-start;
     gap: 184px;
@@ -892,5 +1136,452 @@ export default {
     align-self: stretch;
     overflow-x: auto;
     width: 100%;
+    padding-bottom: 24px;
   }
+
+  @include breakpoint-down('desktop-small') {
+    .h1-text {
+      font-size: 40px;
+    }
+
+    .h1-lasttext{
+      font-size: 40px;
+    }
+
+    .hero-content {
+      padding: 20vh 64px 0 64px;
+      gap: 20vh;
+    }
+
+    .wrapper-cards {
+      max-width: 1200px;
+      padding: 80px 80px 24px 80px;
+    }
+
+    .institutes {
+      padding: 152px 0 176px 0;
+      gap: 120px;
+    }
+
+    .institutes .institutes-header h2{
+      margin: 0 64px;
+      font-size: 40px;
+    }
+
+    .institutes .institutes-header h4{
+      margin: 0 64px;
+    }
+
+    .products{
+      padding: 120px 64px 200px 64px;
+      gap: 160px;
+    }
+
+    .products .title h4{
+      font-size: 20px;
+    }
+
+    .products .products-content{
+      gap: 152px;
+    }
+
+    .products .title h2{
+      font-size: 40px;
+    }
+
+    .products .title-image .world-image {
+
+      img:first-child {
+        height: 112px;
+        width: 112px;
+      }
+
+      img:last-child {
+        right: -34px;
+        top: -34px;
+        height: 44px;
+        width: 44px;
+      }
+    }
+
+    .products .effect {
+      width: 730px;
+      height: 620px;
+      top: -440px;
+    }
+
+    .products .star {
+      width: 743px;
+      height: 465px;
+      top: -137px;
+    }
+
+    .mission-educa {
+      padding: 128px 64px 88px 64px;
+    }
+
+    .mission-educa .educa .educa-topics{
+      overflow-x: auto;
+      scroll-behavior: smooth;
+    }
+
+  }
+
+  // Specific media
+  @media screen and (max-width: 1200px) {
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 80px 64px 24px 64px;
+    }
+  }
+
+  @include breakpoint-down('tablet') {
+
+    .h1-text {
+      font-size: 40px;
+    }
+
+    .h1-lasttext{
+      font-size: 40px;
+    }
+
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 80px 40px 24px 40px;
+    }
+
+    .hero-content {
+      padding: 18vh 40px 0 40px;
+      gap: 18vh;
+    }
+
+    .institutes {
+      padding: 128px 0 152px 0;
+      gap: 96px;
+    }
+
+    .institutes .institutes-header h2{
+      margin: 0 40px;
+      font-size: 36px;
+    }
+
+    .institutes .institutes-header h4{
+      margin: 0 40px;
+      font-size: 14px;
+    }
+
+    .institutes .award-wrapper{
+      display: none;
+    }
+
+    .h1-lasttext {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .hero-text h1 {
+      width: 100%;
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      white-space: wrap;
+    }
+
+    .products{
+      padding: 112px 40px 176px 40px;
+      gap: 144px;
+    }
+
+    .products .products-content{
+      gap: 136px;
+    }
+
+    .products .title h2{
+      font-size: 36px;
+    }
+
+    .products .title h4{
+      font-size: 18px;
+    }
+
+    .products .title-image .world-image {
+
+      img:first-child {
+        height: 100px;
+        width: 100px;
+      }
+
+      img:last-child {
+        right: -28px;
+        top: -28px;
+        height: 38px;
+        width: 38px;
+      }
+    }
+
+    .products .effect {
+      width: 592px;
+      height: 502px;
+      top: -341px;
+    }
+
+    .products .star {
+      width: 670px;
+      height: 418px;
+      top: -124px;
+    }
+
+    .mission-educa {
+      padding: 104px 0px;
+      gap: 120px;
+    }
+
+    .mission-educa .mission{
+      padding: 0px 64px;
+      gap: 56px;
+    }
+
+    .mission-educa .mission img{
+      width: 345px;
+      height: 212px;
+    }
+
+    .mission-educa .educa .title{
+      padding: 0 40px;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mission-educa .educa .educa-topics{
+      padding: 0 40px 0 40px;
+      scroll-behavior: smooth;
+    }
+
+    .mission-educa .educa button.primary-button {
+      width: 184px;
+    }
+
+    .mission-educa .educa .educa-topics::-webkit-scrollbar {
+      display: none;
+    }
+
+  }
+
+  @include breakpoint-down('mobile-large') {
+    .hero-content {
+      padding: 15vh 24px 0 24px;
+      gap: 15vh;
+    }
+
+    .wrapper-platform {
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .platform-link .platform img {
+      width: 700px;
+      height: 500px;
+      object-position: top left;
+    }
+
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 48px 24px 24px 24px;
+    }
+
+    .institutes {
+      padding: 128px 0 152px 0;
+      gap: 80px;
+    }
+
+    .institutes .institutes-header h2{
+      margin: 0 24px;
+      font-size: 32px;
+    }
+
+    .institutes .institutes-header h4{
+      margin: 0 24px;
+    }
+
+    .products{
+      padding: 104px 24px 160px 24px;
+      gap: 128px;
+    }
+
+    .products .products-content{
+      gap: 120px;
+    }
+
+    .products .title h2{
+      font-size: 32px;
+    }
+
+    .products .title h4{
+      font-size: 16px;
+    }
+
+    .products .title-image .world-image {
+
+      img:first-child {
+        height: 87px;
+        width: 87px;
+      }
+
+      img:last-child {
+        right: -25px;
+        top: -25px;
+        height: 32px;
+        width: 32px;
+      }
+    }
+
+    .products .effect {
+      width: 533px;
+      height: 451px;
+      top: -304px;
+    }
+
+    .products .star {
+      width: 600px;
+      height: 376px;
+      top: -105px;
+    }
+
+    .mission-educa .mission{
+      padding: 0px 32px;
+      gap: 56px;
+    }
+
+    .mission-educa .educa .title{
+      padding: 0 24px;
+    }
+
+    .mission-educa .educa .educa-topics{
+      padding: 0 24px 0 24px;
+    }
+
+    .mission-educa .educa{
+      justify-content: center;
+      align-items: center;
+      gap: 56px;
+    }
+
+    .mission-educa .mission img{
+      width: 100%;
+      height: auto;
+    }
+
+    .mission-educa .educa .topics-button-wrapper{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      align-self: stretch;
+    }
+
+    .mission-educa .educa .title h2{
+      font-size: 32px;
+      text-align: center;
+    }
+
+  }
+
+  @include breakpoint-down('mobile-medium') {
+
+    .wrapper-cards {
+      max-width: 1184px;
+      padding: 48px 24px 24px 24px;
+    }
+
+    .hero-content {
+      padding: 13vh 24px 0 24px;
+      gap: 13vh;
+    }
+
+    .hero-top{
+      gap: 64px;
+    }
+
+    .institutes {
+      padding: 88px 0 112px 0;
+      gap: 72px;
+    }
+
+    .products{
+      padding: 96px 24px 144px 24px;
+      gap: 120px;
+    }
+
+    .products .products-content{
+      gap: 112px;
+    }
+
+    .products .title h2{
+      font-size: 32px;
+    }
+
+    .products .title h4{
+      font-size: 14px;
+    }
+
+    .products .title-image .world-image {
+
+      img:first-child {
+        height: 80px;
+        width: 80px;
+      }
+
+      img:last-child {
+        right: -22px;
+        top: -22px;
+        height: 28px;
+        width: 28px;
+      }
+    }
+
+    .products .effect {
+      width: 533px;
+      height: 451px;
+      top: -310px;
+    }
+
+    .products .star {
+      width: 600px;
+      height: 376px;
+      top: -92px;
+    }
+
+    .mission-educa .educa .title h2{
+      font-size: 24px;
+      text-align: center;
+    }
+
+  }
+
+  @include breakpoint-down('mobile-small') {
+
+    .h1-text {
+      font-size: 36px;
+    }
+
+    .h1-lasttext{
+      font-size: 36px;
+    }
+
+    .subtitle{
+      font-size: 14px;
+    }
+
+    .hero-top{
+      gap: 40px;
+    }
+
+    .hero-content {
+      padding: 13vh 24px 0 24px;
+      gap: 13vh;
+    }
+  }
+
 </style>

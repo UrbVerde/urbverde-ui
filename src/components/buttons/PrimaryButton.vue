@@ -56,7 +56,7 @@ export default{
   props: {
     label: {
       type: String,
-      default: 'Primary Button'
+      default: ''
     },
     filled: {
       type: Boolean,

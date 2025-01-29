@@ -20,7 +20,7 @@
 <script setup>
 import NavbarItem from '@/components/side_bar/drop_down/NavbarItemDropdown.vue';
 import { ref, watch } from 'vue';
-import { API_URLS } from '@/constants/endpoints';
+// import { API_URLS } from '@/constants/endpoints';
 import { useLocationStore } from '@/stores/locationStore';
 
 const locationStore = useLocationStore();
@@ -51,7 +51,7 @@ watch(
 async function fetchCategories(code, type) {
   try {
     // console.log('Fetching categories:', { code, type });
-    const response = await fetch(`${API_URLS.CATEGORIES}?code=${code}&type=${type}`);
+    const response = await fetch(`https://api.urbverde.com.br/v1/address/categories?code=${code}&type=${type}`);
     const data = await response.json();
 
     if (data && data.categories) {
