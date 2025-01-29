@@ -80,21 +80,21 @@ export default {
 
 .dashboard-section {
   display: flex;
-  flex-direction: column; 
-  gap: 20px; 
+  flex-direction: column;
+  gap: 20px;
   margin: 20px;
 }
 
 .heat-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
 .tips-card-section {
-  margin-top: 20px; 
+  margin-top: 20px;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
 }
 
 </style>
