@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/homepage/UrbverdeEducaTopics.vue -->
 <template>
   <div class="urbverde-topics">
     <!-- Imagem -->

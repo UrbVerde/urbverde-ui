@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/buttons/LogoButton.vue -->
+<!-- urbverde-ui/src/components/side_bar/buttons/LogoButton.vue -->
 <template>
   <div>
     <LogoRouterLink />

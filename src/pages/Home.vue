@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/pages/Home.vue -->
 <template>
   <div class="homepage">
     <!-- Navbar -->
@@ -350,7 +351,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-marcel.png"
+                imageSrc="src\ssets\images\homepage\urbverde-educa-topics-marcel.png"
                 imageAlt="Reportagens e notícias"
                 title="Reportagens e notícias"
               />
@@ -363,7 +364,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-notebook.png"
+                imageSrc="src\ssets\images\homepage\urbverde-educa-topics-notebook.png"
                 imageAlt="Documentos"
                 title="Documentos"
               />
@@ -376,7 +377,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-edu.png"
+                imageSrc="src\ssets\images\homepage\urbverde-educa-topics-edu.png"
                 imageAlt="Métodologias"
                 title="Métodologias"
               />
@@ -389,7 +390,7 @@
               rel="noopener noreferrer"
             >
               <UrbVerdeEducaTopics
-                imageSrc="src\assets\images\homepage\urbverde-educa-topics-breno.png"
+                imageSrc="src\ssets\images\homepage\urbverde-educa-topics-breno.png"
                 imageAlt="Principais dúvidas"
                 title="Principais dúvidas"
               />

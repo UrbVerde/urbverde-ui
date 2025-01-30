@@ -1,11 +1,12 @@
-<!-- src/components/navbar/Navbar.vue -->
+<!-- urbverde-ui/src/components/navbar/Navbar.vue -->
 <template>
   <div class="navbar">
     <div class="response">
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
         <div class="header-left">
-          <h5> {{ layer }} em {{ cityName }}/{{ uf }} </h5>
+
+          <h5> {{ layer }} em {{ cityName }}-{{ uf }} </h5>
         </div>
         <div class="header-right">
           <button @click="shareMap" class="share-button">
@@ -20,13 +21,11 @@
 
       <!-- Segunda linha: Navegação -->
       <div class="tabs">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          @click="navigateTo(tab.id)"
-          :class="{ 'active-tab': activeSection === tab.id }"
-          class="tab-button"
-        >
+        <button v-for="tab in tabs"
+                :key="tab.id"
+                @click="navigateTo(tab.id)"
+                :class="{ 'active-tab': activeSection === tab.id }"
+                class="tab-button">
           {{ tab.label }}
         </button>
       </div>
@@ -50,11 +49,8 @@ export default {
   setup() {
     const locationStore = useLocationStore();
 
-    const layer = computed(() =>
-    // console.log('Navbar computed - current layer:', locationStore.layer);
-
-      locationStore.layer
-    );
+    const layer = computed(() => locationStore.currentLayerName);  // Use currentLayerName instead
+    console.log('Navbar computed - current layer:', locationStore.currentLayerName);
     const cityName = computed(() => locationStore.nm_mun);
     const uf = computed(() => locationStore.uf);
 

@@ -1,19 +1,19 @@
+<!-- urbverde-ui/src/pages/MapPage.vue -->
   <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="global">
-
     <div class="content-wrapper">
+
       <!-- Sidebar -->
       <Sidebar :class="[{ 'sidebar-collapsed': !isSidebarOpen }]"
                :is-open="isSidebarOpen"
-               @toggle-sidebar="toggleSidebar"
-               @update-coordinates="updateCoordinates" />
+               @toggle-sidebar="toggleSidebar" />
 
       <!-- Main content (navbar, map, etc.) -->
       <div class="main-wrapper" :class="{ 'sidebar-open': isSidebarOpen }">
-        <!-- If no coordinates, show a placeholder -->
-        <div v-if="!coordinates?.lat || !coordinates?.lng" class="placeholder-container">
-          <img src="../assets/images/setLocation.png" alt="Imagem de espera" class="map-placeholder" />
+        <!-- Show initial placeholder only if no municipality is selected -->
+        <div v-if="!locationStore.cd_mun" class="placeholder-container">
+          <img src="../assets/images/setLocation.png" alt="Selecione um município" class="map-placeholder" />
         </div>
 
         <div v-else>
@@ -22,22 +22,14 @@
                   @navigate-to="scrollToSection" />
 
           <div id="map" ref="Mapa" class="content-area">
-            <MapBox :coordinates="coordinates" class="map-box">
+            <MapBox class="map-box">
+              <Legenda />
             </MapBox>
-            <Legenda />
           </div>
 
-          <!--
-              Criar componente de widgets daqui pra frente:
-                procedural
-          -->
-
-          <!-- Stats Section (scroll target) -->
-          <div id="stats"
-               ref="statsSection"
-               class="box"
-          >
-            Estatísticas do {{ category }} em {{ cityName }}/{{ uf }}
+          Stats Section
+          <div id="stats" ref="statsSection" class="box">
+            <h2>Estatísticas do {{ category }} em {{ cityName }}-{{ uf }}</h2>
             <TemperatureSection />
           </div>
 
@@ -47,8 +39,8 @@
                class="box"
                style="border-top: 1px solid black">
             <div class="statistics-container">
-              <span class="title-statistics-container heading-h5">Quem é Mais Afetado Pelo Calor Extremo em {{
-                cityName }}/{{ uf }}?</span>
+              <span class="title-statistics-container heading-h5">
+                Quem é Mais Afetado Pelo Calor Extremo em {{ cityName }}-{{ uf }}?</span>
               <YearPicker v-model="secondSelectedYear"
                           :default-year="defaultYear"
                           :city-code="cityCode"
@@ -64,7 +56,7 @@
                style="border-top: 1px solid black">
             <div class="statistics-container">
               <span class="title-statistics-container heading-h5">
-                {{ cityName }} no Ranking dos Municípios</span>
+                {{ cityName }}-{{ uf }} no Ranking dos Municípios</span>
               <YearPicker v-model="thirdSelectedYear"
                           :default-year="defaultYear"
                           :city-code="cityCode"
@@ -78,7 +70,7 @@
                ref="dataSection"
                class="box"
                style="height:636px; border-top: 1px solid black">
-            Veja mais sobre {{ cityName }}/{{ uf }}
+            Veja mais sobre {{ cityName }}-{{ uf }}
           </div>
 
           <!-- Footer -->
@@ -89,17 +81,18 @@
             RECEBA AS NOVIDADES POR EMAIL
           </div>
         </div>
+        <div ref="statsSection" class="box">
+        </div>
       </div>
-      <!-- <div ref="statsSection" class="box" >
-        </div> -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watchEffect} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
+import { useHead } from '@vueuse/head';
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
@@ -107,20 +100,20 @@ import Legenda from '../components/map/Legenda.vue';
 import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
 import RankSection from '@/components/cards/weather/RankSection.vue';
 import HeatSection from '@/components/cards/weather/HeatSection.vue';
-import { useHead } from '@vueuse/head';
 import YearPicker from '@/components/cards/weather/YearPicker.vue'; // Caminho para o YearPicker.vue
 
 // Store and router setup
-const route = useRoute();
-const router = useRouter();
 const locationStore = useLocationStore();
+const route = useRoute();
+// const router = useRouter();
 
-// Refs and Computed Properties
-const coordinates = ref({ lat: null, lng: null });
+// UI State
 const activeSection = ref('map');
 const isSidebarOpen = ref(true);
 
+// Computed Properties
 const category = computed(() => locationStore.category || 'category?');
+// const currentLayerName = computed(() => locationStore.currentLayerName);
 // const currentLayer = computed(() => locationStore.layer || 'layer?');
 const cityName = computed(() => locationStore.nm_mun || 'city?');
 const uf = computed(() => locationStore.uf || 'uf?');
@@ -137,14 +130,9 @@ const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
 };
 
-const updateCoordinates = (newCoordinates) => {
-  coordinates.value = newCoordinates;
-  // locationStore.setCoordinates(newCoordinates);
-};
-
 const handleScroll = () => {
   const scrollPosition = window.scrollY;
-  const navbarHeight = 100; // Adjust based on your navbar height
+  const navbarHeight = 100;
   const sectionElements = document.querySelectorAll(
     '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
   );
@@ -174,40 +162,64 @@ const scrollToSection = (sectionId) => {
       behavior: 'smooth',
     });
 
-    activeSection.value = sectionId;
-    history.pushState(null, null, `#${sectionId}`);
-  }
-};
-
-const syncStoreWithQuery = async() => {
-  const query = route.query;
-  // console.log('Syncing store with query:', query);
-
-  if (Object.keys(query).length > 0) {
-    locationStore.updateFromQueryParams(query);
-
-    // If we have a municipal code and coordinates aren't set, fetch them
-    if (locationStore.cd_mun && (!coordinates.value?.lat || !coordinates.value?.lng)) {
-      try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${locationStore.nm_mun}`);
-        const data = await response.json();
-
-        if (data && data.length > 0 && data[0].coordinates) {
-          coordinates.value = data[0].coordinates;
-          locationStore.setCoordinates(data[0].coordinates);
-        }
-      } catch (error) {
-        console.error('Error fetching coordinates:', error);
-      }
+    // Don't update hash here if it's a map section to avoid conflicts
+    if (sectionId !== 'map') {
+      history.pushState(null, null, `#${sectionId}`);
     }
   }
 };
 
+// const syncStoreWithQuery = async() => {
+//   const query = route.query;
+//   console.log('MapPage: Syncing store with query:', query);
+
+//   if (Object.keys(query).length > 0) {
+//     await locationStore.updateFromQueryParams(query);
+
+//     // If we have coordinates but they're not set, fetch them
+//     if (locationStore.cd_mun && (!coordinates.value?.lat || !coordinates.value?.lng)) {
+//       try {
+//         const coords = await locationStore.fetchCoordinatesByCode(locationStore.cd_mun);
+//         if (coords) {
+//           coordinates.value = coords;
+//         }
+//       } catch (error) {
+//         console.error('MapPage: Error fetching coordinates:', error);
+//       }
+//     }
+//   }
+// };
+
+// Add this new function to fetch categories
+// async function fetchCategoriesForLocation(code) {
+//   try {
+//     console.log('Fetching categories for location:', code);
+//     const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${code}`);
+//     const data = await response.json();
+
+//     if (data?.categories) {
+//       locationStore.setCategories(data.categories);
+//     }
+//   } catch (error) {
+//     console.error('Error fetching categories:', error);
+//   }
+// }
+
 // Lifecycle hooks
-onMounted(() => {
-  syncStoreWithQuery();
+// Initialize store with URL params
+onMounted(async() => {
+  // Setup URL syncing in store
+  locationStore.setupUrlSync();
+
+  // Initial sync from URL
+  if (Object.keys(route.query).length > 0) {
+    await locationStore.updateFromQueryParams(route.query);
+  }
+
+  // Setup scroll handling
   window.addEventListener('scroll', handleScroll);
 
+  // Handle initial hash if present
   if (window.location.hash) {
     const sectionId = window.location.hash.substring(1);
     setTimeout(() => scrollToSection(sectionId), 100);
@@ -215,20 +227,7 @@ onMounted(() => {
   handleScroll();
 });
 
-watchEffect(() => {
-  const storeParams = locationStore.urlParams;
-  const currentQuery = route.query;
-  if (Object.keys(storeParams).length > 0 &&
-        JSON.stringify(storeParams) !== JSON.stringify(currentQuery)) {
-    const currentHash = window.location.hash;
-    router.replace({
-      path: '/mapa',
-      query: storeParams,
-      hash: currentHash
-    });
-  }
-});
-
+// Cleanup
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
@@ -240,12 +239,12 @@ useHead({
     {
       name: 'description',
       content:
-          'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
+        'Acesse a Plataforma UrbVerde para explorar dados sociais e ambientais detalhados do seu município. Ferramenta gratuita feita para planejamento urbano e sustentável.',
     },
     {
       name: 'keywords',
       content:
-          'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
+        'plataforma de dados sociais, plataforma de dados ambientais, planejamento sustentável, cidades verdes, análise de dados municipais, sustentabilidade urbana, desenvolvimento sustentável, UrbVerde, ferramenta para planejamento urbano, dados socioambientais, acesso gratuito',
     },
     {
       property: 'og:title',
@@ -254,7 +253,7 @@ useHead({
     {
       property: 'og:description',
       content:
-          'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
+        'Descubra como a Plataforma UrbVerde pode ajudar a acessar e analisar dados sociais e ambientais detalhados, promovendo cidades resilientes e sustentáveis.',
     },
   ],
 });
@@ -264,7 +263,7 @@ useHead({
 .global {
   background-color: #F8F9FACC;
   width: 100%;
-/*   height: 100vh; */
+  /*   height: 100vh; */
   display: flex;
   flex-direction: column;
 }
@@ -287,8 +286,8 @@ useHead({
   position: relative;
   display: flex;
   flex-direction: column;
-/*   height: 100vh; */
-/*   overflow-y: auto; */
+  /*   height: 100vh; */
+  /*   overflow-y: auto; */
   margin-left: 72px;
   transition: margin-left 0.3s;
 }

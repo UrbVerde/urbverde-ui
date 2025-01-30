@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/side_bar/buttons/MinimizeButton.vue -->
 <template>
   <div class="alling-button">
     <button

@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/navbar/NavbarHomepage.vue -->
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">

@@ -32,7 +32,9 @@
               :key="layer.id"
               :class="['layer-item', { 'active-layer': layer.isActive }]"
               @click="selectLayer(layer, category)">
-            <span class="layer-name small-regular">{{ layer.name }}</span>
+            <span class="layer-name small-regular">
+              {{ layer.display_name || layer.title || layer.name }}
+            </span>
 
             <div class="new-layer-tag" v-if="layer.isNew">
               <i class="bi bi-stars" id="imgIconNew"></i>
@@ -45,150 +47,101 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
 
-// PROPS
-const props = defineProps({
-  code: { type: Number, default: null },
-  type: { type: String, default: null }
-});
-
-// STORE
 const locationStore = useLocationStore();
 
-// LOCAL STATE
+// Local state
 const categories = ref([]);
 const openCategoryIds = ref([]);
 const containerRef = ref(null);
 
-// LIFECYCLE
-onMounted(() => {
-  // fetch categories immediately
-  fetchCategories(props.code, props.type);
+// Single watcher for all category-related updates
+watchEffect(() => {
+  // Only update local categories when store categories change
+  if (locationStore.categories.length > 0) {
+    console.log('CategoriesDropdown: Updating from store categories');
+    categories.value = locationStore.categories;
 
-  // Add click event listener to document
-  document.addEventListener('click', handleOutsideClick);
+    // Handle active layer visibility
+    if (locationStore.layer) {
+      const activeCategory = categories.value.find(category =>
+        category.layers.some(layer => layer.id === locationStore.layer)
+      );
+
+      if (activeCategory && !openCategoryIds.value.includes(activeCategory.id)) {
+        openCategoryIds.value = [activeCategory.id];
+      }
+    }
+
+    markActiveLayer();
+  }
 });
 
-// Remove event listener when component is unmounted
-onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick);
-});
+// Methods
+function markActiveLayer() {
+  categories.value.forEach(cat => {
+    cat.layers.forEach(lyr => {
+      lyr.isActive = lyr.id === locationStore.layer;
+    });
+  });
+}
 
 function handleOutsideClick(event) {
-  // If the click is outside the container
   if (containerRef.value && !containerRef.value.contains(event.target)) {
-    // Close categories without active layers
-    const updatedOpenCategoryIds = openCategoryIds.value.filter(categoryId => {
+    openCategoryIds.value = openCategoryIds.value.filter(categoryId => {
       const category = categories.value.find(c => c.id === categoryId);
 
-      return category && category.layers.some(layer => layer.isActive);
+      return category?.layers.some(layer => layer.isActive);
     });
-
-    openCategoryIds.value = updatedOpenCategoryIds;
-  }
-}
-
-/**
- * Fetch categories from your API (or mock),
- * then set them in local state.
- * Open the category of the initially selected layer.
- */
-async function fetchCategories(code, type) {
-  try {
-    console.log('Fetching categories:', { code, type });
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/categories?code=${code}`);
-    const data = await response.json();
-
-    if (data && data.categories) {
-      categories.value = data.categories;
-
-      // If a layer is already selected in the store
-      if (locationStore.layer) {
-        // Find the category with the selected layer
-        const categoryWithActiveLayer = categories.value.find(category =>
-          category.layers.some(layer =>
-            layer.slug === locationStore.layer || layer.id === locationStore.layer
-          )
-        );
-
-        // If found, open the category and mark the layer as active
-        if (categoryWithActiveLayer) {
-          openCategoryIds.value.push(categoryWithActiveLayer.id);
-        }
-
-        markActiveLayer();
-      } else {
-        // If no layer is selected, set the first layer
-        const firstCategory = categories.value[0];
-        if (firstCategory?.layers?.length > 0) {
-          const firstLayer = firstCategory.layers[0];
-          firstLayer.isActive = true;
-          locationStore.setLocation({
-            category: firstCategory.name,
-            layer: firstLayer.slug || firstLayer.id
-          });
-
-          // Open the first category
-          openCategoryIds.value.push(firstCategory.id);
-        }
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
-}
-
-function markActiveLayer() {
-  for (const cat of categories.value) {
-    for (const lyr of cat.layers) {
-      if (
-        lyr.slug === locationStore.layer ||
-        lyr.id === locationStore.layer
-      ) {
-        lyr.isActive = true;
-      } else {
-        lyr.isActive = false;
-      }
-    }
   }
 }
 
 function toggleCategory(categoryId) {
-  // Check if the category is already open
   const categoryIndex = openCategoryIds.value.indexOf(categoryId);
-
   if (categoryIndex > -1) {
-    // If open, remove it
     openCategoryIds.value.splice(categoryIndex, 1);
   } else {
-    // If not open, add it
     openCategoryIds.value.push(categoryId);
   }
 }
 
 function selectLayer(layer, categoryObj) {
-  // 1) Deactivate all
+  // Update local state
   categories.value.forEach(cat => {
     cat.layers.forEach(lyr => {
       lyr.isActive = false;
     });
   });
-  // 2) Activate the chosen layer
   layer.isActive = true;
 
-  // 3) Update pinia
+  // Update store
   locationStore.setLocation({
     category: categoryObj.name,
-    layer: layer.slug || layer.id // fallback
+    layer: layer.id,
+    layerName: layer.display_name || layer.title || layer.name
   });
 }
 
 function getActiveLayerInCategory(category) {
   return category.layers.find(lyr => lyr.isActive) || null;
 }
+
+// Lifecycle
+onMounted(() => {
+  document.addEventListener('click', handleOutsideClick);
+
+  // Initial fetch if we have necessary data
+  if (locationStore.cd_mun && locationStore.type) {
+    locationStore.fetchCategories();
+  }
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick);
+});
 </script>
 
 <style scoped>
@@ -313,7 +266,7 @@ align-items: center;
 
 }
 
-.layer-item:hover {
+.layer-item:not(.active-layer):hover {
   background: var(--Gray-200, #E9ECEF);
 }
 
