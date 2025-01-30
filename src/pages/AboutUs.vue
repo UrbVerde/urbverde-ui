@@ -1,33 +1,19 @@
 <template>
-  <div class="homepage">
-    <TawkTo />
-
-    <header>
-      <NavbarHomepage active-item="sobre" />
-    </header>
-
-    <main>
-      aaaaaaaaaaaaa
-    </main>
-
-    <footer>
-      <UrbVerdeFooter />
-    </footer>
-  </div>
+  <InstitutionalLayout
+    active-item="sobre"
+  >
+    aa
+  </InstitutionalLayout>
 </template>
 
 <script>
-import NavbarHomepage from '@/components/navbar/NavbarHomepage.vue';
-import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
-
-// Metas tags de SEO
+import InstitutionalLayout from '@/layouts/InstitutionialLayout.vue';
 import { useHead } from '@vueuse/head';
 
 export default {
   name: 'AboutUs',
   components: {
-    NavbarHomepage,
-    UrbVerdeFooter,
+    InstitutionalLayout,
   },
 
   // Configuração das meta tags de SEO
