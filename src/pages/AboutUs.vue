@@ -1,6 +1,9 @@
 <template>
   <InstitutionalLayout
     active-item="sobre"
+    page-title="Quem somos"
+    page-subtitle="A UrbVerde é uma iniciativa com mais de 50 pesquisadores
+                   dedicados a democratizar o acesso dados sociais e ambientais!"
   >
     aa
   </InstitutionalLayout>

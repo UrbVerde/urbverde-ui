@@ -1,6 +1,8 @@
 <template>
   <InstitutionalLayout
     active-item="contato"
+    page-title="Contatos"
+    page-subtitle="Escolha a melhor forma para entrar em contato com a nossa equipe"
   >
     aa
   </InstitutionalLayout>

@@ -1,6 +1,8 @@
 <template>
   <InstitutionalLayout
     active-item="parceiro"
+    page-title="Seja parceiro"
+    page-subtitle="Seja parceiro da UrbVerde e fortaleça a análise ambiental do seu município!"
   >
     aa
   </InstitutionalLayout>

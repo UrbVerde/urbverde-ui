@@ -13,6 +13,12 @@
         </div>
 
         <section class="content container">
+          <div class="page-title">
+            <h1>
+              <span class="title heading-h1">{{ pageTitle }}</span>
+            </h1>
+            <h4 class="subtitle heading-h5">{{ pageSubtitle }}</h4>
+          </div>
           <slot></slot>
         </section>
       </section>
@@ -47,13 +53,25 @@ export default {
     backgroundAlt: {
       type: String,
       default: 'Paisagem natural com árvores para um futuro sustentável'
-    }
+    },
+    pageTitle: {
+      type: String,
+      default: 'Título da página'
+    },
+    pageSubtitle: {
+      type: String,
+      default: 'Subtítulo da página'
+    },
   }
 };
 </script>
 
   <style scoped lang="scss">
   @import '@/assets/styles/breakpoints.scss';
+
+  h1, h4 {
+    margin: 0;
+  }
 
   .page {
     position: relative;
@@ -95,10 +113,34 @@ export default {
 
   .content {
     display: flex;
+    max-width: 1184px;
+    padding: 184px 0px 160px 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 184px;
+    align-self: stretch;
+  }
+
+  .page-title{
+    display: flex;
+    padding: 0px 256px;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20vh 0 0 0;
-    gap: 20vh;
+    gap: 24px;
+    align-self: stretch;
+  }
+
+  .title{
+    font-size: 64px;
+    color: map-get($primary-fade, 700);
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+  }
+
+  .subtitle{
+    color: map-get($theme, secondary);
+    text-align: center;
   }
   </style>
