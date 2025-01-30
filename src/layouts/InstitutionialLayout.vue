@@ -124,11 +124,14 @@ export default {
 
   .page-title{
     display: flex;
-    padding: 0px 256px;
+    max-width: 720px;
+    padding: 0 24px 0 24px;
+    margin: auto;
     flex-direction: column;
     align-items: center;
     gap: 24px;
     align-self: stretch;
+
   }
 
   .title{
