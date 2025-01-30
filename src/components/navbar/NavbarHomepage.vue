@@ -19,15 +19,21 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">Seja Parceiro</a>
-            </li>
-            <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">Quem Somos</a>
-            </li>
-            <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">Transparência</a>
-            </li>
+            <router-link to="/sobre" class="router">
+              <li class="nav-item d-flex">
+                <a href="#" class="body-small-regular">Quem Somos</a>
+              </li>
+            </router-link>
+            <router-link to="/parceiro" class="router">
+              <li class="nav-item d-flex">
+                <a href="#" class="body-small-regular">Seja Parceiro</a>
+              </li>
+            </router-link>
+            <router-link to="/contato" class="router">
+              <li class="nav-item d-flex">
+                <a href="#" class="body-small-regular">Contatos</a>
+              </li>
+            </router-link>
             <li class="nav-item d-flex">
               <a
                 href="https://urbverde-educa.tawk.help/"
@@ -97,6 +103,10 @@ export default {
 <style scoped lang="scss">
   @import '@/assets/styles/breakpoints.scss';
 
+  .router{
+    text-decoration: none;
+  }
+
   .navbar {
     padding: 0;
     min-height: 72px;
@@ -137,6 +147,11 @@ export default {
     color: map-get($body-text, body-color);
     text-align: center;
     border-radius: 4px;
+  }
+
+  .navbar .navbar-nav .nav-item a:hover {
+    background-color: map-get($gray, 200);
+    border-radius: 66px;
   }
 
   .navbar .navbar-button {
