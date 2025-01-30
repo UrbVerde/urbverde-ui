@@ -3,7 +3,7 @@
     <TawkTo />
 
     <header>
-      <NavbarHomepage />
+      <NavbarHomepage active-item="contato" />
     </header>
 
     <main>

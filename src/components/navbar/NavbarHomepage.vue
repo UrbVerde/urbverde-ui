@@ -20,17 +20,17 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <router-link to="/sobre" class="router">
-              <li class="nav-item d-flex">
+              <li class="nav-item d-flex" :class="{ 'nav-item-active': activeItem === 'sobre' }">
                 <a href="#" class="body-small-regular">Quem Somos</a>
               </li>
             </router-link>
             <router-link to="/parceiro" class="router">
-              <li class="nav-item d-flex">
+              <li class="nav-item d-flex" :class="{ 'nav-item-active': activeItem === 'parceiro' }">
                 <a href="#" class="body-small-regular">Seja Parceiro</a>
               </li>
             </router-link>
             <router-link to="/contato" class="router">
-              <li class="nav-item d-flex">
+              <li class="nav-item d-flex" :class="{ 'nav-item-active': activeItem === 'contato' }">
                 <a href="#" class="body-small-regular">Contatos</a>
               </li>
             </router-link>
@@ -44,7 +44,6 @@
                 UrbVerde Educa
               </a>
             </li>
-
           </ul>
 
           <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">
@@ -72,6 +71,17 @@ export default {
     PrimaryButton,
     LogoRouterLink,
   },
+
+  props: {
+    activeItem: {
+      type: String,
+      default: '',
+      validator(value) {
+        return ['', 'sobre', 'parceiro', 'contato'].includes(value);
+      }
+    }
+  },
+
   methods: {
     handleOutsideClick(event) {
       const collapseElement = document.getElementById('navbarNav');
@@ -91,6 +101,7 @@ export default {
       }
     },
   },
+
   mounted() {
     document.addEventListener('click', this.handleOutsideClick);
   },
@@ -115,10 +126,6 @@ export default {
     z-index: 2;
   }
 
-  .navbar .navbar-logo-homepage:hover {
-    background-color: transparent;
-  }
-
   .navbar .navbar-toggler {
     border: transparent;
   }
@@ -137,21 +144,32 @@ export default {
     padding: 0 12px;
     list-style: none;
     gap: 8px;
-  }
 
-  .navbar .navbar-nav .nav-item a {
-    display: flex;
-    padding: 8px 12px;
-    align-items: center;
-    text-decoration: none;
-    color: map-get($body-text, body-color);
-    text-align: center;
-    border-radius: 4px;
-  }
+    .nav-item a {
+      display: flex;
+      padding: 8px 12px;
+      align-items: center;
+      text-decoration: none;
+      color: map-get($body-text, body-color);
+      text-align: center;
+      border-radius: 4px;
 
-  .navbar .navbar-nav .nav-item a:hover {
-    background-color: map-get($gray, 200);
-    border-radius: 66px;
+      // Hover para itens não ativos
+      &:hover {
+        background-color: map-get($gray, 200);
+        border-radius: 8px;
+      }
+    }
+
+    // Estilo específico para itens ativos
+    .nav-item-active a {
+      background-color: map-get($primary-fade, 100);
+      border-radius: 8px;
+
+      &:hover {
+        background-color: map-get($primary-fade, 100);
+      }
+    }
   }
 
   .navbar .navbar-button {

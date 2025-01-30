@@ -3,7 +3,7 @@
     <TawkTo />
 
     <header>
-      <NavbarHomepage />
+      <NavbarHomepage active-item="sobre" />
     </header>
 
     <main>
