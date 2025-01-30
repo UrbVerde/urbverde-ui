@@ -71,14 +71,14 @@ export default {
 .content {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* Espaçamento vertical entre os elementos */
+  gap: 16px;
 }
 
 .see-more-cards {
   display: flex;
-  flex-direction: row; /* Cards lado a lado */
-  gap: 20px; /* Espaço entre os cards */
+  flex-direction: row;
+  gap: 20px;
   margin: 20px;
-  flex-wrap: wrap; /* Permite quebrar linha se não houver espaço suficiente */
+  flex-wrap: wrap;
 }
 </style>

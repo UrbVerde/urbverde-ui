@@ -53,21 +53,21 @@ export default {
 }
 
 .see-card .card-cantent {
-  text-align: left; /* Garante alinhamento à esquerda */
-  margin: 0px 32px; /* Remove margens padrão */
+  text-align: left;
+  margin: 0px 32px;
 }
 
 .card-cantent {
-  text-align: left; /* Garante alinhamento à esquerda */
-  margin: 0px 32px; /* Remove margens padrão */
+  text-align: left;
+  margin: 0px 32px;
 }
 .see-card .value {
   font-family: Montserrat;
   font-size: 40px;
   font-weight: 700;
   color: var(--Green-500, #198754);
-  text-align: left; /* Garante alinhamento à esquerda */
-  margin: 0px 32px; /* Remove margens padrão */
+  text-align: left;
+  margin: 0px 32px;
   gap: 16px;
 }
 .botao {

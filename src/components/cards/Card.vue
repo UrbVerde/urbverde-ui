@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style>
+<style scooped>
 .custom-card {
   display: flex;
   flex-direction: column;

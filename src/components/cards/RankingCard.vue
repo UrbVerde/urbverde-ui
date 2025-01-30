@@ -56,7 +56,7 @@ export default {
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%;
 }
 
 .rank-card-subtitle {
@@ -91,22 +91,23 @@ export default {
 .rank-card-number {
   color: var(--Green-500, #198754);
 
-  /* Small Shadow */
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
   font-family: Montserrat;
   font-size: 28px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 33.6px */
+  line-height: 120%;
 }
 
 .rank-card-separator {
   color: var(--Green-500, #198754);
-font-family: Montserrat;
-font-size: 16px;
-font-style: normal;
-font-weight: 700;
-line-height: 120%;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .rank-card-total {
