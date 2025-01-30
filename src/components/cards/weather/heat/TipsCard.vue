@@ -1,27 +1,24 @@
 <template>
   <div class="tips-card">
     <div class="tips-card-content">
-      <h2 class="tips-card-title">Como podemos tornar as cidades mais frescas?</h2>
+      <h2 class="tips-card-title heading-h5">Como podemos tornar as cidades mais frescas?</h2>
       <ul class="tips-card-list">
         <li class="tips-card-item">
           <span class="tips-card-number">1</span>
-          Árvores ajudam a reduzir o calor e melhorar a qualidade do ar.
+          <b>Árvores</b>&nbsp;ajudam a reduzir o calor e melhorar a qualidade do ar.
         </li>
         <li class="tips-card-item">
           <span class="tips-card-number">2</span>
-          Rios e lagos ajudam a resfriar o clima urbano.
+          <b>Rios e lagos</b>&nbsp;ajudam a resfriar o clima urbano.
         </li>
         <li class="tips-card-item">
           <span class="tips-card-number">3</span>
-          Implementação de políticas públicas que promovem áreas verdes.
+          Implementação de &nbsp;<b>políticas públicas</b>&nbsp;que podem promover mais áreas verdes nas cidades.
         </li>
       </ul>
       <PrimaryButton
         label="Ver mais dicas"
         :filled="true"
-        icon="bi-info-circle"
-        iconType="bootstrap"
-        iconPosition="right"
         class="tips-card-button"
       />
     </div>
@@ -47,8 +44,8 @@ export default {
 
 <style scoped>
 .tips-card {
-  width: 960px;
-  height: 266px;
+  width: 1056px;
+  height: 354px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,23 +60,21 @@ export default {
 
 .tips-card-content {
   flex: 1;
-  margin-right: 24px;
+  padding: 40px 40px 48px 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .tips-card-image img {
-  width: 250px;
-  height: auto;
+  width: 306px;
+  height: 266px;
   object-fit: contain;
 }
 
 .tips-card-title {
-  font-size: 22px;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 16px;
+  align-self: stretch;
+  margin-bottom: 32px;
 }
 
 .tips-card-list {
@@ -91,22 +86,28 @@ export default {
 .tips-card-item {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   color: #374151;
   margin-bottom: 12px;
 }
 
 .tips-card-number {
-  width: 32px;
-  height: 32px;
+  width: 21px;
+  height: 21px;
   background-color: #e7f6e8;
-  color: #10b981;
   font-weight: bold;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 8px;
+
+  color: var(--Green-700, #0F5132);
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21px */
 }
 
 .tips-card-button {

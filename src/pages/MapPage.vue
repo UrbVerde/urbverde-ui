@@ -51,6 +51,7 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
+
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 

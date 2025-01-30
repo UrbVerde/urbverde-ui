@@ -31,9 +31,10 @@
 <script>
 import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-import TemperatureSection from '@/components/cards/weather/TemperatureSection.vue';
-import RankSection from '@/components/cards/weather/RankSection.vue';
-import HeatSection from '@/components/cards/weather/HeatSection.vue';
+import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
+import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
+import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
+import SeeMoreSection from '../cards/weather/seeMore/SeeMoreSection.vue';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
 
 export default {
@@ -42,6 +43,7 @@ export default {
     TemperatureSection,
     HeatSection,
     RankSection,
+    SeeMoreSection,
     YearPicker,
   },
   props: {
@@ -89,6 +91,12 @@ export default {
             ref: 'rankingSection',
             title: `${cityName.value} nos Rankings por Regiões`,
             component: RankSection
+          },
+          {
+            id: 'seeMore',
+            ref: 'seeMoreSection',
+            title: 'Veja mais sobre sua cidade!',
+            component: SeeMoreSection
           }
         ]
         // Adicione outras configurações de camada aqui

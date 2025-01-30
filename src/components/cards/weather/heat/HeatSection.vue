@@ -2,7 +2,7 @@
 <template>
   <div class="dashboard-section">
     <div class="heat-cards">
-      <HeatCard :data="cardData"/>
+      <SecondSectionCard :data="cardData"/>
     </div>
 
     <div class="tips-card-section">
@@ -12,14 +12,14 @@
 </template>
 
 <script>
-import HeatCard from './HeatCard.vue';
+import SecondSectionCard from '../../SecondSectionCard.vue';
 import TipsCard from './TipsCard.vue';
 
 export default {
   name: 'HeatSection',
 
   components: {
-    HeatCard,
+    SecondSectionCard,
     TipsCard
   },
 
@@ -72,7 +72,6 @@ export default {
 </script>
 
 <style scoped>
-/* Global reset for box-sizing */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -81,21 +80,21 @@ export default {
 
 .dashboard-section {
   display: flex;
-  flex-direction: column; /* Organiza as seções verticalmente */
-  gap: 20px; /* Espaçamento entre HeatCards e TipsCard */
+  flex-direction: column;
+  gap: 20px;
   margin: 20px;
 }
 
 .heat-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Configura 4 colunas iguais */
-  gap: 20px; /* Espaçamento entre os HeatCards */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
 .tips-card-section {
-  margin-top: 20px; /* Adiciona espaçamento acima do TipsCard */
+  margin-top: 20px;
   display: flex;
-  justify-content: center; /* Centraliza o TipsCard horizontalmente */
+  justify-content: center;
 }
 
 </style>

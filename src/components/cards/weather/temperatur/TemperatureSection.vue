@@ -5,19 +5,19 @@
       <InfoTemperature />
     </div>
     <div class="right-panel">
-      <TemperatureCard :data="cardData" :class="temperature-card" />
+      <FirstSectionCard :data="cardData" :class="temperature-card" />
     </div>
   </div>
 </template>
 
 <script>
 import InfoTemperature from './InfoTemperature.vue';
-import TemperatureCard from './TemperatureCard.vue';
+import FirstSectionCard from '../../FirstSectionCard.vue';
 
 export default {
   components: {
     InfoTemperature,
-    TemperatureCard
+    FirstSectionCard
   },
 
   props: {
