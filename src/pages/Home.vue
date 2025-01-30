@@ -168,10 +168,11 @@
             <h4 class="body-normal-medium">
               A UrbVerde é fruto de uma colaboração entre diversas instituições públicas,
               por meio do financiamento do CNPq e do PPPP da FAPESP.
-              <a href="#" class="body-normal-medium">
+              <router-link to="/sobre" class="read-more">
                 Leia mais
                 <i class="bi bi-arrow-up-right"></i>
-              </a>
+              </router-link>
+
             </h4>
           </header>
 
@@ -891,7 +892,7 @@ export default {
     margin: 0;
   }
 
-  .institutes .institutes-header a{
+  .institutes .institutes-header .read-more{
     color: map-get($green, 500);
     text-decoration-line: underline;
     text-underline-position: from-font;
