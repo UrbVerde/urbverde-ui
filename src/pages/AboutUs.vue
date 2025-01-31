@@ -3,7 +3,7 @@
     active-item="sobre"
     page-title="Quem somos"
     page-subtitle="A UrbVerde é uma iniciativa com mais de 50 pesquisadores
-                   dedicados a democratizar o acesso dados sociais e ambientais!"
+                   dedicados a democratizar o acesso a dados sociais e ambientais!"
   >
     <div class="content-page">
       <div class="top-content">
@@ -32,15 +32,15 @@
             <p class="body-normal-medium">
               Desde então, a UrbVerde cresceu significativamente,
               reunindo mais de 40 pesquisadores de instituições como
-              USP, UFBA, UFSCAR, UNITAU, UNIARA e Universidade Lusófona.
-              Em 2024, com o apoio do Edital PPPP da FAPESP e do CNPq, expandimos nossa
+              USP, UFBA, UFSCAR, UNITAU, UNIARA, Universidade Lusófona e Instituto Polis.
+              Em 2024, com o apoio do Edital PPPP da FAPESP e da Chamada Universal do CNPq, expandimos nossa
               atuação, por meio de parcerias com o Consórcio Intermunicipal Grande ABC
-              e as prefeituras de Diadema e São Vicente. Esse crescimento tornou a
+              e a prefeitura de Diadema. Esse crescimento tornou a
               UrbVerde uma ferramenta <strong>referência no monitoramento ambiental urbano no Brasil.</strong>
             </p>
             <p class="body-normal-medium">
-              Nossa missão é impoderar a população com dados socioambientais acessíveis para
-              fomentar decisões conscientes contra os desafios climáticos.
+              Nossa missão é empoderar a população com dados socioambientais acessíveis para
+              fomentar decisões conscientes para o enfrentamento dos desafios climáticos.
             </p>
           </div>
           <div class="image-earth">
@@ -48,16 +48,16 @@
           </div>
         </div>
         <div class="text">
-          <h2 class="title heading-h2">Financiamento</h2>
+          <h2 class="title heading-h2">Fomento</h2>
           <div class="paragraph">
             <p class="body-normal-medium">
               A Plataforma UrbVerde, inicialmente financiada pelo Edital de
               Apoio a Projetos Integrados de Pesquisa em Áreas Estratégicas (PIPAE)
               da Pró-Reitoria de Pesquisa e Inovação da Universidade de São Paulo
-              (PRPI/USP), e atualmente conta com financiamento do Conselho Nacional
-              de Desenvolvimento Científico e Tecnológico (CNPq) e do <strong>Programa de
-                Pesquisa em Políticas Públicas (PPPP)</strong> da Fundação de Amparo à Pesquisa
-              do Estado de São Paulo (FAPESP).
+              (PRPI/USP), conta atualmente com o fomento do <strong> Conselho Nacional
+                de Desenvolvimento Científico e Tecnológico (CNPq)</strong>, processo 421592/2023-0 da Chamada Universal e do <strong>Programa de
+                Pesquisa em Políticas Públicas (PPPP) da Fundação de Amparo à Pesquisa
+                do Estado de São Paulo (FAPESP)</strong>, processo 2023/10076-6.
             </p>
           </div>
         </div>

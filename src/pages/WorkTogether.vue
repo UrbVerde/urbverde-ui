@@ -16,11 +16,11 @@
           <h2 class="title heading-h2">Adicione dados do seu município ao mapa!</h2>
           <div class="paragraph">
             <p class="body-normal-medium">
-              A UrbVerde possui a flexibilidade de <strong>adicionar os dados específicos de
+              A UrbVerde possui a flexibilidade de <strong>adicionar dados específicos de
                 municípios ao mapa interativo</strong>, ampliando a qualidade das análises socioambientais.
-              Com isso, gestores e pesquisadores podem integrar dados e imagens específicas, possibilitando
-              uma visão mais detalhada e comparativa da realidade local e tornando o
-              dado acessível à todos!
+              Com isso, gestores e pesquisadores podem integrar mapas, dados e imagens, possibilitando
+              uma visão mais detalhada e comparativa da realidade local e tornando essas informações
+              acessíveis a todos!
             </p>
           </div>
         </div>
