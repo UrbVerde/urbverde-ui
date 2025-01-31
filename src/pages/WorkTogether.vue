@@ -42,9 +42,7 @@
         <div class="text">
           <h2 class="title heading-h2">Entre em contato com nossa equipe</h2>
         </div>
-        <div class="contact">
-          ADICIONAR CONTATOS
-        </div>
+        <InstitutionalContactWrapper />
       </div>
     </div>
   </InstitutionalLayout>
@@ -52,12 +50,14 @@
 
 <script>
 import InstitutionalLayout from '@/layouts/InstitutionialLayout.vue';
+import InstitutionalContactWrapper from '@/components/institutional_pages/InstitutionalContactWrapper.vue';
 import { useHead } from '@vueuse/head';
 
 export default {
   name: 'WorkTogether',
   components: {
     InstitutionalLayout,
+    InstitutionalContactWrapper,
   },
 
   // Configuração das meta tags de SEO
@@ -167,7 +167,6 @@ export default {
     align-items: center;
     gap: 64px;
     width: 100%;
-    padding: 0 24px;
   }
 
   .text {
