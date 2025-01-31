@@ -29,5 +29,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-.*_flatten/
 *_flatten
+_flatten
+.urbverde-ui_flatten

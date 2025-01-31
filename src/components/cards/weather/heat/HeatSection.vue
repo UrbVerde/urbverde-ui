@@ -1,18 +1,26 @@
 <!-- urbverde-ui/src/components/cards/weather/HeatSection.vue -->
 <template>
-  <div class="dashboard">
-    <HeatCard :data="cardData"/>
+  <div class="dashboard-section">
+    <div class="heat-cards">
+      <SecondSectionCard :data="cardData"/>
+    </div>
+
+    <div class="tips-card-section">
+      <TipsCard />
+    </div>
   </div>
 </template>
 
 <script>
-import HeatCard from './HeatCard.vue';
+import SecondSectionCard from '../../SecondSectionCard.vue';
+import TipsCard from './TipsCard.vue';
 
 export default {
   name: 'HeatSection',
 
   components: {
-    HeatCard,
+    SecondSectionCard,
+    TipsCard
   },
 
   props: {
@@ -64,18 +72,29 @@ export default {
 </script>
 
 <style scoped>
-/* Global reset for box-sizing */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Configura 4 colunas iguais */
-  gap: 20px; /* Espaçamento entre os cards */
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   margin: 20px;
-  align-items: flex-start; /* Alinha os cards no topo */
 }
+
+.heat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.tips-card-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
 </style>

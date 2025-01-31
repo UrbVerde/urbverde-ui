@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
-  <div>
+  <aside>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div :class="['top-area', { 'top-area-open': isOpen }]">
         <LogoButton v-show="showContent" />
@@ -29,7 +29,7 @@
         </div>
       </template>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script setup>
