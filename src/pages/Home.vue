@@ -1,9 +1,10 @@
 <template>
-  <div class="homepage">
+  <div class="homepage" role="document">
     <TawkTo />
 
     <!-- Navbar -->
     <header class="no-transform"
+            role="banner"
             data-aos="fade"
             data-aos-delay="100"
             data-aos-duration="400">
@@ -12,24 +13,24 @@
 
     <main>
       <!-- Content -->
-      <section class="content">
+      <div class="content">
 
         <!-- Background fixo e atrás dos contents -->
         <div class="image-background-wrapper"
              data-aos="fade"
              data-aos-duration="750"
              data-aos-delay="300">
-          <div class="image-background">
+          <figure class="image-background">
             <img src="@/assets/images/homepage/homepage-background.svg" alt="Paisagem natural com pessoas plantando árvores para um futuro sustentável" />
-          </div>
+          </figure>
         </div>
 
-        <!-- Hero content -->
-        <section class="hero-content container">
-          <header class="hero-top"
-                  data-aos="zoom-in-up"
-                  data-aos-duration="1000"
-                  data-aos-delay="500">
+        <!-- Hero section -->
+        <section class="hero-content container" aria-labelledby="hero-title">
+          <div class="hero-top"
+               data-aos="zoom-in-up"
+               data-aos-duration="1000"
+               data-aos-delay="500">
 
             <div class="hero-text"
                  v-if="windowWidth >= 1026">
@@ -67,11 +68,10 @@
               iconType="bootstrap"
               icon="bi bi-arrow-right"
             />
-          </header>
+          </div>
 
-          <section class="wrapper-platform">
-
-            <!-- Imagem da plataforma -->
+          <!-- Platform Preview -->
+          <section class="wrapper-platform" aria-label="Prévia da plataforma">
             <router-link
               v-if="windowWidth >= 601"
               to="/mapa"
@@ -81,7 +81,7 @@
               data-aos-delay="1500"
               data-aos-duration="750"
             >
-              <div
+              <figure
                 class="platform"
                 @mousemove="handleMouseMove"
                 @mouseleave="resetZoom"
@@ -92,9 +92,10 @@
                   src="@/assets/images/homepage/platform.svg"
                   alt="Interface da plataforma UrbVerde exibindo dados ambientais"
                 />
-              </div>
+              </figure>
             </router-link>
 
+            <!-- Mobile version -->
             <router-link
               v-else
               to="/mapa"
@@ -120,8 +121,8 @@
           </section>
         </section>
 
-        <!-- Cards de comentários sobre a UrbVerde -->
-        <div class="block-cards">
+        <!-- Testimonials -->
+        <section class="block-cards" aria-label="Depoimentos">
           <div class="wrapper-cards">
             <article>
               <CardComments
@@ -157,54 +158,54 @@
               />
             </article>
           </div>
-        </div>
+        </section>
 
-        <!-- Institutes content-->
-        <section class="institutes container">
-          <header class="institutes-header">
+        <!-- Institutions -->
+        <section class="institutes container" aria-labelledby="institutes-title">
+          <div class="institutes-header">
             <h2 class="heading-h2">
               Da universidade para a sociedade
             </h2>
             <h4 class="body-normal-medium">
               A UrbVerde é fruto de uma colaboração entre diversas instituições públicas,
               por meio do financiamento do CNPq e do PPPP da FAPESP.
-              <a href="#" class="body-normal-medium">
+              <router-link to="/sobre" class="read-more">
                 Leia mais
                 <i class="bi bi-arrow-up-right"></i>
-              </a>
-            </h4>
-          </header>
+              </router-link>
 
-          <div class="institutes-logo-carousel">
+            </h4>
+          </div>
+
+          <!-- Logo Carousel -->
+          <div class="institutes-logo-carousel" role="marquee">
             <div class="logo-track">
-              <!-- Primeira lista de logos -->
               <div class="logo-item" v-for="(logo, index) in logos" :key="`original-${index}`">
                 <img :src="logo.src" :alt="logo.alt" loading="lazy" />
               </div>
-              <!-- Segunda lista de logos para criar o loop contínuo -->
+              <!-- Duplicated logos for continuous scroll -->
               <div class="logo-item" v-for="(logo, index) in logos" :key="`duplicate-${index}`">
                 <img :src="logo.src" :alt="logo.alt" loading="lazy" />
               </div>
             </div>
           </div>
 
-          <!-- Lista de prêmios -->
-          <div class="award-wrapper">
+          <!-- Awards -->
+          <section class="award-wrapper">
             <HomeAwards :awards="awardsList" />
-          </div>
-
+          </section>
         </section>
-      </section>
+      </div>
 
-      <!-- Products content -->
-      <section class="products">
+      <!-- Products Section -->
+      <section class="products" aria-labelledby="products-title">
         <div class="title-image">
-          <div class="world-image">
+          <figure class="world-image">
             <img
               src="@/assets/images/homepage/product-world.png"
               alt="Imagem do planeta terra">
             <img src="@/assets/images/homepage/product-satellite.png" alt="Imagem de um satélite que fica em volta do planeta terra">
-          </div>
+          </figure>
           <div class="title container">
             <h2 class="heading-h2">
               Ferramentas para uma gestão inteligente
@@ -214,7 +215,9 @@
             </h4>
           </div>
         </div>
-        <span class="effect"></span>
+
+        <!-- Decorative elements -->
+        <span class="effect" role="presentation"></span>
         <img src="@/assets/images/homepage/product-effect-star.svg" class="star" alt="Fundo de estrelas">
         <div class="products-content container">
           <div>
@@ -250,7 +253,7 @@
         </div>
       </section>
 
-      <!-- Mission and Urbverde Educa content -->
+      <!-- Mission and Education -->
       <section class="mission-educa container">
         <div class="mission">
           <div class="label-content">
@@ -295,7 +298,6 @@
           </div>
           <div class="educa-topics">
 
-            <!--Link para Reportagens e notícias-->
             <a
               href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias"
               target="_blank"
@@ -308,7 +310,6 @@
               />
             </a>
 
-            <!--Documentos-->
             <a
               href="https://urbverde-educa.tawk.help/category/documentos"
               target="_blank"
@@ -321,7 +322,6 @@
               />
             </a>
 
-            <!--Métodologias-->
             <a
               href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
               target="_blank"
@@ -334,7 +334,6 @@
               />
             </a>
 
-            <!--Principais dúvidas-->
             <a
               href="https://urbverde-educa.tawk.help/"
               target="_blank"
@@ -360,7 +359,6 @@
           <div class="topics-button-wrapper">
             <div class="educa-topics">
 
-              <!--Link para Reportagens e notícias-->
               <a
                 href="https://urbverde-educa.tawk.help/category/urbverde-nas-m%C3%ADdias"
                 target="_blank"
@@ -373,7 +371,6 @@
                 />
               </a>
 
-              <!--Documentos-->
               <a
                 href="https://urbverde-educa.tawk.help/category/documentos"
                 target="_blank"
@@ -386,7 +383,6 @@
                 />
               </a>
 
-              <!--Métodologias-->
               <a
                 href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
                 target="_blank"
@@ -399,7 +395,6 @@
                 />
               </a>
 
-              <!--Principais dúvidas-->
               <a
                 href="https://urbverde-educa.tawk.help/"
                 target="_blank"
@@ -430,8 +425,8 @@
         </div>
       </section>
 
-      <!-- CTA content -->
-      <section>
+      <!-- Call to Action -->
+      <section aria-label="Chamada para ação">
         <HomeCta
           @location-updated="onLocationUpdated"
           :title="'Conheça mais sobre sua cidade!'"
@@ -443,7 +438,7 @@
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
       <UrbVerdeFooter />
     </footer>
   </div>
@@ -891,7 +886,7 @@ export default {
     margin: 0;
   }
 
-  .institutes .institutes-header a{
+  .institutes .institutes-header .read-more{
     color: map-get($green, 500);
     text-decoration-line: underline;
     text-underline-position: from-font;

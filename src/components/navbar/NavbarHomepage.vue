@@ -19,15 +19,21 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">Seja Parceiro</a>
-            </li>
-            <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">Quem Somos</a>
-            </li>
-            <li class="nav-item d-flex">
-              <a href="#" class="body-small-regular">Transparência</a>
-            </li>
+            <router-link to="/sobre" class="router">
+              <li class="nav-item d-flex" :class="{ 'nav-item-active': activeItem === 'sobre' }">
+                <a href="#" class="body-small-regular">Quem Somos</a>
+              </li>
+            </router-link>
+            <router-link to="/parceiro" class="router">
+              <li class="nav-item d-flex" :class="{ 'nav-item-active': activeItem === 'parceiro' }">
+                <a href="#" class="body-small-regular">Seja Parceiro</a>
+              </li>
+            </router-link>
+            <router-link to="/contato" class="router">
+              <li class="nav-item d-flex" :class="{ 'nav-item-active': activeItem === 'contato' }">
+                <a href="#" class="body-small-regular">Contatos</a>
+              </li>
+            </router-link>
             <li class="nav-item d-flex">
               <a
                 href="https://urbverde-educa.tawk.help/"
@@ -38,7 +44,6 @@
                 UrbVerde Educa
               </a>
             </li>
-
           </ul>
 
           <router-link to="/mapa" class="button-primary-link" aria-label="Acessar a plataforma da UrbVerde">
@@ -66,6 +71,17 @@ export default {
     PrimaryButton,
     LogoRouterLink,
   },
+
+  props: {
+    activeItem: {
+      type: String,
+      default: '',
+      validator(value) {
+        return ['', 'sobre', 'parceiro', 'contato'].includes(value);
+      }
+    }
+  },
+
   methods: {
     handleOutsideClick(event) {
       const collapseElement = document.getElementById('navbarNav');
@@ -85,6 +101,7 @@ export default {
       }
     },
   },
+
   mounted() {
     document.addEventListener('click', this.handleOutsideClick);
   },
@@ -97,16 +114,16 @@ export default {
 <style scoped lang="scss">
   @import '@/assets/styles/breakpoints.scss';
 
+  .router{
+    text-decoration: none;
+  }
+
   .navbar {
     padding: 0;
     min-height: 72px;
     padding: 16px 128px;
     position: relative;
     z-index: 2;
-  }
-
-  .navbar .navbar-logo-homepage:hover {
-    background-color: transparent;
   }
 
   .navbar .navbar-toggler {
@@ -127,16 +144,32 @@ export default {
     padding: 0 12px;
     list-style: none;
     gap: 8px;
-  }
 
-  .navbar .navbar-nav .nav-item a {
-    display: flex;
-    padding: 8px 12px;
-    align-items: center;
-    text-decoration: none;
-    color: map-get($body-text, body-color);
-    text-align: center;
-    border-radius: 4px;
+    .nav-item a {
+      display: flex;
+      padding: 8px 12px;
+      align-items: center;
+      text-decoration: none;
+      color: map-get($body-text, body-color);
+      text-align: center;
+      border-radius: 4px;
+
+      // Hover para itens não ativos
+      &:hover {
+        background-color: map-get($gray, 200);
+        border-radius: 8px;
+      }
+    }
+
+    // Estilo específico para itens ativos
+    .nav-item-active a {
+      background-color: map-get($primary-fade, 100);
+      border-radius: 8px;
+
+      &:hover {
+        background-color: map-get($primary-fade, 100);
+      }
+    }
   }
 
   .navbar .navbar-button {
@@ -195,12 +228,12 @@ export default {
 
   @include breakpoint-down('desktop-small') {
 
-    ::v-deep(.logo-text) {
-      display: none;
+    ::v-deep(.primary-button) {
+      width: 224px;
     }
 
     .navbar {
-      padding: 16px 64px;
+      padding: 16px 48px;
     }
 
   }

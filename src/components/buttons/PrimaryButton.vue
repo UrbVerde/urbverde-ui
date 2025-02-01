@@ -113,13 +113,13 @@ export default{
   }
 
   .notFilled {
-    border: 1px solid var(--Green-500, #198754);
+    border: 1px solid map-get($green, 600);
     background-color: #FFF;
-    color: var(--green-500);
+    color: map-get($green, 600);
   }
 
   .notFilled:hover {
-    border: 3px solid var(--Green-500, #198754);
+    border: 3px solid map-get($green, 600);
     box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.25) inset;
   }
 
