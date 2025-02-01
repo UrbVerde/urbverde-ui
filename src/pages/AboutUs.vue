@@ -9,12 +9,21 @@
     <main class="content-page">
       <section class="top-content" aria-label="Galeria de imagens">
         <figure class="image-top shadow-lg">
-          <img src="@/assets/images/institutional-pages/about-us/top-image-1.png" alt="" loading="lazy">
+          <img src="@/assets/images/institutional-pages/about-us/top-image-1.png" alt="Uma reunião colaborativa em um ambiente moderno, com profissionais discutindo ideias em um espaço de coworking, utilizando tecnologia para interação, destacando a importância do trabalho em equipe." loading="lazy">
         </figure>
         <div class="image-bottom-wrapper">
-          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-2.png" class="shadow-lg" loading="lazy"></figure>
-          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-3.png" class="shadow-lg" loading="lazy"></figure>
-          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-4.png" class="shadow-lg" loading="lazy"></figure>
+          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-2.png"
+                                           alt="Quatro pessoas sorrindo em evento, vestindo camisetas verdes com o logo da empresa. Foto tirada em local moderno e bem iluminado."
+                                           class="shadow-lg"
+                                           loading="lazy"></figure>
+          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-3.png"
+                                           alt="Equipe da Urverde em evento, promovendo soluções sustentáveis e inovação para o meio ambiente, interagindo com visitantes e apresentando suas tecnologias."
+                                           class="shadow-lg"
+                                           loading="lazy"></figure>
+          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-4.png"
+                                           alt="Equipe colaborando em reunião de trabalho, com um gráfico de mapa colorido ao fundo e todos sorrindo. Eles mostraram entusiasmo enquanto discutem a análise de dados."
+                                           class="shadow-lg"
+                                           loading="lazy"></figure>
         </div>
       </section>
 
@@ -45,7 +54,7 @@
             </p>
           </div>
           <figure class="image-earth">
-            <img src="@/assets/images/institutional-pages/about-us/love-the-earth.svg" alt="" loading="lazy">
+            <img src="@/assets/images/institutional-pages/about-us/love-the-earth.svg" alt="Ilustração representando o cuidado com o meio ambiente" loading="lazy">
           </figure>
         </div>
 
@@ -102,11 +111,11 @@
       </article>
 
       <section class="finances-wrapper" aria-label="Instituições financiadoras">
-        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-1.svg" alt="" loading="lazy">
-        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-2.svg" alt="" loading="lazy">
-        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-3.svg" alt="" loading="lazy">
-        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-4.svg" alt="" loading="lazy">
-        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-5.svg" alt="" loading="lazy">
+        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-1.svg" alt="Pró Reitoria de Pesquisa e Inovação da USP" loading="lazy">
+        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-2.svg" alt="Pró-Reitoria de Cultura e Extensão Universitária da USP" loading="lazy">
+        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-3.svg" alt="Pró-Reitoria de Graduação da USP" loading="lazy">
+        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-4.svg" alt="Conselho Nacional de Desenvolvimento Científico e Tecnológico" loading="lazy">
+        <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-5.svg" alt="Fundação de Amparo à Pesquisa do Estado de São Paulo" loading="lazy">
       </section>
 
       <section class="members-content">

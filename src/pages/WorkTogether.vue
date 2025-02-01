@@ -8,7 +8,7 @@
     <main class="content-page">
       <section class="top-content" aria-label="Imagem destacada">
         <figure class="image-top shadow-lg">
-          <img src="@/assets/images/institutional-pages/work-together/top-image-1.png" alt="" loading="lazy">
+          <img src="@/assets/images/institutional-pages/work-together/top-image-1.png" alt="Imagem da camiseta da UrbVerde" loading="lazy">
         </figure>
       </section>
 
