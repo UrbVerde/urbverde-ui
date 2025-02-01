@@ -5,15 +5,15 @@
     page-title="Seja parceiro"
     page-subtitle="Seja parceiro da UrbVerde e fortaleça a análise ambiental do seu município!"
   >
-    <div class="content-page">
-      <div class="top-content">
-        <div class="image-top shadow-lg">
+    <main class="content-page">
+      <section class="top-content" aria-label="Imagem destacada">
+        <figure class="image-top shadow-lg">
           <img src="@/assets/images/institutional-pages/work-together/top-image-1.png" alt="" loading="lazy">
-        </div>
-      </div>
+        </figure>
+      </section>
 
-      <div class="text-content">
-        <div class="text">
+      <article class="text-content">
+        <section class="text">
           <h2 class="title heading-h2">Adicione dados do seu município ao mapa!</h2>
           <div class="paragraph">
             <p class="body-normal-medium">
@@ -24,8 +24,8 @@
               acessíveis a todos!
             </p>
           </div>
-        </div>
-        <div class="text">
+        </section>
+        <section class="text">
           <h2 class="title heading-h2">Como funciona?</h2>
           <div class="paragraph">
             <p class="body-normal-medium">
@@ -36,16 +36,16 @@
               com nossa equipe e descubra como tornar sua cidade parceira da UrbVerde.
             </p>
           </div>
-        </div>
-      </div>
+        </section>
+      </article>
 
-      <div class="contact-content">
+      <section class="contact-content">
         <div class="text">
           <h2 class="title heading-h2">Entre em contato com nossa equipe</h2>
         </div>
         <InstitutionalContactWrapper />
-      </div>
-    </div>
+      </section>
+    </main>
   </InstitutionalLayout>
 </template>
 

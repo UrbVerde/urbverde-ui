@@ -7,7 +7,7 @@
     page-subtitle="Escolha a melhor forma para entrar em contato com a nossa equipe"
   >
 
-    <InstitutionalContactWrapper />
+    <InstitutionalContactWrapper role="main"/>
 
   </InstitutionalLayout>
 
