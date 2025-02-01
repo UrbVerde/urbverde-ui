@@ -6,19 +6,19 @@
     page-subtitle="A UrbVerde é uma iniciativa com mais de 50 pesquisadores
                    dedicados a democratizar o acesso a dados sociais e ambientais!"
   >
-    <div class="content-page">
-      <div class="top-content">
-        <div class="image-top shadow-lg">
+    <main class="content-page">
+      <section class="top-content" aria-label="Galeria de imagens">
+        <figure class="image-top shadow-lg">
           <img src="@/assets/images/institutional-pages/about-us/top-image-1.png" alt="" loading="lazy">
-        </div>
+        </figure>
         <div class="image-bottom-wrapper">
-          <div class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-2.png" class="shadow-lg" loading="lazy"></div>
-          <div class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-3.png" class="shadow-lg" loading="lazy"></div>
-          <div class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-4.png" class="shadow-lg" loading="lazy"></div>
+          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-2.png" class="shadow-lg" loading="lazy"></figure>
+          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-3.png" class="shadow-lg" loading="lazy"></figure>
+          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-4.png" class="shadow-lg" loading="lazy"></figure>
         </div>
-      </div>
+      </section>
 
-      <div class="text-content">
+      <article class="text-content">
         <div class="text">
           <h2 class="title heading-h2">A história da UrbVerde</h2>
           <div class="paragraph">
@@ -44,9 +44,9 @@
               fomentar decisões conscientes para o enfrentamento dos desafios climáticos.
             </p>
           </div>
-          <div class="image-earth">
+          <figure class="image-earth">
             <img src="@/assets/images/institutional-pages/about-us/love-the-earth.svg" alt="" loading="lazy">
-          </div>
+          </figure>
         </div>
 
         <div class="text">
@@ -99,17 +99,17 @@
             </p>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="finances-wrapper">
+      <section class="finances-wrapper" aria-label="Instituições financiadoras">
         <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-1.svg" alt="" loading="lazy">
         <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-2.svg" alt="" loading="lazy">
         <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-3.svg" alt="" loading="lazy">
         <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-4.svg" alt="" loading="lazy">
         <img src="@/assets/images/institutional-pages/about-us/financing/financing-image-5.svg" alt="" loading="lazy">
-      </div>
+      </section>
 
-      <div class="members-content">
+      <section class="members-content">
         <h2 class="title heading-h2">Conheça nossa equipe</h2>
         <div class="wrapper">
           <div
@@ -127,8 +127,8 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   </InstitutionalLayout>
 </template>
 
