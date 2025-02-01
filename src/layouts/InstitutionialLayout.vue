@@ -17,7 +17,7 @@
             <h1>
               <span class="title heading-h1">{{ pageTitle }}</span>
             </h1>
-            <h4 class="subtitle heading-h5">{{ pageSubtitle }}</h4>
+            <h4 class="subtitle body-normal-medium">{{ pageSubtitle }}</h4>
           </div>
           <slot></slot>
         </section>
@@ -114,11 +114,11 @@ export default {
   .content {
     display: flex;
     max-width: 1184px;
-    padding: 184px 0px 160px 0px;
+    padding: 17vh 0px 160px 0px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 184px;
+    gap: 17vh;
     align-self: stretch;
   }
 
@@ -135,8 +135,8 @@ export default {
   }
 
   .title{
-    font-size: 64px;
-    color: map-get($primary-fade, 700);
+    font-size: 48px;
+    color: map-get($primary-fade, 800);
     font-weight: 700;
     text-align: center;
     display: flex;
@@ -145,5 +145,17 @@ export default {
   .subtitle{
     color: map-get($theme, secondary);
     text-align: center;
+  }
+
+  @include breakpoint-down('desktop-small') {
+    .title {
+      font-size: 40px;
+    }
+  }
+
+  @include breakpoint-down('mobile-medium') {
+    .subtitle {
+      font-size: 14px;
+    }
   }
   </style>

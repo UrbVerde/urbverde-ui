@@ -1,4 +1,5 @@
 <template>
+  <TawkTo />
   <InstitutionalLayout
     active-item="sobre"
     page-title="Quem somos"
@@ -134,6 +135,7 @@
 <script>
 import InstitutionalLayout from '@/layouts/InstitutionialLayout.vue';
 import MemberCard from '@/components/institutional_pages/MemberCard.vue';
+import TawkTo from '@/components/homepage/TawkTo.vue';
 import { useHead } from '@vueuse/head';
 
 // Arquivo de imports de images e dicionários para times e membros
@@ -144,6 +146,7 @@ export default {
   components: {
     InstitutionalLayout,
     MemberCard,
+    TawkTo,
   },
 
   setup() {
@@ -346,6 +349,16 @@ export default {
     align-self: stretch;
     flex-wrap: wrap;
     width: 100%;
+  }
+
+  @include breakpoint-down('mobile-large') {
+    .image-top {
+      border: 3px solid map-get($gray, white);
+    }
+
+    .top-content{
+      gap: 40px;
+    }
   }
 
 </style>
