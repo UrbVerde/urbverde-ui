@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import RankingCard from './RankingCard.vue';
+import RankingCard from '../../RankingCard.vue';
 import axios from 'axios';
 
 export default {

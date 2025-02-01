@@ -46,7 +46,7 @@ export const useLocationStore = defineStore('locationStore', {
     async fetchCoordinatesByCdMun(cd_mun) {
       try {
         // Example fetch
-        const response = await fetch(`/v1/address/suggestions?query=${cd_mun}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${cd_mun}`);
         const data = await response.json();
         if (data && data.length && data[0].coordinates) {
           this.setCoordinates(data[0].coordinates);
