@@ -228,12 +228,12 @@ export default {
 
   @include breakpoint-down('desktop-small') {
 
-    ::v-deep(.logo-text) {
-      display: none;
+    ::v-deep(.primary-button) {
+      width: 224px;
     }
 
     .navbar {
-      padding: 16px 64px;
+      padding: 16px 48px;
     }
 
   }
