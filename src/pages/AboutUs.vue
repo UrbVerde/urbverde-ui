@@ -74,16 +74,17 @@
       <div class="members-content">
         <h2 class="title heading-h2">Conheça nossa equipe</h2>
         <div class="wrapper">
-          <div class="team">
-            <h4 class="heading-h4">Coordenadores</h4>
+          <div
+            v-for="group in teamGroups"
+            :key="group.id"
+            class="team"
+          >
+            <h4 class="heading-h4">{{ group.title }}</h4>
             <div class="wrapper-members">
               <MemberCard
-                :background-image="memberImage"
-                name="Dr. João Silva"
-                role="Pesquisador Sênior"
-                linkedin-url="https://linkedin.com/in/joaosilva"
-                lattes-url="http://lattes.cnpq.br/123456789"
-                orcid-url="https://orcid.org/0000-0000-0000-0000"
+                v-for="member in group.members"
+                :key="member.name"
+                v-bind="member"
               />
             </div>
           </div>
@@ -95,9 +96,11 @@
 
 <script>
 import InstitutionalLayout from '@/layouts/InstitutionialLayout.vue';
-import { useHead } from '@vueuse/head';
-import memberImage from '@/assets/images/institutional-pages/about-us/members/marcela-costa.jpg';
 import MemberCard from '@/components/institutional_pages/MemberCard.vue';
+import { useHead } from '@vueuse/head';
+
+// Arquivo de imports de images e dicionários para times e membros
+import { teamGroups } from '@/constants/institutional-pages.js';
 
 export default {
   name: 'AboutUs',
@@ -106,7 +109,6 @@ export default {
     MemberCard,
   },
 
-  // Configuração das meta tags de SEO
   setup() {
     useHead({
       title: 'Sobre a UrbVerde: Democratizando dados socioambientais para cidades sustentáveis',
@@ -134,7 +136,7 @@ export default {
     });
 
     return {
-      memberImage
+      teamGroups
     };
   }
 };
