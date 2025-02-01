@@ -77,7 +77,14 @@
           <div class="team">
             <h4 class="heading-h4">Coordenadores</h4>
             <div class="wrapper-members">
-              ADICIONAR MEMBROS
+              <MemberCard
+                :background-image="memberImage"
+                name="Dr. João Silva"
+                role="Pesquisador Sênior"
+                linkedin-url="https://linkedin.com/in/joaosilva"
+                lattes-url="http://lattes.cnpq.br/123456789"
+                orcid-url="https://orcid.org/0000-0000-0000-0000"
+              />
             </div>
           </div>
         </div>
@@ -89,11 +96,14 @@
 <script>
 import InstitutionalLayout from '@/layouts/InstitutionialLayout.vue';
 import { useHead } from '@vueuse/head';
+import memberImage from '@/assets/images/institutional-pages/about-us/members/marcela-costa.jpg';
+import MemberCard from '@/components/institutional_pages/MemberCard.vue';
 
 export default {
   name: 'AboutUs',
   components: {
     InstitutionalLayout,
+    MemberCard,
   },
 
   // Configuração das meta tags de SEO
@@ -122,6 +132,10 @@ export default {
         },
       ],
     });
+
+    return {
+      memberImage
+    };
   }
 };
 </script>
@@ -287,11 +301,12 @@ export default {
   .members-content .wrapper .team .wrapper-members{
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
     align-content: flex-end;
     gap: 40px 32px;
     align-self: stretch;
     flex-wrap: wrap;
+    width: 100%;
   }
 
 </style>
