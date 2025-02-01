@@ -74,27 +74,15 @@
       </router-link>
 
       <div class="links body-small-medium">
-        <router-link to="/mapa">Plataforma</router-link>
+        <router-link to="/sobre">Quem Somos</router-link>
+        <router-link to="/parceiro">Seja Parceiro</router-link>
+        <router-link to="/contato">Contatos</router-link>
         <a
           href="https://urbverde-educa.tawk.help/"
           target="_blank"
           rel="noopener noreferrer"
         >
           UrbVerde Educa
-        </a>
-        <a
-          href="https://urbverde-educa.tawk.help/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Contatos
-        </a>
-        <a
-          href="https://urbverde-educa.tawk.help/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Termos de uso
         </a>
       </div>
 
