@@ -28,7 +28,7 @@ import laraCavalcante from '@/assets/images/institutional-pages/about-us/members
 import leandroPinton from '@/assets/images/institutional-pages/about-us/members/leandro-pinton.png';
 import luisBet from '@/assets/images/institutional-pages/about-us/members/luis-bet.jpeg';
 import manoelAlves from '@/assets/images/institutional-pages/about-us/members/manoel-alves.jpg';
-import marcelaCosta from '@/assets/images/institutional-pages/about-us/members/marcela-costa.jpg';
+import marcelaCosta from '@/assets/images/institutional-pages/about-us/members/marcelaf-costa.jpg';
 import marcelFantin from '@/assets/images/institutional-pages/about-us/members/marcel-fantin.jpg';
 import marcosMartines from '@/assets/images/institutional-pages/about-us/members/marcos-martines.png';
 import margarethUemura from '@/assets/images/institutional-pages/about-us/members/margareth-uemura.jpg';
@@ -43,7 +43,7 @@ import robsonSantos from '@/assets/images/institutional-pages/about-us/members/r
 import rodrigoHitoshi from '@/assets/images/institutional-pages/about-us/members/rodrigo-hitoshi.png';
 import rossanaAlcantara from '@/assets/images/institutional-pages/about-us/members/rossana-alcantara.jpeg';
 import rubiaMorato from '@/assets/images/institutional-pages/about-us/members/rubia-morato.png';
-import vitorLacerda from '@/assets/images/institutional-pages/about-us/members/vitor-lacerda.png';
+import vitorLacerda from '@/assets/images/institutional-pages/about-us/members/vitor-lacerda.jpg';
 import vitorNisida from '@/assets/images/institutional-pages/about-us/members/vitor-nisida.jpg';
 
 export const teamGroups = [
