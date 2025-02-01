@@ -1,6 +1,6 @@
 <template>
-  <div class="page">
-    <header>
+  <div class="page" role="document">
+    <header role="banner">
       <NavbarHomepage :active-item="activeItem" />
     </header>
 
@@ -24,7 +24,7 @@
       </section>
     </main>
 
-    <footer>
+    <footer role="contentinfo">
       <UrbVerdeFooter />
     </footer>
   </div>

@@ -63,29 +63,28 @@ export default {
     TawkTo,
   },
 
-  // Configuração das meta tags de SEO
   setup() {
     useHead({
-      title: 'Sobre a UrbVerde: Democratizando dados socioambientais para cidades sustentáveis',
+      title: 'Seja Parceiro | UrbVerde - Fortaleça a análise ambiental do seu município',
       meta: [
         {
           name: 'description',
           content:
-                      'A UrbVerde é uma iniciativa que reúne mais de 50 pesquisadores de diversas instituições para democratizar o acesso a dados socioambientais e apoiar o planejamento urbano sustentável. Conheça nossa missão e impacto.',
+            'Torne-se parceiro da UrbVerde e integre dados do seu município ao nosso mapa interativo. Contribua para análises socioambientais mais precisas e fortaleça políticas públicas sustentáveis.',
         },
         {
           name: 'keywords',
           content:
-                      'UrbVerde, dados socioambientais, planejamento urbano, sustentabilidade, monitoramento ambiental, cidades verdes, acesso gratuito, pesquisa, smart cities, FAPESP, CNPq, imagens de satélite, gestão pública',
+            'UrbVerde, parceria, dados ambientais, dados urbanos, geoprocessamento, mapas interativos, planejamento urbano, sustentabilidade, smart cities, monitoramento ambiental, políticas públicas, cidades verdes, geotecnologia, SIG',
         },
         {
           property: 'og:title',
-          content: 'UrbVerde - Transformando dados em impacto socioambiental',
+          content: 'Seja Parceiro da UrbVerde - Amplie a análise socioambiental da sua cidade',
         },
         {
           property: 'og:description',
           content:
-                      'Desde 2021, a UrbVerde tem sido referência em monitoramento ambiental urbano no Brasil, oferecendo dados gratuitos para apoiar políticas públicas e promover cidades mais resilientes.',
+            'Adicione dados do seu município ao mapa da UrbVerde e contribua para um planejamento urbano mais sustentável. Entre em contato e saiba como participar.',
         },
       ],
     });

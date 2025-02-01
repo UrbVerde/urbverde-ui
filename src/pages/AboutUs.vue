@@ -151,7 +151,7 @@ export default {
 
   setup() {
     useHead({
-      title: 'Sobre a UrbVerde: Democratizando dados socioambientais para cidades sustentáveis',
+      title: 'Quem Somos | UrbVerde - A plataforma referência em monitoramento ambiental urbano',
       meta: [
         {
           name: 'description',

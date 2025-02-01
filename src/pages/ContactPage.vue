@@ -27,29 +27,28 @@ export default {
     TawkTo,
   },
 
-  // Configuração das meta tags de SEO
   setup() {
     useHead({
-      title: 'Sobre a UrbVerde: Democratizando dados socioambientais para cidades sustentáveis',
+      title: 'Fale Conosco | UrbVerde - Dados socioambientais para cidades sustentáveis',
       meta: [
         {
           name: 'description',
           content:
-            'A UrbVerde é uma iniciativa que reúne mais de 50 pesquisadores de diversas instituições para democratizar o acesso a dados socioambientais e apoiar o planejamento urbano sustentável. Conheça nossa missão e impacto.',
+            'Entre em contato com a equipe da UrbVerde para esclarecer dúvidas, conhecer nossos projetos e colaborar com a democratização de dados socioambientais. Saiba como podemos apoiar políticas públicas e cidades mais sustentáveis.',
         },
         {
           name: 'keywords',
           content:
-            'UrbVerde, dados socioambientais, planejamento urbano, sustentabilidade, monitoramento ambiental, cidades verdes, acesso gratuito, pesquisa, smart cities, FAPESP, CNPq, imagens de satélite, gestão pública',
+            'UrbVerde, contato, suporte, dados socioambientais, planejamento urbano, sustentabilidade, monitoramento ambiental, cidades inteligentes, políticas públicas, smart cities, pesquisa, gestão ambiental, parceria institucional',
         },
         {
           property: 'og:title',
-          content: 'UrbVerde - Transformando dados em impacto socioambiental',
+          content: 'Fale com a UrbVerde - Conecte-se à inovação em sustentabilidade urbana',
         },
         {
           property: 'og:description',
           content:
-            'Desde 2021, a UrbVerde tem sido referência em monitoramento ambiental urbano no Brasil, oferecendo dados gratuitos para apoiar políticas públicas e promover cidades mais resilientes.',
+            'A UrbVerde facilita o acesso a dados socioambientais para fortalecer políticas públicas e tornar cidades mais sustentáveis. Entre em contato e descubra como podemos colaborar.',
         },
       ],
     });
