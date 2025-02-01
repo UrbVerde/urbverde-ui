@@ -59,22 +59,18 @@ export default {
   name: 'MemberCard',
 
   props: {
-    // Background image é obrigatório
     backgroundImage: {
       type: String,
       required: true
     },
-    // Nome é obrigatório
     name: {
       type: String,
       required: true
     },
-    // Cargo é opcional
     role: {
       type: String,
       default: ''
     },
-    // Links sociais são opcionais
     linkedinUrl: {
       type: String,
       default: ''

@@ -47,6 +47,43 @@
             <img src="@/assets/images/institutional-pages/about-us/love-the-earth.svg" alt="" loading="lazy">
           </div>
         </div>
+
+        <div class="text">
+          <h2 class="title heading-h2">Instituições Participantes</h2>
+          <div class="paragraph">
+            <p class="body-normal-medium">
+              Universidade de São Paulo (IAU-FFLCH-EESC)<br>
+              Universidade Federal de São Carlos<br>
+              Universidade Federal da Bahia<br>
+              Universidade de Taubaté<br>
+              Universidade de Araraquara<br>
+              Universidade Lusófona de Lisboa<br>
+              Pólis - Instituto de Estudos, Formação e Assessoria em Políticas Sociais<br>
+              Consórcio Intermunicipal Grande ABC<br>
+              Prefeitura de Diadema<br>
+              Rede Cyted RUN – Rios Urbanos Naturalizados
+            </p>
+          </div>
+        </div>
+
+        <div class="text">
+          <h2 class="title heading-h2">Corpo Diretivo</h2>
+          <div class="paragraph">
+            <p class="body-normal-medium">
+              <strong>Reitor da USP:</strong><br>
+              Carlos Gilberto Carlotti Junior<br>
+              <strong>Pró-Reitoria de Pesquisa e Inovação da USP:</strong><br>
+              Paulo Alberto Nussenzveig<br>
+              <strong>Diretor do Instituto de Arquitetura e Urbanismo da USP:</strong><br>
+              João Marcos de Almeida Lopes<br>
+              <strong>Vice-Diretora do Instituto de Arquitetura e Urbanismo da USP:</strong><br>
+              Akemi Ino<br>
+              <strong>Presidente da Comissão de Pesquisa e Inovação do Instituto de Arquitetura e Urbanismo da USP:</strong><br>
+              Paulo César Castral<br>
+            </p>
+          </div>
+        </div>
+
         <div class="text">
           <h2 class="title heading-h2">Fomento</h2>
           <div class="paragraph">
