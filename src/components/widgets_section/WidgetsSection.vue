@@ -3,7 +3,7 @@
   <div class="widgets-section">
     <div
       v-for="(section, index) in sections"
-      :key="section.id"
+      :key="`${selectedLayer}-${section.id}`"
       :ref="section.ref"
       class="box"
       :style="index > 0 ? {'border-top': '1px solid black'} : {}"
@@ -23,6 +23,7 @@
         :is="section.component"
         :city-code="cityCode"
         :selected-year="selectedYears[index]"
+        :layer="selectedLayer"
       />
     </div>
   </div>
@@ -36,6 +37,14 @@ import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
 import SeeMoreSection from '../cards/weather/seeMore/SeeMoreSection.vue';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
+import VegetationSection from '../cards/vegetation/vegetationCover/VegetationSection.vue';
+import InequalitySection from '../cards/vegetation/inequality/InequalitySection.vue';
+import SeeMoreVegSection from '../cards/vegetation/seeMore/SeeMoreVegSection.vue';
+import RankVegSection from '../cards/vegetation/rankSection/RankVegSection.vue';
+import InfoParksSection from '../cards/parks/infoSection/infoParksSection.vue';
+import ParksSquaresSection from '../cards/parks/parksandSquaresSection/ParksSquaresSection.vue';
+import SeeMoreParksSection from '../cards/parks/seeMoreSection/SeeMoreParksSection.vue';
+import RankParks from '../cards/parks/rankSection/RankParksSection.vue';
 
 export default {
   name: 'WidgetsSection',
@@ -45,6 +54,14 @@ export default {
     RankSection,
     SeeMoreSection,
     YearPicker,
+    VegetationSection,
+    InequalitySection,
+    SeeMoreVegSection,
+    RankVegSection,
+    InfoParksSection,
+    ParksSquaresSection,
+    SeeMoreParksSection,
+    RankParks,
   },
   props: {
     defaultYear: {
@@ -62,7 +79,7 @@ export default {
     const cityName = computed(() => locationStore.nm_mun || 'city?');
 
     // Estado para controlar a camada selecionada
-    const selectedLayer = ref('temperatura');
+    const selectedLayer = ref('vegetação');
 
     // Número de subseções
     const numSections = ref(3);
@@ -98,6 +115,61 @@ export default {
             title: 'Veja mais sobre sua cidade!',
             component: SeeMoreSection
           }
+        ],
+
+        vegetação: [
+          {
+            id: 'stats',
+            ref: 'statsSection',
+            title: `A cobertura vegetal em ${cityName.value}`,
+            component: VegetationSection
+          },
+          {
+            id: 'inequality',
+            ref: 'inequalitySection',
+            title: 'Desigualdade ambiental e a vegetação',
+            component: InequalitySection
+          },
+          {
+            id: 'rankinVegetation',
+            ref: 'rankingVegSection',
+            title: `${cityName.value} nos Rankings por Regiões`,
+            component: RankVegSection
+          },
+          {
+            id: 'seeMore',
+            ref: 'seeMoreSection',
+            title: 'Veja mais sobre sua cidade!',
+            component: SeeMoreVegSection
+          }
+        ],
+
+        parques: [
+          {
+            id: 'stats',
+            ref: 'statsSection',
+            title: `Parques e praças em ${cityName.value}`,
+            component: InfoParksSection
+          },
+          {
+            id: 'parksSquares',
+            ref: 'parksSquaresSection',
+            title: 'Quem vive distante de parques e praças?',
+            component: ParksSquaresSection
+          },
+          {
+            id: 'rankParks',
+            ref: 'rankParksSection',
+            title: `${cityName.value} nos Rankings por Regiões`,
+            component: RankParks
+          },
+          {
+            id: 'seeMoreParks',
+            ref: 'seeMoreParksSection',
+            title: 'Veja mais sobre sua cidade!',
+            component: SeeMoreParksSection
+          }
+
         ]
         // Adicione outras configurações de camada aqui
       };
@@ -137,6 +209,16 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  display: flex;
+  padding: 2em 4vw 2em 4vw;  /* Usando unidades relativas */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+  flex-grow: 1;  /* Permite que o box cresça conforme o espaço disponível */
+}
+
 .statistics-container {
   display: flex;
   align-items: center;
@@ -152,12 +234,4 @@ export default {
   flex: 1 0 0;
 }
 
-.box {
-  display: flex;
-  padding: 40px 48px 32px 48px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-  align-self: stretch;
-}
 </style>
