@@ -61,24 +61,18 @@ export default {
 };
 </script>
 
-  <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
+  <style scoped>
   .content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 40px;
+    width: 100%;
   }
 
   .see-more-cards {
     display: flex;
     flex-direction: row;
-    gap: 20px;
-    margin: 20px;
+    gap: 24px;
     flex-wrap: wrap;
   }
   </style>
