@@ -85,7 +85,8 @@ export default {
   }
 
   .dashboard {
-      display: flex;
+      display: grid; /* Mudando para grid */
+      grid-template-columns: auto auto 1fr; /* Define 3 colunas */
       gap: 24px;
       width: 100%;
   }
@@ -99,10 +100,12 @@ export default {
   }
 
   .right-panel {
+      grid-column: 3;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      grid-column: 3;
+      width: fit-content; /* Faz o elemento se ajustar ao conteúdo */
+      min-width: 0; /* Previne overflow */
   }
 
   .first-section-card {
@@ -111,4 +114,4 @@ export default {
       border-radius: 12px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  </style>
+</style>

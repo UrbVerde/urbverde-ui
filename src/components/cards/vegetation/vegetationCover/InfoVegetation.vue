@@ -33,27 +33,10 @@ export default {
 };
 </script>
 
-<style>
-  .info-card {
-    width: 365px;
-    height: 412px;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    align-self: stretch;
-    background-color: var(--Gray-White, #FFF);
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-    padding: 48px 40px 48px 40px;
-  }
-
-  .info-vegetation-card .textodescritivo {
-    margin-top: 12px;
-    color: var(--Theme-Secondary, #525960);
-  }
+<style scoped lang="scss">
 
   .card-image {
+    display: flex;
     width: 233px;
     height: 168px;
     align-self: center;
