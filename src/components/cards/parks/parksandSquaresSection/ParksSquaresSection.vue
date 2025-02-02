@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/cards/weather/HeatSection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="heat-cards">
@@ -58,9 +57,9 @@ export default {
       }
     },
 
-    async fetchData(city, year) {
+    async fetchData(city) {
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${year}`); // outra camada
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${this.selectedYear}`);
         const data = await response.json();
         this.cardData = data;
       } catch (error) {

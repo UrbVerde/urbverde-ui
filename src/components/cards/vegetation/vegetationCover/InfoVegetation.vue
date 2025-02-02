@@ -1,5 +1,5 @@
 <template>
-  <div class="info-temperature-card">
+  <div class="info-vegetation-card">
     <CardBase
       :title="titulo"
       :subtitle="descricao"
@@ -18,7 +18,7 @@ import CardBase from '@/components/cards/Card.vue';
 import Ilustracao from '@/assets/images/cards/globalwarming.svg';
 
 export default {
-  name: 'InfoTemperature',
+  name: 'InfoVegetation',
   components: {
     CardBase,
   },

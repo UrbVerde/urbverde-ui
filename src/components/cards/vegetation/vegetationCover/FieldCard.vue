@@ -1,5 +1,5 @@
 <template>
-  <div class="info-temperature-card">
+  <div class="info-field-card">
     <CardBase
       :title="titulo"
       :value="valor"
@@ -44,13 +44,13 @@ export default {
   },
   computed: {
     titulo() {
-      return this.data?.title || 'N/A'; // Mapeia o título do card
+      return this.data?.title || 'N/A';
     },
     valor() {
-      return this.data?.value || 'N/A'; // Mapeia o valor do card
+      return this.data?.value || 'N/A';
     },
     descricao() {
-      return this.data?.subtitle || 'N/A'; // Mapeia a descrição do card
+      return this.data?.subtitle || 'N/A';
     },
   },
 };

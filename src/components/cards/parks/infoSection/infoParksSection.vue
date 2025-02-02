@@ -51,7 +51,7 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/parks/square?city=${this.cityCode}&year=${this.selectedYear}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/parks?city=${this.cityCode}&year=${this.selectedYear}`);
         const data = await response.json();
         this.cardData = data;
       } catch (error) {

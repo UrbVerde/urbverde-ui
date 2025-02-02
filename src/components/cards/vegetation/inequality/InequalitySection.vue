@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/cards/weather/HeatSection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="info-cards">

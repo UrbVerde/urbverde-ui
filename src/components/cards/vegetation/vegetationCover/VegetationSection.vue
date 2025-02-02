@@ -1,8 +1,7 @@
-<!-- urbverde-ui/src/components/cards/weather/TemperatureSection.vue -->
 <template>
   <div class="dashboard">
     <InfoVegetation class="info-card" />
-    <FieldCard  v-if="firstCardData" :data="firstCardData" class="area-card" />
+    <FieldCard  v-if="firstCardData" :data="firstCardData" class="field-card" />
     <div class="right-panel">
       <FirstSectionCard :data="remainingCardData" :class="first-section-card" />
     </div>
@@ -35,7 +34,7 @@ export default {
 
   data() {
     return {
-      firstCardData: null,  // Define corretamente as variáveis
+      firstCardData: null,
       remainingCardData: []
     };
 
@@ -60,13 +59,12 @@ export default {
         );
         const data = await response.json();
         if (data.length > 0) {
-          // Mapeia os dados para o formato esperado
           this.firstCardData = {
-            title: data[0].title || 'Área Vegetal', // Exemplo de campo
-            value: data[0].value?.toString() || '0', // Exemplo de campo
-            subtitle: data[0].subtitle || 'Descrição padrão', // Exemplo de campo
+            title: data[0].title || 'Área Vegetal',
+            value: data[0].value?.toString() || '0',
+            subtitle: data[0].subtitle || 'Descrição padrão',
           };
-          this.remainingCardData = data.slice(1); // Restante para os outros cards
+          this.remainingCardData = data.slice(1);
         } else {
           this.firstCardData = null;
           this.remainingCardData = [];
@@ -79,7 +77,7 @@ export default {
 };
 </script>
 
-  <style scoped>
+  <style s>
   * {
       box-sizing: border-box;
       margin: 0;
@@ -97,7 +95,7 @@ export default {
       grid-column: 1;
   }
 
-  .area-card {
+  .field-card {
       grid-column: 2;
   }
 
