@@ -1,11 +1,11 @@
 <template>
-  <div class="info-field-card">
+  <div class="field-card-wrapper">
     <CardBase
       :title="titulo"
       :value="valor"
       :subtitle="descricao"
       imagePosition="top"
-      class="info-card"
+      class="field-base-card"
     >
       <template #image>
         <img :src="image" alt="Ilustração" class="card-image" />
@@ -55,3 +55,28 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.field-card-wrapper {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.field-base-card {
+  display: flex;
+  width: 100%;
+  position: relative;
+  display: flex;
+  padding: 48px 40px 24px 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-image {
+  display: flex;
+  width: 100%;
+  height: auto;
+}
+</style>

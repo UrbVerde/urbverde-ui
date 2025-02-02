@@ -1,9 +1,9 @@
 <template>
   <div class="dashboard">
-    <InfoVegetation class="info-card" />
-    <FieldCard v-if="firstCardData" :data="firstCardData" class="field-card" />
+    <InfoVegetation class="vegetation-info" />
+    <FieldCard v-if="firstCardData" :data="firstCardData" class="vegetation-field" />
     <div class="right-panel">
-      <FirstSectionCard :data="remainingCardData" :class="first-section-card" />
+      <FirstSectionCard :data="remainingCardData" class="section-card" />
     </div>
   </div>
 </template>
@@ -78,12 +78,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 .dashboard {
     display: flex;
     align-items: flex-start;
@@ -91,17 +85,17 @@ export default {
     align-self: stretch;
 }
 
-.info-card {
+.vegetation-info {
     display: flex;
-    max-width: 560px;
+    max-width: 400px;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
 }
 
-.field-card {
+.vegetation-field {
     display: flex;
-    max-width: 560px;
+    max-width: 400px;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -116,7 +110,7 @@ export default {
     align-self: stretch;
 }
 
-.first-section-card {
+.section-card {
     background-color: #fff;
     padding: 20px;
     border-radius: 12px;
