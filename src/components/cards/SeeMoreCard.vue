@@ -71,6 +71,9 @@ export default {
   gap: 16px;
 }
 .botao {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
   padding: 16px 32px 24px 32px;
 }
 

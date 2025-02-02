@@ -29,14 +29,15 @@ export default {
 
 <style>
 .first-card {
-  width: 322px;
-  height: 175px;
+  flex: 1 1 300px; /* Permite que o card cresça, mas nunca fique menor que 300px */
+  max-width: 400px; /* Define um limite superior */
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
-  justify-content: space-betwee
+  justify-content: space-between,
 }
 
 .first-card .value {
