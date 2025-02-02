@@ -107,7 +107,6 @@ export default {
     align-items: flex-start;
     gap: 24px;
     flex: 1 0 0;
-    align-self: stretch;
 }
 
 .section-card {
