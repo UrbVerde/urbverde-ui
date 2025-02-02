@@ -65,24 +65,22 @@ export default {
 
 <style scoped>
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 .dashboard {
-
   display: flex;
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
+  width: 100%;
+}
 
+.left-panel{
+  max-width: 365px;
+  display: flex;
 }
 
 .right-panel {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+
   gap: 20px;
 }
 

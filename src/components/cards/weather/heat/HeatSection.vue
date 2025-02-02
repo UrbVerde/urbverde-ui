@@ -81,8 +81,8 @@ export default {
 .dashboard-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 20px;
+  gap: 24px;
+  width: 100%;
 }
 
 .heat-cards {
