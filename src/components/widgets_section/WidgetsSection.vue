@@ -6,7 +6,6 @@
       :key="`${selectedLayer}-${section.id}`"
       :ref="section.ref"
       class="box"
-      :style="index > 0 ? {'border-top': '1px solid black'} : {}"
     >
       <div class="statistics-container">
         <span class="title-statistics-container heading-h5">
@@ -100,13 +99,13 @@ export default {
           {
             id: 'vulnerable',
             ref: 'vulnerableSection',
-            title: `Quem é Mais Afetado Pelo Calor Extremo em ${cityName.value}?`,
+            title: `Quem é mais afetado pelo calor extremo em ${cityName.value}?`,
             component: HeatSection
           },
           {
             id: 'ranking',
             ref: 'rankingSection',
-            title: `${cityName.value} nos Rankings por Regiões`,
+            title: `${cityName.value} nos rankings de municípios`,
             component: RankSection
           },
           {
@@ -133,7 +132,7 @@ export default {
           {
             id: 'rankinVegetation',
             ref: 'rankingVegSection',
-            title: `${cityName.value} nos Rankings por Regiões`,
+            title: `${cityName.value} nos rankings de municípios`,
             component: RankVegSection
           },
           {
@@ -160,7 +159,7 @@ export default {
           {
             id: 'rankParks',
             ref: 'rankParksSection',
-            title: `${cityName.value} nos Rankings por Regiões`,
+            title: `${cityName.value} nos rankings de municípios`,
             component: RankParks
           },
           {
@@ -209,14 +208,22 @@ export default {
 </script>
 
 <style scoped>
+.widgets-section{
+  display: flex;
+  flex-direction: column;
+  max-width: 1376px;
+  margin: auto;
+  padding-bottom: 48px;
+}
+
 .box {
   display: flex;
-  padding: 2em 4vw 2em 4vw;  /* Usando unidades relativas */
+  padding: 40px 48px 32px 48px;
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;
   align-self: stretch;
-  flex-grow: 1;  /* Permite que o box cresça conforme o espaço disponível */
+  flex-grow: 1;
 }
 
 .statistics-container {
