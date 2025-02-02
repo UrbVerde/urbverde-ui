@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <InfoVegetation class="info-card" />
-    <FieldCard  v-if="firstCardData" :data="firstCardData" class="field-card" />
+    <FieldCard v-if="firstCardData" :data="firstCardData" class="field-card" />
     <div class="right-panel">
       <FirstSectionCard :data="remainingCardData" :class="first-section-card" />
     </div>
@@ -77,41 +77,49 @@ export default {
 };
 </script>
 
-  <style scoped>
-  * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-  }
+<style scoped>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-  .dashboard {
-      display: grid; /* Mudando para grid */
-      grid-template-columns: auto auto 1fr; /* Define 3 colunas */
-      gap: 24px;
-      width: 100%;
-  }
+.dashboard {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+}
 
-  .info-card {
-      grid-column: 1;
-  }
+.info-card {
+    display: flex;
+    max-width: 560px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
 
-  .field-card {
-      grid-column: 2;
-  }
+.field-card {
+    display: flex;
+    max-width: 560px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
 
-  .right-panel {
-      grid-column: 3;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: fit-content; /* Faz o elemento se ajustar ao conteúdo */
-      min-width: 0; /* Previne overflow */
-  }
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
 
-  .first-section-card {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.first-section-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 </style>

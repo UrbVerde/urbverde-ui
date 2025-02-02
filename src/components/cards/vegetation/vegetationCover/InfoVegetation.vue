@@ -7,7 +7,7 @@
       class="info-card"
     >
       <template #image>
-        <img :src="image" alt="Ilustração" class="card-image" />
+        <img :src="image" alt="Ilustração"/>
       </template>
     </CardBase>
   </div>
@@ -35,11 +35,4 @@ export default {
 
 <style scoped lang="scss">
 
-  .card-image {
-    display: flex;
-    width: 233px;
-    height: 168px;
-    align-self: center;
-    margin-bottom: 54px;
-  }
 </style>
