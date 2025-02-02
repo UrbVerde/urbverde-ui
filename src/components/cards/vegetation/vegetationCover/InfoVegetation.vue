@@ -44,7 +44,7 @@ export default {
   width: 100%;
   position: relative;
   display: flex;
-  padding: 48px 40px 24px 40px;
+  padding: 48px 40px 48px 40px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

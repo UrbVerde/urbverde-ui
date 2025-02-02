@@ -27,7 +27,7 @@ export default {
 };
 </script>
 
-<style scooped>
+<style scooped lang="scss">
 .second-card {
   width: 246px;
   height: 208px;
@@ -50,7 +50,7 @@ export default {
   align-self: stretch;
   padding: 16px 24px 24px 24px;
   text-align: justify;
-  color: var(--Gray-600, #6C757D);
+  color: map-get($gray, 600);
 }
 
 .second-card .value {

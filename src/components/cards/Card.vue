@@ -80,7 +80,6 @@ p, h6{
 
 .content-wrapper{
   display: flex;
-  padding-bottom: 24px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
@@ -114,7 +113,7 @@ p, h6{
 }
 
 .content-wraper .textodescritivo{
-  color: var(--Gray-600, #6C757D);
+  color: map-get($gray, 600);
   align-self: stretch;
   display: flex;
   flex-direction: column;

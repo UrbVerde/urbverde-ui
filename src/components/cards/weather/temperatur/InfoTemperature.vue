@@ -34,7 +34,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
 
 .info-card {
   width: 365px;
@@ -52,7 +52,7 @@ export default {
 
 .info-temperature-card .textodescritivo {
   margin-top: 12px;
-  color: var(--Theme-Secondary, #525960);
+  color: map-get($gray, 600);
 }
 
 .card-image {

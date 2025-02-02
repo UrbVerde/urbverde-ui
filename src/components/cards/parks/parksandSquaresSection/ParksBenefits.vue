@@ -42,7 +42,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .benefits-card {
     display: flex;
     align-items: center;
