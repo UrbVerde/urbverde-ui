@@ -48,7 +48,7 @@ export default {
     padding: 48px 40px 48px 40px;
   }
 
-  .info-temperature-card .textodescritivo {
+  .info-vegetation-card .textodescritivo {
     margin-top: 12px;
     color: var(--Theme-Secondary, #525960);
   }
