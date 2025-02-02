@@ -63,30 +63,17 @@ export default {
 </script>
 
 <style scoped>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
 
   .dashboard {
-
     display: flex;
     align-items: flex-start;
     gap: 24px;
     align-self: stretch;
-
+    width: 100%;
   }
 
   .right-panel {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .first-section-card {
-
-    background-color: #f0f0f0;
-    padding: 20px;
+    display: flex;
+    gap: 24px;
   }
 </style>

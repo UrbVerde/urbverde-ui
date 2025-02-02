@@ -43,7 +43,7 @@ import RankVegSection from '../cards/vegetation/rankSection/RankVegSection.vue';
 import InfoParksSection from '../cards/parks/infoSection/infoParksSection.vue';
 import ParksSquaresSection from '../cards/parks/parksandSquaresSection/ParksSquaresSection.vue';
 import SeeMoreParksSection from '../cards/parks/seeMoreSection/SeeMoreParksSection.vue';
-import RankParks from '../cards/parks/rankSection/RankParksSection.vue';
+import RankParksSection from '../cards/parks/rankSection/RankParksSection.vue';
 
 export default {
   name: 'WidgetsSection',
@@ -60,7 +60,7 @@ export default {
     InfoParksSection,
     ParksSquaresSection,
     SeeMoreParksSection,
-    RankParks,
+    RankParksSection,
   },
   props: {
     defaultYear: {
@@ -78,7 +78,7 @@ export default {
     const cityName = computed(() => locationStore.nm_mun || 'city?');
 
     // Estado para controlar a camada selecionada
-    const selectedLayer = ref('temperatura');
+    const selectedLayer = ref('parques');
 
     // Número de subseções
     const numSections = ref(3);
@@ -160,7 +160,7 @@ export default {
             id: 'rankParks',
             ref: 'rankParksSection',
             title: `${cityName.value} nos rankings de municípios`,
-            component: RankParks
+            component: RankParksSection
           },
           {
             id: 'seeMoreParks',

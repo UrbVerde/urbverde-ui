@@ -80,22 +80,13 @@ export default {
   .dashboard-section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin: 20px;
-    display: flex;
-    flex-wrap: wrap;
+    width: 100%;
+    gap: 24px;
   }
 
   .heat-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
-
-  .benefits-card-section {
-    margin-top: 20px;
     display: flex;
-    justify-content: center;
+    gap: 24px;
   }
 
   </style>
