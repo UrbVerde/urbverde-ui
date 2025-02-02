@@ -49,7 +49,7 @@ export default {
     async fetchRankingData() {
       try {
         const response = await axios.get(
-          `https://api.urbverde.com.br/v1/cards/weather/ranking?city=${this.cityCode}&year=${this.selectedYear}`
+          `https://api.urbverde.com.br/v1/cards/square/ranking?city=${this.cityCode}&year=${this.selectedYear}`
         );
         this.rankCards = response.data;
       } catch (error) {

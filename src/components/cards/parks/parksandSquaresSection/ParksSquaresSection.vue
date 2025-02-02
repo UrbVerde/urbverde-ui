@@ -60,7 +60,7 @@ export default {
 
     async fetchData(city, year) {
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/heat?city=${city}&year=${year}`); // outra camada
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${year}`); // outra camada
         const data = await response.json();
         this.cardData = data;
       } catch (error) {

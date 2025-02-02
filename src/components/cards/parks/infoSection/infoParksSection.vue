@@ -4,7 +4,7 @@
       <InfoParks />
     </div>
     <div class="right-panel">
-      <FirstSectionCard :data="cardData" :class="temperature-card" />
+      <FirstSectionCard :data="cardData" :class="first-section-card" />
     </div>
   </div>
 </template>
@@ -51,7 +51,7 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${this.cityCode}&year=${this.selectedYear}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/parks/square?city=${this.cityCode}&year=${this.selectedYear}`);
         const data = await response.json();
         this.cardData = data;
       } catch (error) {
@@ -84,7 +84,7 @@ export default {
     gap: 20px;
   }
 
-  .temperature-card {
+  .first-section-card {
 
     background-color: #f0f0f0;
     padding: 20px;
