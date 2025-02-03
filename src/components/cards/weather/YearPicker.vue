@@ -1,3 +1,5 @@
+<!-- urbverde-ui/src/components/cards/weather/YearPicker.vue -->
+<!-- YearPicker.vue -->
 <template>
   <div class="date-picker">
     <div class="input-wrapper">
@@ -280,6 +282,7 @@ onBeforeUnmount(() => {
     align-items: center;
     padding: 1px;
     color: #6C757D;
+    color: azure;
 }
 
 .input-text {

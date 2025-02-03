@@ -1,7 +1,8 @@
+<!-- urbverde-ui/src/components/homepage/HomeSearch.vue -->
 <template>
   <div class="search">
     <div class="search-button">
-      <BuscaSimples @location-updated="onLocationUpdated" />
+      <BuscaSimples @location-updated="onLocationUpdated" :openDelay="0" />
     </div>
 
     <!-- Botão para largura maiores que 600px -->

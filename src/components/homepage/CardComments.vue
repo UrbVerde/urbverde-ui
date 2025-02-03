@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/homepage/CardComments.vue -->
 <template>
   <div class="cards shadow">
     <div class="top-content body-small-regular">

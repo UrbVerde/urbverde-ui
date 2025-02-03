@@ -1,3 +1,4 @@
+// urbverde-ui/src/constants/images-homepage.js
 // Importa e exporta somente as imagens utilizadas dentro de componentes da homepage
 
 import logo1 from '@/assets/images/homepage/institutes-logo/logo-01.svg';

@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/FirstSectionCard.vue -->
 <template>
   <CardBase
     class="first-card"
