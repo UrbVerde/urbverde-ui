@@ -41,44 +41,10 @@ export default {
 };
 </script>
 
-<style>
-.see-card {
-  height: 187px;
-  width: 336px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.see-card .titulo {
-  padding:  24px 24px 16px 24px;
+<style scoped lang="scss">
+
+.see-card{
+  padding: 24px 32px 24px 32px;
 }
 
-.see-card .card-cantent {
-  text-align: left;
-  margin: 0px 32px;
-}
-
-.card-cantent {
-  text-align: left;
-  margin: 0px 32px;
-}
-.see-card .value {
-  font-family: Montserrat;
-  font-size: 40px;
-  font-weight: 700;
-  color: var(--Green-500, #198754);
-  text-align: left;
-  margin: 0px 32px;
-  gap: 16px;
-}
-.botao {
-  padding: 16px 32px 24px 32px;
-}
-
-.see-card .card-button {
-  padding: 16px 32px 24px 32px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-}
 </style>

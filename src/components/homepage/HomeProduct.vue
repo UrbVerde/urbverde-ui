@@ -271,6 +271,7 @@ export default {
   .button-primary-link {
     color: map-get($green, 600);
     text-decoration: none;
+    z-index: 1;
   }
 
   @include breakpoint-down('desktop-small') {

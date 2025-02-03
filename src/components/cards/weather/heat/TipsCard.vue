@@ -1,29 +1,44 @@
 <!-- urbverde-ui/src/components/cards/weather/heat/TipsCard.vue -->
 <template>
-  <div class="tips-card">
-    <div class="tips-card-content">
-      <h2 class="tips-card-title heading-h5">Como podemos tornar as cidades mais frescas?</h2>
-      <ul class="tips-card-list">
-        <li class="tips-card-item">
-          <span class="tips-card-number">1</span>
-          <b>Árvores</b>&nbsp;ajudam a reduzir o calor e melhorar a qualidade do ar.
-        </li>
-        <li class="tips-card-item">
-          <span class="tips-card-number">2</span>
-          <b>Rios e lagos</b>&nbsp;ajudam a resfriar o clima urbano.
-        </li>
-        <li class="tips-card-item">
-          <span class="tips-card-number">3</span>
-          Implementação de &nbsp;<b>políticas públicas</b>&nbsp;que podem promover mais áreas verdes nas cidades.
-        </li>
-      </ul>
-      <PrimaryButton
-        label="Ver mais dicas"
-        :filled="true"
-        class="tips-card-button"
-      />
+  <div class="benefits-card">
+    <div class="benefits-card-content">
+      <div class="label">
+        <h2 class="benefits-card-title heading-h5">Como podemos tornar as cidades mais frescas?</h2>
+        <ul class="benefits-card-list">
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">1</span>
+            <p class="body-small-regular">
+              <b>Árvores</b>&nbsp;ajudam a reduzir o calor e melhorar a qualidade do ar.
+            </p>
+          </li>
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">2</span>
+            <p class="body-small-regular">
+              <b>Rios e lagos</b>&nbsp;ajudam a resfriar o clima urbano.
+            </p>
+          </li>
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">3</span>
+            <p class="body-small-regular">
+              Implementação de &nbsp;<b>políticas públicas</b>&nbsp;que podem promover mais áreas verdes nas cidades.
+            </p>
+          </li>
+        </ul>
+      </div>
+      <a
+        href="https://urbverde-educa.tawk.help/category/categorias-e-camadas/temperatura"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="body-small-regular"
+      >
+        <PrimaryButton
+          label="Ver mais dicas"
+          :filled="true"
+          class="benefits-card-button"
+        />
+      </a>
     </div>
-    <div class="tips-card-image">
+    <div class="benefits-card-image">
       <img
         src="@/assets/images/cards/environmentalcampaign.svg"
         alt="Ilustração dicas"
@@ -43,76 +58,94 @@ export default {
 };
 </script>
 
-<style scoped>
-.tips-card {
-  width: 1056px;
-  height: 354px;
+ <style scoped lang="scss">
+ a{
+  text-decoration: none;
+ }
+
+ p {
+  margin: 0;
+ }
+
+ .benefits-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: white;
-  border: 1px solid var(--Gray-200, #E9ECEF);
+  gap: 56px;
+  justify-content: center;
+  background: map-get($gray, white);
+  border: 1px solid map-get($gray, 200);
   border-radius: 16px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  padding: 16px;
+  padding: 40px 40px 40px 40px;
   box-sizing: border-box;
-}
+  flex-grow: 1;
+  width: 100%;
+  min-height: 300px;
+  max-height: 100%;
+ }
 
-.tips-card-content {
-  flex: 1;
-  padding: 40px 40px 48px 40px;
+ .label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+ }
+
+ .benefits-card-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+  text-align: justify;
+  gap: 48px;
+ }
 
-.tips-card-image img {
-  width: 306px;
-  height: 266px;
-  object-fit: contain;
-}
-
-.tips-card-title {
-  align-self: stretch;
-  margin-bottom: 32px;
-}
-
-.tips-card-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.tips-card-item {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #374151;
-  margin-bottom: 12px;
-}
-
-.tips-card-number {
-  width: 21px;
-  height: 21px;
-  background-color: #e7f6e8;
-  font-weight: bold;
-  border-radius: 50%;
+ .benefits-card-image {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 8px;
+ }
 
-  color: var(--Green-700, #0F5132);
-  font-family: Inter;
+ .benefits-card-image img {
+  width: auto;
+  height: 100%;
+  max-width: 300px;
+  object-fit: contain;
+ }
+
+ .benefits-card-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  gap: 12px;
+  margin: 0;
+ }
+
+ .benefits-card-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 21px */
-}
+  color: #374151;
+ }
 
-.tips-card-button {
-  margin-top: 16px;
+ .benefits-card-number {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  padding: 0px 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 99px;
+  background: map-get($green, 100);
+ }
+
+ .benefits-card-button {
   align-self: flex-start;
-}
-</style>
+ }
+ </style>
