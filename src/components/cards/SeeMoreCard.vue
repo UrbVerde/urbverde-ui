@@ -7,7 +7,6 @@
     class="see-card"
   >
     <div class="botao">
-
       <PrimaryButton
         label="Ver no Mapa"
         :filled="false"
@@ -15,8 +14,8 @@
         iconType="bootstrap"
         iconPosition="left"
         class="card-button"
+        @click="$emit('change-layer', index)"
       />
-
     </div>
   </CardBase>
 </template>
@@ -37,6 +36,7 @@ export default {
       required: true,
     },
   },
+  emits: ['change-layer'],
 };
 </script>
 

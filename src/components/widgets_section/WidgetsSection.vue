@@ -1,4 +1,3 @@
-# src/components/widgets/WidgetsSection.vue
 <template>
   <div class="widgets-section">
     <div
@@ -12,9 +11,12 @@
           {{ section.title }}
         </span>
         <YearPicker
+          v-if="!section.isSeeMore"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
           :city-code="cityCode"
+          :layer="selectedLayer"
+          :disabled="isParksLayer"
           @update:modelValue="(value) => handleYearChange(value, index)"
         />
       </div>
@@ -23,13 +25,14 @@
         :city-code="cityCode"
         :selected-year="selectedYears[index]"
         :layer="selectedLayer"
+        @change-layer="changeLayer"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
@@ -86,6 +89,16 @@ export default {
     // Array para armazenar os anos selecionados
     const selectedYears = ref(Array(numSections.value).fill(props.defaultYear));
 
+    // Computed property para verificar se a camada selecionada é "parques"
+    const isParksLayer = computed(() => selectedLayer.value === 'parques');
+
+    // Watch para forçar o valor do YearPicker para 2021 quando a camada for "parques"
+    watch(isParksLayer, (newVal) => {
+      if (newVal) {
+        selectedYears.value = selectedYears.value.map(() => 2021);
+      }
+    });
+
     // Configuração das seções baseada na camada selecionada
     const sections = computed(() => {
       const sectionConfigs = {
@@ -93,7 +106,7 @@ export default {
           {
             id: 'stats',
             ref: 'statsSection',
-            title: `Estatísticas do ${category.value} em ${cityName.value}`,
+            title: `Temperatura e clima em ${cityName.value}`,
             component: TemperatureSection
           },
           {
@@ -112,7 +125,8 @@ export default {
             id: 'seeMore',
             ref: 'seeMoreSection',
             title: 'Veja mais sobre sua cidade!',
-            component: SeeMoreSection
+            component: SeeMoreSection,
+            isSeeMore: true
           }
         ],
 
@@ -139,7 +153,8 @@ export default {
             id: 'seeMore',
             ref: 'seeMoreSection',
             title: 'Veja mais sobre sua cidade!',
-            component: SeeMoreVegSection
+            component: SeeMoreVegSection,
+            isSeeMore: true
           }
         ],
 
@@ -166,7 +181,8 @@ export default {
             id: 'seeMoreParks',
             ref: 'seeMoreParksSection',
             title: 'Veja mais sobre sua cidade!',
-            component: SeeMoreParksSection
+            component: SeeMoreParksSection,
+            isSeeMore: true
           }
 
         ]
@@ -187,7 +203,8 @@ export default {
       selectedLayer,
       sections,
       selectedYears,
-      changeLayer
+      changeLayer,
+      isParksLayer
     };
   },
   watch: {
@@ -200,8 +217,10 @@ export default {
   },
   methods: {
     handleYearChange(value, index) {
-      this.selectedYears[index] = value;
-      this.$emit(`year-change-${index}`, value);
+      if (!this.isParksLayer) {
+        this.selectedYears[index] = value;
+        this.$emit(`year-change-${index}`, value);
+      }
     }
   }
 };
@@ -240,5 +259,4 @@ export default {
   align-items: flex-start;
   flex: 1 0 0;
 }
-
 </style>

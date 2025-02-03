@@ -8,14 +8,21 @@
         </p>
       </div>
       <div class="botao">
-        <PrimaryButton
-          label="Baixar Relatório"
-          :filled="true"
-          icon="bi-download"
-          iconType="bootstrap"
-          iconPosition="left"
-          class="download-card-button"
-        />
+        <a
+          href="https://urbverde-educa.tawk.help/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="body-small-regular"
+        >
+          <PrimaryButton
+            label="Baixar Relatório"
+            :filled="true"
+            icon="bi-download"
+            iconType="bootstrap"
+            iconPosition="left"
+            class="download-card-button"
+          />
+        </a>
       </div>
     </div>
     <div class="download-card-image">
@@ -81,6 +88,10 @@ export default {
     color: map-get($theme, secondary);
     text-align: center;
   }
+
+  .botao a {
+  text-decoration: none;
+}
 
   .download-card-image img {
     width: 306px;
