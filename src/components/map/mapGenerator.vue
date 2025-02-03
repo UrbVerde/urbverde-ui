@@ -161,12 +161,9 @@ export default {
 <style scoped>
 .map-container {
   position: relative;
-  width: calc(100% - 48px);
-  height: calc(100vh - 35px - 144px);
   border-radius: 15px;
-  margin: 0px 24px 0;
   background: #F8F9FA;
-  cursor: pointer; /* Change cursor to hand */
+  cursor: pointer;
 }
 
 .map-wrapper {
@@ -177,7 +174,7 @@ export default {
   height: 100%;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  pointer-events: none; /* Make it clickable through */
+  pointer-events: none;
 }
 
 .map-wrapper.visible {

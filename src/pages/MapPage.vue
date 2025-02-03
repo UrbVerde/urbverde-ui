@@ -200,49 +200,101 @@ export default {
 
 <style scoped>
 .layout-container {
-  position: relative;
+  display: flex;
   min-height: 100vh;
   width: 100%;
   background-color: #F8F9FACC;
+  overflow: hidden;
 }
 
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  height: 100vh;
+  width: 301px;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+  z-index: 10;
+}
+
+.sidebar.collapsed {
+  width: 72px;
+}
+
+/* Main content styles */
 .main-content {
-  position: relative;
-  min-height: 100vh;
+  flex: 1;
   margin-left: 301px;
-  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+  width: calc(100% - 301px);
+  transition: all 0.3s ease;
+  overflow-x: hidden;
 }
 
 .main-content.content-expanded {
   margin-left: 72px;
+  width: calc(100% - 72px);
 }
 
 .content-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100vh;
 }
 
+/* Navbar styles */
+.navbar {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+/* Map container styles */
 .map-container {
   position: relative;
-  flex: 1;
-  display: flex;
+  width: 100%;
+  height: calc(100vh - 133px); /* Adjust based on navbar height */
+  overflow: hidden;
 }
 
 .map-box {
-  flex: 1;
+  width: 100%;
+  height: 100%;
 }
 
+/* Widgets section styles */
+.widgets-section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.widget {
+  flex: 1 1 300px;
+  min-width: 300px;
+  max-width: 100%;
+}
+
+/* Footer styles */
+.footer {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* Placeholder styles */
 .placeholder-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 60px);
+  width: 100%;
 }
 
 .map-placeholder {
-  display: block;
-  margin: 40px auto;
+  max-width: 100%;
+  height: auto;
   opacity: 0.45;
 }
 </style>
