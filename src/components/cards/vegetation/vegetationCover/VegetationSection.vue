@@ -82,12 +82,14 @@ export default {
     display: flex;
     align-items: flex-start;
     gap: 24px;
-    align-self: stretch;
+    width: 100%;
 }
 
 .vegetation-info {
     display: flex;
-    max-width: 400px;
+    flex: 1;
+    min-width: 300px;
+    max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -95,7 +97,9 @@ export default {
 
 .vegetation-field {
     display: flex;
-    max-width: 400px;
+    flex: 1;
+    min-width: 300px;
+    max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -103,16 +107,17 @@ export default {
 
 .right-panel {
     display: flex;
+    flex: 1;
+    min-width: 300px;
+    max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
-    flex: 1 0 0;
 }
 
 .section-card {
-    background-color: #fff;
+    width: 100%;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>

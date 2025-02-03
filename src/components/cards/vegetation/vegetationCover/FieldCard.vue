@@ -57,6 +57,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .field-card-wrapper {
   display: flex;
   width: 100%;
@@ -80,4 +81,5 @@ export default {
   height: auto;
   padding-bottom: 24px;
 }
+
 </style>
