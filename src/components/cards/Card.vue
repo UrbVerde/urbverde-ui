@@ -1,11 +1,11 @@
 <template>
-  <div class="custom-card">
+  <div class="custom-card shadow-sm">
     <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
       <slot name="image"></slot>
     </div>
 
     <div class="card-header">
-      <h1 v-if="title" class="titulo heading-h6">{{ title }}</h1>
+      <h6 v-if="title" class="titulo heading-h6">{{ title }}</h6>
     </div>
 
     <div class="content-wrapper">
@@ -61,42 +61,60 @@ export default {
 };
 </script>
 
-<style scooped>
+<style scoped lang="scss">
+
+p, h6{
+  margin: 0;
+}
+
 .custom-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex: 1 0 0;
-  align-self: stretch;
+  height: auto;
   width: 100%;
   border-radius: 16px;
-  border: 1px solid var(--Gray-200, #E9ECEF);
-  background: var(--Gray-White, #FFF);
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+  border: 1px solid map-get($gray, 200);
+  background-color: map-get($gray, white);
+  gap: 16px;
+}
+
+.content-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
 }
 
 .card-image-wrapper {
   display: flex;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .card-header {
   display: flex;
   align-items: center;
   align-self: stretch;
+  width: auto;
+}
+
+.card-header .titulo{
+  color: map-get($body-text, body-color);
+  height: 100%;
 }
 
 .content-wraper{
-  padding-bottom: 24px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  flex: 1 0 0;
-  align-self: stretch;
+  align-items: center;
+  justify-content: center;
 }
 
-.content-wraper .textodescritivo{
-  color: var(--Gray-600, #6C757D);
+.textodescritivo{
+  color: map-get($gray, 600);
   align-self: stretch;
   display: flex;
   flex-direction: column;
@@ -107,7 +125,15 @@ export default {
 }
 
 .value {
-  color: var(--Green-500, #198754);
+  color: map-get($green, 500);
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  font-family: 'Montserrat';
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  padding: 0;
+  margin: 0;
 }
 
 .card-content {

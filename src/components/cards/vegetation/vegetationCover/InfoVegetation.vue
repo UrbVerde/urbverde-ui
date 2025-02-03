@@ -1,13 +1,13 @@
 <template>
-  <div class="info-vegetation-card">
+  <div class="info-vegetation-wrapper">
     <CardBase
       :title="titulo"
       :subtitle="descricao"
       imagePosition="top"
-      class="info-card"
+      class="vegetation-card"
     >
       <template #image>
-        <img :src="image" alt="Ilustração" class="card-image" />
+        <img :src="image" alt="Ilustração" class="imagem"/>
       </template>
     </CardBase>
   </div>
@@ -33,30 +33,26 @@ export default {
 };
 </script>
 
-<style>
-  .info-card {
-    width: 365px;
-    height: 412px;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    align-self: stretch;
-    background-color: var(--Gray-White, #FFF);
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-    padding: 48px 40px 48px 40px;
-  }
+<style scoped lang="scss">
+.info-vegetation-wrapper {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
 
-  .info-vegetation-card .textodescritivo {
-    margin-top: 12px;
-    color: var(--Theme-Secondary, #525960);
-  }
+.vegetation-card {
+  width: 100%;
+  position: relative;
+  display: flex;
+  padding: 48px 40px 48px 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+}
 
-  .card-image {
-    width: 233px;
-    height: 168px;
-    align-self: center;
-    margin-bottom: 54px;
-  }
+.vegetation-card .imagem {
+  padding-bottom: 56px;
+}
 </style>

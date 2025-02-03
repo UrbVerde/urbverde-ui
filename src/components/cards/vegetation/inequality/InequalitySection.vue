@@ -73,9 +73,8 @@ export default {
 .dashboard-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 20px;
-  height: 100%;
+  gap: 24px;
+  width: 100%;
 }
 
 .info-cards {

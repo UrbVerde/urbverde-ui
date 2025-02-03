@@ -61,24 +61,23 @@ export default {
 };
 </script>
 
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+<style scoped lang="scss">
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+  width: 100%;
 }
 
 .see-more-cards {
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  margin: 20px;
-  flex-wrap: wrap;
+  gap: 24px;
 }
+
+.download-card{
+  width: 100%;
+}
+
 </style>

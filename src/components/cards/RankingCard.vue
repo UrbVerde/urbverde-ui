@@ -34,7 +34,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+h3, p{
+  margin: 0;
+}
+
 .rank-card-container {
   display: flex;
   flex-direction: column;
@@ -43,7 +47,7 @@ export default {
 .rank-card-header {
   display: flex;
   flex-direction: column;
-  padding: 32px 24px 16px 32px;
+  padding: 0 24px 16px 32px;
   gap: 12px;
   align-self: stretch;
 }
@@ -66,7 +70,7 @@ export default {
 
 .rank-card-sections {
   display: flex;
-  padding: 16px 32px;
+  padding: 16px 32px 40px 32px;
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;

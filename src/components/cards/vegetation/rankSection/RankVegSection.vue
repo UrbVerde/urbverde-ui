@@ -74,10 +74,8 @@ export default {
   <style scoped>
   .rank-section {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 16px;
+    gap: 24px;
+    width: 100%;
   }
 
   .rank-card {
