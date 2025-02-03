@@ -6,7 +6,8 @@
       @toggle-sidebar="toggleSidebar"
       @update-coordinates="updateCoordinates"
     />
-    <!-- Main content (navbar, map, etc.) -->
+
+    <!-- Main content -->
     <main
       class="main-content"
       :class="{ 'content-expanded': !isSidebarOpen }"
@@ -22,10 +23,12 @@
           @navigate-to="scrollToSection"
         />
 
-        <div id="map" ref="Mapa" class="map-container">
-          <MapBox :coordinates="coordinates" class="map-box">
-            <Legenda />
-          </MapBox>
+        <div class="map-section">
+          <div id="map" ref="Mapa" class="map-container">
+            <MapBox :coordinates="coordinates" class="map-box">
+              <Legenda />
+            </MapBox>
+          </div>
         </div>
 
         <WidgetsSection
@@ -252,10 +255,15 @@ export default {
 }
 
 /* Map container styles */
+.map-section {
+  padding: 0 24px;
+  width: 100%;
+}
+
 .map-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 133px); /* Adjust based on navbar height */
+  height: calc(100vh - 133px);
   overflow: hidden;
 }
 
