@@ -70,12 +70,7 @@ export default {
 };
 </script>
 
-  <style scoped>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+  <style scoped lang="scss">
 
   .dashboard-section {
     display: flex;
@@ -87,6 +82,8 @@ export default {
   .heat-cards {
     display: flex;
     gap: 24px;
+    width: 100%;
+    height: auto;
   }
 
   </style>

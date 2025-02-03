@@ -1,27 +1,29 @@
 <template>
   <div class="benefits-card">
     <div class="benefits-card-content">
-      <h2 class="benefits-card-title heading-h5">Quais os benefícios de uma cidade arborizada?</h2>
-      <ul class="benefits-card-list">
-        <li class="benefits-card-item">
-          <span class="benefits-card-number body-small-medium">1</span>
-          <p class="body-small-regular">
-            Árvores &nbsp;<b>reduzem a sensação de calor</b>, criando ambientes mais frescos.
-          </p>
-        </li>
-        <li class="benefits-card-item">
-          <span class="benefits-card-number body-small-medium">2</span>
-          <p class="body-small-regular">
-            Ajudam a filtrar poluentes e &nbsp;<b>melhorar a qualidade do ar</b>&nbsp; nas cidades.
-          </p>
-        </li>
-        <li class="benefits-card-item">
-          <span class="benefits-card-number body-small-medium">3</span>
-          <p class="body-small-regular">
-            <b>Políticas públicas</b>&nbsp; podem auxiliar a promover mais áreas verdes nas cidades
-          </p>
-        </li>
-      </ul>
+      <div class="label">
+        <h2 class="benefits-card-title heading-h5">Quais os benefícios de uma cidade arborizada?</h2>
+        <ul class="benefits-card-list">
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">1</span>
+            <p class="body-small-regular">
+              Árvores &nbsp;<b>reduzem a sensação de calor</b>, criando ambientes mais frescos.
+            </p>
+          </li>
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">2</span>
+            <p class="body-small-regular">
+              Ajudam a filtrar poluentes e &nbsp;<b>melhorar a qualidade do ar</b>&nbsp; nas cidades.
+            </p>
+          </li>
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">3</span>
+            <p class="body-small-regular">
+              <b>Políticas públicas</b>&nbsp; podem auxiliar a promover mais áreas verdes nas cidades
+            </p>
+          </li>
+        </ul>
+      </div>
       <PrimaryButton
         label="Ver mais dicas"
         :filled="true"
@@ -49,7 +51,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-p{
+
+p {
   margin: 0;
 }
 
@@ -71,12 +74,20 @@ p{
   max-height: 100%;
 }
 
+.label{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+}
+
 .benefits-card-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: justify;
-  gap: 32px;
+  gap: 48px;
 }
 
 .benefits-card-image {
