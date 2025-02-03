@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/homepage/HomeProduct.vue -->
 <template>
   <div
     class="product"

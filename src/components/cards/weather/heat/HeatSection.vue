@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/cards/weather/HeatSection.vue -->
+<!-- urbverde-ui/src/components/cards/weather/heat/HeatSection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="heat-cards">

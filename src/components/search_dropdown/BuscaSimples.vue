@@ -163,7 +163,7 @@ onMounted(async() => {
 
   // Initialize from Pinia store if values exist
   const locationStore = useLocationStore();
-  const route = useRoute(); // Add this to get route access
+  const route = useRoute();
 
   // Check if we have URL parameters first
   if (Object.keys(route.query).length > 0) {
@@ -174,7 +174,7 @@ onMounted(async() => {
   if (locationStore.cd_mun && locationStore.nm_mun && locationStore.uf) {
     const cityText = `${locationStore.nm_mun} - ${locationStore.uf}`;
     inputValue.value = cityText;
-    visibleInput.value = cityText; // Add this line
+    visibleInput.value = cityText;
     locationChosen.value = cityText;
     codes.value[cityText] = locationStore.cd_mun;
 
@@ -185,9 +185,8 @@ onMounted(async() => {
 
     // Fetch coordinates for the stored location
     await fetchCoordinates(cityText);
-  } else {
-    // Only show dropdown after delay if no location is set
-    // Show dropdown after delay only if openDelay > 0
+  } else if (props.openDelay > 0) { // Only proceed if openDelay is greater than 0
+    // Show dropdown after delay
     setTimeout(() => {
       if (!dropdown.value && inputValue.value === '') {
         dropdown.value = true;
@@ -287,7 +286,7 @@ async function selectSuggestion(suggestion) {
     nm_mun: city,
     uf: stateAbbrev,
     type: 'city',
-    year: new Date().getFullYear()
+    year: '2021', //new Date().getFullYear()
   });
 
   // Ensure coordinates are fetched after store update

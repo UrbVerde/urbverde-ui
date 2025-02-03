@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/SeeMoreCard.vue -->
 <template>
   <CardBase
     v-for="(item, index) in data"

@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/cards/weather/TemperatureSection.vue -->
+<!-- urbverde-ui/src/components/cards/weather/temperatur/TemperatureSection.vue -->
 <template>
   <div class="dashboard">
     <div class="left-panel">

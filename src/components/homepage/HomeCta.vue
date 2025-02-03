@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/homepage/HomeCta.vue -->
 <template>
   <div class="cta-content">
     <img :src="bgSrc" :alt="bgAlt" />
