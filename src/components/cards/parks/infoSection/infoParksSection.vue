@@ -3,8 +3,23 @@
     <div class="left-panel">
       <InfoParks />
     </div>
-    <div class="right-panel">
-      <FirstSectionCard :data="cardData" :class="first-section-card" />
+    <div class="right-wrapper">
+      <div class="top">
+        <FirstSectionCard
+          v-for="(card, index) in firstTwoCards"
+          :key="index"
+          :data="[card]"
+          class="section-card"
+        />
+      </div>
+      <div class="bottom">
+        <FirstSectionCard
+          v-for="(card, index) in lastTwoCards"
+          :key="index"
+          :data="[card]"
+          class="section-card"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -36,8 +51,16 @@ export default {
     };
   },
 
-  watch: {
+  computed: {
+    firstTwoCards() {
+      return this.cardData.slice(0, 2);
+    },
+    lastTwoCards() {
+      return this.cardData.slice(2, 4);
+    }
+  },
 
+  watch: {
     cityCode: {
       handler: 'fetchData',
       immediate: true
@@ -62,18 +85,34 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.dashboard {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  width: 100%;
+}
 
-  .dashboard {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    align-self: stretch;
-    width: 100%;
-  }
+.right-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  flex: 1 0 0;
+}
 
-  .right-panel {
-    display: flex;
-    gap: 24px;
-  }
+.top,
+.bottom {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+}
+
+.section-card {
+  flex: 1;
+  border-radius: 16px;
+  padding: 24px;
+}
 </style>
