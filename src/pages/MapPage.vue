@@ -39,7 +39,9 @@
           @third-year-change="handleThirdYearChange"
         />
 
-        <UrbVerdeFooter />
+        <UrbVerdeFooter
+          id="newsletter"
+        />
       </div>
     </main>
   </div>
@@ -263,7 +265,7 @@ export default {
 .map-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 133px);
+  height: calc(100vh - 171px);
   overflow: hidden;
 }
 
