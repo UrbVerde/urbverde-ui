@@ -1,10 +1,12 @@
 <template>
-  <div class="download-card">
+  <div class="download-card shadow-sm">
     <div class="content">
-      <h2 class="title heading-h5">Baixe gratuitamente o relatório completo</h2>
-      <ul class="text body-small-medium">
-        Obtenha dados completos de temperatura, vegetação e áreas verdes de seu município
-      </ul>
+      <div class="label">
+        <h2 class="title heading-h5">Baixe gratuitamente o relatório completo</h2>
+        <p class="text body-small-medium">
+          Obtenha dados completos de temperatura, vegetação e áreas verdes de seu município
+        </p>
+      </div>
       <div class="botao">
         <PrimaryButton
           label="Baixar Relatório"
@@ -36,39 +38,53 @@ export default {
 };
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
+  p, h2{
+    margin: 0;
+  }
+
   .download-card {
-    width: 1056px;
-    height: 354px;
+    width: 100%;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: white;
-    border: 1px solid var(--Gray-200, #E9ECEF);
+    border: 1px solid map-get($gray, 200);
     border-radius: 16px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     padding: 40px 80px 48px 56px;
     box-sizing: border-box;
     gap: 40px;
   }
 
-  .content {
+  .label{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-      flex: 1 0 0;
+    gap: 8px;
+    align-self: stretch;
+  }
+
+  .content {
+    display: flex;
+    max-width: 620px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    flex: 1 0 0;
   }
 
   .text {
-    color: var(--Theme-Secondary, #525960);
-  text-align: center;
+    color: map-get($theme, secondary);
+    text-align: center;
   }
 
   .download-card-image img {
     width: 306px;
-    height: 266px;
-
+    height: auto;
   }
 
   </style>

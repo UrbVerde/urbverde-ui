@@ -70,9 +70,8 @@ export default {
   }
 
   .see-more-cards {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px;
-    flex-wrap: wrap;
   }
   </style>
