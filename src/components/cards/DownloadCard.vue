@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/DownloadCard.vue -->
 <template>
   <div class="download-card shadow-sm">
     <div class="content">
