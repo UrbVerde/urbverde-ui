@@ -54,8 +54,8 @@ export default {
 }
 
 .card-image {
-  width: 233px;
-  height: 168px;
+  width: 100%;
+  height: auto;
   align-self: center;
   margin-bottom: 54px;
 }

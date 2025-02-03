@@ -92,6 +92,7 @@ p, h6{
   display: flex;
   justify-content: center;
   margin: 0 auto;
+  height: auto;
 }
 
 .card-header {
