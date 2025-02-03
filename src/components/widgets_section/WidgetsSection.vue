@@ -78,7 +78,7 @@ export default {
     const cityName = computed(() => locationStore.nm_mun || 'city?');
 
     // Estado para controlar a camada selecionada
-    const selectedLayer = ref('parques');
+    const selectedLayer = ref('vegetação');
 
     // Número de subseções
     const numSections = ref(3);

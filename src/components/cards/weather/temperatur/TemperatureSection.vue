@@ -1,11 +1,25 @@
-<!-- urbverde-ui/src/components/cards/weather/TemperatureSection.vue -->
 <template>
   <div class="dashboard">
     <div class="left-panel">
       <InfoTemperature />
     </div>
-    <div class="right-panel">
-      <FirstSectionCard :data="cardData" :class="temperature-card" />
+    <div class="right-wrapper">
+      <div class="top">
+        <FirstSectionCard
+          v-for="(card, index) in firstTwoCards"
+          :key="index"
+          :data="[card]"
+          class="temperature-card"
+        />
+      </div>
+      <div class="bottom">
+        <FirstSectionCard
+          v-for="(card, index) in lastTwoCards"
+          :key="index"
+          :data="[card]"
+          class="temperature-card"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -37,8 +51,16 @@ export default {
     };
   },
 
-  watch: {
+  computed: {
+    firstTwoCards() {
+      return this.cardData.slice(0, 2);
+    },
+    lastTwoCards() {
+      return this.cardData.slice(2, 4);
+    }
+  },
 
+  watch: {
     cityCode: {
       handler: 'fetchData',
       immediate: true
@@ -63,8 +85,7 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
 .dashboard {
   display: flex;
   align-items: flex-start;
@@ -73,20 +94,33 @@ export default {
   width: 100%;
 }
 
-.left-panel{
+.left-panel {
   max-width: 365px;
   display: flex;
 }
 
-.right-panel {
+.right-wrapper {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  flex: 1 0 0;
+}
 
-  gap: 20px;
+.top,
+.bottom {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
 }
 
 .temperature-card {
-
-  background-color: #f0f0f0;
-  padding: 20px;
+  flex: 1;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 }
+
 </style>

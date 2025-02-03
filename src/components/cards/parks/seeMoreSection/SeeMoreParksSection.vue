@@ -79,4 +79,5 @@ export default {
   .download-card{
     width: 100%;
   }
+
   </style>

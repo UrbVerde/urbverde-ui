@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 .content {
   display: flex;
@@ -73,8 +73,11 @@ export default {
 .see-more-cards {
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  margin: 20px;
-  flex-wrap: wrap;
+  gap: 24px;
 }
+
+.download-card{
+  width: 100%;
+}
+
 </style>

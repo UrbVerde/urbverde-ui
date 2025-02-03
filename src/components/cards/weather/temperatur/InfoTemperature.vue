@@ -38,15 +38,13 @@ export default {
 
 .info-card {
   width: 365px;
-  height: 412px;
+  height: auto;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-self: stretch;
-  background-color: var(--Gray-White, #FFF);
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
   padding: 48px 40px 48px 40px;
 }
 
