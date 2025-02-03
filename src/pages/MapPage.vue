@@ -279,12 +279,6 @@ export default {
   flex-wrap: wrap;
 }
 
-.widget {
-  flex: 1 1 300px;
-  min-width: 300px;
-  max-width: 100%;
-}
-
 /* Footer styles */
 .footer {
   width: 100%;

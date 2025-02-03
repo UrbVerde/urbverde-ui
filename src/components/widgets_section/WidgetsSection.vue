@@ -224,6 +224,7 @@ export default {
   gap: 32px;
   align-self: stretch;
   flex-grow: 1;
+  width: 100%;
 }
 
 .statistics-container {
