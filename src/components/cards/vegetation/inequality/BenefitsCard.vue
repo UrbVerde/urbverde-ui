@@ -4,16 +4,22 @@
       <h2 class="benefits-card-title heading-h5">Quais os benefícios de uma cidade arborizada?</h2>
       <ul class="benefits-card-list">
         <li class="benefits-card-item">
-          <span class="benefits-card-number">1</span>
-          Árvores &nbsp;<b>reduzem a sensação de calor</b>, criando ambientes mais frescos.
+          <span class="benefits-card-number body-small-medium">1</span>
+          <p class="body-small-regular">
+            Árvores &nbsp;<b>reduzem a sensação de calor</b>, criando ambientes mais frescos.
+          </p>
         </li>
         <li class="benefits-card-item">
-          <span class="benefits-card-number">2</span>
-          Ajudam a filtrar poluentes e &nbsp;<b>melhorar a qualidade do ar</b>&nbsp; nas cidades.
+          <span class="benefits-card-number body-small-medium">2</span>
+          <p class="body-small-regular">
+            Ajudam a filtrar poluentes e &nbsp;<b>melhorar a qualidade do ar</b>&nbsp; nas cidades.
+          </p>
         </li>
         <li class="benefits-card-item">
-          <span class="benefits-card-number">3</span>
-          <b>Políticas públicas</b>&nbsp; podem auxiliar a promover mais áreas verdes nas cidades
+          <span class="benefits-card-number body-small-medium">3</span>
+          <p class="body-small-regular">
+            <b>Políticas públicas</b>&nbsp; podem auxiliar a promover mais áreas verdes nas cidades
+          </p>
         </li>
       </ul>
       <PrimaryButton
@@ -42,17 +48,22 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+p{
+  margin: 0;
+}
+
 .benefits-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: white;
-  border: 1px solid var(--Gray-200, #E9ECEF);
+  gap: 56px;
+  justify-content: center;
+  background: map-get($gray, white);
+  border: 1px solid map-get($gray, 200);
   border-radius: 16px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  padding: 16px;
+  padding: 40px 40px 40px 40px;
   box-sizing: border-box;
   flex-grow: 1;
   width: 100%;
@@ -61,12 +72,11 @@ export default {
 }
 
 .benefits-card-content {
-  flex: 1;
-  padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: justify;
+  gap: 32px;
 }
 
 .benefits-card-image {
@@ -83,40 +93,37 @@ export default {
   object-fit: contain;
 }
 
-.benefits-card-title {
-  margin-bottom: 32px;
-}
-
 .benefits-card-list {
+  display: flex;
+  flex-direction: column;
   list-style: none;
   padding: 0;
+  gap: 12px;
   margin: 0;
 }
 
 .benefits-card-item {
   display: flex;
+  gap: 12px;
   align-items: center;
   font-size: 14px;
   color: #374151;
-  margin-bottom: 12px;
 }
 
 .benefits-card-number {
-  width: 21px;
-  height: 21px;
-  background-color: #e7f6e8;
-  font-weight: bold;
-  border-radius: 50%;
   display: flex;
-  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0px 10px;
+  flex-direction: column;
   justify-content: center;
-  margin-right: 8px;
-
-  color: var(--Green-700, #0F5132);
+  align-items: center;
+  gap: 10px;
+  border-radius: 99px;
+  background: map-get($green, 100);
 }
 
 .benefits-card-button {
-  margin-top: 16px;
   align-self: flex-start;
 }
 </style>
