@@ -1,12 +1,17 @@
 <!-- urbverde-ui/src/App.vue -->
 <template>
   <div id="app">
-    <router-view />
+    <Legenda/>
   </div>
 </template>
 
 <script>
+import Legenda from './components/map/Legenda.vue';
+
 export default {
   name: 'App',
+  components: {
+    Legenda
+  }
 };
 </script>
