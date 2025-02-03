@@ -88,7 +88,6 @@ export default {
 .vegetation-info {
     display: flex;
     flex: 1;
-    min-width: 300px;
     max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;

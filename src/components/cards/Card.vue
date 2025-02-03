@@ -62,6 +62,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 p, h6{
   margin: 0;
 }
@@ -112,7 +113,7 @@ p, h6{
   justify-content: center;
 }
 
-.content-wraper .textodescritivo{
+.textodescritivo{
   color: map-get($gray, 600);
   align-self: stretch;
   display: flex;

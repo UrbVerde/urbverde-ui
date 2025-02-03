@@ -24,11 +24,18 @@
           </li>
         </ul>
       </div>
-      <PrimaryButton
-        label="Ver mais dicas"
-        :filled="true"
-        class="benefits-card-button"
-      />
+      <a
+        href="https://urbverde-educa.tawk.help/category/categorias-e-camadas/pra%C3%A7as-e-parques"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="body-small-regular"
+      >
+        <PrimaryButton
+          label="Ver mais dicas"
+          :filled="true"
+          class="benefits-card-button"
+        />
+      </a>
     </div>
     <div class="benefits-card-image">
       <img
@@ -51,6 +58,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+a{
+  text-decoration: none;
+}
+
 p {
   margin: 0;
 }
