@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/logo_router_link/LogoRouterLink.vue -->
 <template>
   <router-link :to="to" class="container">
     <img src="@/assets/images/logo-white.svg" alt="Logo Homepage" class="logo" />

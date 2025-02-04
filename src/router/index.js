@@ -1,4 +1,4 @@
-// router/index.js (example)
+// urbverde-ui/src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/pages/Home.vue';
 import MapPage from '@/pages/MapPage.vue';
