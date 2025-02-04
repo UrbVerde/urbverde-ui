@@ -595,16 +595,18 @@ function submit() {
         uf: locationChosen.value.split(' - ')[1],
       });
     });
+    emit('interaction-succeeded');
   }
-  emit('interaction-succeeded');
+
 }
 // Chama a função para buscar coordenadas
 function handleEnter() {
-  if (suggestions.value.length > 0) {
+  if (suggestions.value.length > 0 && inputValue.value) {
     selectSuggestion(suggestions.value[0]);
     if (inputField.value) { inputField.value.blur(); }
     submit();
   }
+
 }
 
 function addToHistory(item) {
