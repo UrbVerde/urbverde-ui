@@ -128,7 +128,7 @@ const states = [ // All this shouldnt be hardcorded here in the next versions (!
   'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
 ];
 
-const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
+const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction', 'interaction-succeeded']);
 
 // Refs for DOM elements
 const inputField = ref(null);
@@ -299,6 +299,7 @@ async function selectSuggestion(suggestion) {
   loadAnimation();
   updateSuggestions();
   addToHistory(suggestion.text);
+  emit('interaction-succeeded');
 }
 
 function handleFocus(event) {
@@ -595,6 +596,7 @@ function submit() {
       });
     });
   }
+  emit('interaction-succeeded');
 }
 // Chama a função para buscar coordenadas
 function handleEnter() {

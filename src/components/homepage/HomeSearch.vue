@@ -2,13 +2,16 @@
 <template>
   <div class="search">
     <div class="search-button">
-      <BuscaSimples @location-updated="onLocationUpdated" :openDelay="0" />
+      <BuscaSimples @location-updated="onLocationUpdated"
+                    @interaction-succeeded="handleNavigation"
+                    :openDelay="0" />
     </div>
   </div>
 </template>
 
 <script>
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'HomeSearch',
@@ -37,6 +40,11 @@ export default {
       default: 'bi bi-arrow-right',
     },
   },
+  setup() {
+    const router = useRouter();
+
+    return { router };
+  },
   data() {
     return {
       windowWidth: window.innerWidth,
@@ -48,6 +56,11 @@ export default {
     },
     updateWindowWidth() {
       this.windowWidth = window.innerWidth;
+    },
+    handleNavigation() {
+      setTimeout(() => {
+        this.router.push('/mapa');
+      }, 800); // 1000 milliseconds = 1 second
     },
   },
   mounted() {
