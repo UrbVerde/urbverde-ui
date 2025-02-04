@@ -343,6 +343,7 @@ h5, p{
 }
 
   .placeholder-wrapper .label{
+    color: #212529;
     display: flex;
     flex-direction: column;
     justify-content: center;
