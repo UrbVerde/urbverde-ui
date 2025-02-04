@@ -1,5 +1,4 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
-  <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="layout-container">
     <Sidebar
@@ -10,7 +9,7 @@
     <!-- Main content -->
     <main
       class="main-content"
-      :class="{ 'content-expanded': !isSidebarOpen }"
+      :class="{ 'content-collapsed': !isSidebarOpen }"
     >
       <div v-if="!locationStore.cd_mun" class="placeholder-container">
         <img src="../assets/images/setLocation.png" alt="Selecione um município" class="map-placeholder" />
@@ -56,7 +55,6 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
-
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
@@ -223,7 +221,7 @@ useHead({
   min-height: 100vh;
   width: 100%;
   background-color: #F8F9FACC;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Sidebar styles */
@@ -251,7 +249,7 @@ useHead({
   position: relative;
 }
 
-.main-content.content-expanded {
+.main-content.content-collapsed {
   margin-left: 72px;
   width: calc(100% - 72px);
 }
