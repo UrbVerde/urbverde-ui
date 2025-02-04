@@ -1,20 +1,28 @@
-<!-- src/components/navbar/Navbar.vue -->
+<!-- urbverde-ui/src/components/navbar/Navbar.vue -->
 <template>
   <div class="navbar">
     <div class="response">
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
-        <div class="header-left">
-          <h5>[ {{ currentLayer }} ] em {{ cityName }} </h5>
+        <div class="header-left heading-h5">
+          <h5>{{ layer }} em {{ cityName }}-{{ uf }}</h5>
         </div>
         <div class="header-right">
           <button @click="shareMap" class="share-button">
             <img src="../../assets/icons/share.svg" alt="Compartilhar" />
           </button>
-          <button @click="layerInfo" class="info-button">
-            <img src="../../assets/icons/info.svg" alt="Entender esse dado" />
-            Entender esse dado
-          </button>
+
+          <a
+            href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button @click="layerInfo" class="info-button">
+              <img src="../../assets/icons/info.svg" alt="Entender esse dado" />
+              <p class="body-small-regular">Entender esse dado</p>
+            </button>
+          </a>
+
         </div>
       </div>
 
@@ -27,7 +35,7 @@
           :class="{ 'active-tab': activeSection === tab.id }"
           class="tab-button"
         >
-          {{ tab.label }}
+          <p class="body-small-medium">{{ tab.label }}</p>
         </button>
       </div>
     </div>
@@ -50,13 +58,15 @@ export default {
   setup() {
     const locationStore = useLocationStore();
 
-    // Computed properties from store
-    const currentLayer = computed(() => locationStore.layer || 'layer?');
-    const cityName = computed(() => locationStore.nm_mun || 'city?');
+    const layer = computed(() => locationStore.currentLayerName);  // Use currentLayerName instead
+    console.log('Navbar computed - current layer:', locationStore.currentLayerName);
+    const cityName = computed(() => locationStore.nm_mun);
+    const uf = computed(() => locationStore.uf);
 
     return {
-      currentLayer,
-      cityName
+      layer,
+      cityName,
+      uf
     };
   },
 
@@ -81,29 +91,37 @@ export default {
       alert(`Compartilhar: ${url}`);
     },
     layerInfo() {
-      alert('Info do dado');
+      //alert('Info do dado');
     },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+p, h5{
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
 .navbar {
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 10000;
   background-color: #F8F9FACC;
   box-sizing: border-box;
   padding: 32px 40px;
-  display: block;
-  background: rgba(248, 249, 250, 0.80);
+  display: flex;
   backdrop-filter: blur(10px);
 }
 
 .response {
   width: 100%;
   display: flex;
+  gap: 8px;
   flex-direction: column;
 }
 
@@ -116,11 +134,7 @@ export default {
 }
 
 .header-left h5 {
-  color: var(--Body-Text-Body-Color, #212529);
-  font-family: Inter, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 24px;
+  color: map-get($body-text, body-color);
 }
 
 .header-right {
@@ -138,7 +152,8 @@ export default {
   cursor: pointer;
   background: #fff;
   border-radius: 6px;
-  border: 1px solid #f8f9fa;
+  border: 1px solid map-get($gray, 200);
+  color: map-get($body-text, body-color);
 }
 
 /* Specific sizes */
@@ -152,11 +167,8 @@ export default {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  background: var(--Gray-White, #FFF);
   border-radius: 6px;
-  border: 1px solid #F8F9FA;
-  /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); */
-  /* border: 1px solid var(--Gray-200, #E9ECEF); */
+  border: 1px solid map-get($gray, 200);
 }
 
 .info-button {
@@ -180,28 +192,27 @@ export default {
 .tabs {
   display: flex;
   align-items: center;
-  gap: 16px;
-  /* margin-top: 16px */
+  gap: 8px;
 }
 
 .tab-button {
   background-color: transparent;
   border: none;
-  padding: 4px 24px;
+  padding: 4px 16px;
   font-size: 14px;
   cursor: pointer;
-  color: #333;
+  color: map-get($theme, secondary);
 }
 
 .tab-button:hover {
-  background-color: #f0f0f0;
-  border-radius: 16px;
+  color: map-get($theme, primary);
 }
 
 .active-tab {
-  background-color: #d2e8dd;
-  color: #025949;
+  background-color: map-get($primary-fade, 100);
+  color: map-get($theme, primary);
   border-radius: 16px;
+  padding: 4px 16px;
   font-weight: 600;
 }
 </style>

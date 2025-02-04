@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/YearPicker.vue -->
 <!-- YearPicker.vue -->
 <template>
   <div class="date-picker">
@@ -78,6 +79,10 @@ const props = defineProps({
   cityCode: {
     type: Number,
     required: true
+  },
+  layer: {
+    type: String,
+    required: true
   }
 });
 
@@ -105,12 +110,30 @@ watch(currentYear, (newValue) => {
 
 const fetchYears = async(cityCode) => {
   try {
-    const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`);
+    let apiUrl = '';
+
+    // Escolhe o endpoint da API com base na camada selecionada
+    switch (props.layer) {
+    case 'temperatura':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
+      break;
+    case 'vegetação':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/vegetation/coverage?city=${cityCode}`;
+      break;
+    case 'parques':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/parks/info?city=${cityCode}`;
+      break;
+    default:
+      apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
+    }
+
+    const response = await fetch(apiUrl);
 
     if (!response.ok) {
       throw new Error('Failed to fetch years');
 
     }
+
     const data = await response.json();
     years.value = data;
   } catch (error) {
@@ -118,6 +141,7 @@ const fetchYears = async(cityCode) => {
     years.value = [];
 
   }
+
 };
 
 const availableYears = computed(() => [...years.value].sort((a, b) => a - b));
@@ -258,6 +282,7 @@ onBeforeUnmount(() => {
     align-items: center;
     padding: 1px;
     color: #6C757D;
+    color: azure;
 }
 
 .input-text {

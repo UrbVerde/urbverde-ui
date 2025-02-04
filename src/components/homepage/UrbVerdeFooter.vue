@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/homepage/UrbVerdeFooter.vue -->
 <template>
   <div class="footer">
     <div class="newsletter">
@@ -74,27 +75,15 @@
       </router-link>
 
       <div class="links body-small-medium">
-        <router-link to="/mapa">Plataforma</router-link>
+        <router-link to="/sobre">Quem Somos</router-link>
+        <router-link to="/parceiro">Seja Parceiro</router-link>
+        <router-link to="/contato">Contatos</router-link>
         <a
           href="https://urbverde-educa.tawk.help/"
           target="_blank"
           rel="noopener noreferrer"
         >
           UrbVerde Educa
-        </a>
-        <a
-          href="https://urbverde-educa.tawk.help/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Contatos
-        </a>
-        <a
-          href="https://urbverde-educa.tawk.help/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Termos de uso
         </a>
       </div>
 
@@ -235,6 +224,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 a {
   text-decoration: none;
 }
@@ -440,4 +431,60 @@ a {
     }
   }
 }
+
+// Specific media
+@media screen and (max-width: 1100px) {
+
+  .footer {
+    padding: 0px 24px;
+  }
+
+  .links {
+    flex-direction: column;
+  }
+
+}
+
+// Specific media where the footer is displayed in a single column
+@media screen and (max-width: 720px) {
+
+  .footer .newsletter .heading-h4{
+    font-size: 20px;
+  }
+
+  .footer .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px 40px 24px;
+    gap: 40px;
+
+    .links {
+      order: 1;
+      width: 100%;
+    }
+
+    .midias {
+      order: 2;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .button-primary-link {
+      order: 3;
+      width: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+@include breakpoint-down('mobile-large') {
+
+  .footer .newsletter .form {
+    width: 100%;
+  }
+
+}
+
 </style>
