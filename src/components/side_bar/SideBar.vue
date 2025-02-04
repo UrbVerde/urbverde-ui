@@ -2,7 +2,7 @@
 <template>
   <aside>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
-      <div :class="['top-area', { 'top-area-open': isOpen }]">
+      <div class="top-area">
         <LogoButton v-show="showContent" />
         <MinimizeButton @click="toggleSidebar" />
       </div>
@@ -11,8 +11,6 @@
       </div>
 
       <template v-if="isSearchDone">
-        <!-- componente botão de painel: brasil / políticas públicas -->
-
         <div v-show="showContent" class="middle-area">
           <DropDown />
         </div>
@@ -40,14 +38,21 @@ import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import DropDown from './drop_down/CategoriesDropdown.vue';
 
-// Define emits
-// const emit = defineEmits(['toggle-sidebar']);
+// Props
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true
+  }
+});
+
+// Emits
+const emit = defineEmits(['toggle-sidebar']);
 
 // Store
 const locationStore = useLocationStore();
 
 // Component state
-const isOpen = ref(true);
 const showContent = ref(true);
 
 // Computed to check if search is complete
@@ -55,17 +60,14 @@ const isSearchDone = computed(() => locationStore.cd_mun && locationStore.type);
 
 // Sidebar toggle handler with animation
 async function toggleSidebar() {
-  if (isOpen.value) {
+  if (props.isOpen) {
     showContent.value = false;
-    isOpen.value = false;
   } else {
-    isOpen.value = true;
     await new Promise(resolve => setTimeout(resolve, 200));
     showContent.value = true;
   }
-  localStorage.setItem('sidebarOpen', isOpen.value);
-};
-
+  emit('toggle-sidebar');
+}
 </script>
 
 <style scoped>
@@ -89,8 +91,6 @@ async function toggleSidebar() {
     flex-direction: column;
     align-items: flex-start;
     flex-shrink: 0;
-    /* background: var(--Gray-White, #FFF); */
-    /* height: 100%; Garante que o sidebar ocupe a tela */
   }
 
   /* Rest of the styles remain unchanged */
