@@ -12,7 +12,13 @@
       :class="{ 'content-collapsed': !isSidebarOpen }"
     >
       <div v-if="!locationStore.cd_mun" class="placeholder-container">
-        <img src="../assets/images/setLocation.png" alt="Selecione um município" class="map-placeholder" />
+        <div class="placeholder-wrapper">
+          <img src="../assets/images/setLocation.png" alt="Selecione um município" />
+          <div class="label">
+            <h5 class="heading-h5">Inicie buscando um lugar</h5>
+            <p class="body-small-regular">Experimente um município ou estado</p>
+          </div>
+        </div>
       </div>
 
       <div v-else class="content-wrapper">
@@ -216,6 +222,10 @@ useHead({
 </script>
 
 <style scoped>
+h5, p{
+  margin: 0;
+}
+
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -319,13 +329,26 @@ useHead({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 60px);
+  height: 100%;
   width: 100%;
 }
 
-.map-placeholder {
-  max-width: 100%;
-  height: auto;
-  opacity: 0.45;
+.placeholder-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  align-self: stretch;
 }
+
+  .placeholder-wrapper .label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+  }
+
 </style>
