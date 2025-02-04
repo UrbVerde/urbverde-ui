@@ -11,7 +11,7 @@
                @input="handleInput"
                @focus="handleFocus"
                @keydown.enter="handleEnter"
-               :placeholder="!inputValue && !highlightedText ? 'Buscar um local :)' : ''"
+               :placeholder="!inputValue && !highlightedText ? 'Buscar um local' : ''"
                class="input-field small-regular"
                :disabled="!isInputActive"
                @click="activateInput" />
