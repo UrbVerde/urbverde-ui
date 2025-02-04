@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="see-more-cards">
-      <SeeMoreCard v-if="cardData.length" :data="cardData" @change-layer="handleChangeLayer" />
+      <SeeMoreCard v-if="cardData.length" :data="cardData" />
     </div>
     <div class="download-card">
       <DownloadCard/>
@@ -61,20 +61,6 @@ export default {
         console.error('Erro ao buscar dados do cartão:', error);
       }
     },
-
-    handleChangeLayer(index) {
-      const layerMap = ['temperatura', 'parques', 'parques']; // Associe manualmente os índices às camadas
-      const selectedLayer = layerMap[index] || 'temperatura'; // Default caso haja erro
-      this.$emit('change-layer', selectedLayer);
-      this.scrollToTop();
-    },
-
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth' // Adiciona um efeito de rolagem suave
-      });
-    }
   }
 };
 </script>
