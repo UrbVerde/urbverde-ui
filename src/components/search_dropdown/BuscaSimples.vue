@@ -11,12 +11,12 @@
                @input="handleInput"
                @focus="handleFocus"
                @keydown.enter="handleEnter"
-               :placeholder="!inputValue && !highlightedText ? 'Buscar um local :)' : ''"
-               class="input-field small-regular"
+               :placeholder="!inputValue && !highlightedText ? 'Buscar um local' : ''"
+               class="input-field body-small-regular"
                :disabled="!isInputActive"
                @click="activateInput" />
-        <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
-          <span class="suggestion-text small-regular">
+        <div v-if="highlightedText && inputValue" class="suggestion-overlay body-small-regular">
+          <span class="suggestion-text body-small-regular">
             <span class="invisible ">{{ visibleInput }}</span>
             <span class="highlight ">{{ highlightedText }}</span>
           </span>
@@ -59,13 +59,13 @@
         <div class="filter-container">
           <div class="filter-button-container" ref="filterButtonContainer">
             <button
-              :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
+              :class="{ 'filter-button body-small-regular': !filterAll, 'filter-button-active body-small-medium': filterAll }"
               @click="toggleAll">Todos</button>
             <button
-              :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
+              :class="{ 'filter-button body-small-regular': !filterCity, 'filter-button-active body-small-medium': filterCity }"
               @click="toggleCity">Municípios</button>
             <button
-              :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
+              :class="{ 'filter-button body-small-regular': !filterState, 'filter-button-active body-small-medium': filterState }"
               @click="toggleState">Estados</button>
           </div>
         </div>
@@ -86,7 +86,7 @@
                width="20"
                height="20"></i>
 
-            <span class="item-text small-regular">
+            <span class="item-text body-small-regular">
               <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
               <span>{{ getUnmatchedPart(suggestion.text) }}</span>
             </span>
@@ -876,6 +876,7 @@ function emitLocationUpdate(payload) {
   display: flex;
   flex-direction: row;
   align-items: center;
+  color: #212529;
 }
 
 .clean-button,
@@ -886,6 +887,7 @@ function emitLocationUpdate(payload) {
   gap: 10px;
   background: none;
   border: none;
+  color: #212529;
 }
 
 .clean-button-hidden {

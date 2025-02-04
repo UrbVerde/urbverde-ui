@@ -72,7 +72,9 @@ export default {
 };
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .search {
     margin: 0;
     padding: 0;
@@ -102,10 +104,27 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 480px;
     position: relative;
-    z-index: 10;
-    border-radius: 99%;
+    border-radius: 99px;
   }
+
+  @include breakpoint-down('tablet'){
+    .search-button{
+      width: 400px;
+    }
+  }
+
+  @include breakpoint-down('mobile-large'){
+    .search-button{
+      width: 320px;
+    }
+  }
+
+  @include breakpoint-down('mobile-medium'){
+    .search-button{
+      width: 272px;
+    }
+  }
+
   </style>

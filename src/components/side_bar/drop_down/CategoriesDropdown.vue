@@ -1,7 +1,7 @@
 <!-- urbverde-ui\src\components\side_bar\drop_down\CategoriesDropdown.vue -->
 <template>
   <div class="container" ref="containerRef">
-    <span class="header-title caption-medium">CAMADAS</span>
+    <span class="header-title body-caption-regular">CAMADAS</span>
 
     <div class="categories-list">
       <div v-for="(category) in categories" :key="category.id" class="category-dropdown">
@@ -13,12 +13,12 @@
           <div class="category-icon">
             <IconComponent :name="category.icon" :size="20" />
           </div>
-          <span class="category-name small-regular">{{ category.name }}</span>
+          <span class="category-name body-small-regular">{{ category.name }}</span>
 
           <!-- Show "1" if there is an active layer in that category -->
           <div class="badge-right-menu"
                v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)">
-            <span class="textBadge caption-medium">1</span>
+            <span class="textBadge body-caption-medium">1</span>
           </div>
 
           <i :class="openCategoryIds.includes(category.id)
@@ -32,7 +32,7 @@
               :key="layer.id"
               :class="['layer-item', { 'active-layer': layer.isActive }]"
               @click="selectLayer(layer, category)">
-            <span class="layer-name small-regular">
+            <span class="layer-name body-small-regular">
               {{ layer.display_name || layer.title || layer.name }}
             </span>
 
@@ -144,7 +144,8 @@ onUnmounted(() => {
 });
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
+
   .container {
     display: flex;
     flex-direction: column;
@@ -153,18 +154,17 @@ onUnmounted(() => {
     flex: 1 0 0;
     overflow-y: auto;
     height: 100%;
-    padding: 0;
+    padding: 0 !important;
   }
 
   .header-title {
-    color: var(--Theme-Secondary, #6C757D);
+    color: map-get($theme, secondary);
     position: sticky;
     top: 0;
     z-index: 2;
-    background-color: white;
-    margin-top: -8px;
-    margin-bottom: -4px;
-    border-bottom: 4px solid white;
+    background-color: map-get($gray, white);
+    margin: 0;
+    border-bottom: 4px solid map-get($gray, white);
   }
 
   .categories-list {
@@ -173,10 +173,7 @@ onUnmounted(() => {
     gap: 8px;
     align-self: stretch;
     padding: 0 0;
-  }
-
-  .category-dropdown {
-    padding-bottom: 8px;
+    color: map-get($body-text, body-color);
   }
 
   .category-header {
@@ -189,15 +186,15 @@ onUnmounted(() => {
   }
 
   .category-header:hover {
-    background: var(--Gray-200, #E9ECEF);
+    background: map-get($gray, 200);;
   }
 
   .category-header.open {
-    background: var(--Primary-Fade-100, #F8F9FA);
+    background: map-get($gray, 100);
   }
 
   .category-header.open:hover {
-    background: var(--Gray-200, #E9ECEF);
+    background: map-get($gray, 200);
   }
 
   .category-name {
@@ -210,8 +207,8 @@ onUnmounted(() => {
     padding: 2px 8px;
     gap: 10px;
     border-radius: 4px;
-    color: var(--Theme-Primary, #025949);
-    background: var(--Primary-Fade-100, #D2E8DD);
+    color: map-get($theme, primary);
+    background: map-get($primary-fade, 100);
     width: 22px;
     height: 22px;
     justify-content: center;
@@ -226,29 +223,23 @@ onUnmounted(() => {
   }
 
   .category-icon{
-
     width: 20px;
     height: 20px;
-
     display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .layers-list {
     list-style-type: none;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0px 0px 0px 0px;
+    margin-bottom: 12px;
+    padding: 8px 0 8px 0;
     border-top: 4px solid white;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-
-    background: var(--Primary-Fade-100, #F8F9FA);
-
+    background: map-get($gray, 100);
     gap: 8px;
 
   }
@@ -256,23 +247,20 @@ onUnmounted(() => {
   .layer-item {
     cursor: pointer;
     display: flex;
-
     align-items: center;
     gap: 10px;
-
     padding: 8px 16px 8px 24px;
-
     align-self: stretch;
 
   }
 
   .layer-item:not(.active-layer):hover {
-    background: var(--Gray-200, #E9ECEF);
+    background: map-get($gray, 200);;
   }
 
   .active-layer {
-    border-left: 3px solid var(--Body-Text-Body-Color, #212529);
-    background: var(--Primary-Fade-100, #D2E8DD);
+    border-left: 3px solid map-get($theme, primary);
+    background: map-get($primary-fade, 100);
   }
 
   .layer-name {
@@ -285,8 +273,8 @@ onUnmounted(() => {
     padding: 2px 8px;
     gap: 10px;
     border-radius: 4px;
-    color: var(--Theme-Primary, #025949);
-    background: var(--Primary-Fade-100, #D2E8DD);
+    color: map-get($theme, primary);
+    background: map-get($primary-fade, 100);
     width: 22px;
     height: 22px;
     justify-content: center;

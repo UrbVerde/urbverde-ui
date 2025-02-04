@@ -16,13 +16,17 @@
         </div>
 
         <div v-show="showContent" class="bottom-area">
-          <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
+
+          <a href="/parceiro"
+             class="link-button"
+             target="_blank"
+             rel="noopener noreferrer">
             <i class="bi bi-upload" tag="imgIcon"></i>
-            <span id="txtBottom small-regular">Colaborar com dados</span>
+            <span class="txtBottom body-small-regular">Enviar dados</span>
           </a>
-          <a class="link-button" href="https://urbverde-educa.tawk.help/" target="_blank">
-            <i class="bi bi-question-circle" tag="imgIcon"></i>
-            <span id="txtBottom small-regular">Central de ajuda</span>
+          <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
+            <i class="bi bi-megaphone" tag="imgIcon"></i>
+            <span class="txtBottom body-small-regular">Informar um erro</span>
           </a>
         </div>
       </template>
@@ -70,7 +74,7 @@ async function toggleSidebar() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .sidebar {
     position: fixed;
     top: 0;
@@ -79,7 +83,7 @@ async function toggleSidebar() {
     height: 100vh;
     transition: 0.3s;
     overflow: hidden;
-    background: var(--Gray-White, #FFF);
+    background: map-get($gray, white);
     box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
     z-index: 100;
   }
@@ -102,7 +106,7 @@ async function toggleSidebar() {
     align-items: center;
     gap: 8px;
     align-self: stretch;
-    background: var(--White, #FFF);
+    background: map-get($gray, white);
     box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   }
 
@@ -163,7 +167,7 @@ async function toggleSidebar() {
 
   .link-button {
     text-decoration: none;
-    color: var(--Primary-Color, black);
+    color: map-get($body-text, body-color);
     display: flex;
     padding: 8px 8px;
     justify-content: start;
@@ -172,14 +176,13 @@ async function toggleSidebar() {
     align-self: stretch;
   }
 
-  #txtBottom {
+  .txtBottom {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     flex: 1 0 0;
-    font-family: Inter, sans-serif;
-    font-size: small;
+    color: map-get($body-text, body-color);
   }
 
   #imgIcon {
