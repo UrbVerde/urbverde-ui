@@ -102,10 +102,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 480px;
     position: relative;
-    z-index: 10;
-    border-radius: 99%;
+    border-radius: 99px;
   }
   </style>
