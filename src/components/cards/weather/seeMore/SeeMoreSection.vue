@@ -2,10 +2,10 @@
 <template>
   <div class="content">
     <div class="see-more-cards">
-      <SeeMoreCard v-if="cardData.length" :data="cardData" />
+      <SeeMoreCard v-if="cardData.length" :data="cardData"  />
     </div>
     <div class="download-card">
-      <DownloadCard/>
+      <DownloadCard />
     </div>
   </div>
 </template>
@@ -25,6 +25,10 @@ export default {
   props: {
     cityCode: {
       type: Number,
+      required: true
+    },
+    changeLayer: {
+      type: Function,
       required: true
     }
   },
@@ -57,7 +61,7 @@ export default {
       } catch (error) {
         console.error('Erro ao buscar dados do cartão:', error);
       }
-    }
+    },
   }
 };
 </script>

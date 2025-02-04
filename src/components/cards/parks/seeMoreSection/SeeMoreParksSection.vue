@@ -25,6 +25,10 @@ export default {
     cityCode: {
       type: Number,
       required: true
+    },
+    changeLayer: {
+      type: Function,
+      required: true
     }
   },
 
@@ -56,7 +60,7 @@ export default {
       } catch (error) {
         console.error('Erro ao buscar dados do cartão:', error);
       }
-    }
+    },
   }
 };
 </script>
