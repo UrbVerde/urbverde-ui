@@ -108,7 +108,7 @@ a {
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 1000;
   background-color: #F8F9FACC;
   box-sizing: border-box;
   padding: 32px 40px;
@@ -190,13 +190,13 @@ a {
 .tabs {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
 .tab-button {
   background-color: transparent;
   border: none;
-  padding: 4px 8px;
+  padding: 4px 16px;
   font-size: 14px;
   cursor: pointer;
   color: map-get($theme, secondary);
@@ -210,7 +210,7 @@ a {
   background-color: map-get($primary-fade, 100);
   color: map-get($theme, primary);
   border-radius: 16px;
-  padding: 4px 24px;
+  padding: 4px 16px;
   font-weight: 600;
 }
 </style>

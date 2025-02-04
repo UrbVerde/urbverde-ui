@@ -23,25 +23,25 @@
           @navigate-to="scrollToSection"
         />
 
-        <div class="map-section">
-          <div id="map" ref="Mapa" class="map-container">
-            <MapBox :coordinates="coordinates" class="map-box">
-              <Legenda />
-            </MapBox>
+        <div class="page-content">
+          <div class="map-section">
+            <div id="map" ref="Mapa" class="map-container">
+              <MapBox :coordinates="coordinates" class="map-box">
+                <Legenda />
+              </MapBox>
+            </div>
           </div>
+
+          <WidgetsSection
+            :default-year="defaultYear"
+            :city-code="cityCode"
+            @first-year-change="handleFirstYearChange"
+            @second-year-change="handleSecondYearChange"
+            @third-year-change="handleThirdYearChange"
+          />
+
+          <UrbVerdeFooter id="newsletter" />
         </div>
-
-        <WidgetsSection
-          :default-year="defaultYear"
-          :city-code="cityCode"
-          @first-year-change="handleFirstYearChange"
-          @second-year-change="handleSecondYearChange"
-          @third-year-change="handleThirdYearChange"
-        />
-
-        <UrbVerdeFooter
-          id="newsletter"
-        />
       </div>
     </main>
   </div>
@@ -219,7 +219,7 @@ export default {
   width: 301px;
   overflow-y: auto;
   transition: width 0.3s ease;
-  z-index: 10;
+  z-index: 100;
 }
 
 .sidebar.collapsed {
@@ -234,11 +234,19 @@ export default {
   width: calc(100% - 301px);
   transition: all 0.3s ease;
   overflow-x: hidden;
+  position: relative;
 }
 
 .main-content.content-expanded {
   margin-left: 72px;
   width: calc(100% - 72px);
+}
+
+.page-content {
+  padding-top: 147px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .content-wrapper {
@@ -250,10 +258,17 @@ export default {
 
 /* Navbar styles */
 .navbar {
-  width: 100%;
-  position: sticky;
+  width: calc(100% - 301px);
+  position: fixed;
   top: 0;
-  z-index: 5;
+  left: 301px;
+  z-index: 99;
+  transition: all 0.3s ease;
+}
+
+.navbar.navbar-collapsed {
+  width: calc(100% - 72px);
+  left: 72px;
 }
 
 /* Map container styles */
