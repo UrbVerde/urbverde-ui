@@ -1,18 +1,24 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
-  <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="layout-container">
     <Sidebar
       :is-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar"
     />
-    <!-- Main content (navbar, map, etc.) -->
+
+    <!-- Main content -->
     <main
       class="main-content"
-      :class="{ 'content-expanded': !isSidebarOpen }"
+      :class="{ 'content-collapsed': !isSidebarOpen }"
     >
       <div v-if="!locationStore.cd_mun" class="placeholder-container">
-        <img src="../assets/images/setLocation.png" alt="Selecione um município" class="map-placeholder" />
+        <div class="placeholder-wrapper">
+          <img src="../assets/images/setLocation.png" alt="Selecione um município" />
+          <div class="label">
+            <h5 class="heading-h5">Inicie buscando um lugar</h5>
+            <p class="body-small-regular">Experimente um município ou estado</p>
+          </div>
+        </div>
       </div>
 
       <div v-else class="content-wrapper">
@@ -22,21 +28,25 @@
           @navigate-to="scrollToSection"
         />
 
-        <div id="map" ref="Mapa" class="content-area">
-          <MapBox class="map-box">
-            <Legenda />
-          </MapBox>
+        <div class="page-content">
+          <div class="map-section">
+            <div id="map" ref="Mapa" class="map-container">
+              <MapBox :coordinates="coordinates" class="map-box">
+                <Legenda />
+              </MapBox>
+            </div>
+          </div>
+
+          <WidgetsSection
+            :default-year="defaultYear"
+            :city-code="cityCode"
+            @first-year-change="handleFirstYearChange"
+            @second-year-change="handleSecondYearChange"
+            @third-year-change="handleThirdYearChange"
+          />
+
+          <UrbVerdeFooter id="newsletter" />
         </div>
-
-        <WidgetsSection
-          :default-year="defaultYear"
-          :city-code="cityCode"
-          @first-year-change="handleFirstYearChange"
-          @second-year-change="handleSecondYearChange"
-          @third-year-change="handleThirdYearChange"
-        />
-
-        <UrbVerdeFooter />
       </div>
     </main>
   </div>
@@ -51,7 +61,6 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/Navbar.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
-
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
@@ -213,50 +222,134 @@ useHead({
 </script>
 
 <style scoped>
+h5, p{
+  margin: 0;
+}
+
 .layout-container {
-  position: relative;
+  display: flex;
   min-height: 100vh;
   width: 100%;
   background-color: #F8F9FACC;
+  overflow-x: hidden;
 }
 
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  height: 100vh;
+  width: 301px;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar.collapsed {
+  width: 72px;
+}
+
+/* Main content styles */
 .main-content {
-  position: relative;
-  min-height: 100vh;
+  flex: 1;
   margin-left: 301px;
-  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+  width: calc(100% - 301px);
+  transition: all 0.3s ease;
+  overflow-x: hidden;
+  position: relative;
 }
 
-.main-content.content-expanded {
+.main-content.content-collapsed {
   margin-left: 72px;
+  width: calc(100% - 72px);
+}
+
+.page-content {
+  padding-top: 147px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .content-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100vh;
+}
+
+/* Navbar styles */
+.navbar {
+  width: calc(100% - 301px);
+  position: fixed;
+  top: 0;
+  left: 301px;
+  z-index: 99;
+  transition: all 0.3s ease;
+}
+
+.navbar.navbar-collapsed {
+  width: calc(100% - 72px);
+  left: 72px;
+}
+
+/* Map container styles */
+.map-section {
+  padding: 0 24px;
+  width: 100%;
 }
 
 .map-container {
   position: relative;
-  flex: 1;
-  display: flex;
+  width: 100%;
+  height: calc(100vh - 171px);
+  overflow: hidden;
 }
 
 .map-box {
-  flex: 1;
+  width: 100%;
+  height: 100%;
 }
 
+/* Widgets section styles */
+.widgets-section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Footer styles */
+.footer {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* Placeholder styles */
 .placeholder-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
-.map-placeholder {
-  display: block;
-  margin: 40px auto;
-  opacity: 0.45;
+.placeholder-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  align-self: stretch;
 }
+
+  .placeholder-wrapper .label{
+    color: #212529;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+  }
+
 </style>

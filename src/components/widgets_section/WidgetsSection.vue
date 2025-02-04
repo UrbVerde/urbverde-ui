@@ -4,6 +4,7 @@
     <div
       v-for="(section, index) in sections"
       :key="`${selectedLayer}-${section.id}`"
+      :id="section.id"
       :ref="section.ref"
       class="box"
     >
@@ -164,7 +165,7 @@ export default {
             component: InequalitySection
           },
           {
-            id: 'rankinVegetation',
+            id: 'ranking',
             ref: 'rankingVegSection',
             title: `${cityName.value} nos rankings de municípios`,
             component: RankVegSection
@@ -191,7 +192,7 @@ export default {
             component: ParksSquaresSection
           },
           {
-            id: 'rankParks',
+            id: 'ranking',
             ref: 'rankParksSection',
             title: `${cityName.value} nos rankings de municípios`,
             component: RankParksSection
@@ -276,6 +277,7 @@ export default {
   gap: 32px;
   align-self: stretch;
   flex-grow: 1;
+  width: 100%;
 }
 
 .statistics-container {

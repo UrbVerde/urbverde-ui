@@ -1097,10 +1097,20 @@ onBeforeUnmount(() => {
 <style scoped>
 .map-container {
   position: relative;
+  border-radius: 15px;
+  background: #F8F9FA;
+  cursor: pointer;
+}
+
+.map-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100vh;
-  background: transparent;
-  overflow: visible;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
 }
 .maplibregl-popup {
   z-index: 999999 !important;

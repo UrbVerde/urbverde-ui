@@ -87,9 +87,16 @@ export default {
 
 .heat-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px;
+  flex-wrap: wrap;
 }
+
+.see-more-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
 
 .tips-card-section {
   margin-top: 20px;
