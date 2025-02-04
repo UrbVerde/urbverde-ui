@@ -158,13 +158,13 @@ onUnmounted(() => {
   }
 
   .header-title {
-    color: var(--Theme-Secondary, #6C757D);
+    color: map-get($theme, secondary);
     position: sticky;
     top: 0;
     z-index: 2;
-    background-color: white;
+    background-color: map-get($gray, white);
     margin: 0;
-    border-bottom: 4px solid white;
+    border-bottom: 4px solid map-get($gray, white);
   }
 
   .categories-list {
@@ -173,10 +173,7 @@ onUnmounted(() => {
     gap: 8px;
     align-self: stretch;
     padding: 0 0;
-  }
-
-  .category-dropdown {
-    padding-bottom: 8px;
+    color: map-get($body-text, body-color);
   }
 
   .category-header {
@@ -189,15 +186,15 @@ onUnmounted(() => {
   }
 
   .category-header:hover {
-    background: var(--Gray-200, #E9ECEF);
+    background: map-get($gray, 200);;
   }
 
   .category-header.open {
-    background: var(--Primary-Fade-100, #F8F9FA);
+    background: map-get($gray, 100);
   }
 
   .category-header.open:hover {
-    background: var(--Gray-200, #E9ECEF);
+    background: map-get($gray, 200);
   }
 
   .category-name {
@@ -210,8 +207,8 @@ onUnmounted(() => {
     padding: 2px 8px;
     gap: 10px;
     border-radius: 4px;
-    color: var(--Theme-Primary, #025949);
-    background: var(--Primary-Fade-100, #D2E8DD);
+    color: map-get($theme, primary);
+    background: map-get($primary-fade, 100);
     width: 22px;
     height: 22px;
     justify-content: center;
@@ -226,29 +223,23 @@ onUnmounted(() => {
   }
 
   .category-icon{
-
     width: 20px;
     height: 20px;
-
     display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .layers-list {
     list-style-type: none;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0px 0px 0px 0px;
+    margin-bottom: 12px;
+    padding: 8px 0 8px 0;
     border-top: 4px solid white;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-
-    background: var(--Primary-Fade-100, #F8F9FA);
-
+    background: map-get($gray, 100);
     gap: 8px;
 
   }
@@ -256,23 +247,20 @@ onUnmounted(() => {
   .layer-item {
     cursor: pointer;
     display: flex;
-
     align-items: center;
     gap: 10px;
-
     padding: 8px 16px 8px 24px;
-
     align-self: stretch;
 
   }
 
   .layer-item:not(.active-layer):hover {
-    background: var(--Gray-200, #E9ECEF);
+    background: map-get($gray, 200);;
   }
 
   .active-layer {
-    border-left: 3px solid var(--Body-Text-Body-Color, #212529);
-    background: var(--Primary-Fade-100, #D2E8DD);
+    border-left: 3px solid map-get($theme, primary);
+    background: map-get($primary-fade, 100);
   }
 
   .layer-name {
@@ -286,7 +274,7 @@ onUnmounted(() => {
     gap: 10px;
     border-radius: 4px;
     color: map-get($theme, primary);
-    background: var(--Primary-Fade-100, #D2E8DD);
+    background: map-get($primary-fade, 100);
     width: 22px;
     height: 22px;
     justify-content: center;

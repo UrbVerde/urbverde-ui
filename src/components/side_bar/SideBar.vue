@@ -83,7 +83,7 @@ async function toggleSidebar() {
     height: 100vh;
     transition: 0.3s;
     overflow: hidden;
-    background: var(--Gray-White, #FFF);
+    background: map-get($gray, white);
     box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
     z-index: 100;
   }
@@ -106,7 +106,7 @@ async function toggleSidebar() {
     align-items: center;
     gap: 8px;
     align-self: stretch;
-    background: var(--White, #FFF);
+    background: map-get($gray, white);
     box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   }
 
