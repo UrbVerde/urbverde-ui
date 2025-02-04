@@ -102,7 +102,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 24px;
+
     width: 480px;
     position: relative;
     z-index: 10;

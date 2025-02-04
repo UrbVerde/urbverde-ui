@@ -3,7 +3,7 @@
   <GetUserLocation @location-updated="updateLocationData" @location-error="handleLocationFailure" />
   <div class="search-wrapper">
     <div ref="inputContainer"
-         :class="{ 'input-container shadow-sm': !dropdown && !isError, 'input-container-dropdown shadow': dropdown && !isError, 'input-container-error shake-animation shadow': isError  }"
+         :class="{ 'input-container shadow': !dropdown && !isError, 'input-container-dropdown shadow': dropdown && !isError, 'input-container-error shake-animation shadow': isError  }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
