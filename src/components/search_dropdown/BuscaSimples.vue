@@ -876,6 +876,7 @@ function emitLocationUpdate(payload) {
   display: flex;
   flex-direction: row;
   align-items: center;
+  color: #212529;
 }
 
 .clean-button,
@@ -886,6 +887,7 @@ function emitLocationUpdate(payload) {
   gap: 10px;
   background: none;
   border: none;
+  color: #212529;
 }
 
 .clean-button-hidden {
