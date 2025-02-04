@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/homepage/HomeSearch.vue -->
 <template>
   <div class="search">
-    <div class="search-button">
+    <div class="search-button shadow">
       <BuscaSimples @location-updated="onLocationUpdated"
                     @interaction-succeeded="handleNavigation"
                     :openDelay="0" />
@@ -106,5 +106,6 @@ export default {
     width: 480px;
     position: relative;
     z-index: 10;
+    border-radius: 99%;
   }
   </style>
