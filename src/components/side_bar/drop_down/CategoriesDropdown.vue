@@ -154,7 +154,7 @@ onUnmounted(() => {
     flex: 1 0 0;
     overflow-y: auto;
     height: 100%;
-    padding: 0;
+    padding: 0 !important;
   }
 
   .header-title {
