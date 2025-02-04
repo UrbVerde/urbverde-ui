@@ -3,7 +3,7 @@
   <GetUserLocation @location-updated="updateLocationData" @location-error="handleLocationFailure" />
   <div class="search-wrapper">
     <div ref="inputContainer"
-         :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+         :class="{ 'input-container shadow-sm': !dropdown && !isError, 'input-container-dropdown shadow': dropdown && !isError, 'input-container-error shake-animation shadow': isError  }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
@@ -128,7 +128,7 @@ const states = [ // All this shouldnt be hardcorded here in the next versions (!
   'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
 ];
 
-const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
+const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction', 'interaction-succeeded']);
 
 // Refs for DOM elements
 const inputField = ref(null);
@@ -151,6 +151,7 @@ const highlightedText = ref('');
 const locationChosen = ref('');
 const cachedCities = ref([]);
 const searchHistory = ref([]);
+const isError = ref(false);
 
 // Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
@@ -266,6 +267,14 @@ function activateInput() {
   });
 }
 
+function showError() {
+  alert('Por favor, insira um local.');
+  isError.value = true;
+  setTimeout(() => {
+    isError.value = false;
+  }, 1500);
+}
+
 async function selectSuggestion(suggestion) {
   console.log('selectSuggestion:', suggestion);
   inputValue.value = suggestion.text;
@@ -299,6 +308,7 @@ async function selectSuggestion(suggestion) {
   loadAnimation();
   updateSuggestions();
   addToHistory(suggestion.text);
+  emit('interaction-succeeded');
 }
 
 function handleFocus(event) {
@@ -581,7 +591,7 @@ function submit() {
     };
     selectSuggestion(suggestion);
   } else {
-    alert('Por favor, insira um local.');
+    showError();
   }
 
   // Fetch coordinates and update the location store
@@ -594,15 +604,21 @@ function submit() {
         uf: locationChosen.value.split(' - ')[1],
       });
     });
+    emit('interaction-succeeded');
   }
+
 }
 // Chama a função para buscar coordenadas
 function handleEnter() {
-  if (suggestions.value.length > 0) {
+  if (suggestions.value.length > 0 && inputValue.value) {
     selectSuggestion(suggestions.value[0]);
     if (inputField.value) { inputField.value.blur(); }
     submit();
   }
+  if (!inputValue.value) {
+    showError();
+  }
+
 }
 
 function addToHistory(item) {
@@ -790,8 +806,8 @@ function emitLocationUpdate(payload) {
 .input-container-dropdown {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-  outline: 2px solid #418377;
-  outline-offset: -2px;
+  outline: 3px solid #418377;
+  outline-offset: -3px;
   user-select: none;
   cursor: default;
 }
@@ -1057,5 +1073,43 @@ function emitLocationUpdate(payload) {
   margin-left: 20px;
   font-size: 14px;
   color: #666;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+.shake-animation {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Error state styling */
+.input-container-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  height: 48px;
+  padding: 0px 16px 0px 24px;
+  position: relative;
+  z-index: 1;
+  border-radius: 99px;
+  background: var(--Gray-100, #F8F9FA);
+  outline: 3px solid #DC3545;
+  outline-offset: -3px;
 }
 </style>

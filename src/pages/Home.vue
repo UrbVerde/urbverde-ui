@@ -760,6 +760,9 @@ export default {
     align-items: center;
     gap: 80px;
     align-self: stretch;
+
+    position: relative;
+    z-index: -1;
   }
 
   // Imagem da plataforma e efeito sobre o mouse
