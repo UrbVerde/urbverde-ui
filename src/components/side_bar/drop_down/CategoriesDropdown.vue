@@ -1,7 +1,7 @@
 <!-- urbverde-ui\src\components\side_bar\drop_down\CategoriesDropdown.vue -->
 <template>
   <div class="container" ref="containerRef">
-    <span class="header-title caption-medium">CAMADAS</span>
+    <span class="header-title body-caption-medium">CAMADAS</span>
 
     <div class="categories-list">
       <div v-for="(category) in categories" :key="category.id" class="category-dropdown">
@@ -13,12 +13,12 @@
           <div class="category-icon">
             <IconComponent :name="category.icon" :size="20" />
           </div>
-          <span class="category-name small-regular">{{ category.name }}</span>
+          <span class="category-name body-small-regular">{{ category.name }}</span>
 
           <!-- Show "1" if there is an active layer in that category -->
           <div class="badge-right-menu"
                v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)">
-            <span class="textBadge caption-medium">1</span>
+            <span class="textBadge body-caption-medium">1</span>
           </div>
 
           <i :class="openCategoryIds.includes(category.id)
@@ -32,7 +32,7 @@
               :key="layer.id"
               :class="['layer-item', { 'active-layer': layer.isActive }]"
               @click="selectLayer(layer, category)">
-            <span class="layer-name small-regular">
+            <span class="layer-name body-small-regular">
               {{ layer.display_name || layer.title || layer.name }}
             </span>
 
@@ -144,7 +144,8 @@ onUnmounted(() => {
 });
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
+
   .container {
     display: flex;
     flex-direction: column;
@@ -162,8 +163,7 @@ onUnmounted(() => {
     top: 0;
     z-index: 2;
     background-color: white;
-    margin-top: -8px;
-    margin-bottom: -4px;
+    margin: 0;
     border-bottom: 4px solid white;
   }
 
@@ -285,7 +285,7 @@ onUnmounted(() => {
     padding: 2px 8px;
     gap: 10px;
     border-radius: 4px;
-    color: var(--Theme-Primary, #025949);
+    color: map-get($theme, primary);
     background: var(--Primary-Fade-100, #D2E8DD);
     width: 22px;
     height: 22px;
