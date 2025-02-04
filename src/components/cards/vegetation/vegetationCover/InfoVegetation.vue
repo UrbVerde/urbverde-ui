@@ -15,7 +15,7 @@
 
 <script>
 import CardBase from '@/components/cards/Card.vue';
-import Ilustracao from '@/assets/images/cards/globalwarming.svg';
+import Ilustracao from '@/assets/images/cards/globalwarming-vegetation.svg';
 
 export default {
   name: 'InfoVegetation',
@@ -53,6 +53,9 @@ export default {
 }
 
 .vegetation-card .imagem {
-  padding-bottom: 56px;
+  width: 100%;
+  height: auto;
+  align-self: center;
+  margin-bottom: 54px;
 }
 </style>
