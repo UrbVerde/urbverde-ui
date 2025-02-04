@@ -15,7 +15,7 @@
 
 <script>
 import CardBase from '@/components/cards/Card.vue';
-import Ilustracao from '@/assets/images/cards/globalwarming.svg';
+import Ilustracao from '@/assets/images/cards/globalwarming-park.svg';
 
 export default {
   name: 'InfoTemperature',
@@ -36,7 +36,7 @@ export default {
 <style scoped lang="scss">
 
   .info-card {
-    width: 365px;
+    max-width: 365px;
     height: auto;
     border-radius: 16px;
     display: flex;
@@ -48,8 +48,8 @@ export default {
   }
 
   .card-image {
-    width: 233px;
-    height: 168px;
+    width: 100%;
+    height: auto;
     align-self: center;
     margin-bottom: 54px;
   }
