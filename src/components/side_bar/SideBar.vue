@@ -1,7 +1,13 @@
 <!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
   <aside>
-    <div :class="['sidebar', { 'sidebar-open': isOpen }]">
+    <div :class="[
+      'sidebar',
+      {
+        'sidebar-open': isOpen,
+        'sidebar-closing': isClosing
+      }
+    ]">
       <div class="top-area">
         <Transition name="fade">
           <LogoButton v-if="showContent" />
@@ -66,6 +72,7 @@ const locationStore = useLocationStore();
 
 // Component state
 const showContent = ref(true);
+const isClosing = ref(false); // For animation
 
 // Computed to check if search is complete
 const isSearchDone = computed(() => locationStore.cd_mun && locationStore.type);
@@ -73,12 +80,19 @@ const isSearchDone = computed(() => locationStore.cd_mun && locationStore.type);
 // Sidebar toggle handler with animation
 async function toggleSidebar() {
   if (props.isOpen) {
+    // Quando estiver fechando
+    isClosing.value = true;
     showContent.value = false;
+    // Espera a animação de fade terminar antes de fechar a sidebar
+    await new Promise(resolve => setTimeout(resolve, 100));
+    isClosing.value = false;
+    emit('toggle-sidebar');
   } else {
+    // Quando estiver abrindo
+    emit('toggle-sidebar');
     await new Promise(resolve => setTimeout(resolve, 200));
     showContent.value = true;
   }
-  emit('toggle-sidebar');
 }
 </script>
 
@@ -103,10 +117,13 @@ async function toggleSidebar() {
     transition: 0.3s;
   }
 
-  // Fade transition
-  .fade-enter-active,
-  .fade-leave-active {
+// Fade transition
+  .fade-enter-active{
     transition: opacity 0.3s ease;
+  }
+
+  .fade-leave-active {
+    transition: opacity 0.1s ease;
   }
 
   .fade-enter-from,
@@ -114,12 +131,12 @@ async function toggleSidebar() {
     opacity: 0;
   }
 
-  .fade-enter-active {
+  .sidebar-open .fade-enter-active {
     transition-delay: 0.2s;
   }
 
-  .fade-leave-active {
-    transition-delay: 0s;
+  .sidebar-closing .fade-leave-active {
+    transition-delay: 0.1s;
   }
 
   .top-area {
