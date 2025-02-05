@@ -86,18 +86,15 @@ async function toggleSidebar() {
     background: map-get($gray, white);
     box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
     z-index: 100;
+    display: flex;
+    flex-direction: column;
   }
 
   .sidebar-open {
     width: 301px;
     transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex-shrink: 0;
   }
 
-  /* Rest of the styles remain unchanged */
   .top-area {
     display: flex;
     height: 88px;
@@ -133,8 +130,9 @@ async function toggleSidebar() {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    flex: 1 0 auto;
-    max-height: calc(100vh - 200px);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
     align-self: stretch;
   }
 
@@ -157,7 +155,6 @@ async function toggleSidebar() {
     gap: 8px;
     align-self: stretch;
     padding: 16px 24px;
-    margin-top: auto;
     box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
     border-top: 1px solid rgba(0, 0, 0, 0.13);
     background: var(--White, #FFF);

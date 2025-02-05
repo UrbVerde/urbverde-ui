@@ -124,6 +124,7 @@ onMounted(() => {
   flex: 1 0 0;
   height: 100%;
   padding: 0 !important;
+  overflow: hidden;
 
   ::-webkit-scrollbar {
     width: 6px;
@@ -163,6 +164,8 @@ onMounted(() => {
   align-self: stretch;
   padding: 0 4px 0 0;
   overflow-y: auto;
+  height: 100%;
+  min-height: 0;
   scroll-behavior: smooth;
   color: map-get($body-text, body-color);
 }
