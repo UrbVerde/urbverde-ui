@@ -129,15 +129,13 @@ async function toggleSidebar() {
 
   .middle-area {
     display: flex;
-    padding: 32px 16px 16px 16px;
+    padding: 32px 12px 16px 16px;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
     flex: 1 0 auto;
-    overflow-y: auto;
     max-height: calc(100vh - 200px);
     align-self: stretch;
-
   }
 
   .search-area {
