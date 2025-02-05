@@ -27,20 +27,22 @@
         </div>
 
         <!-- Layers dentro da categoria -->
-        <ul v-show="openCategoryIds.includes(category.id)" class="layers-list">
-          <li v-for="(layer) in category.layers"
-              :key="layer.id"
-              :class="['layer-item', { 'active-layer': layer.isActive }]"
-              @click="selectLayer(layer, category)">
-            <span class="layer-name body-small-regular">
-              {{ layer.display_name || layer.title || layer.name }}
-            </span>
+        <div class="layers-wrapper" :class="{ 'expanded': openCategoryIds.includes(category.id) }">
+          <ul class="layers-list">
+            <li v-for="(layer) in category.layers"
+                :key="layer.id"
+                :class="['layer-item', { 'active-layer': layer.isActive }]"
+                @click="selectLayer(layer, category)">
+              <span class="layer-name body-small-regular">
+                {{ layer.display_name || layer.title || layer.name }}
+              </span>
 
-            <div class="new-layer-tag" v-if="layer.isNew">
-              <i class="bi bi-stars" id="imgIconNew"></i>
-            </div>
-          </li>
-        </ul>
+              <div class="new-layer-tag" v-if="layer.isNew">
+                <i class="bi bi-stars" id="imgIconNew"></i>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -67,6 +69,24 @@ watchEffect(() => {
   }
 });
 
+// Funções de fechamento exclusivo de categorias com animação
+async function updateCategoryHeight(categoryId) {
+  const categoryEl = document.querySelector(`[data-category-id="${categoryId}"] .layers-list`);
+  if (categoryEl) {
+    const height = categoryEl.scrollHeight;
+    categoryEl.parentElement.style.setProperty('--content-height', `${height}px`);
+  }
+}
+
+async function toggleCategory(categoryId) {
+  if (openCategoryIds.value.includes(categoryId)) {
+    openCategoryIds.value = [];
+  } else {
+    openCategoryIds.value = [categoryId];
+    await updateCategoryHeight(categoryId);
+  }
+}
+
 // Marca a layer ativa em cada categoria
 function markActiveLayer() {
   categories.value.forEach(cat => {
@@ -74,17 +94,6 @@ function markActiveLayer() {
       lyr.isActive = lyr.id === locationStore.layer;
     });
   });
-}
-
-// Alteração 1: Fechamento exclusivo de categorias
-function toggleCategory(categoryId) {
-  if (openCategoryIds.value.includes(categoryId)) {
-    // Se já estiver aberta, fecha a categoria
-    openCategoryIds.value = [];
-  } else {
-    // Fecha quaisquer categorias abertas e abre somente a clicada
-    openCategoryIds.value = [categoryId];
-  }
 }
 
 // Seleciona uma layer e atualiza a store
@@ -223,6 +232,18 @@ onMounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.layers-wrapper {
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition: height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+
+  &.expanded {
+    height: var(--content-height);
+    opacity: 1;
+  }
 }
 
 .layers-list {
