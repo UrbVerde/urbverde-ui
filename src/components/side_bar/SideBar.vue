@@ -3,32 +3,40 @@
   <aside>
     <div :class="['sidebar', { 'sidebar-open': isOpen }]">
       <div class="top-area">
-        <LogoButton v-show="showContent" />
+        <Transition name="fade">
+          <LogoButton v-if="showContent" />
+        </Transition>
         <MinimizeButton @click="toggleSidebar" />
       </div>
-      <div v-show="showContent" class="search-area">
-        <BuscaSimples @api-error="$emit('api-error')" />
-      </div>
+      <Transition name="fade">
+        <div v-if="showContent" class="search-area">
+          <BuscaSimples @api-error="$emit('api-error')" />
+        </div>
+      </Transition>
 
       <template v-if="isSearchDone">
-        <div v-show="showContent" class="middle-area">
-          <DropDown />
-        </div>
+        <Transition name="fade">
+          <div v-if="showContent" class="middle-area">
+            <DropDown />
+          </div>
+        </Transition>
 
-        <div v-show="showContent" class="bottom-area">
+        <Transition name="fade">
+          <div v-show="showContent" class="bottom-area">
 
-          <a href="/parceiro"
-             class="link-button"
-             target="_blank"
-             rel="noopener noreferrer">
-            <i class="bi bi-upload" tag="imgIcon"></i>
-            <span class="txtBottom body-small-regular">Enviar dados</span>
-          </a>
-          <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
-            <i class="bi bi-megaphone" tag="imgIcon"></i>
-            <span class="txtBottom body-small-regular">Informar um erro</span>
-          </a>
-        </div>
+            <a href="/parceiro"
+               class="link-button"
+               target="_blank"
+               rel="noopener noreferrer">
+              <i class="bi bi-upload" tag="imgIcon"></i>
+              <span class="txtBottom body-small-regular">Enviar dados</span>
+            </a>
+            <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
+              <i class="bi bi-megaphone" tag="imgIcon"></i>
+              <span class="txtBottom body-small-regular">Informar um erro</span>
+            </a>
+          </div>
+        </Transition>
       </template>
     </div>
   </aside>
@@ -93,6 +101,25 @@ async function toggleSidebar() {
   .sidebar-open {
     width: 301px;
     transition: 0.3s;
+  }
+
+  // Fade transition
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .fade-enter-active {
+    transition-delay: 0.2s;
+  }
+
+  .fade-leave-active {
+    transition-delay: 0s;
   }
 
   .top-area {
