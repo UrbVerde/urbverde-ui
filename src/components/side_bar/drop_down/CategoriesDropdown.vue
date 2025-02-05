@@ -65,10 +65,26 @@ watchEffect(() => {
   if (locationStore.categories.length > 0) {
     console.log('CategoriesDropdown: Atualizando a partir da store');
     categories.value = locationStore.categories;
-    markActiveLayer();
+
+    // Se já existe uma layer ativa no locationStore, marca ela e abre a categoria
+    if (locationStore.layer) {
+      markActiveLayer();
+    } else {
+      // Se não existe layer ativa, seleciona a primeira por padrão
+      const firstCategory = categories.value[0];
+      if (firstCategory?.layers?.length > 0) {
+        const firstLayer = firstCategory.layers[0];
+        firstLayer.isActive = true;
+        openCategoryIds.value = [firstCategory.id];
+        locationStore.setLocation({
+          category: firstCategory.name,
+          layer: firstLayer.id,
+          layerName: firstLayer.display_name || firstLayer.title || firstLayer.name
+        });
+      }
+    }
   }
 });
-
 // Funções de fechamento exclusivo de categorias com animação
 async function updateCategoryHeight(categoryId) {
   const categoryEl = document.querySelector(`[data-category-id="${categoryId}"] .layers-list`);
@@ -91,7 +107,13 @@ async function toggleCategory(categoryId) {
 function markActiveLayer() {
   categories.value.forEach(cat => {
     cat.layers.forEach(lyr => {
-      lyr.isActive = lyr.id === locationStore.layer;
+      if (lyr.id === locationStore.layer) {
+        lyr.isActive = true;
+        // Abre a categoria que contém a layer ativa
+        openCategoryIds.value = [cat.id];
+      } else {
+        lyr.isActive = false;
+      }
     });
   });
 }
