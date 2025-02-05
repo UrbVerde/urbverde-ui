@@ -4,6 +4,7 @@
     <Sidebar
       :is-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar"
+      class="sidebar-animate"
     />
 
     <!-- Main content -->
@@ -21,13 +22,13 @@
         </div>
       </div>
 
-      <div v-else class="content-wrapper">
+      <div v-else class="content-wrapper content-animate">
         <Navbar
           :class="{ 'navbar-collapsed': !isSidebarOpen }"
           :active-section="activeSection"
           @navigate-to="scrollToSection"
-        />
-
+        >
+        </Navbar>
         <div class="page-content">
           <div class="map-section">
             <div id="map" ref="Mapa" class="map-container">
@@ -171,6 +172,7 @@ const scrollToSection = (sectionId) => {
 
 // Lifecycle hooks
 // Initialize store with URL params
+
 onMounted(async() => {
 
   // Setup URL syncing in store
@@ -350,6 +352,39 @@ h5, p{
     align-items: center;
     gap: 8px;
     align-self: stretch;
+  }
+
+  /* Animações de entrada da página */
+  .sidebar-animate {
+    animation: fadeIn 0.75s ease-out;
+    animation-delay: 0.1s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .content-animate {
+    animation: contentFade 1s ease-out;
+    animation-delay: 0.75s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes contentFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
 </style>

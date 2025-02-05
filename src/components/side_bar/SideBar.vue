@@ -1,34 +1,48 @@
 <!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
   <aside>
-    <div :class="['sidebar', { 'sidebar-open': isOpen }]">
+    <div :class="[
+      'sidebar',
+      {
+        'sidebar-open': isOpen,
+        'sidebar-closing': isClosing
+      }
+    ]">
       <div class="top-area">
-        <LogoButton v-show="showContent" />
+        <Transition name="fade">
+          <LogoButton v-if="showContent" />
+        </Transition>
         <MinimizeButton @click="toggleSidebar" />
       </div>
-      <div v-show="showContent" class="search-area">
-        <BuscaSimples @api-error="$emit('api-error')" />
-      </div>
+      <Transition name="fade">
+        <div v-if="showContent" class="search-area">
+          <BuscaSimples @api-error="$emit('api-error')" />
+        </div>
+      </Transition>
 
       <template v-if="isSearchDone">
-        <div v-show="showContent" class="middle-area">
-          <DropDown />
-        </div>
+        <Transition name="fade">
+          <div v-if="showContent" class="middle-area">
+            <DropDown />
+          </div>
+        </Transition>
 
-        <div v-show="showContent" class="bottom-area">
+        <Transition name="fade">
+          <div v-show="showContent" class="bottom-area">
 
-          <a href="/parceiro"
-             class="link-button"
-             target="_blank"
-             rel="noopener noreferrer">
-            <i class="bi bi-upload" tag="imgIcon"></i>
-            <span class="txtBottom body-small-regular">Enviar dados</span>
-          </a>
-          <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
-            <i class="bi bi-megaphone" tag="imgIcon"></i>
-            <span class="txtBottom body-small-regular">Informar um erro</span>
-          </a>
-        </div>
+            <a href="/parceiro"
+               class="link-button"
+               target="_blank"
+               rel="noopener noreferrer">
+              <i class="bi bi-upload" tag="imgIcon"></i>
+              <span class="txtBottom body-small-regular">Enviar dados</span>
+            </a>
+            <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
+              <i class="bi bi-megaphone" tag="imgIcon"></i>
+              <span class="txtBottom body-small-regular">Informar um erro</span>
+            </a>
+          </div>
+        </Transition>
       </template>
     </div>
   </aside>
@@ -58,6 +72,7 @@ const locationStore = useLocationStore();
 
 // Component state
 const showContent = ref(true);
+const isClosing = ref(false); // For animation
 
 // Computed to check if search is complete
 const isSearchDone = computed(() => locationStore.cd_mun && locationStore.type);
@@ -65,12 +80,19 @@ const isSearchDone = computed(() => locationStore.cd_mun && locationStore.type);
 // Sidebar toggle handler with animation
 async function toggleSidebar() {
   if (props.isOpen) {
+    // Quando estiver fechando
+    isClosing.value = true;
     showContent.value = false;
+    // Espera a animação de fade terminar antes de fechar a sidebar
+    await new Promise(resolve => setTimeout(resolve, 100));
+    isClosing.value = false;
+    emit('toggle-sidebar');
   } else {
+    // Quando estiver abrindo
+    emit('toggle-sidebar');
     await new Promise(resolve => setTimeout(resolve, 200));
     showContent.value = true;
   }
-  emit('toggle-sidebar');
 }
 </script>
 
@@ -86,18 +108,37 @@ async function toggleSidebar() {
     background: map-get($gray, white);
     box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
     z-index: 100;
+    display: flex;
+    flex-direction: column;
   }
 
   .sidebar-open {
     width: 301px;
     transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex-shrink: 0;
   }
 
-  /* Rest of the styles remain unchanged */
+// Fade transition
+  .fade-enter-active{
+    transition: opacity 0.3s ease;
+  }
+
+  .fade-leave-active {
+    transition: opacity 0.1s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .sidebar-open .fade-enter-active {
+    transition-delay: 0.2s;
+  }
+
+  .sidebar-closing .fade-leave-active {
+    transition-delay: 0.1s;
+  }
+
   .top-area {
     display: flex;
     height: 88px;
@@ -129,15 +170,14 @@ async function toggleSidebar() {
 
   .middle-area {
     display: flex;
-    padding: 32px 16px 16px 16px;
+    padding: 32px 12px 16px 16px;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    flex: 1 0 auto;
-    overflow-y: auto;
-    max-height: calc(100vh - 200px);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
     align-self: stretch;
-
   }
 
   .search-area {
@@ -159,7 +199,6 @@ async function toggleSidebar() {
     gap: 8px;
     align-self: stretch;
     padding: 16px 24px;
-    margin-top: auto;
     box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
     border-top: 1px solid rgba(0, 0, 0, 0.13);
     background: var(--White, #FFF);
