@@ -4,9 +4,7 @@
     <Sidebar
       :is-open="isSidebarOpen"
       @toggle-sidebar="toggleSidebar"
-      data-aos="fade-right"
-      data-aos-delay="100"
-      data-aos-duration="750"
+      class="sidebar-animate"
     />
 
     <!-- Main content -->
@@ -24,20 +22,14 @@
         </div>
       </div>
 
-      <div v-else class="content-wrapper">
+      <div v-else class="content-wrapper content-animate">
         <Navbar
           :class="{ 'navbar-collapsed': !isSidebarOpen }"
           :active-section="activeSection"
           @navigate-to="scrollToSection"
-          data-aos="fade-down"
-          data-aos-delay="500"
-          data-aos-duration="750"
-        />
-
-        <div class="page-content"
-             data-aos="fade"
-             data-aos-delay="1000"
-             data-aos-duration="750">
+        >
+        </Navbar>
+        <div class="page-content">
           <div class="map-section">
             <div id="map" ref="Mapa" class="map-container">
               <MapBox :coordinates="coordinates" class="map-box">
@@ -72,10 +64,6 @@ import MapBox from '../components/map/mapGenerator.vue';
 import Legenda from '../components/map/Legenda.vue';
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
-
-// Animate on Scroll Library
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
 // Store and router setup
 const locationStore = useLocationStore();
@@ -144,12 +132,6 @@ const scrollToSection = (sectionId) => {
     history.pushState(null, null, `#${sectionId}`);
   }
 };
-
-AOS.init({
-  offset: 0,
-  threshold: 0,
-  once: false
-});
 
 // Commented out for later use
 // const syncStoreWithQuery = async() => {
@@ -370,6 +352,39 @@ h5, p{
     align-items: center;
     gap: 8px;
     align-self: stretch;
+  }
+
+  /* Animações de entrada da página */
+  .sidebar-animate {
+    animation: fadeIn 0.75s ease-out;
+    animation-delay: 0.1s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .content-animate {
+    animation: contentFade 1s ease-out;
+    animation-delay: 0.75s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes contentFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
 </style>
