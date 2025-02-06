@@ -131,6 +131,13 @@ function selectLayer(layer, categoryObj) {
     layer: layer.id,
     layerName: layer.display_name || layer.title || layer.name
   });
+
+  // Aqui entra o GA4 event
+  gtag('event', 'select_map_layer', {
+    category: categoryObj.name,
+    layer_id: layer.id,
+    layer_name: layer.display_name || layer.title || layer.name
+  });
 }
 
 // Retorna a layer ativa na categoria (se existir)
