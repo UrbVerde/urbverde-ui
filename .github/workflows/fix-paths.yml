@@ -43,7 +43,7 @@ jobs:
             PARENT_NAME="$DIR_NAME"
           fi
 
-          (echo ".gitignore"; git ls-files) | while read -r FILE; do
+          (echo ".gitignore"; git ls-files | grep -vE '^\.github/workflows/') | while read -r FILE; do
             # Skip if file doesn't exist or is empty
             [ ! -f "$FILE" ] && continue
             [ ! -s "$FILE" ] && continue
