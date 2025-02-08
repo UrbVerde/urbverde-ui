@@ -1,26 +1,42 @@
-<!-- urbverde-ui/src/components/map/Legenda.vue -->
+<!-- Legend.vue -->
 <template>
   <div class="legend-wrapper">
-    <!-- Header with expand/collapse toggle -->
     <div class="legend-header" @click="toggleLegend">
       <span>Legenda</span>
       <img :src="wrapperIcon" :class="{'icon-open': isOpen, 'icon-closed': !isOpen}" alt="toggle icon" />
     </div>
 
-    <!-- Legend body, visible only when expanded -->
     <div v-if="isOpen" class="legend-body">
-      <!-- Seção do Ano -->
+      <!-- Year Section with YearPicker styling -->
       <div class="section-container">
         <div class="year-section">
           <div class="year-label">
             <img src="@/assets/icons/calendar.svg" alt="Calendar icon" />
             <span>Ano</span>
           </div>
-          <select v-model="selectedYear" class="form-select">
-            <option v-for="year in availableYears" :key="year" :value="year">
-              {{ year }}
-            </option>
-          </select>
+          <div class="input-wrapper">
+            <span
+              class="nav-button"
+              @click="handleYearChange(-1)"
+              :class="{ 'disabled': !canNavigateBack }"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </span>
+            <div class="input-container">
+              <input
+                class="input-text body-small-regular"
+                :value="formattedYear"
+                readonly
+              />
+            </div>
+            <span
+              class="nav-button"
+              @click="handleYearChange(1)"
+              :class="{ 'disabled': !canNavigateForward }"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -28,8 +44,8 @@
       <!-- Layers Section -->
       <div class="section-container">
         <div class="layers-section">
-          <img src="@/assets/icons/layer.svg" alt="Layer icon" />
-          <p>Contornos e traços</p>
+          <IconComponent :name="currentCategoryIcon" :size="20" />
+          <p>{{ currentLayerName }}</p>
         </div>
         <div class="layer-details">
           <p class="layer-sub"><span class="legend-line black"></span>Setores censitários</p>
@@ -43,55 +59,145 @@
           <img src="@/assets/icons/temperatura.svg" alt="Temperature icon" />
           <p>Temperatura de Superfície</p>
         </div>
-        <div class="temperature-scale">
-          <div class="temperature-bar"></div>
-          <span>-5ºC</span>
-          <span>0ºC</span>
-          <span>+5ºC</span>
-        </div>
-      </div>
-
-      <!-- Compare and Download Buttons -->
-      <div class="compare">
-        <button>Comparar camada</button>
-      </div>
-      <div class="section-container download-button">
-        <button @click="downloadData"> Baixar </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import wrapperIcon from '../../assets/icons/wrapper.svg';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import wrapperIcon from '@/assets/icons/wrapper.svg';
+import IconComponent from '@/components/icons/IconComponent.vue';
+import { useLocationStore } from '@/stores/locationStore';
 
 export default {
   name: 'MapLegend',
-  data() {
-    return {
-      isOpen: true,
-      selectedYear: 2021,
-      availableYears: [2021, 2020, 2019, 2018], // Exemplo de anos disponíveis
+  components: {
+    IconComponent
+  },
+  setup() {
+    const locationStore = useLocationStore();
+    const isOpen = ref(true);
+    const availableYears = ref([2018, 2019, 2020, 2021]);
+
+    // Computed properties for year navigation
+    const currentYearIndex = computed(() =>
+      availableYears.value.indexOf(locationStore.year)
+    );
+
+    const canNavigateBack = computed(() => currentYearIndex.value > 0);
+    const canNavigateForward = computed(() =>
+      currentYearIndex.value < availableYears.value.length - 1
+    );
+
+    const formattedYear = computed(() =>
+      locationStore.year ? `${locationStore.year}` : ''
+    );
+
+    const currentLayerName = computed(() => locationStore.currentLayerName);
+    const currentCategoryIcon = computed(() => {
+      const category = locationStore.categories.find(
+        cat => cat.name === locationStore.category
+      );
+
+      return category?.icon || 'layer';
+    });
+
+    // Year navigation methods
+    const handleYearChange = (direction) => {
+      const newIndex = currentYearIndex.value + direction;
+      if (newIndex >= 0 && newIndex < availableYears.value.length) {
+        locationStore.setLocation({ year: availableYears.value[newIndex] });
+      }
     };
-  },
-  methods: {
-    toggleLegend() {
-      this.isOpen = !this.isOpen;
-    },
-    downloadData() {
-      // Função que será chamada ao clicar no botão "Baixar"
-      console.warn('Baixando os dados...');
-    },
-  },
-  computed: {
-    wrapperIcon() {
-      return wrapperIcon;
-    },
-  },
+
+    // Keyboard navigation
+    const handleKeyPress = (event) => {
+      if (event.key === 'ArrowLeft') {
+        handleYearChange(-1);
+      } else if (event.key === 'ArrowRight') {
+        handleYearChange(1);
+      }
+    };
+
+    onMounted(() => {
+      document.addEventListener('keydown', handleKeyPress);
+      // Set default year if not set
+      if (!locationStore.year) {
+        locationStore.setLocation({ year: availableYears.value[0] });
+      }
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener('keydown', handleKeyPress);
+    });
+
+    return {
+      isOpen,
+      wrapperIcon,
+      formattedYear,
+      canNavigateBack,
+      canNavigateForward,
+      currentLayerName,
+      currentCategoryIcon,
+      handleYearChange,
+      toggleLegend: () => isOpen.value = !isOpen.value
+    };
+  }
 };
 </script>
 
 <style scoped>
+/* Keep existing styles and add these new ones */
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-container {
+  border-radius: 7px;
+  padding: 5px 9px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #CED4DA;
+  background-color: white;
+  max-width: 120px;
+  height: 40px;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #6C757D;
+}
+
+.nav-button:hover:not(.disabled) {
+  background-color: #f0f0f0;
+}
+
+.nav-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-text {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: auto;
+  min-width: 0;
+  box-sizing: content-box;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
 .legend-wrapper {
   position: absolute;
   top: 33px;

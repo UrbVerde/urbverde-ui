@@ -1,18 +1,18 @@
 <!-- urbverde-ui/src/components/side_bar/buttons/LogoButton.vue -->
 <template>
-  <div>
+  <div @click="handleClick">
     <LogoRouterLink />
   </div>
 </template>
 
-<script>
+<script setup>
+import { useLocationStore } from '@/stores/locationStore';
 import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
 
-export default {
-  name: 'LogoButton',
-  components: {
-    LogoRouterLink,
-  },
+const locationStore = useLocationStore();
+
+const handleClick = () => {
+  locationStore.reset();
 };
 </script>
 

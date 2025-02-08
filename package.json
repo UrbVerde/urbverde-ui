@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^4.5.1",
     "@vueuse/head": "^2.0.0",
     "aos": "^2.3.4",
     "axios": "^1.7.3",
