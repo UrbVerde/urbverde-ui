@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/map/Legenda.vue -->
+<!-- urbverde-ui/src/components/legend/LegendMain.vue -->
 <template>
   <div class="legend-wrapper">
     <div class="legend-header" @click="toggleLegend">

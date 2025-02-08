@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/parks/rankSection/RankParksSection.vue -->
 <template>
   <div class="rank-section">
     <RankingCard

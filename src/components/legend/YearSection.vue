@@ -1,4 +1,4 @@
-<!-- YearSection.vue -->
+<!-- urbverde-ui/src/components/legend/YearSection.vue -->
 <template>
   <div class="section-container">
     <div class="year-section">

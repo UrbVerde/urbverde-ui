@@ -1,4 +1,4 @@
-<!-- TempSection.vue -->
+<!-- urbverde-ui/src/components/legend/TempSection.vue -->
 <template>
   <div>
     <div class="section-container"

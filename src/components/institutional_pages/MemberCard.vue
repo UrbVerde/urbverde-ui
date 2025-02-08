@@ -1,4 +1,4 @@
-<!-- MemberCard.vue -->
+<!-- urbverde-ui/src/components/institutional_pages/MemberCard.vue -->
 <template>
   <div
     class="card-members shadow-sm"

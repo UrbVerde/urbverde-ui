@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/vegetation/vegetationCover/InfoVegetation.vue -->
 <template>
   <div class="info-vegetation-wrapper">
     <CardBase

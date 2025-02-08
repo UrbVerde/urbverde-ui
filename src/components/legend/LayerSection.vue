@@ -1,4 +1,4 @@
-<!-- LayersSection.vue -->
+<!-- urbverde-ui/src/components/legend/LayerSection.vue -->
 <template>
   <div>
     <div class="container-layers">

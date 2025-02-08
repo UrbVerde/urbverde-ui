@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/parks/infoSection/InfoParks.vue -->
 <template>
   <div class="info-temperature-card">
     <CardBase

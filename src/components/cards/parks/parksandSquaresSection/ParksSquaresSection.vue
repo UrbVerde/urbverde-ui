@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/parks/parksandSquaresSection/ParksSquaresSection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="heat-cards">
