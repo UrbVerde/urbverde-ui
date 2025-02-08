@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/SecondSectionCard.vue -->
 <!-- urbverde-ui/src/components/cards/weather/HeatCard.vue -->
 <template>
   <CardBase

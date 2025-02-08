@@ -80,10 +80,10 @@ export default {
   }
 
   .heat-cards {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 24px;
-    width: 100%;
-    height: auto;
+    flex-wrap: wrap;
   }
 
   </style>

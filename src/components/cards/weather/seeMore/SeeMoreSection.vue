@@ -1,10 +1,11 @@
+<!-- urbverde-ui/src/components/cards/weather/seeMore/SeeMoreSection.vue -->
 <template>
   <div class="content">
     <div class="see-more-cards">
-      <SeeMoreCard v-if="cardData.length" :data="cardData" />
+      <SeeMoreCard v-if="cardData.length" :data="cardData"  />
     </div>
     <div class="download-card">
-      <DownloadCard/>
+      <DownloadCard />
     </div>
   </div>
 </template>
@@ -24,6 +25,10 @@ export default {
   props: {
     cityCode: {
       type: Number,
+      required: true
+    },
+    changeLayer: {
+      type: Function,
       required: true
     }
   },
@@ -56,7 +61,7 @@ export default {
       } catch (error) {
         console.error('Erro ao buscar dados do cartão:', error);
       }
-    }
+    },
   }
 };
 </script>
@@ -71,8 +76,8 @@ export default {
 }
 
 .see-more-cards {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
 }
 

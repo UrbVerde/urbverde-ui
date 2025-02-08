@@ -1,12 +1,9 @@
 <!-- urbverde-ui/src/components/search_dropdown/BuscaSimples.vue -->
 <template>
+  <GetUserLocation @location-updated="updateLocationData" @location-error="handleLocationFailure" />
   <div class="search-wrapper">
-    <GetUserLocation :ip-data-api-key="IPDATA_API_KEY"
-                     @location-updated="updateLocationData"
-                     @location-error="handleLocationFailure" />
-
     <div ref="inputContainer"
-         :class="{ 'input-container shadow-sm': !dropdown, 'input-container-dropdown shadow': dropdown }"
+         :class="{ 'input-container shadow-sm': !dropdown && !isError, 'input-container-dropdown shadow': dropdown && !isError, 'input-container-error shake-animation shadow': isError  }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
@@ -14,12 +11,12 @@
                @input="handleInput"
                @focus="handleFocus"
                @keydown.enter="handleEnter"
-               :placeholder="!inputValue && !highlightedText ? 'Buscar um local :)' : ''"
-               class="input-field small-regular"
+               :placeholder="!inputValue && !highlightedText ? 'Buscar um local' : ''"
+               class="input-field body-small-regular"
                :disabled="!isInputActive"
                @click="activateInput" />
-        <div v-if="highlightedText && inputValue" class="suggestion-overlay small-regular">
-          <span class="suggestion-text small-regular">
+        <div v-if="highlightedText && inputValue" class="suggestion-overlay body-small-regular">
+          <span class="suggestion-text body-small-regular">
             <span class="invisible ">{{ visibleInput }}</span>
             <span class="highlight ">{{ highlightedText }}</span>
           </span>
@@ -56,18 +53,19 @@
       <button @click="clearHistory">Limpar Histórico</button>
     </div>
 
-    <div ref="suggestionContainerEl" :class="{ 'suggestion-container shadow': dropdown, 'suggestion-container-hidden': !dropdown }">
+    <div ref="suggestionContainerEl"
+         :class="{ 'suggestion-container shadow': dropdown, 'suggestion-container-hidden': !dropdown }">
       <div class="suggestion-grid">
         <div class="filter-container">
           <div class="filter-button-container" ref="filterButtonContainer">
             <button
-              :class="{ 'filter-button small-regular': !filterAll, 'filter-button-active small-medium': filterAll }"
+              :class="{ 'filter-button body-small-regular': !filterAll, 'filter-button-active body-small-medium': filterAll }"
               @click="toggleAll">Todos</button>
             <button
-              :class="{ 'filter-button small-regular': !filterCity, 'filter-button-active small-medium': filterCity }"
+              :class="{ 'filter-button body-small-regular': !filterCity, 'filter-button-active body-small-medium': filterCity }"
               @click="toggleCity">Municípios</button>
             <button
-              :class="{ 'filter-button small-regular': !filterState, 'filter-button-active small-medium': filterState }"
+              :class="{ 'filter-button body-small-regular': !filterState, 'filter-button-active body-small-medium': filterState }"
               @click="toggleState">Estados</button>
           </div>
         </div>
@@ -88,7 +86,7 @@
                width="20"
                height="20"></i>
 
-            <span class="item-text small-regular">
+            <span class="item-text body-small-regular">
               <span class="text-highlight">{{ getMatchedPart(suggestion.text) }}</span>
               <span>{{ getUnmatchedPart(suggestion.text) }}</span>
             </span>
@@ -106,10 +104,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, onUpdated } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
-// import { API_URLS } from '@/constants/endpoints';
+import { useRoute } from 'vue-router';
+
+const debug = ref(false);
 
 const props = defineProps({
   openDelay: {
@@ -118,15 +118,9 @@ const props = defineProps({
   }
 });
 
-const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
-
-const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
-// const props = defineProps({
-//   IPDATA_API_KEY: String
-// });
-
-// All this shouldnt be hardcorded here in the next versions (!)
-const states = [
+// Constants
+// const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
+const states = [ // All this shouldnt be hardcorded here in the next versions (!)
   'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
   'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
   'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
@@ -134,7 +128,16 @@ const states = [
   'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
 ];
 
-/* ------------ Reactive State ------------ */
+const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction', 'interaction-succeeded']);
+
+// Refs for DOM elements
+const inputField = ref(null);
+const dropdownEl = ref(null);
+const inputContainer = ref(null);
+const suggestionContainerEl = ref(null);
+const suggestionItems = ref([]);
+
+// Reactive State
 const isLoading = ref(false);
 const inputValue = ref('');
 const locationData = ref(null);
@@ -147,36 +150,44 @@ const visibleInput = ref('');
 const highlightedText = ref('');
 const locationChosen = ref('');
 const cachedCities = ref([]);
-const cachedCityData = ref({});
 const searchHistory = ref([]);
-const debug = ref(false);
+const isError = ref(false);
 
-// Filter States
-const filterAll = ref(true);
-const filterCity = ref(false);
-const filterState = ref(false);
-
+// Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
 
-// showSuggestions: false, // Controla a exibição das sugestões
-// lastInputLength: 0,
-// // isDragging: false,
-// startX: 0,
-// scrollLeft: 0,
-// IPDATA_API_KEY: import.meta.env.VITE_IPDATA_API_KEY,
-// defaultCoordinates: null, // { lat: -23.30958993100988, lng: -51.36049903673405 }, //Rolândia
-
-/* ------------ Lifecycle ------------ */
-onMounted(() => {
+// Lifecycle Hooks
+onMounted(async() => {
   document.addEventListener('mousedown', handleClickOutside);
-  // //this.debouncedFetchCities = debounce(this.fetchCities, 100);
   loadSearchHistory();
-  // generateDefaultSuggestions();
-  updateSuggestions();
 
-  // Show dropdown after delay only if openDelay > 0
-  if (props.openDelay > 0) {
+  // Initialize from Pinia store if values exist
+  const locationStore = useLocationStore();
+  const route = useRoute();
+
+  // Check if we have URL parameters first
+  if (Object.keys(route.query).length > 0) {
+    locationStore.updateFromQueryParams(route.query);
+  }
+
+  // Now initialize if we have store values
+  if (locationStore.cd_mun && locationStore.nm_mun && locationStore.uf) {
+    const cityText = `${locationStore.nm_mun} - ${locationStore.uf}`;
+    inputValue.value = cityText;
+    visibleInput.value = cityText;
+    locationChosen.value = cityText;
+    codes.value[cityText] = locationStore.cd_mun;
+
+    // Add to cached cities
+    if (!cachedCities.value.includes(cityText)) {
+      cachedCities.value.push(cityText);
+    }
+
+    // Fetch coordinates for the stored location
+    await fetchCoordinates(cityText);
+  } else if (props.openDelay > 0) { // Only proceed if openDelay is greater than 0
+    // Show dropdown after delay
     setTimeout(() => {
       if (!dropdown.value && inputValue.value === '') {
         dropdown.value = true;
@@ -188,10 +199,22 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousedown', handleClickOutside);
-  // //const filterButton = this.$refs.filterButtonContainer;
 });
 
-/* ------------ Computed Properties ------------ */
+onBeforeUpdate(() => {
+  suggestionItems.value = [];
+});
+
+// onUpdated(() => {
+//   suggestionItems.value = visibleSuggestions.value.map(
+//     (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
+//   );
+// });
+
+// Computed Properties
+const filterAll = ref(true);
+const filterCity = ref(false);
+const filterState = ref(false);
 const filteredSuggestions = computed(() => {
   if (filterAll.value) {
     return suggestions.value;
@@ -216,7 +239,6 @@ const filteredSuggestions = computed(() => {
 
 const visibleSuggestions = computed(() => {
   const list = filteredSuggestions.value;
-
   // Find first state suggestion
   const firstStateIndex = list.findIndex(s => s.type === 'state');
   if (firstStateIndex === -1) {
@@ -226,7 +248,6 @@ const visibleSuggestions = computed(() => {
   // separate cities from states
   const citiesBefore = list.slice(0, firstStateIndex);
   const statesAfter = list.slice(firstStateIndex);
-
   // ensure at least one state
   const totalItems = Math.min(5, list.length);
   const citiesCount = Math.min(citiesBefore.length, totalItems - 1); // Reserve 1 spot for state
@@ -237,33 +258,57 @@ const visibleSuggestions = computed(() => {
   ];
 });
 
-/* ------------ Methods (Composition Functions) ------------ */
-function selectSuggestion(suggestion) {
+// Core Functions (in order of execution)
+function activateInput() {
+  isInputActive.value = true;
+  // emit('menu-interaction'); // Emit event for menu interaction
+  nextTick(() => {
+    if (inputField.value) { inputField.value.focus(); }
+  });
+}
+
+function showError() {
+  alert('Por favor, insira um local.');
+  isError.value = true;
+  setTimeout(() => {
+    isError.value = false;
+  }, 1500);
+}
+
+async function selectSuggestion(suggestion) {
+  console.log('selectSuggestion:', suggestion);
   inputValue.value = suggestion.text;
   visibleInput.value = suggestion.text;
   highlightedText.value = '';
   dropdown.value = false;
   locationChosen.value = suggestion.text;
 
-  loadAnimation();
-  addToHistory(suggestion.text);
-  updateSuggestions();
+  const { city, state } = parseCityState(suggestion.text);
+  console.log(state);
+  const code = codes.value[suggestion.text];
+  const stateAbbrev = suggestion.text.split(' - ')[1];
 
-  const { city } = parseCityState(suggestion.text);
+  // Update Pinia store
   const locationStore = useLocationStore();
-  locationStore.setLocation({
+  await locationStore.setLocation({
+    cd_mun: code,
     nm_mun: city,
-    cd_mun: codes.value[suggestion.text],
+    uf: stateAbbrev,
+    type: 'city',
+    year: '2021', //new Date().getFullYear()
   });
 
-  fetchCoordinates(locationChosen.value);
-}
-function activateInput() {
-  isInputActive.value = true;
-  // emit('menu-interaction'); // Emit event for menu interaction
-  nextTick(() => {
-    if (inputField.value) {inputField.value.focus();}
-  });
+  // Ensure coordinates are fetched after store update
+  await fetchCoordinates(locationChosen.value);
+
+  // Ensure map recenters
+  emit('location-updated', coordinates.value);
+
+  // Update UI state
+  loadAnimation();
+  updateSuggestions();
+  addToHistory(suggestion.text);
+  emit('interaction-succeeded');
 }
 
 function handleFocus(event) {
@@ -292,7 +337,7 @@ async function loadAnimation() {
 }
 
 function getMatchedPart(text) {
-  if (!inputValue.value) {return '';}
+  if (!inputValue.value) { return ''; }
   const input = inputValue.value.toLowerCase();
   const suggestion = text.toLowerCase();
 
@@ -302,7 +347,7 @@ function getMatchedPart(text) {
 }
 
 function getUnmatchedPart(text) {
-  if (!inputValue.value) {return text;}
+  if (!inputValue.value) { return text; }
   const input = inputValue.value.toLowerCase();
   const suggestion = text.toLowerCase();
 
@@ -313,9 +358,12 @@ function getUnmatchedPart(text) {
 
 // Update the location data handler to preserve existing data when appropriate
 function updateLocationData(location) {
+  // console.log('1 - updateLocationData', location);
+
   // If geolocation or no locationData yet, override
   if (location.source === 'geolocation' || !locationData.value) {
     locationData.value = location;
+    // console.log(locationData.value);
     // console.log('Location updated from:', location.source);
     cacheCities([location.city]);
     generateDefaultSuggestions();
@@ -343,180 +391,54 @@ function parseCityState(text) {
   return { city: text, state: null };
 }
 
-// gambiarra momentânea, deverá ser tudo feito pela API
 async function fetchCities(query) {
-  try {
-    // quick fix for city without state abbreviation
-    const { city } = parseCityState(query);
-    // const response = await fetch(`/v1/address/suggestions?query=${city}`); // Local MSW
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
-    const data = await response.json();
+  // console.log('1 - fetchCities', query);
+  const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${parseCityState(query).city}`);
+  const data = await response.json();
+  // console.log('1 - fetchCities', data);
 
-    if (!data || data.length === 0) {
-      suggestions.value = [{ text: 'No Results', type: 'noresults' }];
-
-      return;
-    }
-
-    suggestions.value = data.map(item => ({
-      text: item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name,
-      lat: item.coordinates?.lat,
-      lng: item.coordinates?.lng,
-      type: 'city',
-      // Include other necessary fields if required
-    }));
-
-    data.forEach(item => {
-      const displayName = item.state_abbreviation
+  // console.log('suggestion before', JSON.parse(JSON.stringify(suggestions.value)))
+  suggestions.value = data
+    .filter(item => !item.error)
+    .map(item => {
+      // console.log('1 - fetchCities', item);
+      const textKey = item.state_abbreviation
         ? `${item.display_name} - ${item.state_abbreviation}`
         : item.display_name;
+      codes.value[textKey] = item.cd_mun;
 
-      cachedCityData.value[displayName] = {
-        code: item.cd_mun,
-        type: 'city',
+      return {
+        text: textKey,
         lat: item.coordinates?.lat,
         lng: item.coordinates?.lng,
-      };
-
-      cachedCityData.value[item.display_name] = {
-        code: item.cd_mun,
         type: 'city',
-        lat: item.coordinates?.lat,
-        lng: item.coordinates?.lng,
       };
-
-      codes.value[displayName] = item.cd_mun;
-      codes.value[item.display_name] = item.cd_mun;
     });
+  // console.log('suggestion after', JSON.parse(JSON.stringify(suggestions.value)))
 
-    suggestions.value = data.map(item => ({
-      text: item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name,
-      type: 'city'
-    }));
-
-    const newCities = data.map(item =>
-      item.state_abbreviation
-        ? `${item.display_name} - ${item.state_abbreviation}`
-        : item.display_name
-    );
-    cachedCities.value = [...new Set([...cachedCities.value, ...newCities])];
-
-    // if (!data || data.length === 0) {
-    //   suggestions.value = [{ text: 'No Results', type: 'noresults' }];
-    //   return;
-    // }
-
-    // data.forEach(item => {
-    //   const displayName = item.state_abbreviation
-    //     ? `${item.display_name} - ${item.state_abbreviation}`
-    //     : item.display_name;
-
-    // store in cache
-    // cachedCityData.value[displayName] = {
-    //   code: item.cd_mun,
-    //   type: 'city',
-    //   lat: item.coordinates?.lat,
-    //   lng: item.coordinates?.lng,
-    // };
-
-    // also store without abbreviation (???)
-    // cachedCityData.value[item.display_name] = {
-    //   code: item.cd_mun,
-    //   type: 'city',
-    //   lat: item.coordinates?.lat,
-    //   lng: item.coordinates?.lng,
-    // };
-    // });
-
-    // update codes
-    // const newCodes = data.reduce((acc, item) => {
-    //   const displayName = item.state_abbreviation
-    //     ? `${item.display_name} - ${item.state_abbreviation}`
-    //     : item.display_name;
-    //   acc[displayName] = item.cd_mun; // with state
-    //   acc[item.display_name] = item.cd_mun; // without state
-    //   return acc;
-    // }, {});
-
-    // codes.value = { ...codes.value, ...newCodes };
-
-    // // update cached cities list
-    // const newCities = data.map(item =>
-    //   item.state_abbreviation
-    //     ? `${item.display_name} - ${item.state_abbreviation}`
-    //     : item.display_name
-    // );
-    // cachedCities.value = [...new Set([...cachedCities.value, ...newCities])];
-
-    // persist to localStorage
-    localStorage.setItem('cachedCityData', JSON.stringify(cachedCityData.value));
-    // console.log('Cached city data:', cachedCityData);
-  } catch (error) {
-    console.error('Error fetching cities:', error);
-  }
+  // console.log('1 - fetchCitiescachedCities before',cachedCities.value);
+  cachedCities.value = suggestions.value.map(s => s.text);
+  // console.log('1 - fetchCitiescachedCities after',cachedCities.value);
 }
 
 async function fetchCoordinates(address) {
-  // Parse the address to get city name without state abbreviation
   const { city } = parseCityState(address);
-  const cached = cachedCityData.value[address];
 
-  // If already cached with coords, skip API
-  if (cached && cached.lat && cached.lng) {
-    coordinates.value = { lat: cached.lat, lng: cached.lng };
-    emitLocationUpdate({
-      lat: cached.lat,
-      lng: cached.lng,
-      code: cached.code.toString(),
-      type: cached.type,
-    });
-
-    return;
-  }
-  // Otherwise, if you must still fetch from API (for the lat/lng):
   try {
-    let codeValue = codes.value[address];
-    if (!codeValue) {
-      await fetchCities(city);
-      codeValue = codes.value[address];
-      if (!codeValue) {
-        handleLocationFailure();
-        console.error('Code not found for:', address);
-
-        return;
-      }
-    }
-
-    // Use the mock API with code
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${codeValue}`);
+    // Fetch coordinates from the API
+    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
     const data = await response.json();
 
-    if (data && data.length > 0) {
-      if (data[0].error) {
-        handleLocationFailure();
-        console.error('Location error:', data[0].error);
-
-        return;
-      }
+    if (data?.[0]?.coordinates) {
       const loc = data[0].coordinates;
-      if (loc && loc.lat && loc.lng) {
-        coordinates.value = { lat: loc.lat, lng: loc.lng };
-        emitLocationUpdate({
-          ...coordinates.value,
-          code: codeValue,
-          type: 'city',
-        });
-      } else {
-        handleLocationFailure();
-        console.error('Invalid coordinates in response');
-      }
+      coordinates.value = { lat: loc.lat, lng: loc.lng };
+      emitLocationUpdate({
+        lat: loc.lat,
+        lng: loc.lng,
+        type: 'city',
+      });
     } else {
       handleLocationFailure();
-      console.error('No coordinates found');
     }
   } catch (error) {
     console.error('Error fetching coordinates:', error);
@@ -567,11 +489,15 @@ function handleClickOutside(event) {
 }
 
 function cacheCities(citiesArr) {
+  // console.log('\n 1 - cacheCities', citiesArr);
+  // console.log('cachedCities before',cachedCities.value);
   cachedCities.value = [...new Set([...cachedCities.value, ...citiesArr])];
+  // console.log('cachedCities before',cachedCities.value);
   updateSuggestions();
 }
 
 function handleInput() {
+  // console.log('1 - handleInput');
   if (inputValue.value !== previousInputValue.value) {
     dropdown.value = inputValue.value !== '';
     updateSuggestions();
@@ -580,8 +506,9 @@ function handleInput() {
 }
 
 async function updateSuggestions(forceUpdate = false) {
+  // console.log('1 - updateSuggestions');
   // alert('updateSuggestions');
-  if (!forceUpdate && inputValue.value === previousInputValue.value) {return;}
+  if (!forceUpdate && inputValue.value === previousInputValue.value) { return; }
   // Only proceed if input actually changed
   if (inputValue.value === '') {
     generateDefaultSuggestions();
@@ -650,51 +577,53 @@ function updateHighlightedText() {
 }
 
 function submit() {
-  // If there's user input
   if (inputValue.value) {
-    // locationChosen -> first suggestion
+    // Use the first suggestion if it exists
     const suggestion = suggestions.value[0];
     if (suggestion && suggestion.text) {
-      loadAnimation();
-      addToHistory(suggestion.text);
-
-      inputValue.value = suggestion.text;
-      visibleInput.value = suggestion.text;
-      highlightedText.value = '';
-      dropdown.value = false;
-      locationChosen.value = suggestion.text;
-
-      updateSuggestions();
-      fetchCoordinates(locationChosen.value);
+      selectSuggestion(suggestion);  // Handles syncing and recentering
     }
+  } else if (locationChosen.value) {
+    // Use the last chosen location if no input
+    const suggestion = {
+      text: locationChosen.value,
+      type: 'city' // Default type if not known
+    };
+    selectSuggestion(suggestion);
   } else {
-    // If no input, just restore from locationChosen if present
-    if (locationChosen.value) {
-      fetchCoordinates(locationChosen.value);
-      loadAnimation();
-      inputValue.value = locationChosen.value;
-      visibleInput.value = locationChosen.value;
-      highlightedText.value = '';
-      dropdown.value = false;
-    } else {
-      // Show dropdown if user tries to submit with empty input
-      isInputActive.value = true;
-      dropdown.value = true;
-      alert('Por favor, insira um local.');
-    }
+    showError();
   }
-}
 
+  // Fetch coordinates and update the location store
+  if (locationChosen.value) {
+    fetchCoordinates(locationChosen.value).then(() => {
+      const locationStore = useLocationStore();
+      locationStore.setLocation({
+        cd_mun: codes.value[locationChosen.value],
+        nm_mun: locationChosen.value.split(' - ')[0],
+        uf: locationChosen.value.split(' - ')[1],
+      });
+    });
+    emit('interaction-succeeded');
+  }
+
+}
 // Chama a função para buscar coordenadas
 function handleEnter() {
-  if (suggestions.value.length > 0) {
+  if (suggestions.value.length > 0 && inputValue.value) {
     selectSuggestion(suggestions.value[0]);
-    if (inputField.value) {inputField.value.blur();}
+    if (inputField.value) { inputField.value.blur(); }
     submit();
   }
+  if (!inputValue.value) {
+    showError();
+  }
+
 }
 
 function addToHistory(item) {
+  if (item === 'No Results') { return; }
+  // if (!codes.value[item]) { return; }
   const itemLower = item.toLowerCase();
   const historyLower = searchHistory.value.map(h => h.toLowerCase());
 
@@ -705,10 +634,6 @@ function addToHistory(item) {
     }
     saveSearchHistory();
   }
-}
-
-function saveSearchHistory() {
-  localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
 }
 
 function clearHistory() {
@@ -722,7 +647,11 @@ function clearInput() {
   generateDefaultSuggestions();
   inputValue.value = '';
   highlightedText.value = '';
-  if (!dropdown.value) {dropdown.value = true;}
+  if (!dropdown.value) { dropdown.value = true; }
+}
+
+function saveSearchHistory() {
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
 }
 
 function loadSearchHistory() {
@@ -730,32 +659,33 @@ function loadSearchHistory() {
   if (savedHistory) {
     searchHistory.value = JSON.parse(savedHistory);
   }
-  const savedCache = localStorage.getItem('cachedCityData');
-  if (savedCache) {
-    cachedCityData.value = JSON.parse(savedCache);
-  }
 }
 
-function generateDefaultSuggestions() {
-  if (!locationData.value) {return;}
+async function generateDefaultSuggestions() {
+  if (!locationData.value) { return; }
+
   const { city, state, stateAbbreviation } = locationData.value;
-  // let defaultSuggestions = [];
-  // if (international || city === 'error' || state === 'error' || city === null) {
-  //   // Pre-defined default suggestions
-  //   const defaultCity = 'Rio de Janeiro - RJ';
-  //   // Fetch the data for Rio de Janeiro if not already cached
-  //   if (!this.cachedCityData[defaultCity]) {
-  //     this.fetchCities('Rio de Janeiro');
-  //   }
-  // }
-  // If you have a fallback city, you can define it here:
-  // alert(stateAbbreviation);
+  const cityWithState = `${city} - ${stateAbbreviation || state}`;
+
+  // Fetch city data if we don't have the code
+  if (!codes.value[cityWithState]) {
+    try {
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
+      const data = await response.json();
+
+      if (data && data.length > 0 && !data[0].error) {
+        codes.value[cityWithState] = data[0].cd_mun;
+      }
+    } catch (error) {
+      console.error('Error fetching city code:', error);
+    }
+  }
+
   suggestions.value = [
-    { text: `${city} - ${stateAbbreviation || state}`, type: 'city' },
+    { text: cityWithState, type: 'city' },
     { text: state, type: 'state' },
     { text: 'Brasil', type: 'country' },
   ];
-
 }
 
 function getImageSource(type) {
@@ -818,24 +748,6 @@ function emitLocationUpdate(payload) {
 
 /* ------------ Template Refs ------------ */
 
-// Refs for DOM elements
-const inputField = ref(null);
-const dropdownEl = ref(null);
-const inputContainer = ref(null);
-const suggestionContainerEl = ref(null);
-const suggestionItems = ref([]);
-
-// On each update, re-map the suggestion items
-onBeforeUpdate(() => {
-  suggestionItems.value = [];
-});
-
-onUpdated(() => {
-  suggestionItems.value = visibleSuggestions.value.map(
-    (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
-  );
-});
-
 /*
   The code above tries to approximate your event system.
   If you want to define emits at the top:
@@ -855,311 +767,351 @@ onUpdated(() => {
 </script>
 
 <style scoped>
-  #imgIcon {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: none;
-  }
+#imgIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
 
-  /* Base layout */
-  .search-wrapper {
-    position: relative;
-    width: 100%;
-  }
+/* Base layout */
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
 
-  /* Input containers */
-  .input-container,
-  .input-container-dropdown {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    align-self: stretch;
-    height: 48px;
-    padding: 0px 16px 0px 24px;
-    /* 0px 9px 0px 16px;  */
-    position: relative;
-    z-index: 1;
-    cursor: default;
-    /* user-select: none; */
-  }
+/* Input containers */
+.input-container,
+.input-container-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  height: 48px;
+  padding: 0px 16px 0px 24px;
+  /* 0px 9px 0px 16px;  */
+  position: relative;
+  z-index: 1;
+  cursor: default;
+  /* user-select: none; */
+}
 
-  .input-container {
-    border-radius: 99px;
-    background: var(--Gray-100, #F8F9FA);
+.input-container {
+  border-radius: 99px;
+  background: var(--Gray-100, #F8F9FA);
 
-  }
+}
 
-  .input-container-dropdown {
-    border-radius: 99px;
-    background: var(--Gray-100, #F8F9FA);
-    outline: 2px solid #418377;
-    outline-offset: -2px;
-    user-select: none;
-    cursor: default;
-  }
+.input-container-dropdown {
+  border-radius: 99px;
+  background: var(--Gray-100, #F8F9FA);
+  outline: 3px solid #418377;
+  outline-offset: -3px;
+  user-select: none;
+  cursor: default;
+}
 
-  /* Input and overlay */
-  .input-field,
-  .suggestion-overlay {
-    width: 100%;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex: 1 0 0;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    overflow: hidden;
-    color: var(--Body-Text-Body-Color, #212529);
-    text-overflow: ellipsis;
-    padding: 0;
-  }
+/* Input and overlay */
+.input-field,
+.suggestion-overlay {
+  width: 100%;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  color: var(--Body-Text-Body-Color, #212529);
+  text-overflow: ellipsis;
+  padding: 0;
+}
 
-  .input-field {
-    background: var(--Gray-100, #F8F9FA);
-    border: none;
-    outline: none;
-    user-select: none;
-    cursor: text;
-  }
+.input-field {
+  background: var(--Gray-100, #F8F9FA);
+  border: none;
+  outline: none;
+  user-select: none;
+  cursor: text;
+}
 
-  .input-overlay {
-    position: relative;
-    flex: 1;
-    overflow: hidden;
-    border: none;
-    display: flex;
-    align-items: center;
-  }
+.input-overlay {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border: none;
+  display: flex;
+  align-items: center;
+}
 
-  .suggestion-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background: transparent;
-  }
+.suggestion-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background: transparent;
+}
 
-  /* Text styles */
-  .invisible {
-    visibility: hidden;
-  }
+/* Text styles */
+.invisible {
+  visibility: hidden;
+}
 
-  .highlight {
-    color: var(--Gray-500, #ADB5BD);
+.highlight {
+  color: var(--Gray-500, #ADB5BD);
 
-    color: var(--Gray-500, #ADB5BD);
-  }
+  color: var(--Gray-500, #ADB5BD);
+}
 
-  .text-highlight {
-    font-weight: bold;
-  }
+.text-highlight {
+  font-weight: bold;
+}
 
-  /* Buttons */
-  .button-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
+/* Buttons */
+.button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #212529;
+}
 
-  .clean-button,
-  .search-button {
-    display: flex;
-    padding: 8px;
-    align-items: center;
-    gap: 10px;
-    background: none;
-    border: none;
-  }
+.clean-button,
+.search-button {
+  display: flex;
+  padding: 8px;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: #212529;
+}
 
-  .clean-button-hidden {
-    display: none;
-  }
+.clean-button-hidden {
+  display: none;
+}
 
-  /* Filter buttons */
-  .filter-button-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    align-self: stretch;
-    /*overflow: hidden;
+/* Filter buttons */
+.filter-button-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  /*overflow: hidden;
     text-overflow: ellipsis;
     */
-  }
+}
 
-  .filter-button,
-  .filter-button-active {
-    /*display: flex;
+.filter-button,
+.filter-button-active {
+  /*display: flex;
     /*display: flex;
     padding: 5px 8px;
     justify-content: center;
     align-items: center;
     gap: 10px;
   */
-    border: none;
-    padding: 8px;
-    gap: 10px;
-    border-radius: 99px;
-    opacity: 0px;
-  }
+  border: none;
+  padding: 8px;
+  gap: 10px;
+  border-radius: 99px;
+  opacity: 0px;
+}
 
-  .filter-button {
-    color: var(--Theme-Secondary, #525960);
-    background: var(--Gray-100, #F8F9FA);
-  }
+.filter-button {
+  color: var(--Theme-Secondary, #525960);
+  background: var(--Gray-100, #F8F9FA);
+}
 
-  .filter-button-active {
-    background: var(--Primary-Fade-100, #D2E8DD);
-    color: var(--Theme-Primary, #025949);
-  }
+.filter-button-active {
+  background: var(--Primary-Fade-100, #D2E8DD);
+  color: var(--Theme-Primary, #025949);
+}
 
-  /* Filter container */
-  .filter-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    align-self: stretch;
-  }
+/* Filter container */
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
 
-  /* Suggestion container */
-  .suggestion-container {
-    position: absolute;
-    border: 1px solid #ffffff;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    gap: 0px;
-    border-radius: 16px 16px 8px 8px;
-    opacity: 0px;
-    /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    background: var(--Gray-100, #F8F9FA);
-  }
+/* Suggestion container */
+.suggestion-container {
+  position: absolute;
+  border: 1px solid #ffffff;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  gap: 0px;
+  border-radius: 16px 16px 8px 8px;
+  opacity: 0px;
+  /*box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);*/
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--Gray-100, #F8F9FA);
+}
 
-  .suggestion-container-hidden {
-    display: none;
-  }
+.suggestion-container-hidden {
+  display: none;
+}
 
-  /* Suggestion grid */
-  .suggestion-grid {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    align-self: stretch;
-    padding: 16px 16px 24px 16px;
-    gap: 24px;
+/* Suggestion grid */
+.suggestion-grid {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  padding: 16px 16px 24px 16px;
+  gap: 24px;
 
-  }
+}
 
-  /* Suggestions list */
-  .suggestions-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    align-self: stretch;
-    cursor: pointer;
-  }
+/* Suggestions list */
+.suggestions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  cursor: pointer;
+}
 
-  .suggestions-list li:hover {
-    background-color: #E9ECEF;
-  }
-
-  .suggestions-list .first-suggestion {
+.suggestions-list li:hover {
   background-color: #E9ECEF;
-  }
+}
 
-  .suggestion-item {
-    width: 100%;
-    display: flex;
-    height: 40px;
-    padding: 8px 8px;
-    /* 0px 8px; */
-    align-items: center;
-    gap: 10px;
-    /* This gap is for internal elements like icon and text */
-    align-self: stretch;
-    border-radius: 4px;
-    background-color: transparent;
-  }
+.suggestions-list .first-suggestion {
+  background-color: #E9ECEF;
+}
 
-  .suggestion-item[data-type="separator"] {
-    height: 1px;
-    background-color: #E9ECEF;
-    margin: 0px 0;
-    padding: 0;
-  }
+.suggestion-item {
+  width: 100%;
+  display: flex;
+  height: 40px;
+  padding: 8px 8px;
+  /* 0px 8px; */
+  align-items: center;
+  gap: 10px;
+  /* This gap is for internal elements like icon and text */
+  align-self: stretch;
+  border-radius: 4px;
+  background-color: transparent;
+}
 
-  .item-text {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    overflow: hidden;
-    color: var(--Body-Text-Body-Color, #212529);
-    text-overflow: ellipsis;
-    /* Body/Small/Regular
+.suggestion-item[data-type="separator"] {
+  height: 1px;
+  background-color: #E9ECEF;
+  margin: 0px 0;
+  padding: 0;
+}
+
+.item-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  color: var(--Body-Text-Body-Color, #212529);
+  text-overflow: ellipsis;
+  /* Body/Small/Regular
       font-family: Inter;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 150%;
     /* 21px */
-  }
+}
 
-  /* Icons */
-  .suggestion-item .bi {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-  }
+/* Icons */
+.suggestion-item .bi {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
 
-  .button-container .bi {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-  }
+.button-container .bi {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
 
-  /* Loading */
-  .spinner-border {
-    width: 16px;
-    height: 16px;
-    color: var(--Theme-Primary, #025949);
-    border-width: 2px;
-  }
+/* Loading */
+.spinner-border {
+  width: 16px;
+  height: 16px;
+  color: var(--Theme-Primary, #025949);
+  border-width: 2px;
+}
 
-  /* Debug elements */
-  .button-debug {
-    display: none;
-  }
+/* Debug elements */
+.button-debug {
+  display: none;
+}
 
-  .suggestion-count {
-    margin-left: 10px;
-    font-size: 14px;
-    color: #666;
-  }
+.suggestion-count {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #666;
+}
 
-  .cache-count {
-    margin-left: 20px;
-    font-size: 14px;
-    color: #666;
-  }
+.cache-count {
+  margin-left: 20px;
+  font-size: 14px;
+  color: #666;
+}
 
-  .history-count {
-    margin-left: 20px;
-    font-size: 14px;
-    color: #666;
+.history-count {
+  margin-left: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
   }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+.shake-animation {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Error state styling */
+.input-container-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  height: 48px;
+  padding: 0px 16px 0px 24px;
+  position: relative;
+  z-index: 1;
+  border-radius: 99px;
+  background: var(--Gray-100, #F8F9FA);
+  outline: 3px solid #DC3545;
+  outline-offset: -3px;
+}
 </style>

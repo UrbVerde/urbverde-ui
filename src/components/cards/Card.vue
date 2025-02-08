@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/Card.vue -->
 <template>
   <div class="custom-card shadow-sm">
     <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
@@ -92,6 +93,7 @@ p, h6{
   display: flex;
   justify-content: center;
   margin: 0 auto;
+  height: auto;
 }
 
 .card-header {

@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/heat/TipsCard.vue -->
 <template>
   <div class="benefits-card">
     <div class="benefits-card-content">

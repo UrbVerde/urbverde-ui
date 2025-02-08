@@ -1,48 +1,21 @@
+<!-- urbverde-ui/src/components/homepage/HomeSearch.vue -->
 <template>
   <div class="search">
-    <div class="search-button">
-      <BuscaSimples @location-updated="onLocationUpdated" />
+    <div class="search-button shadow">
+      <BuscaSimples @location-updated="onLocationUpdated"
+                    @interaction-succeeded="handleNavigation"
+                    :openDelay="0" />
     </div>
-
-    <!-- Botão para largura maiores que 600px -->
-    <router-link
-      v-if="windowWidth >= 600"
-      :to="buttonRoute"
-      class="button-primary-link">
-      <PrimaryButton
-        class="button-primary-link"
-        :label="buttonLabel"
-        :filled="filled"
-        :iconType="iconType"
-        :icon="icon"
-        iconPosition="right"
-      />
-    </router-link>
-
-    <!-- Botão para largura menores que 600px -->
-    <router-link
-      v-else
-      :to="buttonRoute"
-      class="button-primary-link-mobile">
-      <PrimaryButton
-        class="button-primary-link-mobile"
-        :filled="filled"
-        :iconType="iconType"
-        :icon="icon"
-        iconPosition="right"
-      />
-    </router-link>
   </div>
 </template>
 
 <script>
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import BuscaSimples from '@/components/search_dropdown/BuscaSimples.vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'HomeSearch',
   components: {
-    PrimaryButton,
     BuscaSimples,
   },
   props: {
@@ -67,6 +40,11 @@ export default {
       default: 'bi bi-arrow-right',
     },
   },
+  setup() {
+    const router = useRouter();
+
+    return { router };
+  },
   data() {
     return {
       windowWidth: window.innerWidth,
@@ -79,6 +57,11 @@ export default {
     updateWindowWidth() {
       this.windowWidth = window.innerWidth;
     },
+    handleNavigation() {
+      setTimeout(() => {
+        this.router.push('/mapa');
+      }, 800); // 1000 milliseconds = 1 second
+    },
   },
   mounted() {
     window.addEventListener('resize', this.updateWindowWidth);
@@ -89,7 +72,9 @@ export default {
 };
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
   .search {
     margin: 0;
     padding: 0;
@@ -114,4 +99,32 @@ export default {
     margin: 0;
     padding: 0;
   }
+
+  .search-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 480px;
+    position: relative;
+    border-radius: 99px;
+  }
+
+  @include breakpoint-down('tablet'){
+    .search-button{
+      width: 400px;
+    }
+  }
+
+  @include breakpoint-down('mobile-large'){
+    .search-button{
+      width: 320px;
+    }
+  }
+
+  @include breakpoint-down('mobile-medium'){
+    .search-button{
+      width: 272px;
+    }
+  }
+
   </style>

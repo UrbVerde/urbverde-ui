@@ -1,3 +1,4 @@
+// urbverde-ui/eslint.config.js
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import pluginVue from 'eslint-plugin-vue';
@@ -6,6 +7,12 @@ import pluginVue from 'eslint-plugin-vue';
 export default [
   {
     files: ['**/*.{js,mjs,cjs,vue}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        gtag: 'readonly'
+      }
+    },
     rules: {
       'semi': ['error', 'always'],
       'quotes': ['error', 'single', { 'avoidEscape': true }],
@@ -43,7 +50,6 @@ export default [
       ],
     },
   },
-  { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...pluginVue.configs['flat/essential'],
 ];

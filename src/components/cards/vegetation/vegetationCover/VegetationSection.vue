@@ -97,7 +97,6 @@ export default {
 .vegetation-field {
     display: flex;
     flex: 1;
-    min-width: 300px;
     max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
@@ -107,7 +106,6 @@ export default {
 .right-panel {
     display: flex;
     flex: 1;
-    min-width: 300px;
     max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;

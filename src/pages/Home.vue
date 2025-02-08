@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/pages/Home.vue -->
 <template>
   <div class="homepage" role="document">
     <TawkTo />
@@ -262,7 +263,7 @@
               para todo o Brasil, para ajudar cidadãos e gestores a tomar
               decisões conscientes e enfrentar os desafios climáticos
             </p>
-            <router-link to="/sobre" class="button-primary-link">
+            <router-link to="" class="button-primary-link">
               <PrimaryButton
                 label="Saiba quem somos"
                 :filled="false"
@@ -683,6 +684,7 @@ export default {
     gap: 72px;
     align-items: center;
     justify-content: center;
+    z-index: 1;
   }
 
   .hero-text {
