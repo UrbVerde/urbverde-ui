@@ -59,7 +59,7 @@ import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
 import Sidebar from '../components/side_bar/SideBar.vue';
-import Navbar from '../components/navbar/Navbar.vue';
+import Navbar from '../components/navbar/NavbarMap.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legend from '../components/legend/LegendMain.vue';
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
