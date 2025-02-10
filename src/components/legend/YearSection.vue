@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/legend/YearSection.vue -->
 <template>
   <div class="section-container">
     <div class="year-section">
@@ -6,58 +5,68 @@
         <img src="@/assets/icons/calendar.svg" alt="Calendar icon" class="calendar-icon" />
         <span class="body-small-medium">Ano</span>
       </div>
-
-      <div class="custom-select" @click="toggleDropdown" ref="selectContainer">
-        <div class="select-display">
-          <span>{{ selectedYear }}</span>
-          <img
-            src="@/assets/icons/wrapper.svg"
-            :class="['chevron-icon', { 'rotated': isOpen }]"
-            alt="toggle"
-          />
-        </div>
-
-        <!-- Dropdown -->
-        <div v-if="isOpen" class="select-dropdown">
-          <button
+      <div class="custom-select">
+        <button
+          class="nav-button"
+          @click="navigateYear(1)"
+          :disabled="!canNavigateBack"
+        >
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <select
+          v-model="selectedYear"
+          @change="onYearChange"
+          class="year-select"
+        >
+          <option
             v-for="year in availableYears"
             :key="year"
-            class="year-option"
-            :class="{ 'selected': year === selectedYear }"
-            @click="selectYear(year)"
+            :value="year"
           >
             {{ year }}
-          </button>
-        </div>
+          </option>
+        </select>
+        <button
+          class="nav-button"
+          @click="navigateYear(-1)"
+          :disabled="!canNavigateForward"
+        >
+          <i class="bi bi-chevron-right"></i>
+        </button>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: 'YearSection',
   props: {
     initialYear: {
       type: Number,
-      default: new Date().getFullYear()
+      default: 2021
     },
     yearRange: {
       type: Number,
-      default: 4
+      default: 6
     }
   },
   data() {
     return {
+      // Ensure the initial value is a number
       selectedYear: this.initialYear,
-      availableYears: this.generateYearRange(),
-      isOpen: false
+      availableYears: this.generateYearRange()
     };
   },
-  mounted() {
-    document.addEventListener('click', this.handleClickOutside);
-  },
-  beforeUnmount() {
-    document.removeEventListener('click', this.handleClickOutside);
+  computed: {
+    // When navigating backward, we move toward the end of the array
+    canNavigateBack() {
+      return this.availableYears.indexOf(Number(this.selectedYear)) < this.availableYears.length - 1;
+    },
+    // When navigating forward, we move toward the beginning of the array
+    canNavigateForward() {
+      return this.availableYears.indexOf(Number(this.selectedYear)) > 0;
+    }
   },
   methods: {
     generateYearRange() {
@@ -69,32 +78,44 @@ export default {
 
       return years.sort((a, b) => b - a);
     },
-    toggleDropdown() {
-      this.isOpen = !this.isOpen;
+    navigateYear(direction) {
+      const currentIndex = this.availableYears.indexOf(Number(this.selectedYear));
+      const newIndex = currentIndex + direction;
+      if (newIndex >= 0 && newIndex < this.availableYears.length) {
+        this.selectedYear = this.availableYears[newIndex];
+        this.$emit('year-change', this.selectedYear);
+      }
     },
-    selectYear(year) {
-      this.selectedYear = year;
-      this.isOpen = false;
-      this.$emit('year-change', year);
+    onYearChange() {
+      // Convert the selected value to a number (select returns a string by default)
+      this.selectedYear = Number(this.selectedYear);
+      this.$emit('year-change', this.selectedYear);
     },
-    handleClickOutside(event) {
-      if (this.$refs.selectContainer && !this.$refs.selectContainer.contains(event.target)) {
-        this.isOpen = false;
+    handleKeydown(event) {
+      if (event.key === 'ArrowLeft') {
+        this.navigateYear(1);
+      } else if (event.key === 'ArrowRight') {
+        this.navigateYear(-1);
       }
     }
+  },
+  mounted() {
+    window.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.handleKeydown);
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .section-container {
   background-color: #FFF;
-  padding: 16px 24px;
+  padding: 16px 16px;
   margin-bottom: 16px;
   border-radius: 16px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  width: 232px;
 }
 
 .year-section {
@@ -107,90 +128,59 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
+
+  span {
+    color: #525960;
+    font-size: 14px;
+  }
 }
 
-.year-label span {
-  color: #525960;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Custom Select Styling */
 .custom-select {
-  position: relative;
-  width: 90px;
-}
-
-.select-display {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 5px 9px;
+  gap: 4px;
   background: white;
-  border: 1px solid #E0E0E0;
   border-radius: 4px;
-  cursor: pointer;
-  user-select: none;
-  font-size: 14px;
-  color: #525960;
 }
 
-.chevron-icon {
-  width: 16px;
-  height: 16px;
-  transition: transform 150ms ease-in-out;
-}
-
-.chevron-icon.rotated {
-  transform: rotate(180deg);
-}
-
-.select-dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  width: 100%;
-  background: white;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.year-option {
-  width: 100%;
-  padding: 8px 12px;
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   border: none;
   background: none;
-  text-align: left;
+  color: #000;  /* Arrow icons are black */
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0;
+
+  &:hover:not(:disabled) {
+    background-color: #f8f9fa;
+  }
+
+  &:disabled {
+    opacity: 0.5; /* Slight opacity change when disabled */
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 14px;
+  }
+}
+
+.year-select {
+  min-width: 60px;
+  text-align: center;
   font-size: 14px;
   color: #525960;
-  cursor: pointer;
-  transition: background-color 150ms ease;
-}
-
-.year-option:hover {
-  background-color: #F8F9FA;
-}
-
-.year-option.selected {
-  background-color: #F0F0F0;
-  font-weight: 500;
-}
-
-/* Scrollbar styling */
-.select-dropdown::-webkit-scrollbar {
-  width: 4px;
-}
-
-.select-dropdown::-webkit-scrollbar-track {
-  background: #F8F9FA;
-}
-
-.select-dropdown::-webkit-scrollbar-thumb {
-  background: #D1D1D1;
-  border-radius: 2px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 4px;
+  background-color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 </style>

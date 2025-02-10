@@ -10,6 +10,7 @@
       <p class="error-text">{{ errorMessage }}</p>
       <p class="error-text">Selecione uma cidade para visualizar no mapa</p>
     </div>
+    <div ref="basemapSwitcher" class="basemap-switcher"></div>
     <slot></slot>
   </div>
 </template>
@@ -66,7 +67,7 @@ const currentYear = computed(() => route.query.year || '2021');
 ---------------------------------------*/
 watch(
   () => locationStore.cd_mun,
-  (newVal) => { if (newVal) {loadCoordinates(newVal);} }
+  (newVal) => { if (newVal) { loadCoordinates(newVal); } }
 );
 watch(
   () => [currentLayer.value, currentScale.value, route.query.code],
@@ -78,13 +79,13 @@ watch(
         'parks-points', 'parks-buffers', 'parks-vector',
         'vegetation-layer', 'vegetation-layer-outline'
       ];
-      idsToRemove.forEach(id => { if (map.value.getLayer(id)) {map.value.removeLayer(id);} });
+      idsToRemove.forEach(id => { if (map.value.getLayer(id)) { map.value.removeLayer(id); } });
       const srcIdsToRemove = [
         'temperature-source', 'vector-source',
         'parks-source', 'buffers-source', 'parks-vector-source',
         'vegetation-source'
       ];
-      srcIdsToRemove.forEach(id => { if (map.value.getSource(id)) {map.value.removeSource(id);} });
+      srcIdsToRemove.forEach(id => { if (map.value.getSource(id)) { map.value.removeSource(id); } });
 
       // Decide which setup function to call based on the currentLayer.
       if (['surface_temp', 'max_surface_temp', 'heat_island'].includes(currentLayer.value)) {
@@ -93,7 +94,7 @@ watch(
       else if (['park_distribution', 'green_area_per_capita', 'green_area_accessibility'].includes(currentLayer.value)) {
         setupParksLayers();
       }
-      else if (['pcv','icv','idsa','cvp','ndvi'].includes(currentLayer.value)) {
+      else if (['pcv', 'icv', 'idsa', 'cvp', 'ndvi'].includes(currentLayer.value)) {
         setupVegetationLayers();
       }
     }
@@ -114,7 +115,7 @@ function getPopupContent(feat, paintConfig) {
   if (currentScale.value === 'intraurbana') {
     return `
       <div style="font-family: system-ui; padding: 8px;">
-        <p><strong>${paintConfig.label} no setor:</strong><br/><strong>${value} ${paintConfig.unit}</strong></p>
+        <p>${paintConfig.label} no setor:<br/><strong>${value} ${paintConfig.unit}</strong></p>
       </div>
     `;
   } else if (currentScale.value === 'estadual') {
@@ -138,16 +139,16 @@ function getPopupContent(feat, paintConfig) {
  * Fetches the raster value from the WMS.
  */
 async function fetchRasterValue(lng, lat, controller) {
-  if (!isMouseWithinMunicipality.value) {return null;}
+  if (!isMouseWithinMunicipality.value) { return null; }
   const bboxSize = 0.0001;
   const ts = Date.now();
   const url = 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?' +
-      'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&' +
-      'LAYERS=urbverde:tst-intraurbana-rel-30m-2021a2016&' +
-      'QUERY_LAYERS=urbverde:tst-intraurbana-rel-30m-2021a2016&' +
-      'INFO_FORMAT=application/json&FEATURE_COUNT=1&X=50&Y=50&' +
-      `SRS=EPSG:4326&WIDTH=101&HEIGHT=101&_ts=${ts}&` +
-      `BBOX=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}`;
+    'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&' +
+    'LAYERS=urbverde:tst-intraurbana-rel-30m-2021a2016&' +
+    'QUERY_LAYERS=urbverde:tst-intraurbana-rel-30m-2021a2016&' +
+    'INFO_FORMAT=application/json&FEATURE_COUNT=1&X=50&Y=50&' +
+    `SRS=EPSG:4326&WIDTH=101&HEIGHT=101&_ts=${ts}&` +
+    `BBOX=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}`;
   const response = await fetch(url, { signal: controller.signal });
   const data = await response.json();
   if (data?.features?.[0]?.properties?.GRAY_INDEX !== undefined) {
@@ -165,7 +166,7 @@ async function fetchRasterValue(lng, lat, controller) {
  */
 function bringBasemapLabelsToFront() {
   const layers = map.value.getStyle().layers || [];
-  layers.forEach(layer => { if (layer.type === 'symbol') {map.value.moveLayer(layer.id);} });
+  layers.forEach(layer => { if (layer.type === 'symbol') { map.value.moveLayer(layer.id); } });
 }
 
 /* ---------------------------------------
@@ -203,7 +204,7 @@ async function loadCoordinates(code) {
 
 /** Enable raster measurement events for the 'surface_temp' layer. */
 function enableRasterMeasurement() {
-  if (!map.value || currentLayer.value !== 'surface_temp') {return;}
+  if (!map.value || currentLayer.value !== 'surface_temp') { return; }
   // Remove any vector-layer click events.
   map.value.off('click', 'vector-layer');
 
@@ -238,34 +239,39 @@ function enableRasterMeasurement() {
 
     rasterRequestId++;
     const thisRequestId = rasterRequestId;
-    if (currentRequest) {currentRequest.abort();}
+    if (currentRequest) { currentRequest.abort(); }
     const controller = new AbortController();
     currentRequest = controller;
     const { lng, lat } = e.lngLat;
-
     requestAnimationFrame(() => {
-      fetchRasterValue(lng, lat, controller).then(value => {
-        if (currentLayer.value !== 'surface_temp' || thisRequestId !== rasterRequestId) {return;}
-        if (value) {
-          rasterPopup.value.setHTML(`<div class="popup-content">Temperatura Relativa:<br><strong>${value}</strong></div>`);
-        } else {
-          rasterPopup.value.remove();
-        }
-      });
-
+      fetchRasterValue(lng, lat, controller)
+        .then(value => {
+          if (currentLayer.value !== 'surface_temp' || thisRequestId !== rasterRequestId) { return; }
+          if (value) {
+            rasterPopup.value.setHTML(`<div class="popup-content">Temperatura Relativa:<br><strong>${value}</strong></div>`);
+          } else {
+            rasterPopup.value.remove();
+          }
+        })
+        .catch(err => {
+          // Optionally check if err.name === 'AbortError' and ignore it
+          if (err.name !== 'AbortError') {
+            console.error(err);
+          }
+        });
     });
   };
 
   const clickHandler = async(e) => {
-    if (!e.originalEvent.ctrlKey || currentLayer.value !== 'surface_temp') {return;}
+    if (!e.originalEvent.ctrlKey || currentLayer.value !== 'surface_temp') { return; }
     e.originalEvent.stopPropagation();
     e.preventDefault();
     const features = map.value.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
-    if (!features.length) {return;}
+    if (!features.length) { return; }
     const { lng, lat } = e.lngLat;
 
     const value = await fetchRasterValue(lng, lat, new AbortController());
-    if (currentLayer.value !== 'surface_temp') {return;}
+    if (currentLayer.value !== 'surface_temp') { return; }
     if (value) {
       pinnedPopup.value
         .setLngLat(e.lngLat)
@@ -286,9 +292,36 @@ function enableRasterMeasurement() {
   });
 }
 
+/* ---------------------------------------
+   BASEMAPS
+---------------------------------------*/
+/**
+ * A list of custom base-map styles (MapTiler, or your own).
+ * Replace these with any style endpoints you want:
+ * - For example, from https://cloud.maptiler.com/maps
+ * - Or from Mapbox, or from your own tile server
+ */
+// const baseMaps = [
+//   {
+//     id: 'streets',
+//     name: 'Streets',
+//     styleURL: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+//     thumbnail: 'https://cloud.maptiler.com/static/img/maps/streets.png'
+//   },
+//   {
+//     id: 'satellite',
+//     name: 'Satellite',
+//     styleURL: 'https://api.maptiler.com/maps/92fa6478-03bb-44cc-897a-fe5411f52e99/style.json?key=eizpVHFsrBDeO6HGwWvQ"',
+//     thumbnail: 'https://cloud.maptiler.com/static/img/maps/hybrid.png'
+//   },
+// ];
+
+/* ---------------------------------------
+   MAP INITIALIZATION
+---------------------------------------*/
 /** Initialize the map (if not already created). */
 function initializeMap() {
-  if (showError.value || !coordinates.value) {return;}
+  if (showError.value || !coordinates.value) { return; }
   let initialState = {
     center: [coordinates.value.lng, coordinates.value.lat],
     zoom: MAP_ZOOM_START,
@@ -312,6 +345,30 @@ function initializeMap() {
     ...initialState,
     attributionControl: false
   });
+
+  // Add standard MapLibre Navigation Controls (zoom in/out, rotate, etc.)
+  // position can be 'top-right', 'top-left', 'bottom-left', 'bottom-right'
+  map.value.addControl(new maplibregl.NavigationControl(), 'top-left');
+  // map.value.addControl(
+  //   new maplibregl.GeolocateControl({
+  //     positionOptions: { enableHighAccuracy: true },
+  //     trackUserLocation: false, // or true, if you want continuous tracking
+  //     showUserLocation: true
+  //   }),
+  //   'top-left'
+  // );
+  // map.value.addSource('terrain', {
+  //   type: 'raster-dem',
+  //   url: 'https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=eizpVHFsrBDeO6HGwWvQ',
+  //   tileSize: 512,        // or 256 if you prefer
+  //   maxzoom: 14           // depends on your DEM source
+  // });
+
+  // this.map.addSource("terrain", {
+  //             "type": "raster-dem",
+  //             "url": "",
+  //           });
+
   customHash.value = new CustomHash();
   customHash.value.addTo(map.value);
   map.value.on('styleimagemissing', handleMissingImage);
@@ -337,13 +394,13 @@ function initializeMap() {
     });
     addBaseMunicipalitiesLayer();
     // Call the proper setup function based on currentLayer.
-    if (['surface_temp','max_surface_temp','heat_island'].includes(currentLayer.value)) {
+    if (['surface_temp', 'max_surface_temp', 'heat_island'].includes(currentLayer.value)) {
       setupTemperatureLayers();
     }
-    else if (['park_distribution','green_area_per_capita','green_area_accessibility'].includes(currentLayer.value)) {
+    else if (['park_distribution', 'green_area_per_capita', 'green_area_accessibility'].includes(currentLayer.value)) {
       setupParksLayers();
     }
-    else if (['pcv','icv','idsa','cvp','ndvi'].includes(currentLayer.value)) {
+    else if (['pcv', 'icv', 'idsa', 'cvp', 'ndvi'].includes(currentLayer.value)) {
       setupVegetationLayers();
     }
     if (!hash) {
@@ -360,7 +417,7 @@ function initializeMap() {
 
 /** Add municipality base layer and its outline. */
 function addBaseMunicipalitiesLayer() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
   map.value.addSource('base-municipalities', {
     type: 'vector',
     tiles: [
@@ -386,7 +443,7 @@ function addBaseMunicipalitiesLayer() {
       'fill-opacity': [
         'case',
         ['boolean', ['feature-state', 'pinned'], false],
-        0.8,
+        0.9,
         ['boolean', ['feature-state', 'hover'], false],
         0.6,
         0.1
@@ -424,12 +481,19 @@ function addBaseMunicipalitiesLayer() {
       ]
     }
   });
+  // const currentCdMun = locationStore.cd_mun; // current municipality from the store
+
+  // Mouse move: show hover popup only if the feature is not the current municipality
   map.value.on('mousemove', 'municipalities-base', (e) => {
     const features = e.features;
     if (!features?.length) {
       if (hoveredFeatureId !== null) {
         map.value.setFeatureState(
-          { source: 'base-municipalities', id: hoveredFeatureId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
+          {
+            source: 'base-municipalities',
+            id: hoveredFeatureId,
+            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+          },
           { hover: false }
         );
         hoveredFeatureId = null;
@@ -441,27 +505,57 @@ function addBaseMunicipalitiesLayer() {
     }
     const feat = features[0];
     const featId = feat.id || feat.properties.cd_mun;
+    // If we're at intraurbana scale and this feature is the current municipality, do nothing
+    if (currentScale.value === 'intraurbana' && feat.properties.cd_mun === locationStore.cd_mun) {
+      if (hoveredFeatureId !== null) {
+        map.value.setFeatureState(
+          {
+            source: 'base-municipalities',
+            id: hoveredFeatureId,
+            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+          },
+          { hover: false }
+        );
+        hoveredFeatureId = null;
+      }
+      hoverPopup.value.remove();
+      map.value.getCanvas().style.cursor = '';
+
+      return; // Skip further handling (no hover popup for current mun)
+    }
+
+    // Otherwise, proceed with the normal hover behavior:
     if (featId !== hoveredFeatureId) {
       if (hoveredFeatureId !== null) {
         map.value.setFeatureState(
-          { source: 'base-municipalities', id: hoveredFeatureId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
+          {
+            source: 'base-municipalities',
+            id: hoveredFeatureId,
+            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+          },
           { hover: false }
         );
       }
       hoveredFeatureId = featId;
       map.value.setFeatureState(
-        { source: 'base-municipalities', id: featId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
+        {
+          source: 'base-municipalities',
+          id: featId,
+          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+        },
         { hover: true }
       );
     }
     const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-    hoverPopup.value.setLngLat(e.lngLat).setOffset(offset)
+    hoverPopup.value
+      .setLngLat(e.lngLat)
+      .setOffset(offset)
       .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
       .addTo(map.value);
     map.value.getCanvas().style.cursor = 'pointer';
   });
   map.value.on('mouseleave', 'municipalities-base', () => {
-    if (!map.value) {return;}
+    if (!map.value) { return; }
     if (hoveredFeatureId !== null) {
       map.value.setFeatureState(
         { source: 'base-municipalities', id: hoveredFeatureId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
@@ -473,26 +567,40 @@ function addBaseMunicipalitiesLayer() {
     map.value.getCanvas().style.cursor = '';
   });
   map.value.on('click', 'municipalities-base', (e) => {
-    if (!map.value || !e.features?.length) {return;}
+    if (!map.value || !e.features?.length) { return; }
     const feat = e.features[0];
     const featId = feat.id || feat.properties.cd_mun;
+    // For ctrl+click (pinned popup) keep your existing behavior…
     if (e.originalEvent.ctrlKey) {
       if (pinnedFeatureId !== null) {
         map.value.setFeatureState(
-          { source: 'base-municipalities', id: pinnedFeatureId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
+          {
+            source: 'base-municipalities',
+            id: pinnedFeatureId,
+            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+          },
           { pinned: false }
         );
       }
       pinnedFeatureId = featId;
       map.value.setFeatureState(
-        { source: 'base-municipalities', id: featId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
+        {
+          source: 'base-municipalities',
+          id: featId,
+          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+        },
         { pinned: true }
       );
-      const paintConfig = { property: 'c3', label: 'Temperatura máxima de superfície', unit: '°C' };
-      pinnedPopup.value.setLngLat(e.lngLat).setHTML(getPopupContent(feat, paintConfig))
+      pinnedPopup.value
+        .setLngLat(e.lngLat)
+        .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
         .addTo(map.value);
     } else {
-      locationStore.setCdMun(feat.properties.cd_mun);
+      // Update the selected municipality if it’s different from the current one.
+      if (feat.properties.cd_mun !== locationStore.cd_mun) {
+        // Use setLocation to update cd_mun
+        locationStore.setLocation({ cd_mun: feat.properties.cd_mun });
+      }
     }
   });
 }
@@ -516,7 +624,7 @@ function setupTemperatureLayers() {
       id: 'temperature-raster',
       type: 'raster',
       source: 'temperature-source',
-      paint: { 'raster-opacity': 0.7, 'raster-resampling': 'nearest' }
+      paint: { 'raster-opacity': 0.9, 'raster-resampling': 'nearest' }
     }, 'municipalities-base');
     enableRasterMeasurement();
     bringBasemapLabelsToFront();
@@ -547,7 +655,7 @@ function setupTemperatureLayers() {
         1,
         ['boolean', ['feature-state', 'hover'], false],
         currentScale.value === 'estadual' ? 1 : 0.9,
-        0.6
+        0.7
       ],
       'fill-color': [
         'interpolate',
@@ -619,8 +727,8 @@ function setupTemperatureLayers() {
     map.value.getCanvas().style.cursor = '';
   });
   map.value.on('click', 'vector-layer', (e) => {
-    if (currentLayer.value === 'surface_temp') {return;}
-    if (!e.features?.length) {return;}
+    if (currentLayer.value === 'surface_temp') { return; }
+    if (!e.features?.length) { return; }
     const feat = e.features[0];
     const featId = feat.id;
     if (e.originalEvent.ctrlKey) {
@@ -641,138 +749,241 @@ function setupTemperatureLayers() {
 }
 
 /** Setup parks layers */
+function normalizeParksLayer(layer) {
+  const mapping = {
+    park_distribution: 'avg_distance_to_squares',
+    green_area_per_capita: 'square_area_per_capita',
+    green_area_accessibility: 'square_served_area',
+    acesso_populacao_atendida: 'served_population'
+  };
+
+  return mapping[layer] || layer;
+}
+
 function setupParksLayers() {
   if (!map.value || !mapLoaded.value) {return;}
-  const layerIds = ['parks-points', 'parks-buffers', 'parks-vector'];
-  const sourceIds = ['parks-source', 'buffers-source', 'parks-vector-source'];
-  layerIds.forEach(id => { if (map.value.getLayer(id)) {map.value.removeLayer(id);} });
-  sourceIds.forEach(id => { if (map.value.getSource(id)) {map.value.removeSource(id);} });
 
-  const selectedLayer = currentLayer.value;
-  if (!selectedLayer) {return;}
+  // Remove existing parks layers/sources
+  ['parks-vector', 'parks-vector-outline'].forEach((id) => {
+    if (map.value.getLayer(id)) {
+      map.value.removeLayer(id);
+    }
+  });
+  ['parks-vector-source'].forEach((id) => {
+    if (map.value.getSource(id)) {
+      map.value.removeSource(id);
+    }
+  });
 
-  // Add a basic parks source (used by all parks layers)
-  map.value.addSource('parks-source', {
+  const selectedLayerId = normalizeParksLayer(currentLayer.value);
+  if (!selectedLayerId) {return;}
+
+  const paintConfig = getParksPaintConfig(selectedLayerId);
+  if (!paintConfig) {
+    console.error('No paint config found for layer:', selectedLayerId);
+
+    return;
+  }
+
+  const scale = currentScale.value; // e.g. 'intraurbana' or 'estadual'
+  const isIntra = (scale === 'intraurbana');
+  const year = currentYear.value || '2021';
+
+  let tilesUrl, sourceLayer;
+  if (isIntra) {
+    tilesUrl = `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_setor_${year}/{z}/{x}/{y}.pbf`;
+    sourceLayer = `public.geodata_pracas_por_setor_${year}`;
+  } else {
+    tilesUrl = `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_municipio_${year}/{z}/{x}/{y}.pbf`;
+    sourceLayer = `public.geodata_pracas_por_municipio_${year}`;
+  }
+
+  const fillColorExpression = !isIntra ?
+    [
+      'interpolate',
+      ['linear'],
+      ['get', paintConfig.property],
+      ...paintConfig.stopsEstadual.flat()
+    ] :
+    [
+      'match',
+      ['get', 'cd_mun'],
+      parseInt(route.query.code),
+      [
+        'interpolate',
+        ['linear'],
+        ['get', paintConfig.property],
+        ...paintConfig.stopsIntra.flat()
+      ],
+      'transparent'
+    ];
+
+  map.value.addSource('parks-vector-source', {
     type: 'vector',
-    tiles: [
-      'https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf'
-    ],
+    tiles: [tilesUrl],
     minzoom: 0,
     maxzoom: 22
   });
 
-  if (selectedLayer === 'park_distribution') {
-    map.value.addLayer({
-      id: 'parks-points',
-      type: 'fill',
-      source: 'parks-source',
-      'source-layer': 'public.geom_pracas',
-      paint: {
-        'fill-color': '#40826D',
-        'fill-opacity': [
-          'case',
-          ['boolean', ['feature-state', 'pinned'], false],
-          1,
-          ['boolean', ['feature-state', 'hover'], false],
-          0.9,
-          0.7
-        ],
-        'fill-outline-color': [
-          'case',
-          ['boolean', ['feature-state', 'pinned'], false],
-          '#2c46f4',
-          ['boolean', ['feature-state', 'hover'], false],
-          '#7c99f4',
-          '#40826D'
-        ]
-      }
-    });
-    setupParksInteractions('parks-points');
-  } else if (selectedLayer === 'green_area_per_capita') {
-    map.value.addSource('parks-vector-source', {
-      type: 'vector',
-      tiles: [
-        `https://urbverde.iau.usp.br/dados/public.geodata_pracas_por_municipio_${currentYear.value}/{z}/{x}/{y}.pbf`
+  map.value.addLayer({
+    id: 'parks-vector',
+    type: 'fill',
+    source: 'parks-vector-source',
+    'source-layer': sourceLayer,
+    paint: {
+      'fill-opacity': [
+        'case',
+        ['boolean', ['feature-state', 'pinned'], false],
+        1,
+        ['boolean', ['feature-state', 'hover'], false],
+        0.9,
+        0.6
       ],
-      minzoom: 0,
-      maxzoom: 22
-    });
-    map.value.addLayer({
-      id: 'parks-vector',
-      type: 'fill',
-      source: 'parks-vector-source',
-      'source-layer': `public.geodata_pracas_por_municipio_${currentYear.value}`,
-      paint: {
-        'fill-opacity': [
-          'case',
-          ['boolean', ['feature-state', 'pinned'], false],
-          1,
-          ['boolean', ['feature-state', 'hover'], false],
-          0.9,
-          0.6
-        ],
-        'fill-color': [
-          'interpolate',
-          ['linear'],
-          ['get', 'a2'],
-          0, '#d53e4f',
-          40, '#f46d43',
-          50, '#fdae61',
-          60, '#fee08b',
-          70, '#e6f598',
-          85, '#abdda4'
-        ]
-      }
-    });
-    setupParksInteractions('parks-vector');
-  } else if (selectedLayer === 'green_area_accessibility') {
-    // Add parks points layer.
-    map.value.addLayer({
-      id: 'parks-points',
-      type: 'fill',
-      source: 'parks-source',
-      'source-layer': 'public.geom_pracas',
-      paint: {
-        'fill-color': '#40826D',
-        'fill-opacity': 0.7,
-        'fill-outline-color': '#40826D'
-      }
-    });
-    // Add 400m buffer source and layer.
-    map.value.addSource('buffers-source', {
-      type: 'vector',
-      tiles: [
-        'https://urbverde.iau.usp.br/dados/public.geom_buffer_400m_municipios/{z}/{x}/{y}.pbf'
-      ],
-      minzoom: 0,
-      maxzoom: 22
-    });
-    map.value.addLayer({
-      id: 'parks-buffers',
-      type: 'fill',
-      source: 'buffers-source',
-      'source-layer': 'public.geom_buffer_400m_municipios',
-      paint: {
-        'fill-color': '#FF6F91',
-        'fill-opacity': 0.5,
-        'fill-outline-color': '#FF6F91'
-      }
-    }, 'parks-points');
-    if (currentScale.value === 'intraurbana') {
-      map.value.setFilter('parks-buffers', [
-        '==',
-        ['get', 'cd_mun'],
-        parseInt(route.query.code)
-      ]);
+      'fill-color': fillColorExpression
     }
-    setupParksInteractions('parks-points');
+  }, 'municipalities-base');
+
+  map.value.addLayer({
+    id: 'parks-vector-outline',
+    type: 'line',
+    source: 'parks-vector-source',
+    'source-layer': sourceLayer,
+    paint: {
+      'line-color': [
+        'case',
+        ['boolean', ['feature-state', 'pinned'], false],
+        '#2c46f4',
+        ['boolean', ['feature-state', 'hover'], false],
+        '#7c99f4',
+        'rgba(0,0,0,0.6)'
+      ],
+      'line-width': [
+        'case',
+        ['boolean', ['feature-state', 'pinned'], false],
+        3,
+        ['boolean', ['feature-state', 'hover'], false],
+        2,
+        1
+      ]
+    }
+  }, 'municipalities-base');
+
+  if (isIntra) {
+    // Confirm that route.query.code exists and is valid
+    map.value.setFilter('parks-vector', ['==', ['get', 'cd_mun'], parseInt(route.query.code)]);
+    map.value.setFilter('parks-vector-outline', ['==', ['get', 'cd_mun'], parseInt(route.query.code)]);
   }
+
+  setupParksInteractions({
+    fillLayerId: 'parks-vector',
+    outlineLayerId: 'parks-vector-outline',
+    paintConfig
+  });
+
   bringBasemapLabelsToFront();
 }
 
+function getParksPaintConfig(layerId) {
+  if (layerId === 'avg_distance_to_squares') {
+    return {
+      property: 'a4',
+      label: 'Distância média até as praças',
+      unit: 'm',
+      stopsEstadual: [
+        [1.23, '#1a9850'],
+        [1.69, '#91cf60'],
+        [2.83, '#d9ef8b'],
+        [7.45, '#ffffbf'],
+        [18.97, '#fee08b'],
+        [35.07, '#fc8d59'],
+        [46.76, '#d73027']
+      ],
+      stopsIntra: [
+        [0, '#1a9850'],
+        [50, '#d73027']
+      ]
+    };
+  } else if (layerId === 'square_area_per_capita') {
+    return {
+      property: 'a2',
+      label: 'Área de praças por habitante',
+      unit: 'm²/hab',
+      stopsEstadual: [
+        [0, '#d53e4f'],
+        [40, '#f46d43'],
+        [50, '#fdae61'],
+        [60, '#fee08b'],
+        [70, '#e6f598'],
+        [85, '#abdda4']
+      ],
+      stopsIntra: [
+        [0, '#d53e4f'],
+        [15, '#3288bd']
+      ]
+    };
+  } else if (layerId === 'square_served_area') {
+    return {
+      property: 'a9', // Adjust if needed
+      label: 'Área atendida pelas praças',
+      unit: 'km²',
+      stopsEstadual: [
+        [0, '#d53e4f'],
+        [100, '#3288bd']
+      ],
+      stopsIntra: [
+        [0, '#d53e4f'],
+        [100, '#3288bd']
+      ]
+    };
+  } else if (layerId === 'served_population') {
+    return {
+      property: 'a1',
+      label: 'População atendida pelas praças',
+      unit: '%',
+      stopsEstadual: [
+        [0, '#d53e4f'],
+        [14.3, '#f46d43'],
+        [28.6, '#fdae61'],
+        [42.9, '#fee08b'],
+        [57.9, '#e6f598'],
+        [71.5, '#abdda4'],
+        [85.8, '#66c2a5'],
+        [100, '#3288bd']
+      ],
+      stopsIntra: [
+        [0, '#d53e4f'],
+        [100, '#3288bd']
+      ]
+    };
+  }
+
+  return null;
+}
+
+// function getPopupContentParks(feature, paintConfig, pinned = false) {
+//   const val = feature.properties[paintConfig.property];
+//   const numericStr = val != null ? val.toFixed(2) + paintConfig.unit : 'N/A';
+//   if (currentScale.value === 'estadual') {
+//     const nm = feature.properties.nm_mun || '';
+
+//     return `
+//       <div style="font-family: system-ui; padding: 8px; text-align: center;">
+//         <strong>${nm}</strong><br/>
+//         <strong>${numericStr}</strong>
+//       </div>
+//     `;
+//   } else {
+//     return `
+//       <div style="font-family: system-ui; padding: 8px; text-align: center;">
+//         <strong>${numericStr}</strong>
+//       </div>
+//     `;
+//   }
+// }
+
 function setupParksInteractions(layerId) {
   const isIntra = (currentScale.value === 'intraurbana');
-  if (isIntra) {return;} // Skip interactions for intraurbana.
+  if (isIntra) { return; } // Skip interactions for intraurbana.
 
   map.value.on('mousemove', layerId, (e) => {
     if (!e.features?.length) {
@@ -839,7 +1050,7 @@ function setupParksInteractions(layerId) {
   });
 
   map.value.on('click', layerId, (e) => {
-    if (!e.features?.length) {return;}
+    if (!e.features?.length) { return; }
     const feat = e.features[0];
     const featId = feat.id;
     if (e.originalEvent.ctrlKey) {
@@ -885,20 +1096,20 @@ function setupParksInteractions(layerId) {
 
 /** Setup vegetation layers */
 function setupVegetationLayers() {
-  if (!map.value || !mapLoaded.value) {return;}
+  if (!map.value || !mapLoaded.value) { return; }
   map.value.off('mousemove');
   map.value.off('mouseleave');
-  if (rasterPopup.value) {rasterPopup.value.remove();}
+  if (rasterPopup.value) { rasterPopup.value.remove(); }
   // Remove any existing vegetation layers/sources
   ['vegetation-layer', 'vegetation-layer-outline'].forEach(id => {
-    if (map.value.getLayer(id)) {map.value.removeLayer(id);}
+    if (map.value.getLayer(id)) { map.value.removeLayer(id); }
   });
   ['vegetation-source'].forEach(id => {
-    if (map.value.getSource(id)) {map.value.removeSource(id);}
+    if (map.value.getSource(id)) { map.value.removeSource(id); }
   });
 
   const selectedLayerId = currentLayer.value; // e.g., 'pcv', 'icv', 'idsa', 'cvp', 'ndvi'
-  if (!selectedLayerId) {return;}
+  if (!selectedLayerId) { return; }
 
   // If NDVI is selected, add a raster source/layer.
   if (selectedLayerId === 'ndvi') {
@@ -1058,7 +1269,7 @@ function setupVegetationLayers() {
  */
 function handleMissingImage(e) {
   const imageId = e.id?.trim();
-  if (!imageId) {return;}
+  if (!imageId) { return; }
   if (!map.value.hasImage(imageId)) {
     const placeholder = { width: 1, height: 1, data: new Uint8Array(4).fill(0) };
     map.value.addImage(imageId, placeholder);
@@ -1070,10 +1281,10 @@ function handleMissingImage(e) {
  */
 function updateScaleBasedOnZoom(zoom) {
   let newScale;
-  if (zoom >= 12) {newScale = 'intraurbana';}
-  else if (zoom >= 6) {newScale = 'municipal';}
-  else if (zoom > 3) {newScale = 'estadual';}
-  else {newScale = 'nacional';}
+  if (zoom >= 12) { newScale = 'intraurbana'; }
+  else if (zoom >= 6) { newScale = 'municipal'; }
+  else if (zoom > 3) { newScale = 'estadual'; }
+  else { newScale = 'nacional'; }
   if (locationStore.scale !== newScale) {
     const currentHash = window.location.hash;
     locationStore.setLocation({ scale: newScale });
@@ -1085,10 +1296,10 @@ function updateScaleBasedOnZoom(zoom) {
 /* ---------------------------------------
    LIFECYCLE
 ---------------------------------------*/
-onMounted(() => { if (locationStore.cd_mun) {loadCoordinates(locationStore.cd_mun);} });
+onMounted(() => { if (locationStore.cd_mun) { loadCoordinates(locationStore.cd_mun); } });
 onBeforeUnmount(() => {
   if (map.value) {
-    if (customHash.value) {customHash.value.remove();}
+    if (customHash.value) { customHash.value.remove(); }
     setTimeout(() => { map.value.remove(); }, 300);
   }
 });
@@ -1112,9 +1323,11 @@ onBeforeUnmount(() => {
   transition: opacity 0.3s ease-in-out;
   pointer-events: none;
 }
+
 .maplibregl-popup {
   z-index: 999999 !important;
 }
+
 /* Enforce popup background color */
 .maplibregl-popup .maplibregl-popup-content {
   background: #E6F1F2 !important;
@@ -1122,6 +1335,7 @@ onBeforeUnmount(() => {
   padding: 8px;
   font-family: system-ui, -apple-system, sans-serif;
 }
+
 .popup-content {
   font-size: 14px;
   line-height: 1.4;

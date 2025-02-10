@@ -54,13 +54,10 @@ import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
 
 const locationStore = useLocationStore();
-
-// Estado local
 const categories = ref([]);
 const openCategoryIds = ref([]);
 const containerRef = ref(null);
 
-// Atualiza as categorias conforme a store
 watchEffect(() => {
   if (locationStore.categories.length > 0) {
     console.log('CategoriesDropdown: Atualizando a partir da store');
@@ -85,7 +82,26 @@ watchEffect(() => {
     }
   }
 });
-// Funções de fechamento exclusivo de categorias com animação
+
+function selectLayer(layer, categoryObj) {
+  categories.value.forEach(cat => {
+    cat.layers.forEach(lyr => {
+      lyr.isActive = false;
+    });
+  });
+  layer.isActive = true;
+  locationStore.setLocation({
+    category: categoryObj.name,
+    layer: layer.id
+  });
+
+  gtag('event', 'select_map_layer', {
+    category: categoryObj.name,
+    layer_id: layer.id,
+    layer_name: layer.name
+  });
+}
+
 async function updateCategoryHeight(categoryId) {
   const categoryEl = document.querySelector(`[data-category-id="${categoryId}"] .layers-list`);
   if (categoryEl) {
@@ -103,7 +119,6 @@ async function toggleCategory(categoryId) {
   }
 }
 
-// Marca a layer ativa em cada categoria
 function markActiveLayer() {
   categories.value.forEach(cat => {
     cat.layers.forEach(lyr => {
@@ -118,43 +133,20 @@ function markActiveLayer() {
   });
 }
 
-// Seleciona uma layer e atualiza a store
-function selectLayer(layer, categoryObj) {
-  categories.value.forEach(cat => {
-    cat.layers.forEach(lyr => {
-      lyr.isActive = false;
-    });
-  });
-  layer.isActive = true;
-  locationStore.setLocation({
-    category: categoryObj.name,
-    layer: layer.id,
-    layerName: layer.display_name || layer.title || layer.name
-  });
-
-  // Aqui entra o GA4 event
-  gtag('event', 'select_map_layer', {
-    category: categoryObj.name,
-    layer_id: layer.id,
-    layer_name: layer.display_name || layer.title || layer.name
-  });
-}
-
-// Retorna a layer ativa na categoria (se existir)
 function getActiveLayerInCategory(category) {
   return category.layers.find(lyr => lyr.isActive) || null;
 }
 
-// Ciclo de vida: adiciona o listener (não altera nada quando clica fora)
 onMounted(() => {
   if (locationStore.cd_mun && locationStore.type) {
     locationStore.fetchCategories();
   }
 });
+
 </script>
 
-  <style scoped lang="scss">
-  .container {
+<style scoped lang="scss">
+    .container {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -321,4 +313,4 @@ onMounted(() => {
     height: 22px;
     justify-content: center;
   }
-  </style>
+</style>
