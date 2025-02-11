@@ -16,7 +16,7 @@
           v-if="!section.isSeeMore"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
-          :city-code="cityCodeComputed"
+          :city-code="computedCityCode"
           :layer="selectedLayer"
           :disabled="isParksLayer"
           @update:modelValue="(value) => handleYearChange(value, index)"
@@ -96,8 +96,10 @@ export default {
     // Determine the selected layer from the location store.
     const selectedLayer = computed(() => categoryToLayerMap[locationStore.category] || 'temperatura');
 
-    // Compute the city code, preferring the store’s value.
-    const cityCodeComputed = computed(() => locationStore.cd_mun || props.cityCode);
+    // Rename this to avoid collision with props.cityCode
+    const computedCityCode = computed(() =>
+      locationStore.cd_mun || props.cityCode
+    );
 
     // Number of subsections.
     const numSections = ref(3);
@@ -235,7 +237,7 @@ export default {
       // Expose the store values exactly as nm_mun and uf.
       nm_mun,
       uf,
-      cityCodeComputed,
+      computedCityCode,
       selectedLayer,
       sections,
       selectedYears,
