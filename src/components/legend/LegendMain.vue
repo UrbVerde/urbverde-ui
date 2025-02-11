@@ -73,7 +73,7 @@ export default {
 <style scoped>
 .legend-wrapper {
   position: absolute;
-  top: 33px;
+  top: 60px;
   right: 33px;
   display: flex;
   flex-direction: column;
@@ -86,7 +86,7 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 1;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.8s ease-in-out;
 }
 
 .legend-header {

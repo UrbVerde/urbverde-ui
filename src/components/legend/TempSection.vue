@@ -16,8 +16,8 @@
             </span>
           </div>
           <div class="hover-buttons" v-if="isHovered">
-            <button class="action-button">
-              <img src="@/assets/icons/eye.svg" alt="Visibility toggle" />
+            <button class="action-button" @click="toggleVisibility">
+              <img :src="visibilityIcon" alt="Visibility toggle" />
             </button>
             <div class="visibility-input">
               <input
@@ -63,17 +63,27 @@ export default {
     return {
       isHovered: false,
       visibility: 70,
-      isAnimating: false
+      isAnimating: false,
+      isVisible: false,
     };
   },
   computed: {
     displayText() {
       return this.isHovered ? 'Temper...' : 'Temperatura de Superfície';
+    },
+    visibilityIcon() {
+      return this.isVisible
+        ? new URL('@/assets/icons/eye-off.png', import.meta.url).href
+        : new URL('@/assets/icons/eye.svg', import.meta.url).href;
     }
+
   },
   methods: {
     handleHover(value) {
       this.isHovered = value;
+    },
+    toggleVisibility() {
+      this.isVisible = !this.isVisible;
     }
   }
 };
@@ -231,7 +241,7 @@ pointer-events: none;
   width: 100%;
   opacity: 0;
   transform: translateY(-10px);
-  animation: slideIn 150ms ease-in-out forwards;
+  animation: slideIn 550ms ease-in-out forwards;
 }
 
 .sector-button {

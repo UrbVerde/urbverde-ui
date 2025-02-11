@@ -20,8 +20,8 @@
           </span>
         </div>
         <div class="hover-buttons" v-if="isHovered">
-          <button class="action-button">
-            <img src="@/assets/icons/eye.svg" alt="Visibility toggle" />
+          <button class="action-button" @click="toggleVisibility">
+            <img :src="visibilityIcon" alt="Visibility toggle" />
           </button>
           <div class="visibility-input">
             <input
@@ -60,17 +60,26 @@ export default {
     return {
       addIcon,
       isHovered: false,
-      visibility: 70
+      visibility: 70,
+      isVisible: false,
     };
   },
   computed: {
     displayText() {
       return this.isHovered ? 'Contor...' : 'Contorno e Traços';
+    },
+    visibilityIcon() {
+      return this.isVisible
+        ? new URL('@/assets/icons/eye-off.png', import.meta.url).href
+        : new URL('@/assets/icons/eye.svg', import.meta.url).href;
     }
   },
   methods: {
     handleHover(value) {
       this.isHovered = value;
+    },
+    toggleVisibility() {
+      this.isVisible = !this.isVisible;
     }
   }
 };
