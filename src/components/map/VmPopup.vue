@@ -1,4 +1,4 @@
-<!-- src/components/Mapa/components/VmPopup.vue -->
+<!-- urbverde-ui/src/components/map/VmPopup.vue -->
 <template>
   <div :style="{ maxHeight: myMaxHeight, overflow: 'auto' }">
     <slot></slot>

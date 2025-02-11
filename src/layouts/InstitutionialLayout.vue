@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/layouts/InstitutionialLayout.vue -->
 <template>
   <div class="page" role="document">
     <header role="banner">

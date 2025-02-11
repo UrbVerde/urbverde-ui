@@ -1,3 +1,4 @@
+// urbverde-ui/src/constants/institutional-pages.js
 // imports das imagens
 import ademirMorelli from '@/assets/images/institutional-pages/about-us/members/ademir-morelli.jpeg';
 import anaBonnini from '@/assets/images/institutional-pages/about-us/members/ana-bonnini.png';

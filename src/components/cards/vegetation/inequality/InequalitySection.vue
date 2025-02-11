@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/vegetation/inequality/InequalitySection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="info-cards">

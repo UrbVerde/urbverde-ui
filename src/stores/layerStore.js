@@ -1,4 +1,4 @@
-// // src/stores/layerStore.js
+// urbverde-ui/src/stores/layerStore.js
 // import { defineStore } from 'pinia';
 // import { ref, computed, watch } from 'vue';
 // import { useRoute, useRouter } from 'vue-router';

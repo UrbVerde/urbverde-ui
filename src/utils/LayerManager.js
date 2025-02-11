@@ -1,4 +1,4 @@
-// // src/utils/LayerManager.js
+// urbverde-ui/src/utils/LayerManager.js
 
 // export class LayerManager {
 //     constructor(map) {

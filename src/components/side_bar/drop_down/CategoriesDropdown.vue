@@ -153,172 +153,172 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-self: stretch;
-  flex: 1 0 0;
-  height: 100%;
-  padding: 0 !important;
-  overflow: hidden;
+  <style scoped lang="scss">
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: stretch;
+    flex: 1 0 0;
+    height: 100%;
+    padding: 0 !important;
+    overflow: hidden;
 
-  ::-webkit-scrollbar {
-    width: 6px;
-    margin: 4px;
+    ::-webkit-scrollbar {
+      width: 6px;
+      margin: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: map-get($gray, 400);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: map-get($primary-fade, 300);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: map-get($gray, 200);
+      border-radius: 4px;
+    }
   }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: map-get($gray, 400);
+  .header-title {
+    color: map-get($theme, secondary);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: map-get($gray, white);
+    margin: 0;
+    border-bottom: 4px solid map-get($gray, white);
+  }
+
+  .categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: stretch;
+    padding: 0 4px 0 0;
+    overflow-y: auto;
+    height: 100%;
+    min-height: 0;
+    scroll-behavior: smooth;
+    color: map-get($body-text, body-color);
+  }
+
+  .category-header {
+    display: flex;
+    padding: 8px 16px;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .category-header:hover {
+    background: map-get($gray, 200);
+  }
+
+  /* Estilo aplicado somente quando a categoria está efetivamente aberta */
+  .category-header.open {
+    background: map-get($gray, 100);
+  }
+
+  .category-header.open:hover {
+    background: map-get($gray, 200);
+  }
+
+  .category-name {
+    flex: 1;
+  }
+
+  .badge-right-menu {
+    display: flex;
+    align-items: center;
+    padding: 2px 8px;
+    gap: 10px;
     border-radius: 4px;
+    color: map-get($theme, primary);
+    background: map-get($primary-fade, 100);
+    width: 22px;
+    height: 22px;
+    justify-content: center;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: map-get($primary-fade, 300);
+  .textBadge {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .category-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .layers-wrapper {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+
+    &.expanded {
+      height: var(--content-height);
+      opacity: 1;
+    }
+  }
+
+  .layers-list {
+    list-style-type: none;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-top: 4px solid white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    background: map-get($gray, 100);
+    gap: 8px;
+  }
+
+  .layer-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 24px;
+    align-self: stretch;
+  }
+
+  .layer-item:not(.active-layer):hover {
+    background: map-get($gray, 200);
+  }
+
+  .active-layer {
+    border-left: 3px solid map-get($theme, primary);
+    background: map-get($primary-fade, 100);
+  }
+
+  .layer-name {
+    flex: 1;
+  }
+
+  .new-layer-tag {
+    display: flex;
+    align-items: center;
+    padding: 2px 8px;
+    gap: 10px;
     border-radius: 4px;
+    color: map-get($theme, primary);
+    background: map-get($primary-fade, 100);
+    width: 22px;
+    height: 22px;
+    justify-content: center;
   }
-
-  ::-webkit-scrollbar-track {
-    background-color: map-get($gray, 200);
-    border-radius: 4px;
-  }
-}
-
-.header-title {
-  color: map-get($theme, secondary);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background-color: map-get($gray, white);
-  margin: 0;
-  border-bottom: 4px solid map-get($gray, white);
-}
-
-.categories-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-self: stretch;
-  padding: 0 4px 0 0;
-  overflow-y: auto;
-  height: 100%;
-  min-height: 0;
-  scroll-behavior: smooth;
-  color: map-get($body-text, body-color);
-}
-
-.category-header {
-  display: flex;
-  padding: 8px 16px;
-  align-items: center;
-  gap: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.category-header:hover {
-  background: map-get($gray, 200);
-}
-
-/* Estilo aplicado somente quando a categoria está efetivamente aberta */
-.category-header.open {
-  background: map-get($gray, 100);
-}
-
-.category-header.open:hover {
-  background: map-get($gray, 200);
-}
-
-.category-name {
-  flex: 1;
-}
-
-.badge-right-menu {
-  display: flex;
-  align-items: center;
-  padding: 2px 8px;
-  gap: 10px;
-  border-radius: 4px;
-  color: map-get($theme, primary);
-  background: map-get($primary-fade, 100);
-  width: 22px;
-  height: 22px;
-  justify-content: center;
-}
-
-.textBadge {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.category-icon {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.layers-wrapper {
-  overflow: hidden;
-  height: 0;
-  opacity: 0;
-  transition: height 0.3s ease-in-out, opacity 0.2s ease-in-out;
-
-  &.expanded {
-    height: var(--content-height);
-    opacity: 1;
-  }
-}
-
-.layers-list {
-  list-style-type: none;
-  margin-bottom: 12px;
-  padding: 8px 0;
-  border-top: 4px solid white;
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  background: map-get($gray, 100);
-  gap: 8px;
-}
-
-.layer-item {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 16px 8px 24px;
-  align-self: stretch;
-}
-
-.layer-item:not(.active-layer):hover {
-  background: map-get($gray, 200);
-}
-
-.active-layer {
-  border-left: 3px solid map-get($theme, primary);
-  background: map-get($primary-fade, 100);
-}
-
-.layer-name {
-  flex: 1;
-}
-
-.new-layer-tag {
-  display: flex;
-  align-items: center;
-  padding: 2px 8px;
-  gap: 10px;
-  border-radius: 4px;
-  color: map-get($theme, primary);
-  background: map-get($primary-fade, 100);
-  width: 22px;
-  height: 22px;
-  justify-content: center;
-}
-</style>
+  </style>

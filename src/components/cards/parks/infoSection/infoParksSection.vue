@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/parks/infoSection/infoParksSection.vue -->
 <template>
   <div class="dashboard">
     <div class="left-panel">

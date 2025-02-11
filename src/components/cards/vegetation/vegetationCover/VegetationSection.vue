@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/vegetation/vegetationCover/VegetationSection.vue -->
 <template>
   <div class="dashboard">
     <InfoVegetation class="vegetation-info" />

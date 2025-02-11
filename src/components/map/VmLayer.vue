@@ -1,4 +1,4 @@
-<!-- src/components/Mapa/components/VmLayer.vue -->
+<!-- urbverde-ui/src/components/map/VmLayer.vue -->
 <template>
   <VmLayer
     :name="layer.name"
