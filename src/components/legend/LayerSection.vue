@@ -1,10 +1,10 @@
 <!-- urbverde-ui/src/components/legend/LayerSection.vue -->
 <template>
   <div>
-    <!-- <div class="container-layers">
+    <div class="container-layers">
       <span>CAMADAS</span>
       <img :src="addIcon" />
-    </div> -->
+    </div>
 
     <div class="section-container"
          @mouseenter="isHovered = true"
@@ -20,10 +20,10 @@
           </span>
         </div>
         <div class="hover-buttons" v-if="isHovered">
-          <!-- <button class="action-button">
+          <button class="action-button">
             <img src="@/assets/icons/eye.svg" alt="Visibility toggle" />
-          </button> -->
-          <!-- <div class="visibility-input">
+          </button>
+          <div class="visibility-input">
             <input
               type="number"
               v-model="visibility"
@@ -32,7 +32,7 @@
               class="number-input"
             />
             <span class="percentage-symbol">%</span>
-          </div> -->
+          </div>
           <button class="action-button">
             <img src="@/assets/icons/menuButton.svg" alt="More options" />
           </button>

@@ -5,7 +5,7 @@
  * Each layer defines:
  * - type: either 'raster' or 'vector'
  * - label: human-readable name
- * - sourceFn or source: either a function that returns a dynamic vector source or a static source object (for raster layers)
+ * - source or source: either a function that returns a dynamic vector source or a static source object (for raster layers)
  * - property: the feature property used for color interpolation (only for vector layers)
  * - stops: an array of value/color pairs for use in interpolations
  * - unit: any measurement unit for display in popups
@@ -29,7 +29,13 @@ export const LAYER_CONFIGS = {
     },
     popup: {
       label: 'Temperatura Relativa',
-      unit: '°C'
+      unit: '°C',
+      // Add a plus sign for positive values:
+      format: (v) => {
+        const num = Number(v);
+
+        return (num >= 0 ? '+' : '') + num.toFixed(2);
+      }
     }
   },
 
@@ -120,7 +126,12 @@ export const LAYER_CONFIGS = {
       [0.31, '#006837'],
       [0.44, '#004529']
     ],
-    unit: '%'
+    unit: '%',
+    popup: {
+      label: 'PCV',
+      unit: '%',
+      multiplier: 100  // No multiplier needed by default
+    }
   },
 
   icv: {
@@ -147,7 +158,7 @@ export const LAYER_CONFIGS = {
       [3385, '#238443'],
       [4033, '#004529']
     ],
-    unit: ''
+    unit: 'm²/hab'
   },
 
   idsa: {
@@ -177,34 +188,23 @@ export const LAYER_CONFIGS = {
   },
 
   cvp: {
-    type: 'vector',
+    type: 'raster',
     label: 'Cobertura Vegetal por Pixel',
-    source: (year, scale) => {
-      const sourceLayer = scale === 'intraurbana'
-        ? `public.geodata_vegetacao_por_setor_${year}`
-        : `public.geodata_vegetacao_por_municipio_${year}`;
-
-      return {
-        type: 'vector',
-        tiles: [
-          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
-        ],
-        sourceLayer
-      };
+    source: (year) =>({
+      type: 'raster',
+      tiles: [
+        `https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:PCV-30m-8bits-${year}&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true`
+      ],
+      tileSize: 256
+    }),
+    paint: {
+      'raster-opacity': 0.7
     },
-    property: 'b1',
-    stops: [
-      [0.04, '#ffffe5'],
-      [0.14, '#f7fcb9'],
-      [0.15, '#d9f0a3'],
-      [0.18, '#addd8e'],
-      [0.21, '#78c679'],
-      [0.25, '#41ab5d'],
-      [0.28, '#238443'],
-      [0.31, '#006837'],
-      [0.44, '#004529']
-    ],
-    unit: '%'
+    popup: {
+      label: 'PCV',
+      unit: '',
+      multiplier: -1  // No multiplier needed by default
+    }
   },
 
   ndvi: {
@@ -219,6 +219,11 @@ export const LAYER_CONFIGS = {
     }),
     paint: {
       'raster-opacity': 0.7
+    },
+    popup: {
+      label: 'NDVI',
+      unit: '',
+      multiplier: 1  // No multiplier needed by default
     }
   },
 
@@ -296,7 +301,7 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'a9',
+    property: 'a3',
     stops: [
       [0, '#d53e4f'],
       [20, '#f46d43'],
@@ -335,16 +340,16 @@ export const LAYER_CONFIGS = {
       [85.8, '#66c2a5'],
       [100, '#3288bd']
     ],
-    unit: '%'
+    unit: 'pessoas'
   }
 };
 
 // Helper function to get layer config
 export function getLayerConfig(layerId, year, scale) {
   const config = LAYER_CONFIGS[layerId];
-  if (!config) {return null;}
-  // For vector layers that require a dynamic source, call sourceFn; otherwise use source.
-  const source = typeof config.sourceFn === 'function' ? config.sourceFn(year, scale) : config.source;
+  if (!config) { return null; }
+  // If source is a function, call it; otherwise, use it directly.
+  const source = typeof config.source === 'function' ? config.source(year, scale) : config.source;
 
   return { ...config, source };
 }

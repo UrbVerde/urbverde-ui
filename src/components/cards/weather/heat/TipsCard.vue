@@ -14,13 +14,13 @@
           <li class="benefits-card-item">
             <span class="benefits-card-number body-small-medium">2</span>
             <p class="body-small-regular">
-              <b>Rios e lagos</b>&nbsp;ajudam a resfriar o clima urbano.
+              <b>Rios e lagos</b>&nbsp;naturalizados ajudam a resfriar o clima urbano.
             </p>
           </li>
           <li class="benefits-card-item">
             <span class="benefits-card-number body-small-medium">3</span>
             <p class="body-small-regular">
-              Implementação de &nbsp;<b>políticas públicas</b>&nbsp;que podem promover mais áreas verdes nas cidades.
+              <b>Políticas públicas</b>&nbsp;podem promover mais áreas verdes nas cidades.
             </p>
           </li>
         </ul>

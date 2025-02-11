@@ -9,9 +9,13 @@
 
       <div v-if="data.items && data.items.length > 0" class="rank-card-sections">
         <div class="rank-card-section" v-for="(item, index) in data.items" :key="index">
-          <div class="rank-card-section-title">{{ item.type }}</div>
+          <div class="rank-card-section-title">
+            {{ item.type }}
+            <!-- <template v-if="item.number === 1">🏆</template> -->
+          </div>
           <div class="rank-card-section-value">
-            <span class="rank-card-number">{{ item.number }}</span>
+            <span class="rank-card-number" :class="rankingClass(item)">
+              {{ item.number }}</span>
             <span class="rank-card-separator"> de </span>
             <span class="rank-card-total">{{ item.of }}</span>
           </div>
@@ -31,12 +35,26 @@ export default {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    rankingClass(item) {
+      // Calculate percentile based on the ranking number relative to the total (item.of)
+      const percentile = (item.number / item.of) * 100;
+      if (percentile <= 25) {
+        return 'group-top';
+      } else if (percentile <= 75) {
+        return 'group-middle';
+      } else {
+        return 'group-bottom';
+      }
+    },
   }
 };
 </script>
 
 <style scoped lang="scss">
-h3, p{
+h3,
+p {
   margin: 0;
 }
 
@@ -53,7 +71,7 @@ h3, p{
   align-self: stretch;
 }
 
-.rank-card-section-title{
+.rank-card-section-title {
   text-align: left;
   align-self: stretch;
   color: var(--Body-Text-Body-Color, #212529);
@@ -104,6 +122,21 @@ h3, p{
   line-height: 120%;
 }
 
+.rank-card-number::after {
+  content: "o";
+  margin-left: 2px;
+  font-weight: bold;
+  font-size: 40%;
+  vertical-align: super;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  top: -5px;
+}
+
 .rank-card-separator {
   color: var(--Green-500, #198754);
   font-family: Montserrat;
@@ -117,10 +150,23 @@ h3, p{
 
 .rank-card-total {
   color: var(--Green-500, #198754);
-font-family: Montserrat;
-font-size: 16px;
-font-style: normal;
-font-weight: 700;
-line-height: 120%;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+/* Color classes for the three ranking groups */
+.group-top {
+  color: #198754;
+}
+
+.group-middle {
+  color: #198754 // #f7c600;
+}
+
+.group-bottom {
+  color: #198754;  // red;
 }
 </style>

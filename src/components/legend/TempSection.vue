@@ -1,9 +1,3 @@
-<!-- to-do: show blocked icon or grayer color, dont higlight selected one in blue like this.
- show it according to settings, so for some scales we already have more than one available (nacional has pais and estado)
- estadual has municipio and estado
-
- note-to-self: those will be according to the layer chosen. eg: rasters will be only por pixel -->
-
 <!-- TempSection.vue -->
 <template>
   <div class="root-container">
@@ -18,20 +12,17 @@
           </div>
         </div>
         <div class="title-wrapper">
-          <div class="title-text" :class="{ 'shortened': isHovered }">
-            <transition name="fade" mode="out-in">
-              <span :key="isHovered">{{ isHovered ? shortLayerName : layerName }}</span>
-            </transition>
+          <div class="title-text" :class="{ 'with-ellipsis': isHovered }">
+            {{ currentLayerName }}
           </div>
+          <transition name="fade">
+            <button v-if="isHovered" class="menu-button">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+          </transition>
         </div>
-
-        <!-- Three dots menu (only on hover) -->
-        <button v-if="isHovered" class="menu-button">
-          <IconComponent name="bi-three-dots-vertical" :size="16" color="#6C757D" />
-        </button>
       </div>
 
-      <!-- Gradient legend for temperature -->
       <div class="gradient-section">
         <div class="gradient-container">
           <div class="gradient-bar"></div>
@@ -71,34 +62,38 @@
             <button class="eye-container" @click="toggleVisibility">
               <div class="eye-wrapper">
                 <div class="eye-icon">
-                  <IconComponent :name="opacity > 0 ? 'bi-eye' : 'bi-eye-slash'"
-                                 :size="16"
-                                 :color="opacity > 0 ? '#198754' : '#6C757D'" />
+                  <IconComponent
+                    :name="opacity > 0 ? 'bi-eye' : 'bi-eye-slash'"
+                    :size="16"
+                    :color="opacity > 0 ? '#198754' : '#6C757D'"
+                  />
                 </div>
               </div>
             </button>
             <div class="percentage-text">{{ opacity }}%</div>
           </div>
           <div class="progress-container">
-            <input type="range"
-                   v-model="opacity"
-                   min="0"
-                   max="100"
-                   class="opacity-slider" />
+            <input
+              type="range"
+              v-model="opacity"
+              min="0"
+              max="100"
+              class="opacity-slider"
+            />
             <div class="progress-bg"></div>
             <div class="progress-fg" :style="{ width: opacity + '%' }"></div>
           </div>
         </div>
       </transition>
-
     </div>
   </div>
 </template>
 
 <script>
+// Script section stays exactly the same as before
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
-import { storeToRefs } from 'pinia'; //not sure if we should be using this here.
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 export default {
@@ -111,21 +106,21 @@ export default {
     const {
       categories,
       category,
-      layerName,
       scale
     } = storeToRefs(locationStore);
 
     const currentCategory = computed(() => categories.value.find(cat => cat.name === category.value));
+    const currentLayerName = computed(() => locationStore.currentLayerName);
 
     return {
-      layerName,
+      currentLayerName,
       currentCategory,
       scale
     };
   },
   data() {
     return {
-      opacity: 100, //trocar pra isso ser em função do basemap, caso o basemap seja satelite a opacidade é 80%
+      opacity: 100,
       isHovered: false,
       selectedRecorte: 'Setor IBGE 2022',
       recortesByScale: {
@@ -159,11 +154,6 @@ export default {
     };
   },
   computed: {
-    shortLayerName() {
-      return this.layerName.length > 12
-        ? `${this.layerName.slice(0, 12)  }...`
-        : this.layerName;
-    },
     availableRecortesByScale() {
       return this.recortesByScale[this.scale] || this.recortesByScale.intraurbana;
     }
@@ -185,14 +175,13 @@ export default {
 </script>
 
 <style scoped>
-/* --- Root Container --- */
+/* Root and Section Container styles stay the same */
 .root-container {
   width: 100%;
   height: auto;
   display: flex;
 }
 
-/* --- Section Container --- */
 .section-container {
   width: 232px;
   padding: 16px 0 24px;
@@ -207,19 +196,19 @@ export default {
   gap: 16px;
 }
 
-/* --- Header Section --- */
+/* Header Section */
 .header-section {
   align-self: stretch;
   padding: 0 16px;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   gap: 12px;
+  height: 32px;
 }
 
 .icon-wrapper {
+  flex-shrink: 0;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   gap: 4px;
 }
@@ -236,34 +225,42 @@ export default {
   gap: 10px;
 }
 
-.icon-inner {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-}
-
 .title-wrapper {
   flex: 1;
-  align-self: stretch;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 4px;
+  align-items: flex-start;
+  position: relative;
+  min-width: 0;
+  height: 42px; /* Two lines of text (21px * 2) */
 }
 
 .title-text {
-  flex: 1;
   color: #212529;
   font-size: 14px;
   font-family: Inter, sans-serif;
   font-weight: 500;
   line-height: 21px;
-  word-wrap: break-word;
+  width: 100%;
+  padding: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
-/* Menu button styles */
+.title-text.with-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  padding-right: 28px;
+}
+
 .menu-button {
+  position: absolute;
+  right: 0;
+  top: 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -271,12 +268,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.menu-button i {
+  font-size: 16px;
+  color: #6C757D;
 }
 
 .menu-button:hover {
   background-color: #f0f0f0;
-  border-radius: 4px;
 }
 
 /* --- Gradient Section --- */

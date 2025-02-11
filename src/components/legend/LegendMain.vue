@@ -17,22 +17,22 @@
 
     <div v-if="isOpen" class="buttons-container">
       <div class="buttons-space">
-        <!-- <PrimaryButton
+        <PrimaryButton
           label="Comparar Camadas"
           :filled="false"
           :icon="wrapperIcon"
           icon-position="left"
         >
-        </PrimaryButton> -->
+        </PrimaryButton>
 
-        <!-- <PrimaryButton
+        <PrimaryButton
           label="Baixar"
           :filled
           :icon="wrapperIcon"
           icon-position="left"
           @click="downloadData"
         >
-        </PrimaryButton> -->
+        </PrimaryButton>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@
 
 <script>
 import wrapperIcon from '../../assets/icons/wrapper.svg';
-// import PrimaryButton from '../buttons/PrimaryButton.vue';
+import PrimaryButton from '../buttons/PrimaryButton.vue';
 import LayerSection from './LayerSection.vue';
 import TempSection from './TempSection.vue';
 import YearSection from './YearSection.vue';
@@ -49,7 +49,7 @@ import { useLocationStore } from '@/stores/locationStore';
 export default {
   name: 'SubtitleMain',
   components: {
-    // PrimaryButton,
+    PrimaryButton,
     LayerSection,
     TempSection,
     YearSection

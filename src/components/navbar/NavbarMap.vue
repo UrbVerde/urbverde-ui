@@ -46,12 +46,12 @@
 import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 
-// const props = defineProps({
-//   activeSection: {
-//     type: String,
-//     required: true,
-//   },
-// });
+const { activeSection } = defineProps({
+  activeSection: {
+    type: String,
+    required: true,
+  },
+});
 
 const emit = defineEmits(['navigate-to']);
 
