@@ -63,6 +63,7 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${this.selectedYear}`);
         const data = await response.json();
         this.cardData = data;
+        console.log('Data fetched:', data);
       } catch (error) {
         console.error('Error fetching cards data:', error);
       }

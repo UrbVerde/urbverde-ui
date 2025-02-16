@@ -1,3 +1,4 @@
+// urbverde-ui/src/stores/locationStore.js
 import { defineStore } from 'pinia';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';

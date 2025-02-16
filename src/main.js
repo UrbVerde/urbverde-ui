@@ -37,3 +37,8 @@ app.use(router);
 app.use(pinia);
 app.mount('#app');
 // });
+
+window.addEventListener('load', () => {
+  const loadTime = performance.now();
+  console.log(`Page loaded in ${(loadTime/1000).toFixed(2)}s`);
+});

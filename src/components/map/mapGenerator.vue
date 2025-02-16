@@ -15,11 +15,13 @@
 import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
 import maplibregl from 'maplibre-gl';
 import { useLocationStore } from '@/stores/locationStore';
+import { useLayersStore } from '@/stores/layersStore';
 import { useRoute, useRouter } from 'vue-router';
 import CustomHash from './customHash';
 import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 
 const locationStore = useLocationStore();
+const layersStore = useLayersStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -33,7 +35,7 @@ const mapLoaded = ref(false);
 
 const globalLastRasterValue = ref(null);
 const isMouseWithinMunicipality = ref(false);
-
+const isHandlingScaleChange = ref(false);
 let globalRasterMouseMove = null;
 let globalRasterMouseClick = null;
 
@@ -45,6 +47,7 @@ const rasterPopup = ref(null);
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
 let pinnedFeatureId = null;
+let hoveredSetorId = null;
 
 // Map constants
 const MAP_ZOOM_START = 12;
@@ -60,19 +63,23 @@ console.log('currentCode', currentCode);
 const initialCode = ref(route.query.code);
 
 watch(
-  () => locationStore.cd_mun, (newVal) => {
-    if (newVal) {
+  [
+    () => locationStore.cd_mun,
+    () => currentLayer.value,
+    () => currentScale.value,
+    () => currentYear.value, // Add year to the watch array
+    () => route.query.code
+  ],
+  async([newCdMun], [oldCdMun]) => {
+    // Only load coordinates if cd_mun changes AND it's a new municipality
+    if (newCdMun && newCdMun !== oldCdMun) {
       initialCode.value = route.query.code;
-      loadCoordinates(newVal);
+      await loadCoordinates(newCdMun);
     }
-  });
 
-watch(
-  () => [currentLayer.value, route.query.code],
-  () => {
     if (mapLoaded.value) {
       removeDynamicLayer();
-      setupDynamicLayer();
+      await setupDynamicLayer(); // Make this async
     }
   }
 );
@@ -81,85 +88,186 @@ watch(
    HELPER FUNCTIONS
 ---------------------------------------*/
 function removeDynamicLayer() {
-  const dynamicLayerIds = ['dynamic-layer', 'dynamic-layer-outline'];
-  dynamicLayerIds.forEach(id => {
+  if (!map.value) {return;}
+
+  // Remove event handlers
+  removeRasterInteractions();
+  removeVectorInteractions();
+
+  // Remove popups
+  if (hoverPopup.value) {hoverPopup.value.remove();}
+  if (rasterPopup.value) {rasterPopup.value.remove();}
+  if (pinnedPopup.value) {pinnedPopup.value.remove();}
+
+  // Remove layers
+  ['dynamic-layer', 'dynamic-layer-outline', 'setores-layer', 'setores-outline'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }
   });
-  if (map.value.getSource('dynamic-source')) {
-    map.value.removeSource('dynamic-source');
-  }
-  removeRasterInteractions();
-  removeVectorInteractions();
+
+  // Remove sources
+  ['dynamic-source', 'setores-source'].forEach(id => {
+    if (map.value.getSource(id)) {
+      map.value.removeSource(id);
+    }
+  });
+
+  // Reset state
+  hoveredFeatureId = null;
+  hoveredSetorId = null;  // Add this
+  pinnedFeatureId = null;
 }
 
 function setupDynamicLayer() {
-  const layerId = currentLayer.value;
-  // Get the configuration from layers.js (this function will call the source function if needed)
-  const config = getLayerConfig(layerId, currentYear.value, currentScale.value);
-  console.log('Layer config:', config);
-  if (!config) {return;}
+  if (!map.value || !currentLayer.value) {return;}
 
-  // For a raster layer, simply add the source and layer using the provided config.
-  if (config.type === 'raster') {
-    map.value.addSource('dynamic-source', config.source);
-    map.value.addLayer({
-      id: 'dynamic-layer',
-      type: 'raster',
-      source: 'dynamic-source',
-      paint: config.paint
+  // Remove existing layers and handlers
+  removeDynamicLayer();
+
+  const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
+  if (!config || !config.source) {return;}
+
+  // Clear any existing popups
+  if (hoverPopup.value) {hoverPopup.value.remove();}
+  if (rasterPopup.value) {rasterPopup.value.remove();}
+  if (pinnedPopup.value) {pinnedPopup.value.remove();}
+
+  // Reset feature states
+  hoveredFeatureId = null;
+  pinnedFeatureId = null;
+
+  try {
+    // Add source with correct filtering
+    const sourceUrl = config.source.tiles[0];
+    const filteredUrl = currentScale.value === 'intraurbana' && currentCode.value
+      ? `${sourceUrl}?cql_filter=cd_mun=${currentCode.value}`
+      : sourceUrl;
+
+    map.value.addSource('dynamic-source', {
+      ...config.source,
+      tiles: [filteredUrl]
     });
-    setupRasterInteractions(config);
-  }
-  // For vector layers, add a fill layer (with interactive styling) and an outline layer.
-  else if (config.type === 'vector') {
-    if (config && config.source && config.source.type) {
-      map.value.addSource('dynamic-source', config.source);
+
+    // Add layer based on type
+    if (config.type === 'raster') {
+      map.value.addLayer({
+        id: 'dynamic-layer',
+        type: 'raster',
+        source: 'dynamic-source',
+        paint: config.paint
+      });
+      setupRasterInteractions(config);
     } else {
-      console.error('Invalid layer config:', config);
+      // Vector layer
+      map.value.addLayer({
+        id: 'dynamic-layer',
+        type: 'fill',
+        source: 'dynamic-source',
+        'source-layer': config.source.sourceLayer,
+        paint: getLayerPaint(config)
+      });
 
-      return;
+      // Add outline
+      map.value.addLayer({
+        id: 'dynamic-layer-outline',
+        type: 'line',
+        source: 'dynamic-source',
+        'source-layer': config.source.sourceLayer,
+        paint: {
+          'line-color': '#666666',
+          'line-width': 1,
+          'line-opacity': 0.1,
+        }
+      });
+
+      setupVectorInteractions(config);
+
+      // Add setores layer only for vector layers
+      if (currentScale.value === 'intraurbana' && currentCode.value) {
+        map.value.addSource('setores-source', {
+          type: 'vector',
+          tiles: [
+            `https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf?cql_filter=cd_mun=${currentCode.value}`
+          ],
+          minzoom: 0,
+          maxzoom: 22
+        });
+
+        // Add fill layer for hover effects
+        map.value.addLayer({
+          id: 'setores-layer',
+          type: 'fill',
+          source: 'setores-source',
+          'source-layer': 'public.geom_setores',
+          paint: {
+            'fill-color': [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              '#7c99f4',  // blue color on hover
+              'transparent'  // transparent by default
+            ],
+            'fill-opacity': 0.5
+          }
+        });
+
+        // Setup setores interactions
+        map.value.on('mousemove', 'setores-layer', (e) => {
+          if (e.features.length > 0) {
+            if (hoveredSetorId) {
+              map.value.setFeatureState(
+                { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
+                { hover: false }
+              );
+            }
+            hoveredSetorId = e.features[0].id;
+            map.value.setFeatureState(
+              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
+              { hover: true }
+            );
+          }
+        });
+
+        map.value.on('mouseleave', 'setores-layer', () => {
+          if (hoveredSetorId) {
+            map.value.setFeatureState(
+              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
+              { hover: false }
+            );
+            hoveredSetorId = null;
+          }
+        });
+      }
     }
-    map.value.addLayer({
-      id: 'dynamic-layer',
-      type: 'fill',
-      source: 'dynamic-source',
-      'source-layer': config.source.sourceLayer,
-      paint: getLayerPaint(config)
-    });
-    map.value.addLayer({
-      id: 'dynamic-layer-outline',
-      type: 'line',
-      source: 'dynamic-source',
-      'source-layer': config.source.sourceLayer,
-      paint: getOutlinePaint(config)
-    });
-    setupVectorInteractions(config);
+
+    // Bring labels to front AFTER all layers are added
+    bringBasemapLabelsToFront();
+
+  } catch (error) {
+    console.error('Error setting up dynamic layer:', error);
   }
-  bringBasemapLabelsToFront();
 }
 
-function getOutlinePaint(config) {
-  return {
-    'line-color': [
-      'case',
-      ['boolean', ['feature-state', 'pinned'], false],
-      '#2c46f4',
-      ['boolean', ['feature-state', 'hover'], false],
-      '#7c99f4',
-      ['interpolate', ['linear'], ['get', config.property], ...config.stops.flat()]
-    ],
-    'line-width': [
-      'case',
-      ['boolean', ['feature-state', 'pinned'], false],
-      4,
-      ['boolean', ['feature-state', 'hover'], false],
-      3,
-      1.5
-    ]
-  };
-}
+// function getOutlinePaint(config) {
+//   return {
+//     'line-color': [
+//       'case',
+//       ['boolean', ['feature-state', 'pinned'], false],
+//       '#2c46f4',
+//       ['boolean', ['feature-state', 'hover'], false],
+//       '#7c99f4',
+//       ['interpolate', ['linear'], ['get', config.property], ...config.stops.flat()]
+//     ],
+//     'line-width': [
+//       'case',
+//       ['boolean', ['feature-state', 'pinned'], false],
+//       4,
+//       ['boolean', ['feature-state', 'hover'], false],
+//       3,
+//       1.5
+//     ]
+//   };
+// }
 
 function getPopupContent(feat, config) {
   let rawValue = feat.properties[config.property];
@@ -191,7 +299,7 @@ function getPopupContent(feat, config) {
 }
 
 function setupRasterInteractions(config) {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
 
   if (!rasterPopup.value) {
     rasterPopup.value = new maplibregl.Popup({
@@ -243,13 +351,13 @@ function setupRasterInteractions(config) {
             .addTo(map.value);
         })
         .catch(err => {
-          if (err.name !== 'AbortError') {console.error(err);}
+          if (err.name !== 'AbortError') { console.error(err); }
         });
     }, debounceDelay);
   };
 
   const onRasterMouseClick = (e) => {
-    if (!e.originalEvent.ctrlKey) {return;}
+    if (!e.originalEvent.ctrlKey) { return; }
     e.preventDefault();
     pinnedPopup.value
       .setLngLat(e.lngLat)
@@ -268,7 +376,7 @@ function setupRasterInteractions(config) {
 }
 
 function removeRasterInteractions() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
   if (globalRasterMouseMove) {
     map.value.off('mousemove', globalRasterMouseMove);
     globalRasterMouseMove = null;
@@ -286,7 +394,7 @@ function removeVectorInteractions() {
 }
 
 function setupVectorInteractions(config) {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
   map.value.on('mousemove', 'dynamic-layer', onVectorMouseMove);
   map.value.on('mouseleave', 'dynamic-layer', onVectorMouseLeave);
   map.value.on('click', 'dynamic-layer', onVectorClick);
@@ -341,7 +449,7 @@ function setupVectorInteractions(config) {
   }
 
   function onVectorClick(e) {
-    if (!e.features?.length) {return;}
+    if (!e.features?.length) { return; }
     const feat = e.features[0];
     const featId = feat.id;
     if (e.originalEvent.ctrlKey) {
@@ -434,29 +542,52 @@ function bringBasemapLabelsToFront() {
 /** Load city coordinates and initialize or fly the map. */
 async function loadCoordinates(code) {
   isLoadingCoordinates.value = true;
+  isHandlingScaleChange.value = true;
+
   try {
+    const currentHash = window.location.hash;
+
+    // Clear municipality hover state if it exists
+    if (hoveredFeatureId) {
+      map.value.setFeatureState(
+        {
+          source: 'base-municipalities',
+          id: hoveredFeatureId,
+          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+        },
+        { hover: false }
+      );
+      hoveredFeatureId = null;
+    }
+
+    // Remove any existing popups
+    if (hoverPopup.value) {hoverPopup.value.remove();}
+
+    // Set scale and trigger layer setup
+    await locationStore.setLocation({ scale: 'intraurbana' });
+    if (mapLoaded.value) {
+      removeDynamicLayer();
+      await setupDynamicLayer();
+    }
+
     const coords = await locationStore.fetchCoordinatesByCode(code);
     if (coords?.lat && coords?.lng) {
       coordinates.value = coords;
-      // Calculate the expected scale based on the intended flyTo zoom
-      const expectedZoom = MAP_ZOOM_FINAL; // e.g. 17
-      const expectedScale = getScaleFromZoom(expectedZoom);
 
-      // Update URL query parameters and the Pinia store BEFORE the flyTo motion
       router.replace({
         query: {
           ...route.query,
-          scale: expectedScale,
+          scale: 'intraurbana',
           lng: coords.lng,
           lat: coords.lat
-        }
+        },
+        hash: currentHash
       });
-      locationStore.setLocation({ scale: expectedScale });
 
       if (map.value) {
         map.value.flyTo({
           center: [coords.lng, coords.lat],
-          zoom: expectedZoom,
+          zoom: MAP_ZOOM_FINAL,
           duration: MAP_ANIMATION_DURATION,
           essential: true
         });
@@ -468,6 +599,9 @@ async function loadCoordinates(code) {
     console.error('Error loading coords:', err);
   } finally {
     isLoadingCoordinates.value = false;
+    setTimeout(() => {
+      isHandlingScaleChange.value = false;
+    }, MAP_ANIMATION_DURATION + 100);
   }
 }
 
@@ -590,7 +724,7 @@ async function loadCoordinates(code) {
 ---------------------------------------*/
 /** Initialize the map (if not already created). */
 function initializeMap() {
-  if (!coordinates.value) {return;}
+  if (!coordinates.value) { return; }
   let initialState = {
     center: [coordinates.value.lng, coordinates.value.lat],
     zoom: MAP_ZOOM_START,
@@ -629,7 +763,7 @@ function initializeMap() {
   map.value.addControl(
     new maplibregl.GeolocateControl({
       positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: false, // or true, if you want continuous tracking
+      trackUserLocation: true,
       showUserLocation: true
     }),
     'top-left'
@@ -651,7 +785,17 @@ function initializeMap() {
   customHash.value.addTo(map.value);
   map.value.on('styleimagemissing', handleMissingImage);
   map.value.on('zoomend', () => {
-    updateScaleBasedOnZoom(map.value.getZoom());
+    isHandlingScaleChange.value = false;
+
+    const newScale = getScaleFromZoom(map.value.getZoom());
+    if (locationStore.scale !== newScale) {
+      const currentHash = window.location.hash.slice(1); // Remove # symbol
+      locationStore.setLocation({ scale: newScale });
+      router.replace({
+        query: { ...route.query, scale: newScale },
+        hash: currentHash // Don't slice here
+      });
+    }
   });
   map.value.on('load', () => {
     mapLoaded.value = true;
@@ -701,20 +845,12 @@ function addBaseMunicipalitiesLayer() {
     paint: {
       'fill-color': [
         'case',
-        ['boolean', ['feature-state', 'pinned'], false],
-        'rgba(124,153,244,0.3)',
         ['boolean', ['feature-state', 'hover'], false],
-        'rgba(124,153,244,0.2)',
-        'rgba(0,0,0,0)'
+        '#7c99f4',  // light blue on hover
+        'transparent'  // transparent by default
       ],
-      'fill-opacity': [
-        'case',
-        ['boolean', ['feature-state', 'pinned'], false],
-        0.9,
-        ['boolean', ['feature-state', 'hover'], false],
-        0.6,
-        0.1
-      ]
+      'fill-opacity': 1,
+      // If you’re using a separate outline layer, you can simplify that too:
     }
   });
   map.value.addLayer({
@@ -723,29 +859,9 @@ function addBaseMunicipalitiesLayer() {
     source: 'base-municipalities',
     'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
     paint: {
-      'line-color': [
-        'case',
-        ['boolean', ['feature-state', 'pinned'], false],
-        '#2c46f4',
-        ['boolean', ['feature-state', 'hover'], false],
-        '#7c99f4',
-        ['interpolate', ['linear'], ['get', 'c3'],
-          27, '#3288bd',
-          32, '#99d594',
-          37, '#e6f598',
-          42, '#fee08b',
-          47, '#fc8d59',
-          52, '#d53e4f'
-        ]
-      ],
-      'line-width': [
-        'case',
-        ['boolean', ['feature-state', 'pinned'], false],
-        4,
-        ['boolean', ['feature-state', 'hover'], false],
-        3,
-        1.5
-      ]
+      // Replace your case expression with a simple static color:
+      'line-color': '#999',  // pick any color you like
+      'line-width': 1
     }
   });
   // const currentCdMun = locationStore.cd_mun; // current municipality from the store
@@ -863,10 +979,11 @@ function addBaseMunicipalitiesLayer() {
         .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
         .addTo(map.value);
     } else {
-      // Update the selected municipality if it’s different from the current one.
       if (feat.properties.cd_mun !== locationStore.cd_mun) {
-        // Use setLocation to update cd_mun
-        locationStore.setLocation({ cd_mun: feat.properties.cd_mun });
+        locationStore.setLocation({
+          cd_mun: feat.properties.cd_mun,
+          scale: 'intraurbana'  // Set scale immediately
+        });
       }
     }
   });
@@ -885,30 +1002,62 @@ function handleMissingImage(e) {
  * Update the “scale” based on zoom.
  */
 function getScaleFromZoom(zoom) {
-  if (zoom >= 12) {return 'intraurbana';}
-  else if (zoom >= 6) {return 'municipal';}
-  else if (zoom > 3) {return 'estadual';}
-  else {return 'nacional';}
+  if (zoom >= 12) { return 'intraurbana'; }
+  else if (zoom >= 6) { return 'municipal'; }
+  else if (zoom > 3) { return 'estadual'; }
+  else { return 'nacional'; }
 }
 
-function updateScaleBasedOnZoom(zoom) {
-  let newScale;
-  if (zoom >= 12) { newScale = 'intraurbana'; }
-  else if (zoom >= 6) { newScale = 'municipal'; }
-  else if (zoom > 3) { newScale = 'estadual'; }
-  else { newScale = 'nacional'; }
-  if (locationStore.scale !== newScale) {
-    const currentHash = window.location.hash;
-    locationStore.setLocation({ scale: newScale });
-    const newQuery = { ...route.query, scale: newScale };
-    router.replace({ query: newQuery, hash: currentHash.slice(1) });
-  }
-}
+//// 'updateScaleBasedOnZoom' is defined but never used
+// function updateScaleBasedOnZoom(zoom) {
+//   let newScale;
+//   if (zoom >= 12) { newScale = 'intraurbana'; }
+//   else if (zoom >= 6) { newScale = 'municipal'; }
+//   else if (zoom > 3) { newScale = 'estadual'; }
+//   else { newScale = 'nacional'; }
+//   if (locationStore.scale !== newScale) {
+//     const currentHash = window.location.hash;
+//     locationStore.setLocation({ scale: newScale });
+//     const newQuery = { ...route.query, scale: newScale };
+//     router.replace({ query: newQuery, hash: currentHash.slice(1) });
+//   }
+// }
+
+// //is defined but never used
+// function onLegendOpacityChange(newOpacity) {
+//   // newOpacity is 0 to 1
+//   // We need to update the paint property of the newly-added layer
+//   const layerId = 'dynamic-layer'; // or use your ID
+//   if (!map.value) {return;}
+
+//   const layer = map.value.getLayer(layerId);
+//   if (!layer) {return;}
+
+//   // Distinguish between raster and vector layers:
+//   if (layer.type === 'raster') {
+//     // For raster layers, set 'raster-opacity'
+//     map.value.setPaintProperty(layerId, 'raster-opacity', newOpacity);
+//   } else if (layer.type === 'fill') {
+//     // For vector (fill) layers, set 'fill-opacity'
+//     map.value.setPaintProperty(layerId, 'fill-opacity', newOpacity);
+//   }
+
+//   // If you also want to dim the outline for vector, set 'line-opacity':
+//   if (map.value.getLayer(`${layerId}-outline`)) {
+//     map.value.setPaintProperty(`${layerId}-outline`, 'line-opacity', newOpacity);
+//   }
+// }
 
 /* ---------------------------------------
    LIFECYCLE
 ---------------------------------------*/
-onMounted(() => { if (locationStore.cd_mun) { loadCoordinates(locationStore.cd_mun); } });
+onMounted(() => {
+  if (locationStore.cd_mun) {
+    loadCoordinates(locationStore.cd_mun);
+  }
+  // Set map reference in store
+  layersStore.mapRef = map.value;
+});
 onBeforeUnmount(() => {
   if (map.value) {
     if (customHash.value) { customHash.value.remove(); }
@@ -949,6 +1098,11 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   padding: 8px;
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+.maplibregl-ctrl-geolocate button.active {
+  background-color: blue !important;
+  color: white;
 }
 
 .popup-content {
