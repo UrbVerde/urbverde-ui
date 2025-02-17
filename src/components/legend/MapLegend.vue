@@ -47,6 +47,7 @@
         <!-- Data Layer Card -->
         <LegendCard
           v-if="currentLayerName"
+          :showMenu="false"
           :title="currentLayerName"
           :icon="currentCategory?.icon"
           :layerId="currentLayerId"
@@ -65,14 +66,14 @@
         <PrimaryButton
           label="Comparar Camadas"
           :filled="false"
-          :icon="bi-layers"
+          icon="bi-layers"
           icon-position="left"
           @click="handleCompare"
         />
         <PrimaryButton
           label="Baixar"
           :filled="true"
-          :icon="bi-download"
+          icon="bi-download"
           icon-position="left"
           @click="handleDownload"
         />
@@ -162,6 +163,7 @@ const handleDownload = () => {
   overflow: hidden;
   z-index: 1;
   transition: opacity 0.3s ease-in-out;
+  cursor: default;
 }
 
 .legend-header {
@@ -171,7 +173,7 @@ const handleDownload = () => {
   width: 100%;
   padding: 10px 16px;
   background-color: #ffffff;
-  cursor: pointer;
+  /* cursor: pointer; */
   box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.13);
 }
 
@@ -222,7 +224,7 @@ const handleDownload = () => {
 .layers-header img {
   width: 16px;
   height: 16px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .buttons-container {

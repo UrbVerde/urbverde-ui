@@ -1,6 +1,7 @@
 <!-- LegendCard.vue -->
 <template>
-  <div class="card-container" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+  <div class="card-container">
+    <!--  @mouseenter="isHovered = true" @mouseleave="isHovered = false" -->
     <!-- Drag handle -->
     <div v-if="draggable && isHovered" class="drag-handle">
       <IconComponent name="drag" size="20" />
@@ -43,10 +44,10 @@
       </div>
 
       <!-- Opacity Control -->
-      <OpacityControl v-if="showOpacity && isHovered"
+      <!-- <OpacityControl v-if="showOpacity && isHovered"
                       v-model="localOpacity"
                       :layerId="layerId"
-                      @update:modelValue="handleOpacityChange" />
+                      @update:modelValue="handleOpacityChange" /> -->
     </div>
   </div>
 </template>
@@ -55,7 +56,7 @@
 import { ref } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
-import OpacityControl from './OpacityControl.vue';
+// import OpacityControl from './OpacityControl.vue';
 
 defineProps({
   title: {
@@ -100,17 +101,18 @@ defineProps({
   }
 });
 
-const emit = defineEmits(['opacity-change', 'colorbar-click']);
 const isHovered = ref(false);
 const localOpacity = ref(100);
 
 console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 
-const handleOpacityChange = (value) => {
-  console.log('[LegendCard] Opacity changed to:', value);
-  localOpacity.value = value;
-  emit('opacity-change', value);
-};
+// const emit = defineEmits(['opacity-change', 'colorbar-click']);
+
+// const handleOpacityChange = (value) => {
+//   console.log('[LegendCard] Opacity changed to:', value);
+//   localOpacity.value = value;
+//   emit('opacity-change', value);
+// };
 </script>
 
 <style scoped>

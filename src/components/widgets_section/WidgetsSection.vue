@@ -24,7 +24,7 @@
       </div>
       <component
         :is="section.component"
-        :city-code="cityCode"
+        :city-code="computedCityCode"
         :selected-year="selectedYears[index]"
         :layer="selectedLayer"
         @change-layer="changeLayer"

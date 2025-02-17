@@ -4,7 +4,7 @@
     <div class="gradient-bar" :style="{ background: computedGradient }"></div>
     <div class="label-container">
       <span class="min-label">{{ minStop }}{{ unit || '' }}</span>
-      <span class="center-label">{{ centerStop }}</span>
+      <span class="center-label">{{ centerStop }}{{ unit || '' }}</span>
       <span class="max-label">{{ maxStop }}{{ unit || '' }}</span>
     </div>
   </div>
@@ -33,24 +33,32 @@ const config = computed(() => {
   }
 });
 
+const getFormattedValue = (value) => {
+  if (!value) {return '0';}
+  const multiplier = config.value?.popup?.multiplier || 1;
+  const formatted = value * multiplier;
+
+  return formatted.toFixed(formatted % 1 === 0 ? 0 : 2);
+};
+
 const minStop = computed(() => {
   if (!config.value?.stops?.length) {return '0';}
 
-  return config.value.stops[0][0];
+  return getFormattedValue(config.value.stops[0][0]);
 });
 
 const maxStop = computed(() => {
   if (!config.value?.stops?.length) {return '100';}
   const lastIndex = config.value.stops.length - 1;
 
-  return config.value.stops[lastIndex][0];
+  return getFormattedValue(config.value.stops[lastIndex][0]);
 });
 
 const centerStop = computed(() => {
   if (!config.value?.stops?.length) {return '50';}
   const midIndex = Math.floor(config.value.stops.length / 2);
 
-  return config.value.stops[midIndex][0];
+  return getFormattedValue(config.value.stops[midIndex][0]);
 });
 
 const unit = computed(() => config.value?.unit || '');
@@ -78,7 +86,7 @@ function openColorOptions() {
 
 <style scoped>
 .colorbar-container {
-  cursor: pointer;
+  /* cursor: pointer;  */
   width: 100%;
   padding: 0 8px;
 }
