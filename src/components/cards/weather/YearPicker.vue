@@ -1,4 +1,4 @@
-<!-- YearPicker.vue -->
+<!-- urbverde-ui/src/components/cards/weather/YearPicker.vue -->
 <template>
   <div class="date-picker">
     <div class="input-wrapper">
@@ -16,7 +16,8 @@
       <div
         class="input-container"
         :class="{ 'year-modified': yearModified }"
-        @click="showYearSelector">
+        @click="showYearSelector"
+      >
         <input
           class="input-text body-small-regular"
           :value="formattedYear"
@@ -78,49 +79,84 @@ const props = defineProps({
   cityCode: {
     type: Number,
     required: true
+  },
+  layer: {
+    type: String,
+    required: true
   }
 });
 
 const emit = defineEmits(['update:modelValue']);
 
 const isVisible = ref(false);
-const defaultYear = ref(props.modelValue);
+const defaultYearValue = ref(props.modelValue);
 const currentYear = ref(props.modelValue);
 const yearModified = ref(false);
 const years = ref([]);
 
-defaultYear.value = props.modelValue;
+// Ensure the defaultYearValue is set
+defaultYearValue.value = props.modelValue;
 
-watch(() => props.modelValue, (newValue) => {
-  currentYear.value = newValue;
-}, { immediate: true });
-
-watch(() => props.cityCode, async(newCityCode) => {
-  await fetchYears(newCityCode);
-}, { immediate: true });
-
-watch(currentYear, (newValue) => {
-  yearModified.value = newValue !== defaultYear.value;
-});
-
+/**
+ * Define fetchYears before any watcher that references it.
+ */
 const fetchYears = async(cityCode) => {
   try {
-    const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`);
+    let apiUrl = '';
 
+    // Choose the API endpoint based on the layer prop.
+    switch (props.layer) {
+    case 'temperatura':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
+      break;
+    case 'vegetação':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/vegetal/cover?city=${cityCode}`;
+      break;
+    case 'parques':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/parks/info?city=${cityCode}`;
+      break;
+    default:
+      apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
+    }
+
+    const response = await fetch(apiUrl);
     if (!response.ok) {
       throw new Error('Failed to fetch years');
-
     }
     const data = await response.json();
     years.value = data;
   } catch (error) {
     console.error('Error fetching years:', error);
     years.value = [];
-
   }
 };
 
-const availableYears = computed(() => [...years.value].sort((a, b) => a - b));
+// Watch for changes in modelValue and update currentYear.
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    currentYear.value = newValue;
+  },
+  { immediate: true }
+);
+
+// Watch for changes in cityCode and fetch new years.
+watch(
+  () => props.cityCode,
+  async(newCityCode) => {
+    await fetchYears(newCityCode);
+  },
+  { immediate: true }
+);
+
+// Watch currentYear to update the yearModified flag.
+watch(currentYear, (newValue) => {
+  yearModified.value = newValue !== defaultYearValue.value;
+});
+
+const availableYears = computed(() =>
+  [...years.value].sort((a, b) => a - b)
+);
 
 const formattedYear = computed(() =>
   currentYear.value ? `Ano: ${currentYear.value}` : ''
@@ -180,145 +216,146 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .date-picker {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .input-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .input-wrapper .nav-button {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-    visibility: visible;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  visibility: visible;
 }
 
 .input-wrapper:hover .nav-button:not(.invisible) {
-    opacity: 1;
+  opacity: 1;
 }
 
 .input-container {
-    border-radius: 7px;
-    cursor: pointer;
-    padding: 5px 9px;
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid var(--Gray-400, #CED4DA);
-    background-color: white;
-    max-width: 120px;
-    height: 40px;
-    gap: 5px;
+  border-radius: 7px;
+  cursor: pointer;
+  padding: 5px 9px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--Gray-400, #CED4DA);
+  background-color: white;
+  max-width: 120px;
+  height: 40px;
+  gap: 5px;
 }
 
 .input-container.year-modified {
-    outline: 2px solid #418377;
-    outline-offset: -2px;
+  outline: 2px solid #418377;
+  outline-offset: -2px;
 }
 
 .nav-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    border-radius: 4px;
-    color: #6C757D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #6C757D;
 }
 
 .nav-button:hover:not(.disabled) {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 .nav-button.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .nav-button.invisible {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .icon-datepicker {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 14px;
-    height: 14px;
-    cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
 }
 
 .icon-datepicker i {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1px;
-    color: #6C757D;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1px;
+  color: #6C757D;
+  color: azure;
 }
 
 .input-text {
-    border: none;
-    outline: none;
-    background: transparent;
-    width: auto;
-    min-width: 0;
-    box-sizing: content-box;
-    padding: 0;
-    margin: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  width: auto;
+  min-width: 0;
+  box-sizing: content-box;
+  padding: 0;
+  margin: 0;
 }
 
 .year-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 2fr);
-    gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 2fr);
+  gap: 8px;
 }
 
 .year-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0px 8px;
-    cursor: pointer;
-    border-radius: 4px;
-    height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  height: 30px;
 }
 
 .year-item:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 .year-item.selected {
-    background-color: var(--Green-500, #198754);
-    color: white;
+  background-color: var(--Green-500, #198754);
+  color: white;
 }
 
 .calendar-overlay {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    z-index: 1000;
-    margin-top: 5px;
-    border-radius: 7px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  margin-top: 5px;
+  border-radius: 7px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .calendar {
-    min-width: 200px;
+  min-width: 200px;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>

@@ -1,3 +1,4 @@
+# urbverde-ui/.gitignore
 # Logs
 logs
 *.log
@@ -28,3 +29,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+*_flatten
+_flatten
+.urbverde-ui_flatten

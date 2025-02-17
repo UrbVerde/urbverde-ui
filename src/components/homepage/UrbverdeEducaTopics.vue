@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/homepage/UrbverdeEducaTopics.vue -->
 <template>
   <div class="urbverde-topics">
     <!-- Imagem -->
@@ -18,15 +19,15 @@ export default {
   props: {
     imageSrc: {
       type: String,
-      required: true, // A imagem é obrigatória
+      required: true,
     },
     imageAlt: {
       type: String,
-      default: 'Imagem relacionada', // Texto alternativo
+      default: 'Imagem relacionada',
     },
     title: {
       type: String,
-      required: true, // Título obrigatório
+      required: true,
     },
   },
 };

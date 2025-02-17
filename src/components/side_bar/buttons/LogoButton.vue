@@ -1,11 +1,12 @@
-<!-- urbverde-ui/src/components/buttons/LogoButton.vue -->
+<!-- urbverde-ui/src/components/side_bar/buttons/LogoButton.vue -->
 <template>
-  <div>
+  <div class="logo-button" @click="resetStore">
     <LogoRouterLink />
   </div>
 </template>
 
 <script>
+import { useLocationStore } from '@/stores/locationStore';
 import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
 
 export default {
@@ -13,6 +14,12 @@ export default {
   components: {
     LogoRouterLink,
   },
+  methods: {
+    resetStore() {
+      const locationStore = useLocationStore();
+      locationStore.reset();
+    }
+  }
 };
 </script>
 
@@ -43,7 +50,5 @@ export default {
   font-weight: 700;
   line-height: 150%;
   letter-spacing: 1px;
-  leading-trim: both;
-  text-edge: cap;
 }
 </style>
