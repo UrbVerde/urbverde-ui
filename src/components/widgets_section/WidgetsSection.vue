@@ -1,4 +1,4 @@
-# urbverde-ui/src/components/widgets_section/WidgetsSection.vue
+<!-- urbverde-ui/src/components/widgets_section/WidgetsSection.vue -->
 <template>
   <div class="widgets-section">
     <div
@@ -16,7 +16,7 @@
           v-if="!section.isSeeMore"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
-          :city-code="cityCode"
+          :city-code="computedCityCode"
           :layer="selectedLayer"
           :disabled="isParksLayer"
           @update:modelValue="(value) => handleYearChange(value, index)"
@@ -24,7 +24,7 @@
       </div>
       <component
         :is="section.component"
-        :city-code="cityCode"
+        :city-code="computedCityCode"
         :selected-year="selectedYears[index]"
         :layer="selectedLayer"
         @change-layer="changeLayer"
@@ -36,7 +36,7 @@
 <script>
 import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-// import { useRoute } from 'vue-router';
+// Import your section components as needed:
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
@@ -73,6 +73,7 @@ export default {
       type: Number,
       required: true
     },
+    // This is used as a fallback if the store value is not yet available.
     cityCode: {
       type: Number,
       required: true
@@ -80,67 +81,72 @@ export default {
   },
   setup(props) {
     const locationStore = useLocationStore();
-    // const route = useRoute();
 
-    const category = computed(() => locationStore.category || 'category?');
-    const cityName = computed(() => locationStore.nm_mun || 'city?');
+    // Use the exact names from the store.
+    const nm_mun = computed(() => locationStore.nm_mun || '?');
+    const uf = computed(() => locationStore.uf || '?');
 
-    // Map categories to internal layer names
+    // Map categories to internal layer names.
     const categoryToLayerMap = {
       'Clima': 'temperatura',
       'Vegetação': 'vegetação',
       'Parques e Praças': 'parques'
     };
 
-    // Get selected layer from store category
+    // Determine the selected layer from the location store.
     const selectedLayer = computed(() => categoryToLayerMap[locationStore.category] || 'temperatura');
 
-    // Number of subsections
+    // Rename this to avoid collision with props.cityCode
+    const computedCityCode = computed(() =>
+      locationStore.cd_mun || props.cityCode
+    );
+
+    // Number of subsections.
     const numSections = ref(3);
 
-    // Array to store selected years
+    // Array to store selected years.
     const selectedYears = ref(Array(numSections.value).fill(props.defaultYear));
 
-    // Check if parks layer is selected
+    // Check if the parks layer is selected.
     const isParksLayer = computed(() => selectedLayer.value === 'parques');
 
-    // Watch for changes in location store category
+    // When the category changes, reset the years accordingly.
     watch(() => locationStore.category, (newCategory) => {
       if (newCategory) {
-        // Reset years when changing categories
         selectedYears.value = selectedYears.value.map(() =>
           categoryToLayerMap[newCategory] === 'parques' ? 2021 : props.defaultYear
         );
       }
     });
 
-    // Force year to 2021 for parks layer
+    // Force the year to 2021 for the parks layer.
     watch(isParksLayer, (newVal) => {
       if (newVal) {
         selectedYears.value = selectedYears.value.map(() => 2021);
       }
     });
 
-    // Section configurations based on selected layer
+    // Section configurations.
+    // You can directly build titles using nm_mun and uf.
     const sections = computed(() => {
       const sectionConfigs = {
         temperatura: [
           {
             id: 'stats',
             ref: 'statsSection',
-            title: `Temperatura e clima em ${cityName.value}`,
+            title: `Temperatura e clima em ${nm_mun.value} - ${uf.value}`,
             component: TemperatureSection
           },
           {
             id: 'vulnerable',
             ref: 'vulnerableSection',
-            title: `Quem é mais afetado pelo calor extremo em ${cityName.value}?`,
+            title: `Quem é mais afetado pelo calor extremo em ${nm_mun.value}?`,
             component: HeatSection
           },
           {
             id: 'ranking',
             ref: 'rankingSection',
-            title: `${cityName.value} nos rankings de municípios`,
+            title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
             component: RankSection
           },
           {
@@ -155,7 +161,7 @@ export default {
           {
             id: 'stats',
             ref: 'statsSection',
-            title: `A cobertura vegetal em ${cityName.value}`,
+            title: `A cobertura vegetal em ${nm_mun.value} - ${uf.value}`,
             component: VegetationSection
           },
           {
@@ -167,7 +173,7 @@ export default {
           {
             id: 'ranking',
             ref: 'rankingVegSection',
-            title: `${cityName.value} nos rankings de municípios`,
+            title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
             component: RankVegSection
           },
           {
@@ -182,7 +188,7 @@ export default {
           {
             id: 'stats',
             ref: 'statsSection',
-            title: `Parques e praças em ${cityName.value}`,
+            title: `Parques e praças em ${nm_mun.value} - ${uf.value}`,
             component: InfoParksSection
           },
           {
@@ -194,7 +200,7 @@ export default {
           {
             id: 'ranking',
             ref: 'rankParksSection',
-            title: `${cityName.value} nos rankings de municípios`,
+            title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
             component: RankParksSection
           },
           {
@@ -210,28 +216,28 @@ export default {
       return sectionConfigs[selectedLayer.value] || [];
     });
 
-    // Method to change the layer
+    // Method to change the layer.
     const changeLayer = (layer) => {
-      // Map internal layer names to categories
       const layerToCategoryMap = {
         'temperatura': 'Clima',
         'vegetação': 'Vegetação',
         'parques': 'Parques e Praças'
       };
 
-      const category = layerToCategoryMap[layer];
-      if (category) {
+      const newCategory = layerToCategoryMap[layer];
+      if (newCategory) {
         locationStore.setLocation({
-          category,
-          // The layer ID should match what's expected in your categories data
+          category: newCategory,
           layer: `${layer}-layer`
         });
       }
     };
 
     return {
-      category,
-      cityName,
+      // Expose the store values exactly as nm_mun and uf.
+      nm_mun,
+      uf,
+      computedCityCode,
       selectedLayer,
       sections,
       selectedYears,

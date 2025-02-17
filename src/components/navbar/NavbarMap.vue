@@ -42,59 +42,47 @@
   </div>
 </template>
 
-<script>
-import { computed } from 'vue';
+<script setup>
+import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 
-export default {
-  name: 'AppNavbar',
-  props: {
-    activeSection: {
-      type: String,
-      required: true
-    }
+const { activeSection } = defineProps({
+  activeSection: {
+    type: String,
+    required: true,
   },
+});
 
-  setup() {
-    const locationStore = useLocationStore();
+const emit = defineEmits(['navigate-to']);
 
-    const layer = computed(() => locationStore.currentLayerName);  // Use currentLayerName instead
-    console.log('Navbar computed - current layer:', locationStore.currentLayerName);
-    const cityName = computed(() => locationStore.nm_mun);
-    const uf = computed(() => locationStore.uf);
+const locationStore = useLocationStore();
 
-    return {
-      layer,
-      cityName,
-      uf
-    };
-  },
+const layer = computed(() => {
+  console.log('Navbar computed - current layer:', locationStore.currentLayerName);
 
-  data() {
-    return {
-      tabs: [
-        { id: 'map', label: 'Mapa' },
-        { id: 'stats', label: 'Estatísticas' },
-        { id: 'ranking', label: 'Ranking' },
-      ]
-    };
-  },
+  return locationStore.currentLayerName;
+});
+const cityName = computed(() => locationStore.nm_mun);
+const uf = computed(() => locationStore.uf);
 
-  methods: {
-    navigateTo(sectionId) {
-      this.$emit('navigate-to', sectionId);
-    },
-    shareMap() {
-      // Get current URL with query params for sharing
-      const url = window.location.href;
-      // You could implement a share dialog here
-      alert(`Compartilhar: ${url}`);
-    },
-    layerInfo() {
-      //alert('Info do dado');
-    },
-  },
-};
+const tabs = ref([
+  { id: 'map', label: 'Mapa' },
+  { id: 'stats', label: 'Estatísticas' },
+  { id: 'ranking', label: 'Ranking' },
+]);
+
+function navigateTo(sectionId) {
+  emit('navigate-to', sectionId);
+}
+
+function shareMap() {
+  const url = window.location.href;
+  alert(`Compartilhar: ${url}`);
+}
+
+function layerInfo() {
+  // Info do dado
+}
 </script>
 
 <style scoped lang="scss">

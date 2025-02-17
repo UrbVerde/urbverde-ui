@@ -33,7 +33,7 @@
           <div class="map-section">
             <div id="map" ref="Mapa" class="map-container">
               <MapBox :coordinates="coordinates" class="map-box">
-                <Legenda />
+                <Legend />
               </MapBox>
             </div>
           </div>
@@ -59,9 +59,9 @@ import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
 import Sidebar from '../components/side_bar/SideBar.vue';
-import Navbar from '../components/navbar/Navbar.vue';
+import Navbar from '../components/navbar/NavbarMap.vue';
 import MapBox from '../components/map/mapGenerator.vue';
-import Legenda from '../components/map/Legenda.vue';
+import Legend from '../components/legend/MapLegend.vue';
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
