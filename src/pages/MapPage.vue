@@ -1,5 +1,4 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
-<!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="layout-container">
     <Sidebar
@@ -88,7 +87,6 @@ const defaultYear = ref(2020);
 const cityCode = ref(3547809);
 
 // Methods
-
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
 };
@@ -121,13 +119,13 @@ const handleScroll = () => {
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId);
   if (element) {
-    const navbarHeight = 100; // Adjust this value based on your navbar height
+    const navbarHeight = 100; // Adjust based on your navbar height
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
 
     window.scrollTo({
       top: offsetPosition,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
 
     activeSection.value = sectionId;
