@@ -68,14 +68,14 @@
           :filled="false"
           icon="bi-layers"
           icon-position="left"
-          @click="() => { handleCompare(); refModalWaitlist.show()(); }"
+          @click="() => { handleCompare(); refModalWaitlist.show(); }"
         />
         <PrimaryButton
           label="Baixar"
           :filled="true"
           icon="bi-download"
           icon-position="left"
-          @click="() => { handleDownload(); refModalWaitlist.show()(); }"
+          @click="() => { handleDownload(); refModalWaitlist.show(); }"
         />
       </div>
     </div>

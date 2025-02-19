@@ -2,23 +2,64 @@
   <modalBootstrap
     ref="modalRef"
     modalId="modalWaitlist"
-    title="Avisar quando o recurso estiver pronto"
-    :primaryButtonText="primaryButtonText"
-    :primaryButtonClosesModal="false"
-    @closePrimary="handleSubmit"
+    title="Recurso indisponível"
+    primaryButtonText="Ok"
+    :primaryButtonClosesModal="true"
     @close="onModalClose"
     class="waitlist-modal"
   >
     <template #body>
       <div class="waitlist-body">
-        <p class="text-body body-normal-regular">Estamos trabalhando para liberar o recurso em breve, envie seu e-mail e saiba quando estiver pronto!</p>
-        <input
-          type="email"
-          class="input-text body-normal-regular"
-          v-model.trim="email"
-          placeholder="Adicionar seu e-mail"
-          :disabled="loading"
-        />
+        <p class="text-body body-normal-regular">
+          Experimente enviar seu e-mail para ser avisado assim que estiver disponível.
+        </p>
+
+        <!-- Formulário de newsletter similar ao footer -->
+        <form class="input-group body-small-medium" @submit.prevent="handleSubmit">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Adicionar seu e-mail"
+            aria-label="Adicionar seu e-mail"
+            aria-describedby="button-submit"
+            required
+            v-model.trim="email"
+            :disabled="loading"
+          />
+
+          <button
+            :class="['button-base', buttonStateClass]"
+            :style="{ minWidth: '56px' }"
+            :disabled="loading || success"
+            type="submit"
+            id="button-submit"
+          >
+            <span class="icon-holder">
+              <transition name="icon-fade" mode="out-in">
+                <i
+                  v-if="success"
+                  key="success"
+                  class="bi bi-check-lg"
+                  style="font-size: 26px;"
+                ></i>
+                <span
+                  v-else-if="loading"
+                  key="loading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <i
+                  v-else
+                  key="idle"
+                  class="bi bi-send"
+                  style="font-size: 18px;"
+                ></i>
+              </transition>
+            </span>
+          </button>
+        </form>
+
         <p v-if="errorMessage" class="error body-normal-regular">{{ errorMessage }}</p>
       </div>
     </template>
@@ -26,36 +67,39 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, watch } from 'vue';
+import { ref, defineExpose, watch, computed } from 'vue';
 import modalBootstrap from './modalBootstrap.vue';
 
 const email = ref('');
 const loading = ref(false);
 const success = ref(false);
-const isClosing = ref(false);
 const errorMessage = ref('');
-const primaryButtonText = ref('Enviar');
 
 // Ref para o modalBootstrap
 const modalRef = ref(null);
 
-// Atualiza o texto do botão conforme o estado
-watch(loading, (newValue) => {
-  if (!isClosing.value) {
-    primaryButtonText.value = newValue ? 'Enviando...' : (success.value ? 'Enviado!' : 'Enviar');
+// Computed para o estado do botão
+const buttonStateClass = computed(() => {
+  if (success.value) {
+    return 'button-success';
   }
+  if (loading.value) {
+    return 'button-loading';
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  return emailRegex.test(email.value.trim()) ? 'button-valid' : 'button-invalid';
 });
 
-// Restaura o texto do botão se o email for alterado após o loading
+// Restaura o estado se o email for alterado após o success
 watch(email, (newVal, oldVal) => {
-  if ((loading.value || success.value) && newVal !== oldVal) {
-    loading.value = false;
+  if (success.value && newVal !== oldVal) {
     success.value = false;
-    primaryButtonText.value = 'Enviar';
   }
 });
 
-// Função que é chamada quando o usuário clica no botão primário
+// Função que é chamada quando o usuário clica no botão de envio dentro do form
 function handleSubmit() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email.value)) {
@@ -87,43 +131,23 @@ function handleSubmit() {
       }
       loading.value = false;
       success.value = true;
-      primaryButtonText.value = 'Enviado!';
-
-      // Marca que está fechando para não alterar o texto do botão
-      isClosing.value = true;
-
-      // Aguarda um momento para mostrar o status de "Enviado!" antes de fechar
-      setTimeout(() => {
-        modalRef.value.hide();
-      }, 800);
     })
     .catch(error => {
       console.error(error);
       loading.value = false;
-      primaryButtonText.value = 'Enviar';
       errorMessage.value = 'Ocorreu um erro ao enviar. Tente novamente.';
     });
 }
 
 function onModalClose() {
-  // Só reseta o estado se não estiver no processo de fechamento após envio
-  if (!isClosing.value) {
-    resetState();
-  } else {
-    // Após fechar, reseta o estado para o próximo uso
-    setTimeout(() => {
-      resetState();
-    }, 300);
-  }
+  resetState();
 }
 
 function resetState() {
   email.value = '';
   loading.value = false;
   success.value = false;
-  isClosing.value = false;
   errorMessage.value = '';
-  primaryButtonText.value = 'Enviar';
 }
 
 // Expondo o método show para que o componente pai possa chamar
@@ -136,40 +160,145 @@ defineExpose({ show });
 </script>
 
   <style scoped lang="scss">
-  p {
-    margin-bottom: 16px;
-  }
-
   .waitlist-body {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
-  .text-body{
+  .text-body {
     color: map-get($body-text, body-color);
+    cursor: default;
   }
 
-  input[type="email"] {
+  .input-group {
+    display: flex;
     width: 100%;
-    padding: 12px 12px 12px 16px;
-    font-size: 16px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
   }
 
-  .input-text{
-    color: map-get($body-text, body-color);
-    border-radius: 4px;
-    border: 1px solid map-get($theme, secondary);
+  .form-control {
+    flex: 1;
+    height: 40px;
+    border-radius: 8px !important;
+    border: 1px solid map-get($gray, 400);
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: text;
+  }
+
+  .form-control:focus {
+    box-shadow: 0 0 0 0.25rem map-get($primary-fade, 100);
+    border-color: transparent;
+  }
+
+  .form-control:disabled {
+    cursor: default;
+    pointer-events: none;
+    opacity: 1;
+    background-color: map-get($gray, white);
+  }
+
+  .button-base {
+    border-radius: 8px !important;
+    border: 1px solid map-get($gray, 400);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 56px;
+    background-color: white !important;
+  }
+
+  .button-invalid {
+    background-color: map-get($gray, 100);
+    color: map-get($gray, 500);
+  }
+
+  .button-valid {
+    background-color: map-get($gray, 100);
+    color: map-get($green, 500);
+    border: 1px solid map-get($green, 400);
+  }
+
+  .button-loading {
+    background-color: map-get($gray, 100);
+    color: map-get($green, 500);
+    border: 1px solid map-get($green, 400);
+  }
+
+  .button-success {
+    background-color: map-get($gray, 100);
+    color: map-get($green, 500);
+    border: 1px solid map-get($green, 400);
+  }
+
+  .icon-holder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .icon-fade-enter,
+  .icon-fade-leave-to {
+    opacity: 0;
+  }
+
+  .icon-fade-enter-to,
+  .icon-fade-leave {
+    opacity: 1;
+  }
+
+  .icon-fade-enter-active,
+  .icon-fade-leave-active {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .icon-fade-enter:not(.spinner-border),
+  .icon-fade-leave-to:not(.spinner-border) {
+    transform: scale(0.7);
+  }
+
+  .icon-fade-enter-to:not(.spinner-border),
+  .icon-fade-leave:not(.spinner-border) {
+    transform: scale(1);
+  }
+
+  .icon-fade-enter-active:not(.spinner-border),
+  .icon-fade-leave-active:not(.spinner-border) {
+    transition: opacity 0.3s ease-in-out, transform 0.15s ease-in-out;
+  }
+
+  .spinner-border {
+    margin: 0 !important;
+    transform-origin: center center;
   }
 
   .error {
     color: map-get($theme, danger);
     font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 0;
   }
 
-  /* Adiciona estilo para o botão primário no modal */
-  :deep(.modal-footer .primary-button) {
-    min-width: 120px !important;
-    width: 120px !important;
+  .success {
+    color: map-get($green, 600);
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+
+  .body-caption-regular {
+    color: map-get($gray, 500);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 4px;
   }
   </style>
