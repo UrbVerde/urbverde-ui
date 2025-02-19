@@ -1,3 +1,29 @@
+<!--
+    Para funcionar corretamente:
+
+    1. Importar o componente modalBootstrap.vue
+    2. No botão em que abre o modal, adicionar o @click="refModalWaitlist.show()"
+    3. Configurar o modal na página (se for um modal específico)
+        Exemplo:
+        <modalBootstrap
+            ref="refModalWaitlist"
+            modalId="modalWaitlist"
+            title="Título do modal"
+            bodyText="Conteúdo do modal"
+            showSecondaryButton="true"
+            primaryButtonText="Ok"
+            :primaryButtonClosesModal="true"
+            :secondaryButtonClosesModal="false"
+            @closeSecondary="handleSecondaryAction"
+            @closePrimary="handlePrimaryAction"
+        />
+
+    4. Adicionar const <nome da ref do modal> = ref(null); no script
+        Exemplo:
+        const refModalWaitlist = ref(null);
+
+-->
+
 <template>
   <div>
     <!-- Modal -->
@@ -20,24 +46,22 @@
               {{ bodyText }}
             </slot>
           </div>
-          <div class="modal-footer" v-if="showCloseButton || showSaveButton">
+          <div class="modal-footer" v-if="showSecondaryButton || showPrimaryButton">
+
+            <!-- Secondary Button -->
             <PrimaryButton
-              v-if="showCloseButton"
-              :label="closeButtonText"
+              v-if="showSecondaryButton"
+              :label="secondaryButtonText"
               :filled="false"
-              :icon="closeButtonIcon"
-              :icon-position="closeButtonIconPosition"
-              :icon-type="closeButtonIconType"
-              @click="handleCloseClick"
+              @click="secondaryButtonCloseOnClick"
             />
+
+            <!-- Primary Button -->
             <PrimaryButton
-              v-if="showSaveButton"
-              :label="saveButtonText"
+              v-if="showPrimaryButton"
+              :label="primaryButtonText"
               :filled="true"
-              :icon="saveButtonIcon"
-              :icon-position="saveButtonIconPosition"
-              :icon-type="saveButtonIconType"
-              @click="handleSaveClick"
+              @click="primaryButtonCloseOnClick"
             />
           </div>
         </div>
@@ -66,53 +90,33 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  showCloseButton: {
+  showSecondaryButton: {
     type: Boolean,
-    default: true
+    default: false
   },
-  closeButtonText: {
+  secondaryButtonText: {
     type: String,
     default: 'Fechar'
   },
-  closeButtonIcon: {
-    type: String,
-    default: null
-  },
-  closeButtonIconPosition: {
-    type: String,
-    default: 'left'
-  },
-  closeButtonIconType: {
-    type: String,
-    default: 'bootstrap'
-  },
-  closeOnClick: {
+  secondaryButtonClosesModal: {
     type: Boolean,
     default: true
   },
-  showSaveButton: {
+  showPrimaryButton: {
     type: Boolean,
     default: true
   },
-  saveButtonText: {
+  primaryButtonText: {
     type: String,
     default: 'Salvar'
   },
-  saveButtonIcon: {
-    type: String,
-    default: null
-  },
-  saveButtonIconPosition: {
-    type: String,
-    default: 'left'
-  },
-  saveButtonIconType: {
-    type: String,
-    default: 'bootstrap'
+  primaryButtonClosesModal: {
+    type: Boolean,
+    default: true
   }
 });
 
-const emit = defineEmits(['close', 'save']);
+const emit = defineEmits(['closeSecondary', 'closePrimary', 'close']);
 
 onMounted(() => {
   const modalEl = document.getElementById(props.modalId);
@@ -126,16 +130,16 @@ onMounted(() => {
   }
 });
 
-const handleCloseClick = () => {
-  emit('close');
-  if (props.closeOnClick && modalInstance.value) {
+const secondaryButtonCloseOnClick = () => {
+  emit('closeSecondary');
+  if (props.secondaryButtonClosesModal && modalInstance.value) {
     modalInstance.value.hide();
   }
 };
 
-const handleSaveClick = () => {
-  emit('save');
-  if (props.closeOnClick && modalInstance.value) {
+const primaryButtonCloseOnClick = () => {
+  emit('closePrimary');
+  if (props.primaryButtonClosesModal && modalInstance.value) {
     modalInstance.value.hide();
   }
 };
@@ -166,4 +170,24 @@ defineExpose({ show, hide });
   .modal-body {
     color: map-get($body-text, body-color);
   }
+
+  .modal-footer{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .modal-footer :deep(.primary-button){
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    gap: 0;
+  }
+
+  .modal-dialog-centered{
+    padding: 16px;
+    margin: auto;
+  }
+
   </style>

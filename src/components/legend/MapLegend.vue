@@ -68,14 +68,14 @@
           :filled="false"
           icon="bi-layers"
           icon-position="left"
-          @click="() => { handleCompare(); refModalWhitelist.show(); }"
+          @click="() => { handleCompare(); refModalWaitlist.show(); }"
         />
         <PrimaryButton
           label="Baixar"
           :filled="true"
           icon="bi-download"
           icon-position="left"
-          @click="() => { handleDownload(); refModalWhitelist.show(); }"
+          @click="() => { handleDownload(); refModalWaitlist.show(); }"
         />
       </div>
     </div>
@@ -83,17 +83,14 @@
 
   <!-- Modal -->
   <modalBootstrap
-    ref="refModalWhitelist"
-    modalId="modalWhitelist"
-    title="Título Personalizado"
-    bodyText="Conteúdo do modal que pode ser personalizado."
-    closeButtonText="Cancelar"
-    saveButtonText="Confirmar"
-    closeButtonIcon="x-circle"
-    saveButtonIcon="check-circle"
-    :closeOnClick="true"
-    @close="handleClose"
-    @save="handleSave"
+    ref="refModalWaitlist"
+    modalId="modalWaitlist"
+    title="Título do modal"
+    bodyText="Conteúdo do modal"
+    primaryButtonText="Ok"
+    :primaryButtonClosesModal="true"
+    @closeSecondary="handleSecondaryAction"
+    @closePrimary="handlePrimaryAction"
   />
 </template>
 
@@ -160,7 +157,7 @@ const handleDownload = () => {
   console.warn('Downloading data...');
 };
 
-const refModalWhitelist = ref(null);
+const refModalWaitlist = ref(null);
 </script>
 
 <style scoped>
@@ -191,7 +188,7 @@ const refModalWhitelist = ref(null);
   width: 100%;
   padding: 10px 16px;
   background-color: #ffffff;
-  /* cursor: pointer; */
+  cursor: pointer;
   box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.13);
 }
 
