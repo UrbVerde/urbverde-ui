@@ -14,7 +14,6 @@
           Estamos corrigindo isso! Deixe seu e-mail para entrar na lista de espera e ser avisado quando ficar pronto.
         </p>
 
-        <!-- Formulário de newsletter similar ao footer -->
         <form class="input-group body-small-medium" @submit.prevent="handleSubmit">
           <input
             type="email"
@@ -149,16 +148,11 @@ function handleSubmit() {
 }
 
 function onModalClose() {
-  // Não redefine o estado ao fechar o modal
-  // Só limpa mensagens de erro e loading
   loading.value = false;
   errorMessage.value = '';
 }
 
-// Expondo o método show para que o componente pai possa chamar
 function show() {
-  // Não chama mais resetState()
-  // Restaura o estado persistente quando o modal é mostrado
   email.value = persistentEmail.value;
   success.value = persistentSuccess.value;
   loading.value = false;
