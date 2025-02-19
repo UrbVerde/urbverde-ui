@@ -29,7 +29,10 @@
   </div>
 
   <!-- Modal -->
-  <modalWaitList ref="refModalWaitlist" />
+  <modalWaitList
+    ref="refModalWaitlist"
+    :modalId="'modalWaitlistDownload'"
+  />
 </template>
 
 <script setup>

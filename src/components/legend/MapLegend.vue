@@ -68,21 +68,24 @@
           :filled="false"
           icon="bi-layers"
           icon-position="left"
-          @click="() => { handleCompare(); refModalWaitlist.show(); }"
+          @click="() => { handleCompare(); refModalWaitlistLegend.show(); }"
         />
         <PrimaryButton
           label="Baixar"
           :filled="true"
           icon="bi-download"
           icon-position="left"
-          @click="() => { handleDownload(); refModalWaitlist.show(); }"
+          @click="() => { handleDownload(); refModalWaitlistLegend.show(); }"
         />
       </div>
     </div>
   </div>
 
   <!-- Modal -->
-  <modalWaitList ref="refModalWaitlist" />
+  <modalWaitList
+    ref="refModalWaitlistLegend"
+    :modalId="'modalWaitlistLegend'"
+  />
 </template>
 
 <script setup>
@@ -149,7 +152,7 @@ const handleDownload = () => {
 };
 
 // Referenca o modal para utilizar seus métodos
-const refModalWaitlist = ref(null);
+const refModalWaitlistLegend = ref(null);
 </script>
 
 <style scoped>
