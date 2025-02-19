@@ -68,30 +68,21 @@
           :filled="false"
           icon="bi-layers"
           icon-position="left"
-          @click="() => { handleCompare(); refModalWaitlist.show(); }"
+          @click="() => { handleCompare(); refModalWaitlist.show()(); }"
         />
         <PrimaryButton
           label="Baixar"
           :filled="true"
           icon="bi-download"
           icon-position="left"
-          @click="() => { handleDownload(); refModalWaitlist.show(); }"
+          @click="() => { handleDownload(); refModalWaitlist.show()(); }"
         />
       </div>
     </div>
   </div>
 
   <!-- Modal -->
-  <modalBootstrap
-    ref="refModalWaitlist"
-    modalId="modalWaitlist"
-    title="Título do modal"
-    bodyText="Conteúdo do modal"
-    primaryButtonText="Ok"
-    :primaryButtonClosesModal="true"
-    @closeSecondary="handleSecondaryAction"
-    @closePrimary="handlePrimaryAction"
-  />
+  <modalWaitList ref="refModalWaitlist" />
 </template>
 
 <script setup>
@@ -104,7 +95,7 @@ import { useLayersStore } from '@/stores/layersStore';
 import PrimaryButton from '../buttons/PrimaryButton.vue';
 import LegendYearSelector from './LegendYearSelector.vue';
 import LegendCard from './LegendCard.vue';
-import modalBootstrap from '../modal/modalBootstrap.vue';
+import modalWaitList from '../modal/modalWaitList.vue';
 
 // Import icons
 import wrapperIcon from '@/assets/icons/wrapper.svg';
@@ -157,6 +148,7 @@ const handleDownload = () => {
   console.warn('Downloading data...');
 };
 
+// Referenca o modal para utilizar seus métodos
 const refModalWaitlist = ref(null);
 </script>
 

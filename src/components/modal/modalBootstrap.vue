@@ -190,4 +190,8 @@ defineExpose({ show, hide });
     margin: auto;
   }
 
+  .modal-body{
+    margin: 12px;
+  }
+
   </style>
