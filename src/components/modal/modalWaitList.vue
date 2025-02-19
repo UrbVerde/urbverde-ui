@@ -1,5 +1,4 @@
 <template>
-  <!-- Usa diretamente o modalBootstrap -->
   <modalBootstrap
     ref="modalRef"
     :modalId="modalId"
@@ -70,20 +69,16 @@
 import { ref, computed, watch } from 'vue';
 import modalBootstrap from './modalBootstrap.vue';
 
-// Estado persistente (caso queira manter o e-mail quando reabrir o modal)
 const persistentEmail = ref('');
 const persistentSuccess = ref(false);
 
-// Estado do formulário
 const email = ref('');
 const loading = ref(false);
 const success = ref(false);
 const errorMessage = ref('');
 
-// Referência ao modalBootstrap
 const modalRef = ref(null);
 
-// Computed para o estado do botão
 const buttonStateClass = computed(() => {
   if (success.value) {
     return 'button-success';
@@ -104,12 +99,9 @@ watch(email, (newVal, oldVal) => {
   }
 });
 
-// Ao fechar o modal (via “x” ou “Ok” se primaryButtonClosesModal = true)
 function onModalClose() {
   loading.value = false;
   errorMessage.value = '';
-  // Se não quiser manter o e-mail persistente, pode resetar aqui também:
-  // email.value = ''
 }
 
 // Ação do formulário: enviar o e-mail para a API
@@ -145,7 +137,6 @@ function handleSubmit() {
       loading.value = false;
       success.value = true;
 
-      // Atualiza o estado persistente
       persistentEmail.value = email.value;
       persistentSuccess.value = true;
     })
@@ -158,7 +149,6 @@ function handleSubmit() {
 
 // Método público para abrir o modal
 function show() {
-  // Se quiser restaurar o estado persistente:
   email.value = persistentEmail.value;
   success.value = persistentSuccess.value;
   loading.value = false;
@@ -169,14 +159,12 @@ function show() {
   }
 }
 
-// Método público para fechar o modal (opcional)
 function hide() {
   if (modalRef.value) {
     modalRef.value.hide();
   }
 }
 
-// Expondo para que o componente-pai possa chamar <refModalWaitlist>.show()
 defineExpose({ show, hide });
 </script>
 
