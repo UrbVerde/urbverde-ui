@@ -82,7 +82,9 @@
   </div>
 
   <!-- Modal -->
-  <modalWaitList ref="refModalWaitlist" />
+  <div class="modal-container">
+    <modalWaitList ref="refModalWaitlist" />
+  </div>
 </template>
 
 <script setup>
