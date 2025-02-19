@@ -72,8 +72,7 @@ jobs:
                   echo "Updated wrong path: $FILE"
                 fi
               elif ! grep -q "^$COMMENT" "$FILE" 2>/dev/null; then
-                echo -e "$COMMENT
-$(cat "$FILE")" > "$FILE"
+                echo -e "$COMMENT\n$(cat "$FILE")" > "$FILE"
                 echo "Inserted missing path: $FILE"
               fi
             fi
