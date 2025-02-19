@@ -163,6 +163,10 @@ defineExpose({ show, hide });
 </script>
 
   <style scoped lang="scss">
+  .modal-content{
+    cursor: default;
+  }
+
   .modal-title {
     color: map-get($body-text, body-color);
   }
