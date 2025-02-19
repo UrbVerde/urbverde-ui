@@ -68,18 +68,33 @@
           :filled="false"
           icon="bi-layers"
           icon-position="left"
-          @click="handleCompare"
+          @click="() => { handleCompare(); refModalWhitelist.show(); }"
         />
         <PrimaryButton
           label="Baixar"
           :filled="true"
           icon="bi-download"
           icon-position="left"
-          @click="handleDownload"
+          @click="() => { handleDownload(); refModalWhitelist.show(); }"
         />
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <modalBootstrap
+    ref="refModalWhitelist"
+    modalId="modalWhitelist"
+    title="Título Personalizado"
+    bodyText="Conteúdo do modal que pode ser personalizado."
+    closeButtonText="Cancelar"
+    saveButtonText="Confirmar"
+    closeButtonIcon="x-circle"
+    saveButtonIcon="check-circle"
+    :closeOnClick="true"
+    @close="handleClose"
+    @save="handleSave"
+  />
 </template>
 
 <script setup>
@@ -92,6 +107,7 @@ import { useLayersStore } from '@/stores/layersStore';
 import PrimaryButton from '../buttons/PrimaryButton.vue';
 import LegendYearSelector from './LegendYearSelector.vue';
 import LegendCard from './LegendCard.vue';
+import modalBootstrap from '../modal/modalBootstrap.vue';
 
 // Import icons
 import wrapperIcon from '@/assets/icons/wrapper.svg';
@@ -143,6 +159,8 @@ const handleCompare = () => {
 const handleDownload = () => {
   console.warn('Downloading data...');
 };
+
+const refModalWhitelist = ref(null);
 </script>
 
 <style scoped>
