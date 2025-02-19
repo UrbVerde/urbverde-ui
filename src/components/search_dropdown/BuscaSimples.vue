@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div v-if="true" class="button-debug">
+    <div v-if="debug" class="button-debug">
       <span>{{ suggestions.length }} sugestão(ões)</span>
       <span>Cache: {{ cachedCities.length }} item(ns)</span>
       <span>Histórico: {{ searchHistory.length }} item(ns)</span>
@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { useRoute } from 'vue-router';
@@ -153,6 +153,10 @@ const cachedCities = ref([]);
 const searchHistory = ref([]);
 const isError = ref(false);
 
+// Initialize LocationStore
+const locationStore = useLocationStore();
+const route = useRoute();
+
 // Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
@@ -162,30 +166,14 @@ onMounted(async() => {
   document.addEventListener('mousedown', handleClickOutside);
   loadSearchHistory();
 
-  // Initialize from Pinia store if values exist
-  const locationStore = useLocationStore();
-  const route = useRoute();
-
-  // Check if we have URL parameters first
+  // Initialize from URL parameters if they exist
   if (Object.keys(route.query).length > 0) {
     locationStore.updateFromQueryParams(route.query);
   }
 
   // Now initialize if we have store values
   if (locationStore.cd_mun && locationStore.nm_mun && locationStore.uf) {
-    const cityText = `${locationStore.nm_mun} - ${locationStore.uf}`;
-    inputValue.value = cityText;
-    visibleInput.value = cityText;
-    locationChosen.value = cityText;
-    codes.value[cityText] = locationStore.cd_mun;
-
-    // Add to cached cities
-    if (!cachedCities.value.includes(cityText)) {
-      cachedCities.value.push(cityText);
-    }
-
-    // Fetch coordinates for the stored location
-    await fetchCoordinates(cityText);
+    updateInputFromStore();
   } else if (props.openDelay > 0) { // Only proceed if openDelay is greater than 0
     // Show dropdown after delay
     setTimeout(() => {
@@ -196,6 +184,35 @@ onMounted(async() => {
     }, props.openDelay);
   }
 });
+
+// Watch for changes in locationStore values
+watch(() => [locationStore.cd_mun, locationStore.nm_mun, locationStore.uf], () => {
+  if (locationStore.cd_mun && locationStore.nm_mun && locationStore.uf) {
+    updateInputFromStore();
+  }
+}, { deep: true });
+
+function updateInputFromStore() {
+  const cityText = `${locationStore.nm_mun} - ${locationStore.uf}`;
+  inputValue.value = cityText;
+  visibleInput.value = cityText;
+  locationChosen.value = cityText;
+
+  // Store the code for future use
+  if (locationStore.cd_mun) {
+    codes.value[cityText] = locationStore.cd_mun;
+  }
+
+  // Add to cached cities if not already there
+  if (!cachedCities.value.includes(cityText)) {
+    cachedCities.value.push(cityText);
+  }
+
+  // Update coordinates if not already set
+  if (!coordinates.value && locationStore.cd_mun) {
+    fetchCoordinates(cityText);
+  }
+}
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousedown', handleClickOutside);
@@ -289,7 +306,6 @@ async function selectSuggestion(suggestion) {
   const stateAbbrev = suggestion.text.split(' - ')[1];
 
   // Update Pinia store
-  const locationStore = useLocationStore();
   await locationStore.setLocation({
     cd_mun: code,
     nm_mun: city,
@@ -721,49 +737,10 @@ function toggleState() {
   }
 }
 
-// getCachedData() {
-//     return {
-//       city: localStorage.getItem('cachedCity'),
-//       state: localStorage.getItem('cachedState'),
-//       stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
-//       international: localStorage.getItem('cachedInternational') === 'true',
-//       latitude: localStorage.getItem('cachedLatitude'),
-//       longitude: localStorage.getItem('cachedLongitude'),
-//     };
-//   },
-
 // Helper to emit location-updated event from script setup
-// We can’t use defineEmits directly in the child and pass to child of child
-// so we do an old-fashioned dispatch approach or a direct parent bus event.
 function emitLocationUpdate(payload) {
-  // If you want to communicate to parent, defineEmits:
-  // For example:
-  // const emit = defineEmits(['location-updated','api-error']);
-  // emit('location-updated', payload);
-  //
-  // Or for your code sample:
   emit('location-updated', payload);
 }
-// this.suggestions = [];
-
-/* ------------ Template Refs ------------ */
-
-/*
-  The code above tries to approximate your event system.
-  If you want to define emits at the top:
-  ----------------------------------------------------------------------------------
-  const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
-  function emitLocationUpdate(payload) {
-    emit('location-updated', payload);
-  }
-  function handleLocationFailure() {
-    coordinates.value = null;
-    emit('location-updated', null);
-    emit('api-error');
-  }
-  ----------------------------------------------------------------------------------
-  Then replace the customEvent logic with direct `emit` calls.
-*/
 </script>
 
 <style scoped>
