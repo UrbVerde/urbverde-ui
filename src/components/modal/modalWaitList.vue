@@ -119,24 +119,14 @@ function handleSubmit() {
   const formData = new FormData();
   formData.append('email', email.value);
 
-  fetch('https://script.google.com/macros/s/AKfycbxXwPCAHpHFhr2C1mkhsbbzUbCbXfaS2EwooF6-bmaOUXXXZsuFMCMMOHKcZbLpoKtb/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbzKGGlVAbYyGBGS9_kg5DRwKmB_EydLtvj5_Bi1blHtqGneb4Aco8burnW53G1E7qGk/exec', {
     method: 'POST',
+    mode: 'no-cors',
     body: formData
   })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro ao enviar o e‑mail.');
-      }
-
-      return response.json();
-    })
-    .then(result => {
-      if (result.status !== 'success') {
-        throw new Error('Falha no envio.');
-      }
+    .then(() => {
       loading.value = false;
       success.value = true;
-
       persistentEmail.value = email.value;
       persistentSuccess.value = true;
     })
