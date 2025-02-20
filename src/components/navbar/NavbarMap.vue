@@ -22,7 +22,6 @@
               <p class="body-small-regular">Entender esse dado</p>
             </button>
           </a>
-
         </div>
       </div>
 
@@ -39,12 +38,19 @@
         </button>
       </div>
     </div>
+    <!-- Modal de compartilhamento -->
+    <modalShare
+      ref="refModalShare"
+      :cityName="cityName"
+      :stateName="uf"
+    />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
+import modalShare from '../modal/modalShare.vue';
 
 const { activeSection } = defineProps({
   activeSection: {
@@ -54,7 +60,7 @@ const { activeSection } = defineProps({
 });
 
 const emit = defineEmits(['navigate-to']);
-
+const refModalShare = ref(null);
 const locationStore = useLocationStore();
 
 const layer = computed(() => {
@@ -76,8 +82,7 @@ function navigateTo(sectionId) {
 }
 
 function shareMap() {
-  const url = window.location.href;
-  alert(`Compartilhar: ${url}`);
+  refModalShare.value.show();
 }
 
 function layerInfo() {

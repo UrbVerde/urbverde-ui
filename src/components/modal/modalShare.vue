@@ -1,39 +1,40 @@
-<!-- urbverde-ui/src/components/modals/modalShare.vue -->
+<!-- urbverde-ui/src/components/modal/modalShare.vue -->
 <template>
-  <modalBootstrap
-    ref="refModal"
-    modalId="modalShare"
-    title="Compartilhar link"
-    :showSecondaryButton="false"
-    primaryButtonText="Fechar"
-    :primaryButtonClosesModal="true"
-  >
-    <template #body>
-      <div>
-        <p class="mb-3 body-normal-regular">
-          Link para visualizar {{ cityName }} - {{ stateName }}
-        </p>
-        <div class="share-input-container">
-          <input
-            ref="linkInput"
-            type="text"
-            class="form-control"
-            :value="shareUrl"
-            readonly
-            @click="copyToClipboard"
-          />
-          <button
-            class="copy-button"
-            @click="copyToClipboard"
-            :class="{'copied': isCopied}"
-          >
-            <i v-if="!isCopied" class="bi bi-copy"></i>
-            <i v-else class="bi bi-check-circle-fill"></i>
-          </button>
+  <teleport to="body"> <!-- Teleporta o modal para o centro do body -->
+    <modalBootstrap
+      ref="refModal"
+      modalId="modalShare"
+      title="Compartilhar link"
+      :showSecondaryButton="false"
+      :showPrimaryButton="false"
+    >
+      <template #body>
+        <div>
+          <p class="mb-3 body-normal-regular">
+            Link para visualizar {{ cityName }} - {{ stateName }}
+          </p>
+          <div class="share-input-container">
+            <input
+              ref="linkInput"
+              type="text"
+              class="form-control"
+              :value="shareUrl"
+              readonly
+              @click="copyToClipboard"
+            />
+            <button
+              class="copy-button"
+              @click="copyToClipboard"
+              :class="{'copied': isCopied}"
+            >
+              <i v-if="!isCopied" class="bi bi-copy"></i>
+              <i v-else class="bi bi-check-circle-fill"></i>
+            </button>
+          </div>
         </div>
-      </div>
-    </template>
-  </modalBootstrap>
+      </template>
+    </modalBootstrap>
+  </teleport>
 </template>
 
 <script setup>
@@ -92,6 +93,20 @@ defineExpose({ show, hide });
 </script>
 
   <style scoped lang="scss">
+
+  /* Garantir que o modal fique centralizado */
+  :deep(.modal-dialog) {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+  }
+
+  :deep(.modal-content) {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
   .share-input-container {
     position: relative;
     display: flex;
