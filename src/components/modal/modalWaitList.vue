@@ -118,8 +118,11 @@ function handleSubmit() {
 
   const formData = new FormData();
   formData.append('email', email.value);
+  formData.append('url', window.location.href);
+  formData.append('userAgent', navigator.userAgent);
+  formData.append('timestamp', new Date().toISOString());
 
-  fetch('https://script.google.com/macros/s/AKfycbzKGGlVAbYyGBGS9_kg5DRwKmB_EydLtvj5_Bi1blHtqGneb4Aco8burnW53G1E7qGk/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbwTJ1OTDroTEYLusrvPhtDuXj_8vcEBzW1EnE5hGXuk4lRkEoiDByZtF3EjkB3wmufA/exec', {
     method: 'POST',
     mode: 'no-cors',
     body: formData
