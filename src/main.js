@@ -1,4 +1,4 @@
-// urbverde-ui/src/main.js
+// urbverde-ui/main.js
 
 import './assets/main.css';
 import '@/assets/styles/main.scss';

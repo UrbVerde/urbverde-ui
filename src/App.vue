@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/App.vue -->
+<!-- urbverde-ui/App.vue -->
 <template>
   <div id="app">
     <router-view />
