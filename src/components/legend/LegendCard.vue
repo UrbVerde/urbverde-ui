@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/legend/LegendCard.vue -->
 <!-- LegendCard.vue -->
 <template>
   <div class="card-container">

@@ -1,4 +1,4 @@
-<!-- src/components/legend/OpacityControl.vue -->
+<!-- urbverde-ui/src/components/legend/OpacityControl.vue -->
 <template>
   <div class="controls-section">
     <div class="visibility-controls">
