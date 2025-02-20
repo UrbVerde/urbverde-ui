@@ -4,15 +4,12 @@
     <modalBootstrap
       ref="refModal"
       modalId="modalShare"
-      title="Compartilhar link"
+      :title="`Link de ${cityName} - ${stateName}`"
       :showSecondaryButton="false"
       :showPrimaryButton="false"
     >
       <template #body>
         <div>
-          <p class="mb-3 body-normal-regular">
-            Link para visualizar {{ cityName }} - {{ stateName }}
-          </p>
           <div class="share-input-container">
             <input
               ref="linkInput"
@@ -22,13 +19,25 @@
               readonly
               @click="copyToClipboard"
             />
+            <div class="input-fade-overlay"></div>
             <button
               class="copy-button"
               @click="copyToClipboard"
-              :class="{'copied': isCopied}"
             >
-              <i v-if="!isCopied" class="bi bi-copy"></i>
-              <i v-else class="bi bi-check-circle-fill"></i>
+              <span class="icon-holder">
+                <transition name="icon-fade" mode="out-in">
+                  <i
+                    v-if="isCopied"
+                    key="success"
+                    class="bi bi-check-circle-fill"
+                  ></i>
+                  <i
+                    v-else
+                    key="idle"
+                    class="bi bi-copy"
+                  ></i>
+                </transition>
+              </span>
             </button>
           </div>
         </div>
@@ -69,9 +78,15 @@ function copyToClipboard() {
     navigator.clipboard.writeText(linkInput.value.value)
       .then(() => {
         isCopied.value = true;
+
+        // Fechar o modal após 1 segundo
         setTimeout(() => {
-          isCopied.value = false;
-        }, 2000);
+          hide();
+          // Resetar o estado após fechar
+          setTimeout(() => {
+            isCopied.value = false;
+          }, 300);
+        }, 1000);
       })
       .catch(err => {
         console.error('Erro ao copiar texto: ', err);
@@ -94,7 +109,6 @@ defineExpose({ show, hide });
 
   <style scoped lang="scss">
 
-  /* Garantir que o modal fique centralizado */
   :deep(.modal-dialog) {
     display: flex;
     align-items: center;
@@ -111,14 +125,27 @@ defineExpose({ show, hide });
     position: relative;
     display: flex;
     align-items: center;
+    margin-bottom: 8px;
   }
 
   .share-input-container input {
     padding-right: 40px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    padding-left: 12px;
+    background-color: map-get($gray, 100);
+    border: 1px solid map-get($gray, 300);
     height: 48px;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .input-fade-overlay {
+    position: absolute;
+    right: 40px;
+    width: 50px;
+    height: 46px;
+    background: linear-gradient(90deg, rgba(248,249,250,0) 0%, rgba(248,249,250,1) 100%);
+    pointer-events: none;
   }
 
   .copy-button {
@@ -130,22 +157,47 @@ defineExpose({ show, hide });
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    z-index: 2;
+  }
+
+  .form-control:focus {
+    box-shadow: 0 0 0 0;
+    border-color: map-get($theme, primary);
+  }
+
+  .icon-holder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .icon-fade-enter-active,
+  .icon-fade-leave-active {
+    transition: opacity 0.3s ease-in-out, transform 0.15s ease-in-out;
+  }
+
+  .icon-fade-enter-from,
+  .icon-fade-leave-to {
+    opacity: 0;
+    transform: scale(0.7);
   }
 
   .copy-button i {
     font-size: 20px;
     color: map-get($theme, primary);
-    transition: all 0.3s ease;
   }
 
-  .copy-button.copied {
-    animation: pulse 0.4s ease;
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
   }
 
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
   </style>
