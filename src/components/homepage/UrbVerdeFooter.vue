@@ -192,16 +192,14 @@ export default {
       formData.append('url', window.location.href);
       formData.append('userAgent', navigator.userAgent);
       formData.append('timestamp', new Date().toISOString());
-      // Adicionando um campo para indicar que o usuário concordou com os termos
       formData.append('agree', 'yes');
 
       fetch('https://script.google.com/macros/s/AKfycbwk0qSQ95m-6fIrUW5Qz6fj0V2Ok75-kfeAe8olfm7d8vF_ubFJ5KO-mmfqeX08ztJHwA/exec', {
         method: 'POST',
-        mode: 'no-cors', // Para evitar problemas de CORS
+        mode: 'no-cors',
         body: formData
       })
         .then(() => {
-          // Como estamos usando no-cors, assumimos sucesso se chegou aqui
           this.loading = false;
           this.success = true;
         })
