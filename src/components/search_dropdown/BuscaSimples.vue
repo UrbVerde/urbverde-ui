@@ -1114,26 +1114,17 @@ function filterStates(query) {
 }
 
 function filterCities(query) {
-  console.log('Filtering cities with query:', query);
+  const q = query.toLowerCase();
 
-  // For each city in cache, check if it includes the query
-  // and is not already in history (to avoid duplicates)
-  const filteredResults = cachedCities.value.filter(city => {
-    const cityLower = city.toLowerCase();
-    const includesQuery = cityLower.includes(query.toLowerCase());
+  return cachedCities.value
+    .filter(city => city.toLowerCase().includes(q))
+    .sort((a, b) => {
+      // rank by where `q` appears; 0 means 'starts at beginning'
+      const idxA = a.toLowerCase().indexOf(q);
+      const idxB = b.toLowerCase().indexOf(q);
 
-    // Check if this city is in history (by city name, not exact match)
-    const cityName = city.split(' - ')[0].toLowerCase();
-    const inHistory = searchHistory.value.some(histItem =>
-      histItem.split(' - ')[0].toLowerCase() === cityName
-    );
-
-    return includesQuery && !inHistory;
-  });
-
-  console.log('Filtered city results:', filteredResults);
-
-  return filteredResults;
+      return idxA - idxB;
+    });
 }
 
 function updateHighlightedText() {
