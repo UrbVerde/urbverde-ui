@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/navbar/NavbarMap.vue -->
 <!-- urbverde-ui/src/components/navbar/Navbar.vue -->
 <template>
   <div class="navbar">
