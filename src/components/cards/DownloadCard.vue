@@ -9,21 +9,15 @@
         </p>
       </div>
       <div class="botao">
-        <a
-          href="https://urbverde-educa.tawk.help/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="body-small-regular"
-        >
-          <PrimaryButton
-            label="Baixar Relatório"
-            :filled="true"
-            icon="bi-download"
-            iconType="bootstrap"
-            iconPosition="left"
-            class="download-card-button"
-          />
-        </a>
+        <PrimaryButton
+          label="Baixar Relatório"
+          :filled="true"
+          icon="bi-download"
+          iconType="bootstrap"
+          iconPosition="left"
+          class="download-card-button"
+          @click="refModalWaitlist.show()"
+        />
       </div>
     </div>
     <div class="download-card-image">
@@ -33,20 +27,24 @@
       />
     </div>
   </div>
+
+  <!-- Modal -->
+  <modalWaitList
+    ref="refModalWaitlist"
+    :modalId="'modalWaitlistDownload'"
+  />
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import modalWaitList from '../modal/modalWaitList.vue';
 
-export default {
-  name: 'TipsCard',
-  components: {
-    PrimaryButton,
-  },
-};
+// Referência ao modal
+const refModalWaitlist = ref(null);
 </script>
 
-  <style scoped lang="scss">
+<style scoped lang="scss">
   p, h2{
     margin: 0;
   }
@@ -56,7 +54,7 @@ export default {
     height: auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     background: white;
     border: 1px solid map-get($gray, 200);
     border-radius: 16px;
@@ -91,12 +89,11 @@ export default {
   }
 
   .botao a {
-  text-decoration: none;
-}
+    text-decoration: none;
+  }
 
   .download-card-image img {
     width: 306px;
     height: auto;
   }
-
-  </style>
+</style>

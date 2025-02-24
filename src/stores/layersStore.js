@@ -1,4 +1,4 @@
-// src/stores/layersStore.js
+// urbverde-ui/src/stores/layersStore.js
 import { defineStore } from 'pinia';
 import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 

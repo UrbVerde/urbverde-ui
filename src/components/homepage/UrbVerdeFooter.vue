@@ -186,39 +186,30 @@ export default {
         return;
       }
       this.loading = true;
-      try {
-        const formData = new FormData();
-        formData.append('email', this.email.trim());
 
-        const response = await fetch(
-          'https://script.google.com/macros/s/AKfycbxXwPCAHpHFhr2C1mkhsbbzUbCbXfaS2EwooF6-bmaOUXXXZsuFMCMMOHKcZbLpoKtb/exec',
-          {
-            method: 'POST',
-            body: formData
-          }
-        );
+      const formData = new FormData();
+      formData.append('email', this.email.trim());
+      formData.append('url', window.location.href);
+      formData.append('userAgent', navigator.userAgent);
+      formData.append('timestamp', new Date().toISOString());
+      formData.append('agree', 'yes');
 
-        if (!response.ok) {
+      fetch('https://script.google.com/macros/s/AKfycbwk0qSQ95m-6fIrUW5Qz6fj0V2Ok75-kfeAe8olfm7d8vF_ubFJ5KO-mmfqeX08ztJHwA/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      })
+        .then(() => {
           this.loading = false;
-          throw new Error('Não foi possível salvar o e-mail, tente novamente.');
-        }
-
-        const result = await response.json();
-        if (result.status !== 'success') {
+          this.success = true;
+        })
+        .catch(error => {
+          console.error(error);
           this.loading = false;
-          throw new Error('Retorno inesperado do servidor, tente novamente.');
-        }
-
-        // Sucesso
-        this.loading = false;
-        this.success = true;
-      }
-      catch (error) {
-        this.loading = false;
-        alert('Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.');
-        console.error(error);
-      }
+          alert('Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.');
+        });
     }
+
   }
 };
 </script>
