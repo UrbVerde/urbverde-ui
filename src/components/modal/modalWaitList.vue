@@ -66,11 +66,18 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import modalBootstrap from './modalBootstrap.vue';
 
-const persistentEmail = ref('');
-const persistentSuccess = ref(false);
+const props = defineProps({
+  modalId: {
+    type: String,
+    required: true
+  }
+});
+
+const EMAIL_STORAGE_KEY = `waitlist_email_${props.modalId}`;
+const SUCCESS_STORAGE_KEY = `waitlist_success_${props.modalId}`;
 
 const email = ref('');
 const loading = ref(false);
@@ -78,6 +85,30 @@ const success = ref(false);
 const errorMessage = ref('');
 
 const modalRef = ref(null);
+
+// Inicializa carregando dados do localStorage
+onMounted(() => {
+  try {
+    const savedEmail = localStorage.getItem(EMAIL_STORAGE_KEY);
+    const savedSuccess = localStorage.getItem(SUCCESS_STORAGE_KEY);
+
+    if (savedEmail) {
+      email.value = savedEmail;
+    }
+
+    if (savedSuccess === 'true') {
+      success.value = true;
+    }
+
+    setTimeout(() => {
+      if (savedSuccess === 'true') {
+        success.value = true;
+      }
+    }, 100);
+  } catch (error) {
+    console.error('Erro ao carregar dados do localStorage:', error);
+  }
+});
 
 const buttonStateClass = computed(() => {
   if (success.value) {
@@ -93,9 +124,30 @@ const buttonStateClass = computed(() => {
 });
 
 // Se o usuário digitar outro e-mail após "success", reseta o status
+// mas APENAS se a mudança foi causada pelo usuário, não pelo carregamento inicial
+let isInitialLoad = true;
 watch(email, (newVal, oldVal) => {
+  if (isInitialLoad) {
+    isInitialLoad = false;
+
+    return;
+  }
+
   if (success.value && newVal !== oldVal) {
     success.value = false;
+    // Atualiza o localStorage quando o status muda
+    try {
+      localStorage.setItem(SUCCESS_STORAGE_KEY, 'false');
+    } catch (error) {
+      console.error('Erro ao salvar no localStorage:', error);
+    }
+  }
+
+  // Salva o email no localStorage sempre que mudar
+  try {
+    localStorage.setItem(EMAIL_STORAGE_KEY, newVal);
+  } catch (error) {
+    console.error('Erro ao salvar email no localStorage:', error);
   }
 });
 
@@ -130,8 +182,14 @@ function handleSubmit() {
     .then(() => {
       loading.value = false;
       success.value = true;
-      persistentEmail.value = email.value;
-      persistentSuccess.value = true;
+
+      // Salva o estado no localStorage
+      try {
+        localStorage.setItem(EMAIL_STORAGE_KEY, email.value);
+        localStorage.setItem(SUCCESS_STORAGE_KEY, 'true');
+      } catch (error) {
+        console.error('Erro ao salvar dados no localStorage:', error);
+      }
     })
     .catch(error => {
       console.error(error);
@@ -142,10 +200,17 @@ function handleSubmit() {
 
 // Método público para abrir o modal
 function show() {
-  email.value = persistentEmail.value;
-  success.value = persistentSuccess.value;
   loading.value = false;
   errorMessage.value = '';
+
+  try {
+    const savedSuccess = localStorage.getItem(SUCCESS_STORAGE_KEY);
+    if (savedSuccess === 'true') {
+      success.value = true;
+    }
+  } catch (error) {
+    console.error('Erro ao verificar status de sucesso no localStorage:', error);
+  }
 
   if (modalRef.value) {
     modalRef.value.show();
@@ -161,130 +226,126 @@ function hide() {
 defineExpose({ show, hide });
 </script>
 
-  <style scoped lang="scss">
-  .waitlist-body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+<style scoped lang="scss">
+.waitlist-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  .text-body {
-    cursor: default;
-  }
+.text-body {
+  cursor: default;
+}
 
-  .input-group {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    gap: 8px;
-    border-radius: 8px;
-  }
+.input-group {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+}
 
-  .form-control {
-    flex: 1;
-    height: 40px;
-    border-radius: 8px !important;
-    border: 1px solid #ccc;
-    padding: 8px 12px;
-    font-size: 16px;
-  }
+.form-control {
+  flex: 1;
+  height: 40px;
+  border-radius: 8px !important;
+  border: 1px solid map-get($gray, 500);
+  padding: 8px 12px;
+  font-size: 16px;
+}
 
-  .form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-    border-color: transparent;
-  }
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem map-get($primary-fade, 100);
+  border-color: transparent;
+}
 
-  .form-control:disabled {
-    cursor: default;
-    pointer-events: none;
-    opacity: 1;
-    background-color: #f6f6f6;
-  }
+.form-control:disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 1;
+  background-color: map-get($gray, 100);
+}
 
-  .button-base {
-    border-radius: 8px !important;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    min-width: 56px;
-    background-color: #fff !important;
-  }
+.button-base {
+  border-radius: 8px !important;
+  border: 1px solid map-get($gray, 500);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  min-width: 56px;
+  background-color: transparent !important;
+}
 
-  .button-invalid {
-    background-color: #eee;
-    color: #999;
-  }
+.button-invalid {
+  color: map-get($gray, 500);
+}
 
-  .button-valid {
-    background-color: #e5fff2;
-    color: #28a745;
-    border: 1px solid #28a745;
-  }
+.button-valid {
+  color: map-get($green, 500);
+  border: 1px solid map-get($green, 500);
+}
 
-  .button-loading {
-    background-color: #e5fff2;
-    color: #28a745;
-    border: 1px solid #28a745;
-  }
+.button-loading {
+  color: map-get($green, 500);
+  border: 1px solid map-get($green, 500);
+}
 
-  .button-success {
-    background-color: #e5fff2;
-    color: #28a745;
-    border: 1px solid #28a745;
-  }
+.button-success {
+  color: map-get($green, 500);
+  border: 1px solid map-get($green, 500);
+}
 
-  .icon-holder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    position: relative;
-    overflow: hidden;
-  }
+.icon-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+}
 
-  .icon-fade-enter,
-  .icon-fade-leave-to {
-    opacity: 0;
-  }
+.icon-fade-enter,
+.icon-fade-leave-to {
+  opacity: 0;
+}
 
-  .icon-fade-enter-to,
-  .icon-fade-leave {
-    opacity: 1;
-  }
+.icon-fade-enter-to,
+.icon-fade-leave {
+  opacity: 1;
+}
 
-  .icon-fade-enter-active,
-  .icon-fade-leave-active {
-    transition: opacity 0.3s ease-in-out;
-  }
+.icon-fade-enter-active,
+.icon-fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
 
-  .icon-fade-enter:not(.spinner-border),
-  .icon-fade-leave-to:not(.spinner-border) {
-    transform: scale(0.7);
-  }
+.icon-fade-enter:not(.spinner-border),
+.icon-fade-leave-to:not(.spinner-border) {
+  transform: scale(0.7);
+}
 
-  .icon-fade-enter-to:not(.spinner-border),
-  .icon-fade-leave:not(.spinner-border) {
-    transform: scale(1);
-  }
+.icon-fade-enter-to:not(.spinner-border),
+.icon-fade-leave:not(.spinner-border) {
+  transform: scale(1);
+}
 
-  .icon-fade-enter-active:not(.spinner-border),
-  .icon-fade-leave-active:not(.spinner-border) {
-    transition: opacity 0.3s ease-in-out, transform 0.15s ease-in-out;
-  }
+.icon-fade-enter-active:not(.spinner-border),
+.icon-fade-leave-active:not(.spinner-border) {
+  transition: opacity 0.3s ease-in-out, transform 0.15s ease-in-out;
+}
 
-  .spinner-border {
-    margin: 0 !important;
-    transform-origin: center center;
-  }
+.spinner-border {
+  margin: 0 !important;
+  transform-origin: center center;
+}
 
-  .error {
-    color: #d9534f;
-    font-size: 14px;
-    margin-top: 4px;
-    margin-bottom: 0;
-  }
-  </style>
+.error {
+  color: map-get($theme, danger);
+  font-size: 14px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+</style>
