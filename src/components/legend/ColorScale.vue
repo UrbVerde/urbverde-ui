@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/legend/ColorScale.vue -->
 <!-- src/components/legend/LegendColorScale.vue -->
 <template>
   <div class="colorbar-container" @click="openColorOptions">

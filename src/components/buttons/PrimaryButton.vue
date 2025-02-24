@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/buttons/PrimaryButton.vue -->
 <template>
   <button
     class="primary-button"
