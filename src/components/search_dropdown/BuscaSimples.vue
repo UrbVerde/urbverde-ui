@@ -3,11 +3,7 @@
   <GetUserLocation @location-updated="updateLocationData" @location-error="handleLocationFailure" />
   <div class="search-wrapper">
     <div ref="inputContainer"
-         :class="{
-           'input-container shadow-sm': !dropdown && !isError,
-           'input-container-dropdown shadow': dropdown && !isError,
-           'input-container-error shake-animation shadow': isError
-         }"
+         :class="{ 'input-container shadow-sm': !dropdown && !isError, 'input-container-dropdown shadow': dropdown && !isError, 'input-container-error shake-animation shadow': isError  }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
@@ -15,16 +11,14 @@
                @input="handleInput"
                @focus="handleFocus"
                @keydown.enter="handleEnter"
-               @keydown="handleKeydown"
-               :class="{'input-error': isError}"
                :placeholder="!inputValue && !highlightedText ? 'Buscar um local' : ''"
                class="input-field body-small-regular"
                :disabled="!isInputActive"
                @click="activateInput" />
         <div v-if="highlightedText && inputValue" class="suggestion-overlay body-small-regular">
           <span class="suggestion-text body-small-regular">
-            <span class="invisible">{{ visibleInput }}</span>
-            <span :class="['highlight', {'highlight-error': isError}]">{{ highlightedText }}</span>
+            <span class="invisible ">{{ visibleInput }}</span>
+            <span class="highlight ">{{ highlightedText }}</span>
           </span>
         </div>
       </div>
@@ -39,6 +33,7 @@
         </button>
 
         <button class="search-button" @click.stop="submit">
+
           <i v-if="!isLoading"
              class="bi bi-search"
              id="imgIcon"
@@ -49,6 +44,13 @@
           </div>
         </button>
       </div>
+    </div>
+
+    <div v-if="true" class="button-debug">
+      <span>{{ suggestions.length }} sugestão(ões)</span>
+      <span>Cache: {{ cachedCities.length }} item(ns)</span>
+      <span>Histórico: {{ searchHistory.length }} item(ns)</span>
+      <button @click="clearHistory">Limpar Histórico</button>
     </div>
 
     <div ref="suggestionContainerEl"
@@ -69,16 +71,9 @@
         </div>
 
         <ul v-if="dropdown" class="suggestions-list" ref="dropdownEl">
-          <li v-if="suggestions.length === 0 && inputValue.length > 0" class="suggestion-item no-results">
-            <i class="bi bi-exclamation-circle"
-               id="imgIcon"
-               width="20"
-               height="20"></i>
-            <span class="item-text body-small-regular">Nenhum resultado</span>
-          </li>
           <li :class="{ 'suggestion-item': true, 'first-suggestion': inputValue !== '' && index === 0 }"
               v-for="(suggestion, index) in visibleSuggestions"
-              :key="suggestion.text"
+              :key="suggestion"
               @click="selectSuggestion(suggestion)"
               tabindex="0"
               @keydown.enter="selectSuggestion(suggestion)"
@@ -86,7 +81,7 @@
               @keydown.down.prevent="focusNextSuggestion(index)"
               :ref="`suggestionItem-${index}`">
 
-            <i :class="getImageSource(suggestion.type)"
+            <i :class=getImageSource(suggestion.type)
                id="imgIcon"
                width="20"
                height="20"></i>
@@ -109,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { useRoute } from 'vue-router';
@@ -124,14 +119,13 @@ const props = defineProps({
 });
 
 // Constants
+// const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
 const states = [ // All this shouldnt be hardcorded here in the next versions (!)
-  // 'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
-  // 'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
-  // 'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
-  // 'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
-  // 'Roraima', 'Santa Catarina',
-  'São Paulo',
-  // 'Sergipe', 'Tocantins', 'Brasil'
+  'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
+  'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
+  'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
+  'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
+  'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins', 'Brasil'
 ];
 
 const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction', 'interaction-succeeded']);
@@ -158,8 +152,6 @@ const locationChosen = ref('');
 const cachedCities = ref([]);
 const searchHistory = ref([]);
 const isError = ref(false);
-const errorTimeout = ref(null);
-const isTypingBlocked = ref(false);
 
 // Cache tracking
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
@@ -192,9 +184,6 @@ onMounted(async() => {
       cachedCities.value.push(cityText);
     }
 
-    // Add to history
-    addToHistory(cityText);
-
     // Fetch coordinates for the stored location
     await fetchCoordinates(cityText);
   } else if (props.openDelay > 0) { // Only proceed if openDelay is greater than 0
@@ -210,41 +199,17 @@ onMounted(async() => {
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousedown', handleClickOutside);
-  clearTimeout(errorTimeout.value);
 });
 
 onBeforeUpdate(() => {
   suggestionItems.value = [];
 });
 
-// Watch for changes in location store to update component
-const locationStore = useLocationStore();
-watch(() => [locationStore.cd_mun, locationStore.nm_mun, locationStore.uf],
-  ([newCdMun, newNmMun, newUf]) => {
-    if (newCdMun && newNmMun && newUf) {
-      console.log('Location store updated, updating component');
-      const cityText = `${newNmMun} - ${newUf}`;
-      inputValue.value = cityText;
-      visibleInput.value = cityText;
-      locationChosen.value = cityText;
-      codes.value[cityText] = newCdMun;
-
-      // Add to cached cities
-      if (!cachedCities.value.includes(cityText)) {
-        cachedCities.value.push(cityText);
-      }
-
-      // Add to history
-      addToHistory(cityText);
-    }
-  }
-);
-watch(inputValue, (newVal) => {
-  if (newVal === '') {
-    console.log('Input value is now empty, rebuilding suggestions');
-    buildSuggestionsFromHistory();
-  }
-});
+// onUpdated(() => {
+//   suggestionItems.value = visibleSuggestions.value.map(
+//     (_, i) => document.querySelector(`[ref="suggestionItem-${i}"]`)
+//   );
+// });
 
 // Computed Properties
 const filterAll = ref(true);
@@ -293,444 +258,37 @@ const visibleSuggestions = computed(() => {
   ];
 });
 
-// Watch for changes in inputValue to reset error state
-watch(inputValue, (newVal, oldVal) => {
-  if (newVal !== oldVal && isError.value) {
-    clearErrorState();
-
-    // Immediately update suggestions when coming out of error state
-    updateSuggestions(true);
-  }
-});
-
 // Core Functions (in order of execution)
 function activateInput() {
   isInputActive.value = true;
-
-  // Do not clear input on click, just show dropdown
-  dropdown.value = true;
-
-  // Generate suggestions based on current value and history
-  if (inputValue.value) {
-    // If there's current input, use it to search
-    updateSuggestions(true);
-  } else {
-    // Otherwise show default suggestions including history
-    buildSuggestionsFromHistory();
-  }
-
+  // emit('menu-interaction'); // Emit event for menu interaction
   nextTick(() => {
     if (inputField.value) { inputField.value.focus(); }
   });
 }
 
-// Improved function to handle city names with consistent formatting
-function normalizeLocationName(location) {
-  // If it already contains a state abbreviation (e.g., "City - SP"), return as is
-  if (/\s-\s[A-Z]{2}$/.test(location)) {
-    return location;
-  }
-
-  // If it's a state or country, return as is
-  if (states.includes(location) || location === 'Brasil') {
-    return location;
-  }
-
-  // Try to find this city in cached cities with state abbreviation
-  const matchingCity = cachedCities.value.find(city => {
-    const parts = city.split(' - ');
-
-    return parts.length === 2 && parts[0].toLowerCase() === location.toLowerCase();
-  });
-
-  if (matchingCity) {
-    return matchingCity;
-  }
-
-  // If we have locationData with stateAbbreviation, use it
-  if (locationData.value && locationData.value.stateAbbreviation) {
-    return `${location} - ${locationData.value.stateAbbreviation}`;
-  }
-
-  // Default case: return as is (will be handled later if possible)
-  return location;
-}
-
-function getFullStateName(abbreviation) {
-  if (!abbreviation) {return 'São Paulo';}
-
-  const stateMap = {
-    'SP': 'São Paulo',
-    'RJ': 'Rio de Janeiro',
-    'MG': 'Minas Gerais',
-    'RS': 'Rio Grande do Sul',
-    'PR': 'Paraná',
-    'SC': 'Santa Catarina',
-    'BA': 'Bahia',
-    'DF': 'Distrito Federal',
-    'ES': 'Espírito Santo',
-    'GO': 'Goiás',
-    'MA': 'Maranhão',
-    'MT': 'Mato Grosso',
-    'MS': 'Mato Grosso do Sul',
-    'PA': 'Pará',
-    'PB': 'Paraíba',
-    'PE': 'Pernambuco',
-    'PI': 'Piauí',
-    'RN': 'Rio Grande do Norte',
-    'AM': 'Amazonas',
-    'RO': 'Rondônia',
-    'RR': 'Roraima',
-    'SE': 'Sergipe',
-    'TO': 'Tocantins',
-    'AC': 'Acre',
-    'AL': 'Alagoas',
-    'AP': 'Amapá',
-    'CE': 'Ceará'
-  };
-
-  return stateMap[abbreviation] || abbreviation;
-}
-
-function buildSuggestionsFromHistory() {
-  console.log('Building suggestions from history');
-
-  // First check if we have a current chosen location
-  if (locationChosen.value) {
-    const { city, state } = parseCityState(locationChosen.value);
-
-    // Convert state abbreviation to full name if needed
-    const fullStateName = getFullStateName(state);
-
-    // Check if this city is in history (either format)
-    const cityInHistory = searchHistory.value.some(item => {
-      const itemCity = item.split(' - ')[0].toLowerCase();
-
-      return itemCity === city.toLowerCase();
-    });
-
-    // Get the most recent 2 history items excluding current location
-    const recentHistory = searchHistory.value
-      .filter(item => {
-        const itemCity = item.split(' - ')[0].toLowerCase();
-
-        return itemCity !== city.toLowerCase();
-      })
-      .slice(0, 2)
-      .map(item => ({
-        text: item,
-        type: 'history'
-      }));
-
-    // Build suggestions with consistent order
-    suggestions.value = [
-      // Current location first (with appropriate icon)
-      {
-        text: locationChosen.value,
-        type: cityInHistory ? 'history' : 'city'
-      },
-      // Recent history items
-      ...recentHistory,
-      // Standard options - always use full state name
-      { text: fullStateName, type: 'state' },
-      { text: 'Brasil', type: 'country' }
-    ];
-
-    console.log('Built suggestions with current location:', suggestions.value);
-
-    return;
-  }
-
-  // If we have valid location data from GetUserLocation but no chosen location
-  if (locationData.value && locationData.value.city) {
-    const city = locationData.value.city;
-    const state = locationData.value.state || '';
-    const stateAbbrev = locationData.value.stateAbbreviation || '';
-    const cityWithState = `${city} - ${stateAbbrev || state}`;
-
-    // Convert state abbreviation to full name if needed
-    const fullStateName = getFullStateName(stateAbbrev) || state;
-
-    // Check if this city is in history (either format)
-    const cityInHistory = searchHistory.value.some(item => {
-      const itemCity = item.split(' - ')[0].toLowerCase();
-
-      return itemCity === city.toLowerCase();
-    });
-
-    // Get recent history excluding current location
-    const recentHistory = searchHistory.value
-      .filter(item => {
-        const itemCity = item.split(' - ')[0].toLowerCase();
-
-        return itemCity !== city.toLowerCase();
-      })
-      .slice(0, 2)
-      .map(item => ({
-        text: item,
-        type: 'history'
-      }));
-
-    // Build suggestions
-    suggestions.value = [
-      // Current geolocation with appropriate icon
-      {
-        text: cityWithState,
-        type: cityInHistory ? 'history' : 'city'
-      },
-      // Recent history items
-      ...recentHistory,
-      // Standard options - always use full state name
-      { text: fullStateName, type: 'state' },
-      { text: 'Brasil', type: 'country' }
-    ];
-
-    console.log('Built suggestions from location data:', suggestions.value);
-
-    return;
-  }
-
-  // If no specific location, just show history + defaults
-  const historyItems = searchHistory.value.slice(0, 2).map(item => ({
-    text: item,
-    type: 'history'
-  }));
-
-  suggestions.value = [
-    ...historyItems,
-    { text: 'São Paulo', type: 'state' },
-    { text: 'Brasil', type: 'country' }
-  ];
-
-  console.log('Built suggestions from history only:', suggestions.value);
-}
-
-// Helper function to fetch city code if needed
-async function fetchCityCode(city) {
-  if (!city) {return null;}
-
-  try {
-    console.log(`Fetching city code for: ${city}`);
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
-    const data = await response.json();
-
-    if (data && data.length > 0 && !data[0].error) {
-      const item = data[0];
-      const stateAbbrev = item.state_abbreviation || '';
-      const textKey = `${item.display_name} - ${stateAbbrev}`;
-
-      // Save code in our cache
-      const code = item.cd_mun;
-      codes.value[textKey] = code;
-      console.log(`Found code ${code} for ${textKey}`);
-
-      return code;
-    }
-  } catch (error) {
-    console.error('Error fetching city code:', error);
-  }
-
-  return null;
-}
-
-async function generateDefaultSuggestions() {
-  let defaultSuggestions = [];
-
-  // If we have a chosen location, show it first
-  if (locationChosen.value) {
-    // Check if this city is in history
-    const cityInHistory = searchHistory.value.some(item => {
-      const itemCity = item.split(' - ')[0].toLowerCase();
-      const chosenCity = locationChosen.value.split(' - ')[0].toLowerCase();
-
-      return itemCity === chosenCity;
-    });
-
-    defaultSuggestions.push({
-      text: locationChosen.value,
-      type: cityInHistory ? 'history' : 'city'
-    });
-  }
-
-  // Add recent history items (excluding current location)
-  const addedCities = defaultSuggestions.map(s =>
-    s.text.split(' - ')[0].toLowerCase()
-  );
-
-  const recentHistory = searchHistory.value
-    .filter(item => {
-      const itemCity = item.split(' - ')[0].toLowerCase();
-
-      return !addedCities.includes(itemCity);
-    })
-    .slice(0, 2) // Take up to 2 recent history items
-    .map(item => ({ text: item, type: 'history' }));
-
-  defaultSuggestions = [...defaultSuggestions, ...recentHistory];
-
-  // Always add São Paulo state and Brasil
-  defaultSuggestions.push({ text: 'São Paulo', type: 'state' });
-  defaultSuggestions.push({ text: 'Brasil', type: 'country' });
-
-  suggestions.value = defaultSuggestions;
-}
-
 function showError() {
+  alert('Por favor, insira um local.');
   isError.value = true;
-  isTypingBlocked.value = true;
-
-  // Make sure error state is visibly applied to the input container
-  if (inputContainer.value) {
-    // Force reapplication of error class
-    inputContainer.value.classList.remove('input-container-error');
-    void inputContainer.value.offsetWidth;
-    inputContainer.value.classList.add('input-container-error');
-
-    // Remove other container classes that might conflict
-    inputContainer.value.classList.remove('input-container');
-    inputContainer.value.classList.remove('input-container-dropdown');
-  }
-
-  // Set timeout for error state (2 seconds)
-  if (errorTimeout.value) {
-    clearTimeout(errorTimeout.value);
-  }
-
-  errorTimeout.value = setTimeout(() => {
+  setTimeout(() => {
     isError.value = false;
-    isTypingBlocked.value = false;
-  }, 2000);
+  }, 1500);
 }
 
-function clearErrorState() {
-  isError.value = false;
-  isTypingBlocked.value = false;
-  if (errorTimeout.value) {
-    clearTimeout(errorTimeout.value);
-  }
-}
-
-function handleKeydown(event) {
-  // Handle special case for Backspace and Delete - try to recover from error state
-  if (isTypingBlocked.value && (event.key === 'Backspace' || event.key === 'Delete')) {
-    // Allow typing and immediately force update with new value
-    isTypingBlocked.value = false;
-    clearErrorState();
-
-    // Don't wait for handleInput to trigger search
-    setTimeout(() => {
-      updateSuggestions(true);
-    }, 10);
-
-    return;
-  }
-
-  // Block other keys when in error state and trigger animation
-  if (isTypingBlocked.value && !['Escape', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key)) {
-    event.preventDefault();
-    triggerErrorAnimation();
-  }
-}
-
-function triggerErrorAnimation() {
-  // Reset and retrigger the animation
-  if (inputContainer.value) {
-    inputContainer.value.classList.remove('shake-animation');
-    void inputContainer.value.offsetWidth; // force reflow
-    inputContainer.value.classList.add('shake-animation');
-
-    // Make sure error class is applied
-    inputContainer.value.classList.remove('input-container');
-    inputContainer.value.classList.remove('input-container-dropdown');
-    inputContainer.value.classList.add('input-container-error');
-  }
-
-  isError.value = true;
-
-  // Reset the timeout
-  clearTimeout(errorTimeout.value);
-  errorTimeout.value = setTimeout(() => {
-    isError.value = false;
-    isTypingBlocked.value = false;
-  }, 2000);
-}
-
-// Fix - Ensure selectSuggestion handles consistent formatting
-// Fixed fetchCoordinates to properly handle the API response format
-async function fetchCoordinates(address) {
-  // Get just the city name without state
-  const { city } = parseCityState(address);
-  console.log(`Fetching coordinates for: ${city} (from ${address})`);
-
-  try {
-    // Fetch coordinates from the API
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
-    const data = await response.json();
-    console.log('Coordinate search results:', data);
-
-    // Check if we have a valid response with coordinates
-    if (data && data.length > 0) {
-      // Extract coordinates from first result
-      if (data[0] && data[0].coordinates) {
-        const loc = data[0].coordinates;
-        coordinates.value = { lat: loc.lat, lng: loc.lng };
-        console.log(`Found coordinates: ${loc.lat}, ${loc.lng}`);
-
-        // Save the city code if available
-        if (data[0].cd_mun) {
-          const cityWithState = address;
-          codes.value[cityWithState] = data[0].cd_mun;
-          console.log(`Saved code ${data[0].cd_mun} for ${cityWithState}`);
-        }
-
-        emitLocationUpdate({
-          lat: loc.lat,
-          lng: loc.lng,
-          type: 'city',
-        });
-
-        return true;
-      }
-    }
-
-    console.log('No coordinates found in API response');
-    handleLocationFailure();
-
-    return false;
-  } catch (error) {
-    console.error('Error fetching coordinates:', error);
-    handleLocationFailure();
-
-    return false;
-  }
-}
-
-// Enhanced selectSuggestion to ensure code is properly saved
 async function selectSuggestion(suggestion) {
   console.log('selectSuggestion:', suggestion);
-
-  // Normalize the selected location
-  const normalizedText = normalizeLocationName(suggestion.text);
-
-  inputValue.value = normalizedText;
-  visibleInput.value = normalizedText;
+  inputValue.value = suggestion.text;
+  visibleInput.value = suggestion.text;
   highlightedText.value = '';
   dropdown.value = false;
-  locationChosen.value = normalizedText;
+  locationChosen.value = suggestion.text;
 
-  const { city, state } = parseCityState(normalizedText);
+  const { city, state } = parseCityState(suggestion.text);
   console.log(state);
+  const code = codes.value[suggestion.text];
+  const stateAbbrev = suggestion.text.split(' - ')[1];
 
-  // Get the city code, or fetch it if not available
-  let code = codes.value[normalizedText];
-  if (!code) {
-    console.log(`No code found for ${normalizedText}, fetching it now`);
-    code = await fetchCityCode(city);
-  }
-
-  const stateAbbrev = normalizedText.split(' - ')[1];
-
-  // Update Pinia store with the code
+  // Update Pinia store
   const locationStore = useLocationStore();
   await locationStore.setLocation({
     cd_mun: code,
@@ -741,7 +299,7 @@ async function selectSuggestion(suggestion) {
   });
 
   // Ensure coordinates are fetched after store update
-  await fetchCoordinates(normalizedText);
+  await fetchCoordinates(locationChosen.value);
 
   // Ensure map recenters
   emit('location-updated', coordinates.value);
@@ -749,34 +307,28 @@ async function selectSuggestion(suggestion) {
   // Update UI state
   loadAnimation();
   updateSuggestions();
-  addToHistory(normalizedText);
-  clearErrorState();
+  addToHistory(suggestion.text);
   emit('interaction-succeeded');
 }
 
 function handleFocus(event) {
   if (!dropdown.value) {
     dropdown.value = true;
-
-    // Ensure suggestions are populated when dropdown is shown
-    if (inputValue.value) {
-      updateSuggestions(true);
-    } else {
-      buildSuggestionsFromHistory();
-    }
+    // emit('menu-interaction'); // Emit when dropdown opens
   }
   event.stopPropagation();
 }
 
 async function loadAnimation() {
   if (!inputValue.value && !locationChosen.value) {
-    showError();
+    alert('Por favor, insira um local.');
 
     return;
   }
   isLoading.value = true; // spinner on
   try {
     await new Promise(resolve => setTimeout(resolve, 2000));  // Simulates an API call or submission logic
+    // console.log('Busca concluída com sucesso!');
   } catch (error) {
     console.error('Erro durante a busca:', error);
   } finally {
@@ -806,64 +358,29 @@ function getUnmatchedPart(text) {
 
 // Update the location data handler to preserve existing data when appropriate
 function updateLocationData(location) {
-  console.log('updateLocationData called with:', location);
+  // console.log('1 - updateLocationData', location);
 
   // If geolocation or no locationData yet, override
   if (location.source === 'geolocation' || !locationData.value) {
     locationData.value = location;
-
-    // Properly format city with state
-    if (location.city && location.stateAbbreviation) {
-      const cityWithState = `${location.city} - ${location.stateAbbreviation}`;
-
-      // Add to cached cities
-      cacheCities([cityWithState]);
-
-      // If this is geolocation and we don't have a chosen location yet,
-      // automatically select this location
-      if (location.source === 'geolocation' && !locationChosen.value) {
-        console.log('Auto-selecting geolocation:', cityWithState);
-
-        // Create a suggestion object
-        const geoSuggestion = {
-          text: cityWithState,
-          type: 'city'
-        };
-
-        // Wait a moment to ensure location data is fully processed
-        setTimeout(() => {
-          selectSuggestion(geoSuggestion);
-        }, 100);
-      }
-    } else {
-      // Still cache the city if we have it
-      if (location.city) {
-        cacheCities([location.city]);
-      }
-    }
-
-    // Update suggestions based on the new location
-    buildSuggestionsFromHistory();
-
-    console.log('Location updated to:', locationData.value);
+    // console.log(locationData.value);
+    // console.log('Location updated from:', location.source);
+    cacheCities([location.city]);
+    generateDefaultSuggestions();
   }
   else if (!locationData.value.city) {
     // If we don't have a city yet
     locationData.value = location;
-    if (location.city) {
-      cacheCities([location.city]);
-    }
-
-    // Update suggestions based on the new location
-    buildSuggestionsFromHistory();
-
-    console.log('Location city set to:', location.city);
+    // console.log('Initial location set from:', location.source);
+    cacheCities([location.city]);
+    generateDefaultSuggestions();
   }
 }
 
 function parseCityState(text) {
   // Check if the text contains a state abbreviation
   const parts = text.split(' - ');
+  //alert(parts[0]);//está sendo chamado 3x
   if (parts.length === 2) {
     return {
       city: parts[0],
@@ -875,101 +392,65 @@ function parseCityState(text) {
 }
 
 async function fetchCities(query) {
-  try {
-    // Show loading state immediately
-    isLoading.value = true;
+  // console.log('1 - fetchCities', query);
+  const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${parseCityState(query).city}`);
+  const data = await response.json();
+  // console.log('1 - fetchCities', data);
 
-    const requestQuery = parseCityState(query).city;
-    console.log(`Fetching cities for query: "${requestQuery}"`);
-
-    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${requestQuery}`);
-    const data = await response.json();
-
-    console.log('API response for cities:', data);
-
-    // Check if the response indicates an error or is empty
-    if (!data || data.length === 0 || (data.length === 1 && data[0].error)) {
-      console.log('No valid suggestions found in API response');
-      suggestions.value = [];
-      if (inputValue.value.length > 0) {
-        showError();
-      }
-      isLoading.value = false;
-
-      return false;
-    }
-
-    // Process valid results
-    const validResults = data.filter(item => !item.error);
-    console.log(`Found ${validResults.length} valid results`);
-
-    if (validResults.length === 0) {
-      console.log('No valid results after filtering');
-      suggestions.value = [];
-      if (inputValue.value.length > 0) {
-        showError();
-      }
-      isLoading.value = false;
-
-      return false;
-    }
-
-    suggestions.value = validResults.map(item => {
-      // Handle both state_abbreviation and display_name formats
-      const displayName = item.display_name || '';
-      const stateAbbreviation = item.state_abbreviation || '';
-
-      const textKey = stateAbbreviation
-        ? `${displayName} - ${stateAbbreviation}`
-        : displayName;
-
-      // Always store the code when we get it from the API
-      if (item.cd_mun) {
-        codes.value[textKey] = item.cd_mun;
-        console.log(`Saved code ${item.cd_mun} for ${textKey}`);
-      }
+  // console.log('suggestion before', JSON.parse(JSON.stringify(suggestions.value)))
+  suggestions.value = data
+    .filter(item => !item.error)
+    .map(item => {
+      // console.log('1 - fetchCities', item);
+      const textKey = item.state_abbreviation
+        ? `${item.display_name} - ${item.state_abbreviation}`
+        : item.display_name;
+      codes.value[textKey] = item.cd_mun;
 
       return {
         text: textKey,
         lat: item.coordinates?.lat,
         lng: item.coordinates?.lng,
         type: 'city',
-        cd_mun: item.cd_mun  // Include the code in the suggestion object
       };
     });
+  // console.log('suggestion after', JSON.parse(JSON.stringify(suggestions.value)))
 
-    // If we have results, clear error state
-    if (suggestions.value.length > 0) {
-      clearErrorState();
+  // console.log('1 - fetchCitiescachedCities before',cachedCities.value);
+  cachedCities.value = suggestions.value.map(s => s.text);
+  // console.log('1 - fetchCitiescachedCities after',cachedCities.value);
+}
 
-      // Cache the cities we found
-      cachedCities.value = [...new Set([...cachedCities.value, ...suggestions.value.map(s => s.text)])];
-      console.log('Updated cached cities:', cachedCities.value);
+async function fetchCoordinates(address) {
+  const { city } = parseCityState(address);
 
-      return true;
+  try {
+    // Fetch coordinates from the API
+    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
+    const data = await response.json();
+
+    if (data?.[0]?.coordinates) {
+      const loc = data[0].coordinates;
+      coordinates.value = { lat: loc.lat, lng: loc.lng };
+      emitLocationUpdate({
+        lat: loc.lat,
+        lng: loc.lng,
+        type: 'city',
+      });
     } else {
-      console.log('No suggestions after mapping API results');
-      showError();
-      isLoading.value = false;
-
-      return false;
+      handleLocationFailure();
     }
-
   } catch (error) {
-    console.error('Error fetching cities:', error);
-    suggestions.value = [];
-    showError();
-    isLoading.value = false;
-
-    return false;
-  } finally {
-    isLoading.value = false;
+    console.error('Error fetching coordinates:', error);
+    handleLocationFailure();
   }
 }
 
 function handleLocationFailure() {
   coordinates.value = null;
   emitLocationUpdate(null);
+  // emit('api-error') if you want a global event
+  // emit('location-updated', null);
 }
 
 function focusPreviousSuggestion(index) {
@@ -1004,69 +485,40 @@ function handleClickOutside(event) {
     !suggestionContainer.contains(event.target)
   ) {
     dropdown.value = false;
-
-    // Fixed: Reset to previous valid location when clicking outside in error state
-    if (isError.value && locationChosen.value) {
-      console.log('Restoring previous location after error:', locationChosen.value);
-      inputValue.value = locationChosen.value;
-      clearErrorState();
-    } else if (!inputValue.value) {
-      inputValue.value = locationChosen.value || '';
-    }
   }
 }
 
-// Improved function to cache cities with consistent formatting
 function cacheCities(citiesArr) {
-  if (!citiesArr || citiesArr.length === 0) {return;}
-
-  // Normalize city names before caching
-  const normalizedCities = citiesArr.map(city => normalizeLocationName(city));
-
-  // Add to cache, ensuring uniqueness
-  cachedCities.value = [...new Set([...cachedCities.value, ...normalizedCities])];
-
-  console.log('Updated cached cities:', cachedCities.value);
+  // console.log('\n 1 - cacheCities', citiesArr);
+  // console.log('cachedCities before',cachedCities.value);
+  cachedCities.value = [...new Set([...cachedCities.value, ...citiesArr])];
+  // console.log('cachedCities before',cachedCities.value);
+  updateSuggestions();
 }
 
 function handleInput() {
-  if (isTypingBlocked.value) {
-    return;
-  }
-
+  // console.log('1 - handleInput');
   if (inputValue.value !== previousInputValue.value) {
-    // If we deleted all input, show default suggestions immediately
-    if (inputValue.value === '') {
-      dropdown.value = true;
-      generateDefaultSuggestions();
-      highlightedText.value = '';
-      previousInputValue.value = '';
-
-      return;
-    }
-
-    dropdown.value = true;
+    dropdown.value = inputValue.value !== '';
     updateSuggestions();
+    // this.previousInputValue = this.inputValue;
   }
 }
 
 async function updateSuggestions(forceUpdate = false) {
-  if (!forceUpdate && inputValue.value === previousInputValue.value) {
-    return;
-  }
-
-  // If input is empty, show default suggestions
+  // console.log('1 - updateSuggestions');
+  // alert('updateSuggestions');
+  if (!forceUpdate && inputValue.value === previousInputValue.value) { return; }
+  // Only proceed if input actually changed
   if (inputValue.value === '') {
     generateDefaultSuggestions();
     highlightedText.value = '';
 
     return;
   }
-
   try {
     // Make the API call
     await fetchCities(inputValue.value);
-
     const inputLower = inputValue.value.toLowerCase();
 
     // Build suggestion arrays
@@ -1074,57 +526,41 @@ async function updateSuggestions(forceUpdate = false) {
     const stateSuggestions = filterStates(inputLower);
     const citySuggestions = filterCities(inputLower);
 
-    // If we have any filtered results, use those
-    const combinedSuggestions = [
+    // this.previousInputValue = this.inputValue; // Update previous value
+
+    suggestions.value = [
       ...historySuggestions.map(item => ({ text: item, type: 'history' })),
       ...citySuggestions.map(item => ({ text: item, type: 'city' })),
+      // { type: 'separator' }, // Add separator after history items
       ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
     ];
 
-    if (combinedSuggestions.length > 0) {
-      suggestions.value = combinedSuggestions;
-    }
-    // Otherwise, keep the API results from fetchCities
-
-    // Update after everything is done
+    // Update these after everything is done
     previousInputValue.value = inputValue.value;
     updateHighlightedText();
-
   } catch (error) {
-    console.error('Error updating suggestions:', error);
-    // Only show error if we have input
-    if (inputValue.value) {
-      showError();
-    }
+    console.error('Error fetching cities:', error);
   }
 }
 
 function filterHistory(query) {
-  return searchHistory.value.filter(item =>
-    item.toLowerCase().includes(query)
-  );
+  return searchHistory.value.filter(item => item.toLowerCase().startsWith(query));
 }
 
 function filterStates(query) {
   return states.filter(
     state =>
-      state.toLowerCase().includes(query) &&
+      state.toLowerCase().startsWith(query) &&
       !searchHistory.value.includes(state)
   );
 }
 
 function filterCities(query) {
-  const q = query.toLowerCase();
-
-  return cachedCities.value
-    .filter(city => city.toLowerCase().includes(q))
-    .sort((a, b) => {
-      // rank by where `q` appears; 0 means 'starts at beginning'
-      const idxA = a.toLowerCase().indexOf(q);
-      const idxB = b.toLowerCase().indexOf(q);
-
-      return idxA - idxB;
-    });
+  return cachedCities.value.filter(
+    city =>
+      city.toLowerCase().startsWith(query) &&
+      !searchHistory.value.includes(city)
+  );
 }
 
 function updateHighlightedText() {
@@ -1142,13 +578,10 @@ function updateHighlightedText() {
 
 function submit() {
   if (inputValue.value) {
-    // Use the first visible suggestion if it exists
-    const suggestion = visibleSuggestions.value[0];
+    // Use the first suggestion if it exists
+    const suggestion = suggestions.value[0];
     if (suggestion && suggestion.text) {
       selectSuggestion(suggestion);  // Handles syncing and recentering
-    } else {
-      showError();
-      triggerErrorAnimation();
     }
   } else if (locationChosen.value) {
     // Use the last chosen location if no input
@@ -1159,7 +592,6 @@ function submit() {
     selectSuggestion(suggestion);
   } else {
     showError();
-    triggerErrorAnimation();
   }
 
   // Fetch coordinates and update the location store
@@ -1174,59 +606,48 @@ function submit() {
     });
     emit('interaction-succeeded');
   }
-}
 
+}
 // Chama a função para buscar coordenadas
 function handleEnter() {
   if (suggestions.value.length > 0 && inputValue.value) {
     selectSuggestion(suggestions.value[0]);
     if (inputField.value) { inputField.value.blur(); }
     submit();
-  } else if (!inputValue.value) {
-    showError();
-    triggerErrorAnimation();
-  } else {
-    showError();
-    triggerErrorAnimation();
   }
+  if (!inputValue.value) {
+    showError();
+  }
+
 }
 
-// Enhanced function to add items to history with consistent formatting
 function addToHistory(item) {
-  if (!item || item === 'No Results') { return; }
+  if (item === 'No Results') { return; }
+  // if (!codes.value[item]) { return; }
+  const itemLower = item.toLowerCase();
+  const historyLower = searchHistory.value.map(h => h.toLowerCase());
 
-  // Normalize the location name to ensure consistency
-  const normalizedItem = normalizeLocationName(item);
-
-  // Remove any existing entries with the same city name (different format)
-  const cityName = normalizedItem.split(' - ')[0].toLowerCase();
-  searchHistory.value = searchHistory.value.filter(historyItem => {
-    const historyCity = historyItem.split(' - ')[0].toLowerCase();
-
-    return historyCity !== cityName;
-  });
-
-  // Add the normalized item to history
-  searchHistory.value.unshift(normalizedItem);
-  if (searchHistory.value.length > 10) {
-    searchHistory.value.pop();
+  if (!historyLower.includes(itemLower)) {
+    searchHistory.value.unshift(item);
+    if (searchHistory.value.length > 10) {
+      searchHistory.value.pop();
+    }
+    saveSearchHistory();
   }
-
-  saveSearchHistory();
 }
 
-// Updated clear input to ensure proper suggestions are shown
+function clearHistory() {
+  searchHistory.value = [];
+  localStorage.removeItem('searchHistory');
+  alert('Histórico limpo com sucesso!');
+}
+
 function clearInput() {
+  suggestions.value = [];
+  generateDefaultSuggestions();
   inputValue.value = '';
   highlightedText.value = '';
-  previousInputValue.value = '';
-  clearErrorState();
-
-  // Ensure dropdown is visible
-  dropdown.value = true;
-
-  // Show proper default suggestions
-  buildSuggestionsFromHistory();
+  if (!dropdown.value) { dropdown.value = true; }
 }
 
 function saveSearchHistory() {
@@ -1240,6 +661,33 @@ function loadSearchHistory() {
   }
 }
 
+async function generateDefaultSuggestions() {
+  if (!locationData.value) { return; }
+
+  const { city, state, stateAbbreviation } = locationData.value;
+  const cityWithState = `${city} - ${stateAbbreviation || state}`;
+
+  // Fetch city data if we don't have the code
+  if (!codes.value[cityWithState]) {
+    try {
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
+      const data = await response.json();
+
+      if (data && data.length > 0 && !data[0].error) {
+        codes.value[cityWithState] = data[0].cd_mun;
+      }
+    } catch (error) {
+      console.error('Error fetching city code:', error);
+    }
+  }
+
+  suggestions.value = [
+    { text: cityWithState, type: 'city' },
+    { text: state, type: 'state' },
+    { text: 'Brasil', type: 'country' },
+  ];
+}
+
 function getImageSource(type) {
   return type === 'history' ? 'bi bi-clock-history' : 'bi bi-geo-alt';
 }
@@ -1250,6 +698,9 @@ function toggleAll() {
   filterState.value = false;
   updateHighlightedText();
   dropdown.value = true;
+  // if (this.inputValue !== '') {
+  //   this.updateHighlightedText();
+  // }
 }
 
 function toggleCity() {
@@ -1270,10 +721,49 @@ function toggleState() {
   }
 }
 
+// getCachedData() {
+//     return {
+//       city: localStorage.getItem('cachedCity'),
+//       state: localStorage.getItem('cachedState'),
+//       stateAbbreviation: localStorage.getItem('cachedStateAbbreviation'),
+//       international: localStorage.getItem('cachedInternational') === 'true',
+//       latitude: localStorage.getItem('cachedLatitude'),
+//       longitude: localStorage.getItem('cachedLongitude'),
+//     };
+//   },
+
 // Helper to emit location-updated event from script setup
+// We can’t use defineEmits directly in the child and pass to child of child
+// so we do an old-fashioned dispatch approach or a direct parent bus event.
 function emitLocationUpdate(payload) {
+  // If you want to communicate to parent, defineEmits:
+  // For example:
+  // const emit = defineEmits(['location-updated','api-error']);
+  // emit('location-updated', payload);
+  //
+  // Or for your code sample:
   emit('location-updated', payload);
 }
+// this.suggestions = [];
+
+/* ------------ Template Refs ------------ */
+
+/*
+  The code above tries to approximate your event system.
+  If you want to define emits at the top:
+  ----------------------------------------------------------------------------------
+  const emit = defineEmits(['location-updated', 'location-error', 'api-error', 'menu-interaction']);
+  function emitLocationUpdate(payload) {
+    emit('location-updated', payload);
+  }
+  function handleLocationFailure() {
+    coordinates.value = null;
+    emit('location-updated', null);
+    emit('api-error');
+  }
+  ----------------------------------------------------------------------------------
+  Then replace the customEvent logic with direct `emit` calls.
+*/
 </script>
 
 <style scoped>
@@ -1300,14 +790,17 @@ function emitLocationUpdate(payload) {
   align-self: stretch;
   height: 48px;
   padding: 0px 16px 0px 24px;
+  /* 0px 9px 0px 16px;  */
   position: relative;
   z-index: 1;
   cursor: default;
+  /* user-select: none; */
 }
 
 .input-container {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
+
 }
 
 .input-container-dropdown {
@@ -1317,26 +810,6 @@ function emitLocationUpdate(payload) {
   outline-offset: -3px;
   user-select: none;
   cursor: default;
-}
-
-.input-container-error {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  align-self: stretch;
-  height: 48px;
-  padding: 0px 16px 0px 24px;
-  position: relative;
-  z-index: 1;
-  border-radius: 99px;
-  background: #FFF5F5;
-  outline: 3px solid #DC3545;
-  outline-offset: -3px;
-}
-
-/* Explicitly separating animation from error state styling for clean transitions */
-.shake-animation {
-  animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
 /* Input and overlay */
@@ -1366,10 +839,6 @@ function emitLocationUpdate(payload) {
   cursor: text;
 }
 
-.input-error {
-  color: #DC3545;
-}
-
 .input-overlay {
   position: relative;
   flex: 1;
@@ -1394,10 +863,8 @@ function emitLocationUpdate(payload) {
 
 .highlight {
   color: var(--Gray-500, #ADB5BD);
-}
 
-.highlight-error {
-  color: #DC3545;
+  color: var(--Gray-500, #ADB5BD);
 }
 
 .text-highlight {
@@ -1433,10 +900,20 @@ function emitLocationUpdate(payload) {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
+  /*overflow: hidden;
+    text-overflow: ellipsis;
+    */
 }
 
 .filter-button,
 .filter-button-active {
+  /*display: flex;
+    /*display: flex;
+    padding: 5px 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  */
   border: none;
   padding: 8px;
   gap: 10px;
