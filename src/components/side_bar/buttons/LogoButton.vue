@@ -5,22 +5,19 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useLocationStore } from '@/stores/locationStore';
 import LogoRouterLink from '@/components/logo_router_link/LogoRouterLink.vue';
 
-export default {
-  name: 'LogoButton',
-  components: {
-    LogoRouterLink,
-  },
-  methods: {
-    resetStore() {
-      const locationStore = useLocationStore();
-      locationStore.reset();
-    }
-  }
-};
+// Method to reset the store
+function resetStore() {
+  const locationStore = useLocationStore();
+  locationStore.reset();
+
+  // Force a page reload to ensure everything is reset properly
+  // This is an alternative if the watcher doesn't work
+  // window.location.href = '/';
+}
 </script>
 
 <style scoped>

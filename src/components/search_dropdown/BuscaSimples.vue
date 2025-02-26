@@ -16,7 +16,7 @@
                @focus="handleFocus"
                @keydown.enter="handleEnter"
                @keydown="handleKeydown"
-               :class="{'input-error': isError}"
+               :class="{ 'input-error': isError }"
                :placeholder="!inputValue && !highlightedText ? 'Buscar um local' : ''"
                class="input-field body-small-regular"
                :disabled="!isInputActive"
@@ -24,7 +24,7 @@
         <div v-if="highlightedText && inputValue" class="suggestion-overlay body-small-regular">
           <span class="suggestion-text body-small-regular">
             <span class="invisible">{{ visibleInput }}</span>
-            <span :class="['highlight', {'highlight-error': isError}]">{{ highlightedText }}</span>
+            <span :class="['highlight', { 'highlight-error': isError }]">{{ highlightedText }}</span>
           </span>
         </div>
       </div>
@@ -120,6 +120,10 @@ const props = defineProps({
   openDelay: {
     type: Number,
     default: 0 // 0 means no auto-open
+  },
+  autoSelectLocation: {
+    type: Boolean,
+    default: true // Default to true for backward compatibility
   }
 });
 
@@ -245,6 +249,22 @@ watch(inputValue, (newVal) => {
     buildSuggestionsFromHistory();
   }
 });
+watch(
+  () => locationStore.cd_mun,
+  (newVal) => {
+    // When cd_mun becomes null, the store has been reset
+    if (newVal === null) {
+      console.log('Location store was reset, clearing component state');
+      inputValue.value = '';
+      visibleInput.value = '';
+      locationChosen.value = '';
+      highlightedText.value = '';
+
+      // Update suggestions to default
+      buildSuggestionsFromHistory();
+    }
+  }
+);
 
 // Computed Properties
 const filterAll = ref(true);
@@ -356,158 +376,149 @@ function normalizeLocationName(location) {
   return location;
 }
 
-function getFullStateName(abbreviation) {
-  if (!abbreviation) {return 'São Paulo';}
+// function getFullStateName(abbreviation) {
+//   if (!abbreviation) { return 'São Paulo'; }
 
-  const stateMap = {
-    'SP': 'São Paulo',
-    'RJ': 'Rio de Janeiro',
-    'MG': 'Minas Gerais',
-    'RS': 'Rio Grande do Sul',
-    'PR': 'Paraná',
-    'SC': 'Santa Catarina',
-    'BA': 'Bahia',
-    'DF': 'Distrito Federal',
-    'ES': 'Espírito Santo',
-    'GO': 'Goiás',
-    'MA': 'Maranhão',
-    'MT': 'Mato Grosso',
-    'MS': 'Mato Grosso do Sul',
-    'PA': 'Pará',
-    'PB': 'Paraíba',
-    'PE': 'Pernambuco',
-    'PI': 'Piauí',
-    'RN': 'Rio Grande do Norte',
-    'AM': 'Amazonas',
-    'RO': 'Rondônia',
-    'RR': 'Roraima',
-    'SE': 'Sergipe',
-    'TO': 'Tocantins',
-    'AC': 'Acre',
-    'AL': 'Alagoas',
-    'AP': 'Amapá',
-    'CE': 'Ceará'
-  };
+//   const stateMap = {
+//     'SP': 'São Paulo',
+//     'RJ': 'Rio de Janeiro',
+//     'MG': 'Minas Gerais',
+//     'RS': 'Rio Grande do Sul',
+//     'PR': 'Paraná',
+//     'SC': 'Santa Catarina',
+//     'BA': 'Bahia',
+//     'DF': 'Distrito Federal',
+//     'ES': 'Espírito Santo',
+//     'GO': 'Goiás',
+//     'MA': 'Maranhão',
+//     'MT': 'Mato Grosso',
+//     'MS': 'Mato Grosso do Sul',
+//     'PA': 'Pará',
+//     'PB': 'Paraíba',
+//     'PE': 'Pernambuco',
+//     'PI': 'Piauí',
+//     'RN': 'Rio Grande do Norte',
+//     'AM': 'Amazonas',
+//     'RO': 'Rondônia',
+//     'RR': 'Roraima',
+//     'SE': 'Sergipe',
+//     'TO': 'Tocantins',
+//     'AC': 'Acre',
+//     'AL': 'Alagoas',
+//     'AP': 'Amapá',
+//     'CE': 'Ceará'
+//   };
 
-  return stateMap[abbreviation] || abbreviation;
-}
+//   return stateMap[abbreviation] || abbreviation;
+// }
 
 function buildSuggestionsFromHistory() {
   console.log('Building suggestions from history');
+  console.log('Current locationChosen:', locationChosen.value);
+  console.log('Current locationData:', locationData.value);
+  console.log('Current searchHistory:', searchHistory.value);
+  console.log('Current cachedCities:', cachedCities.value);
+
+  // Create a set to track unique city names (case-insensitive)
+  const addedCities = new Set();
+  const suggestionsArray = [];
 
   // First check if we have a current chosen location
   if (locationChosen.value) {
-    const { city, state } = parseCityState(locationChosen.value);
+    const { city } = parseCityState(locationChosen.value);
+    console.log('Adding chosen location to suggestions:', locationChosen.value);
 
-    // Convert state abbreviation to full name if needed
-    const fullStateName = getFullStateName(state);
-
-    // Check if this city is in history (either format)
-    const cityInHistory = searchHistory.value.some(item => {
-      const itemCity = item.split(' - ')[0].toLowerCase();
-
-      return itemCity === city.toLowerCase();
+    // Always show the current chosen location first with 'city' type
+    suggestionsArray.push({
+      text: locationChosen.value,
+      type: 'city' // Always use 'city' type for current location
     });
 
-    // Get the most recent 2 history items excluding current location
-    const recentHistory = searchHistory.value
-      .filter(item => {
-        const itemCity = item.split(' - ')[0].toLowerCase();
-
-        return itemCity !== city.toLowerCase();
-      })
-      .slice(0, 2)
-      .map(item => ({
-        text: item,
-        type: 'history'
-      }));
-
-    // Build suggestions with consistent order
-    suggestions.value = [
-      // Current location first (with appropriate icon)
-      {
-        text: locationChosen.value,
-        type: cityInHistory ? 'history' : 'city'
-      },
-      // Recent history items
-      ...recentHistory,
-      // Standard options - always use full state name
-      { text: fullStateName, type: 'state' },
-      { text: 'Brasil', type: 'country' }
-    ];
-
-    console.log('Built suggestions with current location:', suggestions.value);
-
-    return;
+    // Track this city as added
+    addedCities.add(city.toLowerCase());
   }
 
-  // If we have valid location data from GetUserLocation but no chosen location
-  if (locationData.value && locationData.value.city) {
+  // If we have valid location data from GetUserLocation but no chosen location yet
+  // This is the crucial part that needs to be fixed
+  if (locationData.value && locationData.value.city && !locationChosen.value) {
     const city = locationData.value.city;
-    const state = locationData.value.state || '';
     const stateAbbrev = locationData.value.stateAbbreviation || '';
-    const cityWithState = `${city} - ${stateAbbrev || state}`;
+    const cityWithState = `${city} - ${stateAbbrev}`;
 
-    // Convert state abbreviation to full name if needed
-    const fullStateName = getFullStateName(stateAbbrev) || state;
+    console.log('Checking geolocation city:', city, 'formatted as:', cityWithState);
 
-    // Check if this city is in history (either format)
-    const cityInHistory = searchHistory.value.some(item => {
-      const itemCity = item.split(' - ')[0].toLowerCase();
+    // Only add if not already added
+    if (!addedCities.has(city.toLowerCase())) {
+      console.log('Adding geolocation city to suggestions:', cityWithState);
 
-      return itemCity === city.toLowerCase();
+      // Add the current geolocation with 'city' type
+      suggestionsArray.push({
+        text: cityWithState,
+        type: 'city'
+      });
+
+      // Track this city as added
+      addedCities.add(city.toLowerCase());
+    } else {
+      console.log('Geolocation city already added, skipping');
+    }
+  } else {
+    console.log('No geolocation city available or location already chosen');
+  }
+
+  // Add recent history items (excluding already added cities)
+  if (searchHistory.value.length > 0) {
+    console.log('Processing search history for suggestions');
+
+    // Filter history to exclude cities already added
+    const filteredHistory = searchHistory.value.filter(item => {
+      const { city } = parseCityState(item);
+      const isAdded = addedCities.has(city.toLowerCase());
+      if (isAdded) {
+        console.log(`History item ${item} already added, skipping`);
+      }
+
+      return !isAdded;
     });
 
-    // Get recent history excluding current location
-    const recentHistory = searchHistory.value
-      .filter(item => {
-        const itemCity = item.split(' - ')[0].toLowerCase();
+    console.log('Filtered history items:', filteredHistory);
 
-        return itemCity !== city.toLowerCase();
-      })
+    // Take only up to 2 recent history items
+    const recentHistory = filteredHistory
       .slice(0, 2)
       .map(item => ({
         text: item,
         type: 'history'
       }));
 
-    // Build suggestions
-    suggestions.value = [
-      // Current geolocation with appropriate icon
-      {
-        text: cityWithState,
-        type: cityInHistory ? 'history' : 'city'
-      },
-      // Recent history items
-      ...recentHistory,
-      // Standard options - always use full state name
-      { text: fullStateName, type: 'state' },
-      { text: 'Brasil', type: 'country' }
-    ];
+    console.log('Recent history items to add:', recentHistory);
 
-    console.log('Built suggestions from location data:', suggestions.value);
+    // Add history items to suggestions
+    suggestionsArray.push(...recentHistory);
 
-    return;
+    // Track these cities as added
+    recentHistory.forEach(item => {
+      const { city } = parseCityState(item.text);
+      addedCities.add(city.toLowerCase());
+    });
   }
 
-  // If no specific location, just show history + defaults
-  const historyItems = searchHistory.value.slice(0, 2).map(item => ({
-    text: item,
-    type: 'history'
-  }));
+  // Always add standard options if not already added
+  if (!addedCities.has('são paulo')) {
+    suggestionsArray.push({ text: 'São Paulo', type: 'state' });
+  }
 
-  suggestions.value = [
-    ...historyItems,
-    { text: 'São Paulo', type: 'state' },
-    { text: 'Brasil', type: 'country' }
-  ];
+  suggestionsArray.push({ text: 'Brasil', type: 'country' });
 
-  console.log('Built suggestions from history only:', suggestions.value);
+  // Update suggestions
+  suggestions.value = suggestionsArray;
+
+  console.log('Built suggestions:', suggestionsArray);
 }
 
 // Helper function to fetch city code if needed
 async function fetchCityCode(city) {
-  if (!city) {return null;}
+  if (!city) { return null; }
 
   try {
     console.log(`Fetching city code for: ${city}`);
@@ -690,17 +701,27 @@ async function fetchCoordinates(address) {
         });
 
         return true;
+      } else {
+        console.log('No coordinates found in result:', data[0]);
       }
     }
 
     console.log('No coordinates found in API response');
-    handleLocationFailure();
+    // Don't call handleLocationFailure here as it might interfere with the selection process
+
+    // Try alternate approach - use municipal code instead
+    if (codes.value[address]) {
+      console.log(`Trying to get coordinates using municipal code: ${codes.value[address]}`);
+      const locationStore = useLocationStore();
+
+      return await locationStore.fetchCoordinates(codes.value[address]);
+    }
 
     return false;
   } catch (error) {
     console.error('Error fetching coordinates:', error);
-    handleLocationFailure();
 
+    // Don't call handleLocationFailure here as it might interfere with the selection process
     return false;
   }
 }
@@ -708,6 +729,12 @@ async function fetchCoordinates(address) {
 // Enhanced selectSuggestion to ensure code is properly saved
 async function selectSuggestion(suggestion) {
   console.log('selectSuggestion:', suggestion);
+
+  if (!suggestion || !suggestion.text) {
+    console.error('Invalid suggestion object:', suggestion);
+
+    return;
+  }
 
   // Normalize the selected location
   const normalizedText = normalizeLocationName(suggestion.text);
@@ -719,10 +746,19 @@ async function selectSuggestion(suggestion) {
   locationChosen.value = normalizedText;
 
   const { city, state } = parseCityState(normalizedText);
-  console.log(state);
+  console.log(`Selected city: ${city}, state: ${state}`);
 
   // Get the city code, or fetch it if not available
   let code = codes.value[normalizedText];
+
+  // First check if we already have the code from the suggestion
+  if (suggestion.cd_mun) {
+    code = suggestion.cd_mun;
+    // Make sure it's in our codes cache
+    codes.value[normalizedText] = code;
+  }
+
+  // If still no code, try to fetch it
   if (!code) {
     console.log(`No code found for ${normalizedText}, fetching it now`);
     code = await fetchCityCode(city);
@@ -740,6 +776,9 @@ async function selectSuggestion(suggestion) {
     year: '2021', //new Date().getFullYear()
   });
 
+  // Add to history BEFORE fetching coordinates
+  addToHistory(normalizedText);
+
   // Ensure coordinates are fetched after store update
   await fetchCoordinates(normalizedText);
 
@@ -749,23 +788,8 @@ async function selectSuggestion(suggestion) {
   // Update UI state
   loadAnimation();
   updateSuggestions();
-  addToHistory(normalizedText);
   clearErrorState();
   emit('interaction-succeeded');
-}
-
-function handleFocus(event) {
-  if (!dropdown.value) {
-    dropdown.value = true;
-
-    // Ensure suggestions are populated when dropdown is shown
-    if (inputValue.value) {
-      updateSuggestions(true);
-    } else {
-      buildSuggestionsFromHistory();
-    }
-  }
-  event.stopPropagation();
 }
 
 async function loadAnimation() {
@@ -821,7 +845,7 @@ function updateLocationData(location) {
 
       // If this is geolocation and we don't have a chosen location yet,
       // automatically select this location
-      if (location.source === 'geolocation' && !locationChosen.value) {
+      if (props.autoSelectLocation && location.source === 'geolocation' && !locationChosen.value) {
         console.log('Auto-selecting geolocation:', cityWithState);
 
         // Create a suggestion object
@@ -834,6 +858,10 @@ function updateLocationData(location) {
         setTimeout(() => {
           selectSuggestion(geoSuggestion);
         }, 100);
+      } else {
+        // Just update suggestions without auto-selecting
+        console.log('Updating suggestions from geolocation without auto-selecting');
+        buildSuggestionsFromHistory();
       }
     } else {
       // Still cache the city if we have it
@@ -914,29 +942,54 @@ async function fetchCities(query) {
       return false;
     }
 
-    suggestions.value = validResults.map(item => {
-      // Handle both state_abbreviation and display_name formats
-      const displayName = item.display_name || '';
-      const stateAbbreviation = item.state_abbreviation || '';
+    // Create a set of existing cities for deduplication
+    const existingCities = new Set();
 
-      const textKey = stateAbbreviation
-        ? `${displayName} - ${stateAbbreviation}`
-        : displayName;
+    // Extract cities from current chosen location
+    if (locationChosen.value) {
+      const { city } = parseCityState(locationChosen.value);
+      existingCities.add(city.toLowerCase());
+    }
 
-      // Always store the code when we get it from the API
-      if (item.cd_mun) {
-        codes.value[textKey] = item.cd_mun;
-        console.log(`Saved code ${item.cd_mun} for ${textKey}`);
-      }
+    suggestions.value = validResults
+      .filter(item => {
+        // Handle both state_abbreviation and display_name formats
+        const displayName = item.display_name || '';
+        const { city } = parseCityState(displayName);
 
-      return {
-        text: textKey,
-        lat: item.coordinates?.lat,
-        lng: item.coordinates?.lng,
-        type: 'city',
-        cd_mun: item.cd_mun  // Include the code in the suggestion object
-      };
-    });
+        // Skip if this city is already in suggestions
+        if (existingCities.has(city.toLowerCase())) {
+          return false;
+        }
+
+        // Add to tracking set to avoid future duplicates
+        existingCities.add(city.toLowerCase());
+
+        return true;
+      })
+      .map(item => {
+        // Handle both state_abbreviation and display_name formats
+        const displayName = item.display_name || '';
+        const stateAbbreviation = item.state_abbreviation || '';
+
+        const textKey = stateAbbreviation
+          ? `${displayName}${displayName.includes(' - ') ? '' : ` - ${stateAbbreviation}`}`
+          : displayName;
+
+        // Always store the code when we get it from the API
+        if (item.cd_mun) {
+          codes.value[textKey] = item.cd_mun;
+          console.log(`Saved code ${item.cd_mun} for ${textKey}`);
+        }
+
+        return {
+          text: textKey,
+          lat: item.coordinates?.lat,
+          lng: item.coordinates?.lng,
+          type: 'city',
+          cd_mun: item.cd_mun  // Include the code in the suggestion object
+        };
+      });
 
     // If we have results, clear error state
     if (suggestions.value.length > 0) {
@@ -1005,20 +1058,29 @@ function handleClickOutside(event) {
   ) {
     dropdown.value = false;
 
-    // Fixed: Reset to previous valid location when clicking outside in error state
-    if (isError.value && locationChosen.value) {
+    // Check if locationStore has a location before restoring
+    const locationStore = useLocationStore();
+    const storeHasLocation = locationStore.hasLocation;
+
+    // Only restore previous location if in error state and we have a chosen location AND the store has a location
+    if (isError.value && locationChosen.value && storeHasLocation) {
       console.log('Restoring previous location after error:', locationChosen.value);
       inputValue.value = locationChosen.value;
       clearErrorState();
-    } else if (!inputValue.value) {
-      inputValue.value = locationChosen.value || '';
+    } else if (!inputValue.value && locationChosen.value && storeHasLocation) {
+      // Only restore if store still has a location
+      inputValue.value = locationChosen.value;
+    } else if (!storeHasLocation) {
+      // Clear the input if store has been reset
+      inputValue.value = '';
+      locationChosen.value = '';
     }
   }
 }
 
 // Improved function to cache cities with consistent formatting
 function cacheCities(citiesArr) {
-  if (!citiesArr || citiesArr.length === 0) {return;}
+  if (!citiesArr || citiesArr.length === 0) { return; }
 
   // Normalize city names before caching
   const normalizedCities = citiesArr.map(city => normalizeLocationName(city));
@@ -1057,7 +1119,7 @@ async function updateSuggestions(forceUpdate = false) {
 
   // If input is empty, show default suggestions
   if (inputValue.value === '') {
-    generateDefaultSuggestions();
+    buildSuggestionsFromHistory();
     highlightedText.value = '';
 
     return;
@@ -1069,22 +1131,34 @@ async function updateSuggestions(forceUpdate = false) {
 
     const inputLower = inputValue.value.toLowerCase();
 
-    // Build suggestion arrays
-    const historySuggestions = filterHistory(inputLower);
-    const stateSuggestions = filterStates(inputLower);
-    const citySuggestions = filterCities(inputLower);
+    // Get filtered history items (that aren't already in the API results)
+    const apiCities = new Set(
+      suggestions.value.map(s => parseCityState(s.text).city.toLowerCase())
+    );
 
-    // If we have any filtered results, use those
-    const combinedSuggestions = [
-      ...historySuggestions.map(item => ({ text: item, type: 'history' })),
-      ...citySuggestions.map(item => ({ text: item, type: 'city' })),
-      ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
-    ];
+    // Filter history items that aren't already in API results
+    const historySuggestions = searchHistory.value.filter(item => {
+      const { city } = parseCityState(item);
 
-    if (combinedSuggestions.length > 0) {
+      return city.toLowerCase().includes(inputLower) &&
+             !apiCities.has(city.toLowerCase());
+    });
+
+    // Filter states that match the query
+    const stateSuggestions = states.filter(
+      state => state.toLowerCase().includes(inputLower)
+    );
+
+    // Add history and state suggestions to the results
+    if (historySuggestions.length > 0 || stateSuggestions.length > 0) {
+      const combinedSuggestions = [
+        ...suggestions.value, // API results first
+        ...historySuggestions.map(item => ({ text: item, type: 'history' })),
+        ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
+      ];
+
       suggestions.value = combinedSuggestions;
     }
-    // Otherwise, keep the API results from fetchCities
 
     // Update after everything is done
     previousInputValue.value = inputValue.value;
@@ -1099,33 +1173,33 @@ async function updateSuggestions(forceUpdate = false) {
   }
 }
 
-function filterHistory(query) {
-  return searchHistory.value.filter(item =>
-    item.toLowerCase().includes(query)
-  );
-}
+// function filterHistory(query) {
+//   return searchHistory.value.filter(item =>
+//     item.toLowerCase().includes(query)
+//   );
+// }
 
-function filterStates(query) {
-  return states.filter(
-    state =>
-      state.toLowerCase().includes(query) &&
-      !searchHistory.value.includes(state)
-  );
-}
+// function filterStates(query) {
+//   return states.filter(
+//     state =>
+//       state.toLowerCase().includes(query) &&
+//       !searchHistory.value.includes(state)
+//   );
+// }
 
-function filterCities(query) {
-  const q = query.toLowerCase();
+// function filterCities(query) {
+//   const q = query.toLowerCase();
 
-  return cachedCities.value
-    .filter(city => city.toLowerCase().includes(q))
-    .sort((a, b) => {
-      // rank by where `q` appears; 0 means 'starts at beginning'
-      const idxA = a.toLowerCase().indexOf(q);
-      const idxB = b.toLowerCase().indexOf(q);
+//   return cachedCities.value
+//     .filter(city => city.toLowerCase().includes(q))
+//     .sort((a, b) => {
+//       // rank by where `q` appears; 0 means 'starts at beginning'
+//       const idxA = a.toLowerCase().indexOf(q);
+//       const idxB = b.toLowerCase().indexOf(q);
 
-      return idxA - idxB;
-    });
-}
+//       return idxA - idxB;
+//     });
+// }
 
 function updateHighlightedText() {
   if (visibleSuggestions.value.length > 0 && inputValue.value) {
@@ -1199,11 +1273,11 @@ function addToHistory(item) {
   const normalizedItem = normalizeLocationName(item);
 
   // Remove any existing entries with the same city name (different format)
-  const cityName = normalizedItem.split(' - ')[0].toLowerCase();
+  const { city } = parseCityState(normalizedItem);
   searchHistory.value = searchHistory.value.filter(historyItem => {
-    const historyCity = historyItem.split(' - ')[0].toLowerCase();
+    const historyCity = parseCityState(historyItem).city.toLowerCase();
 
-    return historyCity !== cityName;
+    return historyCity !== city.toLowerCase();
   });
 
   // Add the normalized item to history
@@ -1216,7 +1290,12 @@ function addToHistory(item) {
 }
 
 // Updated clear input to ensure proper suggestions are shown
-function clearInput() {
+function clearInput(event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   inputValue.value = '';
   highlightedText.value = '';
   previousInputValue.value = '';
@@ -1225,7 +1304,7 @@ function clearInput() {
   // Ensure dropdown is visible
   dropdown.value = true;
 
-  // Show proper default suggestions
+  // Force rebuild of suggestions - make sure to include any selected location
   buildSuggestionsFromHistory();
 }
 
@@ -1601,18 +1680,24 @@ function emitLocationUpdate(payload) {
 }
 
 @keyframes shake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
+
   20% {
     transform: translateX(-4px);
   }
+
   40% {
     transform: translateX(4px);
   }
+
   60% {
     transform: translateX(-2px);
   }
+
   80% {
     transform: translateX(2px);
   }
