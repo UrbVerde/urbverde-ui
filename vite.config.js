@@ -28,7 +28,25 @@ export default defineConfig({
       },
     },
   },
-
+  // Add build configuration for cache busting
+  build: {
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        chunkFileNames: 'js/[name].[hash].js',
+        entryFileNames: 'js/[name].[hash].js',
+        assetFileNames: ({ name }) => {
+          if (/\.(gif|jpe?g|png|svg)$/.test(name ?? '')) {
+            return 'img/[name].[hash].[ext]';
+          }
+          if (/\.css$/.test(name ?? '')) {
+            return 'css/[name].[hash].[ext]';
+          }
+          return 'assets/[name].[hash].[ext]';
+        },
+      },
+    },
+  },
   // server: {
   //   host: '0.0.0.0', // Permite acesso via IP
   //   port: 5173, // Porta padrão, você pode alterar se necessário
