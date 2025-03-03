@@ -4,7 +4,7 @@
   <!-- Div para resolucao em DESKTOP -->
   <div
     class="product"
-    v-if="largerThan('mobile_large')"
+    v-if="largerThan('mobile-large')"
   >
     <span class="effect-product"></span>
     <div class="image-wrapper">
