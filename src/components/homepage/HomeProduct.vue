@@ -1,8 +1,10 @@
 <!-- urbverde-ui/src/components/homepage/HomeProduct.vue -->
 <template>
+
+  <!-- Div para resolucao em DESKTOP -->
   <div
     class="product"
-    v-if="windowWidth >= 600"
+    v-if="largerThan('mobile_large')"
   >
     <span class="effect-product"></span>
     <div class="image-wrapper">
@@ -49,6 +51,7 @@
     </div>
   </div>
 
+  <!-- Div para resolucao em MOBILE -->
   <div
     class="product"
     v-else
@@ -102,6 +105,7 @@
 
 <script>
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 export default {
   name: 'HomeProduct',
@@ -109,24 +113,12 @@ export default {
     PrimaryButton,
   },
 
-  data() {
+  setup() {
+    const { largerThan } = useWindowSize();
+
     return {
-      windowWidth: window.innerWidth,
+      largerThan,
     };
-  },
-
-  methods: {
-    updateWindowWidth() {
-      this.windowWidth = window.innerWidth;
-    },
-  },
-
-  mounted() {
-    window.addEventListener('resize', this.updateWindowWidth);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('resize', this.updateWindowWidth);
   },
 
   props: {
