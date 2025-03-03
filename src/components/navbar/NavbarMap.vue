@@ -1,7 +1,8 @@
 <!-- urbverde-ui/src/components/navbar/NavbarMap.vue -->
-<!-- urbverde-ui/src/components/navbar/Navbar.vue -->
 <template>
-  <div class="navbar">
+  <div class="navbar"
+       v-if="largerThan('tablet')"
+  >
     <div class="response">
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
@@ -46,12 +47,52 @@
       :stateName="uf"
     />
   </div>
+
+  <div class="navbar"
+       v-else
+  >
+    <div class="response">
+      <!-- Primeira linha: Título e Botões -->
+      <div class="header">
+        <div class="header-left heading-h5">
+          <h5>{{ layer }} em {{ cityName }}-{{ uf }}</h5>
+        </div>
+        <div class="header-right">
+          <button @click="shareMap" class="share-button">
+            <img src="../../assets/icons/share.svg" alt="Compartilhar" />
+          </button>
+
+          <a
+            href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button @click="layerInfo" class="info-button">
+              <img src="../../assets/icons/info.svg" alt="Entender esse dado" />
+              <p class="body-small-regular">Entender esse dado</p>
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <!-- Segunda linha: Navegação -->
+
+    </div>
+    <!-- Modal de compartilhamento -->
+    <modalShare
+      ref="refModalShare"
+      :cityName="cityName"
+      :stateName="uf"
+    />
+  </div>
+
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import modalShare from '../modal/modalShare.vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 const { activeSection } = defineProps({
   activeSection: {
@@ -77,6 +118,10 @@ const tabs = ref([
   { id: 'stats', label: 'Estatísticas' },
   { id: 'ranking', label: 'Ranking' },
 ]);
+
+const {
+  largerThan
+} = useWindowSize();
 
 function navigateTo(sectionId) {
   emit('navigate-to', sectionId);
