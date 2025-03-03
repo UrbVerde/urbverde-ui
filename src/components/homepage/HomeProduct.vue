@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/homepage/HomeProduct.vue -->
 <template>
 
-  <!-- Div para resolucao em DESKTOP -->
+  <!-- Desktop version -->
   <div
     class="product"
     v-if="largerThan('mobile-large')"
@@ -51,7 +51,7 @@
     </div>
   </div>
 
-  <!-- Div para resolucao em MOBILE -->
+  <!-- Mobile version -->
   <div
     class="product"
     v-else

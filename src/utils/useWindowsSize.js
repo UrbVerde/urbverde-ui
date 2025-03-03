@@ -1,6 +1,7 @@
 /*
 
-Exemplo de uso em um componente com Composition API (script setup)
+--- 1. Exemplo de uso em um componente com Composition API (script setup)
+
 <script setup>
 import { useWindowSize } from '@/utils/composables/useWindowSize';
 
@@ -24,7 +25,8 @@ console.log(`É menor que tablet? ${smallerThan('tablet')}`);
 // <div v-else>Conteúdo desktop</div>
 </script>
 
-// Exemplo de uso em um componente com Options API
+--- 2. Exemplo de uso em um componente com Options API
+
 <script>
 import { useWindowSize } from '@/utils/composables/useWindowSize';
 
@@ -45,26 +47,6 @@ export default {
       largerThan
     };
   },
-
-  methods: {
-    checkResponsiveLayout() {
-      if (this.smallerThan('mobile-medium')) {
-        return 'layout-xsmall';
-      } else if (this.smallerThan('mobile-large')) {
-        return 'layout-small';
-      } else if (this.smallerThan('tablet')) {
-        return 'layout-medium';
-      } else {
-        return 'layout-large';
-      }
-    }
-  },
-
-  computed: {
-    responsiveClass() {
-      return this.checkResponsiveLayout();
-    }
-  }
 };
 </script>
 
@@ -74,8 +56,7 @@ export default {
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 export function useWindowSize() {
-  // Valores dos breakpoints definidos manualmente
-  // Correspondem aos definidos em seu arquivo breakpoints.scss
+  // Valores dos breakpoints definidos manualmente, conforme o do breakpoints.scss
   const BREAKPOINTS = {
     MOBILE_SMALL: 375,
     MOBILE_MEDIUM: 481,

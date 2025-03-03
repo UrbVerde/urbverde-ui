@@ -34,7 +34,7 @@
                data-aos-delay="500">
 
             <div class="hero-text"
-                 v-if="windowWidth >= 1026">
+                 v-if="largerThan('tablet')">
               <h1>
                 <span class="h1-text heading-h1">Mapeando um Futuro </span>
                 <transition name="fade" mode="out-in">
@@ -74,7 +74,7 @@
           <!-- Platform Preview -->
           <section class="wrapper-platform" aria-label="Prévia da plataforma">
             <router-link
-              v-if="windowWidth >= 601"
+              v-if="largerThan('mobile-large')"
               to="/mapa"
               class="platform-link"
               aria-label="Acessar a plataforma da UrbVerde"
@@ -276,8 +276,8 @@
           <img src="@/assets/images/homepage/urbverde-mission.png">
         </div>
         <div class="educa"
-             v-if="windowWidth >= 600"
-        >
+             v-if="largerThan('mobile-large')">
+          >
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
@@ -456,6 +456,7 @@ import HomeAwards from '@/components/homepage/HomeAwards.vue';
 import HomeProduct from '@/components/homepage/HomeProduct.vue';
 import HomeSearch from '@/components/homepage/HomeSearch.vue';
 import HomeCta from '@/components/homepage/HomeCta.vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 // Import para as imagens da página utilizados em componentes
 import { logos, homepageImages } from '@/constants/images-homepage.js';
@@ -508,6 +509,10 @@ export default {
         },
       ],
     });
+
+    const { largerThan } = useWindowSize();
+
+    return { largerThan };
   },
 
   data() {
@@ -516,7 +521,6 @@ export default {
       // Imagens retornando de images-homepage.js
       logos,
       homepageImages,
-      windowWidth: window.innerWidth,
 
       rotatingWords: ['Inclusivo', 'Verde', 'Resiliente', 'Justo'], // Palavras para rotação
       currentWordIndex: 0,
@@ -555,23 +559,15 @@ export default {
       once: false
     });
 
-    window.addEventListener('resize', this.updateWindowWidth);
   },
 
   beforeUnmount() {
     clearInterval(this.wordRotationInterval);
-
-    window.removeEventListener('resize', this.updateWindowWidth);
   },
 
   methods: {
     onLocationUpdated() {
       return;
-    },
-
-    // Método para atualizar a largura da janela
-    updateWindowWidth() {
-      this.windowWidth = window.innerWidth;
     },
 
     // Método para rotação das palavras
