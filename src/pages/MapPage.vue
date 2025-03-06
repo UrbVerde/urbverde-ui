@@ -223,7 +223,7 @@ useHead({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 h5, p{
   margin: 0;
 }
@@ -281,18 +281,12 @@ h5, p{
 }
 
 /* Navbar styles */
-.navbar {
-  width: calc(100% - 301px);
-  position: fixed;
-  top: 0;
-  left: 301px;
-  z-index: 99;
-  transition: all 0.3s ease;
+::v-deep(.navbar) {
+  position: fixed; // For the sticky effect in navbar
 }
 
 .navbar.navbar-collapsed {
   width: calc(100% - 72px);
-  left: 72px;
 }
 
 /* Map container styles */

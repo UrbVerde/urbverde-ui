@@ -146,15 +146,16 @@ a {
 }
 
 .navbar {
-  width: 100%;
+  width: calc(100% - 301px);
   position: sticky;
   top: 0;
   z-index: 10000;
   background-color: #F8F9FACC;
   box-sizing: border-box;
-  padding: 32px 40px;
   display: flex;
   backdrop-filter: blur(10px);
+  padding: 32px 40px !important;
+  transition: all 0.3s ease;
 }
 
 .response {
