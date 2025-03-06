@@ -137,6 +137,8 @@ function layerInfo() {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 p, h5{
   margin: 0;
 }
@@ -256,4 +258,19 @@ a {
   padding: 4px 16px;
   font-weight: 600;
 }
+
+@include breakpoint-down('desktop-small') {
+  .navbar {
+    padding: 24px 32px !important;
+  }
+
+  .response {
+    gap: 2px;
+  }
+
+  .header-left h5 {
+    font-size: 18px;
+  }
+}
+
 </style>

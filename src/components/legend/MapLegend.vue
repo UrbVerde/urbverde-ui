@@ -159,8 +159,8 @@ const refModalWaitlistLegend = ref(null);
 /* Basic MapLegend styles */
 .legend-wrapper {
   position: absolute;
-  top: 33px;
-  right: 33px;
+  top: 12px;
+  right: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
