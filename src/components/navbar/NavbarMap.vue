@@ -146,8 +146,9 @@ a {
 }
 
 .navbar {
-  width: calc(100% - 301px);
+  flex-shrink: 1;
   position: sticky;
+  width: 100%;
   top: 0;
   z-index: 10000;
   background-color: #F8F9FACC;

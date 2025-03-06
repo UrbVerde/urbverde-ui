@@ -1,11 +1,17 @@
 <!-- urbverde-ui/src/pages/MapPage.vue -->
 <template>
   <div class="layout-container">
-    <Sidebar
-      :is-open="isSidebarOpen"
-      @toggle-sidebar="toggleSidebar"
-      class="sidebar-animate"
-    />
+
+    <div
+      class="sidebar-wrapper"
+      :class="{ collapsed: !isSidebarOpen }"
+    >
+      <Sidebar
+        :is-open="isSidebarOpen"
+        @toggle-sidebar="toggleSidebar"
+        class="sidebar-animate"
+      />
+    </div>
 
     <!-- Main content -->
     <main
@@ -23,13 +29,15 @@
       </div>
 
       <div v-else class="content-wrapper content-animate">
+
         <Navbar
           :class="{ 'navbar-collapsed': !isSidebarOpen }"
           :active-section="activeSection"
           @navigate-to="scrollToSection"
-        >
-        </Navbar>
+        />
+
         <div class="page-content">
+
           <div class="map-section">
             <div id="map" ref="Mapa" class="map-container">
               <MapBox :coordinates="coordinates" class="map-box">
@@ -47,6 +55,7 @@
           />
 
           <UrbVerdeFooter id="newsletter" />
+
         </div>
       </div>
     </main>
@@ -58,6 +67,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
+
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/NavbarMap.vue';
 import MapBox from '../components/map/mapGenerator.vue';
@@ -68,7 +78,6 @@ import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 // Store and router setup
 const locationStore = useLocationStore();
 const route = useRoute();
-// const router = useRouter();
 
 // UI State
 const activeSection = ref('map');
@@ -237,51 +246,41 @@ h5, p{
 }
 
 /* Sidebar styles */
-.sidebar {
-  position: fixed;
-  height: 100vh;
+.sidebar-wrapper {
   width: 301px;
-  overflow-y: auto;
+  flex-shrink: 0;
   transition: width 0.3s ease;
-  z-index: 100;
 }
 
-.sidebar.collapsed {
+.sidebar-wrapper.collapsed {
   width: 72px;
 }
 
 /* Main content styles */
 .main-content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  margin-left: 301px;
   min-height: 100vh;
-  width: calc(100% - 301px);
   transition: all 0.3s ease;
-  overflow-x: hidden;
   position: relative;
 }
 
-.main-content.content-collapsed {
-  margin-left: 72px;
-  width: calc(100% - 72px);
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .page-content {
   padding-top: 147px;
   display: flex;
   flex-direction: column;
-  width: 100%;
-}
-
-.content-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
 }
 
 /* Navbar styles */
 ::v-deep(.navbar) {
+  width: calc(100% - 301px);
   position: fixed; // For the sticky effect in navbar
 }
 
