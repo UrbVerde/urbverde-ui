@@ -150,7 +150,7 @@ a {
   position: sticky;
   width: 100%;
   top: 0;
-  z-index: 10000;
+  z-index: 9;
   background-color: #F8F9FACC;
   box-sizing: border-box;
   display: flex;
