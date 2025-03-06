@@ -31,15 +31,19 @@
       <div v-else class="content-wrapper content-animate">
 
         <Navbar
+          ref="navbarRef"
           :class="{ 'navbar-collapsed': !isSidebarOpen }"
           :active-section="activeSection"
           @navigate-to="scrollToSection"
         />
 
-        <div class="page-content">
+        <div class="page-content" :style="pageContentStyle">
 
           <div class="map-section">
-            <div id="map" ref="Mapa" class="map-container">
+            <div id="map"
+                 ref="Mapa"
+                 class="map-container"
+                 :style="mapContainerStyle">
               <MapBox :coordinates="coordinates" class="map-box">
                 <Legend />
               </MapBox>
@@ -63,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick, computed, watchEffect} from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
@@ -201,11 +205,70 @@ onMounted(async() => {
     setTimeout(() => scrollToSection(sectionId), 100);
   }
   handleScroll();
+
+  // Resize the navbar height when the window is resized
+  nextTick(() => {
+    if (navbarRef.value?.$el) {
+      navbarHeight.value = navbarRef.value.$el.offsetHeight;
+      console.log('Navbar height medida:', navbarHeight.value, 'px');
+    }
+  });
+
+  const measureNavbarHeight = () => {
+    if (navbarRef.value?.$el) {
+      navbarHeight.value = navbarRef.value.$el.offsetHeight;
+      console.log('Navbar height medida:', navbarHeight.value, 'px');
+    } else {
+      setTimeout(measureNavbarHeight, 100);
+    }
+  };
+
+  measureNavbarHeight();
+
+  window.addEventListener('resize', updateNavbarHeight);
 });
 
-// Cleanup
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('resize', updateNavbarHeight);
+});
+
+function updateNavbarHeight() {
+  if (navbarRef.value?.$el) {
+    navbarHeight.value = navbarRef.value.$el.offsetHeight;
+  }
+}
+
+// Altura do container do mapa e do conteúdo da página dinâmico conforme tamanho da navbar
+
+const mapContainerStyle = computed(() => {
+  const fallbackHeight = 147 + 24; // 24px da soma dos paddings
+  const totalHeight = navbarHeight.value ? navbarHeight.value + 24 : fallbackHeight;
+
+  return {
+    height: `calc(100vh - ${totalHeight}px)`,
+    overflow: 'hidden',
+    width: '100%'
+  };
+});
+
+const pageContentStyle = computed(() => {
+  const fallbackHeight = 147;
+
+  return {
+    paddingTop: `${navbarHeight.value || fallbackHeight}px`,
+  };
+});
+
+const navbarRef = ref(null);
+const navbarHeight = ref(0);
+
+watchEffect(() => {
+  if (navbarRef.value && navbarRef.value.$el) {
+    requestAnimationFrame(() => {
+      navbarHeight.value = navbarRef.value.$el.offsetHeight;
+      console.log('watchEffect: Navbar height measured', navbarHeight.value);
+    });
+  }
 });
 
 // Configuração das meta tags de SEO
@@ -273,19 +336,18 @@ h5, p{
 }
 
 .page-content {
-  padding-top: 147px;
   display: flex;
   flex-direction: column;
 }
 
 /* Navbar styles */
 ::v-deep(.navbar) {
-  width: calc(100% - 301px);
-  position: fixed; // For the sticky effect in navbar
+  width: calc(100% - 301px); // Adjust based on sidebar width
+  position: fixed;
 }
 
 .navbar.navbar-collapsed {
-  width: calc(100% - 72px);
+  width: calc(100% - 72px); // Adjust based on sidebar collapsed width
 }
 
 /* Map container styles */
@@ -297,7 +359,6 @@ h5, p{
 .map-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 171px);
   overflow: hidden;
 }
 
