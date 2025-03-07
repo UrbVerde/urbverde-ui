@@ -226,7 +226,9 @@ p {
   .benefits-card a{
     display: flex;
     justify-content: center;
-
+  }
+  .benefits-card-image img {
+    max-width: 240px;
   }
 }
 
