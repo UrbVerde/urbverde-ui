@@ -53,6 +53,13 @@
             </div>
           </div>
 
+          <div class="mobile-scroll" @click="handleMobileScroll">
+            <i class="bi bi-chevron-up"></i>
+            <p class="body-small-regular">
+              Arrastar para ver estatísticas
+            </p>
+          </div>
+
           <WidgetsSection
             :default-year="defaultYear"
             :city-code="cityCode"
@@ -74,6 +81,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/NavbarMap.vue';
@@ -112,6 +120,8 @@ const toggleSidebar = () => {
 //   locationStore.setCoordinates(newCoordinates);
 // };
 
+const { smallerThan } = useWindowSize();
+
 const handleScroll = () => {
   const scrollPosition = window.scrollY;
   const navbarHeight = 100;
@@ -135,7 +145,7 @@ const handleScroll = () => {
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId);
   if (element) {
-    const navbarHeight = 100; // Adjust based on your navbar height
+    const navbarHeight = 100;
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
 
@@ -147,6 +157,17 @@ const scrollToSection = (sectionId) => {
     activeSection.value = sectionId;
     history.pushState(null, null, `#${sectionId}`);
   }
+};
+
+// Scroll ao clicar na div mobile-scroll
+const handleMobileScroll = () => {
+
+  const newScrollPosition = window.scrollY + window.innerHeight;
+
+  window.scrollTo({
+    top: newScrollPosition,
+    behavior: 'smooth'
+  });
 };
 
 // Commented out for later use
@@ -270,10 +291,14 @@ const measureNavbarHeight = () => {
   }
 };
 
-// Mao content styles based on navbar height
+// Map content styles based on navbar height
 const mapContainerStyle = computed(() => {
-  const fallbackHeight = 147 + 24; // 24px padding
-  const totalHeight = navbarHeight.value ? navbarHeight.value + 24 : fallbackHeight;
+  const isSmallScreen = smallerThan('tablet');
+
+  const paddingAdjustment = isSmallScreen ? 64 : 24;
+
+  const fallbackHeight = 147 + paddingAdjustment; // 24px padding
+  const totalHeight = navbarHeight.value ? navbarHeight.value + paddingAdjustment : fallbackHeight;
 
   return {
     height: `calc(100vh - ${totalHeight}px)`,
@@ -407,6 +432,24 @@ h5, p{
   flex-direction: column;
 }
 
+.mobile-scroll{
+  display: none;
+  height: 56px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.mobile-scroll i{
+  font-size: 18px;
+  color: map-get($theme, primary);
+}
+
+.mobile-scroll p{
+  color: map-get($theme, primary);
+}
+
 /* Navbar styles */
 ::v-deep(.navbar) {
   width: calc(100% - 301px); // Adjust based on sidebar width
@@ -524,6 +567,11 @@ h5, p{
         width: 0;
       }
     }
+
+    .mobile-scroll{
+      display: flex;
+    }
+
   }
 
 </style>
