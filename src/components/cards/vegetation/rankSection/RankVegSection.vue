@@ -72,16 +72,16 @@ export default {
 };
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
   .rank-section {
     display: flex;
     gap: 24px;
     width: 100%;
+    flex-wrap: wrap;
   }
 
   .rank-card {
-    flex: 1 1 calc(33.333% - 16px);
-    max-width: calc(33.333% - 16px);
-    box-sizing: border-box;
+    flex: 1 1 240px;
+    min-width: 0;
   }
   </style>

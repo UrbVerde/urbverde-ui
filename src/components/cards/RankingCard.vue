@@ -53,6 +53,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 h3,
 p {
   margin: 0;
@@ -61,6 +63,8 @@ p {
 .rank-card-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 .rank-card-header {
