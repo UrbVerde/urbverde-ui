@@ -1,6 +1,10 @@
 <!-- urbverde-ui/src/components/cards/vegetation/inequality/BenefitsCard.vue -->
 <template>
-  <div class="benefits-card">
+
+  <!-- Desktop Version -->
+
+  <div class="benefits-card"
+       v-if="largerThan('tablet')">
     <div class="benefits-card-content">
       <div class="label">
         <h2 class="benefits-card-title heading-h5">Quais os benefícios de uma cidade arborizada?</h2>
@@ -45,20 +49,82 @@
       />
     </div>
   </div>
+
+  <!-- Mobile Version -->
+
+  <div class="benefits-card"
+       v-else>
+    <div class="benefits-card-content">
+      <div class="label">
+        <h2 class="benefits-card-title heading-h5">Quais os benefícios de uma cidade arborizada?</h2>
+        <div class="benefits-card-image">
+          <img
+            src="@/assets/images/cards/plantingATreeTogether.svg"
+            alt="Ilustração beneficios"
+          />
+        </div>
+        <ul class="benefits-card-list">
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">1</span>
+            <p class="body-small-regular">
+              Árvores &nbsp;<b>reduzem a sensação de calor</b>, criando ambientes mais frescos.
+            </p>
+          </li>
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">2</span>
+            <p class="body-small-regular">
+              Ajudam a filtrar poluentes e &nbsp;<b>melhorar a qualidade do ar</b>&nbsp; nas cidades.
+            </p>
+          </li>
+          <li class="benefits-card-item">
+            <span class="benefits-card-number body-small-medium">3</span>
+            <p class="body-small-regular">
+              <b>Políticas públicas</b>&nbsp; podem auxiliar a promover mais áreas verdes nas cidades
+            </p>
+          </li>
+        </ul>
+      </div>
+      <a
+        href="https://urbverde-educa.tawk.help/category/categorias-e-camadas/vegeta%C3%A7%C3%A3o"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="body-small-regular"
+      >
+        <PrimaryButton
+          label="Ver mais dicas"
+          :filled="true"
+          class="benefits-card-button"
+        />
+      </a>
+    </div>
+  </div>
+
 </template>
 
 <script>
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 export default {
   name: 'BenefitsCard',
   components: {
     PrimaryButton,
   },
+
+  setup() {
+    const {
+      largerThan
+    } = useWindowSize();
+
+    return {
+      largerThan
+    };
+  },
 };
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
 
 a{
   text-decoration: none;
@@ -98,7 +164,6 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: justify;
   gap: 48px;
 }
 
@@ -148,5 +213,21 @@ p {
 
 .benefits-card-button {
   align-self: flex-start;
+}
+
+@include breakpoint-down('tablet') {
+  .benefits-card-title{
+    margin: auto;
+  };
+
+  .benefits-card-image {
+    margin: auto;
+  }
+
+  .benefits-card a{
+    display: flex;
+    justify-content: center;
+
+  }
 }
 </style>
