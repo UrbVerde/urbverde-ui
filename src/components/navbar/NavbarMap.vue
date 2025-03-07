@@ -1,5 +1,8 @@
 <!-- urbverde-ui/src/components/navbar/NavbarMap.vue -->
 <template>
+
+  <!-- Desktop version -->
+
   <div class="navbar"
        v-if="largerThan('tablet')"
   >
@@ -48,6 +51,8 @@
     />
   </div>
 
+  <!-- Mobile version -->
+
   <div class="navbar"
        v-else
   >
@@ -57,6 +62,7 @@
         <div class="header-left heading-h5">
           <h5>{{ layer }} em {{ cityName }}-{{ uf }}</h5>
         </div>
+
         <div class="header-right">
           <button @click="shareMap" class="share-button">
             <img src="../../assets/icons/share.svg" alt="Compartilhar" />
@@ -73,6 +79,7 @@
             </button>
           </a>
         </div>
+
       </div>
 
       <!-- Segunda linha: Navegação -->

@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, computed, watchEffect} from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
@@ -206,42 +206,112 @@ onMounted(async() => {
   }
   handleScroll();
 
-  // Resize the navbar height when the window is resized
-  nextTick(() => {
-    if (navbarRef.value?.$el) {
-      navbarHeight.value = navbarRef.value.$el.offsetHeight;
-      console.log('Navbar height medida:', navbarHeight.value, 'px');
-    }
-  });
+  const attemptMeasurement = (attempt = 1, maxAttempts = 5) => {
+    console.log(`Measurement attempt ${attempt} of ${maxAttempts}`);
 
-  const measureNavbarHeight = () => {
-    if (navbarRef.value?.$el) {
-      navbarHeight.value = navbarRef.value.$el.offsetHeight;
-      console.log('Navbar height medida:', navbarHeight.value, 'px');
-    } else {
-      setTimeout(measureNavbarHeight, 100);
+    measureNavbarHeight();
+
+    // If measurement failed and we haven't reached the max attempts, try again
+    if (!navbarHeight.value && attempt < maxAttempts) {
+      setTimeout(() => attemptMeasurement(attempt + 1, maxAttempts), 100 * attempt);
     }
   };
 
-  measureNavbarHeight();
+  // Start with a short delay to let the component render
+  setTimeout(() => attemptMeasurement(), 100);
 
-  window.addEventListener('resize', updateNavbarHeight);
+  // Setup resize listener
+  window.addEventListener('resize', measureNavbarHeight);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', updateNavbarHeight);
+  window.removeEventListener('resize', measureNavbarHeight);
 });
 
-function updateNavbarHeight() {
-  if (navbarRef.value?.$el) {
-    navbarHeight.value = navbarRef.value.$el.offsetHeight;
+// Function to measure navbar height for responsiveness
+const measureNavbarHeight = () => {
+  console.log('measureNavbarHeight called');
+  console.log('navbarRef.value exists:', !!navbarRef.value);
+
+  if (navbarRef.value) {
+    console.log('navbarRef.$el exists:', !!navbarRef.value.$el);
+
+    if (navbarRef.value.$el) {
+      console.log('Tipo de $el:', typeof navbarRef.value.$el);
+      console.log('$el é um elemento DOM?', navbarRef.value.$el instanceof Element);
+
+      try {
+        const offsetHeight = navbarRef.value.$el.offsetHeight;
+        const clientHeight = navbarRef.value.$el.clientHeight;
+        let boundingRect = null;
+
+        if (navbarRef.value.$el instanceof Element) {
+          boundingRect = navbarRef.value.$el.getBoundingClientRect().height;
+        }
+
+        console.log('offsetHeight:', offsetHeight);
+        console.log('clientHeight:', clientHeight);
+        console.log('boundingRect.height:', boundingRect);
+
+        const computedHeight = offsetHeight || clientHeight || (boundingRect ? boundingRect : 0);
+
+        if (computedHeight) {
+          navbarHeight.value = computedHeight;
+          console.log('Navbar height set to:', navbarHeight.value, 'px');
+        } else {
+          const navbar = document.querySelector('.navbar');
+          if (navbar) {
+            const navbarDOMHeight = navbar.offsetHeight;
+            console.log('Direct DOM navbar height:', navbarDOMHeight);
+            if (navbarDOMHeight) {
+              navbarHeight.value = navbarDOMHeight;
+              console.log('Navbar height set from DOM:', navbarHeight.value, 'px');
+            } else {
+              console.log('Using fallback height');
+              navbarHeight.value = 147;
+            }
+          } else {
+            console.log('Navbar element not found in DOM');
+            navbarHeight.value = 147;
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao medir altura:', error);
+
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+          const navbarDOMHeight = navbar.offsetHeight;
+          console.log('Altura após erro:', navbarDOMHeight);
+          navbarHeight.value = navbarDOMHeight || 147;
+        } else {
+          navbarHeight.value = 147;
+        }
+      }
+    } else {
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        const navbarDOMHeight = navbar.offsetHeight;
+        console.log('Altura DOM de backup:', navbarDOMHeight);
+        navbarHeight.value = navbarDOMHeight || 147;
+      } else {
+        navbarHeight.value = 147;
+      }
+    }
+  } else {
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      const navbarDOMHeight = navbar.offsetHeight;
+      console.log('Altura DOM último recurso:', navbarDOMHeight);
+      navbarHeight.value = navbarDOMHeight || 147;
+    } else {
+      navbarHeight.value = 147;
+    }
   }
-}
+};
 
-// Altura do container do mapa e do conteúdo da página dinâmico conforme tamanho da navbar
-
+// Mao content styles based on navbar height
 const mapContainerStyle = computed(() => {
-  const fallbackHeight = 147 + 24; // 24px da soma dos paddings
+  const fallbackHeight = 147 + 24; // 24px padding
   const totalHeight = navbarHeight.value ? navbarHeight.value + 24 : fallbackHeight;
 
   return {
@@ -251,6 +321,7 @@ const mapContainerStyle = computed(() => {
   };
 });
 
+// Page content styles based on navbar height
 const pageContentStyle = computed(() => {
   const fallbackHeight = 147;
 
@@ -261,15 +332,6 @@ const pageContentStyle = computed(() => {
 
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
-
-watchEffect(() => {
-  if (navbarRef.value && navbarRef.value.$el) {
-    requestAnimationFrame(() => {
-      navbarHeight.value = navbarRef.value.$el.offsetHeight;
-      console.log('watchEffect: Navbar height measured', navbarHeight.value);
-    });
-  }
-});
 
 // Configuração das meta tags de SEO
 useHead({

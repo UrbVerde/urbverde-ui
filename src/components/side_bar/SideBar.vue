@@ -1,6 +1,10 @@
 <!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
-  <aside>
+
+  <!-- Desktop version -->
+
+  <aside
+    v-if="largerThan('tablet')">
     <div :class="[
       'sidebar',
       {
@@ -46,6 +50,57 @@
       </template>
     </div>
   </aside>
+
+  <!-- Mobile version -->
+
+  <aside
+    v-else>
+    <div :class="[
+      'sidebar',
+      {
+        'sidebar-open': isOpen,
+        'sidebar-closing': isClosing
+      }
+    ]">
+      <div class="top-area">
+        <Transition name="fade">
+          <LogoButton v-if="showContent" />
+        </Transition>
+        <MinimizeButton @click="toggleSidebar" />
+      </div>
+      <Transition name="fade">
+        <div v-if="showContent" class="search-area">
+          <BuscaSimples @api-error="$emit('api-error')" />
+        </div>
+      </Transition>
+
+      <template v-if="isSearchDone">
+        <Transition name="fade">
+          <div v-if="showContent" class="middle-area">
+            <DropDown />
+          </div>
+        </Transition>
+
+        <Transition name="fade">
+          <div v-show="showContent" class="bottom-area">
+
+            <a href="/parceiro"
+               class="link-button"
+               target="_blank"
+               rel="noopener noreferrer">
+              <i class="bi bi-upload" tag="imgIcon"></i>
+              <span class="txtBottom body-small-regular">Enviar dados</span>
+            </a>
+            <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
+              <i class="bi bi-megaphone" tag="imgIcon"></i>
+              <span class="txtBottom body-small-regular">Informar um erro</span>
+            </a>
+          </div>
+        </Transition>
+      </template>
+    </div>
+  </aside>
+
 </template>
 
 <script setup>
@@ -55,6 +110,11 @@ import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import DropDown from './drop_down/CategoriesDropdown.vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
+
+const {
+  largerThan
+} = useWindowSize();
 
 // Props
 const props = defineProps({
