@@ -22,7 +22,7 @@ const toggleSidebar = () => {
   emit('toggle-sidebar');
 };
 
-const iconClass = computed(() => props.isOpen ? 'bi-x-lg' : 'bi-list');
+const iconClass = computed(() => props.isOpen ? 'bi-list' : 'bi-list');
 </script>
 
   <style scoped lang="scss">

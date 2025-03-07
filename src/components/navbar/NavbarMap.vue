@@ -13,8 +13,8 @@
           <h5>{{ layer }} em {{ cityName }}-{{ uf }}</h5>
         </div>
         <div class="header-right">
-          <button @click="shareMap" class="share-button">
-            <img src="../../assets/icons/share.svg" alt="Compartilhar" />
+          <button @click="shareMap" class="nav-button">
+            <i class="bi bi-share"></i>
           </button>
 
           <a
@@ -22,8 +22,8 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <button @click="layerInfo" class="info-button">
-              <img src="../../assets/icons/info.svg" alt="Entender esse dado" />
+            <button @click="layerInfo" class="nav-button">
+              <i class="bi bi-info-circle"></i>
               <p class="body-small-regular">Entender esse dado</p>
             </button>
           </a>
@@ -57,34 +57,57 @@
        v-else
   >
     <div class="response">
-      <!-- Primeira linha: Título e Botões -->
       <div class="header">
         <CollapseButton
           :is-open="isSidebarOpen"
           @toggle-sidebar="$emit('toggle-sidebar')"
         />
 
-        <div class="header-left heading-h5">
-          <h5>{{ layer }} em {{ cityName }}-{{ uf }}</h5>
-        </div>
+        <div class="mobile-nav-right">
+          <div class="logo">
+            <LogoButton />
+          </div>
 
-        <div class="header-right">
-          <button @click="shareMap" class="share-button">
-            <img src="../../assets/icons/share.svg" alt="Compartilhar" />
-          </button>
+          <div class="search-nav">
+            <BuscaSimples @api-error="$emit('api-error')" />
+          </div>
 
-          <a
-            href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <button @click="layerInfo" class="info-button">
-              <img src="../../assets/icons/info.svg" alt="Entender esse dado" />
-              <p class="body-small-regular">Entender esse dado</p>
+          <!-- Botão de três pontos para mobile -->
+          <div class="mobile-menu-container">
+            <button
+              @click="togglePopover"
+              class="three-dots-button"
+              ref="popoverButton"
+            >
+              <i class="bi bi-three-dots-vertical"></i>
             </button>
-          </a>
-        </div>
 
+            <!-- Popover e nasted button -->
+            <div
+              v-if="isPopoverVisible"
+              class="popover-menu shadow"
+              ref="popoverMenu"
+            >
+
+              <div class="popover-item" @click="shareMap">
+                <i class="bi bi-share"></i>
+                <p class="body-small-regular">Compartilhar</p>
+              </div>
+
+              <a
+                href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="popover-item"
+                @click="layerInfo"
+              >
+                <i class="bi bi-info-circle"></i>
+                <p class="body-small-regular">Entender esse dado</p>
+              </a>
+
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -99,11 +122,13 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import modalShare from '../modal/modalShare.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
 import CollapseButton from '../side_bar/buttons/CollapseButton.vue';
+import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
+import LogoButton from '../side_bar/buttons/LogoButton.vue';
 
 const { activeSection, isSidebarOpen } = defineProps({
   activeSection: {
@@ -119,6 +144,11 @@ const { activeSection, isSidebarOpen } = defineProps({
 const emit = defineEmits(['navigate-to', 'toggle-sidebar']);
 const refModalShare = ref(null);
 const locationStore = useLocationStore();
+
+// Popover refs e estado
+const isPopoverVisible = ref(false);
+const popoverButton = ref(null);
+const popoverMenu = ref(null);
 
 const layer = computed(() => {
   console.log('Navbar computed - current layer:', locationStore.currentLayerName);
@@ -149,6 +179,33 @@ function shareMap() {
 function layerInfo() {
   // Info do dado
 }
+
+// Função para abrir/fechar o popover
+function togglePopover() {
+  isPopoverVisible.value = !isPopoverVisible.value;
+}
+
+// Função para fechar o popover ao clicar fora dele
+const handleClickOutside = (event) => {
+  if (
+    isPopoverVisible.value &&
+    popoverButton.value &&
+    popoverMenu.value &&
+    !popoverButton.value.contains(event.target) &&
+    !popoverMenu.value.contains(event.target)
+  ) {
+    isPopoverVisible.value = false;
+  }
+};
+
+// Adicionar e remover event listener para fechar o popover ao clicar fora
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 
 </script>
 
@@ -202,49 +259,19 @@ a {
   gap: 12px;
 }
 
-/* Buttons */
-.share-button,
-.info-button {
+.nav-button{
   display: flex;
+  width: auto;
+  height: 40px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   background: #fff;
-  border-radius: 6px;
+  border-radius: 8px;
+  gap: 8px;
+  padding: 11px;
   border: 1px solid map-get($gray, 200);
   color: map-get($body-text, body-color);
-}
-
-/* Specific sizes */
-
-.share-button {
-  display: flex;
-  width: 38px;
-  height: 38px;
-  padding: 10px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  border-radius: 6px;
-  border: 1px solid map-get($gray, 200);
-}
-
-.info-button {
-  height: 40px;
-  padding: 8px 16px;
-  border: 1px solid #e9ecef;
-}
-
-.share-button img {
-  width: 40x;
-  height: 40px;
-}
-
-.info-button img {
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
 }
 
 /* Tabs */
@@ -275,6 +302,94 @@ a {
   font-weight: 600;
 }
 
+.search-nav {
+  height: 48px;
+  width: 100%;
+}
+
+.mobile-nav-right {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+.logo {
+  width: auto;
+  height: auto;
+}
+
+:deep(.input-container) {
+  outline: 1px solid map-get($green, 500);
+}
+
+:deep(.search-wrapper) {
+  width: 100%;
+}
+
+:deep(.logo-button) {
+  height: 48px;
+  padding: 0 16px 0 4px;
+}
+
+/* Botão de três pontos e popover mobile */
+.mobile-menu-container {
+  position: relative;
+}
+
+.three-dots-button {
+  display: flex;
+  width: 40px;
+  height: 48px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.three-dots-button i {
+  font-size: 22px;
+  color: map-get($green, 500);
+}
+
+.popover-menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 100%;
+  right: 0;
+  width: 240px;
+  background-color: white;
+  border-radius: 6px;
+  z-index: 100;
+  margin-top: 8px;
+  overflow: hidden;
+  padding: 12px 8px;
+  gap: 4px;
+}
+
+.popover-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: map-get($body-text, body-color);
+}
+
+.popover-item:hover {
+  background-color: map-get($gray, 100);
+}
+
+.popover-item img {
+  width: 18px;
+  height: 18px;
+}
+
 @include breakpoint-down('desktop-small') {
   .navbar {
     padding: 24px 32px !important;
@@ -286,6 +401,26 @@ a {
 
   .header-left h5 {
     font-size: 18px;
+  }
+}
+
+@include breakpoint-down('tablet') {
+  .navbar {
+    padding: 24px !important;
+  }
+
+  .header {
+    display: flex;
+    align-items: left;
+    flex: 1;
+    gap: 12px;
+    width: 100%;
+  }
+}
+
+@include breakpoint-down('mobile-large') {
+  .logo {
+    display: none;
   }
 }
 
