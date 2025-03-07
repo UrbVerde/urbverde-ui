@@ -59,6 +59,11 @@
     <div class="response">
       <!-- Primeira linha: Título e Botões -->
       <div class="header">
+        <CollapseButton
+          :is-open="isSidebarOpen"
+          @toggle-sidebar="$emit('toggle-sidebar')"
+        />
+
         <div class="header-left heading-h5">
           <h5>{{ layer }} em {{ cityName }}-{{ uf }}</h5>
         </div>
@@ -82,8 +87,6 @@
 
       </div>
 
-      <!-- Segunda linha: Navegação -->
-
     </div>
     <!-- Modal de compartilhamento -->
     <modalShare
@@ -100,15 +103,20 @@ import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import modalShare from '../modal/modalShare.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
+import CollapseButton from '../side_bar/buttons/CollapseButton.vue';
 
-const { activeSection } = defineProps({
+const { activeSection, isSidebarOpen } = defineProps({
   activeSection: {
     type: String,
     required: true,
   },
+  isSidebarOpen: {
+    type: Boolean,
+    required: true,
+  }
 });
 
-const emit = defineEmits(['navigate-to']);
+const emit = defineEmits(['navigate-to', 'toggle-sidebar']);
 const refModalShare = ref(null);
 const locationStore = useLocationStore();
 
@@ -141,6 +149,7 @@ function shareMap() {
 function layerInfo() {
   // Info do dado
 }
+
 </script>
 
 <style scoped lang="scss">

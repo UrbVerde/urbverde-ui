@@ -11,6 +11,7 @@
         @toggle-sidebar="toggleSidebar"
         class="sidebar-animate"
       />
+
     </div>
 
     <!-- Main content -->
@@ -34,6 +35,8 @@
           ref="navbarRef"
           :class="{ 'navbar-collapsed': !isSidebarOpen }"
           :active-section="activeSection"
+          :is-sidebar-open="isSidebarOpen"
+          @toggle-sidebar="toggleSidebar"
           @navigate-to="scrollToSection"
         />
 
@@ -358,6 +361,8 @@ useHead({
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 h5, p{
   margin: 0;
 }

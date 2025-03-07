@@ -157,6 +157,8 @@ async function toggleSidebar() {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
   .sidebar {
     position: fixed;
     top: 0;
