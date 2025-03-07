@@ -1,60 +1,14 @@
 <!-- urbverde-ui/src/components/side_bar/SideBar.vue -->
 <template>
 
-  <!-- Desktop version -->
+  <aside>
+    <!-- Overlay fundo preto (mobile only) -->
+    <div
+      v-if="isOpen && !largerThan('tablet')"
+      class="sidebar-overlay"
+      @click="toggleSidebar"
+    ></div>
 
-  <aside
-    v-if="largerThan('tablet')">
-    <div :class="[
-      'sidebar',
-      {
-        'sidebar-open': isOpen,
-        'sidebar-closing': isClosing
-      }
-    ]">
-      <div class="top-area">
-        <Transition name="fade">
-          <LogoButton v-if="showContent" />
-        </Transition>
-        <MinimizeButton @click="toggleSidebar" />
-      </div>
-      <Transition name="fade">
-        <div v-if="showContent" class="search-area">
-          <BuscaSimples @api-error="$emit('api-error')" />
-        </div>
-      </Transition>
-
-      <template v-if="isSearchDone">
-        <Transition name="fade">
-          <div v-if="showContent" class="middle-area">
-            <DropDown />
-          </div>
-        </Transition>
-
-        <Transition name="fade">
-          <div v-show="showContent" class="bottom-area">
-
-            <a href="/parceiro"
-               class="link-button"
-               target="_blank"
-               rel="noopener noreferrer">
-              <i class="bi bi-upload" tag="imgIcon"></i>
-              <span class="txtBottom body-small-regular">Enviar dados</span>
-            </a>
-            <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
-              <i class="bi bi-megaphone" tag="imgIcon"></i>
-              <span class="txtBottom body-small-regular">Informar um erro</span>
-            </a>
-          </div>
-        </Transition>
-      </template>
-    </div>
-  </aside>
-
-  <!-- Mobile version -->
-
-  <aside
-    v-else>
     <div :class="[
       'sidebar',
       {
@@ -112,10 +66,6 @@ import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import DropDown from './drop_down/CategoriesDropdown.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
 
-const {
-  largerThan
-} = useWindowSize();
-
 // Props
 const props = defineProps({
   isOpen: {
@@ -129,6 +79,9 @@ const emit = defineEmits(['toggle-sidebar']);
 
 // Store
 const locationStore = useLocationStore();
+
+// Responsividade
+const { largerThan } = useWindowSize();
 
 // Component state
 const showContent = ref(true);
@@ -169,7 +122,7 @@ async function toggleSidebar() {
     overflow: hidden;
     background: map-get($gray, white);
     box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.13) inset;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
   }
@@ -177,6 +130,16 @@ async function toggleSidebar() {
   .sidebar-open {
     width: 301px;
     transition: 0.3s;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
   }
 
 // Fade transition
@@ -293,5 +256,15 @@ async function toggleSidebar() {
     font-size: 20px;
     width: 20px;
     height: 20px;
+  }
+
+  @include breakpoint-down('tablet') {
+    .sidebar {
+      width: 0;
+
+      &.sidebar-open {
+        width: 301px;
+      }
+    }
   }
 </style>

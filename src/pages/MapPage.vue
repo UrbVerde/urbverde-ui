@@ -508,4 +508,22 @@ h5, p{
     }
   }
 
+  @include breakpoint-down('tablet') {
+    ::v-deep(.navbar) {
+      width: 100%;
+    }
+
+    .navbar.navbar-collapsed {
+      width: 100%;
+    }
+
+    .sidebar-wrapper {
+      width: 0;
+
+      &.collapsed {
+        width: 0;
+      }
+    }
+  }
+
 </style>
