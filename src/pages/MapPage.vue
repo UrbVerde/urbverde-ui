@@ -186,48 +186,6 @@ const scrollToSection = (sectionId) => {
 // Lifecycle hooks
 // Initialize store with URL params
 
-onMounted(async() => {
-
-  // Setup URL syncing in store
-  locationStore.setupUrlSync();
-
-  // Initial sync from URL
-  if (Object.keys(route.query).length > 0) {
-    await locationStore.updateFromQueryParams(route.query);
-  }
-
-  // Setup scroll handling
-  window.addEventListener('scroll', handleScroll);
-
-  // Handle initial hash if present
-  if (window.location.hash) {
-    const sectionId = window.location.hash.substring(1);
-    setTimeout(() => scrollToSection(sectionId), 100);
-  }
-  handleScroll();
-
-  const attemptMeasurement = (attempt = 1, maxAttempts = 5) => {
-    console.log(`Measurement attempt ${attempt} of ${maxAttempts}`);
-
-    measureNavbarHeight();
-
-    // If measurement failed and we haven't reached the max attempts, try again
-    if (!navbarHeight.value && attempt < maxAttempts) {
-      setTimeout(() => attemptMeasurement(attempt + 1, maxAttempts), 100 * attempt);
-    }
-  };
-
-  // Start with a short delay to let the component render
-  setTimeout(() => attemptMeasurement(), 100);
-
-  // Setup resize listener
-  window.addEventListener('resize', measureNavbarHeight);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', measureNavbarHeight);
-});
-
 // Function to measure navbar height for responsiveness
 const measureNavbarHeight = () => {
   console.log('measureNavbarHeight called');
@@ -332,6 +290,48 @@ const pageContentStyle = computed(() => {
 
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
+
+onMounted(async() => {
+
+  // Setup URL syncing in store
+  locationStore.setupUrlSync();
+
+  // Initial sync from URL
+  if (Object.keys(route.query).length > 0) {
+    await locationStore.updateFromQueryParams(route.query);
+  }
+
+  // Setup scroll handling
+  window.addEventListener('scroll', handleScroll);
+
+  // Handle initial hash if present
+  if (window.location.hash) {
+    const sectionId = window.location.hash.substring(1);
+    setTimeout(() => scrollToSection(sectionId), 100);
+  }
+  handleScroll();
+
+  const attemptMeasurement = (attempt = 1, maxAttempts = 5) => {
+    console.log(`Measurement attempt ${attempt} of ${maxAttempts}`);
+
+    measureNavbarHeight();
+
+    // If measurement failed and we haven't reached the max attempts, try again
+    if (!navbarHeight.value && attempt < maxAttempts) {
+      setTimeout(() => attemptMeasurement(attempt + 1, maxAttempts), 100 * attempt);
+    }
+  };
+
+  // Start with a short delay to let the component render
+  setTimeout(() => attemptMeasurement(), 100);
+
+  // Setup resize listener
+  window.addEventListener('resize', measureNavbarHeight);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', measureNavbarHeight);
+});
 
 // Configuração das meta tags de SEO
 useHead({
