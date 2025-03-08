@@ -37,7 +37,6 @@ export default {
 <style scoped lang="scss">
 
   .info-card {
-    max-width: 365px;
     height: auto;
     border-radius: 16px;
     display: flex;
@@ -46,6 +45,8 @@ export default {
     align-items: center;
     align-self: stretch;
     padding: 48px 40px 48px 40px;
+    flex-shrink: 0;
+    width: 100%;
   }
 
   .card-image {
