@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocationStore } from '@/stores/locationStore';
 import { useHead } from '@vueuse/head';
@@ -212,82 +212,30 @@ const handleMobileScroll = () => {
 
 // Function to measure navbar height for responsiveness
 const measureNavbarHeight = () => {
-  console.log('measureNavbarHeight called');
-  console.log('navbarRef.value exists:', !!navbarRef.value);
+  if (navbarRef.value && navbarRef.value.$el) {
+    try {
+      const boundingRect = navbarRef.value.$el.getBoundingClientRect().height;
+      const offsetHeight = navbarRef.value.$el.offsetHeight;
+      const clientHeight = navbarRef.value.$el.clientHeight;
 
-  if (navbarRef.value) {
-    console.log('navbarRef.$el exists:', !!navbarRef.value.$el);
+      const computedHeight = boundingRect || offsetHeight || clientHeight;
 
-    if (navbarRef.value.$el) {
-      console.log('Tipo de $el:', typeof navbarRef.value.$el);
-      console.log('$el é um elemento DOM?', navbarRef.value.$el instanceof Element);
+      if (computedHeight) {
+        navbarHeight.value = computedHeight;
 
-      try {
-        const offsetHeight = navbarRef.value.$el.offsetHeight;
-        const clientHeight = navbarRef.value.$el.clientHeight;
-        let boundingRect = null;
-
-        if (navbarRef.value.$el instanceof Element) {
-          boundingRect = navbarRef.value.$el.getBoundingClientRect().height;
-        }
-
-        console.log('offsetHeight:', offsetHeight);
-        console.log('clientHeight:', clientHeight);
-        console.log('boundingRect.height:', boundingRect);
-
-        const computedHeight = offsetHeight || clientHeight || (boundingRect ? boundingRect : 0);
-
-        if (computedHeight) {
-          navbarHeight.value = computedHeight;
-          console.log('Navbar height set to:', navbarHeight.value, 'px');
-        } else {
-          const navbar = document.querySelector('.navbar');
-          if (navbar) {
-            const navbarDOMHeight = navbar.offsetHeight;
-            console.log('Direct DOM navbar height:', navbarDOMHeight);
-            if (navbarDOMHeight) {
-              navbarHeight.value = navbarDOMHeight;
-              console.log('Navbar height set from DOM:', navbarHeight.value, 'px');
-            } else {
-              console.log('Using fallback height');
-              navbarHeight.value = 147;
-            }
-          } else {
-            console.log('Navbar element not found in DOM');
-            navbarHeight.value = 147;
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao medir altura:', error);
-
-        const navbar = document.querySelector('.navbar');
-        if (navbar) {
-          const navbarDOMHeight = navbar.offsetHeight;
-          console.log('Altura após erro:', navbarDOMHeight);
-          navbarHeight.value = navbarDOMHeight || 147;
-        } else {
-          navbarHeight.value = 147;
-        }
+        return;
       }
-    } else {
-      const navbar = document.querySelector('.navbar');
-      if (navbar) {
-        const navbarDOMHeight = navbar.offsetHeight;
-        console.log('Altura DOM de backup:', navbarDOMHeight);
-        navbarHeight.value = navbarDOMHeight || 147;
-      } else {
-        navbarHeight.value = 147;
-      }
+    } catch {
+      void 0;
     }
+  }
+
+  // Fallback
+  const navbar = document.querySelector('.navbar');
+  if (navbar) {
+    navbarHeight.value = navbar.offsetHeight || 147;
   } else {
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-      const navbarDOMHeight = navbar.offsetHeight;
-      console.log('Altura DOM último recurso:', navbarDOMHeight);
-      navbarHeight.value = navbarDOMHeight || 147;
-    } else {
-      navbarHeight.value = 147;
-    }
+    navbarHeight.value = 147;
   }
 };
 
@@ -315,6 +263,17 @@ const pageContentStyle = computed(() => {
     paddingTop: `${navbarHeight.value || fallbackHeight}px`,
   };
 });
+
+// When municipality is selected or changes, recalculate navbar height
+watch(() => locationStore.cd_mun, (newValue, oldValue) => {
+  console.log('Municipality changed from', oldValue, 'to', newValue);
+
+  if (newValue) {
+    setTimeout(() => {
+      measureNavbarHeight();
+    }, 300);
+  }
+}, { immediate: true });
 
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
