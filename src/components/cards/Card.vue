@@ -78,6 +78,8 @@ p, h6{
   border: 1px solid map-get($gray, 200);
   background-color: map-get($gray, white);
   gap: 16px;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .content-wrapper{
@@ -87,6 +89,7 @@ p, h6{
   align-items: flex-start;
   gap: 16px;
   align-self: stretch;
+  width: 100%;
 }
 
 .card-image-wrapper {
@@ -101,12 +104,14 @@ p, h6{
   display: flex;
   align-items: center;
   align-self: stretch;
-  width: auto;
+  width: 100%;
+  height: auto;
 }
 
 .card-header .titulo{
   color: map-get($body-text, body-color);
-  height: 100%;
+  width: 100%;
+  word-wrap: break-word;
 }
 
 .content-wraper{
@@ -114,6 +119,7 @@ p, h6{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .textodescritivo{
@@ -124,7 +130,7 @@ p, h6{
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
-
+  word-wrap: break-word;
 }
 
 .value {
@@ -142,6 +148,7 @@ p, h6{
 .card-content {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 </style>

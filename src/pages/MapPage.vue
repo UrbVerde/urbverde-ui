@@ -531,6 +531,10 @@ h5, p{
       display: flex;
     }
 
+    .map-section {
+      padding: 0 8px;
+    }
+
   }
 
 </style>

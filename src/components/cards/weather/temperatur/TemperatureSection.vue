@@ -87,6 +87,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .dashboard {
   display: flex;
   align-items: flex-start;
@@ -124,6 +126,17 @@ export default {
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+@include breakpoint-down('tablet') {
+  .right-wrapper {
+    gap: 16px;
+  }
+
+  .top,
+  .bottom {
+    gap: 16px;
+  }
 }
 
 @media (max-width: 700px) {

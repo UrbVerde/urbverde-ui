@@ -118,15 +118,21 @@ export default {
     border-radius: 12px;
 }
 
-  @media screen and (max-width: 760px) {
-    .dashboard {
-        flex-direction: column;
-    }
+@include breakpoint-down('tablet') {
+  .right-panel {
+    gap: 16px;
+  }
+}
 
-    .right-panel {
-        width: 100% !important;
-        flex-direction: row;
-    }
- }
+@media screen and (max-width: 760px) {
+  .dashboard {
+      flex-direction: column;
+  }
+
+  .right-panel {
+      width: 100% !important;
+      flex-direction: row;
+  }
+}
 
 </style>

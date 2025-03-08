@@ -126,6 +126,17 @@ export default {
   padding: 24px;
 }
 
+@include breakpoint-down('tablet') {
+  .right-wrapper {
+    gap: 16px;
+  }
+
+  .top,
+  .bottom {
+    gap: 16px;
+  }
+}
+
 @media (max-width: 700px) {
   .left-panel,
   .right-wrapper {
