@@ -78,7 +78,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .dashboard {
     display: flex;
     align-items: flex-start;
@@ -89,7 +91,6 @@ export default {
 .vegetation-info {
     display: flex;
     flex: 1;
-    max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -98,7 +99,6 @@ export default {
 .vegetation-field {
     display: flex;
     flex: 1;
-    max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -106,11 +106,10 @@ export default {
 
 .right-panel {
     display: flex;
-    flex: 1;
-    max-width: calc(33.333% - 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
+    flex: 0 1 25%;
 }
 
 .section-card {
@@ -118,4 +117,16 @@ export default {
     padding: 20px;
     border-radius: 12px;
 }
+
+  @media screen and (max-width: 760px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .right-panel {
+        width: 100% !important;
+        flex-direction: row;
+    }
+ }
+
 </style>
