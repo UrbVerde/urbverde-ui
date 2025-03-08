@@ -173,4 +173,14 @@ p {
 .group-bottom {
   color: #198754;  // red;
 }
+
+@include breakpoint-down('tablet') {
+  .rank-card-title{
+    font-size: 16px;
+  }
+
+  .rank-card-section-title{
+    font-size: 14px;
+  }
+}
 </style>

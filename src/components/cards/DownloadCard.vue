@@ -182,5 +182,9 @@ const refModalWaitlist = ref(null);
       margin: 12px 0;
       object-fit: contain;
     }
+
+    .title {
+      font-size: 16px;
+    }
   }
 </style>

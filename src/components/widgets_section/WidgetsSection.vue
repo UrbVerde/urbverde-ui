@@ -310,8 +310,14 @@ export default {
   }
 
   .statistics-container {
-    padding-left: 12px;
-    gap: 16px;
+    padding-left: 2px;
+    gap: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title-statistics-container.heading-h5{
+    font-size: 18px;
   }
 
 }

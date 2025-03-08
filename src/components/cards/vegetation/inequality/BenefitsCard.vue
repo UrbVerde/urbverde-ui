@@ -225,6 +225,7 @@ p {
   .benefits-card-title{
     text-align: center;
     margin: auto;
+    font-size: 16px;
   };
 
   .benefits-card-image {
