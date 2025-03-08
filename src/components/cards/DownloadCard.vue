@@ -103,7 +103,7 @@ const refModalWaitlist = ref(null);
     border: 1px solid map-get($gray, 200);
     border-radius: 16px;
     overflow: hidden;
-    padding: 40px 80px 48px 56px;
+    padding: 40px;
     box-sizing: border-box;
     gap: 40px;
   }
@@ -137,23 +137,50 @@ const refModalWaitlist = ref(null);
     text-align: center;
   }
 
+  .botao {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 261px;
+  }
+
   .botao a {
     text-decoration: none;
+    max-width: 261px;
+    width: 100%;
+    display: block;
+  }
+
+  .download-card-image {
+    width: auto;
+    display: flex;
+    justify-content: center;
   }
 
   .download-card-image img {
     width: auto;
-    height: 100%;
-    max-width: 300px;
+    max-width: min(100%, 300px);
+    height: auto;
     object-fit: contain;
   }
 
+  :deep(.primary-button) {
+    width: 100%;
+  }
+
   @include breakpoint-down('tablet') {
-    .download-card-image img {
-      margin: 24px;
-      max-width: 240px;
-      object-fit: contain;
+    .download-card-image {
+      max-width: 100%;
+      display: flex;
+      justify-content: center;
     }
 
+    .download-card-image img {
+      max-width: min(100%, 240px);
+      width: auto;
+      height: auto;
+      margin: 12px 0;
+      object-fit: contain;
+    }
   }
 </style>

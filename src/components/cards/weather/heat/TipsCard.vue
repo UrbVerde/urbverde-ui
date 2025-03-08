@@ -171,12 +171,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: auto;
  }
 
  .benefits-card-image img {
   width: auto;
-  height: 100%;
-  max-width: 300px;
+  height: auto;
+  max-width: min(100%, 300px);
   object-fit: contain;
  }
 
@@ -214,8 +215,14 @@ export default {
   align-self: flex-start;
  }
 
+ :deep(.primary-button) {
+  width: 100%;
+  max-width: 261px;
+}
+
  @include breakpoint-down('tablet') {
   .benefits-card-title{
+    text-align: center;
     margin: auto;
   };
 
@@ -226,10 +233,6 @@ export default {
   .benefits-card a{
     display: flex;
     justify-content: center;
-  }
-
-  .benefits-card-image img {
-    max-width: 240px;
   }
 }
 

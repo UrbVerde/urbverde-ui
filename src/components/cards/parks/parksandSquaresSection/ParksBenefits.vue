@@ -169,14 +169,15 @@ p {
 .benefits-card-image {
   flex-shrink: 0;
   display: flex;
+  width: auto;
   align-items: center;
   justify-content: center;
 }
 
 .benefits-card-image img {
   width: auto;
-  height: 100%;
-  max-width: 300px;
+  height: auto;
+  max-width: min(100%, 300px);
   object-fit: contain;
 }
 
@@ -214,8 +215,14 @@ p {
   align-self: flex-start;
 }
 
+:deep(.primary-button) {
+  width: 100%;
+  max-width: 261px;
+}
+
 @include breakpoint-down('tablet') {
   .benefits-card-title{
+    text-align: center;
     margin: auto;
   };
 
@@ -226,9 +233,6 @@ p {
   .benefits-card a{
     display: flex;
     justify-content: center;
-  }
-  .benefits-card-image img {
-    max-width: 240px;
   }
 }
 

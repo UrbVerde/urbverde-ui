@@ -94,6 +94,7 @@ p, h6{
   justify-content: center;
   margin: 0 auto;
   height: auto;
+  max-width: min(100%, 300px);
 }
 
 .card-header {
