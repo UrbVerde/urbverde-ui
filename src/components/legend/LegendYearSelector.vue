@@ -5,7 +5,7 @@
     <div class="year-section">
       <div class="year-label">
         <img src="@/assets/icons/calendar.svg" alt="Calendar icon" class="calendar-icon" />
-        <span class="body-small-medium">Ano</span>
+        <span class="body-small-regular">Ano</span>
       </div>
       <div class="custom-select" ref="selectContainer">
         <!-- Left nav button -->
@@ -37,6 +37,7 @@
             maxlength="4"
             v-model="yearInput"
             @input="onYearChange"
+            class="body-small-regular"
           />
         </div>
 
@@ -213,10 +214,8 @@ onBeforeUnmount(() => {
   gap: 8px;
 }
 
-.body-small-medium {
-  color: #525960;
-  font-size: 14px;
-  font-weight: 500;
+.body-small-regular {
+  color: map-get($body-text, body-color);
 }
 
 .custom-select {
@@ -255,7 +254,7 @@ onBeforeUnmount(() => {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   font-size: 14px;
-  color: #525960;
+  color: map-get($body-text, body-color);
   text-align: center;
   display: flex;
   align-items: center;

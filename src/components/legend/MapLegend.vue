@@ -3,7 +3,7 @@
   <div class="legend-wrapper">
     <!-- Legend Header -->
     <div class="legend-header" @click="toggleLegend">
-      <span class="body-small-semibold">Legenda</span>
+      <span class="body-small-medium">Legenda</span>
       <img
         :src="wrapperIcon"
         :class="{'icon-open': isOpen, 'icon-closed': !isOpen}"
@@ -29,9 +29,9 @@
 
       <!-- Layer Cards -->
       <div class="layers-section">
-        <div class="layers-header">
-          <span>CAMADAS</span>
-          <img :src="addIcon" />
+        <div class="layers-header body-caption-medium">
+          <p>CAMADAS</p>
+          <!-- <img :src="addIcon" /> -->
         </div>
 
         <!-- Base Layer Card -->
@@ -89,10 +89,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 // Import components
 import PrimaryButton from '../buttons/PrimaryButton.vue';
@@ -102,7 +103,7 @@ import modalWaitList from '../modal/modalWaitList.vue';
 
 // Import icons
 import wrapperIcon from '@/assets/icons/wrapper.svg';
-import addIcon from '@/assets/icons/add.svg';
+//import addIcon from '@/assets/icons/add.svg';
 
 // Store setup
 const locationStore = useLocationStore();
@@ -112,6 +113,15 @@ const { year: storeYear, category, categories, layer, scale } = storeToRefs(loca
 // Reactive state
 const isOpen = ref(true);
 const isLegendHovered = ref(false);
+
+const { smallerThan } = useWindowSize();
+
+onMounted(() => {
+  // Se for menor que tablet, fecha a legenda por padrão
+  if (smallerThan('tablet')) {
+    isOpen.value = false;
+  }
+});
 
 // Computed properties
 const currentYear = computed(() => storeYear.value || 2021);
@@ -155,7 +165,7 @@ const handleDownload = () => {
 const refModalWaitlistLegend = ref(null);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Basic MapLegend styles */
 .legend-wrapper {
   position: absolute;
@@ -203,7 +213,7 @@ const refModalWaitlistLegend = ref(null);
 
 .legend-body {
   padding: 16px;
-  background-color: #F8F9FA;
+  background-color: map-get($gray, 100);
   overflow-y: auto;
   width: 100%;
   box-sizing: border-box;
@@ -223,12 +233,9 @@ const refModalWaitlistLegend = ref(null);
   padding: 0 8px;
 }
 
-.layers-header span {
-  color: #525960;
-  font-family: Inter;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 150%;
+.layers-header p {
+  margin: 0;
+  color: map-get($theme, secondary);
 }
 
 .layers-header img {
@@ -238,7 +245,7 @@ const refModalWaitlistLegend = ref(null);
 }
 
 .buttons-container {
-  background-color: #ffffff;
+  background-color: map-get($gray, white);
   border-top: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
