@@ -87,16 +87,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .dashboard {
   display: flex;
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .left-panel {
-  max-width: 365px;
+  flex: 0 1 40%;
   display: flex;
 }
 
@@ -114,6 +117,7 @@ export default {
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
+  flex-wrap: wrap;
 }
 
 .temperature-card {
@@ -122,6 +126,25 @@ export default {
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+@include breakpoint-down('tablet') {
+  .right-wrapper {
+    gap: 16px;
+  }
+
+  .top,
+  .bottom {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .left-panel,
+  .right-wrapper {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
 }
 
 </style>

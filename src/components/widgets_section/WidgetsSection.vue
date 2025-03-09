@@ -266,7 +266,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .widgets-section {
   display: flex;
   flex-direction: column;
@@ -299,5 +301,24 @@ export default {
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
+}
+
+@include breakpoint-down('tablet') {
+
+  .box {
+    padding: 40px 24px 32px 24px;
+  }
+
+  .statistics-container {
+    padding-left: 2px;
+    gap: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title-statistics-container.heading-h5{
+    font-size: 18px;
+  }
+
 }
 </style>

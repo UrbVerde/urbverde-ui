@@ -5,16 +5,19 @@
       @click="changeButton"
       :class="['btn', 'btn-light', 'minimize-btn', minimized ? 'btn-closed' : 'btn-open']"
     >
-      <i :class="['bi', minimized ? 'bi-chevron-right' : 'bi-chevron-left']" style="font-size: 20px"></i>
+      <i v-if="smallerThan('tablet')" class="bi bi-x-lg" style="font-size: 20px"></i>
+      <i v-else :class="['bi', minimized ? 'bi-chevron-right' : 'bi-chevron-left']" style="font-size: 20px"></i>
     </button>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
 
 const minimized = ref(false);
 const emit = defineEmits(['changed-state']);
+const { smallerThan } = useWindowSize();
 
 function changeButton() {
   emit('changed-state');

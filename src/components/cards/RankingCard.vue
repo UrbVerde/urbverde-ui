@@ -53,6 +53,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 h3,
 p {
   margin: 0;
@@ -61,6 +63,8 @@ p {
 .rank-card-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 .rank-card-header {
@@ -168,5 +172,15 @@ p {
 
 .group-bottom {
   color: #198754;  // red;
+}
+
+@include breakpoint-down('tablet') {
+  .rank-card-title{
+    font-size: 16px;
+  }
+
+  .rank-card-section-title{
+    font-size: 14px;
+  }
 }
 </style>

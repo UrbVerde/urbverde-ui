@@ -70,7 +70,9 @@ export default {
 };
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
+  @import '@/assets/styles/breakpoints.scss';
+
 .dashboard-section {
   display: flex;
   flex-direction: column;
@@ -81,7 +83,7 @@ export default {
 .info-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
   flex-grow: 1;
   justify-content: space-between;
   align-items: stretch;
@@ -98,6 +100,12 @@ export default {
 .benefits-card-section > * {
   flex: 1;
   max-width: 100%;
+}
+
+@include breakpoint-down('tablet') {
+  .info-cards {
+    gap: 16px;
+  }
 }
 
 </style>

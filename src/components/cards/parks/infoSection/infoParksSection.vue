@@ -87,12 +87,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .dashboard {
   display: flex;
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
   width: 100%;
+  flex-wrap: wrap;
+}
+
+.left-panel {
+  flex: 0 1 40%;
+  min-width: 240px;
 }
 
 .right-wrapper {
@@ -109,6 +117,7 @@ export default {
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
+  flex-wrap: wrap;
 }
 
 .section-card {
@@ -116,4 +125,24 @@ export default {
   border-radius: 16px;
   padding: 24px;
 }
+
+@include breakpoint-down('tablet') {
+  .right-wrapper {
+    gap: 16px;
+  }
+
+  .top,
+  .bottom {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .left-panel,
+  .right-wrapper {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+
 </style>

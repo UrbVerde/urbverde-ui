@@ -766,7 +766,9 @@ function emitLocationUpdate(payload) {
 */
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 #imgIcon {
   display: flex;
   flex-direction: column;
@@ -790,11 +792,9 @@ function emitLocationUpdate(payload) {
   align-self: stretch;
   height: 48px;
   padding: 0px 16px 0px 24px;
-  /* 0px 9px 0px 16px;  */
   position: relative;
   z-index: 1;
   cursor: default;
-  /* user-select: none; */
 }
 
 .input-container {
@@ -1099,7 +1099,6 @@ function emitLocationUpdate(payload) {
   animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
-/* Error state styling */
 .input-container-error {
   display: flex;
   align-items: center;
@@ -1114,4 +1113,10 @@ function emitLocationUpdate(payload) {
   outline: 3px solid #DC3545;
   outline-offset: -3px;
 }
+
+  @include breakpoint-down('tablet') {
+    .input-container {
+      outline: 1px solid map-get($green, 500);
+    }
+  }
 </style>

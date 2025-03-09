@@ -71,7 +71,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -87,7 +89,7 @@ export default {
 
 .heat-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 24px;
   flex-wrap: wrap;
 }
@@ -102,6 +104,12 @@ export default {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+@include breakpoint-down('tablet') {
+  .heat-cards {
+    gap: 16px;
+  }
 }
 
 </style>

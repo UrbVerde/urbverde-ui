@@ -34,12 +34,6 @@ export default {
     CtaBackground,
   },
 
-  data() {
-    return {
-      windowWidth: window.innerWidth,
-    };
-  },
-
   props: {
     bgSrc: {
       type: String,

@@ -9,11 +9,10 @@
         <button
           class="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          @click.prevent="toggleNavbar"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -84,6 +83,39 @@ export default {
   },
 
   methods: {
+    toggleNavbar() {
+      const collapseElement = document.getElementById('navbarNav');
+
+      if (collapseElement.classList.contains('show')) {
+        collapseElement.classList.add('collapsing');
+        const height = collapseElement.offsetHeight;
+        collapseElement.style.height = `${height  }px`;
+        collapseElement.offsetHeight;
+        collapseElement.style.height = '0';
+        collapseElement.classList.remove('show');
+        event.currentTarget.setAttribute('aria-expanded', 'false');
+
+        setTimeout(() => {
+          collapseElement.classList.remove('collapsing');
+          collapseElement.style.height = '';
+        }, 300);
+      } else {
+
+        collapseElement.classList.add('collapsing');
+        collapseElement.style.height = '0';
+        collapseElement.offsetHeight;
+        collapseElement.classList.add('show');
+        const height = collapseElement.scrollHeight;
+        collapseElement.style.height = `${height  }px`;
+        event.currentTarget.setAttribute('aria-expanded', 'true');
+
+        setTimeout(() => {
+          collapseElement.classList.remove('collapsing');
+          collapseElement.style.height = '';
+        }, 300);
+      }
+    },
+
     handleOutsideClick(event) {
       const collapseElement = document.getElementById('navbarNav');
       const togglerElement = document.querySelector('.navbar-toggler');
@@ -91,13 +123,27 @@ export default {
       // Verifica se o clique foi fora do menu e do botão
       if (
         collapseElement &&
-          togglerElement &&
-          !collapseElement.contains(event.target) &&
-          !togglerElement.contains(event.target)
+        togglerElement &&
+        !collapseElement.contains(event.target) &&
+        !togglerElement.contains(event.target)
       ) {
         // Fecha o menu se estiver aberto
-        if (togglerElement.getAttribute('aria-expanded') === 'true') {
-          togglerElement.click(); // Simula o clique no botão para fechar
+        if (collapseElement.classList.contains('show')) {
+          collapseElement.classList.add('collapsing');
+
+          const height = collapseElement.offsetHeight;
+          collapseElement.style.height = `${height  }px`;
+
+          collapseElement.offsetHeight;
+          collapseElement.style.height = '0';
+
+          collapseElement.classList.remove('show');
+          togglerElement.setAttribute('aria-expanded', 'false');
+
+          setTimeout(() => {
+            collapseElement.classList.remove('collapsing');
+            collapseElement.style.height = '';
+          }, 300);
         }
       }
     },
@@ -179,7 +225,7 @@ export default {
   }
 
   .navbar .navbar-collapse {
-    transition: height 0.3s ease, padding 0.3s ease;
+    transition: none;
   }
 
   .navbar .navbar-collapse.collapsing {
@@ -191,10 +237,16 @@ export default {
     right: 0;
     box-shadow: 0px 24px 24px 0px rgba(0, 0, 0, 0.05);
     padding: 0 32px;
+    overflow: hidden;
+    transition: height 0.3s ease;
   }
 
   .navbar .navbar-collapse.collapsing .navbar-nav {
     padding: 12px 6px 56px 6px;
+  }
+
+  .navbar .navbar-collapse.collapse:not(.show) {
+    display: none;
   }
 
   .navbar .navbar-collapse.collapse.show {
@@ -206,11 +258,12 @@ export default {
     left: 0;
     right: 0;
     box-shadow: 0px 24px 24px 0px rgba(0, 0, 0, 0.1);
-    padding: 12px 32px 64px;
+    padding: 12px 32px 40px;
+    display: block;
   }
 
   .navbar .navbar-collapse.collapse.show .navbar-nav {
-    padding: 12px 6px 56px 6px;
+    padding: 12px 6px 48px 6px;
   }
 
   .container-fluid {

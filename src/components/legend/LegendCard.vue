@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/legend/LegendCard.vue -->
 <!-- LegendCard.vue -->
 <template>
-  <div class="card-container">
+  <div class="card-container shadow-sm">
     <!--  @mouseenter="isHovered = true" @mouseleave="isHovered = false" -->
     <!-- Drag handle -->
     <div v-if="draggable && isHovered" class="drag-handle">
@@ -15,7 +15,7 @@
       </div>
 
       <div class="title-wrapper">
-        <span v-if="title" class="title" :class="{ 'with-ellipsis': isHovered }">
+        <span v-if="title" class="title body-small-regular" :class="{ 'with-ellipsis': isHovered }">
           {{ title }}
         </span>
 
@@ -36,10 +36,10 @@
 
       <!-- Legend Lines -->
       <div v-if="showLegendLines" class="legend-lines">
-        <p v-if="scale === 'intraurbana' && title !== 'Temperatura de superfície'" class="legend-item">
+        <p v-if="scale === 'intraurbana' && title !== 'Temperatura de superfície'" class="legend-item body-small-regular">
           <span class="legend-line census"></span>Setores censitários
         </p>
-        <p v-else class="legend-item">
+        <p v-else class="legend-item body-small-medium">
           <span class="legend-line municipal"></span>Municípios
         </p>
       </div>
@@ -116,7 +116,7 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 // };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .card-container {
   position: relative;
   width: 100%;
@@ -124,7 +124,6 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
   background: white;
   border-radius: 12px;
   border: 1px solid #E9ECEF;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .drag-handle {
@@ -139,7 +138,7 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 .header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
@@ -164,12 +163,7 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 }
 
 .title {
-  color: #212529;
-  font-size: 14px;
-  font-family: Inter, sans-serif;
-  font-weight: 500;
-  line-height: 21px;
-  flex: 1;
+  color: map-get($body-text, body-color);
   min-width: 0;
 }
 
@@ -207,10 +201,9 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   margin: 0;
-  font-size: 14px;
-  color: #525960;
+  color: map-get($body-text, body-color);
 }
 
 .legend-line {

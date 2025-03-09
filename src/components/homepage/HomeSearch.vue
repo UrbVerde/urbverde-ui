@@ -45,29 +45,15 @@ export default {
 
     return { router };
   },
-  data() {
-    return {
-      windowWidth: window.innerWidth,
-    };
-  },
   methods: {
     onLocationUpdated(location) {
       this.$emit('location-updated', location);
-    },
-    updateWindowWidth() {
-      this.windowWidth = window.innerWidth;
     },
     handleNavigation() {
       setTimeout(() => {
         this.router.push('/mapa');
       }, 800); // 1000 milliseconds = 1 second
     },
-  },
-  mounted() {
-    window.addEventListener('resize', this.updateWindowWidth);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.updateWindowWidth);
   },
 };
 </script>

@@ -214,7 +214,9 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .date-picker {
   position: relative;
   display: inline-block;
@@ -237,16 +239,16 @@ onBeforeUnmount(() => {
 }
 
 .input-container {
-  border-radius: 7px;
+  border-radius: 8px;
   cursor: pointer;
-  padding: 5px 9px;
+  padding: 8px 12px;
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--Gray-400, #CED4DA);
   background-color: white;
-  max-width: 120px;
+  max-width: 128px;
   height: 40px;
-  gap: 5px;
+  gap: 4px;
 }
 
 .input-container.year-modified {
@@ -294,7 +296,7 @@ onBeforeUnmount(() => {
   align-items: center;
   padding: 1px;
   color: #6C757D;
-  color: azure;
+  font-size: 16px;
 }
 
 .input-text {
@@ -357,5 +359,16 @@ onBeforeUnmount(() => {
 .fade-leave-to {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+@include breakpoint-down('tablet') {
+  .nav-button{
+    display: none;
+  }
+
+  .calendar-overlay {
+    right: 0;
+    left: 0;
+  }
 }
 </style>

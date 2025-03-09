@@ -7,7 +7,7 @@
     :value="item.value"
     class="see-card"
   >
-    <div class="botao">
+    <div class="button">
       <PrimaryButton
         label="Ver no Mapa"
         :filled="false"
@@ -45,6 +45,16 @@ export default {
 
 .see-card{
   padding: 24px 32px 24px 32px;
+}
+
+.button{
+  display: flex;
+  width: 100%;
+}
+
+:deep(.primary-button){
+  display: flex;
+  width: 100%;
 }
 
 </style>

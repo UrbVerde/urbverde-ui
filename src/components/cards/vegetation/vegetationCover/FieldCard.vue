@@ -83,4 +83,8 @@ export default {
   padding-bottom: 24px;
 }
 
+:deep(h2.value){
+  font-size: 26px;
+}
+
 </style>
