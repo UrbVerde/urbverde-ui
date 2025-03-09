@@ -107,11 +107,23 @@ const isSidebarOpen = ref(true);
 // const uf = computed(() => locationStore.uf || 'uf?');
 
 // Data
+
+const hasMunicipality = computed(() => !!locationStore.cd_mun);
 const defaultYear = ref(2020);
 const cityCode = ref(3547809);
 
 // Methods
 const toggleSidebar = () => {
+  if (!isSidebarOpen.value && !shouldAllowSidebarToggle.value) {
+    isSidebarOpen.value = true;
+
+    return;
+  }
+
+  if (isSidebarOpen.value && !shouldAllowSidebarToggle.value) {
+    return;
+  }
+
   isSidebarOpen.value = !isSidebarOpen.value;
 };
 
@@ -275,6 +287,15 @@ watch(() => locationStore.cd_mun, (newValue, oldValue) => {
   }
 }, { immediate: true });
 
+watch([
+  () => smallerThan('tablet'),
+  () => locationStore.cd_mun
+], ([isMobile, hasMun]) => {
+  if (isMobile && !hasMun) {
+    isSidebarOpen.value = true;
+  }
+}, { immediate: true });
+
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
 
@@ -318,6 +339,17 @@ onMounted(async() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', measureNavbarHeight);
+});
+
+// Verify sidebar toggle conditions in mobile
+const shouldAllowSidebarToggle = computed(() => {
+  const isMobile = smallerThan('tablet');
+
+  if (isMobile && !hasMunicipality.value) {
+    return false;
+  }
+
+  return true;
 });
 
 // Configuração das meta tags de SEO

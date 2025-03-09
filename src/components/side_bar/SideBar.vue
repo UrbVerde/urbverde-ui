@@ -6,8 +6,9 @@
     <div
       v-if="isOpen && !largerThan('tablet')"
       class="sidebar-overlay"
-      @click="toggleSidebar"
-    ></div>
+      @click="handleOverlayClick"
+    >
+    </div>
 
     <div :class="[
       'sidebar',
@@ -20,7 +21,10 @@
         <Transition name="fade">
           <LogoButton v-if="showContent" />
         </Transition>
-        <MinimizeButton @click="toggleSidebar" />
+        <MinimizeButton
+          v-if="shouldShowMinimizeButton"
+          @click="handleMinimizeClick"
+        />
       </div>
       <Transition name="fade">
         <div v-if="showContent" class="search-area">
@@ -80,7 +84,7 @@ const emit = defineEmits(['toggle-sidebar', 'api-error']);
 const locationStore = useLocationStore();
 
 // Responsividade
-const { largerThan } = useWindowSize();
+const { largerThan, smallerThan } = useWindowSize();
 
 // Component state
 const showContent = ref(props.isOpen);
@@ -95,24 +99,59 @@ watch(() => props.isOpen, (newValue) => {
   }
 });
 
-// Computed to check if search is complete
 const isSearchDone = computed(() => locationStore.cd_mun && locationStore.type);
+
+const shouldShowMinimizeButton = computed(() => {
+  const isMobile = smallerThan('tablet');
+  const hasMunicipality = !!locationStore.cd_mun;
+
+  // Se for mobile E não tiver município selecionado, esconde o botão
+  if (isMobile && !hasMunicipality) {
+    return false;
+  }
+
+  return true;
+});
+
+const shouldAllowClosing = computed(() => {
+  const isMobile = smallerThan('tablet');
+  const hasMunicipality = !!locationStore.cd_mun;
+
+  // Se for mobile E não tiver município selecionado, não pode fechar
+  if (isMobile && !hasMunicipality) {
+    return false;
+  }
+
+  return true;
+});
+
+function handleOverlayClick() {
+  if (shouldAllowClosing.value) {
+    toggleSidebar();
+  }
+}
+
+function handleMinimizeClick() {
+  toggleSidebar();
+}
 
 // Sidebar toggle handler with animation
 async function toggleSidebar() {
+  if (props.isOpen && !shouldAllowClosing.value) {
+    return;
+  }
+
   if (props.isOpen) {
-    // Quando estiver fechando
     isClosing.value = true;
     showContent.value = false;
-    // Espera a animação de fade terminar antes de fechar a sidebar
     await new Promise(resolve => setTimeout(resolve, 150));
     isClosing.value = false;
     emit('toggle-sidebar');
   } else {
-    // Quando estiver abrindo
     emit('toggle-sidebar');
   }
 }
+
 </script>
 
 <style scoped lang="scss">
