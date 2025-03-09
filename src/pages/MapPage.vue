@@ -73,6 +73,11 @@
         </div>
       </div>
     </main>
+
+    <!-- Botão de voltar ao topo -->
+    <div class="back-to-top shadow" :class="{ 'visible': showBackToTop }" @click="scrollToTop">
+      <i class="bi bi-arrow-up"></i>
+    </div>
   </div>
 </template>
 
@@ -97,6 +102,7 @@ const route = useRoute();
 // UI State
 const activeSection = ref('map');
 const isSidebarOpen = ref(true);
+const showBackToTop = ref(false);
 // const coordinates = ref({ lat: null, lng: null });
 
 // Computed Properties
@@ -137,6 +143,9 @@ const { smallerThan } = useWindowSize();
 const handleScroll = () => {
   const scrollPosition = window.scrollY;
   const navbarHeight = 100;
+
+  showBackToTop.value = scrollPosition > window.innerHeight * 0.2;
+
   const sectionElements = document.querySelectorAll(
     '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
   );
@@ -154,6 +163,7 @@ const handleScroll = () => {
   }
 };
 
+// Scroll ao clicar nas opções da navbar
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId);
   if (element) {
@@ -171,9 +181,16 @@ const scrollToSection = (sectionId) => {
   }
 };
 
+// Função para rolar até o topo da página
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
+
 // Scroll ao clicar na div mobile-scroll
 const handleMobileScroll = () => {
-
   const newScrollPosition = window.scrollY + window.innerHeight;
 
   window.scrollTo({
@@ -338,6 +355,7 @@ onMounted(async() => {
 });
 
 onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('resize', measureNavbarHeight);
 });
 
@@ -389,6 +407,7 @@ h5, p{
   width: 100%;
   background-color: #F8F9FACC;
   overflow-x: hidden;
+  position: relative;
 }
 
 /* Sidebar styles */
@@ -439,6 +458,36 @@ h5, p{
 
 .mobile-scroll p{
   color: map-get($theme, primary);
+}
+
+.back-to-top {
+  display: none;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: map-get($primary-fade, 200);
+  justify-content: center;
+  align-items: center;
+  z-index: -1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.back-to-top i {
+  font-size: 24px;
+  color: map-get($theme, primary);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  z-index: 1000;
+  pointer-events: auto;
 }
 
 /* Navbar styles */
@@ -571,6 +620,10 @@ h5, p{
       display: none;
     }
 
+    .back-to-top {
+      display: flex;
+    }
+
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -581,7 +634,5 @@ h5, p{
         transform: translateX(0);
       }
     }
-
   }
-
 </style>
