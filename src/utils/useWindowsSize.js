@@ -1,3 +1,4 @@
+// urbverde-ui/src/utils/useWindowsSize.js
 /*
 
 --- 1. Exemplo de uso em um componente com Composition API (script setup)
