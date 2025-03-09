@@ -130,7 +130,7 @@ async function toggleSidebar() {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  width: 301px; // largura fixa sempre
+  width: 301px;
   transition: transform 0.3s ease, width 0.3s ease;
 
   @include breakpoint-down('tablet') {

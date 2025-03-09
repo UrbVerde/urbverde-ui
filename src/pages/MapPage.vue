@@ -535,6 +535,21 @@ h5, p{
       padding: 0 8px;
     }
 
+    .placeholder-container {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
   }
 
 </style>

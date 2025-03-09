@@ -318,10 +318,6 @@ a {
   height: auto;
 }
 
-:deep(.input-container) {
-  outline: 1px solid map-get($green, 500);
-}
-
 :deep(.search-wrapper) {
   width: 100%;
 }
