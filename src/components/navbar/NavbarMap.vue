@@ -161,7 +161,9 @@ const uf = computed(() => locationStore.uf);
 const tabs = ref([
   { id: 'map', label: 'Mapa' },
   { id: 'stats', label: 'Estatísticas' },
+  { id: 'vulnerable', label: 'Vulnerabilidade' },
   { id: 'ranking', label: 'Ranking' },
+
 ]);
 
 const {
@@ -288,6 +290,8 @@ a {
   font-size: 14px;
   cursor: pointer;
   color: map-get($theme, secondary);
+  transition: all 0.0s ease; /* Adicione esta linha */
+
 }
 
 .tab-button:hover {
