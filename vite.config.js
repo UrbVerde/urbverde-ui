@@ -42,6 +42,7 @@ export default defineConfig({
           if (/\.css$/.test(name ?? '')) {
             return 'css/[name].[hash].[ext]';
           }
+
           return 'assets/[name].[hash].[ext]';
         },
       },

@@ -169,7 +169,7 @@ const scrollToSection = (sectionId) => {
   if (element) {
     const navbarHeight = 100;
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight + 1;
 
     window.scrollTo({
       top: offsetPosition,
