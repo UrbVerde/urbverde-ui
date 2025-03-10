@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/navbar/NavbarMap.vue (UPDATED) -->
+<!-- urbverde-ui/src/components/navbar/NavbarMap.vue -->
 <template>
 
   <!-- Desktop version -->
