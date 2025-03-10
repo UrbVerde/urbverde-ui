@@ -1,3 +1,30 @@
+<!-- urbverde-ui/src/components/modal/modalBootstrap.vue -->
+<!--
+    Para funcionar corretamente:
+
+    1. Importar o componente modalBootstrap.vue
+    2. No botão em que abre o modal, adicionar o @click="refModalWaitlist.show()"
+    3. Configurar o modal na página (se for um modal específico)
+        Exemplo:
+        <modalBootstrap
+            ref="refModalWaitlist"
+            modalId="modalWaitlist"
+            title="Título do modal"
+            bodyText="Conteúdo do modal"
+            showSecondaryButton="true"
+            primaryButtonText="Ok"
+            :primaryButtonClosesModal="true"
+            :secondaryButtonClosesModal="false"
+            @closeSecondary="handleSecondaryAction"
+            @closePrimary="handlePrimaryAction"
+        />
+
+    4. Adicionar const <nome da ref do modal> = ref(null); no script
+        Exemplo:
+        const refModalWaitlist = ref(null);
+
+-->
+
 <template>
   <div>
     <!-- Modal -->
