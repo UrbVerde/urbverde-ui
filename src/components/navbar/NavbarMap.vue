@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/navbar/NavbarMap.vue -->
+<!-- urbverde-ui/src/components/navbar/NavbarMap.vue (UPDATED) -->
 <template>
 
   <!-- Desktop version -->
@@ -17,16 +17,10 @@
             <i class="bi bi-share"></i>
           </button>
 
-          <a
-            href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <button @click="layerInfo" class="nav-button">
-              <i class="bi bi-info-circle"></i>
-              <p class="body-small-regular">Entender esse dado</p>
-            </button>
-          </a>
+          <button @click="showLayerInfo" class="nav-button">
+            <i class="bi bi-info-circle"></i>
+            <p class="body-small-regular">Entender esse dado</p>
+          </button>
         </div>
       </div>
 
@@ -48,6 +42,10 @@
       ref="refModalShare"
       :cityName="cityName"
       :stateName="uf"
+    />
+    <!-- Modal de informações da camada -->
+    <modalLayerInfo
+      ref="refModalLayerInfo"
     />
   </div>
 
@@ -94,16 +92,13 @@
                 <p class="body-small-regular">Compartilhar</p>
               </div>
 
-              <a
-                href="https://urbverde-educa.tawk.help/category/categorias-e-camadas"
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
                 class="popover-item"
-                @click="layerInfo"
+                @click="showLayerInfo"
               >
                 <i class="bi bi-info-circle"></i>
                 <p class="body-small-regular">Entender esse dado</p>
-              </a>
+              </div>
 
             </div>
           </div>
@@ -117,6 +112,10 @@
       :cityName="cityName"
       :stateName="uf"
     />
+    <!-- Modal de informações da camada -->
+    <modalLayerInfo
+      ref="refModalLayerInfo"
+    />
   </div>
 
 </template>
@@ -125,6 +124,7 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import modalShare from '../modal/modalShare.vue';
+import modalLayerInfo from '../modal/modalLayerInfo.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
 import CollapseButton from '../side_bar/buttons/CollapseButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
@@ -141,8 +141,9 @@ const { activeSection, isSidebarOpen } = defineProps({
   }
 });
 
-const emit = defineEmits(['navigate-to', 'toggle-sidebar']);
+const emit = defineEmits(['navigate-to', 'toggle-sidebar', 'api-error']);
 const refModalShare = ref(null);
+const refModalLayerInfo = ref(null);
 const locationStore = useLocationStore();
 
 // Popover refs e estado
@@ -150,11 +151,11 @@ const isPopoverVisible = ref(false);
 const popoverButton = ref(null);
 const popoverMenu = ref(null);
 
-const layer = computed(() => {
-  console.log('Navbar computed - current layer:', locationStore.currentLayerName);
+const layer = computed(() =>
+// console.log('Navbar computed - current layer:', locationStore.currentLayerName);
 
-  return locationStore.currentLayerName;
-});
+  locationStore.currentLayerName
+);
 const cityName = computed(() => locationStore.nm_mun);
 const uf = computed(() => locationStore.uf);
 
@@ -178,8 +179,11 @@ function shareMap() {
   refModalShare.value.show();
 }
 
-function layerInfo() {
-  // Info do dado
+function showLayerInfo() {
+  // Abrir o modal de informações da camada
+  refModalLayerInfo.value.show();
+  // Fechar o popover caso esteja aberto (mobile)
+  isPopoverVisible.value = false;
 }
 
 // Função para abrir/fechar o popover
