@@ -13,6 +13,7 @@
       @closeSecondary="openLayerInfoPage"
       @closePrimary="closeModal"
       class="layer-info-modal"
+      size="lg"
     >
       <template #body>
         <div class="layer-info-content body-normal-regular" v-html="layerDescription">
