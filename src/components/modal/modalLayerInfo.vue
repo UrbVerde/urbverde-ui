@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/modal/modalLayerInfo.vue -->
 <template>
   <teleport to="body">
     <modalBootstrap
@@ -35,7 +36,8 @@ const locationStore = useLocationStore();
 const currentLayer = computed(() => locationStore.currentLayerName || '');
 
 // Título do modal baseado na camada atual
-const layerTitle = computed(() => `Informações sobre:\n${currentLayer.value}`);
+const layerTitle = computed(() => `Informações sobre:
+${currentLayer.value}`);
 
 // Descrição da camada para o modal
 const layerDescription = computed(() => {
