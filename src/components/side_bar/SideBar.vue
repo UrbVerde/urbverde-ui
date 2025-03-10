@@ -28,7 +28,7 @@
       </div>
       <Transition name="fade">
         <div v-if="showContent" class="search-area">
-          <BuscaSimples @api-error="$emit('api-error')" />
+          <BuscaSimples @api-error="$emit('api-error')" :openDelay="2000"/>
         </div>
       </Transition>
 
