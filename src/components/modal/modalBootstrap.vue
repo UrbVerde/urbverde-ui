@@ -25,6 +25,7 @@
 
 -->
 
+<!-- urbverde-ui/src/components/modal/modalBootstrap.vue -->
 <template>
   <div>
     <!-- Modal -->
@@ -39,7 +40,7 @@
             <h5 class="modal-title heading-h5" :id="`${modalId}Title`">{{ title }}</h5>
             <button type="button"
                     class="btn-close"
-                    data-bs-dismiss="modal"
+                    @click="hide"
                     aria-label="Close"></button>
           </div>
           <div class="modal-body body-normal-regular">
@@ -203,4 +204,9 @@ defineExpose({ show, hide });
 .modal-body{
   margin: 12px;
 }
+
+.modal-header{
+  padding-right: 20px;
+}
+
 </style>
