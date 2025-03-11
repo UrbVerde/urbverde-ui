@@ -207,6 +207,7 @@ onMounted(() => {
     gap: 12px;
     border-radius: 8px;
     cursor: pointer;
+    transition: all 0.15s ease;
   }
 
   .category-header:hover {
@@ -220,6 +221,7 @@ onMounted(() => {
 
   .category-header.open:hover {
     background: map-get($gray, 200);
+    transition: all 0.15s ease;
   }
 
   .category-name {
@@ -290,6 +292,7 @@ onMounted(() => {
 
   .layer-item:not(.active-layer):hover {
     background: map-get($gray, 200);
+    transition: all 0.15s ease;
   }
 
   .active-layer {

@@ -303,7 +303,7 @@ async function toggleSidebar() {
   align-self: stretch;
   width: 100%;
   border-radius: 8px;
-  transition: 0s;
+  transition: all 0.15s ease;
 }
 
 .link-button:hover {
