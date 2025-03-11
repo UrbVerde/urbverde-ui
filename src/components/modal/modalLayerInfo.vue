@@ -76,7 +76,7 @@ const getLayerInfoUrl = computed(() => {
     'Desigualdade sociambiental (IDSA)':'https://urbverde-educa.tawk.help/article/%C3%ADndice-de-desigualdade-socioambiental-idsa',
     'Cobertura vegetal por satélite':'https://urbverde-educa.tawk.help/article/vegeta%C3%A7%C3%A3o',
     'Vigor da vegetação (NDVI)':'https://urbverde-educa.tawk.help/article/%C3%ADndice-de-vegeta%C3%A7%C3%A3o-por-diferen%C3%A7a-normalizada-ndvi',
-    'Índice de cobertura vegetal (ICV)':'https://urbverde-educa.tawk.help/article/%C3%ADndice-de-cobertura-vegetal-icv',
+    'Cobertura vegetal por habitante (ICV)':'https://urbverde-educa.tawk.help/article/%C3%ADndice-de-cobertura-vegetal-icv',
 
     'Distância media até as praças':'https://urbverde-educa.tawk.help/article/dist%C3%A2ncia-m%C3%A9dia-at%C3%A9-as-pra%C3%A7as',
     'Área de praças por habitante':'https://urbverde-educa.tawk.help/article/%C3%A1rea-de-pra%C3%A7as-por-habitante-m%C2%B2hab',
