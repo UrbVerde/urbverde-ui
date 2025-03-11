@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/banner/bannerEvent.vue -->
 <template>
   <div v-if="isVisible" class="alert-message" :class="{ 'fade-in': showBanner }">
     <div class="badge">
