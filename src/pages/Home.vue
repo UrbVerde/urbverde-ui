@@ -16,6 +16,8 @@
       <!-- Content -->
       <div class="content">
 
+        <bannerEvent />
+
         <!-- Background fixo e atrás dos contents -->
         <div class="image-background-wrapper"
              data-aos="fade"
@@ -456,6 +458,7 @@ import HomeAwards from '@/components/homepage/HomeAwards.vue';
 import HomeProduct from '@/components/homepage/HomeProduct.vue';
 import HomeSearch from '@/components/homepage/HomeSearch.vue';
 import HomeCta from '@/components/homepage/HomeCta.vue';
+import bannerEvent from '@/components/banner/bannerEvent.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
 
 // Import para as imagens da página utilizados em componentes
@@ -481,6 +484,7 @@ export default {
     HomeProduct,
     HomeSearch,
     HomeCta,
+    bannerEvent,
   },
 
   // Configuração das meta tags de SEO
