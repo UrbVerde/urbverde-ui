@@ -103,6 +103,6 @@ defineProps({
 }
 
 .notFilled:hover {
-  border: 3px solid map-get($green, 600);
+  background-color: map-get($primary-fade, 50);
 }
 </style>
