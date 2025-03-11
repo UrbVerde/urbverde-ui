@@ -89,7 +89,9 @@
                 @mousemove="handleMouseMove"
                 @mouseleave="resetZoom"
               >
-                <div class="overlay"></div>
+                <div class="overlay">
+                  <span class="body-small-regular">Clique para acessar</span>
+                </div>
                 <img
                   ref="zoomImage"
                   src="@/assets/images/homepage/platform.svg"
@@ -213,7 +215,7 @@
             <h2 class="heading-h2">
               Ferramentas para uma gestão inteligente
             </h2>
-            <h4 class="heading-h4">
+            <h4 class="body-normal-medium">
               Por meio de imagens de satélite, fornecemos informações que ajudam sua cidade a enfrentar os desafios climáticos
             </h4>
           </div>
@@ -279,7 +281,6 @@
         </div>
         <div class="educa"
              v-if="largerThan('mobile-large')">
-          >
           <div class="title">
             <h2 class="heading-h2">
               Explore mais tópicos no UrbVerde Educa
@@ -800,8 +801,16 @@ export default {
         opacity: 0;
         transition: opacity 0.3s ease;
         border-radius: 32px;
-        z-index: 2; // Overlay acima da imagem
+        z-index: 2;
         pointer-events: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .overlay span{
+        color: map-get($gray, white);
+        font-size: 16px;
+        text-align: center;
       }
 
       &:hover .overlay {
@@ -1026,7 +1035,7 @@ export default {
     max-width: 1184px;
     flex-direction: column;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
     align-self: center;
     padding: 0;
   }
@@ -1046,6 +1055,7 @@ export default {
     text-align: center;
     font-style: normal;
     margin: 0;
+    font-size: 18px;
   }
 
   .products .products-content{
@@ -1175,7 +1185,7 @@ export default {
     }
 
     .products .title h4{
-      font-size: 20px;
+      font-size: 18px;
     }
 
     .products .products-content{
