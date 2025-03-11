@@ -278,6 +278,11 @@ a {
   padding: 11px;
   border: 1px solid map-get($gray, 200);
   color: map-get($body-text, body-color);
+  transition: all 0.15s ease;
+}
+
+.nav-button:hover {
+  border: 1px solid map-get($gray, 500);
 }
 
 /* Tabs */
@@ -294,16 +299,16 @@ a {
   font-size: 14px;
   cursor: pointer;
   color: map-get($theme, secondary);
-  transition: all 0.0s ease; /* Adicione esta linha */
-
+  transition: all 0.15s ease;
+  border-radius: 99px;
 }
 
 .tab-button:hover {
-  color: map-get($theme, primary);
+  background-color: map-get($gray, 200);
 }
 
 .active-tab {
-  background-color: map-get($primary-fade, 100);
+  background-color: map-get($primary-fade, 100) !important;
   color: map-get($theme, primary);
   border-radius: 16px;
   padding: 4px 16px;

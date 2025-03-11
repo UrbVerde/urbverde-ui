@@ -72,6 +72,7 @@
               Pólis - Instituto de Estudos, Formação e Assessoria em Políticas Sociais<br>
               Consórcio Intermunicipal Grande ABC<br>
               Prefeitura de Diadema<br>
+              Escola Estadual prof. Aduar Kemell Dibo<br>
               Rede Cyted RUN – Rios Urbanos Naturalizados
             </p>
           </div>
