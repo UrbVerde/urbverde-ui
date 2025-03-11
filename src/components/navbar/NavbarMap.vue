@@ -278,6 +278,11 @@ a {
   padding: 11px;
   border: 1px solid map-get($gray, 200);
   color: map-get($body-text, body-color);
+  transition: all 0.15s ease;
+}
+
+.nav-button:hover {
+  border: 1px solid map-get($gray, 500);
 }
 
 /* Tabs */
