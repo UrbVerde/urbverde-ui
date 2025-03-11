@@ -285,10 +285,10 @@ async function toggleSidebar() {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-  padding: 16px 24px;
+  padding: 16px;
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   border-top: 1px solid rgba(0, 0, 0, 0.13);
-  background: var(--White, #FFF);
+  background: map-get($gray, white);
   width: 100%;
 }
 
@@ -296,12 +296,18 @@ async function toggleSidebar() {
   text-decoration: none;
   color: map-get($body-text, body-color);
   display: flex;
-  padding: 8px 8px;
+  padding: 8px 16px;
   justify-content: start;
   align-items: center;
   gap: 16px;
   align-self: stretch;
   width: 100%;
+  border-radius: 8px;
+  transition: 0s;
+}
+
+.link-button:hover {
+  background: map-get($gray, 200);
 }
 
 .txtBottom {
