@@ -158,6 +158,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
+
 .attribution-bar {
   position: absolute;
   bottom: 0px;
@@ -256,5 +257,11 @@ onBeforeUnmount(() => {
   position: relative;
   text-align: center;
   width: 100%;
+}
+
+@media screen and (max-width: 700px) {
+  .attribution-bar {
+    display: none;
+  }
 }
 </style>
