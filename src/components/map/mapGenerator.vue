@@ -826,12 +826,6 @@ function initializeMap() {
       // showCompass: true
     }), 'top-left');
   map.value.addControl(
-    new maplibregl.ScaleControl({
-      maxWidth: 120,
-      unit: 'metric',
-    }), 'bottom-right'
-  );
-  map.value.addControl(
     new maplibregl.GeolocateControl({
       positionOptions: { enableHighAccuracy: true },
       trackUserLocation: true,

@@ -1,17 +1,19 @@
 <template>
   <div class="attribution-bar">
-    <!-- ScaleControl container -->
-    <div ref="scaleMount" class="scale-widget"></div>
 
-    <!-- Other custom bits (e.g. proportion, coordinates, sources) -->
-    <div class="scale-proportion">Escala {{ scaleProportion }}</div>
-    <div class="coordinates">{{ coordinates.lat }} {{ coordinates.lng }}</div>
-    <div class="altitude">{{ altitude }}</div>
+    <div class="scale-content">
+      <div ref="scaleMount" class="scale-widget"></div>
+    </div>
 
-    <!-- Image sources -->
-    <div class="sources">
-      <span>Fonte: IBGE (2010), Landsat 8, Sen...</span>
-      <a href="#" class="more-link">Ver mais</a>
+    <div class="attribution">
+      <div class="scale-proportion body-caption-regular">Escala {{ scaleProportion }}</div>
+      <div class="coordinates body-caption-regular">{{ coordinates.lat }} {{ coordinates.lng }}</div>
+      <div class="altitude body-caption-regular">{{ altitude }}</div>
+
+      <div class="sources">
+        <span class="body-caption-medium">Fonte: IBGE (2010), Landsat 8, Sen...</span>
+        <a href="#" class="more-link body-caption-medium">Ver mais</a>
+      </div>
     </div>
   </div>
 </template>
@@ -50,7 +52,7 @@ let scaleControl = null;
 onMounted(() => {
   // 1) Create the ScaleControl
   scaleControl = new maplibregl.ScaleControl({
-    maxWidth: 120,
+    maxWidth: 88,
     unit: 'metric'
   });
 
@@ -69,45 +71,84 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .attribution-bar {
     position: absolute;
-    bottom: 10px;
-    right: 30px;
-    z-index: 9999; /* some large value so it’s above the map */
+    bottom: 0px;
+    right: 0px;
+    z-index: 9999;
     width: auto;
-    height: 22px;
-    padding: 2px 16px;
-    background: rgba(248, 249, 250, 0.80);
-    backdrop-filter: blur(20px);
+    height: auto;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 16px;
-    font-family: Inter, sans-serif;
-    font-size: 12px;
-    color: #212529;
+    gap: 2px;
     white-space: nowrap;
 }
 
-.scale-widget {
-    /* Just a placeholder div to hold the scale’s DOM */
+.attribution {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+    padding: 0 8px 0 12px;
+    background: rgba(248, 249, 250, 0.70);
+    backdrop-filter: blur(20px);
+    color: map-get($body-text, body-color);
+    border-radius: 4px 0 0 0;
+}
+
+.scale-content {
+    padding: 0 6px;
     display: flex;
     align-items: center;
+    justify-content: end;
+    border-radius: 4px 0 0 0;
+    width: 88px;
+    height: 24px;
+}
+
+.scale-widget {
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+}
+
+:deep(.maplibregl-ctrl) {
+  margin: 0;
+}
+
+:deep(.maplibregl-ctrl-scale) {
+  background-color: transparent;
+  border-color: map-get($body-text, body-color);
+  color: map-get($body-text, body-color);
+  margin: 0;
+  font-size: 12px;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  padding-bottom: 2px;
+  line-height: 12px;
+  position: relative;
+  text-align: center;
+  width: 100%;
 }
 
 .scale-proportion,
 .coordinates,
 .altitude,
 .sources {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .more-link {
-    color: #025949;
-    font-weight: 500;
-    text-decoration: underline;
+  color: map-get($theme, primary);
+  text-decoration: underline;
 }
 </style>
