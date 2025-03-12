@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/cards/weather/temperatur/TemperatureSection.vue -->
 <template>
   <div class="dashboard">
     <div class="left-panel">
@@ -22,17 +21,33 @@
         />
       </div>
     </div>
+    <div class="third-row">
+      <div class="large-card">
+        <FirstSectionCard
+          :data="[{title: `Temperatura média em ${nm_mun} ao longo do tempo`, subtitle: '', value: ''}]"
+          class="temperature-card"
+        />
+      </div>
+      <div class="small-card">
+        <FirstSectionCard
+          :data="[{title: 'aqui', subtitle: '', value: ''}]"
+          class="temperature-card"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import InfoTemperature from './InfoTemperature.vue';
 import FirstSectionCard from '../../FirstSectionCard.vue';
+import { useLocationStore } from '@/stores/locationStore';
+import { computed} from 'vue';
 
 export default {
   components: {
     InfoTemperature,
-    FirstSectionCard
+    FirstSectionCard,
   },
 
   props: {
@@ -44,6 +59,15 @@ export default {
       type: Number,
       required: true
     }
+  },
+
+  setup() {
+    const locationStore = useLocationStore();
+    const nm_mun = computed(() => locationStore.nm_mun || '?');
+
+    return {
+      nm_mun
+    };
   },
 
   data() {
@@ -78,6 +102,7 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${this.cityCode}&year=${this.selectedYear}`);
         const data = await response.json();
         this.cardData = data;
+
       } catch (error) {
         console.error('Error fetching cards data:', error);
       }
@@ -112,7 +137,8 @@ export default {
 }
 
 .top,
-.bottom {
+.bottom,
+.third-row {
   display: flex;
   align-items: flex-start;
   gap: 24px;
@@ -128,13 +154,26 @@ export default {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 }
 
+.third-row {
+  width: 100%;
+}
+
+.large-card {
+  flex: 2;
+}
+
+.small-card {
+  flex: 1;
+}
+
 @include breakpoint-down('tablet') {
   .right-wrapper {
     gap: 16px;
   }
 
   .top,
-  .bottom {
+  .bottom,
+  .third-row {
     gap: 16px;
   }
 }
@@ -145,6 +184,10 @@ export default {
     flex-basis: 100%;
     max-width: 100%;
   }
-}
 
+  .large-card,
+  .small-card {
+    flex-basis: 100%;
+  }
+}
 </style>
