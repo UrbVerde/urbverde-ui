@@ -192,7 +192,7 @@ const scrollToSection = (sectionId) => {
 
       // Desativar a flag após completar a rolagem
       isProgrammaticScrolling.value = false;
-    }, 700); // Ajuste este tempo com base na duração da rolagem suave
+    }, 0); // Ajuste este tempo com base na duração da rolagem suave
   }
 };
 

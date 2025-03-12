@@ -138,7 +138,7 @@ export default {
             component: TemperatureSection
           },
           {
-            id: 'vulnerable',
+            id: 'stats',
             ref: 'vulnerableSection',
             title: `Quem é mais afetado pelo calor extremo em ${nm_mun.value}?`,
             component: HeatSection
@@ -165,7 +165,7 @@ export default {
             component: VegetationSection
           },
           {
-            id: 'inequality',
+            id: 'stats',
             ref: 'inequalitySection',
             title: 'Desigualdade ambiental e a vegetação',
             component: InequalitySection
@@ -192,7 +192,7 @@ export default {
             component: InfoParksSection
           },
           {
-            id: 'parksSquares',
+            id: 'stats',
             ref: 'parksSquaresSection',
             title: 'Quem vive distante de parques e praças?',
             component: ParksSquaresSection

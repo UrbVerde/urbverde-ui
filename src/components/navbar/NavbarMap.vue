@@ -162,7 +162,6 @@ const uf = computed(() => locationStore.uf);
 const tabs = ref([
   { id: 'map', label: 'Mapa' },
   { id: 'stats', label: 'Estatísticas' },
-  { id: 'vulnerable', label: 'Vulnerabilidade' },
   { id: 'ranking', label: 'Ranking' },
 
 ]);
