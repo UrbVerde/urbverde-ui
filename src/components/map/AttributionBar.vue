@@ -38,7 +38,7 @@ const props = defineProps({
   },
   altitude: {
     type: String,
-    default: '810 m'
+    default: '- m'
   }
 });
 
