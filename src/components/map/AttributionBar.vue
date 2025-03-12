@@ -17,18 +17,22 @@
       </div>
       <div v-if="hasValidAltitude" class="altitude body-caption-regular">{{ mouseAltitude }}</div>
       <div class="sources">
-        <span class="body-caption-medium">Fonte: IBGE (2010), Landsat 8, Sen...</span>
-        <a href="#" class="more-link body-caption-medium">Ver mais</a>
+        <span class="body-caption-medium">Fonte: {{ truncatedSource }}</span>
+        <a href="#" class="more-link body-caption-medium" @click.prevent="openMapInfoModal">{{ moreButtonText }}</a>
       </div>
     </div>
+
+    <!-- Modal component -->
+    <modalMapInfo ref="mapInfoModal" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, reactive, computed } from 'vue';
 import maplibregl from 'maplibre-gl';
+import modalMapInfo from '../modal/modalMapInfo.vue';
+import { useLocationStore } from '@/stores/locationStore';
 
-// Get props from parent
 const props = defineProps({
   map: {
     type: Object,
@@ -51,6 +55,8 @@ const props = defineProps({
   }
 });
 
+const locationStore = useLocationStore();
+const mapInfoModal = ref(null);
 const scaleMount = ref(null);
 let scaleControl = null;
 
@@ -61,8 +67,35 @@ const mouseCoordinates = reactive({
 });
 const mouseAltitude = ref(props.altitude);
 
-// Computed property to check if altitude has a valid value
 const hasValidAltitude = computed(() => mouseAltitude.value !== '- m' && mouseAltitude.value !== '');
+
+// Get current layer from locationStore, for the modal
+const currentLayer = computed(() => locationStore.currentLayerName || '');
+
+const currentSource = computed(() => {
+  if (!mapInfoModal.value || !currentLayer.value) {
+    return '';
+  }
+
+  return mapInfoModal.value.layerSources[currentLayer.value] || '';
+});
+
+const truncatedSource = computed(() => {
+  if (!currentSource.value) {
+    return '';
+  }
+
+  // Truncate to 20 characters
+  return `${currentSource.value.substring(0, 20)  }...`;
+});
+
+const moreButtonText = computed(() => currentSource.value ? 'Ver mais' : 'Ver fontes dos dados');
+
+const openMapInfoModal = () => {
+  if (mapInfoModal.value) {
+    mapInfoModal.value.show();
+  }
+};
 
 // Function to format coordinates to degrees, minutes, seconds
 const formatDMS = (coordinate, isLat) => {
@@ -129,7 +162,7 @@ onBeforeUnmount(() => {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  z-index: 9999;
+  z-index: 10;
   width: auto;
   height: auto;
   display: flex;
