@@ -49,20 +49,20 @@ const currentLayer = computed(() => locationStore.currentLayerName || '');
 
 // Objeto com fontes específicas para cada camada
 const layerSources = {
-  'Temperatura de superfície': 'ERMIDA, S. L. et al. "Google Earth Engine open-source code for Land Surface Temperature estimation from the Landsat series". Remote Sensing, v. 12, n. 9, p. 1471, 2020.',
-  'Temperatura máxima de superfície': 'ERMIDA, S. L. et al. "Google Earth Engine open-source code for Land Surface Temperature estimation from the Landsat series". Remote Sensing, v. 12, n. 9, p. 1471, 2020.',
-  'Nível de exposição à ilha de calor': 'Instituto Brasileiro de Geografia e Estatística (IBGE), NASA, ERMIDA, S. L. "Google Earth Engine Open-Source Code for Land Surface Temperature Estimation from the Landsat Series". Remote Sensing, 2020.',
+  'Temperatura de superfície': 'Landsat 8 tratamento UrbVerde (2025).',
+  'Temperatura máxima de superfície': 'Landsat 8 tratamento UrbVerde (2025).',
+  'Nível de exposição à ilha de calor': 'Censo IBGE (2010), Landsat 8 tratamento UrbVerde (2025).',
 
-  'Cobertura vegetal (PCV)': 'SMALL, C.; MILESI, C. Multi-scale standardized spectral mixture models. Remote Sensing Of Environment, Amsterdã, v. 136, p. 442–54, 19 jan. 2013.',
-  'Desigualdade sociambiental (IDSA)': 'Toppa, R. H.; Martines, M. R. Análise ambiental de áreas de interesse para o estabelecimento de unidades de conservação para a proteção dos mananciais do município de Araçoiaba da Serra, Estado de São Paulo. São Paulo, SP: Ed. dos autores, 2021.',
-  'Cobertura vegetal por satélite': 'SMALL, C.; MILESI, C. Multi-scale standardized spectral mixture models. Remote Sensing Of Environment, Amsterdã, v. 136, p. 442–54, 19 jan. 2013.',
-  'Vigor da vegetação (NDVI)': 'Rouse, J.W., Jr.; Haas, R.H.; Schell, J.; Deering, D. Monitoring the Vernal Advancement and Retrogradation (Green Wave Effect) of Natural Vegetation; Technical Report; 1973.',
-  'Cobertura vegetal por habitante (ICV)': 'Dados derivados do Percentual de Cobertura Vegetal (PCV) e Censo IBGE.',
+  'Cobertura vegetal (PCV)': 'Sentinel tratamento UrbVerde (2025).',
+  'Desigualdade sociambiental (IDSA)': 'Censo IBGE (2010), Sentinel tratamento UrbVerde (2025).',
+  'Cobertura vegetal por satélite': 'Sentinel tratamento UrbVerde (2025).',
+  'Vigor da vegetação (NDVI)': 'Sentinel tratamento UrbVerde (2025).',
+  'Cobertura vegetal por habitante (ICV)': 'Censo IBGE (2010), Sentinel tratamento UrbVerde (2025).',
 
-  'Distância media até as praças': 'PIPAE. Relatório Metodológico. UrbVerde.',
-  'Área de praças por habitante': 'UN-Habitat (2018). SDG Indicator 11.7.1 Training Module: Public Space. United Nations Human Settlement. NUCCI, J. C. (2008).',
-  'Área atendida pelas praças': 'FANTIN, M.; PEDRASSOLI, J. C.; MELO, B. M. de; MENEZES, G. P.; MARTINES, M. R. "Inteligência geográfica na construção de políticas públicas: rumo à plataforma de monitoramento de áreas verdes urbanas do Estado de São Paulo". Interações, v. 23, p. 907-922, 2022.',
-  'População atendida pelas praças': 'FANTIN, M. et al. "Inteligência geográfica na construção de políticas públicas: rumo à plataforma de monitoramento de áreas verdes urbanas do Estado de São Paulo". Interações, v. 23, pp. 907-922, 2022.',
+  'Distância media até as praças': 'Landsat 8 tratamento UrbVerde (2025).',
+  'Área de praças por habitante': 'Censo IBGE (2010), Landsat 8 tratamento UrbVerde (2025).',
+  'Área atendida pelas praças': 'Landsat 8 tratamento UrbVerde (2025).',
+  'População atendida pelas praças': 'Censo IBGE (2010), Landsat 8 tratamento UrbVerde (2025).',
 };
 
 // Fonte da camada para o modal
