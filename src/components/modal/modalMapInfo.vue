@@ -4,9 +4,8 @@
     <modalBootstrap
       ref="refModal"
       modalId="modalMapInfo"
-      title="Fonte dos dados"
+      title="Fonte dos dados do mapa"
       bodyText=""
-      showSecondaryButton="false"
       primaryButtonText="Ok"
       :primaryButtonClosesModal="true"
       @closePrimary="closeModal"
@@ -15,7 +14,20 @@
       <template #body>
         <div class="map-info-content body-normal-regular">
           <p><strong>Basemap:</strong></p>
-          <p>MapTiler e OpenStreetMap contributors</p>
+          <p>
+            <a
+              href="https://www.maptiler.com/"
+              target="_blank"
+              rel="noopener noreferrer">
+              MapTiler
+            </a> e
+            <a
+              href="https://www.openstreetmap.org/about"
+              target="_blank"
+              rel="noopener noreferrer">
+              OpenStreetMap contributors
+            </a>
+          </p>
 
           <p><strong>Camadas:</strong></p>
           <p><strong>{{ currentLayer }}</strong>: {{ layerSource }}</p>

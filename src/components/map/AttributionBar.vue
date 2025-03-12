@@ -236,6 +236,7 @@ onBeforeUnmount(() => {
 .more-link {
   color: map-get($theme, primary);
   text-decoration: underline;
+  text-decoration-color: map-get($theme, primary);
 }
 
 :deep(.maplibregl-ctrl) {
