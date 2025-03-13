@@ -39,10 +39,11 @@
       </div>
 
       <!-- Opacity Control -->
-      <!-- <OpacityControl v-if="showOpacity"
+      <OpacityControl v-if="showOpacity"
                       v-model="localOpacity"
                       :layerId="layerId"
-                      @update:modelValue="handleOpacityChange" /> -->
+                      @update:modelValue="handleOpacityChange"
+      />
     </div>
   </div>
 </template>
@@ -51,7 +52,7 @@
 import { ref } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
-// import OpacityControl from './OpacityControl.vue';
+import OpacityControl from './OpacityControl.vue';
 
 defineProps({
   title: {
