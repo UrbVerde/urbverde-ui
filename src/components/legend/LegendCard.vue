@@ -40,6 +40,7 @@
 
       <!-- Opacity Control -->
       <OpacityControl v-if="showOpacity"
+                      class="opacity-control"
                       v-model="localOpacity"
                       :layerId="layerId"
                       @update:modelValue="handleOpacityChange"
@@ -193,5 +194,13 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 
 .legend-line.municipal {
   background-color: #999;
+}
+
+.opacity-control {
+  display: none;
+}
+
+.card-container:hover .opacity-control {
+  display: block;
 }
 </style>
