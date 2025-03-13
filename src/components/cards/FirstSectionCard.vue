@@ -9,6 +9,7 @@
     :value="item.value"
   >
   </CardBase>
+
 </template>
 
 <script>
