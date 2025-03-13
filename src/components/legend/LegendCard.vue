@@ -1,10 +1,8 @@
 <!-- urbverde-ui/src/components/legend/LegendCard.vue -->
-<!-- LegendCard.vue -->
 <template>
-  <div class="card-container shadow-sm">
-    <!--  @mouseenter="isHovered = true" @mouseleave="isHovered = false" -->
+  <div class="card-container">
     <!-- Drag handle -->
-    <div v-if="draggable && isHovered" class="drag-handle">
+    <div v-if="draggable" class="drag-handle">
       <IconComponent name="drag" size="20" />
     </div>
 
@@ -15,13 +13,9 @@
       </div>
 
       <div class="title-wrapper">
-        <span v-if="title" class="title body-small-regular" :class="{ 'with-ellipsis': isHovered }">
+        <span v-if="title" class="title body-small-regular">
           {{ title }}
         </span>
-
-        <button v-if="showMenu && isHovered" class="menu-button">
-          <i class="bi bi-three-dots-vertical"></i>
-        </button>
       </div>
     </div>
 
@@ -45,7 +39,7 @@
       </div>
 
       <!-- Opacity Control -->
-      <!-- <OpacityControl v-if="showOpacity && isHovered"
+      <!-- <OpacityControl v-if="showOpacity"
                       v-model="localOpacity"
                       :layerId="layerId"
                       @update:modelValue="handleOpacityChange" /> -->
@@ -102,7 +96,6 @@ defineProps({
   }
 });
 
-const isHovered = ref(false);
 const localOpacity = ref(100);
 
 console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
@@ -120,10 +113,10 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 .card-container {
   position: relative;
   width: 100%;
-  padding: 12px 16px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #E9ECEF;
+  padding: 16px;
+  background: map-get($gray, white);
+  border-radius: 8px;
+  border: 1px solid map-get($gray, 200);
 }
 
 .drag-handle {
@@ -165,25 +158,6 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 .title {
   color: map-get($body-text, body-color);
   min-width: 0;
-}
-
-.title.with-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.menu-button {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: #6C757D;
-  border-radius: 4px;
-}
-
-.menu-button:hover {
-  background: #f0f0f0;
 }
 
 .content {

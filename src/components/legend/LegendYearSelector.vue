@@ -194,10 +194,10 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .section-container {
   background-color: #fff;
-  padding: 16px;
+  padding: 12px 16px;
   margin-bottom: 16px;
-  border-radius: 16px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid map-get($gray, 200);
   width: 100%;
 }
 
@@ -231,14 +231,13 @@ onBeforeUnmount(() => {
   height: 24px;
   border: none;
   background: none;
-  color: #000;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 0;
   transition: opacity 150ms ease-in-out;
 }
 .nav-button:hover:not(:disabled) {
-  background-color: #f8f9fa;
+  background-color: map-get($gray, 200);
 }
 .nav-button:disabled {
   cursor: not-allowed;
@@ -264,7 +263,7 @@ onBeforeUnmount(() => {
 
 /* Error state: red border */
 .select-display.error {
-  border-color: red;
+  border-color: map-get($theme, danger);
 }
 
 /* Shake animation */
@@ -330,7 +329,7 @@ onBeforeUnmount(() => {
   background: none;
   text-align: center;
   font-size: 14px;
-  color: #525960;
+  color: map-get($theme, secondary);
   cursor: pointer;
   transition: background-color 150ms ease;
 }
