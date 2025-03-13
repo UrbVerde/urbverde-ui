@@ -45,6 +45,10 @@
                       :layerId="layerId"
                       @update:modelValue="handleOpacityChange"
       />
+
+      <!-- Card Layer Switch -->
+      <CardLayerSwitch  class="grip-control"/>
+
     </div>
   </div>
 </template>
@@ -54,6 +58,7 @@ import { ref } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
+import CardLayerSwitch from './CardLayerSwitch.vue';
 
 defineProps({
   title: {
@@ -196,11 +201,13 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
   background-color: #999;
 }
 
-.opacity-control {
+.opacity-control, .grip-control {
   display: none;
 }
 
-.card-container:hover .opacity-control {
-  display: block;
+.card-container:hover .opacity-control,
+.card-container:hover .grip-control {
+  display: flex;
 }
+
 </style>
