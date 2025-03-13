@@ -1,6 +1,8 @@
 <!-- urbverde-ui/src/components/legend/OpacityControl.vue -->
 <template>
-  <div class="controls-section" @click="handleControlsClick">
+  <div class="controls-section"
+       @click="handleControlsClick"
+       @mouseleave="handleMouseLeave">
     <div class="visibility-controls">
       <button class="eye-container" @click.stop="toggleVisibility">
         <div class="eye-wrapper">
@@ -29,9 +31,11 @@
         <input
           type="range"
           :value="modelValue"
-          @input="updateValue($event.target.value)"
-          @mouseup="closeSlider"
-          @touchend="closeSlider"
+          @input="handleSliderInput($event.target.value)"
+          @mousedown="sliderDragging = true"
+          @mouseup="sliderDragging = false"
+          @touchstart="sliderDragging = true"
+          @touchend="sliderDragging = false"
           min="0"
           max="100"
           class="opacity-slider"
@@ -68,6 +72,8 @@ const layersStore = useLayersStore();
 const opacityValue = ref(props.modelValue);
 const showSlider = ref(false);
 const isInvalid = ref(false);
+const sliderDragging = ref(false);
+const hasSliderBeenDragged = ref(false);
 
 // Assistir mudanças no modelValue para atualizar o input
 watch(() => props.modelValue, (newValue) => {
@@ -79,6 +85,8 @@ const handleClickOutside = (event) => {
   const controlsSection = document.querySelector('.controls-section');
   if (controlsSection && !controlsSection.contains(event.target)) {
     showSlider.value = false;
+    // Resetar o estado de arrasto quando fechar
+    hasSliderBeenDragged.value = false;
   }
 };
 
@@ -107,18 +115,36 @@ const toggleVisibility = () => {
 const handleControlsClick = () => {
   if (!showSlider.value) {
     showSlider.value = true;
+    // Resetar o estado de arrasto quando abrir
+    hasSliderBeenDragged.value = false;
   }
 };
 
 const toggleSlider = () => {
   showSlider.value = !showSlider.value;
+  if (showSlider.value === false) {
+    // Resetar o estado de arrasto quando fechar
+    hasSliderBeenDragged.value = false;
+  }
 };
 
-const closeSlider = () => {
-  // Fecha o slider após o usuário soltar o mouse
-  setTimeout(() => {
+const handleMouseLeave = () => {
+  // Fecha o slider quando o mouse sai da área do componente
+  // MAS APENAS se o usuário já arrastou o slider
+  if (showSlider.value && hasSliderBeenDragged.value) {
     showSlider.value = false;
-  }, 250); // Pequeno atraso para garantir que o valor seja atualizado
+    hasSliderBeenDragged.value = false;
+  }
+};
+
+const handleSliderInput = (value) => {
+  // Marcar que o slider foi arrastado
+  if (sliderDragging.value) {
+    hasSliderBeenDragged.value = true;
+  }
+
+  // Atualizar o valor
+  updateValue(value);
 };
 
 const updateValue = (value) => {
