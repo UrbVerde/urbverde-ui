@@ -814,11 +814,13 @@ function initializeMap() {
   }
   map.value = new maplibregl.Map({
     container: mapContainer.value,
-    style:
-      'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+    style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
     ...initialState,
     attributionControl: false,
   });
+
+  layersStore.mapRef = map.value;
+
   map.value.addControl(
     new maplibregl.NavigationControl({
       visualizePitch: true,

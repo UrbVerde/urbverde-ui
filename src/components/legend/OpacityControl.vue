@@ -94,11 +94,18 @@ onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 
   // Inicializa a opacidade a partir do store
-  const currentLayer = layersStore.activeLayers.find(l => l.id === props.layerId);
-  if (currentLayer && currentLayer.opacity !== props.modelValue / 100) {
-    const newOpacity = Math.round(currentLayer.opacity * 100);
-    emit('update:modelValue', newOpacity);
-    opacityValue.value = newOpacity;
+  if (props.layerId) {
+    const currentLayer = layersStore.activeLayers.find(l => l.id === props.layerId);
+    if (currentLayer && currentLayer.opacity !== undefined) {
+      const newOpacity = Math.round(currentLayer.opacity * 100);
+      console.log(`[OpacityControl] Initializing opacity for layer ${props.layerId} to ${newOpacity}%`);
+      emit('update:modelValue', newOpacity);
+      opacityValue.value = newOpacity;
+    } else {
+      // If layer not found in store, initialize with current model value
+      console.log(`[OpacityControl] Layer ${props.layerId} not found in store, using model value: ${props.modelValue}%`);
+      opacityValue.value = props.modelValue;
+    }
   }
 });
 
@@ -177,7 +184,13 @@ const validateAndUpdate = () => {
 
 const updateOpacity = (value) => {
   emit('update:modelValue', value);
-  layersStore.setLayerOpacity(props.layerId, value / 100);
+  // Make sure we have a valid layerId before updating opacity
+  if (props.layerId) {
+    console.log(`[OpacityControl] Updating layer ${props.layerId} to opacity ${value/100}`);
+    layersStore.setLayerOpacity(props.layerId, value / 100);
+  } else {
+    console.warn('[OpacityControl] No layerId provided, cannot update opacity');
+  }
 };
 </script>
 

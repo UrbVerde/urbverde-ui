@@ -145,8 +145,10 @@ const handleYearChange = (year) => {
 // };
 
 const handleDataLayerOpacity = (opacity) => {
-  console.log('[MapLegend] Handling opacity change:', opacity);
-  layersStore.setLayerOpacity(opacity);
+  console.log('[MapLegend] Handling opacity change:', opacity, 'for layer:', currentLayerId.value);
+  if (currentLayerId.value) {
+    layersStore.setLayerOpacity(currentLayerId.value, opacity / 100);
+  }
 };
 
 const handleColorbarClick = () => {

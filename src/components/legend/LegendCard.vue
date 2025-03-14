@@ -113,13 +113,14 @@ const localOpacity = ref(100);
 
 console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 
-// const emit = defineEmits(['opacity-change', 'colorbar-click']);
+const emit = defineEmits(['opacity-change', 'colorbar-click']);
 
-// const handleOpacityChange = (value) => {
-//   console.log('[LegendCard] Opacity changed to:', value);
-//   localOpacity.value = value;
-//   emit('opacity-change', value);
-// };
+const handleOpacityChange = (value) => {
+  console.log('[LegendCard] Opacity changed to:', value);
+  localOpacity.value = value;
+  emit('opacity-change', value);
+};
+
 </script>
 
 <style scoped lang="scss">
