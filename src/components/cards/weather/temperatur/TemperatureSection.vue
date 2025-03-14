@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/temperatur/TemperatureSection.vue -->
 <template>
   <div class="dashboard">
     <div class="left-panel">
@@ -21,35 +22,38 @@
         />
       </div>
     </div>
+
     <div class="third-row">
-      <div class="large-card">
-        <div v-if="isLoading" class="loading-indicator">Carregando dados...</div>
-        <GraphicGenerator
-          v-else
-          :data="[{title: `Temperatura média em ${nm_mun} ao longo do tempo`, subtitle: '', value: ''}]"
-          :xData="chartXData"
-          :yData="chartYData"
-          :xLabel="chartXLabel"
-          :yLabel="chartYLabel"
-          class="temperature-card"
-          dataType="Temperatura média"
-          :showAverage="showHistoricalAverage"
-        />
+      <span class="title-statistics-container heading-h5">
+        Temperatura média em {{nm_mun}} ao longo do tempo
+      </span>
+
+      <div class="cards-container">
+        <div class="large-card">
+          <div v-if="isLoading" class="loading-indicator">Carregando dados...</div>
+          <GraphicGenerator
+            v-else
+            :data="[{title: `Gáfico temperatura média ao longo dos anos`, subtitle: '', value: ''}]"
+            :xData="chartXData"
+            :yData="chartYData"
+            :xLabel="chartXLabel"
+            :yLabel="chartYLabel"
+            dataType="Temperatura média"
+            :showAverage="showHistoricalAverage"
+          />
+        </div>
+        <div class="small-card">
+          <GraphicData
+            :title="lastYearTitle"
+            :data="absDifferenceData"
+            :subtitle="compareText"
+            :showImage="true"
+          >
+          </GraphicData>
+        </div>
       </div>
-      <div class="small-card">
-        <FirstSectionCard
-          :data="[{title: yearSelectorTitle, subtitle: '', value: ''}]"
-          class="temperature-card"
-        >
-          <div class="year-selector">
-            <select v-model="selectedYear" class="year-dropdown" @change="fetchData">
-              <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
-            </select>
-          </div>
-        </FirstSectionCard>
-      </div>
+      <pre v-if="debug">{{ debugData }}</pre>
     </div>
-    <pre v-if="debug">{{ debugData }}</pre>
   </div>
 </template>
 
@@ -59,12 +63,16 @@ import FirstSectionCard from '../../FirstSectionCard.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { computed, ref, onMounted, watch } from 'vue';
 import GraphicGenerator from './GraphicGenerator.vue';
+import GraphicData from './GraphicData.vue';
 
 export default {
+  name: 'TemperatureSection',
+
   components: {
     InfoTemperature,
     FirstSectionCard,
     GraphicGenerator,
+    GraphicData,
   },
 
   props: {
@@ -72,9 +80,9 @@ export default {
       type: Number,
       required: true
     },
-    selectedYearProp: {
+    selectedYear: {
       type: Number,
-      default: null
+      required: true
     },
     debug: {
       type: Boolean,
@@ -87,34 +95,70 @@ export default {
     const nm_mun = computed(() => locationStore.nm_mun || '?');
     const cardData = ref([]);
     const availableYears = ref([]);
-    const selectedYear = ref(null);
     const chartXData = ref([]);
     const chartYData = ref([]);
-    const yearSelectorTitle = ref('Selecione o ano');
     const isLoading = ref(true);
     const debugData = ref({});
+    const historicalAverage = ref(0);
+    const lastYearTemp = ref(0);
+    const tempDifference = ref(0);
 
     const firstTwoCards = computed(() => cardData.value.slice(0, 2));
     const lastTwoCards = computed(() => cardData.value.slice(2, 4));
+
+    // Computed properties for GraphicData component
+    const lastYear = computed(() => {
+      if (availableYears.value.length === 0) {return '';}
+
+      return availableYears.value[availableYears.value.length - 1];
+    });
+
+    const lastYearTitle = computed(() => {
+      if (!lastYear.value) {return '';}
+
+      return `A temperatura em ${lastYear.value} foi`;
+    });
+
+    const absDifferenceData = computed(() => `${Math.abs(tempDifference.value).toFixed(1)}°C`);
+
+    const compareText = computed(() => tempDifference.value > 0 ? 'acima da média histórica' : 'abaixo da média histórica');
+
+    // Keep the original comparisonText for debug purposes
+    const comparisonText = computed(() => {
+      if (availableYears.value.length === 0) {return '';}
+
+      const lastYear = availableYears.value[availableYears.value.length - 1];
+      const difference = tempDifference.value;
+      const absDifference = Math.abs(difference).toFixed(1);
+      const compareText = difference > 0 ? 'acima' : 'abaixo';
+
+      return `Em ${lastYear}, a temperatura média foi ${absDifference}°C ${compareText} da média histórica.`;
+    });
 
     const chartXLabel = 'Anos';
     const chartYLabel = 'Temperatura (°C)';
     const showHistoricalAverage = ref(true);
 
-    onMounted(async() => {
-      await fetchAvailableYears();
-      if (availableYears.value.length > 0) {
-        selectedYear.value = props.selectedYearProp || availableYears.value[availableYears.value.length - 1];
-        await fetchData();
-      }
-      await fetchHistoricalData();
-    });
+    // This onMounted hook is replaced by the one below with fetchData included
 
+    // Watch for changes in cityCode
     watch(() => props.cityCode, async() => {
       isLoading.value = true;
       await fetchAvailableYears();
-      if (availableYears.value.length > 0) {
-        selectedYear.value = props.selectedYearProp || availableYears.value[availableYears.value.length - 1];
+      await fetchHistoricalData();
+    });
+
+    // Watch for changes in selectedYear - similar to HeatSection implementation
+    watch(() => props.selectedYear, async() => {
+      if (props.selectedYear) {
+        await fetchData();
+      }
+    }, { immediate: true });
+
+    // Ensure the data is fetched on component mount
+    onMounted(async() => {
+      await fetchAvailableYears();
+      if (props.selectedYear) {
         await fetchData();
       }
       await fetchHistoricalData();
@@ -123,7 +167,6 @@ export default {
     const fetchAvailableYears = async() => {
       try {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${props.cityCode}`);
-        alert(props.cityCode);
         const data = await response.json();
         if (Array.isArray(data)) {
           availableYears.value = data.sort((a, b) => a - b);
@@ -135,14 +178,15 @@ export default {
         console.error('Error fetching available years:', error);
         availableYears.value = [];
       }
-
     };
 
     const fetchData = async() => {
-      if (!selectedYear.value) {return;}
+      if (!props.selectedYear) {
+        return;
+      }
 
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${props.cityCode}&year=${selectedYear.value}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${props.cityCode}&year=${props.selectedYear}`);
         const data = await response.json();
         if (Array.isArray(data)) {
           cardData.value = data;
@@ -203,10 +247,24 @@ export default {
 
         chartYData.value = temps;
 
+        // Calculate historical average
+        const validTemps = chartYData.value.filter(temp => temp !== null);
+        historicalAverage.value = validTemps.length > 0 ?
+          validTemps.reduce((sum, temp) => sum + temp, 0) / validTemps.length : 0;
+
+        // Get the last year's temperature
+        if (validTemps.length > 0) {
+          lastYearTemp.value = validTemps[validTemps.length - 1];
+          tempDifference.value = lastYearTemp.value - historicalAverage.value;
+        }
+
         // For debugging
         debugData.value = {
           years: chartXData.value,
           temperatures: chartYData.value,
+          historicalAverage: historicalAverage.value,
+          lastYearTemp: lastYearTemp.value,
+          tempDifference: tempDifference.value,
           rawTemperatureData: temperatureData
         };
 
@@ -215,6 +273,9 @@ export default {
         console.error('Error fetching historical data:', error);
         chartXData.value = [];
         chartYData.value = [];
+        historicalAverage.value = 0;
+        lastYearTemp.value = 0;
+        tempDifference.value = 0;
         isLoading.value = false;
       }
     };
@@ -222,7 +283,6 @@ export default {
     return {
       nm_mun,
       cardData,
-      selectedYear,
       availableYears,
       firstTwoCards,
       lastTwoCards,
@@ -230,11 +290,18 @@ export default {
       chartYData,
       chartXLabel,
       chartYLabel,
-      yearSelectorTitle,
       fetchData,
       isLoading,
       debugData,
-      showHistoricalAverage
+      showHistoricalAverage,
+      historicalAverage,
+      lastYearTemp,
+      tempDifference,
+      comparisonText,
+      lastYear,
+      lastYearTitle,
+      absDifferenceData,
+      compareText
     };
   }
 };
@@ -266,8 +333,7 @@ export default {
 }
 
 .top,
-.bottom,
-.third-row {
+.bottom {
   display: flex;
   align-items: flex-start;
   gap: 24px;
@@ -276,7 +342,6 @@ export default {
 }
 
 .temperature-card {
-  flex: 1;
   background: white;
   padding: 24px;
   border-radius: 16px;
@@ -284,31 +349,32 @@ export default {
 }
 
 .third-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 24px;
+}
+
+.title-statistics-container {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
   width: 100%;
 }
 
 .large-card {
-  flex: 2;
+  width: 66.66%; /* Exatamente 2/3 */
   min-height: 300px;
   position: relative;
 }
 
 .small-card {
-  flex: 1;
-}
-
-.year-selector {
-  margin-top: 16px;
-  width: 100%;
-}
-
-.year-dropdown {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  font-size: 16px;
-  outline: none;
+  width: 33.33%; /* Exatamente 1/3 */
 }
 
 .loading-indicator {
@@ -327,8 +393,11 @@ export default {
   }
 
   .top,
-  .bottom,
-  .third-row {
+  .bottom {
+    gap: 16px;
+  }
+
+  .cards-container {
     gap: 16px;
   }
 }
@@ -340,9 +409,13 @@ export default {
     max-width: 100%;
   }
 
+  .cards-container {
+    flex-direction: column;
+  }
+
   .large-card,
   .small-card {
-    flex-basis: 100%;
+    width: 100%;
   }
 }
 </style>
