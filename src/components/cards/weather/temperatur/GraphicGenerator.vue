@@ -89,5 +89,6 @@ export default {
     flex: 1 0 0;
     align-self: stretch;
     height: auto;
+    width: 100%;
   }
   </style>

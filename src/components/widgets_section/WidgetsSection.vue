@@ -38,8 +38,10 @@ import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 // Import your section components as needed:
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
+import TGraphicSection from '@/components/cards/weather/temperatur/TGraphicSection.vue';
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
+
 import SeeMoreSection from '../cards/weather/seeMore/SeeMoreSection.vue';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
 import VegetationSection from '../cards/vegetation/vegetationCover/VegetationSection.vue';
@@ -136,6 +138,11 @@ export default {
             ref: 'statsSection',
             title: `Temperatura e clima em ${nm_mun.value} - ${uf.value}`,
             component: TemperatureSection
+          },
+          { id: 'stats',
+            ref: 'graphicSection',
+            title: `Temperatura média em ${nm_mun.value} - ${uf.value} ao longo do tempo`,
+            component: TGraphicSection
           },
           {
             id: 'stats',
