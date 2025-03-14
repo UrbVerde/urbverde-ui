@@ -12,10 +12,15 @@
         <IconComponent :name="icon || 'bi-question-circle'" :size="20" />
       </div>
 
-      <div class="title-wrapper">
-        <span v-if="title" class="title body-small-regular">
-          {{ title }}
-        </span>
+      <div class="label-wrapper">
+        <div class="title-wrapper">
+          <span v-if="title" class="title body-small-regular">
+            {{ title }}
+          </span>
+        </div>
+
+        <!-- Recorte da camada -->
+        <LayerCut class="layer-cut"/>
       </div>
     </div>
 
@@ -59,6 +64,7 @@ import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
 import CardLayerSwitch from './CardLayerSwitch.vue';
+import LayerCut from './LayerCut.vue';
 
 defineProps({
   title: {
@@ -153,6 +159,16 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
   justify-content: center;
 }
 
+.label-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  min-width: 0;
+  flex-direction: column;
+}
+
 .title-wrapper {
   flex: 1;
   display: flex;
@@ -160,6 +176,13 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
   justify-content: space-between;
   gap: 8px;
   min-width: 0;
+}
+
+.layer-cut{
+  width: 100%;
+  display: flex;
+  align-items: left;
+  cursor: pointer;
 }
 
 .title {
@@ -208,6 +231,15 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 .card-container:hover .opacity-control,
 .card-container:hover .grip-control {
   display: flex;
+}
+
+.card-container:hover :deep(.layer-cut-icon) {
+  display: block;
+}
+
+.card-container:hover :deep(.layer-cut-text),
+.card-container:hover :deep(.layer-cut-icon) {
+  color: map-get($theme, primary);
 }
 
 </style>
