@@ -1,3 +1,4 @@
+<!-- CardBase.vue -->
 <template>
   <div class="custom-card shadow-sm">
     <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
@@ -17,9 +18,26 @@
       <slot name="image"></slot>
     </div>
 
-    <!-- Chart.js integration -->
+    <!-- Chart component integration -->
     <div class="chart-container" v-if="graphic">
-      <canvas ref="chartCanvas"></canvas>
+      <component
+        :is="graphicComponent"
+        :xData="xData"
+        :yData="yData"
+        :xLabel="xLabel"
+        :yLabel="yLabel"
+        :dataType="dataType"
+        :chartColor="chartColor"
+        :chartBgColor="chartBgColor"
+        :suggestYScale="suggestYScale"
+        :paddingFactor="paddingFactor"
+        :showAverage="showAverage"
+        :averageLineColor="averageLineColor"
+        :averageLineDash="averageLineDash"
+        :averageLineWidth="averageLineWidth"
+        :averageLabel="averageLabel"
+        :chartData="chartData"
+      />
     </div>
 
     <div class="card-content" v-if="$slots.default">
@@ -37,10 +55,15 @@
 </template>
 
 <script>
-import { Chart } from 'chart.js/auto';
+import LineGraphic from './graphics/LineGraphic.vue';
+import PizzaGraphic from './graphics/PizzaGraphic.vue';
 
 export default {
   name: 'CardBase',
+  components: {
+    LineGraphic,
+    PizzaGraphic
+  },
   props: {
     title: {
       type: String,
@@ -59,11 +82,17 @@ export default {
       default: 'top',
       validator: value => ['top', 'middle', 'bottom'].includes(value),
     },
-    // Chart.js properties
+    // Chart properties
     graphic: {
       type: Boolean,
       default: false,
     },
+    graphicType: {
+      type: String,
+      default: 'line',
+      validator: value => ['line', 'pizza'].includes(value),
+    },
+    // Data properties shared by all chart types
     xLabel: {
       type: String,
       default: '',
@@ -80,6 +109,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    chartData: {
+      type: Object,
+      default: () => ({}),
+      description: 'Custom data structure for specific chart types (e.g., pizza chart)'
+    },
     dataType: {
       type: String,
       default: 'Data',
@@ -87,361 +121,54 @@ export default {
     },
     chartColor: {
       type: String,
-      default: '#4CAF50', // Default to green (from the green 500 color)
+      default: '#4CAF50', // Default to green
     },
     chartBgColor: {
       type: String,
       default: 'rgba(76, 175, 80, 0.1)', // Light green with transparency
     },
-    // New properties for controlling Y axis
+    // Line chart specific properties
     suggestYScale: {
       type: Boolean,
-      default: true, // By default, use suggested scale based on data
+      default: true,
     },
     paddingFactor: {
       type: Number,
-      default: 0.1, // 10% padding above and below min/max by default
+      default: 0.1,
     },
-    // New properties for historical average line
     showAverage: {
       type: Boolean,
-      default: true, // By default, don't show average line
+      default: true,
     },
     averageLineColor: {
       type: String,
-      default: 'rgba(255, 99, 132, 1)', // Red line for average by default
+      default: 'rgba(255, 99, 132, 1)',
     },
     averageLineDash: {
       type: Array,
-      default: () => [5, 5], // Dashed line by default
+      default: () => [5, 5],
     },
     averageLineWidth: {
       type: Number,
-      default: 2, // Line width
+      default: 2,
     },
     averageLabel: {
       type: String,
-      default: 'Média histórica', // Label for average line in legend
+      default: 'Média histórica',
     },
-  },
-  data() {
-    return {
-      chart: null,
-    };
   },
   computed: {
     imageSlot() {
       return !!this.$slots.image;
     },
-    // Calculate suggested min and max for Y axis
-    yAxisRange() {
-      if (!this.yData || this.yData.length === 0) {
-        return { min: 0, max: 100 };
-      }
-
-      const validValues = this.yData.filter(val => val !== null && val !== undefined && !isNaN(val));
-      if (validValues.length === 0) {
-        return { min: 0, max: 100 };
-      }
-
-      const minValue = Math.min(...validValues);
-      const maxValue = Math.max(...validValues);
-
-      // Calculate range and add padding
-      const range = maxValue - minValue;
-      const padding = range * this.paddingFactor;
-
-      // Ensure min is never negative unless data values are negative
-      const calculatedMin = minValue >= 0 ? Math.max(0, minValue - padding) : minValue - padding;
-      const calculatedMax = maxValue + padding;
-
-      return {
-        min: calculatedMin,
-        max: calculatedMax
-      };
-    },
-    // Calculate historical average from yData
-    historicalAverage() {
-      if (!this.yData || this.yData.length === 0) {
-        return 0;
-      }
-
-      const validValues = this.yData.filter(val => val !== null && val !== undefined && !isNaN(val));
-      if (validValues.length === 0) {
-        return 0;
-      }
-
-      const sum = validValues.reduce((acc, val) => acc + val, 0);
-
-      return sum / validValues.length;
-    }
-  },
-  mounted() {
-    if (this.graphic) {
-      this.initChart();
-    }
-  },
-  methods: {
-    initChart() {
-      if (!this.$refs.chartCanvas) {return;}
-
-      const ctx = this.$refs.chartCanvas.getContext('2d');
-      const yAxisSettings = this.getYAxisSettings();
-
-      // Create chart configuration
-      const config = {
-        type: 'line',
-        data: {
-          labels: this.xData,
-          datasets: [{
-            label: this.dataType,
-            data: this.yData,
-            borderColor: this.chartColor,
-            backgroundColor: this.chartBgColor,
-            borderWidth: 2,
-            pointBackgroundColor: this.chartColor,
-            tension: 0.4,
-            fill: true,
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              title: {
-                display: !!this.xLabel,
-                text: this.xLabel
-              }
-            },
-            y: {
-              title: {
-                display: !!this.yLabel,
-                text: this.yLabel
-              },
-              ...yAxisSettings
-            }
-          }
-        }
+    graphicComponent() {
+      // Map graphic type to component
+      const componentMap = {
+        'line': 'LineGraphic',
+        'pizza': 'PizzaGraphic'
       };
 
-      // Add historical average line if enabled
-      if (this.showAverage && this.yData && this.yData.length > 0) {
-        this.addAverageLineToConfig(config);
-      }
-
-      // Create the chart
-      this.chart = new Chart(ctx, config);
-    },
-
-    addAverageLineToConfig(config) {
-      const avgValue = this.historicalAverage;
-
-      // Add horizontal average line as an annotation
-      if (!config.options.plugins) {
-        config.options.plugins = {};
-      }
-
-      // Configure annotation plugin
-      config.options.plugins.annotation = {
-        annotations: {
-          averageLine: {
-            type: 'line',
-            yMin: avgValue,
-            yMax: avgValue,
-            borderColor: this.averageLineColor,
-            borderWidth: this.averageLineWidth,
-            borderDash: this.averageLineDash,
-            label: {
-              display: true,
-              content: `${this.averageLabel}: ${avgValue.toFixed(1)}`,
-              position: 'end',
-              backgroundColor: 'rgba(255, 255, 255, 0.8)',
-              color: this.averageLineColor,
-              font: {
-                weight: 'bold'
-              },
-              padding: 4
-            }
-          }
-        }
-      };
-
-      // Add average line to legend
-      config.data.datasets.push({
-        label: this.averageLabel,
-        data: Array(this.xData.length).fill(avgValue),
-        borderColor: this.averageLineColor,
-        borderDash: this.averageLineDash,
-        borderWidth: this.averageLineWidth,
-        pointRadius: 0,
-        fill: false,
-        tension: 0
-      });
-    },
-
-    getYAxisSettings() {
-      if (!this.suggestYScale) {
-        return { beginAtZero: true };
-      }
-
-      return {
-        min: this.yAxisRange.min,
-        max: this.yAxisRange.max,
-        beginAtZero: this.yAxisRange.min >= 0
-      };
-    },
-
-    updateChart() {
-      if (!this.chart) {return;}
-
-      // Update main dataset
-      this.chart.data.labels = this.xData;
-      this.chart.data.datasets[0].data = this.yData;
-
-      // Update y-axis scale when data changes
-      if (this.suggestYScale) {
-        this.chart.options.scales.y.min = this.yAxisRange.min;
-        this.chart.options.scales.y.max = this.yAxisRange.max;
-      }
-
-      // Update or add average line
-      if (this.showAverage) {
-        const avgValue = this.historicalAverage;
-
-        // Update annotation if it exists
-        if (this.chart.options.plugins && this.chart.options.plugins.annotation) {
-          if (this.chart.options.plugins.annotation.annotations.averageLine) {
-            this.chart.options.plugins.annotation.annotations.averageLine.yMin = avgValue;
-            this.chart.options.plugins.annotation.annotations.averageLine.yMax = avgValue;
-            this.chart.options.plugins.annotation.annotations.averageLine.label.content =
-              `${this.averageLabel}: ${avgValue.toFixed(1)}`;
-          } else {
-            // Create annotation if it doesn't exist
-            this.chart.options.plugins.annotation.annotations.averageLine = {
-              type: 'line',
-              yMin: avgValue,
-              yMax: avgValue,
-              borderColor: this.averageLineColor,
-              borderWidth: this.averageLineWidth,
-              borderDash: this.averageLineDash,
-              label: {
-                display: true,
-                content: `${this.averageLabel}: ${avgValue.toFixed(1)}`,
-                position: 'end',
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                color: this.averageLineColor,
-                font: {
-                  weight: 'bold'
-                },
-                padding: 4
-              }
-            };
-          }
-        } else {
-          // If annotation plugin wasn't configured, reconfigure the chart
-          if (!this.chart.options.plugins) {
-            this.chart.options.plugins = {};
-          }
-
-          this.chart.options.plugins.annotation = {
-            annotations: {
-              averageLine: {
-                type: 'line',
-                yMin: avgValue,
-                yMax: avgValue,
-                borderColor: this.averageLineColor,
-                borderWidth: this.averageLineWidth,
-                borderDash: this.averageLineDash,
-                label: {
-                  display: true,
-                  content: `${this.averageLabel}: ${avgValue.toFixed(1)}`,
-                  position: 'end',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  color: this.averageLineColor,
-                  font: {
-                    weight: 'bold'
-                  },
-                  padding: 4
-                }
-              }
-            }
-          };
-        }
-
-        // Update or add dataset for the legend
-        if (this.chart.data.datasets.length > 1) {
-          // Update existing average line dataset
-          this.chart.data.datasets[1].data = Array(this.xData.length).fill(avgValue);
-        } else {
-          // Add new average line dataset
-          this.chart.data.datasets.push({
-            label: this.averageLabel,
-            data: Array(this.xData.length).fill(avgValue),
-            borderColor: this.averageLineColor,
-            borderDash: this.averageLineDash,
-            borderWidth: this.averageLineWidth,
-            pointRadius: 0,
-            fill: false,
-            tension: 0
-          });
-        }
-      } else {
-        // Remove average line if it exists and showAverage is false
-        if (this.chart.data.datasets.length > 1) {
-          this.chart.data.datasets.splice(1, 1);
-        }
-
-        // Remove annotation if it exists
-        if (this.chart.options.plugins &&
-            this.chart.options.plugins.annotation &&
-            this.chart.options.plugins.annotation.annotations.averageLine) {
-          delete this.chart.options.plugins.annotation.annotations.averageLine;
-        }
-      }
-
-      this.chart.update();
-    }
-  },
-  watch: {
-    graphic(newVal) {
-      if (newVal && !this.chart) {
-        this.$nextTick(() => {
-          this.initChart();
-        });
-      }
-    },
-    xData() {
-      this.updateChart();
-    },
-    yData() {
-      this.updateChart();
-    },
-    suggestYScale() {
-      this.updateChart();
-    },
-    paddingFactor() {
-      this.updateChart();
-    },
-    showAverage() {
-      this.updateChart();
-    },
-    averageLineColor() {
-      this.updateChart();
-    },
-    averageLineDash() {
-      this.updateChart();
-    },
-    averageLineWidth() {
-      this.updateChart();
-    },
-    averageLabel() {
-      this.updateChart();
-    }
-  },
-  beforeUnmount() {
-    if (this.chart) {
-      this.chart.destroy();
+      return componentMap[this.graphicType] || 'LineGraphic';
     }
   }
 };
@@ -498,14 +225,6 @@ p, h6 {
   word-wrap: break-word;
 }
 
-.content-wraper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
 .textodescritivo {
   color: map-get($gray, 600);
   align-self: stretch;
@@ -535,7 +254,7 @@ p, h6 {
   width: 100%;
 }
 
-/* Chart.js style */
+/* Chart container style */
 .chart-container {
   width: 100%;
   height: 300px;

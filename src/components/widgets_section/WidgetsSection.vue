@@ -38,7 +38,7 @@ import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 // Import your section components as needed:
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
-import TGraphicSection from '@/components/cards/weather/temperatur/TGraphicSection.vue';
+import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection.vue';
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
 
