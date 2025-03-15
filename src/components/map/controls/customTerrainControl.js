@@ -5,6 +5,7 @@ class CustomTerrainControl {
     this.options = options;
     this._terrainActive = false;
     this._customClassName = 'custom-terrain-control';
+    this._buildingLayerStates = {}; // Para armazenar estado original das camadas
   }
 
   onAdd(map) {
@@ -34,6 +35,14 @@ class CustomTerrainControl {
       });
     }
 
+    // Listen to opacity changes in dynamic layers
+    this._map.on('styledata', () => {
+      // Corrigir opacidade se o terreno estiver ativo
+      if (this._terrainActive) {
+        this._preserveLayerOpacity();
+      }
+    });
+
     return this._container;
   }
 
@@ -57,6 +66,9 @@ class CustomTerrainControl {
 
       // Show building layers
       this._toggleBuildingLayers(true);
+
+      // Restaurar opacidade das camadas dinâmicas
+      this._restoreLayerOpacity();
     } else {
       // Ensure terrain source exists
       this._initTerrainSource();
@@ -72,7 +84,51 @@ class CustomTerrainControl {
 
       // Hide building layers
       this._toggleBuildingLayers(false);
+
+      // Preservar opacidade das camadas dinâmicas
+      this._preserveLayerOpacity();
     }
+  }
+
+  // Preservar opacidade das camadas dinâmicas
+  _preserveLayerOpacity() {
+    if (!this._map || !this._map.getStyle() || !this._map.getStyle().layers) {return;}
+
+    // Verificar camadas dinâmicas
+    const dynamicLayers = ['dynamic-layer', 'dynamic-layer-outline'];
+
+    dynamicLayers.forEach(layerId => {
+      try {
+        if (this._map.getLayer(layerId)) {
+          const layer = this._map.getLayer(layerId);
+
+          // Verificar o tipo de camada e obter a propriedade de opacidade correta
+          let opacityProp = '';
+          if (layer.type === 'fill') {
+            opacityProp = 'fill-opacity';
+          } else if (layer.type === 'line') {
+            opacityProp = 'line-opacity';
+          } else if (layer.type === 'raster') {
+            opacityProp = 'raster-opacity';
+          }
+
+          if (opacityProp) {
+            // Armazenar o valor atual de opacidade para uso futuro
+            const currentOpacity = this._map.getPaintProperty(layerId, opacityProp);
+            this._map.setPaintProperty(layerId, opacityProp, currentOpacity);
+          }
+        }
+      } catch (e) {
+        console.error(`Error preserving opacity for layer ${layerId}:`, e);
+      }
+    });
+  }
+
+  // Restaurar opacidade após desativar o terreno
+  _restoreLayerOpacity() {
+    // Similar ao método _preserveLayerOpacity, apenas para garantir que
+    // a opacidade seja restaurada corretamente
+    this._preserveLayerOpacity();
   }
 
   // Helper function to toggle building layers visibility
@@ -83,7 +139,23 @@ class CustomTerrainControl {
     for (const layer of layers) {
       if (layer.type === 'fill-extrusion' && layer.id.toLowerCase().includes('building')) {
         try {
-          this._map.setLayoutProperty(layer.id, 'visibility', visible ? 'visible' : 'none');
+          // Salvar estado original se estamos escondendo
+          if (!visible && !this._buildingLayerStates[layer.id]) {
+            this._buildingLayerStates[layer.id] = {
+              visibility: this._map.getLayoutProperty(layer.id, 'visibility') || 'visible'
+            };
+          }
+
+          // Restaurar estado original ou esconder
+          if (visible && this._buildingLayerStates[layer.id]) {
+            this._map.setLayoutProperty(
+              layer.id,
+              'visibility',
+              this._buildingLayerStates[layer.id].visibility
+            );
+          } else {
+            this._map.setLayoutProperty(layer.id, 'visibility', visible ? 'visible' : 'none');
+          }
         } catch (e) {
           console.error('Error toggling building layer:', e);
         }
@@ -97,50 +169,50 @@ class CustomTerrainControl {
       const style = document.createElement('style');
       style.id = 'custom-terrain-control-styles';
       style.innerHTML = `
-        .custom-terrain-control {
-          background: white;
-          box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-          border: 2px solid white !important;
-          margin-right: 10px;
-          height: 29px !important;
-          width: 29px !important;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 7;
-          transition: transform 0.2s ease;
-          padding: 0 !important;
-        }
-        
-        .custom-terrain-control:hover {
-          background: #e9e9e9;
-        }
-        
-        .custom-terrain-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-          height: 100%;
-        }
-        
-        .custom-terrain-icon {
-          font-family: Roboto, Arial, sans-serif;
-          font-size: 14px;
-          font-weight: bold;
-          color: #333;
-        }
-        
-        .custom-terrain-button.active {
-          background: #D2E8DD;
-        }
-        
-        .custom-terrain-button.active .custom-terrain-icon {
-          color: #025949;
+          .custom-terrain-control {
+            background: white;
+            box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+            border: 2px solid white !important;
+            margin-right: 10px;
+            height: 29px !important;
+            width: 29px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 7;
+            transition: transform 0.2s ease;
+            padding: 0 !important;
+          }
           
-        }
-      `;
+          .custom-terrain-control:hover {
+            background: #e9e9e9;
+          }
+          
+          .custom-terrain-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+          }
+          
+          .custom-terrain-icon {
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+          }
+          
+          .custom-terrain-button.active {
+            background: #D2E8DD;
+          }
+          
+          .custom-terrain-button.active .custom-terrain-icon {
+            color: #025949;
+            
+          }
+        `;
       document.head.appendChild(style);
     }
   }
@@ -149,6 +221,12 @@ class CustomTerrainControl {
     if (this._container && this._container.parentNode) {
       this._container.parentNode.removeChild(this._container);
     }
+
+    // Remover listener
+    if (this._map) {
+      this._map.off('styledata');
+    }
+
     this._map = undefined;
   }
 }
