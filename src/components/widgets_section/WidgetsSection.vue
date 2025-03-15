@@ -258,6 +258,7 @@ export default {
         if (!this.isParksLayer) {
           this.selectedYears = this.selectedYears.map(() => newValue);
         }
+        alert(this.defaultYear);
       },
       immediate: true
     }

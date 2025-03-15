@@ -125,11 +125,50 @@ const fetchYears = async(cityCode) => {
     }
     const data = await response.json();
     years.value = data;
+
+    // After fetching years, check if the current year is valid
+    // If not, set it to the default year if available in the years list,
+    // otherwise set it to the most recent year available
+    if (!years.value.includes(currentYear.value)) {
+      if (years.value.includes(props.defaultYear)) {
+        currentYear.value = props.defaultYear;
+        emit('update:modelValue', props.defaultYear);
+      } else if (years.value.length > 0) {
+        // If default year is not available, use the most recent year
+        const mostRecentYear = Math.max(...years.value);
+        currentYear.value = mostRecentYear;
+        emit('update:modelValue', mostRecentYear);
+      }
+    }
   } catch (error) {
     console.error('Error fetching years:', error);
     years.value = [];
   }
 };
+
+// Then modify the onMounted hook to ensure proper initialization
+onMounted(async() => {
+  // Ensure currentYear is initialized with modelValue or defaultYear
+  if (!currentYear.value && props.modelValue) {
+    currentYear.value = props.modelValue;
+  } else if (!currentYear.value) {
+    currentYear.value = props.defaultYear;
+  }
+
+  await fetchYears(props.cityCode);
+});
+
+// Then modify the onMounted hook to ensure proper initialization
+onMounted(async() => {
+  // Ensure currentYear is initialized with modelValue or defaultYear
+  if (!currentYear.value && props.modelValue) {
+    currentYear.value = props.modelValue;
+  } else if (!currentYear.value) {
+    currentYear.value = props.defaultYear;
+  }
+
+  await fetchYears(props.cityCode);
+});
 
 // Watch for changes in modelValue and update currentYear.
 watch(
