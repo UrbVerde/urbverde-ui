@@ -44,6 +44,8 @@ import CustomHash from './customHash';
 import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
+import CustomTerrainControl from './controls/customTerrainControl';
+
 // Example computed properties (replace these with real values as needed)
 const computedScaleMetric = computed(() =>
   // You could calculate this dynamically based on the map's scale
@@ -824,9 +826,8 @@ function initializeMap() {
   map.value.addControl(
     new maplibregl.NavigationControl({
       visualizePitch: true,
-      // showZoom: true,
-      // showCompass: true
     }), 'top-left');
+
   map.value.addControl(
     new maplibregl.GeolocateControl({
       positionOptions: { enableHighAccuracy: true },
@@ -835,16 +836,12 @@ function initializeMap() {
     }),
     'top-left'
   );
-  // map.value.addSource('terrain', {
-  //   type: 'raster-dem',
-  //   url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ',
-  //   tileSize: 512,        // or 256 if you prefer
-  //   maxzoom: 14           // depends on your DEM source
-  // });
+
+  // Adicione o nosso controle de terreno personalizado
   map.value.addControl(
-    new maplibregl.TerrainControl({
+    new CustomTerrainControl({
       source: 'terrain',
-      exaggeration: 6,
+      exaggeration: 2,
     }), 'top-left'
   );
 

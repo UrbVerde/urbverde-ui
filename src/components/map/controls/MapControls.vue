@@ -7,11 +7,13 @@
       @style-change="onStyleChange"
     />
 
+    <!--
     <TerrainControl
       :map="map"
       :enabled="terrainEnabled"
       @toggle="onTerrainToggle"
     />
+    -->
 
     <LocationControl
       :map="map"
@@ -23,7 +25,6 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 import BasemapSwitcher from './BasemapSwitcher.vue';
-import TerrainControl from './TerrainControl.vue';
 import LocationControl from './LocationControl.vue';
 
 defineProps({
@@ -46,10 +47,6 @@ const emit = defineEmits(['style-change', 'terrain-toggle', 'location-found']);
 // Pass events up to parent
 function onStyleChange(data) {
   emit('style-change', data);
-}
-
-function onTerrainToggle(enabled) {
-  emit('terrain-toggle', enabled);
 }
 
 function onLocationFound(coords) {

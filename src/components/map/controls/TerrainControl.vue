@@ -1,4 +1,9 @@
 <!-- src/components/map/controls/TerrainControl.vue -->
+
+<!-- Este componente NÃO ESTÁ SENDO UTILIZADO, foi substituido pelo
+ customTerrainControl.js
+-->
+
 <template>
   <div class="terrain-control" @click="toggleTerrain">
     <div class="terrain-icon">3D</div>
@@ -67,14 +72,14 @@ function toggleBuildingLayers(visible) {
 }
 </script>
 
-  <style scoped>
+  <style scoped lang="scss">
   .terrain-control {
-    background: #fff;
+    background: map-get($gray, white);
     box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
     border-radius: 8px;
-    border: 2px solid #fff;
+    border: 2px solid map-get($gray, white);
     position: absolute;
-    bottom: 20px;
+    bottom: 16px;
     left: 110px; /* Position to the right of style switcher */
     height: 40px;
     width: 40px;
@@ -87,13 +92,13 @@ function toggleBuildingLayers(visible) {
   }
 
   .terrain-control:hover {
-    transform: scale(1.05);
+    background: map-get($gray, 200);
   }
 
   .terrain-icon {
     font-family: Roboto, Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
-    color: #3c4043;
+    color: map-get($gray, 800);
   }
   </style>
