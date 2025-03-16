@@ -44,10 +44,13 @@ import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
 
 import SeeMoreSection from '../cards/weather/seeMore/SeeMoreSection.vue';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
+
 import VegetationSection from '../cards/vegetation/vegetationCover/VegetationSection.vue';
+import VGraphicSection from '@/components/cards/vegetation/vgraphics/VGraphicSection.vue';
 import InequalitySection from '../cards/vegetation/inequality/InequalitySection.vue';
 import SeeMoreVegSection from '../cards/vegetation/seeMore/SeeMoreVegSection.vue';
 import RankVegSection from '../cards/vegetation/rankSection/RankVegSection.vue';
+
 import InfoParksSection from '../cards/parks/infoSection/infoParksSection.vue';
 import ParksSquaresSection from '../cards/parks/parksandSquaresSection/ParksSquaresSection.vue';
 import SeeMoreParksSection from '../cards/parks/seeMoreSection/SeeMoreParksSection.vue';
@@ -170,6 +173,11 @@ export default {
             ref: 'statsSection',
             title: `A cobertura vegetal em ${nm_mun.value} - ${uf.value}`,
             component: VegetationSection
+          },
+          { id: 'stats',
+            ref: 'graphicSection',
+            title: `Cobertura vegetal em ${nm_mun.value} - ${uf.value} ao longo do tempo`,
+            component: VGraphicSection
           },
           {
             id: 'stats',

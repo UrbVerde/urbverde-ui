@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/cards/parks/parksandSquaresSection/ParksSquaresSection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="heat-cards">
@@ -62,8 +61,27 @@ export default {
       try {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${this.selectedYear}`);
         const data = await response.json();
-        this.cardData = data;
-        console.log('Data fetched:', data);
+
+        // Multiplicar os valores numéricos por 100
+        const processedData = data.map(item => {
+          // Remover o símbolo % e converter para número
+          const numericValue = parseFloat(item.value.replace('%', ''));
+          // Multiplicar por 100
+          const multipliedValue = numericValue * 100;
+
+          // Formatar o valor sem casas decimais se terminar em .00
+          const formattedValue = Number.isInteger(multipliedValue)
+            ? `${Math.round(multipliedValue)  }%`
+            : `${multipliedValue.toFixed(2)  }%`;
+
+          return {
+            ...item,
+            value: formattedValue
+          };
+        });
+
+        this.cardData = processedData;
+        console.log('Data fetched and processed:', processedData);
       } catch (error) {
         console.error('Error fetching cards data:', error);
       }
@@ -72,27 +90,26 @@ export default {
 };
 </script>
 
-  <style scoped lang="scss">
-  @import '@/assets/styles/breakpoints.scss';
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
 
-  .dashboard-section {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 24px;
-  }
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 24px;
+}
 
+.heat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+@include breakpoint-down('tablet') {
   .heat-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 24px;
-    flex-wrap: wrap;
+    gap: 16px;
   }
-
-  @include breakpoint-down('tablet') {
-    .heat-cards {
-      gap: 16px;
-    }
-  }
-
-  </style>
+}
+</style>
