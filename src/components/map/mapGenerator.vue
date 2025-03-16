@@ -840,9 +840,9 @@ function initializeMap() {
   map.value.addControl(
     new CustomTerrainControl({
       source: 'terrain',
-      exaggeration: 1.2,
-      highPerformance: false, // Configuração que prioriza desempenho
-      lazyLoading: true // Só carrega o DEM quando o usuário clicar no botão 3D
+      exaggeration: 3,
+      highPerformance: false,
+      lazyLoading: true
     }), 'top-left'
   );
 
