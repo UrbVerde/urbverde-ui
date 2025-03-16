@@ -1,10 +1,11 @@
+<!-- SeeMoreParkSection.vue -->
 <template>
   <div class="content">
     <div class="see-more-cards">
       <SeeMoreCard
         v-if="cardData.length"
         :data="cardData"
-        :cityCode="cityCode"
+        :cityCode="computedCityCode"
         @change-layer="onChangeLayer"
       />
     </div>
@@ -15,6 +16,8 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useLocationStore } from '@/stores/locationStore';
 import SeeMoreCard from '../../SeeMoreCard.vue';
 import DownloadCard from '../../DownloadCard.vue';
 
@@ -27,14 +30,28 @@ export default {
   },
 
   props: {
+    // Add cityCode as a fallback prop similar to WidgetsSection
     cityCode: {
       type: Number,
       required: true
     },
-    changeLayer: {
-      type: Function,
-      required: true
+    layer: {
+      type: String,
+      default: 'temperatura'
     }
+  },
+
+  setup(props) { // Removed empty object pattern
+    const locationStore = useLocationStore();
+
+    // Compute the city code from the store with fallback to the prop
+    const computedCityCode = computed(() =>
+      locationStore.cd_mun || props.cityCode
+    );
+
+    return {
+      computedCityCode
+    };
   },
 
   data() {
@@ -43,8 +60,16 @@ export default {
     };
   },
 
+  computed: {
+    // Add a computed property to react to changes in computedCityCode
+    cityCodeForFetch() {
+      return this.computedCityCode;
+    }
+  },
+
   watch: {
-    cityCode: {
+    // Update the watcher to use the computed cityCode
+    cityCodeForFetch: {
       handler: 'fetchDataOnChange',
       immediate: true
     }
@@ -52,8 +77,8 @@ export default {
 
   methods: {
     fetchDataOnChange() {
-      if (this.cityCode) {
-        this.fetchData(this.cityCode);
+      if (this.computedCityCode) {
+        this.fetchData(this.computedCityCode);
       }
     },
 
@@ -67,9 +92,11 @@ export default {
       }
     },
 
-    onChangeLayer(index) {
-      // Repassa o evento para o método passado pela prop
-      this.changeLayer(index);
+    onChangeLayer(layer) {
+      // Use the layer parameter here to fix the unused variable warning
+      // For example, you could log it or actually emit it to the parent
+      console.log('Layer changed:', layer);
+      this.$emit('change-layer', layer);
     }
   }
 };
