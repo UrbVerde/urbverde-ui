@@ -1,12 +1,13 @@
-<!-- urbverde-ui/src/components/cards/weather/heat/HeatSection.vue -->
 <template>
-  <div v-if="hasValidData" class="dashboard-section">
-    <div class="heat-cards">
-      <SecondSectionCard :data="cardData"/>
-    </div>
-
+  <div class="dashboard-section">
+    <!-- TipsCard is always rendered -->
     <div class="tips-card-section">
       <TipsCard />
+    </div>
+
+    <!-- Only the card data section is conditional -->
+    <div v-if="hasValidData" class="heat-cards">
+      <SecondSectionCard :data="cardData"/>
     </div>
   </div>
 </template>

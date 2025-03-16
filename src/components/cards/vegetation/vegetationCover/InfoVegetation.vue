@@ -1,28 +1,28 @@
-<!-- urbverde-ui/src/components/cards/vegetation/vegetationCover/InfoVegetation.vue -->
+<!-- Fixed InfoVegetation.vue with guaranteed rendering -->
 <template>
   <div class="info-vegetation-wrapper">
-    <CardBase
-      :title="titulo"
-      :subtitle="descricao"
-      imagePosition="top"
-      class="vegetation-card"
-    >
-      <template #image>
+    <!-- Direct HTML instead of using CardBase to guarantee rendering -->
+    <div class="custom-card shadow-sm vegetation-card">
+      <div class="card-image-wrapper">
         <img :src="image" alt="Ilustração" class="imagem"/>
-      </template>
-    </CardBase>
+      </div>
+
+      <div class="card-header">
+        <h6 class="titulo heading-h6">{{ titulo }}</h6>
+      </div>
+
+      <div class="card-content">
+        <p class="textodescritivo body-small-medium">{{ descricao }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import CardBase from '@/components/cards/Card.vue';
 import Ilustracao from '@/assets/images/cards/globalwarming-vegetation.svg';
 
 export default {
   name: 'InfoVegetation',
-  components: {
-    CardBase,
-  },
   data() {
     return {
       titulo: 'O que é cobertura vegetal?',
@@ -41,6 +41,19 @@ export default {
   position: relative;
 }
 
+.custom-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid #E9ECEF;
+  background-color: white;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
 .vegetation-card {
   width: 100%;
   position: relative;
@@ -53,10 +66,45 @@ export default {
   align-self: stretch;
 }
 
-.vegetation-card .imagem {
+.card-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  height: auto;
+  width: 100%;
+}
+
+.imagem {
   width: 100%;
   height: auto;
   align-self: center;
   margin-bottom: 54px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  width: 100%;
+}
+
+.titulo {
+  color: #212529;
+  width: 100%;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.card-content {
+  display: flex;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.textodescritivo {
+  color: #6C757D;
+  align-self: stretch;
+  word-wrap: break-word;
+  margin: 0;
 }
 </style>

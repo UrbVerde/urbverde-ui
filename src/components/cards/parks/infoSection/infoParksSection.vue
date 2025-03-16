@@ -1,10 +1,13 @@
-<!-- InfoParksSection.vue -->
+<!-- Complete solution for infoParksSection.vue -->
 <template>
-  <div v-if="!dataFetched || !isError || hasValidCards" class="dashboard">
+  <div class="dashboard">
+    <!-- InfoParks is always rendered, not conditional on card data -->
     <div class="left-panel">
       <InfoParks />
     </div>
-    <div class="right-wrapper" v-if="hasValidCards">
+
+    <!-- Only the card data section is conditional -->
+    <div v-if="hasValidData" class="right-wrapper">
       <div class="top">
         <FirstSectionCard
           v-for="(card, index) in firstTwoCards"
@@ -21,12 +24,6 @@
           class="section-card"
         />
       </div>
-    </div>
-    <div v-else-if="dataFetched && !isError" class="right-wrapper no-data-message">
-      <p>Não há dados disponíveis para este município.</p>
-    </div>
-    <div v-else-if="isError" class="right-wrapper error-message">
-      <p>Ocorreu um erro ao carregar os dados.</p>
     </div>
   </div>
 </template>
@@ -69,9 +66,11 @@ export default {
     lastTwoCards() {
       return this.cardData.slice(2, 4);
     },
-    hasValidCards() {
-      // Check if any card has valid data
-      if (!this.cardData || this.cardData.length === 0) {
+    hasValidData() {
+      // Only affects the right panel cards, not the InfoParks component
+      if (!this.dataFetched) {return true;}
+
+      if (this.isError || !this.cardData || this.cardData.length === 0) {
         return false;
       }
 
@@ -85,17 +84,6 @@ export default {
       return this.cardData.some(card => card &&
                card.value &&
                !errorValues.includes(card.value.toString().trim()));
-    },
-    hasValidData() {
-      // Show while loading
-      if (!this.dataFetched) {return true;}
-
-      // Hide if error or no data
-      if (this.isError || !this.hasValidCards) {
-        return false;
-      }
-
-      return true;
     }
   },
 
@@ -122,7 +110,9 @@ export default {
       this.isError = false;
 
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/parks?city=${this.cityCode}&year=${this.selectedYear}`);
+        const response = await fetch(
+          `https://api.urbverde.com.br/v1/cards/square/parks?city=${this.cityCode}&year=${this.selectedYear}`
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -187,20 +177,6 @@ export default {
   flex: 1;
   border-radius: 16px;
   padding: 24px;
-}
-
-.no-data-message,
-.error-message {
-  width: 100%;
-  padding: 24px;
-  background: white;
-  border-radius: 16px;
-  text-align: center;
-  color: #6c757d;
-}
-
-.error-message {
-  color: #dc3545;
 }
 
 @include breakpoint-down('tablet') {

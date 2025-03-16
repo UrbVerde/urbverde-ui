@@ -1,16 +1,13 @@
-<!-- VegetationSection.vue -->
 <template>
-  <div v-if="!dataFetched || !isError || hasValidFirstCard || hasValidRemainingCards" class="dashboard">
+  <div class="dashboard">
+    <!-- InfoVegetation is always rendered, regardless of data status -->
     <InfoVegetation class="vegetation-info" />
+
+    <!-- Data-dependent sections with conditional rendering -->
     <FieldCard v-if="hasValidFirstCard" :data="firstCardData" class="vegetation-field" />
+
     <div v-if="hasValidRemainingCards" class="right-panel">
       <FirstSectionCard :data="remainingCardData" class="section-card" />
-    </div>
-    <div v-else-if="dataFetched && !hasValidFirstCard && !hasValidRemainingCards && !isError" class="no-data-message">
-      <p>Não há dados disponíveis para este município.</p>
-    </div>
-    <div v-else-if="isError" class="error-message">
-      <p>Ocorreu um erro ao carregar os dados.</p>
     </div>
   </div>
 </template>
@@ -79,14 +76,15 @@ export default {
                !errorValues.includes(card.value.toString().trim()));
     },
 
+    // This computed property now only affects the emitted event, not the InfoVegetation display
     hasValidData() {
-      // Show while loading
+      // If we're still loading, don't emit empty
       if (!this.dataFetched) {return true;}
 
-      // Hide if error
+      // If there was an error, consider it empty for emitting
       if (this.isError) {return false;}
 
-      // Show if either first card or remaining cards have valid data
+      // Check if either first card or remaining cards have valid data
       return this.hasValidFirstCard || this.hasValidRemainingCards;
     }
   },
@@ -193,20 +191,6 @@ export default {
     width: 100%;
     padding: 20px;
     border-radius: 12px;
-}
-
-.no-data-message,
-.error-message {
-  width: 100%;
-  padding: 24px;
-  background: white;
-  border-radius: 16px;
-  text-align: center;
-  color: #6c757d;
-}
-
-.error-message {
-  color: #dc3545;
 }
 
 @include breakpoint-down('tablet') {
