@@ -1,8 +1,12 @@
-<!-- urbverde-ui/src/components/cards/parks/seeMoreSection/SeeMoreParksSection.vue -->
 <template>
   <div class="content">
     <div class="see-more-cards">
-      <SeeMoreCard v-if="cardData.length" :data="cardData" />
+      <SeeMoreCard
+        v-if="cardData.length"
+        :data="cardData"
+        :cityCode="cityCode"
+        @change-layer="onChangeLayer"
+      />
     </div>
     <div class="download-card">
       <DownloadCard/>
@@ -62,27 +66,30 @@ export default {
         console.error('Erro ao buscar dados do cartão:', error);
       }
     },
+
+    onChangeLayer(index) {
+      // Repassa o evento para o método passado pela prop
+      this.changeLayer(index);
+    }
   }
 };
 </script>
 
-  <style scoped>
+<style scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-  }
+.see-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
 
-  .see-more-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-  }
-
-  .download-card{
-    width: 100%;
-  }
-
-  </style>
+.download-card{
+  width: 100%;
+}
+</style>
