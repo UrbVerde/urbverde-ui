@@ -6,7 +6,7 @@
         class="nav-button"
         @click="navigateYear(-1)"
         :class="{
-          'disabled': !canNavigateBack,
+          'disabled': !canNavigateBack || disabled,
           'invisible': !canNavigateBack
         }"
       >
@@ -15,7 +15,7 @@
 
       <div
         class="input-container"
-        :class="{ 'year-modified': yearModified }"
+        :class="{ 'year-modified': yearModified, 'disabled': disabled }"
         @click="showYearSelector"
       >
         <input
@@ -24,6 +24,7 @@
           @focus="showYearSelector"
           placeholder=""
           readonly
+          :disabled="disabled"
         />
         <span class="icon-datepicker">
           <i class="bi bi-chevron-down" tag="icon"></i>
@@ -34,7 +35,7 @@
         class="nav-button"
         @click="navigateYear(1)"
         :class="{
-          'disabled': !canNavigateForward,
+          'disabled': !canNavigateForward || disabled,
           'invisible': !canNavigateForward
         }"
       >
@@ -83,23 +84,27 @@ const props = defineProps({
   layer: {
     type: String,
     required: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 });
 
 const emit = defineEmits(['update:modelValue']);
 
 const isVisible = ref(false);
-const defaultYearValue = ref(props.modelValue);
 const currentYear = ref(props.modelValue);
 const yearModified = ref(false);
 const years = ref([]);
 
-// Ensure the defaultYearValue is set
-defaultYearValue.value = props.modelValue;
+// Função para atualizar o estado yearModified com base nos valores atuais
+const updateYearModifiedState = () => {
+  yearModified.value = currentYear.value !== props.defaultYear;
+  console.log(`Recalculating yearModified: ${yearModified.value} (current: ${currentYear.value}, default: ${props.defaultYear})`);
+};
 
-/**
- * Define fetchYears before any watcher that references it.
- */
+// Função para buscar os anos disponíveis
 const fetchYears = async(cityCode) => {
   try {
     let apiUrl = '';
@@ -119,12 +124,35 @@ const fetchYears = async(cityCode) => {
       apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
     }
 
+    console.log(`Fetching years from API: ${apiUrl}`);
     const response = await fetch(apiUrl);
     if (!response.ok) {
       throw new Error('Failed to fetch years');
     }
     const data = await response.json();
     years.value = data;
+    console.log(`Available years for city ${cityCode}: ${JSON.stringify(years.value)}`);
+
+    // After fetching years, check if the current year is valid
+    // If not, set it to the default year if available in the years list,
+    // otherwise set it to the most recent year available
+    if (!years.value.includes(currentYear.value)) {
+      if (years.value.includes(props.defaultYear)) {
+        currentYear.value = props.defaultYear;
+        emit('update:modelValue', props.defaultYear);
+        console.log(`Setting year to default: ${props.defaultYear}`);
+
+      } else if (years.value.length > 0) {
+        // If default year is not available, use the most recent year
+        const mostRecentYear = Math.max(...years.value);
+        currentYear.value = mostRecentYear;
+        emit('update:modelValue', mostRecentYear);
+        console.log(`Setting year to most recent: ${mostRecentYear}`);
+      }
+    }
+
+    // Recalculate the modified state after setting the year
+    updateYearModifiedState();
   } catch (error) {
     console.error('Error fetching years:', error);
     years.value = [];
@@ -136,6 +164,20 @@ watch(
   () => props.modelValue,
   (newValue) => {
     currentYear.value = newValue;
+    console.log(`modelValue changed to: ${newValue}`);
+    // Recalculate yearModified when modelValue changes
+    updateYearModifiedState();
+  },
+  { immediate: true }
+);
+
+// Watch for changes in defaultYear and update the yearModified state
+watch(
+  () => props.defaultYear,
+  (newDefaultYear) => {
+    console.log(`defaultYear changed to: ${newDefaultYear}`);
+    // Recalculate yearModified when defaultYear changes
+    updateYearModifiedState();
   },
   { immediate: true }
 );
@@ -144,15 +186,11 @@ watch(
 watch(
   () => props.cityCode,
   async(newCityCode) => {
+    console.log(`cityCode changed to: ${newCityCode}`);
     await fetchYears(newCityCode);
   },
   { immediate: true }
 );
-
-// Watch currentYear to update the yearModified flag.
-watch(currentYear, (newValue) => {
-  yearModified.value = newValue !== defaultYearValue.value;
-});
 
 const availableYears = computed(() =>
   [...years.value].sort((a, b) => a - b)
@@ -173,6 +211,7 @@ const canNavigateForward = computed(() =>
 );
 
 const showYearSelector = () => {
+  if (props.disabled) {return;}
   isVisible.value = true;
   document.addEventListener('click', handleClickOutside);
 };
@@ -193,11 +232,14 @@ const selectYear = (year) => {
   currentYear.value = year;
   emit('update:modelValue', year);
   hideYearSelector();
+  console.log(`Year selected: ${year}`);
+  // updateYearModifiedState será chamado pelo watcher de modelValue
 };
 
 const isSelected = (year) => year === currentYear.value;
 
 const navigateYear = (direction) => {
+  if (props.disabled) {return;}
   const newIndex = currentYearIndex.value + direction;
   if (newIndex >= 0 && newIndex < availableYears.value.length) {
     const newYear = availableYears.value[newIndex];
@@ -206,7 +248,17 @@ const navigateYear = (direction) => {
 };
 
 onMounted(async() => {
+  // Ensure currentYear is initialized with modelValue or defaultYear
+  if (!currentYear.value && props.modelValue) {
+    currentYear.value = props.modelValue;
+  } else if (!currentYear.value) {
+    currentYear.value = props.defaultYear;
+  }
+
+  console.log(`YearPicker mounted with defaultYear: ${props.defaultYear}, cityCode: ${props.cityCode}, layer: ${props.layer}`);
   await fetchYears(props.cityCode);
+  // Initial calculation of yearModified
+  updateYearModifiedState();
 });
 
 onBeforeUnmount(() => {
@@ -234,7 +286,7 @@ onBeforeUnmount(() => {
   visibility: visible;
 }
 
-.input-wrapper:hover .nav-button:not(.invisible) {
+.input-wrapper:hover .nav-button:not(.invisible):not(.disabled) {
   opacity: 1;
 }
 
@@ -249,6 +301,12 @@ onBeforeUnmount(() => {
   max-width: 128px;
   height: 40px;
   gap: 4px;
+}
+
+.input-container.disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 .input-container.year-modified {
@@ -308,6 +366,10 @@ onBeforeUnmount(() => {
   box-sizing: content-box;
   padding: 0;
   margin: 0;
+}
+
+.input-text:disabled {
+  cursor: not-allowed;
 }
 
 .year-grid {

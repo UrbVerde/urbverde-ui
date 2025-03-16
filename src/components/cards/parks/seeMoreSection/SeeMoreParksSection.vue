@@ -1,8 +1,13 @@
-<!-- urbverde-ui/src/components/cards/parks/seeMoreSection/SeeMoreParksSection.vue -->
+<!-- SeeMoreParkSection.vue -->
 <template>
   <div class="content">
     <div class="see-more-cards">
-      <SeeMoreCard v-if="cardData.length" :data="cardData" />
+      <SeeMoreCard
+        v-if="cardData.length"
+        :data="cardData"
+        :cityCode="computedCityCode"
+        @change-layer="onChangeLayer"
+      />
     </div>
     <div class="download-card">
       <DownloadCard/>
@@ -11,6 +16,8 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useLocationStore } from '@/stores/locationStore';
 import SeeMoreCard from '../../SeeMoreCard.vue';
 import DownloadCard from '../../DownloadCard.vue';
 
@@ -23,14 +30,28 @@ export default {
   },
 
   props: {
+    // Add cityCode as a fallback prop similar to WidgetsSection
     cityCode: {
       type: Number,
       required: true
     },
-    changeLayer: {
-      type: Function,
-      required: true
+    layer: {
+      type: String,
+      default: 'temperatura'
     }
+  },
+
+  setup(props) { // Removed empty object pattern
+    const locationStore = useLocationStore();
+
+    // Compute the city code from the store with fallback to the prop
+    const computedCityCode = computed(() =>
+      locationStore.cd_mun || props.cityCode
+    );
+
+    return {
+      computedCityCode
+    };
   },
 
   data() {
@@ -39,8 +60,16 @@ export default {
     };
   },
 
+  computed: {
+    // Add a computed property to react to changes in computedCityCode
+    cityCodeForFetch() {
+      return this.computedCityCode;
+    }
+  },
+
   watch: {
-    cityCode: {
+    // Update the watcher to use the computed cityCode
+    cityCodeForFetch: {
       handler: 'fetchDataOnChange',
       immediate: true
     }
@@ -48,8 +77,8 @@ export default {
 
   methods: {
     fetchDataOnChange() {
-      if (this.cityCode) {
-        this.fetchData(this.cityCode);
+      if (this.computedCityCode) {
+        this.fetchData(this.computedCityCode);
       }
     },
 
@@ -62,27 +91,32 @@ export default {
         console.error('Erro ao buscar dados do cartão:', error);
       }
     },
+
+    onChangeLayer(layer) {
+      // Use the layer parameter here to fix the unused variable warning
+      // For example, you could log it or actually emit it to the parent
+      console.log('Layer changed:', layer);
+      this.$emit('change-layer', layer);
+    }
   }
 };
 </script>
 
-  <style scoped>
+<style scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-  }
+.see-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
 
-  .see-more-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-  }
-
-  .download-card{
-    width: 100%;
-  }
-
-  </style>
+.download-card{
+  width: 100%;
+}
+</style>
