@@ -1,37 +1,44 @@
-<!-- urbverde-ui/src/components/widgets_section/WidgetsSection.vue -->
 <template>
   <div class="widgets-section">
-    <div
-      v-for="(section, index) in visibleSections"
-      :key="`${selectedLayer}-${section.id}`"
-      :id="section.id"
-      :ref="section.ref"
-      class="box"
-    >
-      <div class="statistics-container">
-        <span class="title-statistics-container heading-h5">
-          {{ section.title }}
-        </span>
-        <YearPicker
-          v-if="!section.isSeeMore"
-          v-model="selectedYears[index]"
-          :default-year="defaultYear"
+    <!-- Only show sections if the category should display widgets -->
+    <template v-if="shouldShowWidgets">
+      <div
+        v-for="(section, index) in visibleSections"
+        :key="`${selectedLayer}-${section.id}`"
+        :id="section.id"
+        :ref="section.ref"
+        class="box"
+      >
+        <div class="statistics-container">
+          <span class="title-statistics-container heading-h5">
+            {{ section.title }}
+          </span>
+          <YearPicker
+            v-if="!section.isSeeMore"
+            v-model="selectedYears[index]"
+            :default-year="defaultYear"
+            :city-code="computedCityCode"
+            :layer="selectedLayer"
+            :disabled="isParksLayer"
+            @update:modelValue="(value) => handleYearChange(value, index)"
+          />
+        </div>
+        <component
+          :is="section.component"
           :city-code="computedCityCode"
+          :selected-year="selectedYears[index]"
           :layer="selectedLayer"
-          :disabled="isParksLayer"
-          @update:modelValue="(value) => handleYearChange(value, index)"
+          @change-layer="changeLayer"
+          @section-empty="markSectionAsEmpty(section.id)"
+          ref="sectionComponents"
         />
       </div>
-      <component
-        :is="section.component"
-        :city-code="computedCityCode"
-        :selected-year="selectedYears[index]"
-        :layer="selectedLayer"
-        @change-layer="changeLayer"
-        @section-empty="markSectionAsEmpty(section.id)"
-        ref="sectionComponents"
-      />
-    </div>
+
+      <!-- Only show download section if we have widgets and it's not already shown via SeeMore -->
+      <div v-if="!hasSeeMoreSection" class="download-section box" id="download">
+        <DownloadCard />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -52,6 +59,7 @@ import InfoParksSection from '../cards/parks/infoSection/infoParksSection.vue';
 import ParksSquaresSection from '../cards/parks/parksandSquaresSection/ParksSquaresSection.vue';
 import SeeMoreParksSection from '../cards/parks/seeMoreSection/SeeMoreParksSection.vue';
 import RankParksSection from '../cards/parks/rankSection/RankParksSection.vue';
+import DownloadCard from '../cards/DownloadCard.vue';
 
 export default {
   name: 'WidgetsSection',
@@ -69,6 +77,7 @@ export default {
     ParksSquaresSection,
     SeeMoreParksSection,
     RankParksSection,
+    DownloadCard,
   },
   props: {
     defaultYear: {
@@ -96,8 +105,14 @@ export default {
       'Parques e Praças': 'parques'
     };
 
+    // List of categories that SHOULD show widgets
+    const categoriesWithWidgets = ['Clima', 'Vegetação', 'Parques e Praças'];
+
     // Determine the selected layer from the location store.
     const selectedLayer = computed(() => categoryToLayerMap[locationStore.category] || 'temperatura');
+
+    // Check if the current category should display widgets
+    const shouldShowWidgets = computed(() => categoriesWithWidgets.includes(locationStore.category));
 
     // Rename this to avoid collision with props.cityCode
     const computedCityCode = computed(() =>
@@ -119,12 +134,42 @@ export default {
     // Reference to section components
     const sectionComponents = ref([]);
 
+    // Check if any "See More" section is visible (to avoid duplicate download cards)
+    const hasSeeMoreSection = computed(() => {
+      const seeMoreSectionIds = ['seeMore', 'seeMoreVeg', 'seeMoreParks'];
+      const visibleSeeMore = visibleSections.value.some(section =>
+        seeMoreSectionIds.includes(section.id)
+      );
+
+      return visibleSeeMore;
+    });
+
     // Mark a section as empty (no valid data)
     const markSectionAsEmpty = (sectionId) => {
+      console.log('Section marked as empty:', sectionId);
+
       if (!hiddenSections.value.includes(sectionId)) {
         hiddenSections.value.push(sectionId);
+
+        // Create a custom event for the navbar to respond to
+        const event = new CustomEvent('section-visibility-changed', {
+          detail: {
+            sectionId,
+            isVisible: false
+          },
+          bubbles: true,
+          cancelable: true
+        });
+        document.dispatchEvent(event);
+
+        // Also emit event through props for other components
         emit('section-visibility-changed', sectionId, false);
       }
+
+      // Force UI update
+      nextTick(() => {
+        console.log('Current hidden sections:', hiddenSections.value);
+      });
     };
 
     // When the category changes, reset the years accordingly.
@@ -195,8 +240,8 @@ export default {
             component: RankVegSection
           },
           {
-            id: 'seeMore',
-            ref: 'seeMoreSection',
+            id: 'seeMoreVeg',
+            ref: 'seeMoreVegSection',
             title: 'Veja mais sobre sua cidade!',
             component: SeeMoreVegSection,
             isSeeMore: true
@@ -217,7 +262,7 @@ export default {
           },
           {
             id: 'ranking',
-            ref: 'rankParksSection',
+            ref: 'rankingParksSection',
             title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
             component: RankParksSection
           },
@@ -257,8 +302,11 @@ export default {
     // Add a method to check if sections have valid data after loading
     const checkSectionsData = () => {
       nextTick(() => {
-        // Implement logic to check if sections are empty
-        // This would be executed after components have fetched their data
+        // Reset hidden sections
+        hiddenSections.value = [];
+
+        // We'll rely on each component to emit section-empty events
+        // when they determine their data isn't valid
       });
     };
 
@@ -280,7 +328,9 @@ export default {
       hiddenSections,
       markSectionAsEmpty,
       visibleSections,
-      sectionComponents
+      sectionComponents,
+      shouldShowWidgets,
+      hasSeeMoreSection
     };
   },
   watch: {
@@ -346,6 +396,11 @@ export default {
   justify-content: center;
   align-items: flex-start;
   flex: 1 0 0;
+}
+
+.download-section {
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
 @include breakpoint-down('tablet') {

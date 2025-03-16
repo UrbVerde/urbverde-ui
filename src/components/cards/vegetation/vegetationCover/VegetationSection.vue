@@ -1,16 +1,21 @@
-<!-- urbverde-ui/src/components/cards/vegetation/vegetationCover/VegetationSection.vue -->
+<!-- VegetationSection.vue -->
 <template>
-  <div v-if="hasValidData" class="dashboard">
+  <div v-if="!dataFetched || !isError || hasValidFirstCard || hasValidRemainingCards" class="dashboard">
     <InfoVegetation class="vegetation-info" />
     <FieldCard v-if="hasValidFirstCard" :data="firstCardData" class="vegetation-field" />
     <div v-if="hasValidRemainingCards" class="right-panel">
       <FirstSectionCard :data="remainingCardData" class="section-card" />
     </div>
+    <div v-else-if="dataFetched && !hasValidFirstCard && !hasValidRemainingCards && !isError" class="no-data-message">
+      <p>Não há dados disponíveis para este município.</p>
+    </div>
+    <div v-else-if="isError" class="error-message">
+      <p>Ocorreu um erro ao carregar os dados.</p>
+    </div>
   </div>
 </template>
 
 <script>
-
 import FirstSectionCard from '../../FirstSectionCard.vue';
 import InfoVegetation from './InfoVegetation.vue';
 import FieldCard from './FieldCard.vue';
@@ -190,6 +195,20 @@ export default {
     border-radius: 12px;
 }
 
+.no-data-message,
+.error-message {
+  width: 100%;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
 @include breakpoint-down('tablet') {
   .right-panel {
     gap: 16px;
@@ -206,5 +225,4 @@ export default {
       flex-direction: row;
   }
 }
-
 </style>

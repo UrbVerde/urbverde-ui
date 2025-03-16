@@ -1,8 +1,4 @@
-<!-- urbverde-ui/src/components/navbar/NavbarMap.vue -->
 <template>
-
-  <!-- Desktop version -->
-
   <div class="navbar"
        v-if="largerThan('tablet')"
   >
@@ -25,7 +21,7 @@
       </div>
 
       <!-- Segunda linha: Navegação -->
-      <div class="tabs">
+      <div class="tabs" v-if="shouldShowTabs">
         <button
           v-for="tab in visibleTabs"
           :key="tab.id"
@@ -50,7 +46,6 @@
   </div>
 
   <!-- Mobile version -->
-
   <div class="navbar"
        v-else
   >
@@ -117,7 +112,6 @@
       ref="refModalLayerInfo"
     />
   </div>
-
 </template>
 
 <script setup>
@@ -160,20 +154,46 @@ const layer = computed(() =>
 const cityName = computed(() => locationStore.nm_mun);
 const uf = computed(() => locationStore.uf);
 
-// Default tabs
-const allTabs = ref([
-  { id: 'map', label: 'Mapa' },
-  { id: 'stats', label: 'Estatísticas' },
-  { id: 'vulnerable', label: 'Vulnerabilidade' },
-  { id: 'ranking', label: 'Ranking' },
-]);
+// Default tabs for each category
+const categoryTabs = {
+  'Clima': ['map', 'stats', 'vulnerable', 'ranking'],
+  'Vegetação': ['map', 'stats', 'inequality', 'ranking'],
+  'Parques e Praças': ['map', 'stats', 'parksSquares', 'ranking'],
+  // Other categories only get the map tab
+  'default': ['map']
+};
 
-// Filter tabs based on hidden sections
+// Map tab IDs to user-friendly labels
+const tabLabels = {
+  'map': 'Mapa',
+  'stats': 'Estatísticas',
+  'vulnerable': 'Vulnerabilidade',
+  'inequality': 'Desigualdade',
+  'parksSquares': 'Parques e Praças',
+  'ranking': 'Ranking'
+};
+
+// Get tabs for current category
+const categoryTabIds = computed(() => categoryTabs[locationStore.category] || categoryTabs['default']);
+
+// Generate all tabs with proper labels based on current category
+const allTabs = computed(() => categoryTabIds.value.map(tabId => ({
+  id: tabId,
+  label: tabLabels[tabId] || tabId
+})));
+
+// Whether tabs should be shown at all
+const shouldShowTabs = computed(() =>
+  // Always show tabs because we need at least the Map tab
+  true
+);
+
+// Filter tabs based on hidden sections and category
 const visibleTabs = computed(() => allTabs.value.filter(tab => {
-  // Map is always visible
+  // Map is always visible regardless of category
   if (tab.id === 'map') {return true;}
 
-  // Filter out tabs for hidden sections
+  // For other tabs, only show if not hidden
   return !hiddenSections.value.includes(tab.id);
 }));
 
@@ -182,6 +202,18 @@ const {
 } = useWindowSize();
 
 function navigateTo(sectionId) {
+  // Special case for map tab - scroll to absolute top of page
+  if (sectionId === 'map') {
+    // Use scrollTo with immediate behavior for precise positioning
+    window.scrollTo(0, 0);
+
+    // Still emit the event for active section tracking
+    emit('navigate-to', sectionId);
+
+    return;
+  }
+
+  // Normal behavior for other tabs
   emit('navigate-to', sectionId);
 }
 
@@ -209,7 +241,9 @@ function markSectionAsHidden(sectionId) {
 }
 
 // Function to handle section visibility change events from widgets
-function handleSectionVisibilityChange(sectionId, isVisible) {
+function handleSectionVisibilityChange(event) {
+  const { sectionId, isVisible } = event.detail;
+
   if (!isVisible && !hiddenSections.value.includes(sectionId)) {
     hiddenSections.value.push(sectionId);
   } else if (isVisible && hiddenSections.value.includes(sectionId)) {
@@ -240,11 +274,7 @@ onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 
   // Set up custom event listener for section visibility changes
-  window.addEventListener('section-visibility-changed', (e) => {
-    if (e.detail && e.detail.sectionId) {
-      handleSectionVisibilityChange(e.detail.sectionId, e.detail.isVisible);
-    }
-  });
+  window.addEventListener('section-visibility-changed', handleSectionVisibilityChange);
 });
 
 onUnmounted(() => {

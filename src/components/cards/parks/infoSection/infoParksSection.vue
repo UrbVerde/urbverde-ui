@@ -1,10 +1,10 @@
-<!-- urbverde-ui/src/components/cards/parks/infoSection/infoParksSection.vue -->
+<!-- InfoParksSection.vue -->
 <template>
-  <div v-if="hasValidData" class="dashboard">
+  <div v-if="!dataFetched || !isError || hasValidCards" class="dashboard">
     <div class="left-panel">
       <InfoParks />
     </div>
-    <div class="right-wrapper">
+    <div class="right-wrapper" v-if="hasValidCards">
       <div class="top">
         <FirstSectionCard
           v-for="(card, index) in firstTwoCards"
@@ -21,6 +21,12 @@
           class="section-card"
         />
       </div>
+    </div>
+    <div v-else-if="dataFetched && !isError" class="right-wrapper no-data-message">
+      <p>Não há dados disponíveis para este município.</p>
+    </div>
+    <div v-else-if="isError" class="right-wrapper error-message">
+      <p>Ocorreu um erro ao carregar os dados.</p>
     </div>
   </div>
 </template>
@@ -63,16 +69,12 @@ export default {
     lastTwoCards() {
       return this.cardData.slice(2, 4);
     },
-    hasValidData() {
-      // Show while loading
-      if (!this.dataFetched) {return true;}
-
-      // Hide if error or no data
-      if (this.isError || !this.cardData || this.cardData.length === 0) {
+    hasValidCards() {
+      // Check if any card has valid data
+      if (!this.cardData || this.cardData.length === 0) {
         return false;
       }
 
-      // Check if any card has valid data
       const errorValues = [
         'Dados indisponíveis',
         'Dados não Disponíveis',
@@ -83,6 +85,17 @@ export default {
       return this.cardData.some(card => card &&
                card.value &&
                !errorValues.includes(card.value.toString().trim()));
+    },
+    hasValidData() {
+      // Show while loading
+      if (!this.dataFetched) {return true;}
+
+      // Hide if error or no data
+      if (this.isError || !this.hasValidCards) {
+        return false;
+      }
+
+      return true;
     }
   },
 
@@ -176,6 +189,20 @@ export default {
   padding: 24px;
 }
 
+.no-data-message,
+.error-message {
+  width: 100%;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
 @include breakpoint-down('tablet') {
   .right-wrapper {
     gap: 16px;
@@ -194,5 +221,4 @@ export default {
     max-width: 100%;
   }
 }
-
 </style>

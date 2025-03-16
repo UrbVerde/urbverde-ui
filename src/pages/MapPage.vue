@@ -163,8 +163,18 @@ const handleScroll = () => {
   }
 };
 
-// Scroll ao clicar nas opções da navbar
+// Scroll to section function with special case for map
 const scrollToSection = (sectionId) => {
+  // Special case for the map section - scroll to absolute top
+  if (sectionId === 'map') {
+    window.scrollTo(0, 0);
+    activeSection.value = 'map';
+    history.pushState(null, null, '#map');
+
+    return;
+  }
+
+  // Normal behavior for other sections
   const element = document.getElementById(sectionId);
   if (element) {
     const navbarHeight = 100;
