@@ -104,9 +104,17 @@ export default {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
+        let data = await response.json();
 
         if (Array.isArray(data)) {
+
+          // Transformar os dados conforme solicitado
+          data = data.map(item => ({
+            ...item,
+            title: item.title.replace(/(afetados|afetadas)/, ''),
+            subtitle: 'do total de pessoas vivendo nas regiões mais quentes.'
+          }));
+
           this.cardData = data;
         } else {
           console.warn('Invalid response format from heat API:', data);
@@ -165,5 +173,4 @@ export default {
     gap: 16px;
   }
 }
-
 </style>

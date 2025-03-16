@@ -99,10 +99,32 @@ export default {
 
         const data = await response.json();
 
+        let processedData;
+
         if (Array.isArray(data)) {
-          this.cardData = data;
+
+          // Multiplicar os valores numéricos por 100 e atualizar os subtítulos
+          processedData = data.map(item => {
+          // Remover o símbolo % e converter para número
+            const numericValue = parseFloat(item.value.replace('%', ''));
+            // Multiplicar por 100
+            const multipliedValue = numericValue * 100;
+
+            // Formatar o valor sem casas decimais se terminar em .00
+            const formattedValue = Number.isInteger(multipliedValue)
+              ? `${Math.round(multipliedValue)}%`
+              : `${multipliedValue.toFixed(2)}%`;
+
+            return {
+              ...item,
+              subtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
+              value: formattedValue
+            };
+          });
+
+          this.cardData = processedData;
         } else {
-          console.warn('Invalid response format from parks API:', data);
+          console.warn('Invalid response format from parks API and processed:', processedData);
           this.cardData = null;
           this.isError = true;
         }

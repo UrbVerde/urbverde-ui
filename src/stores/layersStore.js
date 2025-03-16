@@ -14,7 +14,8 @@ export const useLayersStore = defineStore('layersStore', {
      */
     activeLayers: [],
     setoresVisible: false,
-    error: null
+    error: null,
+    layerOpacity: 0.7
   }),
 
   getters: {
@@ -210,13 +211,40 @@ export const useLayersStore = defineStore('layersStore', {
       // For backward compatibility, we also update store.layerOpacity
       this.layerOpacity = newOpacity;
 
-      if (!this.mapRef) {return;}
+      console.log(`[LayersStore] Setting opacity for layer ${layerId} to ${newOpacity}`);
 
-      // Find the store record for that layer
+      if (!this.mapRef) {
+        console.warn('[LayersStore] Map reference is not available, cannot update opacity');
+
+        return;
+      }
+
+      // First try looking for layer by ID in the active layers
       const layerIndex = this.activeLayers.findIndex((l) => l.id === layerId);
-      if (layerIndex < 0) {return;} // not found
+      if (layerIndex < 0) {
+        console.warn(`[LayersStore] Layer with ID "${layerId}" not found in active layers`);
 
-      // Update our store’s record
+        // Try with the dynamic-layer as backup (from mapGenerator.vue)
+        if (this.mapRef.getLayer('dynamic-layer')) {
+          console.log('[LayersStore] Trying to update dynamic-layer opacity instead');
+          const isRaster = this.mapRef.getLayer('dynamic-layer').type === 'raster';
+          const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
+
+          this.mapRef.setPaintProperty('dynamic-layer', opacityProp, newOpacity);
+
+          if (this.mapRef.getLayer('dynamic-layer-outline')) {
+            this.mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', newOpacity);
+          }
+
+          console.log(`[LayersStore] Updated dynamic-layer opacity to ${newOpacity}`);
+
+          return;
+        }
+
+        return;
+      }
+
+      // Update our store's record
       this.activeLayers[layerIndex].opacity = newOpacity;
 
       // Figure out the MapLibre layer IDs
@@ -225,13 +253,17 @@ export const useLayersStore = defineStore('layersStore', {
 
       // Check if the main layer is present
       const mainLayer = this.mapRef.getLayer(mainId);
-      if (!mainLayer) {return;}
+      if (!mainLayer) {
+        console.warn(`[LayersStore] Layer with ID "${mainId}" not found in map`);
 
-      // Decide if it’s raster or vector
+        return;
+      }
+
+      // Decide if it's raster or vector
       const isRaster = mainLayer.type === 'raster';
       const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
 
-      // Update main layer’s opacity
+      // Update main layer's opacity
       this.mapRef.setPaintProperty(mainId, opacityProp, newOpacity);
 
       // If vector, also update the outline

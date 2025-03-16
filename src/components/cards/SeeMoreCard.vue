@@ -15,7 +15,7 @@
         iconType="bootstrap"
         iconPosition="left"
         class="card-button"
-        @click="$emit('change-layer', index)"
+        @click="handleClick(item)"
       />
     </div>
   </CardBase>
@@ -36,13 +36,35 @@ export default {
       type: Array,
       required: true,
     },
+    cityCode: {
+      type: Number,
+      required: true
+    }
   },
   emits: ['change-layer'],
+  methods: {
+    handleClick(item) {
+      // Verifica o título e redireciona para o link apropriado
+      if (item.title === 'Temperatura média da superfície') {
+        window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=2021&category=Clima&layer=surface_temp&scale=intraurbana`;
+      } else if (item.title === 'Média da cobertura vegetal') {
+        window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=2021&category=Vegeta%C3%A7%C3%A3o&layer=pcv&scale=intraurbana#map`;
+      } else if (item.title === 'Moradores próximos a praças') {
+        window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=2021&category=Parques+e+Pra%C3%A7as&layer=served_population&scale=intraurbana`;
+      } else if (item.title === 'Distancia média até as praças') {
+        window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=2021&category=Parques+e+Pra%C3%A7as&layer=avg_distance_to_squares&scale=intraurbana`;
+      } else if (item.title === 'Desigualdade ambiental e social') {
+        window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=2021&category=Vegeta%C3%A7%C3%A3o&layer=idsa&scale=intraurbana`;
+      } else {
+        // Comportamento padrão: emite o evento change-layer
+        // this.$emit('change-layer', index);
+      }
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
-
 .see-card{
   padding: 24px 32px 24px 32px;
 }
@@ -56,5 +78,4 @@ export default {
   display: flex;
   width: 100%;
 }
-
 </style>

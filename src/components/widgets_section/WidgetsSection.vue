@@ -47,14 +47,19 @@ import { computed, ref, watch, nextTick } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 // Import your section components as needed:
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
+import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection.vue';
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
+
 import SeeMoreSection from '../cards/weather/seeMore/SeeMoreSection.vue';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
+
 import VegetationSection from '../cards/vegetation/vegetationCover/VegetationSection.vue';
+import VGraphicSection from '@/components/cards/vegetation/vgraphics/VGraphicSection.vue';
 import InequalitySection from '../cards/vegetation/inequality/InequalitySection.vue';
 import SeeMoreVegSection from '../cards/vegetation/seeMore/SeeMoreVegSection.vue';
 import RankVegSection from '../cards/vegetation/rankSection/RankVegSection.vue';
+
 import InfoParksSection from '../cards/parks/infoSection/infoParksSection.vue';
 import ParksSquaresSection from '../cards/parks/parksandSquaresSection/ParksSquaresSection.vue';
 import SeeMoreParksSection from '../cards/parks/seeMoreSection/SeeMoreParksSection.vue';
@@ -200,8 +205,13 @@ export default {
             title: `Temperatura e clima em ${nm_mun.value} - ${uf.value}`,
             component: TemperatureSection
           },
+          { id: 'stats',
+            ref: 'graphicSection',
+            title: `Temperatura média em ${nm_mun.value} - ${uf.value} ao longo do tempo`,
+            component: TGraphicSection
+          },
           {
-            id: 'vulnerable',
+            id: 'stats',
             ref: 'vulnerableSection',
             title: `Quem é mais afetado pelo calor extremo em ${nm_mun.value}?`,
             component: HeatSection
@@ -227,8 +237,13 @@ export default {
             title: `A cobertura vegetal em ${nm_mun.value} - ${uf.value}`,
             component: VegetationSection
           },
+          { id: 'stats',
+            ref: 'graphicSection',
+            title: `Cobertura vegetal em ${nm_mun.value} - ${uf.value} ao longo do tempo`,
+            component: VGraphicSection
+          },
           {
-            id: 'inequality',
+            id: 'stats',
             ref: 'inequalitySection',
             title: 'Desigualdade ambiental e a vegetação',
             component: InequalitySection
@@ -255,7 +270,7 @@ export default {
             component: InfoParksSection
           },
           {
-            id: 'parksSquares',
+            id: 'stats',
             ref: 'parksSquaresSection',
             title: 'Quem vive distante de parques e praças?',
             component: ParksSquaresSection
@@ -339,6 +354,7 @@ export default {
         if (!this.isParksLayer) {
           this.selectedYears = this.selectedYears.map(() => newValue);
         }
+
       },
       immediate: true
     }

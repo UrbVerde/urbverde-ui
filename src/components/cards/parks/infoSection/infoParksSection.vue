@@ -12,7 +12,7 @@
         <FirstSectionCard
           v-for="(card, index) in firstTwoCards"
           :key="index"
-          :data="[card]"
+          :data="[formatCardData(card)]"
           class="section-card"
         />
       </div>
@@ -20,7 +20,7 @@
         <FirstSectionCard
           v-for="(card, index) in lastTwoCards"
           :key="index"
-          :data="[card]"
+          :data="[formatCardData(card)]"
           class="section-card"
         />
       </div>
@@ -105,6 +105,30 @@ export default {
   },
 
   methods: {
+    formatCardData(card) {
+      // Cria uma cópia do cartão para não modificar o original
+      const formattedCard = { ...card };
+
+      // Verifica se é o cartão de desigualdade de renda
+      if (formattedCard.title === 'Desigualdade de renda') {
+        // Extrai o valor numérico (removendo o 'x' do final)
+        const valueNum = parseFloat(formattedCard.value.replace('x', ''));
+
+        // Calcula a porcentagem
+        const percentageDiff = Math.abs(Math.round((valueNum * 100) - 100));
+
+        // Determina se é "mais renda" ou "menos renda" com base no valor
+        const incomeText = valueNum >= 1
+          ? `Moradores próximos a praças têm em média ${percentageDiff}% mais de renda`
+          : `Moradores próximos a praças têm em média ${percentageDiff}% menos de renda`;
+
+        // Atualiza o subtítulo
+        formattedCard.subtitle = incomeText;
+      }
+
+      return formattedCard;
+    },
+
     async fetchData() {
       this.dataFetched = false;
       this.isError = false;

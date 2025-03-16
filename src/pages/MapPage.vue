@@ -115,7 +115,7 @@ const showBackToTop = ref(false);
 // Data
 
 const hasMunicipality = computed(() => !!locationStore.cd_mun);
-const defaultYear = ref(2020);
+const defaultYear = computed(() => locationStore.year);
 const cityCode = ref(3547809);
 
 // Methods
@@ -140,7 +140,12 @@ const toggleSidebar = () => {
 
 const { smallerThan } = useWindowSize();
 
+const isProgrammaticScrolling = ref(false);
+
 const handleScroll = () => {
+  // Se estiver em rolagem programática, não atualizar o activeSection
+  if (isProgrammaticScrolling.value) {return;}
+
   const scrollPosition = window.scrollY;
   const navbarHeight = 100;
 
@@ -181,13 +186,23 @@ const scrollToSection = (sectionId) => {
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - navbarHeight + 1;
 
+    // Configurar a flag para informar que estamos em rolagem programática
+    isProgrammaticScrolling.value = true;
+
+    // Iniciar a rolagem
     window.scrollTo({
       top: offsetPosition,
       behavior: 'smooth',
     });
 
-    activeSection.value = sectionId;
-    history.pushState(null, null, `#${sectionId}`);
+    // Aguardar o término da rolagem e depois atualizar o activeSection
+    setTimeout(() => {
+      activeSection.value = sectionId;
+      history.pushState(null, null, `#${sectionId}`);
+
+      // Desativar a flag após completar a rolagem
+      isProgrammaticScrolling.value = false;
+    }, 0); // Ajuste este tempo com base na duração da rolagem suave
   }
 };
 

@@ -3,7 +3,7 @@
   <div class="legend-wrapper">
     <!-- Legend Header -->
     <div class="legend-header" @click="toggleLegend">
-      <span class="body-small-medium">Legenda</span>
+      <span class="body-small-medium">Detalhes do mapa</span>
       <img
         :src="wrapperIcon"
         :class="{'icon-open': isOpen, 'icon-closed': !isOpen}"
@@ -30,7 +30,7 @@
       <!-- Layer Cards -->
       <div class="layers-section">
         <div class="layers-header body-caption-medium">
-          <p>CAMADAS</p>
+          <p>LEGENDA</p>
           <!-- <img :src="addIcon" /> -->
         </div>
 
@@ -145,8 +145,10 @@ const handleYearChange = (year) => {
 // };
 
 const handleDataLayerOpacity = (opacity) => {
-  console.log('[MapLegend] Handling opacity change:', opacity);
-  layersStore.setLayerOpacity(opacity);
+  console.log('[MapLegend] Handling opacity change:', opacity, 'for layer:', currentLayerId.value);
+  if (currentLayerId.value) {
+    layersStore.setLayerOpacity(currentLayerId.value, opacity / 100);
+  }
 };
 
 const handleColorbarClick = () => {
@@ -222,7 +224,7 @@ const refModalWaitlistLegend = ref(null);
 .layers-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .layers-header {
