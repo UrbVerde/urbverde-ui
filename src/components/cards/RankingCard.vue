@@ -1,14 +1,14 @@
 <!-- urbverde-ui/src/components/cards/RankingCard.vue -->
 <template>
-  <CardBase>
+  <CardBase v-if="hasValidData">
     <div class="rank-card-container">
       <div class="rank-card-header">
         <h3 class="rank-card-title heading-h5">{{ data.title }}</h3>
         <p class="rank-card-subtitle body-small-medium">{{ data.subtitle }}</p>
       </div>
 
-      <div v-if="data.items && data.items.length > 0" class="rank-card-sections">
-        <div class="rank-card-section" v-for="(item, index) in data.items" :key="index">
+      <div v-if="validItems.length > 0" class="rank-card-sections">
+        <div class="rank-card-section" v-for="(item, index) in validItems" :key="index">
           <div class="rank-card-section-title">
             {{ item.type }}
             <!-- <template v-if="item.number === 1">🏆</template> -->
@@ -34,6 +34,28 @@ export default {
     data: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    validItems() {
+      if (!this.data.items || !this.data.items.length) {return [];}
+
+      return this.data.items.filter(item =>
+        // Ensure number and of are valid numbers
+        item &&
+          item.type &&
+          item.number !== undefined &&
+          !isNaN(Number(item.number)) &&
+          item.of !== undefined &&
+          !isNaN(Number(item.of))
+      );
+    },
+
+    hasValidData() {
+      // Check if we have a valid title and at least one valid item
+      return this.data &&
+        this.data.title &&
+        this.validItems.length > 0;
     }
   },
   methods: {

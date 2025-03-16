@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards/weather/ranking/RankSection.vue -->
 <template>
-  <div class="rank-section">
+  <div v-if="hasValidData" class="rank-section">
     <RankingCard
       v-for="(card, index) in rankCards"
       :key="index"
@@ -24,39 +24,34 @@ export default {
   },
   props: {
     cityCode: {
-      type: String,
+      type: [String, Number],
       required: true
     },
     selectedYear: {
-      type: String,
+      type: [String, Number],
       required: true
     }
   },
+  emits: ['section-empty'],
   data() {
     return {
       rankCards: [],
+      dataFetched: false,
+      isError: false
     };
   },
-  methods: {
-    transformItems(items) {
-      if (!items) {return [];}
+  computed: {
+    hasValidData() {
+      // Show while loading
+      if (!this.dataFetched) {return true;}
 
-      return items.map(item => ({
-        title: item.type,
-        value: item.number.toString(),
-        total: item.of.toString()
-      }));
-    },
-    async fetchRankingData() {
-      try {
-        const response = await axios.get(
-          `https://api.urbverde.com.br/v1/cards/weather/ranking?city=${this.cityCode}&year=${this.selectedYear}`
-        );
-        this.rankCards = response.data;
-      } catch (error) {
-        console.error('Error fetching ranking data:', error);
-        this.rankCards = [];
+      // Hide if error or no data
+      if (this.isError || !this.rankCards || this.rankCards.length === 0) {
+        return false;
       }
+
+      // Check if any card has valid items
+      return this.rankCards.some(card => card && card.items && card.items.length > 0);
     }
   },
   watch: {
@@ -67,8 +62,41 @@ export default {
     selectedYear: {
       handler: 'fetchRankingData',
       immediate: true
+    },
+    hasValidData(newValue) {
+      if (!newValue && this.dataFetched) {
+        // If we have no valid data after fetching, emit an event
+        this.$emit('section-empty', 'ranking');
+      }
     }
   },
+  methods: {
+    async fetchRankingData() {
+      this.dataFetched = false;
+      this.isError = false;
+
+      try {
+        const response = await axios.get(
+          `https://api.urbverde.com.br/v1/cards/weather/ranking?city=${this.cityCode}&year=${this.selectedYear}`
+        );
+
+        if (response.status === 200 && Array.isArray(response.data)) {
+          this.rankCards = response.data;
+        } else {
+          // Non-200 response or unexpected data format
+          console.warn('Invalid response format from ranking API:', response.data);
+          this.rankCards = [];
+          this.isError = true;
+        }
+      } catch (error) {
+        console.error('Error fetching ranking data:', error);
+        this.rankCards = [];
+        this.isError = true;
+      } finally {
+        this.dataFetched = true;
+      }
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards/parks/infoSection/infoParksSection.vue -->
 <template>
-  <div class="dashboard">
+  <div v-if="hasValidData" class="dashboard">
     <div class="left-panel">
       <InfoParks />
     </div>
@@ -37,18 +37,22 @@ export default {
 
   props: {
     cityCode: {
-      type: Number,
+      type: [String, Number],
       required: true
     },
     selectedYear: {
-      type: Number,
+      type: [String, Number],
       required: true
     }
   },
 
+  emits: ['section-empty'],
+
   data() {
     return {
-      cardData: []
+      cardData: [],
+      dataFetched: false,
+      isError: false
     };
   },
 
@@ -58,6 +62,27 @@ export default {
     },
     lastTwoCards() {
       return this.cardData.slice(2, 4);
+    },
+    hasValidData() {
+      // Show while loading
+      if (!this.dataFetched) {return true;}
+
+      // Hide if error or no data
+      if (this.isError || !this.cardData || this.cardData.length === 0) {
+        return false;
+      }
+
+      // Check if any card has valid data
+      const errorValues = [
+        'Dados indisponíveis',
+        'Dados não Disponíveis',
+        'N/A',
+        'Indisponível'
+      ];
+
+      return this.cardData.some(card => card &&
+               card.value &&
+               !errorValues.includes(card.value.toString().trim()));
     }
   },
 
@@ -69,17 +94,42 @@ export default {
     selectedYear: {
       handler: 'fetchData',
       immediate: true
+    },
+    hasValidData(newValue) {
+      if (!newValue && this.dataFetched) {
+        // If we have no valid data after fetching, emit an event
+        this.$emit('section-empty', 'stats');
+      }
     }
   },
 
   methods: {
     async fetchData() {
+      this.dataFetched = false;
+      this.isError = false;
+
       try {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/parks?city=${this.cityCode}&year=${this.selectedYear}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        this.cardData = data;
+
+        if (Array.isArray(data)) {
+          this.cardData = data;
+        } else {
+          console.warn('Invalid response format from parks API:', data);
+          this.cardData = [];
+          this.isError = true;
+        }
       } catch (error) {
         console.error('Error fetching cards data:', error);
+        this.cardData = [];
+        this.isError = true;
+      } finally {
+        this.dataFetched = true;
       }
     }
   }

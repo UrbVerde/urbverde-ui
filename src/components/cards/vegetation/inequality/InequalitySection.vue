@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards/vegetation/inequality/InequalitySection.vue -->
 <template>
-  <div class="dashboard-section">
+  <div v-if="hasValidData" class="dashboard-section">
     <div class="info-cards">
       <FirstSectionCard :data="cardData"/>
     </div>
@@ -24,19 +24,47 @@ export default {
 
   props: {
     cityCode: {
-      type: Number,
+      type: [String, Number],
       required: true
     },
     selectedYear: {
-      type: Number,
+      type: [String, Number],
       required: true
     }
   },
 
+  emits: ['section-empty'],
+
   data() {
     return {
-      cardData: []
+      cardData: [],
+      dataFetched: false,
+      isError: false
     };
+  },
+
+  computed: {
+    hasValidData() {
+      // Show while loading
+      if (!this.dataFetched) {return true;}
+
+      // Hide if error or no data
+      if (this.isError || !this.cardData || this.cardData.length === 0) {
+        return false;
+      }
+
+      // Check if any card has valid data
+      const errorValues = [
+        'Dados indisponíveis',
+        'Dados não Disponíveis',
+        'N/A',
+        'Indisponível'
+      ];
+
+      return this.cardData.some(card => card &&
+               card.value &&
+               !errorValues.includes(card.value.toString().trim()));
+    }
   },
 
   watch: {
@@ -47,6 +75,12 @@ export default {
     selectedYear: {
       handler: 'fetchDataOnChange',
       immediate: true
+    },
+    hasValidData(newValue) {
+      if (!newValue && this.dataFetched) {
+        // If we have no valid data after fetching, emit an event
+        this.$emit('section-empty', 'inequality');
+      }
     }
   },
 
@@ -58,20 +92,39 @@ export default {
     },
 
     async fetchData(city, year) {
+      this.dataFetched = false;
+      this.isError = false;
+
       try {
-        const response = await fetch(`https:/api.urbverde.com.br/v1/cards/vegetal/inequality?city=${city}&year=${year}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/cards/vegetal/inequality?city=${city}&year=${year}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        this.cardData = data;
+
+        if (Array.isArray(data)) {
+          this.cardData = data;
+        } else {
+          console.warn('Invalid response format from inequality API:', data);
+          this.cardData = [];
+          this.isError = true;
+        }
       } catch (error) {
         console.error('Error fetching cards data:', error);
+        this.cardData = [];
+        this.isError = true;
+      } finally {
+        this.dataFetched = true;
       }
     }
   }
 };
 </script>
 
-  <style scoped lang="scss">
-  @import '@/assets/styles/breakpoints.scss';
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
 
 .dashboard-section {
   display: flex;

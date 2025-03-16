@@ -27,7 +27,7 @@
       <!-- Segunda linha: Navegação -->
       <div class="tabs">
         <button
-          v-for="tab in tabs"
+          v-for="tab in visibleTabs"
           :key="tab.id"
           @click="navigateTo(tab.id)"
           :class="{ 'active-tab': activeSection === tab.id }"
@@ -121,7 +121,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import modalShare from '../modal/modalShare.vue';
 import modalLayerInfo from '../modal/modalLayerInfo.vue';
@@ -151,21 +151,31 @@ const isPopoverVisible = ref(false);
 const popoverButton = ref(null);
 const popoverMenu = ref(null);
 
-const layer = computed(() =>
-// console.log('Navbar computed - current layer:', locationStore.currentLayerName);
+// Track hidden sections
+const hiddenSections = ref([]);
 
+const layer = computed(() =>
   locationStore.currentLayerName
 );
 const cityName = computed(() => locationStore.nm_mun);
 const uf = computed(() => locationStore.uf);
 
-const tabs = ref([
+// Default tabs
+const allTabs = ref([
   { id: 'map', label: 'Mapa' },
   { id: 'stats', label: 'Estatísticas' },
   { id: 'vulnerable', label: 'Vulnerabilidade' },
   { id: 'ranking', label: 'Ranking' },
-
 ]);
+
+// Filter tabs based on hidden sections
+const visibleTabs = computed(() => allTabs.value.filter(tab => {
+  // Map is always visible
+  if (tab.id === 'map') {return true;}
+
+  // Filter out tabs for hidden sections
+  return !hiddenSections.value.includes(tab.id);
+}));
 
 const {
   largerThan
@@ -191,6 +201,27 @@ function togglePopover() {
   isPopoverVisible.value = !isPopoverVisible.value;
 }
 
+// Mark a section as hidden
+function markSectionAsHidden(sectionId) {
+  if (!hiddenSections.value.includes(sectionId)) {
+    hiddenSections.value.push(sectionId);
+  }
+}
+
+// Function to handle section visibility change events from widgets
+function handleSectionVisibilityChange(sectionId, isVisible) {
+  if (!isVisible && !hiddenSections.value.includes(sectionId)) {
+    hiddenSections.value.push(sectionId);
+  } else if (isVisible && hiddenSections.value.includes(sectionId)) {
+    hiddenSections.value = hiddenSections.value.filter(id => id !== sectionId);
+  }
+}
+
+// Watch for category changes to reset hidden sections
+watch(() => locationStore.category, () => {
+  hiddenSections.value = [];
+});
+
 // Função para fechar o popover ao clicar fora dele
 const handleClickOutside = (event) => {
   if (
@@ -207,12 +238,24 @@ const handleClickOutside = (event) => {
 // Adicionar e remover event listener para fechar o popover ao clicar fora
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+
+  // Set up custom event listener for section visibility changes
+  window.addEventListener('section-visibility-changed', (e) => {
+    if (e.detail && e.detail.sectionId) {
+      handleSectionVisibilityChange(e.detail.sectionId, e.detail.isVisible);
+    }
+  });
 });
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('section-visibility-changed', handleSectionVisibilityChange);
 });
 
+// Expose functions to parent component
+defineExpose({
+  markSectionAsHidden
+});
 </script>
 
 <style scoped lang="scss">
@@ -432,5 +475,4 @@ a {
     display: none;
   }
 }
-
 </style>

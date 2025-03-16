@@ -1,14 +1,16 @@
 <!-- urbverde-ui/src/components/cards/FirstSectionCard.vue -->
 <template>
-  <CardBase
-    class="first-card"
-    v-for="(item, index) in data"
-    :key="index"
-    :title="item.title"
-    :subtitle="item.subtitle"
-    :value="item.value"
-  >
-  </CardBase>
+  <template v-if="hasValidCards">
+    <CardBase
+      class="first-card"
+      v-for="(item, index) in filteredData"
+      :key="index"
+      :title="item.title"
+      :subtitle="item.subtitle"
+      :value="item.value"
+    >
+    </CardBase>
+  </template>
 </template>
 
 <script>
@@ -25,6 +27,31 @@ export default {
       required: true,
     },
   },
+  computed: {
+    // Filter out items with unavailable data
+    filteredData() {
+      if (!this.data || !this.data.length) {return [];}
+
+      return this.data.filter(item => {
+        if (!item.value) {return false;}
+
+        const errorValues = [
+          'Dados indisponíveis',
+          'Dados não Disponíveis',
+          'N/A',
+          'Indisponível',
+          '',
+        ];
+
+        return !errorValues.includes(item.value.trim());
+      });
+    },
+
+    // Check if there are any valid cards to display
+    hasValidCards() {
+      return this.filteredData.length > 0;
+    }
+  }
 };
 </script>
 

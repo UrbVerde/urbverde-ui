@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards/Card.vue -->
 <template>
-  <div class="custom-card shadow-sm">
+  <div v-if="shouldRenderCard" class="custom-card shadow-sm">
     <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
       <slot name="image"></slot>
     </div>
@@ -10,7 +10,7 @@
     </div>
 
     <div class="content-wrapper">
-      <h2 v-if="value" class="value">{{ value }}</h2>
+      <h2 v-if="displayValue" class="value">{{ displayValue }}</h2>
       <p v-if="subtitle" class="textodescritivo body-small-medium">{{ subtitle }}</p>
     </div>
 
@@ -58,6 +58,48 @@ export default {
     imageSlot() {
       return !!this.$slots.image;
     },
+
+    // Determine if the card should be rendered at all
+    shouldRenderCard() {
+      // If no value is provided, or value is one of the error indicators, hide the card
+      if (!this.value) {
+        return this.$slots.default ? true : false;
+      }
+
+      const errorValues = [
+        'Dados indisponíveis',
+        'Dados não Disponíveis',
+        'N/A',
+        'Indisponível',
+        '',
+      ];
+
+      // If value is in the error values list, only show if there's default content
+      if (errorValues.includes(this.value.trim())) {
+        return this.$slots.default ? true : false;
+      }
+
+      return true;
+    },
+
+    // Format the value for display
+    displayValue() {
+      if (!this.value) {return null;}
+
+      const errorValues = [
+        'Dados indisponíveis',
+        'Dados não Disponíveis',
+        'N/A',
+        'Indisponível'
+      ];
+
+      // Don't display error values
+      if (errorValues.includes(this.value.trim())) {
+        return null;
+      }
+
+      return this.value;
+    }
   },
 };
 </script>

@@ -1,10 +1,9 @@
 <!-- urbverde-ui/src/components/cards/parks/parksandSquaresSection/ParksSquaresSection.vue -->
 <template>
-  <div class="dashboard-section">
+  <div v-if="hasValidData" class="dashboard-section">
     <div class="heat-cards">
       <SecondSectionCard :data="cardData"/>
     </div>
-
     <div class="benefits-card-section">
       <ParksBenefits />
     </div>
@@ -17,7 +16,6 @@ import ParksBenefits from './ParksBenefits.vue';
 
 export default {
   name: 'ParksSquaresSection',
-
   components: {
     SecondSectionCard,
     ParksBenefits
@@ -25,74 +23,131 @@ export default {
 
   props: {
     cityCode: {
-      type: Number,
+      type: [String, Number],
       required: true
     },
     selectedYear: {
-      type: Number,
+      type: [String, Number],
       required: true
     }
   },
 
+  emits: ['section-empty'],
+
   data() {
     return {
-      cardData: []
+      cardData: null,
+      dataFetched: false,
+      isError: false
     };
+  },
+
+  computed: {
+    hasValidData() {
+      // Show while loading
+      if (!this.dataFetched) {return true;}
+
+      // Hide if error
+      if (this.isError) {return false;}
+
+      // Show if card data is valid
+      if (!this.cardData) {return false;}
+
+      const errorValues = [
+        'Dados indisponíveis',
+        'Dados não Disponíveis',
+        'N/A',
+        'Indisponível'
+      ];
+
+      return this.cardData.some(card => card &&
+               card.value &&
+               !errorValues.includes(card.value.toString().trim()));
+    }
   },
 
   watch: {
     cityCode: {
-      handler: 'fetchDataOnChange',
+      handler: 'fetchData',
       immediate: true
     },
     selectedYear: {
-      handler: 'fetchDataOnChange',
+      handler: 'fetchData',
       immediate: true
+    },
+    hasValidData(newValue) {
+      if (!newValue && this.dataFetched) {
+        // If we have no valid data after fetching, emit an event
+        this.$emit('section-empty', 'parks');
+      }
     }
   },
 
   methods: {
-    fetchDataOnChange() {
-      if (this.cityCode && this.selectedYear) {
-        this.fetchData(this.cityCode, this.selectedYear.toString());
+    async fetchData() {
+      this.dataFetched = false;
+      this.isError = false;
+
+      try {
+        const response = await fetch(
+          `https://api.urbverde.com.br/v1/cards/parks?city=${this.cityCode}&year=${this.selectedYear}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          this.cardData = data;
+        } else {
+          console.warn('Invalid response format from parks API:', data);
+          this.cardData = null;
+          this.isError = true;
+        }
+      } catch (error) {
+        console.error('Error fetching parks data:', error);
+        this.cardData = null;
+        this.isError = true;
+      } finally {
+        this.dataFetched = true;
       }
     },
-
-    async fetchData(city) {
-      try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${this.selectedYear}`);
-        const data = await response.json();
-        this.cardData = data;
-        console.log('Data fetched:', data);
-      } catch (error) {
-        console.error('Error fetching cards data:', error);
-      }
-    }
-  }
+  },
 };
 </script>
 
-  <style scoped lang="scss">
-  @import '@/assets/styles/breakpoints.scss';
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
 
-  .dashboard-section {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 24px;
-  }
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
 
+.heat-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  width: 100%;
+}
+
+.benefits-card-section {
+  width: 100%;
+}
+
+@include breakpoint-down('tablet') {
   .heat-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 24px;
-    flex-wrap: wrap;
+    gap: 16px;
   }
+}
 
-  @include breakpoint-down('tablet') {
-    .heat-cards {
-      gap: 16px;
-    }
+@media screen and (max-width: 760px) {
+  .dashboard-section {
+    flex-direction: column;
   }
-
-  </style>
+}
+</style>

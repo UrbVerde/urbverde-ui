@@ -2,7 +2,7 @@
 <template>
   <div class="widgets-section">
     <div
-      v-for="(section, index) in sections"
+      v-for="(section, index) in visibleSections"
       :key="`${selectedLayer}-${section.id}`"
       :id="section.id"
       :ref="section.ref"
@@ -28,13 +28,15 @@
         :selected-year="selectedYears[index]"
         :layer="selectedLayer"
         @change-layer="changeLayer"
+        @section-empty="markSectionAsEmpty(section.id)"
+        ref="sectionComponents"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, nextTick } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 // Import your section components as needed:
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
@@ -79,7 +81,8 @@ export default {
       required: true
     }
   },
-  setup(props) {
+  emits: ['first-year-change', 'second-year-change', 'third-year-change', 'section-visibility-changed'],
+  setup(props, { emit }) {
     const locationStore = useLocationStore();
 
     // Use the exact names from the store.
@@ -110,12 +113,27 @@ export default {
     // Check if the parks layer is selected.
     const isParksLayer = computed(() => selectedLayer.value === 'parques');
 
+    // Track hidden sections
+    const hiddenSections = ref([]);
+
+    // Reference to section components
+    const sectionComponents = ref([]);
+
+    // Mark a section as empty (no valid data)
+    const markSectionAsEmpty = (sectionId) => {
+      if (!hiddenSections.value.includes(sectionId)) {
+        hiddenSections.value.push(sectionId);
+        emit('section-visibility-changed', sectionId, false);
+      }
+    };
+
     // When the category changes, reset the years accordingly.
     watch(() => locationStore.category, (newCategory) => {
       if (newCategory) {
         selectedYears.value = selectedYears.value.map(() =>
           categoryToLayerMap[newCategory] === 'parques' ? 2021 : props.defaultYear
         );
+        hiddenSections.value = []; // Reset hidden sections when category changes
       }
     });
 
@@ -216,6 +234,9 @@ export default {
       return sectionConfigs[selectedLayer.value] || [];
     });
 
+    // Filter visible sections
+    const visibleSections = computed(() => sections.value.filter(section => !hiddenSections.value.includes(section.id)));
+
     // Method to change the layer.
     const changeLayer = (layer) => {
       const layerToCategoryMap = {
@@ -233,8 +254,21 @@ export default {
       }
     };
 
+    // Add a method to check if sections have valid data after loading
+    const checkSectionsData = () => {
+      nextTick(() => {
+        // Implement logic to check if sections are empty
+        // This would be executed after components have fetched their data
+      });
+    };
+
+    // Watch for city code changes to check sections after data loading
+    watch(() => computedCityCode.value, () => {
+      hiddenSections.value = []; // Reset hidden sections when city changes
+      checkSectionsData();
+    });
+
     return {
-      // Expose the store values exactly as nm_mun and uf.
       nm_mun,
       uf,
       computedCityCode,
@@ -242,7 +276,11 @@ export default {
       sections,
       selectedYears,
       changeLayer,
-      isParksLayer
+      isParksLayer,
+      hiddenSections,
+      markSectionAsEmpty,
+      visibleSections,
+      sectionComponents
     };
   },
   watch: {
@@ -259,7 +297,14 @@ export default {
     handleYearChange(value, index) {
       if (!this.isParksLayer) {
         this.selectedYears[index] = value;
-        this.$emit(`year-change-${index}`, value);
+        // Emit the year change event based on the index
+        if (index === 0) {
+          this.$emit('first-year-change', value);
+        } else if (index === 1) {
+          this.$emit('second-year-change', value);
+        } else if (index === 2) {
+          this.$emit('third-year-change', value);
+        }
       }
     }
   }
