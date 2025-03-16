@@ -1,12 +1,35 @@
-<!-- urbverde-ui/src/components/map/mapGenerator.vue -->
+<!-- src/components/map/mapGenerator.vue -->
 <template>
   <div ref="mapContainer" class="map-container">
     <!-- Loading State -->
     <div v-if="isLoadingCoordinates" class="map-loading">
       <p>Carregando mapa...</p>
     </div>
+
     <!-- Main map -->
     <div class="map-wrapper"></div>
+
+    <!-- All map controls in one component -->
+    <MapControls
+      v-if="mapLoaded && map"
+      :map="map"
+      :current-style="currentStyle"
+      :terrain-enabled="terrainEnabled"
+      @style-change="handleStyleChange"
+      @terrain-toggle="handleTerrainToggle"
+      @location-found="handleLocationFound"
+    />
+
+    <!-- Custom Attribution Bar -->
+    <AttributionBar
+      v-if="mapLoaded"
+      :scale-metric="computedScaleMetric"
+      :scale-proportion="computedScaleProportion"
+      :coordinates="currentCoordinates"
+      :altitude="computedAltitude"
+      :map="map" />
+    />
+
     <slot></slot>
   </div>
 </template>
@@ -19,6 +42,30 @@ import { useLayersStore } from '@/stores/layersStore';
 import { useRoute, useRouter } from 'vue-router';
 import CustomHash from './customHash';
 import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
+import MapControls from './controls/MapControls.vue';
+import AttributionBar from './AttributionBar.vue';
+import CustomTerrainControl from './controls/customTerrainControl';
+
+// Example computed properties (replace these with real values as needed)
+const computedScaleMetric = computed(() =>
+  // You could calculate this dynamically based on the map's scale
+  '200 m'
+);
+const computedScaleProportion = computed(() =>
+  // Change this based on your application logic
+  '1:100'
+);
+const computedAltitude = computed(() =>
+  // For example, this could be derived from the map's zoom or another metric
+  '810 m'
+);
+const currentCoordinates = computed(() =>
+  // Extract these values from your coordinates ref or from the location store
+  ({
+    lat: "23°33'34.3\"S",
+    lng: "46°53'57.3\"W"
+  })
+);
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -32,6 +79,32 @@ const customHash = ref(null);
 const coordinates = ref(null);
 const isLoadingCoordinates = ref(false);
 const mapLoaded = ref(false);
+
+// Map style state
+const currentStyle = ref('streets');
+const terrainEnabled = ref(false);
+
+// Handler functions - these are much simpler now
+function handleStyleChange({ id, visibleLayers }) {
+  console.log(visibleLayers);
+  currentStyle.value = id;
+
+  // Restore layers after style is loaded
+  setTimeout(() => {
+    addBaseMunicipalitiesLayer();
+    setupDynamicLayer();
+    bringBasemapLabelsToFront();
+  }, 100);
+}
+
+function handleTerrainToggle(enabled) {
+  terrainEnabled.value = enabled;
+}
+
+function handleLocationFound(coords) {
+  // Maybe store the location or update some UI state
+  console.log('User location found:', coords);
+}
 
 const globalLastRasterValue = ref(null);
 const isMouseWithinMunicipality = ref(false);
@@ -743,23 +816,18 @@ function initializeMap() {
   }
   map.value = new maplibregl.Map({
     container: mapContainer.value,
-    style:
-      'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+    style: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
     ...initialState,
-    attributionControl: false
+    attributionControl: false,
   });
+
+  layersStore.mapRef = map.value;
+
   map.value.addControl(
     new maplibregl.NavigationControl({
       visualizePitch: true,
-      // showZoom: true,
-      // showCompass: true
     }), 'top-left');
-  map.value.addControl(
-    new maplibregl.ScaleControl({
-      maxWidth: 120,
-      unit: 'metric',
-    }), 'bottom-left'
-  );
+
   map.value.addControl(
     new maplibregl.GeolocateControl({
       positionOptions: { enableHighAccuracy: true },
@@ -768,16 +836,12 @@ function initializeMap() {
     }),
     'top-left'
   );
-  // map.value.addSource('terrain', {
-  //   type: 'raster-dem',
-  //   url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ',
-  //   tileSize: 512,        // or 256 if you prefer
-  //   maxzoom: 14           // depends on your DEM source
-  // });
+
+  // Adicione o nosso controle de terreno personalizado
   map.value.addControl(
-    new maplibregl.TerrainControl({
+    new CustomTerrainControl({
       source: 'terrain',
-      exaggeration: 6,
+      exaggeration: 2,
     }), 'top-left'
   );
 

@@ -1,39 +1,57 @@
 <!-- urbverde-ui/src/components/legend/OpacityControl.vue -->
 <template>
-  <div class="controls-section">
+  <div class="controls-section"
+       @click="handleControlsClick"
+       @mouseleave="handleMouseLeave">
     <div class="visibility-controls">
-      <button class="eye-container" @click="toggleVisibility">
+      <button class="eye-container" @click.stop="toggleVisibility">
         <div class="eye-wrapper">
           <div class="eye-icon">
-            <IconComponent
-              :name="modelValue > 0 ? 'bi-eye' : 'bi-eye-slash'"
-              :size="16"
-              :color="modelValue > 0 ? '#198754' : '#6C757D'"
-            />
+            <i
+              :class="[modelValue > 0 ? 'bi bi-eye' : 'bi bi-eye-slash']"
+              :style="{ color: modelValue > 0 ? '#025949' : '#025949' }"
+            ></i>
           </div>
         </div>
       </button>
-      <div class="percentage-text">{{ modelValue }}%</div>
+      <div class="input-wrapper" @click.stop="toggleSlider">
+        <input
+          type="text"
+          v-model="opacityValue"
+          @blur="validateAndUpdate"
+          @keyup.enter="validateAndUpdate"
+          class="percentage-input body-small-medium"
+          :class="{ 'error': isInvalid }"
+        />
+        <span class="percentage-symbol">%</span>
+      </div>
     </div>
-    <div class="progress-container">
-      <input
-        type="range"
-        :value="modelValue"
-        @input="updateValue($event.target.value)"
-        min="0"
-        max="100"
-        class="opacity-slider"
-      />
-      <div class="progress-bg"></div>
-      <div class="progress-fg" :style="{ width: modelValue + '%' }"></div>
+    <div v-show="showSlider" class="slider-wrapper">
+      <div class="progress-container">
+        <input
+          type="range"
+          :value="modelValue"
+          @input="handleSliderInput($event.target.value)"
+          @mousedown="sliderDragging = true"
+          @mouseup="sliderDragging = false"
+          @touchstart="sliderDragging = true"
+          @touchend="sliderDragging = false"
+          min="0"
+          max="100"
+          class="opacity-slider"
+          @click.stop
+        />
+        <div class="progress-bg"></div>
+        <div class="progress-fg" :style="{ width: modelValue + '%' }"></div>
+        <div class="slider-thumb" :style="{ left: modelValue + '%' }"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {  onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useLayersStore } from '@/stores/layersStore';
-import IconComponent from '@/components/icons/IconComponent.vue';
 
 const props = defineProps({
   modelValue: {
@@ -50,45 +68,178 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const layersStore = useLayersStore();
 
+// Estado reativo
+const opacityValue = ref(props.modelValue);
+const showSlider = ref(false);
+const isInvalid = ref(false);
+const sliderDragging = ref(false);
+const hasSliderBeenDragged = ref(false);
+
+// Assistir mudanças no modelValue para atualizar o input
+watch(() => props.modelValue, (newValue) => {
+  opacityValue.value = newValue;
+});
+
+// Gerenciamento de cliques externos
+const handleClickOutside = (event) => {
+  const controlsSection = document.querySelector('.controls-section');
+  if (controlsSection && !controlsSection.contains(event.target)) {
+    showSlider.value = false;
+    // Resetar o estado de arrasto quando fechar
+    hasSliderBeenDragged.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+
+  // Inicializa a opacidade a partir do store
+  if (props.layerId) {
+    const currentLayer = layersStore.activeLayers.find(l => l.id === props.layerId);
+    if (currentLayer && currentLayer.opacity !== undefined) {
+      const newOpacity = Math.round(currentLayer.opacity * 100);
+      console.log(`[OpacityControl] Initializing opacity for layer ${props.layerId} to ${newOpacity}%`);
+      emit('update:modelValue', newOpacity);
+      opacityValue.value = newOpacity;
+    } else {
+      // If layer not found in store, initialize with current model value
+      console.log(`[OpacityControl] Layer ${props.layerId} not found in store, using model value: ${props.modelValue}%`);
+      opacityValue.value = props.modelValue;
+    }
+  }
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+
 // Methods
 const toggleVisibility = () => {
   const newValue = props.modelValue > 0 ? 0 : 100;
   updateOpacity(newValue);
 };
 
+const handleControlsClick = () => {
+  if (!showSlider.value) {
+    showSlider.value = true;
+    // Resetar o estado de arrasto quando abrir
+    hasSliderBeenDragged.value = false;
+  }
+};
+
+const toggleSlider = () => {
+  showSlider.value = !showSlider.value;
+  if (showSlider.value === false) {
+    // Resetar o estado de arrasto quando fechar
+    hasSliderBeenDragged.value = false;
+  }
+};
+
+const handleMouseLeave = () => {
+  // Fecha o slider quando o mouse sai da área do componente
+  // MAS APENAS se o usuário já arrastou o slider
+  if (showSlider.value && hasSliderBeenDragged.value) {
+    showSlider.value = false;
+    hasSliderBeenDragged.value = false;
+  }
+};
+
+const handleSliderInput = (value) => {
+  // Marcar que o slider foi arrastado
+  if (sliderDragging.value) {
+    hasSliderBeenDragged.value = true;
+  }
+
+  // Atualizar o valor
+  updateValue(value);
+};
+
 const updateValue = (value) => {
-  updateOpacity(Number(value));
+  const numValue = Number(value);
+  const validValue = Math.max(0, Math.min(100, numValue));
+  updateOpacity(validValue);
+};
+
+const validateAndUpdate = () => {
+  let num = Number(opacityValue.value);
+
+  if (isNaN(num)) {
+    // Caso seja NaN, restaura o valor anterior
+    opacityValue.value = props.modelValue;
+
+    return;
+  }
+
+  // Limita o valor entre 0 e 100
+  if (num < 0) {
+    num = 0;
+  } else if (num > 100) {
+    num = 100;
+  }
+
+  isInvalid.value = false;
+  opacityValue.value = num;
+  updateOpacity(num);
 };
 
 const updateOpacity = (value) => {
   emit('update:modelValue', value);
-  layersStore.setLayerOpacity(props.layerId, value / 100);
-};
-
-// Initialize opacity from store on mount
-onMounted(() => {
-  const currentLayer = layersStore.activeLayers.find(l => l.id === props.layerId);
-  if (currentLayer && currentLayer.opacity !== props.modelValue / 100) {
-    emit('update:modelValue', currentLayer.opacity * 100);
+  // Make sure we have a valid layerId before updating opacity
+  if (props.layerId) {
+    console.log(`[OpacityControl] Updating layer ${props.layerId} to opacity ${value/100}`);
+    layersStore.setLayerOpacity(props.layerId, value / 100);
+  } else {
+    console.warn('[OpacityControl] No layerId provided, cannot update opacity');
   }
-});
+};
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .controls-section {
   align-self: stretch;
-  height: 18px;
-  padding: 0 8px;
+  height: auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  padding: 8px 8px 20px 32px;
+  background: radial-gradient(50% 50% at 50% 50%, #FFF 53%, rgba(255, 255, 255, 0.00) 100%);
 }
 
 .visibility-controls {
   display: flex;
+  padding: 4px 8px 4px 6px;
   align-items: center;
-  gap: 6px;
+  gap: 0px;
+  border-radius: 8px;
+  border: 1px solid map-get($primary-fade, 200);
+  background: map-get($gray, white);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content:flex-end;
+  cursor: pointer;
+}
+
+.slider-wrapper {
+  position: absolute;
+  top: 70%;
+  right: 8px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid map-get($gray, 200);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 120px;
+  z-index: 100;
+  margin-top: 4px;
 }
 
 .eye-container {
@@ -102,10 +253,12 @@ onMounted(() => {
   cursor: pointer;
   height: 24px;
   width: 24px;
+  background-color: map-get($green, 100);
+  transition: 0.1s;
 }
 
 .eye-container:hover {
-  background-color: #f0f0f0;
+  background-color: map-get($green, 200);
 }
 
 .eye-wrapper {
@@ -118,48 +271,87 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 18px;
+  margin-top: 2px;
 }
 
-.percentage-text {
-  color: #212529;
-  font-size: 12px;
-  font-family: Inter, sans-serif;
-  font-weight: 400;
-  line-height: 18px;
-  min-width: 36px;
+.percentage-input {
+  color: map-get($theme, primary);
+  max-width: 30px;
+  background: transparent;
+  border: none;
+  margin: 0 2px 0 0;
+  text-align: right;
+  align-items: center;
+  outline: none;
+  padding: 0;
+  line-height: 1;
+  font-size: 14px;
+}
+
+.percentage-symbol {
+  color: map-get($theme, primary);
+  font-size: 14px;
+  padding-top: 1px;
 }
 
 .progress-container {
-  flex: 1;
-  height: 7px;
+  height: 6px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
+  width: 100%;
+  margin: 4px 0;
 }
 
 .opacity-slider {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 18px;
   margin: 0;
-  cursor: pointer;
-  opacity: 0;
+  top: -6px;
+  cursor: grab;
+  opacity: 0.01;
   z-index: 2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.opacity-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.opacity-slider:active::-moz-range-thumb {
+  cursor: grabbing;
 }
 
 .progress-bg {
   position: absolute;
   width: 100%;
-  height: 7px;
-  background: #E9ECEF;
+  height: 6px;
+  background: map-get($gray, 200);
   z-index: 0;
+  border-radius: 8px;
 }
 
 .progress-fg {
   position: absolute;
-  height: 7px;
-  background: #75B798;
-  transition: width 0.2s ease;
+  height: 6px;
+  background: map-get($primary-fade, 300);
   z-index: 1;
+  border-radius: 8px;
+}
+
+.slider-thumb {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: map-get($theme, primary);
+  border-radius: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 3;
+  pointer-events: none;
 }
 </style>

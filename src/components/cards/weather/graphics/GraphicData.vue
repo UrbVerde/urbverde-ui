@@ -64,7 +64,7 @@ export default {
   justify-content: center;
   align-items: center;
   align-self: stretch;
-  padding: 48px 40px 48px 40px;
+  padding: 48px 40px 32px 40px;
 }
 
 .graphic-data-card .textodescritivo {
@@ -76,6 +76,6 @@ export default {
   width: 100%;
   height: auto;
   align-self: center;
-  margin-bottom: 54px;
+  margin-bottom: 32px;
 }
 </style>

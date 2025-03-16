@@ -257,7 +257,8 @@ p, h6 {
 /* Chart container style */
 .chart-container {
   width: 100%;
-  height: 300px;
+  height: auto;
+  min-height: auto;
   padding: 8px;
   box-sizing: border-box;
 }

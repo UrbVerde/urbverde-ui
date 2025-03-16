@@ -267,13 +267,12 @@ export default {
 }
 
 .large-card {
-  width: 66.66%; /* Exatamente 2/3 */
-  min-height: 300px;
+  width: 66.66%;
   position: relative;
 }
 
 .small-card {
-  width: 33.33%; /* Exatamente 1/3 */
+  width: 33.33%;
 }
 
 .loading-indicator {
@@ -300,7 +299,7 @@ export default {
   .large-card,
   .small-card {
     width: 100%;
-
+    min-height: auto;
   }
 }
 </style>

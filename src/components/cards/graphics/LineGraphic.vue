@@ -382,6 +382,14 @@ export default {
   <style scoped>
   .line-chart-wrapper {
     width: 100%;
-    height: 100%;
+    min-height: 0;
+  }
+
+  canvas {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 300px;
+    max-height: 350px;
   }
   </style>

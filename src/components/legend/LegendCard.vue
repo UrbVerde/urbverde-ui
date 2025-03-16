@@ -1,10 +1,8 @@
 <!-- urbverde-ui/src/components/legend/LegendCard.vue -->
-<!-- LegendCard.vue -->
 <template>
-  <div class="card-container shadow-sm">
-    <!--  @mouseenter="isHovered = true" @mouseleave="isHovered = false" -->
+  <div class="card-container">
     <!-- Drag handle -->
-    <div v-if="draggable && isHovered" class="drag-handle">
+    <div v-if="draggable" class="drag-handle">
       <IconComponent name="drag" size="20" />
     </div>
 
@@ -14,14 +12,15 @@
         <IconComponent :name="icon || 'bi-question-circle'" :size="20" />
       </div>
 
-      <div class="title-wrapper">
-        <span v-if="title" class="title body-small-regular" :class="{ 'with-ellipsis': isHovered }">
-          {{ title }}
-        </span>
+      <div class="label-wrapper">
+        <div class="title-wrapper">
+          <span v-if="title" class="title body-small-regular">
+            {{ title }}
+          </span>
+        </div>
 
-        <button v-if="showMenu && isHovered" class="menu-button">
-          <i class="bi bi-three-dots-vertical"></i>
-        </button>
+        <!-- Recorte da camada -->
+        <LayerCut class="layer-cut"/>
       </div>
     </div>
 
@@ -45,10 +44,16 @@
       </div>
 
       <!-- Opacity Control -->
-      <!-- <OpacityControl v-if="showOpacity && isHovered"
+      <OpacityControl v-if="showOpacity"
+                      class="opacity-control"
                       v-model="localOpacity"
                       :layerId="layerId"
-                      @update:modelValue="handleOpacityChange" /> -->
+                      @update:modelValue="handleOpacityChange"
+      />
+
+      <!-- Card Layer Switch -->
+      <CardLayerSwitch  class="grip-control"/>
+
     </div>
   </div>
 </template>
@@ -57,7 +62,9 @@
 import { ref } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
-// import OpacityControl from './OpacityControl.vue';
+import OpacityControl from './OpacityControl.vue';
+import CardLayerSwitch from './CardLayerSwitch.vue';
+import LayerCut from './LayerCut.vue';
 
 defineProps({
   title: {
@@ -102,28 +109,28 @@ defineProps({
   }
 });
 
-const isHovered = ref(false);
 const localOpacity = ref(100);
 
 console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 
-// const emit = defineEmits(['opacity-change', 'colorbar-click']);
+const emit = defineEmits(['opacity-change', 'colorbar-click']);
 
-// const handleOpacityChange = (value) => {
-//   console.log('[LegendCard] Opacity changed to:', value);
-//   localOpacity.value = value;
-//   emit('opacity-change', value);
-// };
+const handleOpacityChange = (value) => {
+  console.log('[LegendCard] Opacity changed to:', value);
+  localOpacity.value = value;
+  emit('opacity-change', value);
+};
+
 </script>
 
 <style scoped lang="scss">
 .card-container {
   position: relative;
   width: 100%;
-  padding: 12px 16px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #E9ECEF;
+  padding: 16px;
+  background: map-get($gray, white);
+  border-radius: 8px;
+  border: 1px solid map-get($gray, 200);
 }
 
 .drag-handle {
@@ -153,6 +160,16 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
   justify-content: center;
 }
 
+.label-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  min-width: 0;
+  flex-direction: column;
+}
+
 .title-wrapper {
   flex: 1;
   display: flex;
@@ -162,28 +179,16 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
   min-width: 0;
 }
 
+.layer-cut{
+  width: 100%;
+  display: flex;
+  align-items: left;
+  cursor: pointer;
+}
+
 .title {
   color: map-get($body-text, body-color);
   min-width: 0;
-}
-
-.title.with-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.menu-button {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: #6C757D;
-  border-radius: 4px;
-}
-
-.menu-button:hover {
-  background: #f0f0f0;
 }
 
 .content {
@@ -219,4 +224,23 @@ console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
 .legend-line.municipal {
   background-color: #999;
 }
+
+.opacity-control, .grip-control {
+  display: none;
+}
+
+.card-container:hover .opacity-control,
+.card-container:hover .grip-control {
+  display: flex;
+}
+
+.card-container:hover :deep(.layer-cut-icon) {
+  display: block;
+}
+
+.card-container:hover :deep(.layer-cut-text),
+.card-container:hover :deep(.layer-cut-icon) {
+  color: map-get($theme, primary);
+}
+
 </style>
