@@ -2,7 +2,11 @@
 <template>
   <div class="content">
     <div class="see-more-cards">
-      <SeeMoreCard v-if="cardData.length" :data="cardData" />
+      <SeeMoreCard
+        v-if="cardData.length"
+        :data="cardData"
+        :cityCode="computedCityCode"
+      />
     </div>
     <div class="download-card">
       <DownloadCard/>
@@ -11,11 +15,13 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useLocationStore } from '@/stores/locationStore';
 import SeeMoreCard from '../../SeeMoreCard.vue';
 import DownloadCard from '../../DownloadCard.vue';
 
 export default {
-  name: 'SeeMoreSection',
+  name: 'SeeMoreVegSection',
 
   components: {
     SeeMoreCard,
@@ -33,14 +39,35 @@ export default {
     }
   },
 
+  setup(props) {
+    const locationStore = useLocationStore();
+
+    // Compute the city code from the store with fallback to the prop
+    const computedCityCode = computed(() =>
+      locationStore.cd_mun || props.cityCode
+    );
+
+    return {
+      computedCityCode
+    };
+  },
+
   data() {
     return {
       cardData: []
     };
   },
 
+  computed: {
+    // Add a computed property to react to changes in computedCityCode
+    cityCodeForFetch() {
+      return this.computedCityCode;
+    }
+  },
+
   watch: {
-    cityCode: {
+    // Update the watcher to use the computed cityCode
+    cityCodeForFetch: {
       handler: 'fetchDataOnChange',
       immediate: true
     }
@@ -48,8 +75,8 @@ export default {
 
   methods: {
     fetchDataOnChange() {
-      if (this.cityCode) {
-        this.fetchData(this.cityCode);
+      if (this.computedCityCode) {
+        this.fetchData(this.computedCityCode);
       }
     },
 
@@ -66,17 +93,21 @@ export default {
 };
 </script>
 
-  <style scoped>
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    width: 100%;
-  }
+<style scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+}
 
-  .see-more-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-  }
-  </style>
+.see-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.download-card {
+  width: 100%;
+}
+</style>

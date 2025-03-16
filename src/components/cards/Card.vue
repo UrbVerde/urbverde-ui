@@ -1,4 +1,5 @@
 <!-- urbverde-ui/src/components/cards/Card.vue -->
+<!-- CardBase.vue -->
 <template>
   <div class="custom-card shadow-sm">
     <div class="card-image-wrapper" v-if="imagePosition === 'top' && imageSlot">
@@ -18,6 +19,28 @@
       <slot name="image"></slot>
     </div>
 
+    <!-- Chart component integration -->
+    <div class="chart-container" v-if="graphic">
+      <component
+        :is="graphicComponent"
+        :xData="xData"
+        :yData="yData"
+        :xLabel="xLabel"
+        :yLabel="yLabel"
+        :dataType="dataType"
+        :chartColor="chartColor"
+        :chartBgColor="chartBgColor"
+        :suggestYScale="suggestYScale"
+        :paddingFactor="paddingFactor"
+        :showAverage="showAverage"
+        :averageLineColor="averageLineColor"
+        :averageLineDash="averageLineDash"
+        :averageLineWidth="averageLineWidth"
+        :averageLabel="averageLabel"
+        :chartData="chartData"
+      />
+    </div>
+
     <div class="card-content" v-if="$slots.default">
       <slot></slot>
     </div>
@@ -33,8 +56,15 @@
 </template>
 
 <script>
+import LineGraphic from './graphics/LineGraphic.vue';
+import PizzaGraphic from './graphics/PizzaGraphic.vue';
+
 export default {
   name: 'CardBase',
+  components: {
+    LineGraphic,
+    PizzaGraphic
+  },
   props: {
     title: {
       type: String,
@@ -53,18 +83,100 @@ export default {
       default: 'top',
       validator: value => ['top', 'middle', 'bottom'].includes(value),
     },
+    // Chart properties
+    graphic: {
+      type: Boolean,
+      default: false,
+    },
+    graphicType: {
+      type: String,
+      default: 'line',
+      validator: value => ['line', 'pizza'].includes(value),
+    },
+    // Data properties shared by all chart types
+    xLabel: {
+      type: String,
+      default: '',
+    },
+    yLabel: {
+      type: String,
+      default: '',
+    },
+    xData: {
+      type: Array,
+      default: () => [],
+    },
+    yData: {
+      type: Array,
+      default: () => [],
+    },
+    chartData: {
+      type: Object,
+      default: () => ({}),
+      description: 'Custom data structure for specific chart types (e.g., pizza chart)'
+    },
+    dataType: {
+      type: String,
+      default: 'Data',
+      description: 'Label for dataset displayed in the chart legend',
+    },
+    chartColor: {
+      type: String,
+      default: '#4CAF50', // Default to green
+    },
+    chartBgColor: {
+      type: String,
+      default: 'rgba(76, 175, 80, 0.1)', // Light green with transparency
+    },
+    // Line chart specific properties
+    suggestYScale: {
+      type: Boolean,
+      default: true,
+    },
+    paddingFactor: {
+      type: Number,
+      default: 0.1,
+    },
+    showAverage: {
+      type: Boolean,
+      default: true,
+    },
+    averageLineColor: {
+      type: String,
+      default: 'rgba(255, 99, 132, 1)',
+    },
+    averageLineDash: {
+      type: Array,
+      default: () => [5, 5],
+    },
+    averageLineWidth: {
+      type: Number,
+      default: 2,
+    },
+    averageLabel: {
+      type: String,
+      default: 'Média histórica',
+    },
   },
   computed: {
     imageSlot() {
       return !!this.$slots.image;
     },
-  },
+    graphicComponent() {
+      // Map graphic type to component
+      const componentMap = {
+        'line': 'LineGraphic',
+        'pizza': 'PizzaGraphic'
+      };
+
+      return componentMap[this.graphicType] || 'LineGraphic';
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
-
-p, h6{
+p, h6 {
   margin: 0;
 }
 
@@ -82,7 +194,7 @@ p, h6{
   box-sizing: border-box;
 }
 
-.content-wrapper{
+.content-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -108,21 +220,13 @@ p, h6{
   height: auto;
 }
 
-.card-header .titulo{
+.card-header .titulo {
   color: map-get($body-text, body-color);
   width: 100%;
   word-wrap: break-word;
 }
 
-.content-wraper{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.textodescritivo{
+.textodescritivo {
   color: map-get($gray, 600);
   align-self: stretch;
   display: flex;
@@ -151,4 +255,12 @@ p, h6{
   width: 100%;
 }
 
+/* Chart container style */
+.chart-container {
+  width: 100%;
+  height: auto;
+  min-height: auto;
+  padding: 8px;
+  box-sizing: border-box;
+}
 </style>

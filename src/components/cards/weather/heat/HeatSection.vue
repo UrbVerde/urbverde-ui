@@ -61,7 +61,15 @@ export default {
     async fetchData(city, year) {
       try {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/heat?city=${city}&year=${year}`);
-        const data = await response.json();
+        let data = await response.json();
+
+        // Transformar os dados conforme solicitado
+        data = data.map(item => ({
+          ...item,
+          title: item.title.replace(/(afetados|afetadas)/, ''),
+          subtitle: 'do total de pessoas vivendo nas regiões mais quentes.'
+        }));
+
         this.cardData = data;
       } catch (error) {
         console.error('Error fetching cards data:', error);
@@ -111,5 +119,4 @@ export default {
     gap: 16px;
   }
 }
-
 </style>
