@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/vegetation/vgraphics/VGraphicGenerator.vue -->
 <template>
   <CardBase
     class="graphic-card"

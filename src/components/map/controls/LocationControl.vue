@@ -1,4 +1,4 @@
-<!-- src/components/map/controls/LocationControl.vue -->
+<!-- urbverde-ui/src/components/map/controls/LocationControl.vue -->
 <template>
   <div></div>
   <!-- <div class="location-control" @click="findUserLocation">

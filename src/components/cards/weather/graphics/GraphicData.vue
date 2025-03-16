@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/graphics/GraphicData.vue -->
 <template>
   <div class="">
     <CardBase

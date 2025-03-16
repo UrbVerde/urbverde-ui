@@ -1,4 +1,4 @@
-<!-- src/components/map/controls/BasemapSwitcher.vue -->
+<!-- urbverde-ui/src/components/map/controls/BasemapSwitcher.vue -->
 <template>
   <div class="map-style-switcher" @click="toggleStyle">
     <div class="map-style-wrapper">

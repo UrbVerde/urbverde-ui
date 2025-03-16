@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/graphics/GraphicGenerator.vue -->
 <template>
   <CardBase
     class="graphic-card"

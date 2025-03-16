@@ -1,4 +1,4 @@
-<!-- src/components/map/controls/TerrainControl.vue -->
+<!-- urbverde-ui/src/components/map/controls/TerrainControl.vue -->
 
 <!-- Este componente NÃO ESTÁ SENDO UTILIZADO, foi substituido pelo
  customTerrainControl.js

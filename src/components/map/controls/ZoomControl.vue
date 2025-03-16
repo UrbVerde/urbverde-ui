@@ -1,4 +1,4 @@
-<!-- src/components/map/controls/ZoomControl.vue -->
+<!-- urbverde-ui/src/components/map/controls/ZoomControl.vue -->
 <template>
   <div class="zoom-controls">
     <button class="zoom-button zoom-in" @click="zoomIn" :disabled="atMaxZoom">+</button>

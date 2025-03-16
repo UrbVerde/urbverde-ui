@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/Card.vue -->
 <!-- CardBase.vue -->
 <template>
   <div class="custom-card shadow-sm">

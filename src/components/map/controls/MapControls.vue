@@ -1,4 +1,4 @@
-<!-- src/components/map/controls/MapControls.vue -->
+<!-- urbverde-ui/src/components/map/controls/MapControls.vue -->
 <template>
   <div>
     <BasemapSwitcher

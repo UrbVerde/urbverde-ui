@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/parks/seeMoreSection/SeeMoreParksSection.vue -->
 <!-- SeeMoreParkSection.vue -->
 <template>
   <div class="content">

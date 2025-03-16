@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/weather/seeMore/SeeMoreSection.vue -->
 <!-- SeeMoreSection.vue -->
 <template>
   <div class="content">
