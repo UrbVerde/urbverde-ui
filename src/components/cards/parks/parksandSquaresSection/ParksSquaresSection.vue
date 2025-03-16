@@ -62,7 +62,7 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/square/inequality?city=${city}&year=${this.selectedYear}`);
         const data = await response.json();
 
-        // Multiplicar os valores numéricos por 100
+        // Multiplicar os valores numéricos por 100 e atualizar os subtítulos
         const processedData = data.map(item => {
           // Remover o símbolo % e converter para número
           const numericValue = parseFloat(item.value.replace('%', ''));
@@ -71,11 +71,12 @@ export default {
 
           // Formatar o valor sem casas decimais se terminar em .00
           const formattedValue = Number.isInteger(multipliedValue)
-            ? `${Math.round(multipliedValue)  }%`
-            : `${multipliedValue.toFixed(2)  }%`;
+            ? `${Math.round(multipliedValue)}%`
+            : `${multipliedValue.toFixed(2)}%`;
 
           return {
             ...item,
+            subtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
             value: formattedValue
           };
         });
