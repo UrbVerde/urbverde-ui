@@ -16,7 +16,7 @@
           {{ mouseCoordinates.lng }}
         </div>
       </div>
-      <div v-if="hasValidAltitude" class="altitude body-caption-regular">{{ mouseAltitude }}</div>
+      <!--<div v-if="hasValidAltitude" class="altitude body-caption-regular">{{ mouseAltitude }}</div>-->
       <div class="sources">
         <span class="body-caption-medium">Fonte: {{ truncatedSource }}</span>
         <a href="#" class="more-link body-caption-medium" @click.prevent="openMapInfoModal">{{ moreButtonText }}</a>
@@ -50,10 +50,10 @@ const props = defineProps({
       lng: "46°53'57\"W"
     })
   },
-  altitude: {
-    type: String,
-    default: '- m'
-  }
+  //altitude: {
+  //  type: String,
+  //  default: '- m'
+  //}
 });
 
 const locationStore = useLocationStore();
@@ -66,9 +66,9 @@ const mouseCoordinates = reactive({
   lat: props.coordinates.lat,
   lng: props.coordinates.lng
 });
-const mouseAltitude = ref(props.altitude);
+//const mouseAltitude = ref(props.altitude);
 
-const hasValidAltitude = computed(() => mouseAltitude.value !== '- m' && mouseAltitude.value !== '');
+// const hasValidAltitude = computed(() => mouseAltitude.value !== '- m' && mouseAltitude.value !== '');
 
 // Get current layer from locationStore, for the modal
 const currentLayer = computed(() => locationStore.currentLayerName || '');
@@ -123,17 +123,17 @@ const handleMouseMove = (e) => {
   mouseCoordinates.lng = formatDMS(e.lngLat.lng, false);
 
   // If there's terrain data or a DEM source in the map, we can get the elevation
-  if (props.map.getTerrain && props.map.queryTerrainElevation) {
-    const elevation = props.map.queryTerrainElevation(e.lngLat);
-    if (elevation !== null && elevation !== undefined) {
-      mouseAltitude.value = `${Math.round(elevation)} m`;
-    } else {
-      mouseAltitude.value = '- m';
-    }
-  } else {
-    // Se não houver dados de elevação disponíveis
-    mouseAltitude.value = '- m';
-  }
+  //if (props.map.getTerrain && props.map.queryTerrainElevation) {
+  //  const elevation = props.map.queryTerrainElevation(e.lngLat);
+  //  if (elevation !== null && elevation !== undefined) {
+  //    mouseAltitude.value = `${Math.round(elevation)} m`;
+  //  } else {
+  //    mouseAltitude.value = '- m';
+  //  }
+  //} else {
+  //  // Se não houver dados de elevação disponíveis
+  //  mouseAltitude.value = '- m';
+  //}
 };
 
 onMounted(() => {
@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  z-index: 10;
+  z-index: 1;
   width: auto;
   height: auto;
   display: flex;

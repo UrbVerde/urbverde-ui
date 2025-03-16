@@ -7,26 +7,28 @@
     <div class="label">
       <div class="text">
         <p class="title body-small-bold">
-          Participe do evento de lançamento da UrbVerde nacional!
+          Veja as lives do evento da UrbVerde nacional!
         </p>
         <p class="title-mobile body-small-semibold">
-          Evento UrbVerde Nacional
+          Veja lives do evento!
         </p>
         <p class="title-mobile-small body-small-semibold">
-          Evento UrbVerde<br>Nacional
+          Veja lives<br>do evento
         </p>
-        <p class="subtitle body-small-regular">
-          No dia 17/03, explore recursos que transformarão a análise socioambiental da sua cidade
-        </p>
+        <!--
+          <p class="subtitle body-small-regular">
+            No dia 17/03, explore recursos que transformarão a análise socioambiental da sua cidade
+          </p>
+        -->
       </div>
       <a
-        href="https://www.even3.com.br/urbverde-lancamento/"
+        href="https://www.youtube.com/playlist?list=PLBd2_lqSblG10Lmq5hOsInHrg1XrdlfXC"
         target="_blank"
         rel="noopener noreferrer"
       >
         <PrimaryButton
           class="button-desktop"
-          label="Participar"
+          label="Ver lives"
           iconType="bootstrap"
           :filled="false"
           icon="bi bi-arrow-right"
@@ -103,8 +105,8 @@ onMounted(() => {
     display: flex;
     width: auto;
     min-width: max-content;
-    padding: 16px 24px;
-    align-items: flex-start;
+    padding: 4px 18px;
+    align-items: center;
     gap: 16px;
     border-radius: 8px;
     border: 1px solid map-get($primary-fade, 100);
@@ -201,7 +203,7 @@ onMounted(() => {
 
   @include breakpoint-down('tablet') {
     .alert-message {
-      padding: 8px 24px;
+      padding: 4px 18px;
       align-items: center;
     }
 
@@ -220,7 +222,7 @@ onMounted(() => {
 
   @media screen and (max-width: 730px) {
     .alert-message {
-      padding: 8px 24px 8px 16px;
+      padding: 4px 18px;
     }
 
     .alert-message .label .text .title {

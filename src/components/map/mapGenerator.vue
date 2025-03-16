@@ -837,11 +837,12 @@ function initializeMap() {
     'top-left'
   );
 
-  // Adicione o nosso controle de terreno personalizado
   map.value.addControl(
     new CustomTerrainControl({
       source: 'terrain',
-      exaggeration: 2,
+      exaggeration: 3,
+      highPerformance: false,
+      lazyLoading: true
     }), 'top-left'
   );
 
