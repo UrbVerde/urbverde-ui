@@ -28,7 +28,7 @@
       >
         <PrimaryButton
           class="button-desktop"
-          label="Ver live"
+          label="Ver lives"
           iconType="bootstrap"
           :filled="false"
           icon="bi bi-arrow-right"
