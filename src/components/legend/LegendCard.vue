@@ -19,8 +19,8 @@
           </span>
         </div>
 
-        <!-- Recorte da camada -->
-        <LayerCut class="layer-cut"/>
+        <!-- Recorte da camada
+        <LayerCut class="layer-cut"/>-->
       </div>
     </div>
 
@@ -51,8 +51,8 @@
                       @update:modelValue="handleOpacityChange"
       />
 
-      <!-- Card Layer Switch -->
-      <CardLayerSwitch  class="grip-control"/>
+      <!-- Card Layer Switch
+      <CardLayerSwitch  class="grip-control"/>-->
 
     </div>
   </div>
@@ -63,8 +63,8 @@ import { ref } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
-import CardLayerSwitch from './CardLayerSwitch.vue';
-import LayerCut from './LayerCut.vue';
+// import CardLayerSwitch from './CardLayerSwitch.vue';
+// import LayerCut from './LayerCut.vue';
 
 defineProps({
   title: {
