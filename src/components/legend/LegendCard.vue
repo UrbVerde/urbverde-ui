@@ -60,11 +60,11 @@
       />
 
       <!-- Card Layer Switch -->
-      <CardLayerSwitch
+      <!-- <CardLayerSwitch
         v-if="layerId"
         class="grip-control"
         :layerId="layerId"
-      />
+      /> -->
     </div>
   </div>
 </template>
@@ -74,8 +74,8 @@ import { ref } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
-import CardLayerSwitch from './CardLayerSwitch.vue';
-import LayerCut from './LayerCut.vue';
+// import CardLayerSwitch from './CardLayerSwitch.vue';
+// import LayerCut from './LayerCut.vue';
 
 defineProps({
   title: {
