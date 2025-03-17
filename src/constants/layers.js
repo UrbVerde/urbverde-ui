@@ -4,6 +4,7 @@
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, '2016-2021'];
 const PARKS_YEARS = [2021];
+const CENSUS_YEARS = [2022];
 
 /**
  * A single file that holds all layer definitions.
@@ -18,6 +19,36 @@ const PARKS_YEARS = [2021];
  */
 
 export const LAYER_CONFIGS = {
+
+  population: {
+    type: 'vector',
+    label: 'População',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_setores_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_setores_2022'
+    }),
+    property: 'v0001',
+    // Using a more varied color palette - Viridis (blue to green to yellow)
+    stops: [
+      [0, '#440154'],     // Dark purple
+      [250, '#3b528b'],   // Blue
+      [500, '#21918c'],   // Teal
+      [750, '#5ec962'],   // Green
+      [1000, '#fde725']   // Yellow
+    ],
+    unit: 'hab',
+    popup: {
+      label: 'População',
+      unit: 'habitantes',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
 
   setores: {
     type: 'vector',
@@ -440,7 +471,7 @@ export const LAYER_CONFIGS = {
 // Helper function to get layer config
 export function getLayerConfig(layerId, year, scale) {
   const base = LAYER_CONFIGS[layerId];
-  if (!base) {return null;}
+  if (!base) { return null; }
 
   // If base.source is a function, call it
   const source = typeof base.source === 'function'

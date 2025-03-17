@@ -68,6 +68,12 @@ const computedGradient = computed(() => {
   if (!config.value?.stops?.length) {
     return 'linear-gradient(to right, #ccc, #ccc)';
   }
+
+  // Special case for population layer (viridis color scheme)
+  if (config.value.property === 'v0001') {
+    return 'linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725)';
+  }
+
   const stops = config.value.stops;
   const count = stops.length - 1;
   const gradientPieces = stops.map((pair, idx) => {

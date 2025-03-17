@@ -258,6 +258,24 @@ function setupDynamicLayer() {
         paint: getLayerPaint(config)
       });
 
+      // Special handling for population layer
+      if (currentLayer.value === 'population') {
+        // Set the fill paint property directly
+        map.value.setPaintProperty('dynamic-layer', 'fill-color', [
+          'interpolate',
+          ['linear'],
+          ['to-number', ['get', 'v0001']], // Convert to number explicitly
+          0, '#440154',     // Dark purple
+          250, '#3b528b',   // Blue
+          500, '#21918c',   // Teal
+          750, '#5ec962',   // Green
+          1000, '#fde725'   // Yellow
+        ]);
+
+        // Make sure opacity is high enough
+        map.value.setPaintProperty('dynamic-layer', 'fill-opacity', 0.8);
+      }
+
       // Add outline
       map.value.addLayer({
         id: 'dynamic-layer-outline',
