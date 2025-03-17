@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/cards/vegetation/inequality/InequalitySection.vue -->
 <template>
   <div class="dashboard-section">
     <div class="info-cards">
@@ -61,6 +60,18 @@ export default {
       try {
         const response = await fetch(`https:/api.urbverde.com.br/v1/cards/vegetal/inequality?city=${city}&year=${year}`);
         const data = await response.json();
+
+        // Process the data to ensure the second card has the desired subtitle
+        if (data && data.length > 1) {
+          // Find the IDSA card (second card)
+          const idsaCard = data.find(card => card.title.includes('Desigualdade ambiental e social'));
+
+          if (idsaCard) {
+            // Add the subtitle
+            idsaCard.subtitle = 'Mostra a desigualdade ambiental comparando dados do censo sobre população, renda e saneamento com a vegetação. Quanto mais perto de 100, maior a desigualdade.';
+          }
+        }
+
         this.cardData = data;
       } catch (error) {
         console.error('Error fetching cards data:', error);
@@ -70,8 +81,8 @@ export default {
 };
 </script>
 
-  <style scoped lang="scss">
-  @import '@/assets/styles/breakpoints.scss';
+<style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
 
 .dashboard-section {
   display: flex;
@@ -107,5 +118,4 @@ export default {
     gap: 16px;
   }
 }
-
 </style>

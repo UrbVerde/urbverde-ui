@@ -1,4 +1,3 @@
-<!-- urbverde-ui/src/components/cards/weather/temperatur/TemperatureSection.vue -->
 <template>
   <div class="dashboard">
     <div class="left-panel">
@@ -88,7 +87,19 @@ export default {
         const response = await fetch(`https://api.urbverde.com.br/v1/cards/weather/temperature?city=${props.cityCode}&year=${props.selectedYear}`);
         const data = await response.json();
         if (Array.isArray(data)) {
-          cardData.value = data;
+          // Add the subtitle to the "Nível de ilha de calor" card
+          const processedData = data.map(card => {
+            if (card.title === 'Nível de ilha de calor') {
+              return {
+                ...card,
+                subtitle: 'Conta o número de crianças e idosos morando em áreas mais quentes. Quanto maior, maior a vulnerabilidade.'
+              };
+            }
+
+            return card;
+          });
+
+          cardData.value = processedData;
         } else {
           console.error('Unexpected data format for card data:', data);
           cardData.value = [];
