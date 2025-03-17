@@ -206,13 +206,24 @@ const handleDataLayerOpacity = (opacity) => {
   const mapRef = layersStore.mapRef;
   if (mapRef) {
     if (mapRef.getLayer('dynamic-layer')) {
-      mapRef.setPaintProperty('dynamic-layer', 'fill-opacity', decimalOpacity);
-      console.log(`[MapLegend] Directly updated dynamic-layer opacity to ${decimalOpacity}`);
+      // Check layer type to use correct opacity property
+      const layer = mapRef.getLayer('dynamic-layer');
+      const isRaster = layer.type === 'raster';
+      const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
+
+      mapRef.setPaintProperty('dynamic-layer', opacityProp, decimalOpacity);
+      console.log(`[MapLegend] Directly updated dynamic-layer opacity to ${decimalOpacity} (${opacityProp})`);
     }
 
     if (mapRef.getLayer('dynamic-layer-outline')) {
       mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', decimalOpacity);
       console.log(`[MapLegend] Directly updated dynamic-layer-outline opacity to ${decimalOpacity}`);
+    }
+
+    // Always ensure parks are on top after opacity changes
+    if (mapRef.getLayer('parks-layer')) {
+      mapRef.moveLayer('parks-layer');
+      console.log('[MapLegend] Ensuring parks layer is on top after opacity change');
     }
   }
 };
@@ -327,6 +338,19 @@ const getInitialOpacity = (layerId) => {
   // Convert from decimal (0-1) to percentage (0-100)
   return layer ? Math.round(layer.opacity * 100) : 100;
 };
+
+watch(() => layer.value, (newLayer, oldLayer) => {
+  console.log(`[MapLegend] Layer changed from ${oldLayer} to ${newLayer}`);
+  const mapRef = layersStore.mapRef;
+  if (mapRef && scale.value === 'intraurbana' && mapRef.getLayer('parks-layer')) {
+    // Ensure parks layer is on top
+    setTimeout(() => {
+      mapRef.moveLayer('parks-layer');
+      console.log('[MapLegend] Ensuring parks layer is on top after layer change');
+    }, 300); // Small timeout to ensure this happens after dynamic layer is added
+  }
+});
+
 </script>
 
 <style scoped lang="scss">

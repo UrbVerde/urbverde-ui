@@ -29,7 +29,7 @@ export const useLayersStore = defineStore('layersStore', {
      * (including their sources) and also removes any "setores" layers.
      */
     removeExistingLayers() {
-      if (!this.mapRef) {return;}
+      if (!this.mapRef) { return; }
 
       // For every layer in activeLayers, remove its main/outline layers & source
       this.activeLayers.forEach(({ id }) => {
@@ -67,7 +67,7 @@ export const useLayersStore = defineStore('layersStore', {
      * It removes any previous dynamic layers before adding.
      */
     async setActiveLayer({ layerId, year, scale }) {
-      if (!this.mapRef) {return;}
+      if (!this.mapRef) { return; }
 
       try {
         // Get the layer config from layers.js
@@ -272,6 +272,33 @@ export const useLayersStore = defineStore('layersStore', {
       else {
         console.warn(`[LayersStore] Layer with ID "${layerId}" or "${standardMainId}" not found on map`);
       }
+
+      // Handle interactions for 0 opacity
+      if (newOpacity === 0) {
+        // Disable interaction for this layer
+        if (layerId === 'parks-layer' && this.mapRef.getLayer('parks-layer')) {
+          this.mapRef.setLayoutProperty('parks-layer', 'visibility', 'none');
+          console.log(`[LayersStore] Disabled visibility for ${layerId} with 0 opacity`);
+        } else if (layerId === 'dynamic-layer' || this.mapRef.getLayer('dynamic-layer')) {
+          this.mapRef.setLayoutProperty('dynamic-layer', 'visibility', 'none');
+          if (this.mapRef.getLayer('dynamic-layer-outline')) {
+            this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'none');
+          }
+          console.log('[LayersStore] Disabled visibility for dynamic layer with 0 opacity');
+        }
+      } else {
+        // Enable interaction for this layer
+        if (layerId === 'parks-layer' && this.mapRef.getLayer('parks-layer')) {
+          this.mapRef.setLayoutProperty('parks-layer', 'visibility', 'visible');
+          console.log(`[LayersStore] Enabled visibility for ${layerId} with ${newOpacity} opacity`);
+        } else if (layerId === 'dynamic-layer' || this.mapRef.getLayer('dynamic-layer')) {
+          this.mapRef.setLayoutProperty('dynamic-layer', 'visibility', 'visible');
+          if (this.mapRef.getLayer('dynamic-layer-outline')) {
+            this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'visible');
+          }
+          console.log(`[LayersStore] Enabled visibility for dynamic layer with ${newOpacity} opacity`);
+        }
+      }
     },
 
     /**
@@ -294,7 +321,7 @@ export const useLayersStore = defineStore('layersStore', {
      */
     async addSetoresLayer(year) {
       console.log('Adding setores layer for year:', year);
-      if (!this.mapRef || !this.currentMunicipioId) {return;}
+      if (!this.mapRef || !this.currentMunicipioId) { return; }
 
       const setoresConfig = {
         type: 'vector',
@@ -348,7 +375,7 @@ export const useLayersStore = defineStore('layersStore', {
      */
     toggleSetoresLayer() {
       this.setoresVisible = !this.setoresVisible;
-      if (!this.mapRef) {return;}
+      if (!this.mapRef) { return; }
 
       if (!this.setoresVisible) {
         // Remove any setores layers
@@ -413,7 +440,7 @@ export const useLayersStore = defineStore('layersStore', {
      * Move all symbol layers to the front so they’re above polygons.
      */
     bringLabelsToFront() {
-      if (!this.mapRef) {return;}
+      if (!this.mapRef) { return; }
       const layers = this.mapRef.getStyle().layers || [];
       layers.forEach((layer) => {
         if (layer.type === 'symbol') {
