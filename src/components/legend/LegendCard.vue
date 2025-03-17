@@ -19,8 +19,8 @@
           </span>
         </div>
 
-        <!-- Recorte da camada -->
-        <LayerCut class="layer-cut"/>
+        <!-- Recorte da camada - only show for non-parks layers -->
+        <LayerCut v-if="layerId !== 'parks-layer'" class="layer-cut"/>
       </div>
     </div>
 
@@ -34,12 +34,20 @@
                   @colorbar-click="$emit('colorbar-click')" />
 
       <!-- Legend Lines -->
-      <div v-if="showLegendLines" class="legend-lines">
-        <p v-if="scale === 'intraurbana' && title !== 'Temperatura de superfície'" class="legend-item body-small-regular">
-          <span class="legend-line census"></span>Setores censitários
-        </p>
-        <p v-else class="legend-item body-small-medium">
-          <span class="legend-line municipal"></span>Municípios
+      <div v-if="showLegendLines || layerId === 'parks-layer'" class="legend-lines">
+        <!-- For base layer, show only setores censitários -->
+        <template v-if="!layerId || layerId !== 'parks-layer'">
+          <p v-if="scale === 'intraurbana'" class="legend-item body-small-regular">
+            <span class="legend-line census"></span>Setores censitários
+          </p>
+          <p v-else class="legend-item body-small-medium">
+            <span class="legend-line municipal"></span>Municípios
+          </p>
+        </template>
+
+        <!-- For parks layer, show only parks square -->
+        <p v-if="layerId === 'parks-layer' && scale === 'intraurbana'" class="legend-item body-small-regular">
+          <span class="legend-square parks"></span>Áreas verdes urbanas
         </p>
       </div>
 
@@ -52,8 +60,11 @@
       />
 
       <!-- Card Layer Switch -->
-      <CardLayerSwitch  class="grip-control"/>
-
+      <CardLayerSwitch
+        v-if="layerId"
+        class="grip-control"
+        :layerId="layerId"
+      />
     </div>
   </div>
 </template>
@@ -223,6 +234,16 @@ const handleOpacityChange = (value) => {
 
 .legend-line.municipal {
   background-color: #999;
+}
+
+.legend-square {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.legend-square.parks {
+  background-color: #40826D;
 }
 
 .opacity-control, .grip-control {

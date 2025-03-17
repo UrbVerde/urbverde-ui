@@ -10,24 +10,21 @@
     <div class="map-wrapper"></div>
 
     <!-- All map controls in one component -->
-    <MapControls
-      v-if="mapLoaded && map"
-      :map="map"
-      :current-style="currentStyle"
-      :terrain-enabled="terrainEnabled"
-      @style-change="handleStyleChange"
-      @terrain-toggle="handleTerrainToggle"
-      @location-found="handleLocationFound"
-    />
+    <MapControls v-if="mapLoaded && map"
+                 :map="map"
+                 :current-style="currentStyle"
+                 :terrain-enabled="terrainEnabled"
+                 @style-change="handleStyleChange"
+                 @terrain-toggle="handleTerrainToggle"
+                 @location-found="handleLocationFound" />
 
     <!-- Custom Attribution Bar -->
-    <AttributionBar
-      v-if="mapLoaded"
-      :scale-metric="computedScaleMetric"
-      :scale-proportion="computedScaleProportion"
-      :coordinates="currentCoordinates"
-      :altitude="computedAltitude"
-      :map="map" />
+    <AttributionBar v-if="mapLoaded"
+                    :scale-metric="computedScaleMetric"
+                    :scale-proportion="computedScaleProportion"
+                    :coordinates="currentCoordinates"
+                    :altitude="computedAltitude"
+                    :map="map" />
     />
 
     <slot></slot>
@@ -60,7 +57,7 @@ const computedAltitude = computed(() =>
   '810 m'
 );
 const currentCoordinates = computed(() =>
-  // Extract these values from your coordinates ref or from the location store
+// Extract these values from your coordinates ref or from the location store
   ({
     lat: "23°33'34.3\"S",
     lng: "46°53'57.3\"W"
@@ -161,16 +158,16 @@ watch(
    HELPER FUNCTIONS
 ---------------------------------------*/
 function removeDynamicLayer() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
 
   // Remove event handlers
   removeRasterInteractions();
   removeVectorInteractions();
 
   // Remove popups
-  if (hoverPopup.value) {hoverPopup.value.remove();}
-  if (rasterPopup.value) {rasterPopup.value.remove();}
-  if (pinnedPopup.value) {pinnedPopup.value.remove();}
+  if (hoverPopup.value) { hoverPopup.value.remove(); }
+  if (rasterPopup.value) { rasterPopup.value.remove(); }
+  if (pinnedPopup.value) { pinnedPopup.value.remove(); }
 
   // Remove layers
   ['dynamic-layer', 'dynamic-layer-outline', 'setores-layer', 'setores-outline'].forEach(id => {
@@ -193,18 +190,18 @@ function removeDynamicLayer() {
 }
 
 function setupDynamicLayer() {
-  if (!map.value || !currentLayer.value) {return;}
+  if (!map.value || !currentLayer.value) { return; }
 
   // Remove existing layers and handlers
   removeDynamicLayer();
 
   const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
-  if (!config || !config.source) {return;}
+  if (!config || !config.source) { return; }
 
   // Clear any existing popups
-  if (hoverPopup.value) {hoverPopup.value.remove();}
-  if (rasterPopup.value) {rasterPopup.value.remove();}
-  if (pinnedPopup.value) {pinnedPopup.value.remove();}
+  if (hoverPopup.value) { hoverPopup.value.remove(); }
+  if (rasterPopup.value) { rasterPopup.value.remove(); }
+  if (pinnedPopup.value) { pinnedPopup.value.remove(); }
 
   // Reset feature states
   hoveredFeatureId = null;
@@ -309,6 +306,77 @@ function setupDynamicLayer() {
             );
             hoveredSetorId = null;
           }
+        });
+
+        // Add parks source
+        map.value.addSource('parks-source', {
+          type: 'vector',
+          tiles: [
+            'https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf'
+          ],
+          minzoom: 0,
+          maxzoom: 22
+        });
+
+        // Add parks layer
+        map.value.addLayer({
+          id: 'parks-layer',
+          type: 'fill',
+          source: 'parks-source',
+          'source-layer': 'public.geom_pracas',
+          paint: {
+            'fill-color': '#40826D',
+            'fill-opacity': 0.7,
+            'fill-outline-color': '#40826D'
+          }
+        });
+
+        // Ensure parks layer is always on top if it exists
+        if (this.mapRef.getLayer('parks-layer')) {
+          this.mapRef.moveLayer('parks-layer');
+          console.log('[mapGenerator] Ensuring parks layer is on top');
+        }
+        // Add hover interactivity for parks
+        let hoveredParkId = null;
+
+        map.value.on('mousemove', 'parks-layer', (e) => {
+          if (e.features.length > 0) {
+            if (hoveredParkId) {
+              map.value.setFeatureState(
+                { source: 'parks-source', id: hoveredParkId, sourceLayer: 'public.geom_pracas' },
+                { hover: false }
+              );
+            }
+            hoveredParkId = e.features[0].id;
+            map.value.setFeatureState(
+              { source: 'parks-source', id: hoveredParkId, sourceLayer: 'public.geom_pracas' },
+              { hover: true }
+            );
+
+            // Show popup for park
+            hoverPopup.value
+              .setLngLat(e.lngLat)
+              .setHTML(`<div style="font-family: system-ui; padding: 8px;">
+                <strong>Praça</strong>
+                ${e.features[0].properties.nm_praca ? `<br>${  e.features[0].properties.nm_praca}` : ''}
+              </div>`)
+              .addTo(map.value);
+
+            map.value.getCanvas().style.cursor = 'pointer';
+          }
+        });
+
+        map.value.on('mouseleave', 'parks-layer', () => {
+          if (hoveredParkId) {
+            map.value.setFeatureState(
+              { source: 'parks-source', id: hoveredParkId, sourceLayer: 'public.geom_pracas' },
+              { hover: false }
+            );
+            hoveredParkId = null;
+          }
+
+          hoverPopup.value.remove();
+          map.value.getCanvas().style.cursor = '';
         });
       }
     }
@@ -634,7 +702,7 @@ async function loadCoordinates(code) {
     }
 
     // Remove any existing popups
-    if (hoverPopup.value) {hoverPopup.value.remove();}
+    if (hoverPopup.value) { hoverPopup.value.remove(); }
 
     // Set scale and trigger layer setup
     await locationStore.setLocation({ scale: 'intraurbana' });
