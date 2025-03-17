@@ -44,6 +44,21 @@
           @opacity-change="onLegendOpacityChange"
         />
 
+        <!-- Parks Layer Card - Always above data layer, only show in intraurbana -->
+        <LegendCard
+          v-if="scale === 'intraurbana'"
+          :showMenu="false"
+          :showOpacity="true"
+          :showColorScale="false"
+          :layerId="'parks-layer'"
+          :year="currentYear"
+          :scale="scale"
+          :showLegendLines="true"
+          :initialOpacity="getInitialOpacity('parks-layer')"
+          @opacity-change="handleParksLayerOpacity"
+          @order-change="handleLayerOrderChange"
+        />
+
         <!-- Data Layer Card -->
         <LegendCard
           v-if="currentLayerName"
@@ -54,8 +69,10 @@
           :year="currentYear"
           :scale="scale"
           :showLegendLines="false"
+          :initialOpacity="getInitialOpacity(currentLayerId)"
           @opacity-change="handleDataLayerOpacity"
           @colorbar-click="handleColorbarClick"
+          @order-change="handleLayerOrderChange"
         />
       </div>
     </div>
@@ -86,10 +103,17 @@
     ref="refModalWaitlistLegend"
     :modalId="'modalWaitlistLegend'"
   />
+
+  <!-- Visual indicators for drag operations -->
+  <div v-if="isDragging"
+       class="drag-indicator"
+       :style="dragIndicatorStyle"
+       :class="{'above': dragDirection === 'above', 'below': dragDirection === 'below'}">
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
@@ -113,6 +137,14 @@ const { year: storeYear, category, categories, layer, scale } = storeToRefs(loca
 // Reactive state
 const isOpen = ref(true);
 const isLegendHovered = ref(false);
+const isDragging = ref(false);
+const dragDirection = ref(null); // 'above' or 'below'
+const dragIndicatorStyle = ref({
+  top: '0px',
+  left: '0px',
+  width: '100%',
+  height: '4px'
+});
 
 const { smallerThan } = useWindowSize();
 
@@ -130,6 +162,11 @@ const currentCategory = computed(() =>
   categories.value?.find(cat => cat.name === category.value)
 );
 const currentLayerId = computed(() => layer.value);
+const currentLayerAllowedYears = computed(() =>
+  // Get the allowed years for the current layer from your layer config
+  // This is a placeholder - implement according to your layer management system
+  [2016, 2017, 2018, 2019, 2020, 2021]
+);
 
 // Event handlers
 const toggleLegend = () => {
@@ -140,14 +177,43 @@ const handleYearChange = (year) => {
   locationStore.setLocation({ year });
 };
 
-// const handleBaseLayerOpacity = (opacity) => {
-//   locationStore.setBaseLayerOpacity(opacity);
-// };
+const onLegendOpacityChange = (opacity) => {
+  // Handle base layer opacity if needed
+  console.log('Base layer opacity:', opacity);
+};
+
+// Parks layer opacity handler
+const handleParksLayerOpacity = (opacity) => {
+  console.log('[MapLegend] Handling parks opacity change:', opacity);
+
+  // Convert from percentage (0-100) to decimal (0-1)
+  const decimalOpacity = opacity / 100;
+
+  // Update through layersStore to ensure we track this layer's opacity
+  layersStore.setLayerOpacity('parks-layer', decimalOpacity);
+};
 
 const handleDataLayerOpacity = (opacity) => {
   console.log('[MapLegend] Handling opacity change:', opacity, 'for layer:', currentLayerId.value);
-  if (currentLayerId.value) {
-    layersStore.setLayerOpacity(currentLayerId.value, opacity / 100);
+
+  // Convert from percentage (0-100) to decimal (0-1)
+  const decimalOpacity = opacity / 100;
+
+  // Track the opacity for this layer ID in the store
+  layersStore.setLayerOpacity(currentLayerId.value, decimalOpacity);
+
+  // IMPORTANT: Also directly update the dynamic-layer
+  const mapRef = layersStore.mapRef;
+  if (mapRef) {
+    if (mapRef.getLayer('dynamic-layer')) {
+      mapRef.setPaintProperty('dynamic-layer', 'fill-opacity', decimalOpacity);
+      console.log(`[MapLegend] Directly updated dynamic-layer opacity to ${decimalOpacity}`);
+    }
+
+    if (mapRef.getLayer('dynamic-layer-outline')) {
+      mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', decimalOpacity);
+      console.log(`[MapLegend] Directly updated dynamic-layer-outline opacity to ${decimalOpacity}`);
+    }
   }
 };
 
@@ -163,8 +229,104 @@ const handleDownload = () => {
   console.warn('Downloading data...');
 };
 
+// Handle layer order changes
+const handleLayerOrderChange = (data) => {
+  console.log('[MapLegend] Layer order change:', data);
+
+  const { layerId, direction } = data;
+  const mapRef = layersStore.mapRef;
+
+  if (!mapRef) {return;}
+
+  // Update layer order in maplibre
+  updateLayerOrder(layerId, direction === 'up' ? 'above' : 'below');
+};
+
+// Function to update layer order in the map
+const updateLayerOrder = (layerId, position) => {
+  const mapRef = layersStore.mapRef;
+  if (!mapRef) {return;}
+
+  // For parks layer
+  if (layerId === 'parks-layer') {
+    if (position === 'below' && mapRef.getLayer('dynamic-layer')) {
+      // Move parks layer below data layer
+      mapRef.moveLayer('parks-layer', 'dynamic-layer');
+    } else {
+      // Move parks layer to top
+      mapRef.moveLayer('parks-layer');
+      bringBasemapLabelsToFront();
+    }
+  }
+  // For data layers (assuming dynamic-layer is the id)
+  else if (layerId === currentLayerId.value && mapRef.getLayer('dynamic-layer')) {
+    if (position === 'above' && mapRef.getLayer('parks-layer')) {
+      // Move data layer above parks layer
+      mapRef.moveLayer('dynamic-layer', 'parks-layer');
+      if (mapRef.getLayer('dynamic-layer-outline')) {
+        mapRef.moveLayer('dynamic-layer-outline', 'parks-layer');
+      }
+    } else {
+      // Move data layer below parks layer
+      if (mapRef.getLayer('parks-layer')) {
+        mapRef.moveLayer('parks-layer', 'dynamic-layer-outline');
+      }
+    }
+    bringBasemapLabelsToFront();
+  }
+};
+
+// Function to bring basemap labels to front
+const bringBasemapLabelsToFront = () => {
+  const mapRef = layersStore.mapRef;
+  if (!mapRef) {return;}
+
+  const layers = mapRef.getStyle().layers || [];
+  layers.forEach(layer => {
+    if (layer.type === 'symbol') {
+      mapRef.moveLayer(layer.id);
+    }
+  });
+};
+
+// Watch for scale changes to add/remove parks layer
+watch(() => scale.value, (newScale) => {
+  const mapRef = layersStore.mapRef;
+  if (!mapRef) {return;}
+
+  // Remove parks layer when scale is not intraurbana
+  if (newScale === 'intraurbana') {
+    // When returning to intraurbana, ensure parks layer is added and properly positioned
+    if (mapRef && !mapRef.getLayer('parks-layer')) {
+      // Logic to add parks layer would go here
+      // This should be coordinated with mapGenerator.vue
+    } else if (mapRef && mapRef.getLayer('parks-layer')) {
+      // If parks layer exists, ensure it's on top
+      mapRef.moveLayer('parks-layer');
+      bringBasemapLabelsToFront();
+      console.log('[MapLegend] Ensuring parks layer is on top');
+    }
+  } else {
+    // Remove parks layer when scale is not intraurbana
+    if (mapRef.getLayer('parks-layer')) {
+      mapRef.removeLayer('parks-layer');
+      if (mapRef.getSource('parks-source')) {
+        mapRef.removeSource('parks-source');
+      }
+    }
+  }
+});
+
 // Referenca o modal para utilizar seus métodos
 const refModalWaitlistLegend = ref(null);
+
+// Add this helper function to MapLegend.vue:
+const getInitialOpacity = (layerId) => {
+  const layer = layersStore.activeLayers.find(l => l.id === layerId);
+
+  // Convert from decimal (0-1) to percentage (0-100)
+  return layer ? Math.round(layer.opacity * 100) : 100;
+};
 </script>
 
 <style scoped lang="scss">
@@ -265,5 +427,30 @@ const refModalWaitlistLegend = ref(null);
 .buttons-space :deep(button) {
   width: 100%;
   border-radius: 12px;
+}
+
+/* Drag indicator styles */
+.drag-indicator {
+  position: absolute;
+  background-color: #4CAF50;
+  z-index: 1000;
+  pointer-events: none;
+  transition: all 0.1s ease;
+}
+
+.drag-indicator.above {
+  border-top: 2px solid #4CAF50;
+}
+
+.drag-indicator.below {
+  border-bottom: 2px solid #4CAF50;
+}
+
+/* Card being dragged */
+.card-dragging {
+  opacity: 0.7;
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 </style>
