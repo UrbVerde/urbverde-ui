@@ -79,13 +79,22 @@ export const useLayersStore = defineStore('layersStore', {
         // Remove any previous dynamic layers
         this.removeExistingLayers();
 
-        // Decide an initial or existing opacity for this layer
-        //  - If we already have an entry for this layer in activeLayers, reuse its opacity.
-        //  - Otherwise, default to store.layerOpacity or 1.0
+        // Decide an initial or existing opacity for this layer:
+        // 1. First check if we already have an entry for this layer in activeLayers
+        // 2. Next check if the config has a default opacity
+        // 3. Fall back to store.layerOpacity (default 0.7)
         const existing = this.activeLayers.find((l) => l.id === layerId);
-        const layerOpacity = existing
-          ? existing.opacity
-          : this.layerOpacity; // or 1.0 if you prefer
+        let layerOpacity;
+
+        if (existing && existing.opacity !== undefined) {
+          layerOpacity = existing.opacity;
+        } else if (config.paint && config.paint[config.type === 'raster' ? 'raster-opacity' : 'fill-opacity'] !== undefined) {
+          // Get opacity from the layer config
+          layerOpacity = config.paint[config.type === 'raster' ? 'raster-opacity' : 'fill-opacity'];
+          console.log(`[LayersStore] Using preset opacity from config: ${layerOpacity} for layer ${layerId}`);
+        } else {
+          layerOpacity = this.layerOpacity;
+        }
 
         // Build unique IDs for the map
         const sourceId = `${layerId}-source`;
@@ -170,6 +179,12 @@ export const useLayersStore = defineStore('layersStore', {
           opacity: layerOpacity
         });
 
+        // Also track in dynamic-layer for compatibility with MapLegend
+        this.activeLayers.push({
+          id: 'dynamic-layer',
+          opacity: layerOpacity
+        });
+
         // If we need to fetch dynamic stats for intraurbana scale
         if (scale === 'intraurbana') {
           const stats = await this.fetchMunicipalityStats(
@@ -208,9 +223,6 @@ export const useLayersStore = defineStore('layersStore', {
      * (identified by layerId).
      */
     setLayerOpacity(layerId, newOpacity) {
-      // For backward compatibility, we also update store.layerOpacity
-      this.layerOpacity = newOpacity;
-
       console.log(`[LayersStore] Setting opacity for layer ${layerId} to ${newOpacity}`);
 
       if (!this.mapRef) {
@@ -219,58 +231,47 @@ export const useLayersStore = defineStore('layersStore', {
         return;
       }
 
-      // First try looking for layer by ID in the active layers
+      // First check if this layer exists in activeLayers and update its opacity
       const layerIndex = this.activeLayers.findIndex((l) => l.id === layerId);
-      if (layerIndex < 0) {
-        console.warn(`[LayersStore] Layer with ID "${layerId}" not found in active layers`);
 
-        // Try with the dynamic-layer as backup (from mapGenerator.vue)
-        if (this.mapRef.getLayer('dynamic-layer')) {
-          console.log('[LayersStore] Trying to update dynamic-layer opacity instead');
-          const isRaster = this.mapRef.getLayer('dynamic-layer').type === 'raster';
-          const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
+      if (layerIndex >= 0) {
+        // Update our store's record for this specific layer
+        this.activeLayers[layerIndex].opacity = newOpacity;
+        console.log(`[LayersStore] Updated opacity for active layer ${layerId} to ${newOpacity}`);
+      } else {
+        // If not found in activeLayers, add it
+        this.activeLayers.push({
+          id: layerId,
+          opacity: newOpacity
+        });
+        console.log(`[LayersStore] Added new layer ${layerId} with opacity ${newOpacity}`);
+      }
 
-          this.mapRef.setPaintProperty('dynamic-layer', opacityProp, newOpacity);
+      // HANDLE DIFFERENT LAYER ID FORMATS
+      // This is the critical part that's causing the issue
 
-          if (this.mapRef.getLayer('dynamic-layer-outline')) {
-            this.mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', newOpacity);
-          }
+      // Case 1: Standard format used by layersStore (layerId-main)
+      const standardMainId = `${layerId}-main`;
+      const standardOutlineId = `${layerId}-outline`;
 
-          console.log(`[LayersStore] Updated dynamic-layer opacity to ${newOpacity}`);
-
-          return;
+      if (this.mapRef.getLayer(standardMainId)) {
+        this.updateMapLayerOpacity(standardMainId, newOpacity);
+        if (this.mapRef.getLayer(standardOutlineId)) {
+          this.updateMapLayerOpacity(standardOutlineId, newOpacity, true);
         }
-
-        return;
       }
+      // Case 2: Direct layer IDs (parks-layer, dynamic-layer)
+      else if (this.mapRef.getLayer(layerId)) {
+        this.updateMapLayerOpacity(layerId, newOpacity);
 
-      // Update our store's record
-      this.activeLayers[layerIndex].opacity = newOpacity;
-
-      // Figure out the MapLibre layer IDs
-      const mainId = `${layerId}-main`;
-      const outlineId = `${layerId}-outline`;
-
-      // Check if the main layer is present
-      const mainLayer = this.mapRef.getLayer(mainId);
-      if (!mainLayer) {
-        console.warn(`[LayersStore] Layer with ID "${mainId}" not found in map`);
-
-        return;
+        // Check for corresponding outline layers
+        if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
+          this.updateMapLayerOpacity('dynamic-layer-outline', newOpacity, true);
+        }
       }
-
-      // Decide if it's raster or vector
-      const isRaster = mainLayer.type === 'raster';
-      const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
-
-      // Update main layer's opacity
-      this.mapRef.setPaintProperty(mainId, opacityProp, newOpacity);
-
-      // If vector, also update the outline
-      if (!isRaster && this.mapRef.getLayer(outlineId)) {
-        this.mapRef.setPaintProperty(outlineId, 'line-opacity', newOpacity);
+      else {
+        console.warn(`[LayersStore] Layer with ID "${layerId}" or "${standardMainId}" not found on map`);
       }
-      console.log(`[LayersStore] Opacity updated for ${layerId} -> ${newOpacity}`);
     },
 
     /**
@@ -367,6 +368,30 @@ export const useLayersStore = defineStore('layersStore', {
       }
     },
 
+    updateMapLayerOpacity(layerId, newOpacity, isOutline = false) {
+      if (!this.mapRef || !this.mapRef.getLayer(layerId)) {
+        return;
+      }
+
+      // Determine layer type to set the correct opacity property
+      const layer = this.mapRef.getLayer(layerId);
+
+      // For outline layers, we always use 'line-opacity'
+      // For other layers, check the type
+      let opacityProp;
+      if (isOutline) {
+        opacityProp = 'line-opacity';
+      } else {
+        const isRaster = layer.type === 'raster';
+        opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
+      }
+
+      // Update layer opacity
+      this.mapRef.setPaintProperty(layerId, opacityProp, newOpacity);
+
+      console.log(`[LayersStore] Updated map layer ${layerId} opacity to ${newOpacity} (property: ${opacityProp})`);
+    },
+
     /**
      * Fetches dynamic stats for a given municipality, year, and property.
      */
@@ -406,5 +431,36 @@ export const useLayersStore = defineStore('layersStore', {
       this.currentStatistics = null;
       this.error = null;
     }
-  }
+  },
+
+  getLayerOpacity(layerId) {
+    // Check if the layer exists in our activeLayers array
+    const layer = this.activeLayers.find(l => l.id === layerId);
+    if (layer && layer.opacity !== undefined) {
+      return layer.opacity;
+    }
+
+    // For direct layer access (dynamic-layer, parks-layer)
+    if (this.mapRef) {
+      if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer')) {
+        try {
+          return this.mapRef.getPaintProperty('dynamic-layer', 'fill-opacity');
+        } catch {
+          console.warn('[LayersStore] Could not get dynamic-layer opacity');
+        }
+      }
+
+      if (layerId === 'parks-layer' && this.mapRef.getLayer('parks-layer')) {
+        try {
+          return this.mapRef.getPaintProperty('parks-layer', 'fill-opacity');
+        } catch {
+          console.warn('[LayersStore] Could not get parks-layer opacity');
+        }
+      }
+    }
+
+    // Default fallback
+    return this.layerOpacity;
+  },
+
 });
