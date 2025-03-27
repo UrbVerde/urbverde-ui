@@ -1,8 +1,14 @@
 <!-- urbverde-ui/src/components/widgets_section/WidgetsSection.vue -->
 <template>
   <div class="widgets-section">
-    <div v-if="sections.length === 0" class="no-sections">
-      <p class="no-data-message">Não há informações adicionais disponíveis para esta camada.</p>
+    <div v-if="sections.length === 0" class="empty-state-wrapper">
+      <div class="empty-state">
+        <img src="@/assets/images/cards/empty-state.svg" alt="Nenhum dado disponível" />
+        <div class="label">
+          <h5 class="heading-h5">Sem dados estatísticos por aqui</h5>
+          <p class="body-small-regular">Parece que os dados ainda não foram plantados</p>
+        </div>
+      </div>
     </div>
 
     <div
@@ -186,6 +192,10 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/styles/breakpoints.scss';
 
+p, h5 {
+  margin: 0;
+}
+
 .widgets-section {
   display: flex;
   flex-direction: column;
@@ -220,15 +230,53 @@ export default {
   flex: 1 0 0;
 }
 
-.no-sections {
+.empty-state-wrapper {
+  margin: 160px 0 128px 0;
   display: flex;
+  width: 100%;
+  height: auto;
   justify-content: center;
-  padding: 60px 0;
 }
 
-.no-data-message {
-  font-size: 18px;
-  color: #666;
+.empty-state {
+  display: flex;
+  width: 100%;
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.empty-state img{
+  max-width: 323px;
+  width: 100%;
+  height: auto;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  width: 100%;
+}
+
+.label h5, .label p {
+  color: map-get($body-text, body-color);
+  text-align: center;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
 }
 
 @include breakpoint-down('tablet') {
@@ -245,6 +293,17 @@ export default {
 
   .title-statistics-container.heading-h5{
     font-size: 18px;
+  }
+
+  .empty-state img{
+    max-width: 256px;
+    height: auto;
+  }
+}
+
+@include breakpoint-down('mobile-small') {
+  .widgets-section{
+    max-width: 300px;
   }
 }
 </style>
