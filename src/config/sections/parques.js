@@ -8,7 +8,7 @@ export default createSectionConfig((nm_mun, uf) => [
   createSection({
     id: 'stats',
     ref: 'statsSection',
-    title: `Parques e praças em ${nm_mun.value} - ${uf.value}`,
+    title: `Parques e praças em ${nm_mun} - ${uf}`,
     component: InfoParksSection
   }),
   createSection({
@@ -20,7 +20,7 @@ export default createSectionConfig((nm_mun, uf) => [
   createSection({
     id: 'ranking',
     ref: 'rankParksSection',
-    title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
+    title: `${nm_mun} - ${uf} nos rankings de municípios`,
     component: RankParksSection
   }),
   createSection({

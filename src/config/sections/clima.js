@@ -1,4 +1,5 @@
 import { createSectionConfig, createSection } from '@/config/helper';
+
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
 import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection.vue';
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
@@ -21,13 +22,13 @@ export default createSectionConfig((nm_mun, uf) => [
   createSection({
     id: 'stats',
     ref: 'vulnerableSection',
-    title: `Quem é mais afetado pelo calor extremo em ${nm_mun.value}?`,
+    title: `Quem é mais afetado pelo calor extremo em ${nm_mun}?`,
     component: HeatSection
   }),
   createSection({
     id: 'ranking',
     ref: 'rankingSection',
-    title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
+    title: `${nm_mun} - ${uf} nos rankings de municípios`,
     component: RankSection
   }),
   createSection({

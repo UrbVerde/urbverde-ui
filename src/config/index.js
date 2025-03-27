@@ -8,7 +8,6 @@ export const categoryToLayerMap = {
   'Clima': 'temperatura',
   'Vegetação': 'vegetação',
   'Parques e Praças': 'parques',
-  'Censo': 'censo'
 };
 
 // Mapa inverso para converter de interno para categorias da UI
@@ -16,7 +15,6 @@ export const layerToCategoryMap = {
   'temperatura': 'Clima',
   'vegetação': 'Vegetação',
   'parques': 'Parques e Praças',
-  'censo': 'Censo'
 };
 
 // Configurações de seções para cada tipo de camada
@@ -28,7 +26,6 @@ export const sectionConfigs = {
 };
 
 // RESTRIÇÕES DE CAMADAS ESPECÍFICAS
-
 export const layerYearConfig = {
   parques: {
     fixedYear: 2021,

@@ -53,7 +53,6 @@ export default {
       type: Number,
       required: true
     },
-    // This is used as a fallback if the store value is not yet available.
     cityCode: {
       type: Number,
       required: true
@@ -62,17 +61,17 @@ export default {
   setup(props) {
     const locationStore = useLocationStore();
 
-    // Use the exact names from the store.
-    const nm_mun = computed(() => locationStore.nm_mun || '?');
-    const uf = computed(() => locationStore.uf || '?');
-
     // Determine the selected layer from the location store.
     const selectedLayer = computed(() => {
-      // Pega a camada correspondente à categoria selecionada
-      const mappedLayer = categoryToLayerMap[locationStore.category];
+      const currentCategory = locationStore.category;
 
-      // Se houver um mapeamento, use-o; caso contrário, use o valor direto da categoria (para debug)
-      return mappedLayer || locationStore.category.toLowerCase();
+      // Se não houver categoria definida, retorne string vazia
+      if (!currentCategory) {
+        return '';
+      }
+
+      // Use o mapeamento se existir, ou use uma versão normalizada da categoria
+      return categoryToLayerMap[currentCategory] || currentCategory.toLowerCase();
     });
 
     // Rename this to avoid collision with props.cityCode
@@ -100,9 +99,16 @@ export default {
 
     // Get sections for the selected layer
     const sections = computed(() => {
-      const config = sectionConfigs[selectedLayer.value];
+      const configGetter = sectionConfigs[selectedLayer.value];
 
-      return config ? config(nm_mun.value, uf.value) : [];
+      if (!configGetter) {
+        return [];
+      }
+
+      // Com o novo helpers.js, configGetter é uma função que retorna um computed
+      const sectionsComputed = configGetter();
+
+      return sectionsComputed.value;
     });
 
     // Initialize selected years when sections change
@@ -142,8 +148,6 @@ export default {
     };
 
     return {
-      nm_mun,
-      uf,
       computedCityCode,
       selectedLayer,
       sections,
