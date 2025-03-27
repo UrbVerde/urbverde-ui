@@ -1,4 +1,5 @@
 // src/config/index.js
+
 import clima from './sections/clima';
 import vegetacao from './sections/vegetacao';
 import parques from './sections/parques';
@@ -19,7 +20,6 @@ export const layerToCategoryMap = {
 
 // Configurações de seções para cada tipo de camada
 export const sectionConfigs = {
-
   // Sections de categorias
   temperatura: clima,
   vegetação: vegetacao,
@@ -38,4 +38,13 @@ export const layerYearConfig = {
     hasYearPicker: false
   },
   // Adicione configurações para outras camadas conforme necessário
+};
+
+// Mapeamento de IDs para labels amigáveis nas abas
+export const tabIdToLabelMap = {
+  'map': 'Mapa',
+  'stats': 'Estatísticas',
+  'ranking': 'Ranking',
+  'seeMore': 'Veja Mais'
+  // Adicione mais mapeamentos conforme necessário
 };

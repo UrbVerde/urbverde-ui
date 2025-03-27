@@ -1,4 +1,4 @@
-import { createSectionConfig, createSection } from '@/config/helper';
+import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import InfoParksSection from '@/components/cards/parks/infoSection/infoParksSection.vue';
 import ParksSquaresSection from '@/components/cards/parks/parksandSquaresSection/ParksSquaresSection.vue';

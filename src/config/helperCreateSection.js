@@ -1,4 +1,4 @@
-// src/config/sections/helpers.js
+// src/config/sections/helperCreateSection.js
 import { computed } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 

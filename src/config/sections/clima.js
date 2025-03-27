@@ -1,4 +1,4 @@
-import { createSectionConfig, createSection } from '@/config/helper';
+import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
 import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection.vue';

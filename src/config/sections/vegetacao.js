@@ -1,4 +1,4 @@
-import { createSectionConfig, createSection } from '@/config/helper';
+import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import VegetationSection from '@/components/cards/vegetation/vegetationCover/VegetationSection.vue';
 import VGraphicSection from '@/components/cards/vegetation/vgraphics/VGraphicSection.vue';
