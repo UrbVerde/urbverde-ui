@@ -19,10 +19,16 @@ export const layerToCategoryMap = {
 
 // Configurações de seções para cada tipo de camada
 export const sectionConfigs = {
+
+  // Sections de categorias
   temperatura: clima,
   vegetação: vegetacao,
-  parques
-  // Adicionar novas camadas aqui
+  parques,
+
+  // Section de camadas específicas
+  //layers : {
+  //  'avg_distance_to_squares': distanceSquareConfig
+  //}
 };
 
 // RESTRIÇÕES DE CAMADAS ESPECÍFICAS
@@ -30,6 +36,6 @@ export const layerYearConfig = {
   parques: {
     fixedYear: 2021,
     hasYearPicker: false
-  }
+  },
   // Adicione configurações para outras camadas conforme necessário
 };

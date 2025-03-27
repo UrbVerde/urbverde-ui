@@ -99,13 +99,28 @@ export default {
 
     // Get sections for the selected layer
     const sections = computed(() => {
+      // Verifica se possui uma configuração específica para a camada
+      const layerId = locationStore.layer;
+
+      if (layerId && sectionConfigs.layers && sectionConfigs.layers[layerId]) {
+        // Usa a configuração específica da camada
+        console.log(`Usando configuração específica para a camada: ${layerId}`);
+        const layerSpecificConfig = sectionConfigs.layers[layerId];
+        const sectionsComputed = layerSpecificConfig();
+
+        return sectionsComputed.value;
+      }
+
+      // Se não, verifica se possui uma configuração de categoria
       const configGetter = sectionConfigs[selectedLayer.value];
 
       if (!configGetter) {
+        console.log(`Nenhuma configuração encontrada para: ${selectedLayer.value}`);
+
         return [];
       }
 
-      // Com o novo helpers.js, configGetter é uma função que retorna um computed
+      console.log(`Usando configuração de categoria para: ${selectedLayer.value}`);
       const sectionsComputed = configGetter();
 
       return sectionsComputed.value;
