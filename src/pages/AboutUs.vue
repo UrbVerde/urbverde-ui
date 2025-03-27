@@ -12,20 +12,6 @@
         <figure class="image-top shadow-lg">
           <img src="@/assets/images/institutional-pages/about-us/top-image-1.png" alt="Uma reunião colaborativa em um ambiente moderno, com profissionais discutindo ideias em um espaço de coworking, utilizando tecnologia para interação, destacando a importância do trabalho em equipe." loading="lazy">
         </figure>
-        <div class="image-bottom-wrapper">
-          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-2.png"
-                                           alt="Quatro pessoas sorrindo em evento, vestindo camisetas verdes com o logo da empresa. Foto tirada em local moderno e bem iluminado."
-                                           class="shadow-lg"
-                                           loading="lazy"></figure>
-          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-3.png"
-                                           alt="Equipe da Urverde em evento, promovendo soluções sustentáveis e inovação para o meio ambiente, interagindo com visitantes e apresentando suas tecnologias."
-                                           class="shadow-lg"
-                                           loading="lazy"></figure>
-          <figure class="small-image"><img src="@/assets/images/institutional-pages/about-us/top-image-4.png"
-                                           alt="Equipe colaborando em reunião de trabalho, com um gráfico de mapa colorido ao fundo e todos sorrindo. Eles mostraram entusiasmo enquanto discutem a análise de dados."
-                                           class="shadow-lg"
-                                           loading="lazy"></figure>
-        </div>
       </section>
 
       <article class="text-content">
