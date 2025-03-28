@@ -159,11 +159,22 @@ const uf = computed(() => locationStore.uf);
 
 // Tabs dinâmicas baseadas na camada atual
 const tabs = computed(() => {
+  // Obtém a camada atual do store
   const currentLayer = locationStore.layer ?
     locationStore.layer.replace('-layer', '') :
     categoryToLayerMap[locationStore.category] || '';
 
-  return getTabsForLayer(currentLayer, sectionConfigs, tabIdToLabelMap);
+  console.log('NavbarMap - Camada atual:', currentLayer);
+  console.log('NavbarMap - Categoria atual:', locationStore.category);
+
+  // Verifica se sectionConfigs possui a configuração necessária
+  console.log('NavbarMap - sectionConfigs possui a camada?', !!sectionConfigs[currentLayer]);
+
+  // Utiliza o helper para obter as abas, passando o locationStore
+  const result = getTabsForLayer(currentLayer, sectionConfigs, tabIdToLabelMap, locationStore);
+  console.log('NavbarMap - Abas obtidas:', result);
+
+  return result;
 });
 
 // Watch para atualizar a aba ativa quando a camada muda

@@ -25,7 +25,7 @@ export default createSectionConfig((nm_mun, uf) => [
     component: RankParksSection
   }),
   createSection({
-    id: 'seeMoreParks',
+    id: 'seeMore',
     ref: 'seeMoreParksSection',
     title: 'Veja mais sobre sua cidade!',
     component: SeeMoreParksSection,
