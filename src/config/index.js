@@ -25,8 +25,8 @@ export const sectionConfigs = {
   vegetação: vegetacao,
   parques,
 
-  //layers : {
-  //  'avg_distance_to_squares': testeveg
+  // layers : {
+  //  'id_da_layer': teste
   //}
 };
 
