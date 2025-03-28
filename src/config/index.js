@@ -25,9 +25,8 @@ export const sectionConfigs = {
   vegetação: vegetacao,
   parques,
 
-  // Section de camadas específicas
   //layers : {
-  //  'avg_distance_to_squares': distanceSquareConfig
+  //  'avg_distance_to_squares': testeveg
   //}
 };
 
