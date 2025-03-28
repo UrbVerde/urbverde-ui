@@ -1,4 +1,4 @@
-// src/config/index.js
+// urbverde-ui/src/config/index.js
 
 import clima from './sections/clima';
 import vegetacao from './sections/vegetacao';

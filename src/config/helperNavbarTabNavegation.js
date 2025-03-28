@@ -1,3 +1,4 @@
+// urbverde-ui/src/config/helperNavbarTabNavegation.js
 import { categoryToLayerMap } from '@/config';
 
 // IDs que devem ser excluídos das abas de navegação
@@ -85,7 +86,7 @@ const convertCategoryToKey = (category) => {
 
   // Normaliza a string para usar como chave se não encontrar no mapeamento
   return category.normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
     .trim();
 };

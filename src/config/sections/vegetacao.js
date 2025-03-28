@@ -1,3 +1,4 @@
+// urbverde-ui/src/config/sections/vegetacao.js
 import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import VegetationSection from '@/components/cards/vegetation/vegetationCover/VegetationSection.vue';

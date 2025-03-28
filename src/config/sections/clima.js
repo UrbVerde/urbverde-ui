@@ -1,3 +1,4 @@
+// urbverde-ui/src/config/sections/clima.js
 import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';

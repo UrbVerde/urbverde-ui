@@ -1,3 +1,4 @@
+// urbverde-ui/src/config/sections/parques.js
 import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import InfoParksSection from '@/components/cards/parks/infoSection/infoParksSection.vue';

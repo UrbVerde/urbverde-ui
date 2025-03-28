@@ -1,4 +1,4 @@
-// src/config/sections/helperCreateSection.js
+// urbverde-ui/src/config/helperCreateSection.js
 import { computed } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 
