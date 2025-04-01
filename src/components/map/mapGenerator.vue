@@ -46,27 +46,6 @@ import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
 
-// Example computed properties (replace these with real values as needed)
-const computedScaleMetric = computed(() =>
-  // You could calculate this dynamically based on the map's scale
-  '200 m'
-);
-const computedScaleProportion = computed(() =>
-  // Change this based on your application logic
-  '1:100'
-);
-const computedAltitude = computed(() =>
-  // For example, this could be derived from the map's zoom or another metric
-  '810 m'
-);
-const currentCoordinates = computed(() =>
-  // Extract these values from your coordinates ref or from the location store
-  ({
-    lat: "23°33'34.3\"S",
-    lng: "46°53'57.3\"W"
-  })
-);
-
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
 const route = useRoute();
@@ -84,7 +63,7 @@ const mapLoaded = ref(false);
 const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
 
-// Handler functions - these are much simpler now
+// Handler functions
 function handleStyleChange({ id, visibleLayers }) {
   console.log(visibleLayers);
   currentStyle.value = id;
@@ -269,7 +248,7 @@ function setupDynamicLayer() {
           250, '#3b528b',   // Blue
           500, '#21918c',   // Teal
           750, '#5ec962',   // Green
-          1000, 'red'   // Yellow
+          1000, 'yellow'   // Yellow
         ]);
 
         // Make sure opacity is high enough
