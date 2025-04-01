@@ -269,7 +269,7 @@ function setupDynamicLayer() {
           250, '#3b528b',   // Blue
           500, '#21918c',   // Teal
           750, '#5ec962',   // Green
-          1000, '#fde725'   // Yellow
+          1000, 'red'   // Yellow
         ]);
 
         // Make sure opacity is high enough
@@ -1194,129 +1194,24 @@ function addBaseMunicipalitiesLayer() {
       'line-width': 1
     }
   });
-  // const currentCdMun = locationStore.cd_mun; // current municipality from the store
 
-  // Mouse move: show hover popup only if the feature is not the current municipality
-  map.value.on('mousemove', 'municipalities-base', (e) => {
-    const features = e.features;
-    if (!features?.length) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: hoveredFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-        hoverPopup.value.remove();
-        map.value.getCanvas().style.cursor = '';
-      }
+  map.value.on('click', 'municipalities-base', handleMunicipalityClick);
+}
 
-      return;
-    }
-    const feat = features[0];
-    const featId = feat.id || feat.properties.cd_mun;
-    // If we're at intraurbana scale and this feature is the current municipality, do nothing
-    if (currentScale.value === 'intraurbana' && feat.properties.cd_mun === locationStore.cd_mun) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: hoveredFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-      }
-      hoverPopup.value.remove();
-      map.value.getCanvas().style.cursor = '';
+// Function to modify location when users click on a municipality
 
-      return; // Skip further handling (no hover popup for current mun)
-    }
+function handleMunicipalityClick(e) {
+  if (!map.value || !e.features?.length) { return; }
 
-    // Otherwise, proceed with the normal hover behavior:
-    if (featId !== hoveredFeatureId) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: hoveredFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { hover: false }
-        );
-      }
-      hoveredFeatureId = featId;
-      map.value.setFeatureState(
-        {
-          source: 'base-municipalities',
-          id: featId,
-          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-        },
-        { hover: true }
-      );
-    }
-    const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-    hoverPopup.value
-      .setLngLat(e.lngLat)
-      .setOffset(offset)
-      .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
-      .addTo(map.value);
-    map.value.getCanvas().style.cursor = 'pointer';
-  });
-  map.value.on('mouseleave', 'municipalities-base', () => {
-    if (!map.value) { return; }
-    if (hoveredFeatureId !== null) {
-      map.value.setFeatureState(
-        { source: 'base-municipalities', id: hoveredFeatureId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
-        { hover: false }
-      );
-      hoveredFeatureId = null;
-    }
-    hoverPopup.value.remove();
-    map.value.getCanvas().style.cursor = '';
-  });
-  map.value.on('click', 'municipalities-base', (e) => {
-    if (!map.value || !e.features?.length) { return; }
-    const feat = e.features[0];
-    const featId = feat.id || feat.properties.cd_mun;
-    // For ctrl+click (pinned popup) keep your existing behavior…
-    if (e.originalEvent.ctrlKey) {
-      if (pinnedFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: pinnedFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { pinned: false }
-        );
-      }
-      pinnedFeatureId = featId;
-      map.value.setFeatureState(
-        {
-          source: 'base-municipalities',
-          id: featId,
-          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-        },
-        { pinned: true }
-      );
-      pinnedPopup.value
-        .setLngLat(e.lngLat)
-        .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
-        .addTo(map.value);
-    } else {
-      if (feat.properties.cd_mun !== locationStore.cd_mun) {
-        locationStore.setLocation({
-          cd_mun: feat.properties.cd_mun,
-          scale: 'intraurbana'  // Set scale immediately
-        });
-      }
-    }
-  });
+  const feat = e.features[0];
+
+  if (feat.properties.cd_mun !== locationStore.cd_mun) {
+    // Atualiza o locationStore com o novo município e define a escala como 'intraurbana'
+    locationStore.setLocation({
+      cd_mun: feat.properties.cd_mun,
+      scale: 'intraurbana'
+    });
+  }
 }
 
 function handleMissingImage(e) {
