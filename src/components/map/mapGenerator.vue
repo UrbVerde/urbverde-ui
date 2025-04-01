@@ -305,7 +305,7 @@ function setupDynamicLayer() {
           maxzoom: 22
         });
 
-        // Add fill layer for hover effects
+        // Add fill                layer for hover effects
         map.value.addLayer({
           id: 'setores-layer',
           type: 'fill',
@@ -1156,9 +1156,10 @@ function initializeMap() {
   });
 }
 
-/** Add municipality base layer and its outline. */
+/** Add municipality outline, click and move effects - ONLY SP STATE */
 function addBaseMunicipalitiesLayer() {
   if (!map.value) { return; }
+
   map.value.addSource('base-municipalities', {
     type: 'vector',
     tiles: [
@@ -1167,38 +1168,103 @@ function addBaseMunicipalitiesLayer() {
     minzoom: 0,
     maxzoom: 22
   });
+
+  // Camada de preenchimento estadual - sem efeito de hover
   map.value.addLayer({
     id: 'municipalities-base',
     type: 'fill',
     source: 'base-municipalities',
     'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
     paint: {
-      'fill-color': [
-        'case',
-        ['boolean', ['feature-state', 'hover'], false],
-        '#7c99f4',  // light blue on hover
-        'transparent'  // transparent by default
-      ],
-      'fill-opacity': 1,
-      // If you’re using a separate outline layer, you can simplify that too:
+      'fill-color': 'transparent',  // Sempre transparente
+      'fill-opacity': 1
     }
   });
+
+  // Camada de contorno estadual - com efeito de hover
   map.value.addLayer({
     id: 'municipalities-base-outline',
     type: 'line',
     source: 'base-municipalities',
     'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
     paint: {
-      // Replace your case expression with a simple static color:
-      'line-color': '#999',  // pick any color you like
-      'line-width': 1
+      'line-color': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        '#86919B',  // Cor cinza no hover
+        '#86919B'      // Cor cinza por padrão
+      ],
+      'line-width': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        5,         // Largura da linha durante o hover (5px)
+        1           // Largura da linha padrão
+      ]
     }
   });
 
+  // Events
+  map.value.on('mousemove', 'municipalities-base', handleMunicipalityMouseMove);
+  map.value.on('mouseleave', 'municipalities-base', handleMunicipalityMouseLeave);
   map.value.on('click', 'municipalities-base', handleMunicipalityClick);
 }
 
-// Function to modify location when users click on a municipality
+function handleMunicipalityMouseMove(e) {
+  const features = e.features;
+  if (!features?.length) {
+    clearHoveredState();
+
+    return;
+  }
+
+  const feat = features[0];
+  const featId = feat.id || feat.properties.cd_mun;
+
+  // Se estamos na escala intraurbana e este é o município atual, não fazemos nada
+  if (currentScale.value === 'intraurbana' && feat.properties.cd_mun === locationStore.cd_mun) {
+    clearHoveredState();
+
+    return;
+  }
+
+  // Caso contrário, prossiga com o comportamento normal de hover
+  if (featId !== hoveredFeatureId) {
+    clearHoveredState();
+    setHoveredState(featId);
+  }
+
+}
+
+function clearHoveredState() {
+  if (hoveredFeatureId !== null) {
+    map.value.setFeatureState(
+      {
+        source: 'base-municipalities',
+        id: hoveredFeatureId,
+        sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+      },
+      { hover: false }
+    );
+    hoveredFeatureId = null;
+  }
+}
+
+function setHoveredState(featureId) {
+  hoveredFeatureId = featureId;
+  map.value.setFeatureState(
+    {
+      source: 'base-municipalities',
+      id: featureId,
+      sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+    },
+    { hover: true }
+  );
+}
+
+function handleMunicipalityMouseLeave() {
+  if (!map.value) { return; }
+  clearHoveredState();
+}
 
 function handleMunicipalityClick(e) {
   if (!map.value || !e.features?.length) { return; }
