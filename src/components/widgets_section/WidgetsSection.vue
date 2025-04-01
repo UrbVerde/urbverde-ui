@@ -1,9 +1,19 @@
 <!-- urbverde-ui/src/components/widgets_section/WidgetsSection.vue -->
 <template>
   <div class="widgets-section">
+    <div v-if="sections.length === 0" class="empty-state-wrapper">
+      <div class="empty-state">
+        <img src="@/assets/images/cards/empty-state.svg" alt="Nenhum dado disponível" />
+        <div class="label">
+          <h5 class="heading-h5">Sem dados estatísticos por aqui</h5>
+          <p class="body-small-regular">Parece que os dados ainda não foram plantados</p>
+        </div>
+      </div>
+    </div>
+
     <div
       v-for="(section, index) in sections"
-      :key="`${selectedLayer}-${section.id}`"
+      :key="`${selectedLayer}-${section.id}-${index}`"
       :id="section.id"
       :ref="section.ref"
       class="box"
@@ -13,12 +23,12 @@
           {{ section.title }}
         </span>
         <YearPicker
-          v-if="!section.isSeeMore"
+          v-if="!section.isSeeMore && showYearPicker"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
           :city-code="computedCityCode"
           :layer="selectedLayer"
-          :disabled="isParksLayer"
+          :disabled="isYearPickerDisabled"
           @update:modelValue="(value) => handleYearChange(value, index)"
         />
       </div>
@@ -36,49 +46,19 @@
 <script>
 import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-// Import your section components as needed:
-import TemperatureSection from '@/components/cards/weather/temperatur/TemperatureSection.vue';
-import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection.vue';
-import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
-import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
-
-import SeeMoreSection from '../cards/weather/seeMore/SeeMoreSection.vue';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
-
-import VegetationSection from '../cards/vegetation/vegetationCover/VegetationSection.vue';
-import VGraphicSection from '@/components/cards/vegetation/vgraphics/VGraphicSection.vue';
-import InequalitySection from '../cards/vegetation/inequality/InequalitySection.vue';
-import SeeMoreVegSection from '../cards/vegetation/seeMore/SeeMoreVegSection.vue';
-import RankVegSection from '../cards/vegetation/rankSection/RankVegSection.vue';
-
-import InfoParksSection from '../cards/parks/infoSection/infoParksSection.vue';
-import ParksSquaresSection from '../cards/parks/parksandSquaresSection/ParksSquaresSection.vue';
-import SeeMoreParksSection from '../cards/parks/seeMoreSection/SeeMoreParksSection.vue';
-import RankParksSection from '../cards/parks/rankSection/RankParksSection.vue';
+import { sectionConfigs, categoryToLayerMap, layerToCategoryMap, layerYearConfig } from '@/config';
 
 export default {
   name: 'WidgetsSection',
   components: {
-    TemperatureSection,
-    HeatSection,
-    RankSection,
-    SeeMoreSection,
     YearPicker,
-    VegetationSection,
-    InequalitySection,
-    SeeMoreVegSection,
-    RankVegSection,
-    InfoParksSection,
-    ParksSquaresSection,
-    SeeMoreParksSection,
-    RankParksSection,
   },
   props: {
     defaultYear: {
       type: Number,
       required: true
     },
-    // This is used as a fallback if the store value is not yet available.
     cityCode: {
       type: Number,
       required: true
@@ -87,158 +67,98 @@ export default {
   setup(props) {
     const locationStore = useLocationStore();
 
-    // Use the exact names from the store.
-    const nm_mun = computed(() => locationStore.nm_mun || '?');
-    const uf = computed(() => locationStore.uf || '?');
-
-    // Map categories to internal layer names.
-    const categoryToLayerMap = {
-      'Clima': 'temperatura',
-      'Vegetação': 'vegetação',
-      'Parques e Praças': 'parques'
-    };
-
     // Determine the selected layer from the location store.
-    const selectedLayer = computed(() => categoryToLayerMap[locationStore.category] || 'temperatura');
+    const selectedLayer = computed(() => {
+      const currentCategory = locationStore.category;
+
+      // Se não houver categoria definida, retorne string vazia
+      if (!currentCategory) {
+        return '';
+      }
+
+      // Use o mapeamento se existir, ou use uma versão normalizada da categoria
+      return categoryToLayerMap[currentCategory] || currentCategory.toLowerCase();
+    });
 
     // Rename this to avoid collision with props.cityCode
     const computedCityCode = computed(() =>
       locationStore.cd_mun || props.cityCode
     );
 
-    // Number of subsections.
-    const numSections = ref(3);
+    // Get layer year configuration
+    const layerConfig = computed(() =>
+      layerYearConfig[selectedLayer.value] || {}
+    );
+
+    // Check if this layer uses a fixed year
+    const isYearPickerDisabled = computed(() =>
+      !!layerConfig.value.fixedYear
+    );
+
+    // Check if this layer shows the year picker
+    const showYearPicker = computed(() =>
+      layerConfig.value.hasYearPicker !== false
+    );
 
     // Array to store selected years.
-    const selectedYears = ref(Array(numSections.value).fill(props.defaultYear));
+    const selectedYears = ref([]);
 
-    // Check if the parks layer is selected.
-    const isParksLayer = computed(() => selectedLayer.value === 'parques');
+    // Get sections for the selected layer
+    const sections = computed(() => {
+      // Verifica se possui uma configuração específica para a camada
+      const layerId = locationStore.layer;
+
+      if (layerId && sectionConfigs.layers && sectionConfigs.layers[layerId]) {
+        // Usa a configuração específica da camada
+        console.log(`Usando configuração específica para a camada: ${layerId}`);
+        const layerSpecificConfig = sectionConfigs.layers[layerId];
+        const sectionsComputed = layerSpecificConfig();
+
+        return sectionsComputed.value;
+      }
+
+      // Se não, verifica se possui uma configuração de categoria
+      const configGetter = sectionConfigs[selectedLayer.value];
+
+      if (!configGetter) {
+        console.log(`Nenhuma configuração encontrada para: ${selectedLayer.value}`);
+
+        return [];
+      }
+
+      console.log(`Usando configuração de categoria para: ${selectedLayer.value}`);
+      const sectionsComputed = configGetter();
+
+      return sectionsComputed.value;
+    });
+
+    // Initialize selected years when sections change
+    watch(sections, (newSections) => {
+      // If this layer has a fixed year, use that
+      const year = layerConfig.value.fixedYear || props.defaultYear;
+      selectedYears.value = Array(newSections.length).fill(year);
+    }, { immediate: true });
 
     // When the category changes, reset the years accordingly.
     watch(() => locationStore.category, (newCategory) => {
       if (newCategory) {
-        selectedYears.value = selectedYears.value.map(() =>
-          categoryToLayerMap[newCategory] === 'parques' ? 2021 : props.defaultYear
-        );
+        const layer = categoryToLayerMap[newCategory];
+        const config = layerYearConfig[layer] || {};
+        const year = config.fixedYear || props.defaultYear;
+
+        selectedYears.value = selectedYears.value.map(() => year);
       }
     });
 
-    // Force the year to 2021 for the parks layer.
-    watch(isParksLayer, (newVal) => {
-      if (newVal) {
-        selectedYears.value = selectedYears.value.map(() => 2021);
+    // When default year changes, update if not fixed
+    watch(() => props.defaultYear, (newValue) => {
+      if (!isYearPickerDisabled.value) {
+        selectedYears.value = selectedYears.value.map(() => newValue);
       }
-    });
-
-    // Section configurations.
-    // You can directly build titles using nm_mun and uf.
-    const sections = computed(() => {
-      const sectionConfigs = {
-        temperatura: [
-          {
-            id: 'stats',
-            ref: 'statsSection',
-            title: `Temperatura e clima em ${nm_mun.value} - ${uf.value}`,
-            component: TemperatureSection
-          },
-          { id: 'stats',
-            ref: 'graphicSection',
-            title: `Temperatura média em ${nm_mun.value} - ${uf.value} ao longo do tempo`,
-            component: TGraphicSection
-          },
-          {
-            id: 'stats',
-            ref: 'vulnerableSection',
-            title: `Quem é mais afetado pelo calor extremo em ${nm_mun.value}?`,
-            component: HeatSection
-          },
-          {
-            id: 'ranking',
-            ref: 'rankingSection',
-            title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
-            component: RankSection
-          },
-          {
-            id: 'seeMore',
-            ref: 'seeMoreSection',
-            title: 'Veja mais sobre sua cidade!',
-            component: SeeMoreSection,
-            isSeeMore: true
-          }
-        ],
-        vegetação: [
-          {
-            id: 'stats',
-            ref: 'statsSection',
-            title: `A cobertura vegetal em ${nm_mun.value} - ${uf.value}`,
-            component: VegetationSection
-          },
-          { id: 'stats',
-            ref: 'graphicSection',
-            title: `Cobertura vegetal em ${nm_mun.value} - ${uf.value} ao longo do tempo`,
-            component: VGraphicSection
-          },
-          {
-            id: 'stats',
-            ref: 'inequalitySection',
-            title: 'Desigualdade ambiental e a vegetação',
-            component: InequalitySection
-          },
-          {
-            id: 'ranking',
-            ref: 'rankingVegSection',
-            title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
-            component: RankVegSection
-          },
-          {
-            id: 'seeMore',
-            ref: 'seeMoreSection',
-            title: 'Veja mais sobre sua cidade!',
-            component: SeeMoreVegSection,
-            isSeeMore: true
-          }
-        ],
-        parques: [
-          {
-            id: 'stats',
-            ref: 'statsSection',
-            title: `Parques e praças em ${nm_mun.value} - ${uf.value}`,
-            component: InfoParksSection
-          },
-          {
-            id: 'stats',
-            ref: 'parksSquaresSection',
-            title: 'Quem vive distante de parques e praças?',
-            component: ParksSquaresSection
-          },
-          {
-            id: 'ranking',
-            ref: 'rankParksSection',
-            title: `${nm_mun.value} - ${uf.value} nos rankings de municípios`,
-            component: RankParksSection
-          },
-          {
-            id: 'seeMoreParks',
-            ref: 'seeMoreParksSection',
-            title: 'Veja mais sobre sua cidade!',
-            component: SeeMoreParksSection,
-            isSeeMore: true
-          }
-        ]
-      };
-
-      return sectionConfigs[selectedLayer.value] || [];
     });
 
     // Method to change the layer.
     const changeLayer = (layer) => {
-      const layerToCategoryMap = {
-        'temperatura': 'Clima',
-        'vegetação': 'Vegetação',
-        'parques': 'Parques e Praças'
-      };
-
       const newCategory = layerToCategoryMap[layer];
       if (newCategory) {
         locationStore.setLocation({
@@ -249,31 +169,18 @@ export default {
     };
 
     return {
-      // Expose the store values exactly as nm_mun and uf.
-      nm_mun,
-      uf,
       computedCityCode,
       selectedLayer,
       sections,
       selectedYears,
       changeLayer,
-      isParksLayer
+      isYearPickerDisabled,
+      showYearPicker
     };
-  },
-  watch: {
-    defaultYear: {
-      handler(newValue) {
-        if (!this.isParksLayer) {
-          this.selectedYears = this.selectedYears.map(() => newValue);
-        }
-
-      },
-      immediate: true
-    }
   },
   methods: {
     handleYearChange(value, index) {
-      if (!this.isParksLayer) {
+      if (!this.isYearPickerDisabled) {
         this.selectedYears[index] = value;
         this.$emit(`year-change-${index}`, value);
       }
@@ -284,6 +191,10 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/styles/breakpoints.scss';
+
+p, h5 {
+  margin: 0;
+}
 
 .widgets-section {
   display: flex;
@@ -319,8 +230,56 @@ export default {
   flex: 1 0 0;
 }
 
-@include breakpoint-down('tablet') {
+.empty-state-wrapper {
+  margin: 160px 0 128px 0;
+  display: flex;
+  width: 100%;
+  height: auto;
+  justify-content: center;
+}
 
+.empty-state {
+  display: flex;
+  width: 100%;
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.empty-state img{
+  max-width: 323px;
+  width: 100%;
+  height: auto;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  width: 100%;
+}
+
+.label h5, .label p {
+  color: map-get($body-text, body-color);
+  text-align: center;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+@include breakpoint-down('tablet') {
   .box {
     padding: 40px 24px 32px 24px;
   }
@@ -336,5 +295,15 @@ export default {
     font-size: 18px;
   }
 
+  .empty-state img{
+    max-width: 256px;
+    height: auto;
+  }
+}
+
+@include breakpoint-down('mobile-small') {
+  .widgets-section{
+    max-width: 300px;
+  }
 }
 </style>
