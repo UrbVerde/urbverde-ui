@@ -133,6 +133,10 @@ watch(
       removeDynamicLayer();
       await setupDynamicLayer(); // Make this async
     }
+
+    if (map.value.getLayer('selected-municipality-fill')) {
+      map.value.setFilter('selected-municipality-fill', ['==', 'cd_mun', locationStore.cd_mun]);
+    }
   }
 );
 
@@ -1148,6 +1152,20 @@ function addBaseMunicipalitiesLayer() {
     maxzoom: 22
   });
 
+  // Camada de preenchimento do município selecionado
+  map.value.addLayer({
+    id: 'selected-municipality-fill',
+    type: 'line',
+    source: 'base-municipalities',
+    'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
+    paint: {
+      'line-color': '#212529',
+      'line-opacity': 1,
+      'line-width' : 5
+    },
+    filter: ['==', 'cd_mun', locationStore.cd_mun]
+  });
+
   // Camada de preenchimento estadual - sem efeito de hover
   map.value.addLayer({
     id: 'municipalities-base',
@@ -1171,12 +1189,12 @@ function addBaseMunicipalitiesLayer() {
         'case',
         ['boolean', ['feature-state', 'hover'], false],
         '#86919B',  // Cor cinza no hover
-        '#86919B'      // Cor cinza por padrão
+        '#ADB5BD'      // Cor cinza por padrão
       ],
       'line-width': [
         'case',
         ['boolean', ['feature-state', 'hover'], false],
-        5,         // Largura da linha durante o hover (5px)
+        3,         // Largura da linha durante o hover (3px)
         1           // Largura da linha padrão
       ]
     }
@@ -1277,46 +1295,6 @@ function getScaleFromZoom(zoom) {
   else if (zoom > 3) { return 'estadual'; }
   else { return 'nacional'; }
 }
-
-//// 'updateScaleBasedOnZoom' is defined but never used
-// function updateScaleBasedOnZoom(zoom) {
-//   let newScale;
-//   if (zoom >= 12) { newScale = 'intraurbana'; }
-//   else if (zoom >= 6) { newScale = 'municipal'; }
-//   else if (zoom > 3) { newScale = 'estadual'; }
-//   else { newScale = 'nacional'; }
-//   if (locationStore.scale !== newScale) {
-//     const currentHash = window.location.hash;
-//     locationStore.setLocation({ scale: newScale });
-//     const newQuery = { ...route.query, scale: newScale };
-//     router.replace({ query: newQuery, hash: currentHash.slice(1) });
-//   }
-// }
-
-// //is defined but never used
-// function onLegendOpacityChange(newOpacity) {
-//   // newOpacity is 0 to 1
-//   // We need to update the paint property of the newly-added layer
-//   const layerId = 'dynamic-layer'; // or use your ID
-//   if (!map.value) {return;}
-
-//   const layer = map.value.getLayer(layerId);
-//   if (!layer) {return;}
-
-//   // Distinguish between raster and vector layers:
-//   if (layer.type === 'raster') {
-//     // For raster layers, set 'raster-opacity'
-//     map.value.setPaintProperty(layerId, 'raster-opacity', newOpacity);
-//   } else if (layer.type === 'fill') {
-//     // For vector (fill) layers, set 'fill-opacity'
-//     map.value.setPaintProperty(layerId, 'fill-opacity', newOpacity);
-//   }
-
-//   // If you also want to dim the outline for vector, set 'line-opacity':
-//   if (map.value.getLayer(`${layerId}-outline`)) {
-//     map.value.setPaintProperty(`${layerId}-outline`, 'line-opacity', newOpacity);
-//   }
-// }
 
 /* ---------------------------------------
    LIFECYCLE
