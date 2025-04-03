@@ -208,14 +208,14 @@ function setupDynamicLayer() {
     const sourceUrl = config.source.tiles[0];
     const urlHasQuery = sourceUrl.includes('?');
 
-    const isVector = config.type !== 'raster' && currentLayer.value !== 'population';
+    const isVector = config.type !== 'raster';
     const shouldFilter = currentScale.value === 'intraurbana' && locationStore.cd_mun && isVector;
 
+    // Filtro do município para camadas vetoriais
     const filteredUrl = shouldFilter
       ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun='${locationStore.cd_mun}'`
       : sourceUrl;
 
-    // Adiciona a source com URL filtrada se necessário
     map.value.addSource('dynamic-source', {
       ...config.source,
       tiles: [filteredUrl]
@@ -223,7 +223,7 @@ function setupDynamicLayer() {
 
     console.log('[mapGenerator] filteredUrl:', filteredUrl);
 
-    // Camadas raster já são filtradas anteriormente para mostrar apenas o município
+    // Adicao de layer raster
     if (config.type === 'raster') {
       map.value.addLayer({
         id: 'dynamic-layer',
@@ -238,7 +238,8 @@ function setupDynamicLayer() {
 
       setupRasterInteractions(config);
     } else {
-      // Layer vetorial
+
+      // Adicao de layer vetorial
       map.value.addLayer({
         id: 'dynamic-layer',
         type: 'fill',
@@ -248,22 +249,8 @@ function setupDynamicLayer() {
       });
 
       // Filtro local como fallback
-      if (shouldFilter) {
+      if (shouldFilter && config.filterable !== false) {
         map.value.setFilter('dynamic-layer', ['==', 'cd_mun', locationStore.cd_mun]);
-      }
-
-      if (currentLayer.value === 'population') {
-        map.value.setPaintProperty('dynamic-layer', 'fill-color', [
-          'interpolate',
-          ['linear'],
-          ['to-number', ['get', 'v0001']],
-          0, '#440154',
-          250, '#3b528b',
-          500, '#21918c',
-          750, '#5ec962',
-          1000, 'yellow'
-        ]);
-        map.value.setPaintProperty('dynamic-layer', 'fill-opacity', 0.8);
       }
 
       map.value.addLayer({

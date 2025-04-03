@@ -24,6 +24,7 @@ export const LAYER_CONFIGS = {
     type: 'vector',
     label: 'População',
     allowedYears: CENSUS_YEARS,
+    filterable: false, // Para o caso de vetores que não devem ser filtrados para determinado município
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -542,7 +543,7 @@ export function getLayerPaint(config, { scale, municipioId, statistics } = {}) {
     'fill-color': [
       'interpolate',
       ['linear'],
-      ['get', property],
+      ['to-number', ['get', property]],
       ...config.stops.flat()
     ]
   };
