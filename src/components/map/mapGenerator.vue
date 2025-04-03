@@ -208,7 +208,7 @@ function setupDynamicLayer() {
     const sourceUrl = config.source.tiles[0];
     const urlHasQuery = sourceUrl.includes('?');
 
-    const isVector = config.type !== 'raster';
+    const isVector = config.type !== 'raster' && currentLayer.value !== 'population';
     const shouldFilter = currentScale.value === 'intraurbana' && locationStore.cd_mun && isVector;
 
     const filteredUrl = shouldFilter
