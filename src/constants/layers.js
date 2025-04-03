@@ -338,6 +338,25 @@ export const LAYER_CONFIGS = {
   },
 
   // Parks layers
+  parks: {
+    type: 'vector',
+    label: 'Praças',
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geom_pracas'
+    }),
+    paint: {
+      'fill-color': '#40826D',
+      'fill-opacity': 0.7,
+      'fill-outline-color': '#40826D'
+    }
+  },
+
   avg_distance_to_squares: {
     type: 'vector',
     label: 'Distância Média até as Praças',

@@ -205,18 +205,25 @@ function setupDynamicLayer() {
   pinnedFeatureId = null;
 
   try {
-    // Add source with correct filtering
     const sourceUrl = config.source.tiles[0];
-    const filteredUrl = currentScale.value === 'intraurbana' && currentCode.value
-      ? `${sourceUrl}?cql_filter=cd_mun=${currentCode.value}`
+    const urlHasQuery = sourceUrl.includes('?');
+
+    const isVector = config.type !== 'raster';
+    const shouldFilter = currentScale.value === 'intraurbana' && locationStore.cd_mun && isVector;
+
+    const filteredUrl = shouldFilter
+      ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun='${locationStore.cd_mun}'`
       : sourceUrl;
 
+    // Adiciona a source com URL filtrada se necessário
     map.value.addSource('dynamic-source', {
       ...config.source,
       tiles: [filteredUrl]
     });
 
-    // Add layer based on type
+    console.log('[mapGenerator] filteredUrl:', filteredUrl);
+
+    // Camadas raster já são filtradas anteriormente para mostrar apenas o município
     if (config.type === 'raster') {
       map.value.addLayer({
         id: 'dynamic-layer',
@@ -225,14 +232,13 @@ function setupDynamicLayer() {
         paint: config.paint
       });
 
-      // For raster layers, add parks here too
       if (currentScale.value === 'intraurbana' && currentCode.value) {
-        addParksLayer(); // We'll define this function below
+        addParksLayer();
       }
 
       setupRasterInteractions(config);
     } else {
-      // Vector layer
+      // Layer vetorial
       map.value.addLayer({
         id: 'dynamic-layer',
         type: 'fill',
@@ -241,25 +247,25 @@ function setupDynamicLayer() {
         paint: getLayerPaint(config)
       });
 
-      // Special handling for population layer
+      // Filtro local como fallback
+      if (shouldFilter) {
+        map.value.setFilter('dynamic-layer', ['==', 'cd_mun', locationStore.cd_mun]);
+      }
+
       if (currentLayer.value === 'population') {
-        // Set the fill paint property directly
         map.value.setPaintProperty('dynamic-layer', 'fill-color', [
           'interpolate',
           ['linear'],
-          ['to-number', ['get', 'v0001']], // Convert to number explicitly
-          0, '#440154',     // Dark purple
-          250, '#3b528b',   // Blue
-          500, '#21918c',   // Teal
-          750, '#5ec962',   // Green
-          1000, 'yellow'   // Yellow
+          ['to-number', ['get', 'v0001']],
+          0, '#440154',
+          250, '#3b528b',
+          500, '#21918c',
+          750, '#5ec962',
+          1000, 'yellow'
         ]);
-
-        // Make sure opacity is high enough
         map.value.setPaintProperty('dynamic-layer', 'fill-opacity', 0.8);
       }
 
-      // Add outline
       map.value.addLayer({
         id: 'dynamic-layer-outline',
         type: 'line',
@@ -268,15 +274,13 @@ function setupDynamicLayer() {
         paint: {
           'line-color': '#666666',
           'line-width': 1,
-          'line-opacity': 0.1,
+          'line-opacity': 0.1
         }
       });
 
       setupVectorInteractions(config);
 
-      // Add setores layer for vector layers
       if (currentScale.value === 'intraurbana' && currentCode.value) {
-        // Add parks layer
         addParksLayer();
 
         map.value.addSource('setores-source', {
@@ -288,7 +292,6 @@ function setupDynamicLayer() {
           maxzoom: 22
         });
 
-        // Add fill                layer for hover effects
         map.value.addLayer({
           id: 'setores-layer',
           type: 'fill',
@@ -298,14 +301,13 @@ function setupDynamicLayer() {
             'fill-color': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              '#7c99f4',  // blue color on hover
-              'transparent'  // transparent by default
+              '#7c99f4',
+              'transparent'
             ],
             'fill-opacity': 0.5
           }
         });
 
-        // Setup setores interactions
         map.value.on('mousemove', 'setores-layer', (e) => {
           if (e.features.length > 0) {
             if (hoveredSetorId) {
@@ -334,46 +336,37 @@ function setupDynamicLayer() {
       }
     }
 
-    // Set up a single master event handler to fix the layer interaction priority
     setupMasterInteractionHandler(config);
-
-    // Bring labels to front AFTER all layers are added
     bringBasemapLabelsToFront();
   } catch (error) {
     console.error('Error setting up dynamic layer:', error);
   }
 }
 
-// Helper function to add parks layer (for both raster and vector layers)
+// Helper function to add parks layer
 function addParksLayer() {
-  // Add parks source if it doesn't exist
+  const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value, locationStore.cd_mun);
+  if (!parksConfig) {return;}
+
+  // Adiciona o source, se ainda não existir
   if (!map.value.getSource('parks-source')) {
-    map.value.addSource('parks-source', {
-      type: 'vector',
-      tiles: [
-        'https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf'
-      ],
-      minzoom: 0,
-      maxzoom: 22
-    });
+    map.value.addSource('parks-source', parksConfig.source);
   }
 
-  // Add parks layer if it doesn't exist
+  // Adiciona a layer, se ainda não existir
   if (!map.value.getLayer('parks-layer')) {
     map.value.addLayer({
       id: 'parks-layer',
       type: 'fill',
       source: 'parks-source',
-      'source-layer': 'public.geom_pracas',
-      paint: {
-        'fill-color': '#40826D',
-        'fill-opacity': 0.7,
-        'fill-outline-color': '#40826D'
-      }
+      'source-layer': parksConfig.source.sourceLayer,
+      paint: parksConfig.paint
     });
   }
+  // Filtrar pois ainda não funciona cql diretamente no tile
+  map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
 
-  // Always ensure parks are on top
+  // Move a camada para o topo
   map.value.moveLayer('parks-layer');
   console.log('[mapGenerator] Ensuring parks layer is on top');
 }
