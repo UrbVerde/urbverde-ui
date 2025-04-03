@@ -211,9 +211,9 @@ function setupDynamicLayer() {
     const isVector = config.type !== 'raster';
     const shouldFilter = currentScale.value === 'intraurbana' && locationStore.cd_mun && isVector;
 
-    // Filtro do município para camadas vetoriais
+    // Aplica filtro no URL usando OR: compara cd_mun como string e como número
     const filteredUrl = shouldFilter
-      ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun='${locationStore.cd_mun}'`
+      ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=(cd_mun='${locationStore.cd_mun}' OR cd_mun=${locationStore.cd_mun})`
       : sourceUrl;
 
     map.value.addSource('dynamic-source', {
@@ -249,8 +249,13 @@ function setupDynamicLayer() {
       });
 
       // Filtro local como fallback
-      if (shouldFilter && config.filterable !== false) {
-        map.value.setFilter('dynamic-layer', ['==', 'cd_mun', locationStore.cd_mun]);
+      if (shouldFilter) {
+        // Considera cd_mun para string e para number
+        map.value.setFilter('dynamic-layer', [
+          'any',
+          ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
+          ['==', ['get', 'cd_mun'], locationStore.cd_mun]
+        ]);
       }
 
       map.value.addLayer({
@@ -350,6 +355,7 @@ function addParksLayer() {
       paint: parksConfig.paint
     });
   }
+
   // Filtrar pois ainda não funciona cql diretamente no tile
   map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
 
