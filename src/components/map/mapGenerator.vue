@@ -1103,6 +1103,7 @@ function initializeMap() {
         query: { ...route.query, scale: newScale },
         hash: currentHash // Don't slice here
       });
+
     }
   });
   map.value.on('load', () => {
@@ -1193,7 +1194,8 @@ function addBaseMunicipalitiesLayer() {
         1           // Largura da linha padrão
       ]
     }
-  });
+  })
+  ;
 
   // Events
   map.value.on('mousemove', 'municipalities-base', handleMunicipalityMouseMove);

@@ -1,37 +1,29 @@
 /**
- * Ordem principal das camadas, indo do "fundo" para o "topo"
+ * Ordem principal das camadas
  */
 const LAYER_ORDER = [
-  'dynamic-layer', // Camada selecionada
-  'dynamic-layer-outline', // Camada de setor censitário
-  'setores-layer', // Camada de setores censitários com hover
-  'parks-layer', // Camada de parques nacionais
   'base-municipalities', // Camada transparente de municípios
-  'municipalities-base-outline', // Camada de contorno de municípios
   'selected-municipality-fill', // Camada de hover de municípios
+  'municipalities-base-outline', // Camada de contorno de municípios
+  'parks-layer', // Camada de parques nacionais
+  'setores-layer', // Camada de setores censitários com hover
+  'dynamic-layer-outline', // Camada de setor censitário
+  'dynamic-layer', // Camada selecionada
 ];
 
 /**
-   * Função básica: move cada camada antes da próxima definida em LAYER_ORDER.
+   * Função básica: move cada camada primeiro da próxima definida em LAYER_ORDER.
    */
 export function reorderLayers(map) {
   if (!map) {return;}
 
-  for (let i = 0; i < LAYER_ORDER.length; i++) {
-    const current = LAYER_ORDER[i];
-    const next = LAYER_ORDER[i + 1];
-
-    if (map.getLayer(current)) {
-      // Se existir "próxima camada" e ela também estiver presente no mapa:
-      if (next && map.getLayer(next)) {
-        map.moveLayer(current, next);
-      } else {
-        // Caso contrário, move sem parâmetro, que joga pro topo
-        map.moveLayer(current);
-      }
+  for (let i = LAYER_ORDER.length - 1; i >= 0; i--) {
+    const layer = LAYER_ORDER[i];
+    if (map.getLayer(layer)) {
+      // Move cada camada para o topo, em ordem
+      map.moveLayer(layer);
     }
   }
-  console.log('[layerOrder] Reordenadas as camadas definidas em LAYER_ORDER.');
 }
 
 /**
