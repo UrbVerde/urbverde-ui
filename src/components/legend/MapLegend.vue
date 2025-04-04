@@ -118,6 +118,7 @@ import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import { useWindowSize } from '@/utils/useWindowsSize';
+import { reorderAllLayers } from '@/utils/layersOrder';
 
 // Import components
 import PrimaryButton from '../buttons/PrimaryButton.vue';
@@ -222,8 +223,7 @@ const handleDataLayerOpacity = (opacity) => {
 
     // Always ensure parks are on top after opacity changes
     if (mapRef.getLayer('parks-layer')) {
-      mapRef.moveLayer('parks-layer');
-      console.log('[MapLegend] Ensuring parks layer is on top after opacity change');
+      reorderAllLayers(mapRef);
     }
   }
 };

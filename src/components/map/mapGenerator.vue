@@ -45,6 +45,7 @@ import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
+import { reorderAllLayers } from '@/utils/layersOrder';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -72,7 +73,7 @@ function handleStyleChange({ id, visibleLayers }) {
   setTimeout(() => {
     addBaseMunicipalitiesLayer();
     setupDynamicLayer();
-    bringBasemapLabelsToFront();
+    reorderAllLayers(map.value);
   }, 100);
 }
 
@@ -258,6 +259,7 @@ function setupDynamicLayer() {
         ]);
       }
 
+      // Adiciona layer de contorno de setores censitários
       map.value.addLayer({
         id: 'dynamic-layer-outline',
         type: 'line',
@@ -269,6 +271,8 @@ function setupDynamicLayer() {
           'line-opacity': 0.1
         }
       });
+
+      map.value.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
 
       setupVectorInteractions(config);
 
@@ -329,7 +333,9 @@ function setupDynamicLayer() {
     }
 
     setupMasterInteractionHandler(config);
-    bringBasemapLabelsToFront();
+
+    reorderAllLayers(map.value);
+
   } catch (error) {
     console.error('Error setting up dynamic layer:', error);
   }
@@ -359,9 +365,8 @@ function addParksLayer() {
   // Filtrar pois ainda não funciona cql diretamente no tile
   map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
 
-  // Move a camada para o topo
-  map.value.moveLayer('parks-layer');
-  console.log('[mapGenerator] Ensuring parks layer is on top');
+  // Reordena Layers
+  reorderAllLayers(map.value);
 }
 
 // This function sets up a master event handler for interaction priority
@@ -830,18 +835,6 @@ async function fetchRasterValue(lng, lat, controller) {
   return null;
 }
 
-/**
- * Brings basemap label layers (symbols) to the front.
- */
-function bringBasemapLabelsToFront() {
-  const layers = map.value.getStyle().layers || [];
-  layers.forEach(layer => {
-    if (layer.type === 'symbol') {
-      map.value.moveLayer(layer.id);
-    }
-  });
-}
-
 /* ---------------------------------------
    CORE FUNCTIONS
 ---------------------------------------*/
@@ -1121,7 +1114,7 @@ function initializeMap() {
         essential: true
       });
     }
-    bringBasemapLabelsToFront();
+    //bringBasemapLabelsToFront();
   });
 }
 
