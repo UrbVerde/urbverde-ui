@@ -100,7 +100,7 @@ const rasterPopup = ref(null);
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
 let pinnedFeatureId = null;
-let hoveredSetorId = null;
+let hoveredOutlineId = null;
 
 // Map constants
 const MAP_ZOOM_START = 12;
@@ -164,15 +164,24 @@ function removeDynamicLayer() {
   if (rasterPopup.value) { rasterPopup.value.remove(); }
   if (pinnedPopup.value) { pinnedPopup.value.remove(); }
 
+  // Reset hover state
+  hoveredOutlineId = null;
+
+  // Remove event listeners específicos para dynamic-layer
+  if (map.value.getLayer('dynamic-layer')) {
+    map.value.off('mousemove', 'dynamic-layer');
+    map.value.off('mouseleave', 'dynamic-layer');
+  }
+
   // Remove layers
-  ['dynamic-layer', 'dynamic-layer-outline', 'setores-layer', 'setores-outline', 'parks-layer'].forEach(id => {
+  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }
   });
 
   // Remove sources
-  ['dynamic-source', 'setores-source', 'parks-source'].forEach(id => {
+  ['dynamic-source', 'parks-source'].forEach(id => {
     if (map.value.getSource(id)) {
       map.value.removeSource(id);
     }
@@ -180,8 +189,8 @@ function removeDynamicLayer() {
 
   // Reset state
   hoveredFeatureId = null;
-  hoveredSetorId = null;
   pinnedFeatureId = null;
+  hoveredOutlineId = null;
   if (map.value._hoveredParkId) {
     map.value._hoveredParkId = null;
   }
@@ -192,6 +201,10 @@ function setupDynamicLayer() {
 
   // Remove existing layers and handlers
   removeDynamicLayer();
+
+  // Reset hover state para garantir uma transição limpa
+  hoveredOutlineId = null;
+  hoveredFeatureId = null;
 
   const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
   if (!config || !config.source) { return; }
@@ -259,92 +272,81 @@ function setupDynamicLayer() {
         ]);
       }
 
-      // Adiciona layer de contorno de setores censitários
+      // Adiciona layer de contorno de setores censitários com hover
       map.value.addLayer({
         id: 'dynamic-layer-outline',
         type: 'line',
         source: 'dynamic-source',
         'source-layer': config.source.sourceLayer,
         paint: {
-          'line-color': '#ADB5BD',
-          'line-width': 1,
+          'line-color': [
+            'case',
+            ['==', ['id'], hoveredOutlineId || -1], // Compara com o ID atual ou -1 (que não existe)
+            '#495057',  // Cor quando hover
+            '#ADB5BD'   // Cor padrão
+          ],
+          'line-width': [
+            'case',
+            ['==', ['id'], hoveredOutlineId || -1], // Compara com o ID atual ou -1 (que não existe)
+            3,         // Largura quando hover
+            1          // Largura padrão
+          ],
           'line-opacity': 0.8
         }
       });
 
       map.value.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
 
+      // Adicionar handlers de hover para dynamic-layer usando setPaintProperty em vez de feature-state
+      map.value.on('mousemove', 'dynamic-layer', (e) => {
+        if (e.features.length > 0) {
+          const newId = e.features[0].id;
+          if (newId !== hoveredOutlineId) {
+            hoveredOutlineId = newId;
+
+            // Atualiza diretamente as propriedades de pintura
+            map.value.setPaintProperty('dynamic-layer-outline', 'line-color', [
+              'case',
+              ['==', ['id'], hoveredOutlineId || -1],
+              '#495057',  // Cor quando hover
+              '#ADB5BD'   // Cor padrão
+            ]);
+
+            map.value.setPaintProperty('dynamic-layer-outline', 'line-width', [
+              'case',
+              ['==', ['id'], hoveredOutlineId || -1],
+              3,         // Largura quando hover
+              1          // Largura padrão
+            ]);
+          }
+        }
+      });
+
+      map.value.on('mouseleave', 'dynamic-layer', () => {
+        if (hoveredOutlineId !== null) {
+          hoveredOutlineId = null;
+
+          // Resetar para valores padrão
+          map.value.setPaintProperty('dynamic-layer-outline', 'line-color', [
+            'case',
+            ['==', ['id'], -1], // ID inexistente
+            '#495057',  // Cor quando hover (não será usada)
+            '#ADB5BD'   // Cor padrão (será usada para todos)
+          ]);
+
+          map.value.setPaintProperty('dynamic-layer-outline', 'line-width', [
+            'case',
+            ['==', ['id'], -1], // ID inexistente
+            3,         // Largura quando hover (não será usada)
+            1          // Largura padrão (será usada para todos)
+          ]);
+        }
+      });
+
       setupVectorInteractions(config);
 
       if (currentScale.value === 'intraurbana' && currentCode.value) {
         addParksLayer();
-
-        // Layer de setores censitários com hover
-        map.value.addSource('setores-source', {
-          type: 'vector',
-          tiles: [
-            `https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf?cql_filter=cd_mun=${currentCode.value}`
-          ],
-          minzoom: 0,
-          maxzoom: 22
-        });
-
-        map.value.addLayer({
-          id: 'setores-layer',
-          type: 'fill',
-          source: 'setores-source',
-          'source-layer': 'public.geom_setores',
-          paint: {
-            'fill-color': 'transparent',
-            'fill-opacity': 0
-          }
-        });
-
-        // Adiciona uma camada de contorno para o hover
-        map.value.addLayer({
-          id: 'setores-outline',
-          type: 'line',
-          source: 'setores-source',
-          'source-layer': 'public.geom_setores',
-          paint: {
-            'line-color': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              '#495057',
-              'transparent'
-            ],
-            'line-width': 3,
-            'line-opacity': 1
-          }
-        });
-
-        map.value.setFilter('setores-outline', ['==', 'cd_mun', locationStore.cd_mun]);
-
-        map.value.on('mousemove', 'setores-layer', (e) => {
-          if (e.features.length > 0) {
-            if (hoveredSetorId) {
-              map.value.setFeatureState(
-                { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-                { hover: false }
-              );
-            }
-            hoveredSetorId = e.features[0].id;
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: true }
-            );
-          }
-        });
-
-        map.value.on('mouseleave', 'setores-layer', () => {
-          if (hoveredSetorId) {
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: false }
-            );
-            hoveredSetorId = null;
-          }
-        });
       }
     }
 
@@ -1041,6 +1043,12 @@ async function loadCoordinates(code) {
 /** Initialize the map (if not already created). */
 function initializeMap() {
   if (!coordinates.value) { return; }
+
+  // Reset hover state
+  hoveredOutlineId = null;
+  hoveredFeatureId = null;
+  pinnedFeatureId = null;
+
   let initialState = {
     center: [coordinates.value.lng, coordinates.value.lat],
     zoom: MAP_ZOOM_START,
@@ -1121,6 +1129,7 @@ function initializeMap() {
       offset: { top: [0, 20], bottom: [0, -20] },
       className: 'pinned-popup'
     });
+
     addBaseMunicipalitiesLayer();
     setupDynamicLayer();
     if (!hash) {
@@ -1131,7 +1140,6 @@ function initializeMap() {
         essential: true
       });
     }
-    //bringBasemapLabelsToFront();
   });
 }
 

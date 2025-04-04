@@ -6,7 +6,6 @@ const LAYER_ORDER = [
   'selected-municipality-fill', // Camada de hover de municípios
   'municipalities-base-outline', // Camada de contorno de municípios
   'parks-layer', // Camada de parques nacionais
-  'setores-layer', // Camada de setores censitários com hover
   'dynamic-layer-outline', // Camada de setor censitário
   'dynamic-layer', // Camada selecionada
 ];
