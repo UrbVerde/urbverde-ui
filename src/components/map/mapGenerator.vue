@@ -266,71 +266,57 @@ function setupDynamicLayer() {
         source: 'dynamic-source',
         'source-layer': config.source.sourceLayer,
         paint: {
-          'line-color': '#666666',
-          'line-width': 1,
-          'line-opacity': 0.1
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            '#6C757D', // cor no hover
+            '#86919B'  // cor padrão
+          ],
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            3,
+            1
+          ],
+          'line-opacity': 1
         }
       });
 
       map.value.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
+
+      map.value.on('mousemove', 'dynamic-layer', (e) => {
+        if (e.features.length > 0) {
+          if (hoveredSetorId) {
+            map.value.setFeatureState(
+              { source: 'dynamic-source', id: hoveredSetorId, sourceLayer: config.source.sourceLayer },
+              { hover: false }
+            );
+          }
+
+          hoveredSetorId = e.features[0].id;
+          map.value.setFeatureState(
+            { source: 'dynamic-source', id: hoveredSetorId, sourceLayer: config.source.sourceLayer },
+            { hover: true }
+          );
+        }
+      });
+
+      map.value.on('mouseleave', 'dynamic-layer', () => {
+        if (hoveredSetorId) {
+          map.value.setFeatureState(
+            { source: 'dynamic-source', id: hoveredSetorId, sourceLayer: config.source.sourceLayer },
+            { hover: false }
+          );
+          hoveredSetorId = null;
+        }
+      });
 
       setupVectorInteractions(config);
 
       if (currentScale.value === 'intraurbana' && currentCode.value) {
         addParksLayer();
 
-        map.value.addSource('setores-source', {
-          type: 'vector',
-          tiles: [
-            `https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf?cql_filter=cd_mun=${currentCode.value}`
-          ],
-          minzoom: 0,
-          maxzoom: 22
-        });
-
-        map.value.addLayer({
-          id: 'setores-layer',
-          type: 'fill',
-          source: 'setores-source',
-          'source-layer': 'public.geom_setores',
-          paint: {
-            'fill-color': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              '#7c99f4',
-              'transparent'
-            ],
-            'fill-opacity': 0.5
-          }
-        });
-
-        map.value.on('mousemove', 'setores-layer', (e) => {
-          if (e.features.length > 0) {
-            if (hoveredSetorId) {
-              map.value.setFeatureState(
-                { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-                { hover: false }
-              );
-            }
-            hoveredSetorId = e.features[0].id;
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: true }
-            );
-          }
-        });
-
-        map.value.on('mouseleave', 'setores-layer', () => {
-          if (hoveredSetorId) {
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: false }
-            );
-            hoveredSetorId = null;
-          }
-        });
-      }
-    }
+      }}
 
     setupMasterInteractionHandler(config);
 

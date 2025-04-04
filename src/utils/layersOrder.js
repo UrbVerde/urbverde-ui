@@ -3,8 +3,7 @@
  */
 const LAYER_ORDER = [
   'dynamic-layer', // Camada selecionada
-  'dynamic-layer-outline', // Camada de setor censitário
-  'setores-layer', // Camada de setores censitários com hover
+  'dynamic-layer-outline', // Camada de setor censitário e hover
   'parks-layer', // Camada de parques nacionais
   'base-municipalities', // Camada transparente de municípios
   'municipalities-base-outline', // Camada de contorno de municípios
