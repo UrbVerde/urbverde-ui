@@ -266,9 +266,9 @@ function setupDynamicLayer() {
         source: 'dynamic-source',
         'source-layer': config.source.sourceLayer,
         paint: {
-          'line-color': '#666666',
+          'line-color': '#ADB5BD',
           'line-width': 1,
-          'line-opacity': 0.1
+          'line-opacity': 0.8
         }
       });
 
@@ -279,6 +279,7 @@ function setupDynamicLayer() {
       if (currentScale.value === 'intraurbana' && currentCode.value) {
         addParksLayer();
 
+        // Layer de setores censitários com hover
         map.value.addSource('setores-source', {
           type: 'vector',
           tiles: [
@@ -294,15 +295,30 @@ function setupDynamicLayer() {
           source: 'setores-source',
           'source-layer': 'public.geom_setores',
           paint: {
-            'fill-color': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              '#7c99f4',
-              'transparent'
-            ],
-            'fill-opacity': 0.5
+            'fill-color': 'transparent',
+            'fill-opacity': 0
           }
         });
+
+        // Adiciona uma camada de contorno para o hover
+        map.value.addLayer({
+          id: 'setores-outline',
+          type: 'line',
+          source: 'setores-source',
+          'source-layer': 'public.geom_setores',
+          paint: {
+            'line-color': [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              '#495057',
+              'transparent'
+            ],
+            'line-width': 3,
+            'line-opacity': 1
+          }
+        });
+
+        map.value.setFilter('setores-outline', ['==', 'cd_mun', locationStore.cd_mun]);
 
         map.value.on('mousemove', 'setores-layer', (e) => {
           if (e.features.length > 0) {
@@ -1266,7 +1282,7 @@ function handleMissingImage(e) {
 }
 
 /**
- * Update the “scale” based on zoom.
+ * Update the "scale" based on zoom.
  */
 function getScaleFromZoom(zoom) {
   if (zoom >= 12) { return 'intraurbana'; }
