@@ -34,7 +34,7 @@
           <!-- <img :src="addIcon" /> -->
         </div>
 
-        <!-- Base Layer Card -->
+        <!-- Basemap Lines Layer Card -->
         <LegendCard
           :showMenu="false"
           :showOpacity="false"
@@ -54,11 +54,11 @@
           :year="currentYear"
           :scale="scale"
           :showLegendLines="true"
-          @opacity-change="handleParksLayerOpacity"
+          @opacity-change="handlerParksLayerOpacity"
           @order-change="handleLayerOrderChange"
         />
 
-        <!-- Data Layer Card -->
+        <!-- Dynamic Layer Card -->
         <LegendCard
           v-if="currentLayerName"
           :showMenu="false"
@@ -194,7 +194,7 @@ const onLegendOpacityChange = (opacity) => {
 };
 
 // Parks layer opacity handler
-const handleParksLayerOpacity = (opacity) => {
+const handlerParksLayerOpacity = (opacity) => {
   console.log('[MapLegend] Handling parks opacity change:', opacity);
 
   // Convert from percentage (0-100) to decimal (0-1)
@@ -211,26 +211,7 @@ const handleDataLayerOpacity = (opacity) => {
   const decimalOpacity = opacity / 100;
 
   // Track the opacity for this layer ID in the store
-  layersStore.setLayerOpacity(currentLayerId.value, decimalOpacity);
-
-  // IMPORTANT: Also directly update the dynamic-layer
-  const mapRef = layersStore.mapRef;
-  if (mapRef) {
-    if (mapRef.getLayer('dynamic-layer')) {
-      // Check layer type to use correct opacity property
-      const layer = mapRef.getLayer('dynamic-layer');
-      const isRaster = layer.type === 'raster';
-      const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
-
-      mapRef.setPaintProperty('dynamic-layer', opacityProp, decimalOpacity);
-      console.log(`[MapLegend] Directly updated dynamic-layer opacity to ${decimalOpacity} (${opacityProp})`);
-    }
-
-    if (mapRef.getLayer('dynamic-layer-outline')) {
-      mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', decimalOpacity);
-      console.log(`[MapLegend] Directly updated dynamic-layer-outline opacity to ${decimalOpacity}`);
-    }
-  }
+  layersStore.setLayerOpacity('dynamic-layer', decimalOpacity);
 };
 
 // Layer order handling
