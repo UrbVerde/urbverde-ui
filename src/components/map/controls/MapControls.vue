@@ -7,14 +7,6 @@
       @style-change="onStyleChange"
     />
 
-    <!--
-    <TerrainControl
-      :map="map"
-      :enabled="terrainEnabled"
-      @toggle="onTerrainToggle"
-    />
-    -->
-
     <LocationControl
       :map="map"
       @location-found="onLocationFound"
