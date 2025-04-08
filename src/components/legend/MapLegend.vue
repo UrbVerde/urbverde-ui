@@ -114,6 +114,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
+import { useLayersStore } from '@/stores/layersStore';
 import { useWindowSize } from '@/utils/useWindowsSize';
 
 // Import components
@@ -128,6 +129,7 @@ import wrapperIcon from '@/assets/icons/wrapper.svg';
 
 // Store setup
 const locationStore = useLocationStore();
+const layersStore = useLayersStore();
 const { year: storeYear, category, categories, layer, scale } = storeToRefs(locationStore);
 
 // Reactive state
@@ -183,6 +185,57 @@ const handleCompare = () => {
 
 const handleDownload = () => {
   console.warn('Downloading data...');
+};
+
+// Opacity handlers
+const onLegendOpacityChange = (opacity) => {
+  // Handle base layer opacity if needed
+  console.log('Base layer opacity:', opacity);
+};
+
+// Parks layer opacity handler
+const handleParksLayerOpacity = (opacity) => {
+  console.log('[MapLegend] Handling parks opacity change:', opacity);
+
+  // Convert from percentage (0-100) to decimal (0-1)
+  const decimalOpacity = opacity / 100;
+
+  // Update through layersStore to ensure we track this layer's opacity
+  layersStore.setLayerOpacity('parks-layer', decimalOpacity);
+};
+
+const handleDataLayerOpacity = (opacity) => {
+  console.log('[MapLegend] Handling opacity change:', opacity, 'for layer:', currentLayerId.value);
+
+  // Convert from percentage (0-100) to decimal (0-1)
+  const decimalOpacity = opacity / 100;
+
+  // Track the opacity for this layer ID in the store
+  layersStore.setLayerOpacity(currentLayerId.value, decimalOpacity);
+
+  // IMPORTANT: Also directly update the dynamic-layer
+  const mapRef = layersStore.mapRef;
+  if (mapRef) {
+    if (mapRef.getLayer('dynamic-layer')) {
+      // Check layer type to use correct opacity property
+      const layer = mapRef.getLayer('dynamic-layer');
+      const isRaster = layer.type === 'raster';
+      const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
+
+      mapRef.setPaintProperty('dynamic-layer', opacityProp, decimalOpacity);
+      console.log(`[MapLegend] Directly updated dynamic-layer opacity to ${decimalOpacity} (${opacityProp})`);
+    }
+
+    if (mapRef.getLayer('dynamic-layer-outline')) {
+      mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', decimalOpacity);
+      console.log(`[MapLegend] Directly updated dynamic-layer-outline opacity to ${decimalOpacity}`);
+    }
+  }
+};
+
+// Layer order handling
+const handleLayerOrderChange = (direction) => {
+  console.log('Layer order change:', direction);
 };
 
 // Referenca o modal para utilizar seus métodos
