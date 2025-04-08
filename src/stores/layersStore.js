@@ -52,56 +52,34 @@ export const useLayersStore = defineStore('layersStore', {
         console.log(`[LayersStore] Added new layer ${layerId} with opacity ${newOpacity}`);
       }
 
-      // HANDLE DIFFERENT LAYER ID FORMATS
-      // This is the critical part that's causing the issue
+      // Update the layer on the map
+      this.updateMapLayerOpacity(layerId, newOpacity);
 
-      // Case 1: Standard format used by layersStore (layerId-main)
-      const standardMainId = `${layerId}-main`;
-      const standardOutlineId = `${layerId}-outline`;
-
-      if (this.mapRef.getLayer(standardMainId)) {
-        this.updateMapLayerOpacity(standardMainId, newOpacity);
-        if (this.mapRef.getLayer(standardOutlineId)) {
-          this.updateMapLayerOpacity(standardOutlineId, newOpacity, true);
-        }
-      }
-      // Case 2: Direct layer IDs (parks-layer, dynamic-layer)
-      else if (this.mapRef.getLayer(layerId)) {
-        this.updateMapLayerOpacity(layerId, newOpacity);
-
-        // Check for corresponding outline layers
-        if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
-          this.updateMapLayerOpacity('dynamic-layer-outline', newOpacity, true);
-        }
-      }
-      else {
-        console.warn(`[LayersStore] Layer with ID "${layerId}" or "${standardMainId}" not found on map`);
+      // Handle special cases for dynamic-layer and parks-layer
+      if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
+        this.updateMapLayerOpacity('dynamic-layer-outline', newOpacity, true);
       }
 
-      // Handle interactions for 0 opacity
+      // Handle visibility based on opacity
       if (newOpacity === 0) {
-        // Disable interaction for this layer
-        if (layerId === 'parks-layer' && this.mapRef.getLayer('parks-layer')) {
-          this.mapRef.setLayoutProperty('parks-layer', 'visibility', 'none');
+        if (this.mapRef.getLayer(layerId)) {
+          this.mapRef.setLayoutProperty(layerId, 'visibility', 'none');
           console.log(`[LayersStore] Disabled visibility for ${layerId} with 0 opacity`);
-        } else if (layerId === 'dynamic-layer' || this.mapRef.getLayer('dynamic-layer')) {
-          this.mapRef.setLayoutProperty('dynamic-layer', 'visibility', 'none');
-          if (this.mapRef.getLayer('dynamic-layer-outline')) {
-            this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'none');
-          }
-          console.log('[LayersStore] Disabled visibility for dynamic layer with 0 opacity');
+        }
+
+        // Special case for dynamic-layer-outline
+        if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
+          this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'none');
         }
       } else {
-        // Enable interaction for this layer
-        if (layerId === 'parks-layer' && this.mapRef.getLayer('parks-layer')) {
-          this.mapRef.setLayoutProperty('parks-layer', 'visibility', 'visible');
+        if (this.mapRef.getLayer(layerId)) {
+          this.mapRef.setLayoutProperty(layerId, 'visibility', 'visible');
           console.log(`[LayersStore] Enabled visibility for ${layerId} with ${newOpacity} opacity`);
-        } else if (layerId === 'dynamic-layer' || this.mapRef.getLayer('dynamic-layer')) {
-          this.mapRef.setLayoutProperty('dynamic-layer', 'visibility', 'visible');
-          if (this.mapRef.getLayer('dynamic-layer-outline')) {
-            this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'visible');
-          }
-          console.log(`[LayersStore] Enabled visibility for dynamic layer with ${newOpacity} opacity`);
+        }
+
+        // Special case for dynamic-layer-outline
+        if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
+          this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'visible');
         }
       }
     },
@@ -129,7 +107,5 @@ export const useLayersStore = defineStore('layersStore', {
 
       console.log(`[LayersStore] Updated map layer ${layerId} opacity to ${newOpacity} (property: ${opacityProp})`);
     },
-
   },
-
 });
