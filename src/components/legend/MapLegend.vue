@@ -118,7 +118,6 @@ import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import { useWindowSize } from '@/utils/useWindowsSize';
-import { reorderAllLayers } from '@/utils/layersOrder';
 
 // Import components
 import PrimaryButton from '../buttons/PrimaryButton.vue';
@@ -178,56 +177,6 @@ const handleYearChange = (year) => {
   locationStore.setLocation({ year });
 };
 
-const onLegendOpacityChange = (opacity) => {
-  // Handle base layer opacity if needed
-  console.log('Base layer opacity:', opacity);
-};
-
-// Parks layer opacity handler
-const handleParksLayerOpacity = (opacity) => {
-  console.log('[MapLegend] Handling parks opacity change:', opacity);
-
-  // Convert from percentage (0-100) to decimal (0-1)
-  const decimalOpacity = opacity / 100;
-
-  // Update through layersStore to ensure we track this layer's opacity
-  layersStore.setLayerOpacity('parks-layer', decimalOpacity);
-};
-
-const handleDataLayerOpacity = (opacity) => {
-  console.log('[MapLegend] Handling opacity change:', opacity, 'for layer:', currentLayerId.value);
-
-  // Convert from percentage (0-100) to decimal (0-1)
-  const decimalOpacity = opacity / 100;
-
-  // Track the opacity for this layer ID in the store
-  layersStore.setLayerOpacity(currentLayerId.value, decimalOpacity);
-
-  // IMPORTANT: Also directly update the dynamic-layer
-  const mapRef = layersStore.mapRef;
-  if (mapRef) {
-    if (mapRef.getLayer('dynamic-layer')) {
-      // Check layer type to use correct opacity property
-      const layer = mapRef.getLayer('dynamic-layer');
-      const isRaster = layer.type === 'raster';
-      const opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
-
-      mapRef.setPaintProperty('dynamic-layer', opacityProp, decimalOpacity);
-      console.log(`[MapLegend] Directly updated dynamic-layer opacity to ${decimalOpacity} (${opacityProp})`);
-    }
-
-    if (mapRef.getLayer('dynamic-layer-outline')) {
-      mapRef.setPaintProperty('dynamic-layer-outline', 'line-opacity', decimalOpacity);
-      console.log(`[MapLegend] Directly updated dynamic-layer-outline opacity to ${decimalOpacity}`);
-    }
-
-    // Always ensure parks are on top after opacity changes
-    if (mapRef.getLayer('parks-layer')) {
-      reorderAllLayers(mapRef);
-    }
-  }
-};
-
 const handleColorbarClick = () => {
   console.log('Color options clicked');
 };
@@ -238,66 +187,6 @@ const handleCompare = () => {
 
 const handleDownload = () => {
   console.warn('Downloading data...');
-};
-
-// Handle layer order changes
-const handleLayerOrderChange = (data) => {
-  console.log('[MapLegend] Layer order change:', data);
-
-  const { layerId, direction } = data;
-  const mapRef = layersStore.mapRef;
-
-  if (!mapRef) {return;}
-
-  // Update layer order in maplibre
-  updateLayerOrder(layerId, direction === 'up' ? 'above' : 'below');
-};
-
-// Function to update layer order in the map
-const updateLayerOrder = (layerId, position) => {
-  const mapRef = layersStore.mapRef;
-  if (!mapRef) {return;}
-
-  // For parks layer
-  if (layerId === 'parks-layer') {
-    if (position === 'below' && mapRef.getLayer('dynamic-layer')) {
-      // Move parks layer below data layer
-      mapRef.moveLayer('parks-layer', 'dynamic-layer');
-    } else {
-      // Move parks layer to top
-      mapRef.moveLayer('parks-layer');
-      bringBasemapLabelsToFront();
-    }
-  }
-  // For data layers (assuming dynamic-layer is the id)
-  else if (layerId === currentLayerId.value && mapRef.getLayer('dynamic-layer')) {
-    if (position === 'above' && mapRef.getLayer('parks-layer')) {
-      // Move data layer above parks layer
-      mapRef.moveLayer('dynamic-layer', 'parks-layer');
-      if (mapRef.getLayer('dynamic-layer-outline')) {
-        mapRef.moveLayer('dynamic-layer-outline', 'parks-layer');
-      }
-    } else {
-      // Move data layer below parks layer
-      if (mapRef.getLayer('parks-layer')) {
-        mapRef.moveLayer('parks-layer', 'dynamic-layer-outline');
-      }
-    }
-    bringBasemapLabelsToFront();
-  }
-};
-
-// Function to bring basemap labels to front
-const bringBasemapLabelsToFront = () => {
-  const mapRef = layersStore.mapRef;
-  if (!mapRef) {return;}
-
-  const layers = mapRef.getStyle().layers || [];
-  layers.forEach(layer => {
-    if (layer.type === 'symbol') {
-      mapRef.moveLayer(layer.id);
-    }
-  });
 };
 
 // Watch for scale changes to add/remove parks layer
@@ -314,7 +203,6 @@ watch(() => scale.value, (newScale) => {
     } else if (mapRef && mapRef.getLayer('parks-layer')) {
       // If parks layer exists, ensure it's on top
       mapRef.moveLayer('parks-layer');
-      bringBasemapLabelsToFront();
       console.log('[MapLegend] Ensuring parks layer is on top');
     }
   } else {
