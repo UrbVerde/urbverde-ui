@@ -26,7 +26,7 @@ const props = defineProps({
 const emit = defineEmits(['satellite-toggle']);
 
 const isSatellite = ref(false);
-const satelliteOnImg = 'https://cloud.maptiler.com/static/img/maps/hybrid.png';
+const satelliteOnImg = 'https://cloud.maptiler.com/static/img/maps/satellite.png';
 const satelliteOffImg = 'https://cloud.maptiler.com/static/img/maps/streets.png';
 
 function toggleSatellite() {
@@ -39,7 +39,7 @@ function toggleSatellite() {
     props.map.addSource('satellite', {
       type: 'raster',
       tiles: [
-        'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=eizpVHFsrBDeO6HGwWvQ'
+        'https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=eizpVHFsrBDeO6HGwWvQ'
       ],
       tileSize: 256
     });
