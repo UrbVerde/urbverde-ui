@@ -65,16 +65,13 @@ const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
 
 // Handler functions
-function handleStyleChange({ id, visibleLayers }) {
-  console.log(visibleLayers);
-  currentStyle.value = id;
+function handleStyleChange(isSatellite) {
+  console.log('Satellite toggled:', isSatellite);
 
-  // Restore layers after style is loaded
-  setTimeout(() => {
-    addBaseMunicipalitiesLayer();
-    setupDynamicLayer();
+  // Se o satélite foi ativado, apenas reordena as camadas
+  if (isSatellite) {
     reorderAllLayers(map.value);
-  }, 100);
+  }
 }
 
 function handleTerrainToggle(enabled) {
