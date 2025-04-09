@@ -45,27 +45,7 @@ import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
-
-// Example computed properties (replace these with real values as needed)
-const computedScaleMetric = computed(() =>
-  // You could calculate this dynamically based on the map's scale
-  '200 m'
-);
-const computedScaleProportion = computed(() =>
-  // Change this based on your application logic
-  '1:100'
-);
-const computedAltitude = computed(() =>
-  // For example, this could be derived from the map's zoom or another metric
-  '810 m'
-);
-const currentCoordinates = computed(() =>
-  // Extract these values from your coordinates ref or from the location store
-  ({
-    lat: "23°33'34.3\"S",
-    lng: "46°53'57.3\"W"
-  })
-);
+import { reorderAllLayers } from '@/utils/layersOrder';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -84,7 +64,7 @@ const mapLoaded = ref(false);
 const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
 
-// Handler functions - these are much simpler now
+// Handler functions
 function handleStyleChange({ id, visibleLayers }) {
   console.log(visibleLayers);
   currentStyle.value = id;
@@ -93,7 +73,7 @@ function handleStyleChange({ id, visibleLayers }) {
   setTimeout(() => {
     addBaseMunicipalitiesLayer();
     setupDynamicLayer();
-    bringBasemapLabelsToFront();
+    reorderAllLayers(map.value);
   }, 100);
 }
 
@@ -120,7 +100,7 @@ const rasterPopup = ref(null);
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
 let pinnedFeatureId = null;
-let hoveredSetorId = null;
+let hoveredOutlineId = null;
 
 // Map constants
 const MAP_ZOOM_START = 12;
@@ -154,6 +134,10 @@ watch(
       removeDynamicLayer();
       await setupDynamicLayer(); // Make this async
     }
+
+    if (map.value.getLayer('selected-municipality-fill')) {
+      map.value.setFilter('selected-municipality-fill', ['==', 'cd_mun', locationStore.cd_mun]);
+    }
   }
 );
 
@@ -180,15 +164,24 @@ function removeDynamicLayer() {
   if (rasterPopup.value) { rasterPopup.value.remove(); }
   if (pinnedPopup.value) { pinnedPopup.value.remove(); }
 
+  // Reset hover state
+  hoveredOutlineId = null;
+
+  // Remove event listeners específicos para dynamic-layer
+  if (map.value.getLayer('dynamic-layer')) {
+    map.value.off('mousemove', 'dynamic-layer');
+    map.value.off('mouseleave', 'dynamic-layer');
+  }
+
   // Remove layers
-  ['dynamic-layer', 'dynamic-layer-outline', 'setores-layer', 'setores-outline', 'parks-layer'].forEach(id => {
+  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }
   });
 
   // Remove sources
-  ['dynamic-source', 'setores-source', 'parks-source'].forEach(id => {
+  ['dynamic-source', 'parks-source'].forEach(id => {
     if (map.value.getSource(id)) {
       map.value.removeSource(id);
     }
@@ -196,8 +189,8 @@ function removeDynamicLayer() {
 
   // Reset state
   hoveredFeatureId = null;
-  hoveredSetorId = null;
   pinnedFeatureId = null;
+  hoveredOutlineId = null;
   if (map.value._hoveredParkId) {
     map.value._hoveredParkId = null;
   }
@@ -208,6 +201,10 @@ function setupDynamicLayer() {
 
   // Remove existing layers and handlers
   removeDynamicLayer();
+
+  // Reset hover state para garantir uma transição limpa
+  hoveredOutlineId = null;
+  hoveredFeatureId = null;
 
   const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
   if (!config || !config.source) { return; }
@@ -222,10 +219,15 @@ function setupDynamicLayer() {
   pinnedFeatureId = null;
 
   try {
-    // Add source with correct filtering
     const sourceUrl = config.source.tiles[0];
-    const filteredUrl = currentScale.value === 'intraurbana' && currentCode.value
-      ? `${sourceUrl}?cql_filter=cd_mun=${currentCode.value}`
+    const urlHasQuery = sourceUrl.includes('?');
+
+    const isVector = config.type !== 'raster';
+    const shouldFilter = currentScale.value === 'intraurbana' && locationStore.cd_mun && isVector;
+
+    // Aplica filtro no URL usando OR: compara cd_mun como string e como número
+    const filteredUrl = shouldFilter
+      ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=(cd_mun='${locationStore.cd_mun}' OR cd_mun=${locationStore.cd_mun})`
       : sourceUrl;
 
     map.value.addSource('dynamic-source', {
@@ -233,7 +235,9 @@ function setupDynamicLayer() {
       tiles: [filteredUrl]
     });
 
-    // Add layer based on type
+    console.log('[mapGenerator] filteredUrl:', filteredUrl);
+
+    // Adicao de layer raster
     if (config.type === 'raster') {
       map.value.addLayer({
         id: 'dynamic-layer',
@@ -242,14 +246,14 @@ function setupDynamicLayer() {
         paint: config.paint
       });
 
-      // For raster layers, add parks here too
       if (currentScale.value === 'intraurbana' && currentCode.value) {
-        addParksLayer(); // We'll define this function below
+        addParksLayer();
       }
 
       setupRasterInteractions(config);
     } else {
-      // Vector layer
+
+      // Adicao de layer vetorial
       map.value.addLayer({
         id: 'dynamic-layer',
         type: 'fill',
@@ -258,141 +262,129 @@ function setupDynamicLayer() {
         paint: getLayerPaint(config)
       });
 
-      // Special handling for population layer
-      if (currentLayer.value === 'population') {
-        // Set the fill paint property directly
-        map.value.setPaintProperty('dynamic-layer', 'fill-color', [
-          'interpolate',
-          ['linear'],
-          ['to-number', ['get', 'v0001']], // Convert to number explicitly
-          0, '#440154',     // Dark purple
-          250, '#3b528b',   // Blue
-          500, '#21918c',   // Teal
-          750, '#5ec962',   // Green
-          1000, '#fde725'   // Yellow
+      // Filtro local como fallback
+      if (shouldFilter) {
+        // Considera cd_mun para string e para number
+        map.value.setFilter('dynamic-layer', [
+          'any',
+          ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
+          ['==', ['get', 'cd_mun'], locationStore.cd_mun]
         ]);
-
-        // Make sure opacity is high enough
-        map.value.setPaintProperty('dynamic-layer', 'fill-opacity', 0.8);
       }
 
-      // Add outline
+      // Adiciona layer de contorno de setores censitários com hover
       map.value.addLayer({
         id: 'dynamic-layer-outline',
         type: 'line',
         source: 'dynamic-source',
         'source-layer': config.source.sourceLayer,
         paint: {
-          'line-color': '#666666',
-          'line-width': 1,
-          'line-opacity': 0.1,
+          'line-color': [
+            'case',
+            ['==', ['id'], hoveredOutlineId || -1], // Compara com o ID atual ou -1 (que não existe)
+            '#495057',  // Cor quando hover
+            '#ADB5BD'   // Cor padrão
+          ],
+          'line-width': [
+            'case',
+            ['==', ['id'], hoveredOutlineId || -1], // Compara com o ID atual ou -1 (que não existe)
+            3,         // Largura quando hover
+            1          // Largura padrão
+          ],
+          'line-opacity': 0.8
+        }
+      });
+
+      map.value.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
+
+      // Adicionar handlers de hover para dynamic-layer usando setPaintProperty em vez de feature-state
+      map.value.on('mousemove', 'dynamic-layer', (e) => {
+        if (e.features.length > 0) {
+          const newId = e.features[0].id;
+          if (newId !== hoveredOutlineId) {
+            hoveredOutlineId = newId;
+
+            // Atualiza diretamente as propriedades de pintura
+            map.value.setPaintProperty('dynamic-layer-outline', 'line-color', [
+              'case',
+              ['==', ['id'], hoveredOutlineId || -1],
+              '#495057',  // Cor quando hover
+              '#ADB5BD'   // Cor padrão
+            ]);
+
+            map.value.setPaintProperty('dynamic-layer-outline', 'line-width', [
+              'case',
+              ['==', ['id'], hoveredOutlineId || -1],
+              3,         // Largura quando hover
+              1          // Largura padrão
+            ]);
+          }
+        }
+      });
+
+      map.value.on('mouseleave', 'dynamic-layer', () => {
+        if (hoveredOutlineId !== null) {
+          hoveredOutlineId = null;
+
+          // Resetar para valores padrão
+          map.value.setPaintProperty('dynamic-layer-outline', 'line-color', [
+            'case',
+            ['==', ['id'], -1], // ID inexistente
+            '#495057',  // Cor quando hover (não será usada)
+            '#ADB5BD'   // Cor padrão (será usada para todos)
+          ]);
+
+          map.value.setPaintProperty('dynamic-layer-outline', 'line-width', [
+            'case',
+            ['==', ['id'], -1], // ID inexistente
+            3,         // Largura quando hover (não será usada)
+            1          // Largura padrão (será usada para todos)
+          ]);
         }
       });
 
       setupVectorInteractions(config);
 
-      // Add setores layer for vector layers
       if (currentScale.value === 'intraurbana' && currentCode.value) {
-        // Add parks layer
         addParksLayer();
-
-        map.value.addSource('setores-source', {
-          type: 'vector',
-          tiles: [
-            `https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf?cql_filter=cd_mun=${currentCode.value}`
-          ],
-          minzoom: 0,
-          maxzoom: 22
-        });
-
-        // Add fill layer for hover effects
-        map.value.addLayer({
-          id: 'setores-layer',
-          type: 'fill',
-          source: 'setores-source',
-          'source-layer': 'public.geom_setores',
-          paint: {
-            'fill-color': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              '#7c99f4',  // blue color on hover
-              'transparent'  // transparent by default
-            ],
-            'fill-opacity': 0.5
-          }
-        });
-
-        // Setup setores interactions
-        map.value.on('mousemove', 'setores-layer', (e) => {
-          if (e.features.length > 0) {
-            if (hoveredSetorId) {
-              map.value.setFeatureState(
-                { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-                { hover: false }
-              );
-            }
-            hoveredSetorId = e.features[0].id;
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: true }
-            );
-          }
-        });
-
-        map.value.on('mouseleave', 'setores-layer', () => {
-          if (hoveredSetorId) {
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: false }
-            );
-            hoveredSetorId = null;
-          }
-        });
       }
     }
 
-    // Set up a single master event handler to fix the layer interaction priority
     setupMasterInteractionHandler(config);
 
-    // Bring labels to front AFTER all layers are added
-    bringBasemapLabelsToFront();
+    reorderAllLayers(map.value);
+
   } catch (error) {
     console.error('Error setting up dynamic layer:', error);
   }
 }
 
-// Helper function to add parks layer (for both raster and vector layers)
+// Helper function to add parks layer
 function addParksLayer() {
-  // Add parks source if it doesn't exist
+  const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value, locationStore.cd_mun);
+  if (!parksConfig) {return;}
+
+  // Adiciona o source, se ainda não existir
   if (!map.value.getSource('parks-source')) {
-    map.value.addSource('parks-source', {
-      type: 'vector',
-      tiles: [
-        'https://urbverde.iau.usp.br/dados/public.geom_pracas/{z}/{x}/{y}.pbf'
-      ],
-      minzoom: 0,
-      maxzoom: 22
-    });
+    map.value.addSource('parks-source', parksConfig.source);
   }
 
-  // Add parks layer if it doesn't exist
+  // Adiciona a layer, se ainda não existir
   if (!map.value.getLayer('parks-layer')) {
     map.value.addLayer({
       id: 'parks-layer',
       type: 'fill',
       source: 'parks-source',
-      'source-layer': 'public.geom_pracas',
-      paint: {
-        'fill-color': '#40826D',
-        'fill-opacity': 0.7,
-        'fill-outline-color': '#40826D'
-      }
+      'source-layer': parksConfig.source.sourceLayer,
+      paint: parksConfig.paint
     });
   }
 
-  // Always ensure parks are on top
-  map.value.moveLayer('parks-layer');
-  console.log('[mapGenerator] Ensuring parks layer is on top');
+  // Filtrar pois ainda não funciona cql diretamente no tile
+  map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
+
+  // Reordena Layers
+  reorderAllLayers(map.value);
 }
 
 // This function sets up a master event handler for interaction priority
@@ -861,18 +853,6 @@ async function fetchRasterValue(lng, lat, controller) {
   return null;
 }
 
-/**
- * Brings basemap label layers (symbols) to the front.
- */
-function bringBasemapLabelsToFront() {
-  const layers = map.value.getStyle().layers || [];
-  layers.forEach(layer => {
-    if (layer.type === 'symbol') {
-      map.value.moveLayer(layer.id);
-    }
-  });
-}
-
 /* ---------------------------------------
    CORE FUNCTIONS
 ---------------------------------------*/
@@ -943,126 +923,18 @@ async function loadCoordinates(code) {
   }
 }
 
-/** Enable raster measurement events for the 'surface_temp' layer. */
-// function enableRasterMeasurement() {
-//   if (!map.value || currentLayer.value !== 'surface_temp') { return; }
-//   // Remove any vector-layer click events.
-//   map.value.off('click', 'vector-layer');
-
-//   if (!rasterPopup.value) {
-//     rasterPopup.value = new maplibregl.Popup({
-//       closeButton: false,
-//       closeOnClick: false,
-//       offset: { top: [0, 0], bottom: [0, -5] },
-//       className: 'hover-popup',
-//       trackPointer: true
-//     });
-//   }
-//   let currentRequest = null;
-//   let rasterRequestId = 0;
-
-//   const mousemoveHandler = (e) => {
-//     if (currentLayer.value !== 'surface_temp') {
-//       rasterPopup.value.remove();
-
-//       return;
-//     }
-//     const features = map.value.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
-//     isMouseWithinMunicipality.value = features.length > 0;
-//     if (!isMouseWithinMunicipality.value) {
-//       rasterPopup.value.remove();
-
-//       return;
-//     }
-//     // Clear any previously held content.
-//     rasterPopup.value.setLngLat(e.lngLat).setHTML('')
-//       .addTo(map.value);
-
-//     rasterRequestId++;
-//     const thisRequestId = rasterRequestId;
-//     if (currentRequest) { currentRequest.abort(); }
-//     const controller = new AbortController();
-//     currentRequest = controller;
-//     const { lng, lat } = e.lngLat;
-//     requestAnimationFrame(() => {
-//       fetchRasterValue(lng, lat, controller)
-//         .then(value => {
-//           if (currentLayer.value !== 'surface_temp' || thisRequestId !== rasterRequestId) { return; }
-//           if (value) {
-//             rasterPopup.value.setHTML(`<div class="popup-content">Temperatura Relativa:<br><strong>${value}</strong></div>`);
-//           } else {
-//             rasterPopup.value.remove();
-//           }
-//         })
-//         .catch(err => {
-//           // Optionally check if err.name === 'AbortError' and ignore it
-//           if (err.name !== 'AbortError') {
-//             console.error(err);
-//           }
-//         });
-//     });
-//   };
-
-//   const clickHandler = async(e) => {
-//     if (!e.originalEvent.ctrlKey || currentLayer.value !== 'surface_temp') { return; }
-//     e.originalEvent.stopPropagation();
-//     e.preventDefault();
-//     const features = map.value.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
-//     if (!features.length) { return; }
-//     const { lng, lat } = e.lngLat;
-
-//     const value = await fetchRasterValue(lng, lat, new AbortController());
-//     if (currentLayer.value !== 'surface_temp') { return; }
-//     if (value) {
-//       pinnedPopup.value
-//         .setLngLat(e.lngLat)
-//         .setHTML(`<div class="popup-content">Temperatura Relativa:<br><strong>${value}</strong></div>`)
-//         .addTo(map.value);
-//     }
-
-//   };
-
-//   map.value.on('mousemove', mousemoveHandler);
-//   map.value.on('click', clickHandler);
-//   map.value.on('mouseout', () => {
-//     rasterPopup.value.remove();
-//     if (currentRequest) {
-//       currentRequest.abort();
-//       currentRequest = null;
-//     }
-//   });
-// }
-
-/* ---------------------------------------
-   BASEMAPS
----------------------------------------*/
-/**
- * A list of custom base-map styles (MapTiler, or your own).
- * Replace these with any style endpoints you want:
- * - For example, from https://cloud.maptiler.com/maps
- * - Or from Mapbox, or from your own tile server
- */
-// const baseMaps = [
-//   {
-//     id: 'streets',
-//     name: 'Streets',
-//     styleURL: 'https://api.maptiler.com/maps/28491ce3-59b6-4174-85fe-ff2f6de88a04/style.json?key=eizpVHFsrBDeO6HGwWvQ',
-//     thumbnail: 'https://cloud.maptiler.com/static/img/maps/streets.png'
-//   },
-//   {
-//     id: 'satellite',
-//     name: 'Satellite',
-//     styleURL: 'https://api.maptiler.com/maps/92fa6478-03bb-44cc-897a-fe5411f52e99/style.json?key=eizpVHFsrBDeO6HGwWvQ"',
-//     thumbnail: 'https://cloud.maptiler.com/static/img/maps/hybrid.png'
-//   },
-// ];
-
 /* ---------------------------------------
    MAP INITIALIZATION
 ---------------------------------------*/
 /** Initialize the map (if not already created). */
 function initializeMap() {
   if (!coordinates.value) { return; }
+
+  // Reset hover state
+  hoveredOutlineId = null;
+  hoveredFeatureId = null;
+  pinnedFeatureId = null;
+
   let initialState = {
     center: [coordinates.value.lng, coordinates.value.lat],
     zoom: MAP_ZOOM_START,
@@ -1125,6 +997,7 @@ function initializeMap() {
         query: { ...route.query, scale: newScale },
         hash: currentHash // Don't slice here
       });
+
     }
   });
   map.value.on('load', () => {
@@ -1142,6 +1015,7 @@ function initializeMap() {
       offset: { top: [0, 20], bottom: [0, -20] },
       className: 'pinned-popup'
     });
+
     addBaseMunicipalitiesLayer();
     setupDynamicLayer();
     if (!hash) {
@@ -1152,13 +1026,13 @@ function initializeMap() {
         essential: true
       });
     }
-    bringBasemapLabelsToFront();
   });
 }
 
-/** Add municipality base layer and its outline. */
+/** Add municipality outline, click and move effects - ONLY SP STATE */
 function addBaseMunicipalitiesLayer() {
   if (!map.value) { return; }
+
   map.value.addSource('base-municipalities', {
     type: 'vector',
     tiles: [
@@ -1167,156 +1041,131 @@ function addBaseMunicipalitiesLayer() {
     minzoom: 0,
     maxzoom: 22
   });
+
+  // Camada de preenchimento do município selecionado
+  map.value.addLayer({
+    id: 'selected-municipality-fill',
+    type: 'line',
+    source: 'base-municipalities',
+    'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
+    paint: {
+      'line-color': '#212529',
+      'line-opacity': 1,
+      'line-width' : 5
+    },
+    filter: ['==', 'cd_mun', locationStore.cd_mun]
+  });
+
+  // Camada de preenchimento estadual - sem efeito de hover
   map.value.addLayer({
     id: 'municipalities-base',
     type: 'fill',
     source: 'base-municipalities',
     'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
     paint: {
-      'fill-color': [
-        'case',
-        ['boolean', ['feature-state', 'hover'], false],
-        '#7c99f4',  // light blue on hover
-        'transparent'  // transparent by default
-      ],
-      'fill-opacity': 1,
-      // If you’re using a separate outline layer, you can simplify that too:
+      'fill-color': 'transparent',  // Sempre transparente
+      'fill-opacity': 1
     }
   });
+
+  // Camada de contorno estadual - com efeito de hover
   map.value.addLayer({
     id: 'municipalities-base-outline',
     type: 'line',
     source: 'base-municipalities',
     'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
     paint: {
-      // Replace your case expression with a simple static color:
-      'line-color': '#999',  // pick any color you like
-      'line-width': 1
+      'line-color': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        '#86919B',  // Cor cinza no hover
+        '#ADB5BD'      // Cor cinza por padrão
+      ],
+      'line-width': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        3,         // Largura da linha durante o hover (3px)
+        1           // Largura da linha padrão
+      ]
     }
-  });
-  // const currentCdMun = locationStore.cd_mun; // current municipality from the store
+  })
+  ;
 
-  // Mouse move: show hover popup only if the feature is not the current municipality
-  map.value.on('mousemove', 'municipalities-base', (e) => {
-    const features = e.features;
-    if (!features?.length) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: hoveredFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-        hoverPopup.value.remove();
-        map.value.getCanvas().style.cursor = '';
-      }
+  // Events
+  map.value.on('mousemove', 'municipalities-base', handleMunicipalityMouseMove);
+  map.value.on('mouseleave', 'municipalities-base', handleMunicipalityMouseLeave);
+  map.value.on('click', 'municipalities-base', handleMunicipalityClick);
+}
 
-      return;
-    }
-    const feat = features[0];
-    const featId = feat.id || feat.properties.cd_mun;
-    // If we're at intraurbana scale and this feature is the current municipality, do nothing
-    if (currentScale.value === 'intraurbana' && feat.properties.cd_mun === locationStore.cd_mun) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: hoveredFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-      }
-      hoverPopup.value.remove();
-      map.value.getCanvas().style.cursor = '';
+function handleMunicipalityMouseMove(e) {
+  const features = e.features;
+  if (!features?.length) {
+    clearHoveredState();
 
-      return; // Skip further handling (no hover popup for current mun)
-    }
+    return;
+  }
 
-    // Otherwise, proceed with the normal hover behavior:
-    if (featId !== hoveredFeatureId) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: hoveredFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { hover: false }
-        );
-      }
-      hoveredFeatureId = featId;
-      map.value.setFeatureState(
-        {
-          source: 'base-municipalities',
-          id: featId,
-          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-        },
-        { hover: true }
-      );
-    }
-    const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-    hoverPopup.value
-      .setLngLat(e.lngLat)
-      .setOffset(offset)
-      .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
-      .addTo(map.value);
-    map.value.getCanvas().style.cursor = 'pointer';
-  });
-  map.value.on('mouseleave', 'municipalities-base', () => {
-    if (!map.value) { return; }
-    if (hoveredFeatureId !== null) {
-      map.value.setFeatureState(
-        { source: 'base-municipalities', id: hoveredFeatureId, sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}` },
-        { hover: false }
-      );
-      hoveredFeatureId = null;
-    }
-    hoverPopup.value.remove();
-    map.value.getCanvas().style.cursor = '';
-  });
-  map.value.on('click', 'municipalities-base', (e) => {
-    if (!map.value || !e.features?.length) { return; }
-    const feat = e.features[0];
-    const featId = feat.id || feat.properties.cd_mun;
-    // For ctrl+click (pinned popup) keep your existing behavior…
-    if (e.originalEvent.ctrlKey) {
-      if (pinnedFeatureId !== null) {
-        map.value.setFeatureState(
-          {
-            source: 'base-municipalities',
-            id: pinnedFeatureId,
-            sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-          },
-          { pinned: false }
-        );
-      }
-      pinnedFeatureId = featId;
-      map.value.setFeatureState(
-        {
-          source: 'base-municipalities',
-          id: featId,
-          sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
-        },
-        { pinned: true }
-      );
-      pinnedPopup.value
-        .setLngLat(e.lngLat)
-        .setHTML(`<div style="font-family: system-ui; padding: 8px;"><strong>${feat.properties.nm_mun}</strong></div>`)
-        .addTo(map.value);
-    } else {
-      if (feat.properties.cd_mun !== locationStore.cd_mun) {
-        locationStore.setLocation({
-          cd_mun: feat.properties.cd_mun,
-          scale: 'intraurbana'  // Set scale immediately
-        });
-      }
-    }
-  });
+  const feat = features[0];
+  const featId = feat.id || feat.properties.cd_mun;
+
+  // Se estamos na escala intraurbana e este é o município atual, não fazemos nada
+  if (currentScale.value === 'intraurbana' && feat.properties.cd_mun === locationStore.cd_mun) {
+    clearHoveredState();
+
+    return;
+  }
+
+  // Caso contrário, prossiga com o comportamento normal de hover
+  if (featId !== hoveredFeatureId) {
+    clearHoveredState();
+    setHoveredState(featId);
+  }
+
+}
+
+function clearHoveredState() {
+  if (hoveredFeatureId !== null) {
+    map.value.setFeatureState(
+      {
+        source: 'base-municipalities',
+        id: hoveredFeatureId,
+        sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+      },
+      { hover: false }
+    );
+    hoveredFeatureId = null;
+  }
+}
+
+function setHoveredState(featureId) {
+  hoveredFeatureId = featureId;
+  map.value.setFeatureState(
+    {
+      source: 'base-municipalities',
+      id: featureId,
+      sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
+    },
+    { hover: true }
+  );
+}
+
+function handleMunicipalityMouseLeave() {
+  if (!map.value) { return; }
+  clearHoveredState();
+}
+
+function handleMunicipalityClick(e) {
+  if (!map.value || !e.features?.length) { return; }
+
+  const feat = e.features[0];
+
+  if (feat.properties.cd_mun !== locationStore.cd_mun) {
+    // Atualiza o locationStore com o novo município e define a escala como 'intraurbana'
+    locationStore.setLocation({
+      cd_mun: feat.properties.cd_mun,
+      scale: 'intraurbana'
+    });
+  }
 }
 
 function handleMissingImage(e) {
@@ -1329,7 +1178,7 @@ function handleMissingImage(e) {
 }
 
 /**
- * Update the “scale” based on zoom.
+ * Update the "scale" based on zoom.
  */
 function getScaleFromZoom(zoom) {
   if (zoom >= 12) { return 'intraurbana'; }
@@ -1337,46 +1186,6 @@ function getScaleFromZoom(zoom) {
   else if (zoom > 3) { return 'estadual'; }
   else { return 'nacional'; }
 }
-
-//// 'updateScaleBasedOnZoom' is defined but never used
-// function updateScaleBasedOnZoom(zoom) {
-//   let newScale;
-//   if (zoom >= 12) { newScale = 'intraurbana'; }
-//   else if (zoom >= 6) { newScale = 'municipal'; }
-//   else if (zoom > 3) { newScale = 'estadual'; }
-//   else { newScale = 'nacional'; }
-//   if (locationStore.scale !== newScale) {
-//     const currentHash = window.location.hash;
-//     locationStore.setLocation({ scale: newScale });
-//     const newQuery = { ...route.query, scale: newScale };
-//     router.replace({ query: newQuery, hash: currentHash.slice(1) });
-//   }
-// }
-
-// //is defined but never used
-// function onLegendOpacityChange(newOpacity) {
-//   // newOpacity is 0 to 1
-//   // We need to update the paint property of the newly-added layer
-//   const layerId = 'dynamic-layer'; // or use your ID
-//   if (!map.value) {return;}
-
-//   const layer = map.value.getLayer(layerId);
-//   if (!layer) {return;}
-
-//   // Distinguish between raster and vector layers:
-//   if (layer.type === 'raster') {
-//     // For raster layers, set 'raster-opacity'
-//     map.value.setPaintProperty(layerId, 'raster-opacity', newOpacity);
-//   } else if (layer.type === 'fill') {
-//     // For vector (fill) layers, set 'fill-opacity'
-//     map.value.setPaintProperty(layerId, 'fill-opacity', newOpacity);
-//   }
-
-//   // If you also want to dim the outline for vector, set 'line-opacity':
-//   if (map.value.getLayer(`${layerId}-outline`)) {
-//     map.value.setPaintProperty(`${layerId}-outline`, 'line-opacity', newOpacity);
-//   }
-// }
 
 /* ---------------------------------------
    LIFECYCLE
