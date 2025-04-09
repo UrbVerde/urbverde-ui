@@ -299,17 +299,18 @@ function setupDynamicLayer() {
         // Adiciona camada de setores para hover
         map.value.addLayer({
           id: 'setores-layer-hover',
-          type: 'fill',
+          type: 'line',
           source: 'setores-source',
           'source-layer': 'public.geom_setores',
           paint: {
-            'fill-color': [
+            'line-color': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              '#7c99f4',  // cor azul no hover
+              '#495057',  // cor cinza no hover
               'transparent'  // transparente por padrão
             ],
-            'fill-opacity': 0.5
+            'line-width': 2,
+            'line-opacity': 0.8
           }
         });
 
@@ -318,7 +319,7 @@ function setupDynamicLayer() {
         }
 
         // Setup interações dos setores
-        map.value.on('mousemove', 'setores-layer-hover', (e) => {
+        map.value.on('mousemove', 'dynamic-layer', (e) => {
           if (e.features.length > 0) {
             if (hoveredSetorId) {
               map.value.setFeatureState(
@@ -334,7 +335,7 @@ function setupDynamicLayer() {
           }
         });
 
-        map.value.on('mouseleave', 'setores-layer-hover', () => {
+        map.value.on('mouseleave', 'dynamic-layer', () => {
           if (hoveredSetorId) {
             map.value.setFeatureState(
               { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
@@ -1050,7 +1051,7 @@ function addBaseMunicipalitiesLayer() {
     paint: {
       'line-color': '#212529',
       'line-opacity': 1,
-      'line-width' : 5
+      'line-width' : 3
     },
     filter: ['==', 'cd_mun', locationStore.cd_mun]
   });
