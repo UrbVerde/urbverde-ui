@@ -13,6 +13,7 @@
 </template>
 
 <script setup>
+import { reorderAllLayers } from '@/utils/layersOrder';
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
@@ -50,7 +51,7 @@ function toggleSatellite() {
       paint: {
         'raster-opacity': 1
       }
-    });
+    }, 'municipalities-base');
   } else {
     // Remove camada de satélite
     if (props.map.getLayer('satellite-layer')) {
@@ -62,6 +63,7 @@ function toggleSatellite() {
   }
 
   emit('satellite-toggle', isSatellite.value);
+  reorderAllLayers(props.map);
 }
 </script>
 

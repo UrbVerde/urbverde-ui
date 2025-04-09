@@ -9,6 +9,7 @@ const LAYER_ORDER = [
   'dynamic-layer-outline', // Camada de setor censitário de contorno
   'setores-layer-hover', // Camada de setor censitário de contorno de hover
   'dynamic-layer', // Camada selecionada
+  'satellite-layer', // Camada de satélite
 ];
 
 /**
