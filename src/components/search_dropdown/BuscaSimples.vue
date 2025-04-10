@@ -729,7 +729,7 @@ async function generateDefaultSuggestions() {
   // Definir as capitais padrão
   const defaultCapitals = [
     { text: 'Salvador - BA', type: 'city' },
-    { text: 'Rio de Janeiro - RJ', type: 'city' }
+    { text: 'São Paulo - SP', type: 'city' }
   ];
 
   // Filtrar as capitais para não incluir a cidade atual
