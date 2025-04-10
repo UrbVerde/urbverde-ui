@@ -79,8 +79,8 @@ function checkCachedLocation() {
 
     return true;
   }
-  // console.log('No valid cache found');
 
+  // console.log('No valid cache found');
   return false;
 }
 

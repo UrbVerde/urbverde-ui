@@ -674,7 +674,16 @@ async function generateDefaultSuggestions() {
       const data = await response.json();
 
       if (data && data.length > 0 && !data[0].error) {
-        codes.value[cityWithState] = data[0].cd_mun;
+        // Procura na resposta da API a cidade exata que corresponde ao cityWithState
+        const exactMatch = data.find(item =>
+          `${item.display_name}` === cityWithState
+        );
+
+        if (exactMatch) {
+          codes.value[cityWithState] = exactMatch.cd_mun;
+        } else {
+          console.warn(`Cidade exata não encontrada para ${cityWithState}`);
+        }
       }
     } catch (error) {
       console.error('Error fetching city code:', error);
@@ -733,7 +742,7 @@ function toggleState() {
 //   },
 
 // Helper to emit location-updated event from script setup
-// We can’t use defineEmits directly in the child and pass to child of child
+// We can't use defineEmits directly in the child and pass to child of child
 // so we do an old-fashioned dispatch approach or a direct parent bus event.
 function emitLocationUpdate(payload) {
   // If you want to communicate to parent, defineEmits:
