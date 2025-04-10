@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { useRoute } from 'vue-router';
@@ -157,13 +157,28 @@ const isError = ref(false);
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
 
+const locationStore = useLocationStore();
+
+// Watch para monitorar mudanças no store de localização
+watch(
+  () => [locationStore.nm_mun, locationStore.uf],
+  ([newNmMun, newUf]) => {
+    if (newNmMun && newUf) {
+      const cityText = `${newNmMun} - ${newUf}`;
+      inputValue.value = cityText;
+      visibleInput.value = cityText;
+      locationChosen.value = cityText;
+    }
+  },
+  { immediate: true }
+);
+
 // Lifecycle Hooks
 onMounted(async() => {
   document.addEventListener('mousedown', handleClickOutside);
   loadSearchHistory();
 
   // Initialize from Pinia store if values exist
-  const locationStore = useLocationStore();
   const route = useRoute();
 
   // Check if we have URL parameters first
@@ -277,16 +292,33 @@ function showError() {
 
 async function selectSuggestion(suggestion) {
   console.log('selectSuggestion:', suggestion);
-  inputValue.value = suggestion.text;
-  visibleInput.value = suggestion.text;
+  const cityText = suggestion.text;
+  inputValue.value = cityText;
+  visibleInput.value = cityText;
   highlightedText.value = '';
   dropdown.value = false;
-  locationChosen.value = suggestion.text;
+  locationChosen.value = cityText;
 
-  const { city, state } = parseCityState(suggestion.text);
+  const { city, state } = parseCityState(cityText);
   console.log(state);
-  const code = codes.value[suggestion.text];
-  const stateAbbrev = suggestion.text.split(' - ')[1];
+
+  // Garantir que temos o código do município
+  let code = codes.value[cityText];
+  if (!code) {
+    try {
+      // Buscar o código do município da API
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
+      const data = await response.json();
+      if (data?.[0]?.cd_mun) {
+        code = data[0].cd_mun;
+        codes.value[cityText] = code;
+      }
+    } catch (error) {
+      console.error('Erro ao buscar código do município:', error);
+    }
+  }
+
+  const stateAbbrev = cityText.split(' - ')[1];
 
   // Update Pinia store
   const locationStore = useLocationStore();
@@ -299,7 +331,7 @@ async function selectSuggestion(suggestion) {
   });
 
   // Ensure coordinates are fetched after store update
-  await fetchCoordinates(locationChosen.value);
+  await fetchCoordinates(cityText);
 
   // Ensure map recenters
   emit('location-updated', coordinates.value);
@@ -307,7 +339,7 @@ async function selectSuggestion(suggestion) {
   // Update UI state
   loadAnimation();
   updateSuggestions();
-  addToHistory(suggestion.text);
+  addToHistory(cityText);
   emit('interaction-succeeded');
 }
 
@@ -497,25 +529,28 @@ function cacheCities(citiesArr) {
 }
 
 function handleInput() {
-  // console.log('1 - handleInput');
   if (inputValue.value !== previousInputValue.value) {
-    dropdown.value = inputValue.value !== '';
-    updateSuggestions();
-    // this.previousInputValue = this.inputValue;
+    dropdown.value = true;
+    if (inputValue.value === '') {
+      generateDefaultSuggestions();
+      highlightedText.value = '';
+    } else {
+      updateSuggestions();
+    }
   }
 }
 
 async function updateSuggestions(forceUpdate = false) {
-  // console.log('1 - updateSuggestions');
-  // alert('updateSuggestions');
   if (!forceUpdate && inputValue.value === previousInputValue.value) { return; }
-  // Only proceed if input actually changed
+
+  // Se o input estiver vazio, mostrar sugestões padrão
   if (inputValue.value === '') {
     generateDefaultSuggestions();
     highlightedText.value = '';
 
     return;
   }
+
   try {
     // Make the API call
     await fetchCities(inputValue.value);
@@ -526,12 +561,9 @@ async function updateSuggestions(forceUpdate = false) {
     const stateSuggestions = filterStates(inputLower);
     const citySuggestions = filterCities(inputLower);
 
-    // this.previousInputValue = this.inputValue; // Update previous value
-
     suggestions.value = [
       ...historySuggestions.map(item => ({ text: item, type: 'history' })),
       ...citySuggestions.map(item => ({ text: item, type: 'city' })),
-      // { type: 'separator' }, // Add separator after history items
       ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
     ];
 
@@ -577,8 +609,8 @@ function updateHighlightedText() {
 }
 
 function submit() {
-  if (inputValue.value) {
-    // Use the first suggestion if it exists
+  if (inputValue.value && suggestions.value.length > 0) {
+    // Use the first suggestion only if input is not empty and we have suggestions
     const suggestion = suggestions.value[0];
     if (suggestion && suggestion.text) {
       selectSuggestion(suggestion);  // Handles syncing and recentering
@@ -598,15 +630,15 @@ function submit() {
   if (locationChosen.value) {
     fetchCoordinates(locationChosen.value).then(() => {
       const locationStore = useLocationStore();
+      const [city, state] = locationChosen.value.split(' - ');
       locationStore.setLocation({
         cd_mun: codes.value[locationChosen.value],
-        nm_mun: locationChosen.value.split(' - ')[0],
-        uf: locationChosen.value.split(' - ')[1],
+        nm_mun: city,
+        uf: state,
       });
     });
     emit('interaction-succeeded');
   }
-
 }
 // Chama a função para buscar coordenadas
 function handleEnter() {
@@ -643,11 +675,10 @@ function clearHistory() {
 }
 
 function clearInput() {
-  suggestions.value = [];
-  generateDefaultSuggestions();
   inputValue.value = '';
   highlightedText.value = '';
-  if (!dropdown.value) { dropdown.value = true; }
+  dropdown.value = true;
+  generateDefaultSuggestions();
 }
 
 function saveSearchHistory() {
@@ -674,17 +705,40 @@ async function generateDefaultSuggestions() {
       const data = await response.json();
 
       if (data && data.length > 0 && !data[0].error) {
-        codes.value[cityWithState] = data[0].cd_mun;
+        const exactMatch = data.find(item =>
+          `${item.display_name}` === cityWithState
+        );
+
+        if (exactMatch) {
+          codes.value[cityWithState] = exactMatch.cd_mun;
+        } else {
+          console.warn(`Cidade exata não encontrada para ${cityWithState}`);
+        }
       }
     } catch (error) {
       console.error('Error fetching city code:', error);
     }
   }
 
+  // Filtrar o histórico para remover a cidade atual se ela estiver presente
+  const filteredHistory = searchHistory.value.filter(item => item !== cityWithState);
+
+  // Incluir apenas os 2 primeiros itens do histórico filtrado nas sugestões
+  const historySuggestions = filteredHistory.slice(0, 2).map(item => ({ text: item, type: 'history' }));
+
+  // Definir as capitais padrão
+  const defaultCapitals = [
+    { text: 'Salvador - BA', type: 'city' },
+    { text: 'São Paulo - SP', type: 'city' }
+  ];
+
+  // Filtrar as capitais para não incluir a cidade atual
+  const filteredCapitals = defaultCapitals.filter(capital => capital.text !== cityWithState);
+
   suggestions.value = [
+    ...historySuggestions,
     { text: cityWithState, type: 'city' },
-    { text: state, type: 'state' },
-    { text: 'Brasil', type: 'country' },
+    ...filteredCapitals.slice(0, 2) // Limitar a 2 capitais
   ];
 }
 
@@ -733,7 +787,7 @@ function toggleState() {
 //   },
 
 // Helper to emit location-updated event from script setup
-// We can’t use defineEmits directly in the child and pass to child of child
+// We can't use defineEmits directly in the child and pass to child of child
 // so we do an old-fashioned dispatch approach or a direct parent bus event.
 function emitLocationUpdate(payload) {
   // If you want to communicate to parent, defineEmits:
