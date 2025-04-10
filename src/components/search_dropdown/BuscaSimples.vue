@@ -726,11 +726,19 @@ async function generateDefaultSuggestions() {
   // Incluir apenas os 2 primeiros itens do histórico filtrado nas sugestões
   const historySuggestions = filteredHistory.slice(0, 2).map(item => ({ text: item, type: 'history' }));
 
+  // Definir as capitais padrão
+  const defaultCapitals = [
+    { text: 'Salvador - BA', type: 'city' },
+    { text: 'Rio de Janeiro - RJ', type: 'city' }
+  ];
+
+  // Filtrar as capitais para não incluir a cidade atual
+  const filteredCapitals = defaultCapitals.filter(capital => capital.text !== cityWithState);
+
   suggestions.value = [
     ...historySuggestions,
     { text: cityWithState, type: 'city' },
-    { text: state, type: 'state' },
-    { text: 'Brasil', type: 'country' },
+    ...filteredCapitals.slice(0, 2) // Limitar a 2 capitais
   ];
 }
 
