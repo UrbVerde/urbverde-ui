@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, onBeforeUpdate, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GetUserLocation from './GetUserLocation.vue';
 import { useRoute } from 'vue-router';
@@ -157,13 +157,28 @@ const isError = ref(false);
 // Keep track of codes for quick lookups: { "City - ST": code, "City": code }
 const codes = ref({});
 
+const locationStore = useLocationStore();
+
+// Watch para monitorar mudanças no store de localização
+watch(
+  () => [locationStore.nm_mun, locationStore.uf],
+  ([newNmMun, newUf]) => {
+    if (newNmMun && newUf) {
+      const cityText = `${newNmMun} - ${newUf}`;
+      inputValue.value = cityText;
+      visibleInput.value = cityText;
+      locationChosen.value = cityText;
+    }
+  },
+  { immediate: true }
+);
+
 // Lifecycle Hooks
 onMounted(async() => {
   document.addEventListener('mousedown', handleClickOutside);
   loadSearchHistory();
 
   // Initialize from Pinia store if values exist
-  const locationStore = useLocationStore();
   const route = useRoute();
 
   // Check if we have URL parameters first
@@ -277,16 +292,17 @@ function showError() {
 
 async function selectSuggestion(suggestion) {
   console.log('selectSuggestion:', suggestion);
-  inputValue.value = suggestion.text;
-  visibleInput.value = suggestion.text;
+  const cityText = suggestion.text;
+  inputValue.value = cityText;
+  visibleInput.value = cityText;
   highlightedText.value = '';
   dropdown.value = false;
-  locationChosen.value = suggestion.text;
+  locationChosen.value = cityText;
 
-  const { city, state } = parseCityState(suggestion.text);
+  const { city, state } = parseCityState(cityText);
   console.log(state);
-  const code = codes.value[suggestion.text];
-  const stateAbbrev = suggestion.text.split(' - ')[1];
+  const code = codes.value[cityText];
+  const stateAbbrev = cityText.split(' - ')[1];
 
   // Update Pinia store
   const locationStore = useLocationStore();
@@ -299,7 +315,7 @@ async function selectSuggestion(suggestion) {
   });
 
   // Ensure coordinates are fetched after store update
-  await fetchCoordinates(locationChosen.value);
+  await fetchCoordinates(cityText);
 
   // Ensure map recenters
   emit('location-updated', coordinates.value);
@@ -307,7 +323,7 @@ async function selectSuggestion(suggestion) {
   // Update UI state
   loadAnimation();
   updateSuggestions();
-  addToHistory(suggestion.text);
+  addToHistory(cityText);
   emit('interaction-succeeded');
 }
 
@@ -598,15 +614,15 @@ function submit() {
   if (locationChosen.value) {
     fetchCoordinates(locationChosen.value).then(() => {
       const locationStore = useLocationStore();
+      const [city, state] = locationChosen.value.split(' -');
       locationStore.setLocation({
         cd_mun: codes.value[locationChosen.value],
-        nm_mun: locationChosen.value.split(' - ')[0],
-        uf: locationChosen.value.split(' - ')[1],
+        nm_mun: city,
+        uf: state,
       });
     });
     emit('interaction-succeeded');
   }
-
 }
 // Chama a função para buscar coordenadas
 function handleEnter() {
