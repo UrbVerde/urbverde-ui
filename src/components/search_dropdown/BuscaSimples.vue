@@ -513,25 +513,28 @@ function cacheCities(citiesArr) {
 }
 
 function handleInput() {
-  // console.log('1 - handleInput');
   if (inputValue.value !== previousInputValue.value) {
-    dropdown.value = inputValue.value !== '';
-    updateSuggestions();
-    // this.previousInputValue = this.inputValue;
+    dropdown.value = true;
+    if (inputValue.value === '') {
+      generateDefaultSuggestions();
+      highlightedText.value = '';
+    } else {
+      updateSuggestions();
+    }
   }
 }
 
 async function updateSuggestions(forceUpdate = false) {
-  // console.log('1 - updateSuggestions');
-  // alert('updateSuggestions');
   if (!forceUpdate && inputValue.value === previousInputValue.value) { return; }
-  // Only proceed if input actually changed
+
+  // Se o input estiver vazio, mostrar sugestões padrão
   if (inputValue.value === '') {
     generateDefaultSuggestions();
     highlightedText.value = '';
 
     return;
   }
+
   try {
     // Make the API call
     await fetchCities(inputValue.value);
@@ -542,12 +545,9 @@ async function updateSuggestions(forceUpdate = false) {
     const stateSuggestions = filterStates(inputLower);
     const citySuggestions = filterCities(inputLower);
 
-    // this.previousInputValue = this.inputValue; // Update previous value
-
     suggestions.value = [
       ...historySuggestions.map(item => ({ text: item, type: 'history' })),
       ...citySuggestions.map(item => ({ text: item, type: 'city' })),
-      // { type: 'separator' }, // Add separator after history items
       ...stateSuggestions.map(item => ({ text: item, type: 'state' })),
     ];
 
@@ -614,7 +614,7 @@ function submit() {
   if (locationChosen.value) {
     fetchCoordinates(locationChosen.value).then(() => {
       const locationStore = useLocationStore();
-      const [city, state] = locationChosen.value.split(' -');
+      const [city, state] = locationChosen.value.split(' - ');
       locationStore.setLocation({
         cd_mun: codes.value[locationChosen.value],
         nm_mun: city,
@@ -659,11 +659,10 @@ function clearHistory() {
 }
 
 function clearInput() {
-  suggestions.value = [];
-  generateDefaultSuggestions();
   inputValue.value = '';
   highlightedText.value = '';
-  if (!dropdown.value) { dropdown.value = true; }
+  dropdown.value = true;
+  generateDefaultSuggestions();
 }
 
 function saveSearchHistory() {
@@ -690,7 +689,6 @@ async function generateDefaultSuggestions() {
       const data = await response.json();
 
       if (data && data.length > 0 && !data[0].error) {
-        // Procura na resposta da API a cidade exata que corresponde ao cityWithState
         const exactMatch = data.find(item =>
           `${item.display_name}` === cityWithState
         );
@@ -706,7 +704,14 @@ async function generateDefaultSuggestions() {
     }
   }
 
+  // Filtrar o histórico para remover a cidade atual se ela estiver presente
+  const filteredHistory = searchHistory.value.filter(item => item !== cityWithState);
+
+  // Incluir apenas os 2 primeiros itens do histórico filtrado nas sugestões
+  const historySuggestions = filteredHistory.slice(0, 2).map(item => ({ text: item, type: 'history' }));
+
   suggestions.value = [
+    ...historySuggestions,
     { text: cityWithState, type: 'city' },
     { text: state, type: 'state' },
     { text: 'Brasil', type: 'country' },
