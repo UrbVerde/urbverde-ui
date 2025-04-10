@@ -7,8 +7,10 @@ const LAYER_ORDER = [
   'selected-municipality-fill', // Camada de hover de municípios
   'municipalities-base-outline', // Camada de contorno de municípios
   'parks-layer', // Camada de parques nacionais
-  'dynamic-layer-outline', // Camada de setor censitário
+  'dynamic-layer-outline', // Camada de setor censitário de contorno
+  'setores-layer-hover', // Camada de setor censitário de contorno de hover
   'dynamic-layer', // Camada selecionada
+  'satellite-layer', // Camada de satélite
 ];
 
 /**
