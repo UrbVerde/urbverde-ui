@@ -301,7 +301,23 @@ async function selectSuggestion(suggestion) {
 
   const { city, state } = parseCityState(cityText);
   console.log(state);
-  const code = codes.value[cityText];
+
+  // Garantir que temos o código do município
+  let code = codes.value[cityText];
+  if (!code) {
+    try {
+      // Buscar o código do município da API
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
+      const data = await response.json();
+      if (data?.[0]?.cd_mun) {
+        code = data[0].cd_mun;
+        codes.value[cityText] = code;
+      }
+    } catch (error) {
+      console.error('Erro ao buscar código do município:', error);
+    }
+  }
+
   const stateAbbrev = cityText.split(' - ')[1];
 
   // Update Pinia store
