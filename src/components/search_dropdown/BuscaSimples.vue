@@ -593,8 +593,8 @@ function updateHighlightedText() {
 }
 
 function submit() {
-  if (inputValue.value) {
-    // Use the first suggestion if it exists
+  if (inputValue.value && suggestions.value.length > 0) {
+    // Use the first suggestion only if input is not empty and we have suggestions
     const suggestion = suggestions.value[0];
     if (suggestion && suggestion.text) {
       selectSuggestion(suggestion);  // Handles syncing and recentering
