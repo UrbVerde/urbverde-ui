@@ -121,8 +121,10 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
+import { categoryToLayerMap, tabIdToLabelMap, sectionConfigs } from '@/config';
+import { getTabsForLayer } from '@/config/helperNavbarTabNavegation';
 import modalShare from '../modal/modalShare.vue';
 import modalLayerInfo from '../modal/modalLayerInfo.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
@@ -151,20 +153,37 @@ const isPopoverVisible = ref(false);
 const popoverButton = ref(null);
 const popoverMenu = ref(null);
 
-const layer = computed(() =>
-// console.log('Navbar computed - current layer:', locationStore.currentLayerName);
-
-  locationStore.currentLayerName
-);
+const layer = computed(() => locationStore.currentLayerName);
 const cityName = computed(() => locationStore.nm_mun);
 const uf = computed(() => locationStore.uf);
 
-const tabs = ref([
-  { id: 'map', label: 'Mapa' },
-  { id: 'stats', label: 'Estatísticas' },
-  { id: 'ranking', label: 'Ranking' },
+// Tabs dinâmicas baseadas na camada atual
+const tabs = computed(() => {
+  // Obtém a camada atual do store
+  const currentLayer = locationStore.layer ?
+    locationStore.layer.replace('-layer', '') :
+    categoryToLayerMap[locationStore.category] || '';
 
-]);
+  console.log('NavbarMap - Camada atual:', currentLayer);
+  console.log('NavbarMap - Categoria atual:', locationStore.category);
+
+  // Verifica se sectionConfigs possui a configuração necessária
+  console.log('NavbarMap - sectionConfigs possui a camada?', !!sectionConfigs[currentLayer]);
+
+  // Utiliza o helper para obter as abas, passando o locationStore
+  const result = getTabsForLayer(currentLayer, sectionConfigs, tabIdToLabelMap, locationStore);
+  console.log('NavbarMap - Abas obtidas:', result);
+
+  return result;
+});
+
+// Watch para atualizar a aba ativa quando a camada muda
+watch(() => locationStore.layer, () => {
+  // Se a aba atual não existir nas novas abas, mude para a primeira aba
+  if (tabs.value.length > 0 && !tabs.value.find(tab => tab.id === activeSection)) {
+    navigateTo(tabs.value[0].id);
+  }
+});
 
 const {
   largerThan
