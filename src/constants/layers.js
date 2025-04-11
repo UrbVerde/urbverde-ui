@@ -191,15 +191,15 @@ export const LAYER_CONFIGS = {
     },
     property: 'b1',
     stops: [
-      [0.04, '#ffffe5'],
+      [0.0, '#ffffe5'],
       [0.14, '#f7fcb9'],
       [0.15, '#d9f0a3'],
       [0.18, '#addd8e'],
-      [0.21, '#78c679'],
+      [0.2, '#78c679'],
       [0.25, '#41ab5d'],
       [0.28, '#238443'],
       [0.31, '#006837'],
-      [0.44, '#004529']
+      [0.4, '#004529']
     ],
     unit: '%',
     popup: {
@@ -377,13 +377,9 @@ export const LAYER_CONFIGS = {
     },
     property: 'a4',
     stops: [
-      [1.23, '#1a9850'],
-      [1.69, '#91cf60'],
-      [2.83, '#d9ef8b'],
-      [7.45, '#ffffbf'],
-      [18.97, '#fee08b'],
-      [35.07, '#fc8d59'],
-      [46.76, '#d73027']
+      [0, '#1a9850'],
+      [200, '#ffffbf'],
+      [400, '#d73027']
     ],
     unit: 'm'
   },
@@ -408,11 +404,11 @@ export const LAYER_CONFIGS = {
     property: 'a2',
     stops: [
       [0, '#d53e4f'],
-      [40, '#f46d43'],
-      [50, '#fdae61'],
-      [60, '#fee08b'],
-      [70, '#e6f598'],
-      [85, '#abdda4']
+      [2, '#f46d43'],
+      [3, '#fdae61'],
+      [7, '#fee08b'],
+      [10, '#e6f598'],
+      [15, '#abdda4']
     ],
     unit: 'm²/hab'
   },
@@ -478,7 +474,7 @@ export const LAYER_CONFIGS = {
       [85.8, '#66c2a5'],
       [100, '#3288bd']
     ],
-    unit: 'habitantes',
+    unit: 'hab',
 
     popup: {
       label: 'População Atendida',
