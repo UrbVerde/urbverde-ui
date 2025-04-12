@@ -586,7 +586,7 @@ function getPopupContent(feat, config) {
   }
   // For "escala estadual" add the municipality name (if available)
   let prefix = '';
-  if ((currentScale.value === 'estadual' || currentScale.value === 'municipal') && feat.properties.nm_mun) {
+  if (currentScale.value === 'estadual' && feat.properties.nm_mun) {
     prefix = `<span style="font-size: 1.2em; font-weight: bold;">${feat.properties.nm_mun}</span><br>`;
   }
 
@@ -953,6 +953,7 @@ function initializeMap() {
     style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=lEOSxnRzpX8g8OjMcRqw',
     ...initialState,
     attributionControl: false,
+    minZoom: 3.5
   });
 
   layersStore.mapRef = map.value;
@@ -986,7 +987,10 @@ function initializeMap() {
   map.value.on('zoomend', () => {
     isHandlingScaleChange.value = false;
 
-    const newScale = getScaleFromZoom(map.value.getZoom());
+    const currentZoom = map.value.getZoom();
+    const newScale = getScaleFromZoom(currentZoom);
+    console.log(`Event zoomend - Zoom atual: ${currentZoom.toFixed(2)}, Escala antiga: ${locationStore.scale}, Nova escala: ${newScale}`);
+
     if (locationStore.scale !== newScale) {
       const currentHash = window.location.hash.slice(1); // Remove # symbol
       locationStore.setLocation({ scale: newScale });
@@ -994,7 +998,6 @@ function initializeMap() {
         query: { ...route.query, scale: newScale },
         hash: currentHash // Don't slice here
       });
-
     }
   });
   map.value.on('load', () => {
@@ -1178,10 +1181,19 @@ function handleMissingImage(e) {
  * Update the "scale" based on zoom.
  */
 function getScaleFromZoom(zoom) {
-  if (zoom >= 12) { return 'intraurbana'; }
-  else if (zoom >= 6) { return 'municipal'; }
-  else if (zoom > 3) { return 'estadual'; }
-  else { return 'nacional'; }
+  let scale;
+  if (zoom >= 10) {
+    scale = 'intraurbana';
+  }
+  else if (zoom > 5) {
+    scale = 'estadual';
+  }
+  else {
+    scale = 'nacional';
+  }
+  console.log(`Zoom atual: ${zoom.toFixed(2)} => Escala determinada: ${scale}`);
+
+  return scale;
 }
 
 /* ---------------------------------------
