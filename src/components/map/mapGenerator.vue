@@ -987,9 +987,7 @@ function initializeMap() {
   map.value.on('zoomend', () => {
     isHandlingScaleChange.value = false;
 
-    const currentZoom = map.value.getZoom();
-    const newScale = getScaleFromZoom(currentZoom);
-    console.log(`Event zoomend - Zoom atual: ${currentZoom.toFixed(2)}, Escala antiga: ${locationStore.scale}, Nova escala: ${newScale}`);
+    const newScale = getScaleFromZoom(map.value.getZoom());
 
     if (locationStore.scale !== newScale) {
       const currentHash = window.location.hash.slice(1); // Remove # symbol
@@ -1191,7 +1189,6 @@ function getScaleFromZoom(zoom) {
   else {
     scale = 'nacional';
   }
-  console.log(`Zoom atual: ${zoom.toFixed(2)} => Escala determinada: ${scale}`);
 
   return scale;
 }
