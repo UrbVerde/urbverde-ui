@@ -100,9 +100,9 @@ let pinnedFeatureId = null;
 let hoveredSetorId = null;
 
 // Map constants
-const MAP_ZOOM_START = 14;
-const MAP_ZOOM_FINAL = 15;
-const MAP_ANIMATION_DURATION = 4000;
+const MAP_ZOOM_START = 13;
+const MAP_ZOOM_FINAL = 14;
+const MAP_ANIMATION_DURATION = 3000;
 
 // Get current layer id, scale and year from the URL query.
 const currentLayer = computed(() => route.query.layer);
