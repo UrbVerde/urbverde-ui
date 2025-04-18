@@ -68,7 +68,12 @@ export const useLocationStore = defineStore('locationStore', {
           throw new Error('No categories in response');
         }
 
-        this.categories = data.categories;
+        // Filtra as categorias se o estado não for SP
+        if (this.uf && this.uf !== 'SP') {
+          this.categories = data.categories.filter(category => category.id === 'census');
+        } else {
+          this.categories = data.categories;
+        }
 
         // If we have a current layer, check if it exists in new categories
         if (this.layer) {
