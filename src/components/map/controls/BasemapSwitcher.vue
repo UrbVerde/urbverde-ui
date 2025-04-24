@@ -39,7 +39,7 @@ function toggleSatellite() {
     props.map.addSource('satellite', {
       type: 'raster',
       tiles: [
-        'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=e65ZDmqptUtav7se3TYd'
+        'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=lEOSxnRzpX8g8OjMcRqw'
       ],
       tileSize: 256
     });
