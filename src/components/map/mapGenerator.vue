@@ -294,29 +294,25 @@ function setupDynamicLayer() {
         });
 
         // Adiciona camada de setores para hover
+        // Add fill layer for hover effects
         map.value.addLayer({
-          id: 'setores-layer-hover',
-          type: 'line',
+          id: 'setores-layer',
+          type: 'fill',
           source: 'setores-source',
           'source-layer': 'public.geom_setores',
           paint: {
-            'line-color': [
+            'fill-color': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              '#495057',  // cor cinza no hover
-              'transparent'  // transparente por padrão
+              '#7c99f4',  // blue color on hover
+              'transparent'  // transparent by default
             ],
-            'line-width': 2,
-            'line-opacity': 0.8
+            'fill-opacity': 0.5
           }
         });
 
-        if (shouldFilter) {
-          map.value.setFilter('setores-layer-hover', ['==', 'cd_mun', locationStore.cd_mun]);
-        }
-
-        // Setup interações dos setores
-        map.value.on('mousemove', 'dynamic-layer', (e) => {
+        // Setup setores interactions
+        map.value.on('mousemove', 'setores-layer', (e) => {
           if (e.features.length > 0) {
             if (hoveredSetorId) {
               map.value.setFeatureState(
@@ -332,7 +328,7 @@ function setupDynamicLayer() {
           }
         });
 
-        map.value.on('mouseleave', 'dynamic-layer', () => {
+        map.value.on('mouseleave', 'setores-layer', () => {
           if (hoveredSetorId) {
             map.value.setFeatureState(
               { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
@@ -341,11 +337,8 @@ function setupDynamicLayer() {
             hoveredSetorId = null;
           }
         });
-
-        // Adiciona camada de parques
         addParksLayer();
       }
-
       setupVectorInteractions(config);
       reorderAllLayers(map.value);
     }

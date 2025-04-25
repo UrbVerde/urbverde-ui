@@ -13,7 +13,6 @@
 </template>
 
 <script setup>
-import { reorderAllLayers } from '@/utils/layersOrder';
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
@@ -41,7 +40,6 @@ function toggleSatellite() {
   }
 
   emit('satellite-toggle', isSatellite.value);
-  reorderAllLayers(props.map);
 }
 </script>
 
