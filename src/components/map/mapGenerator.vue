@@ -15,7 +15,6 @@
       :map="map"
       :current-style="currentStyle"
       :terrain-enabled="terrainEnabled"
-      @style-change="handleStyleChange"
       @terrain-toggle="handleTerrainToggle"
       @location-found="handleLocationFound"
     />
@@ -63,16 +62,6 @@ const mapLoaded = ref(false);
 // Map style state
 const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
-
-// Handler functions
-function handleStyleChange(isSatellite) {
-  console.log('Satellite toggled:', isSatellite);
-
-  // Se o satélite foi ativado, apenas reordena as camadas
-  if (isSatellite) {
-    reorderAllLayers(map.value);
-  }
-}
 
 function handleTerrainToggle(enabled) {
   terrainEnabled.value = enabled;
@@ -242,7 +231,6 @@ function setupDynamicLayer() {
       }
 
       setupRasterInteractions(config);
-      reorderAllLayers(map.value);
 
     } else {
       // Adiciona layer vetorial
@@ -342,7 +330,6 @@ function setupDynamicLayer() {
         addParksLayer();
       }
       setupVectorInteractions(config);
-      reorderAllLayers(map.value);
     }
 
     setupMasterInteractionHandler(config);
@@ -375,9 +362,6 @@ function addParksLayer() {
 
   // Filtrar pois ainda não funciona cql diretamente no tile
   map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
-
-  // Reordena Layers
-  reorderAllLayers(map.value);
 }
 
 // This function sets up a master event handler for interaction priority
