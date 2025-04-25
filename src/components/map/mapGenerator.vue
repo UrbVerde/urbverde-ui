@@ -950,7 +950,7 @@ function initializeMap() {
   }
   map.value = new maplibregl.Map({
     container: mapContainer.value,
-    style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=lEOSxnRzpX8g8OjMcRqw',
+    style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ',
     ...initialState,
     attributionControl: false,
     minZoom: 3.5
