@@ -171,7 +171,7 @@ function removeDynamicLayer() {
   }
 
   // Remove layers
-  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer', 'setores-layer-hover'].forEach(id => {
+  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }
@@ -272,16 +272,15 @@ function setupDynamicLayer() {
         paint: {
           'line-color': '#666666',
           'line-width': 1,
-          'line-opacity': 0.1
+          'line-opacity': 0.3
         }
       });
 
-      // Aplicar filtro em ambas as camadas de contorno
       if (shouldFilter) {
         map.value.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
       }
 
-      // Adiciona camada de setores hover se estiver na escala intraurbana e se não for raster
+      // Adiciona camada de setores hover se estiver na escala intraurbana
       if (currentScale.value === 'intraurbana' && currentCode.value && config.type !== 'raster') {
         // Adiciona source dos setores
         map.value.addSource('setores-source', {
@@ -294,7 +293,6 @@ function setupDynamicLayer() {
         });
 
         // Adiciona camada de setores para hover
-        // Add fill layer for hover effects
         map.value.addLayer({
           id: 'setores-layer',
           type: 'fill',
@@ -304,12 +302,16 @@ function setupDynamicLayer() {
             'fill-color': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              '#7c99f4',  // blue color on hover
-              'transparent'  // transparent by default
+              '#666666',
+              'transparent'
             ],
-            'fill-opacity': 0.5
+            'fill-opacity': 0.2
           }
         });
+
+        if (shouldFilter) {
+          map.value.setFilter('setores-layer', ['==', 'cd_mun', locationStore.cd_mun]);
+        }
 
         // Setup setores interactions
         map.value.on('mousemove', 'setores-layer', (e) => {
@@ -347,6 +349,7 @@ function setupDynamicLayer() {
   } catch (error) {
     console.error('Error setting up dynamic layer:', error);
   }
+  reorderAllLayers(map.value);
 }
 
 // Helper function to add parks layer
