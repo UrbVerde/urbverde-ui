@@ -100,9 +100,9 @@ let pinnedFeatureId = null;
 let hoveredSetorId = null;
 
 // Map constants
-const MAP_ZOOM_START = 13;
+const MAP_ZOOM_START = 14;
 const MAP_ZOOM_FINAL = 14;
-const MAP_ANIMATION_DURATION = 3000;
+const MAP_ANIMATION_DURATION = 1000;
 
 // Get current layer id, scale and year from the URL query.
 const currentLayer = computed(() => route.query.layer);
@@ -900,10 +900,9 @@ async function loadCoordinates(code) {
       });
 
       if (map.value) {
-        map.value.flyTo({
+        map.value.jumpTo({
           center: [coords.lng, coords.lat],
           zoom: MAP_ZOOM_FINAL,
-          duration: MAP_ANIMATION_DURATION,
           essential: true
         });
       } else {
@@ -948,12 +947,73 @@ function initializeMap() {
       };
     }
   }
+
+  // Initialize MapTiler stats
+  window.mapTilerStats = {
+    tiles: 0,
+    renderedMaps: 0,
+    lastLogTime: Date.now()
+  };
+
   map.value = new maplibregl.Map({
     container: mapContainer.value,
-    style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+    style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ',
     ...initialState,
     attributionControl: false,
-    minZoom: 3.5
+    minZoom: 3.5,
+    maxZoom: 16.5,
+    transformRequest: (url, resourceType) => {
+      console.log('TransformRequest called:', { url, resourceType });
+
+      const isMapTiler = url.includes('maptiler.com');
+      if (isMapTiler) {
+        console.log(`[MapTiler Request] Type: ${resourceType}, URL: ${url}`);
+
+        if (resourceType === 'Tile') {window.mapTilerStats.tiles++;}
+        if (resourceType === 'RenderedMap') {window.mapTilerStats.renderedMaps++;}
+
+        const now = Date.now();
+        if (now - window.mapTilerStats.lastLogTime > 5000) {
+          console.log('[MapTiler Stats]', {
+            tiles: window.mapTilerStats.tiles,
+            renderedMaps: window.mapTilerStats.renderedMaps,
+            timeElapsed: `${(now - window.mapTilerStats.lastLogTime) / 1000  }s`
+          });
+          window.mapTilerStats.lastLogTime = now;
+        }
+      }
+
+      return { url };
+    }
+  });
+
+  // Add debug logs for map events
+  map.value.on('load', () => {
+    console.log('Map loaded, starting to monitor requests');
+    mapLoaded.value = true;
+    hoverPopup.value = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      trackPointer: true,
+      offset: { top: [0, 20], bottom: [0, -20] },
+      className: 'hover-popup'
+    });
+    pinnedPopup.value = new maplibregl.Popup({
+      closeButton: true,
+      closeOnClick: false,
+      offset: { top: [0, 20], bottom: [0, -20] },
+      className: 'pinned-popup'
+    });
+
+    addBaseMunicipalitiesLayer();
+    setupDynamicLayer();
+    if (!hash) {
+      map.value.jumpTo({
+        center: [coordinates.value.lng, coordinates.value.lat],
+        zoom: MAP_ZOOM_FINAL,
+        essential: true
+      });
+    }
   });
 
   layersStore.mapRef = map.value;
@@ -995,33 +1055,6 @@ function initializeMap() {
       router.replace({
         query: { ...route.query, scale: newScale },
         hash: currentHash // Don't slice here
-      });
-    }
-  });
-  map.value.on('load', () => {
-    mapLoaded.value = true;
-    hoverPopup.value = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      trackPointer: true,
-      offset: { top: [0, 20], bottom: [0, -20] },
-      className: 'hover-popup'
-    });
-    pinnedPopup.value = new maplibregl.Popup({
-      closeButton: true,
-      closeOnClick: false,
-      offset: { top: [0, 20], bottom: [0, -20] },
-      className: 'pinned-popup'
-    });
-
-    addBaseMunicipalitiesLayer();
-    setupDynamicLayer();
-    if (!hash) {
-      map.value.flyTo({
-        center: [coordinates.value.lng, coordinates.value.lat],
-        zoom: MAP_ZOOM_FINAL,
-        duration: MAP_ANIMATION_DURATION,
-        essential: true
       });
     }
   });
