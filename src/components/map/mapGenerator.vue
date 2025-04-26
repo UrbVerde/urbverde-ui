@@ -941,7 +941,7 @@ function initializeMap() {
     ...initialState,
     attributionControl: false,
     minZoom: 3.5,
-    maxZoom: 16.5,
+    maxZoom: 18,
     transformRequest: (url, resourceType) => {
       console.log('TransformRequest called:', { url, resourceType });
 
