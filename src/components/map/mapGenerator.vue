@@ -937,9 +937,7 @@ function initializeMap() {
     maxZoom: 18,
   });
 
-  // Add debug logs for map events
   map.value.on('load', () => {
-    console.log('Map loaded, starting to monitor requests');
     mapLoaded.value = true;
     hoverPopup.value = new maplibregl.Popup({
       closeButton: false,
