@@ -928,43 +928,13 @@ function initializeMap() {
     }
   }
 
-  // Initialize MapTiler stats
-  window.mapTilerStats = {
-    tiles: 0,
-    renderedMaps: 0,
-    lastLogTime: Date.now()
-  };
-
   map.value = new maplibregl.Map({
     container: mapContainer.value,
-    style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ',
+    style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=zuxU0KiQ4drdRZ555olV',
     ...initialState,
     attributionControl: false,
     minZoom: 3.5,
     maxZoom: 18,
-    transformRequest: (url, resourceType) => {
-      console.log('TransformRequest called:', { url, resourceType });
-
-      const isMapTiler = url.includes('maptiler.com');
-      if (isMapTiler) {
-        console.log(`[MapTiler Request] Type: ${resourceType}, URL: ${url}`);
-
-        if (resourceType === 'Tile') {window.mapTilerStats.tiles++;}
-        if (resourceType === 'RenderedMap') {window.mapTilerStats.renderedMaps++;}
-
-        const now = Date.now();
-        if (now - window.mapTilerStats.lastLogTime > 5000) {
-          console.log('[MapTiler Stats]', {
-            tiles: window.mapTilerStats.tiles,
-            renderedMaps: window.mapTilerStats.renderedMaps,
-            timeElapsed: `${(now - window.mapTilerStats.lastLogTime) / 1000  }s`
-          });
-          window.mapTilerStats.lastLogTime = now;
-        }
-      }
-
-      return { url };
-    }
   });
 
   // Add debug logs for map events

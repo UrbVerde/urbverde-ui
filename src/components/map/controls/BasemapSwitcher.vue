@@ -34,9 +34,9 @@ function toggleSatellite() {
   isSatellite.value = !isSatellite.value;
 
   if (isSatellite.value) {
-    props.map.setStyle('https://api.maptiler.com/maps/hybrid/style.json?key=eizpVHFsrBDeO6HGwWvQ');
+    props.map.setStyle('https://api.maptiler.com/maps/hybrid/style.json?key=zuxU0KiQ4drdRZ555olV');
   } else {
-    props.map.setStyle('https://api.maptiler.com/maps/basic-v2/style.json?key=eizpVHFsrBDeO6HGwWvQ');
+    props.map.setStyle('https://api.maptiler.com/maps/basic-v2/style.json?key=zuxU0KiQ4drdRZ555olV');
   }
 
   emit('satellite-toggle', isSatellite.value);

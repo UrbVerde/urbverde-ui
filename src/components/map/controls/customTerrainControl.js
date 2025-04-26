@@ -79,7 +79,7 @@ class CustomTerrainControl {
         // Considerar usar Maptiler API com resolução ajustável
         this._map.addSource(this.options.source, {
           type: 'raster-dem',
-          url: 'https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=eizpVHFsrBDeO6HGwWvQ',
+          url: 'https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=zuxU0KiQ4drdRZ555olV',
           tileSize,
           maxzoom: this.options.highPerformance ? 15 : 13 // Limitar zoom para melhor desempenho
         });
