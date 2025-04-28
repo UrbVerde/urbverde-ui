@@ -13,7 +13,6 @@
 </template>
 
 <script setup>
-import { reorderAllLayers } from '@/utils/layersOrder';
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
@@ -35,35 +34,12 @@ function toggleSatellite() {
   isSatellite.value = !isSatellite.value;
 
   if (isSatellite.value) {
-    // Adiciona camada de satélite
-    props.map.addSource('satellite', {
-      type: 'raster',
-      tiles: [
-        'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=eizpVHFsrBDeO6HGwWvQ'
-      ],
-      tileSize: 256
-    });
-
-    props.map.addLayer({
-      id: 'satellite-layer',
-      type: 'raster',
-      source: 'satellite',
-      paint: {
-        'raster-opacity': 1
-      }
-    }, 'municipalities-base');
+    props.map.setStyle('https://api.maptiler.com/maps/hybrid/style.json?key=zuxU0KiQ4drdRZ555olV');
   } else {
-    // Remove camada de satélite
-    if (props.map.getLayer('satellite-layer')) {
-      props.map.removeLayer('satellite-layer');
-    }
-    if (props.map.getSource('satellite')) {
-      props.map.removeSource('satellite');
-    }
+    props.map.setStyle('https://api.maptiler.com/maps/basic-v2/style.json?key=zuxU0KiQ4drdRZ555olV');
   }
 
   emit('satellite-toggle', isSatellite.value);
-  reorderAllLayers(props.map);
 }
 </script>
 

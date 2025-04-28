@@ -8,7 +8,7 @@ const LAYER_ORDER = [
   'municipalities-base-outline', // Camada de contorno de municípios
   'parks-layer', // Camada de parques nacionais
   'dynamic-layer-outline', // Camada de setor censitário de contorno
-  'setores-layer-hover', // Camada de setor censitário de contorno de hover
+  'setores-layer', // Camada de setor censitário de contorno de hover
   'dynamic-layer', // Camada selecionada
   'satellite-layer', // Camada de satélite
 ];
