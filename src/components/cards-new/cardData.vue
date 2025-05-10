@@ -123,7 +123,15 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  apiParams: {
+  cityCode: {
+    type: [Number, String],
+    required: true
+  },
+  selectedYear: {
+    type: [Number, String],
+    required: true
+  },
+  additionalParams: {
     type: Object,
     default: () => ({})
   },
@@ -146,6 +154,13 @@ const isEmpty = computed(() => {
   return Object.keys(apiData.value).length === 0;
 });
 
+// Computed para combinar os parâmetros padrão com os adicionais
+const apiParams = computed(() => ({
+  city: props.cityCode,
+  year: props.selectedYear,
+  ...props.additionalParams
+}));
+
 // Methods
 const fetchData = async() => {
   if (!props.apiUrl) {return;}
@@ -154,7 +169,7 @@ const fetchData = async() => {
   error.value = null;
 
   try {
-    const queryParams = new URLSearchParams(props.apiParams).toString();
+    const queryParams = new URLSearchParams(apiParams.value).toString();
     const url = `${props.apiUrl}${queryParams ? `?${queryParams}` : ''}`;
 
     const response = await fetch(url);
@@ -172,7 +187,7 @@ const fetchData = async() => {
 
 // Watch for API params changes
 watch(
-  () => props.apiParams,
+  () => apiParams.value,
   () => fetchData(),
   { deep: true, immediate: true }
 );
