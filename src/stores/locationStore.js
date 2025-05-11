@@ -61,21 +61,80 @@ export const useLocationStore = defineStore('locationStore', {
       console.log('locationStore: Fetching categories for city:', this.cd_mun);
 
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${this.cd_mun}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        let data;
+        if (this.viewMode === 'policies') {
+          // JSON mockado para o modo 'policies'
+          data = {
+            'categories': [
+              {
+                'id': 'overview',
+                'name': 'Síntese dos indicadores',
+                'icon': 'stats.svg',
+                'layers': [
+                  { 'id': 'about_city', 'name': 'Sobre a cidade', 'isActive': false, 'isNew': true },
+                  { 'id': 'danger_zone', 'name': 'Zonas de risco climático', 'isActive': false, 'isNew': false }
+                ]
+              },
+              {
+                'id': 'climate',
+                'name': 'Clima',
+                'icon': 'Snowy Sunny Day.svg',
+                'layers': [
+                  { 'id': 'surface_temp', 'name': 'Temperatura de superfície', 'isActive': false, 'isNew': true },
+                  { 'id': 'max_surface_temp', 'name': 'Temperatura máxima de superfície', 'isActive': false, 'isNew': false },
+                  { 'id': 'heat_island', 'name': 'Nível de exposição à ilha de calor', 'isActive': false, 'isNew': false }
+                ]
+              },
+              {
+                'id': 'vegetation',
+                'name': 'Vegetação',
+                'icon': 'Oak Tree.svg',
+                'layers': [
+                  { 'id': 'pcv', 'name': 'Cobertura vegetal (PCV)', 'isActive': false, 'isNew': false },
+                  { 'id': 'icv', 'name': 'Cobertura vegetal por habitante (ICV)', 'isActive': false, 'isNew': false },
+                  { 'id': 'idsa', 'name': 'Desigualdade sociambiental (IDSA)', 'isActive': false, 'isNew': false },
+                  { 'id': 'cvp', 'name': 'Cobertura vegetal por satélite', 'isActive': false, 'isNew': false },
+                  { 'id': 'ndvi', 'name': 'Vigor da vegetação (NDVI)', 'isActive': false, 'isNew': false }
+                ]
+              },
+              {
+                'id': 'census',
+                'name': 'Censo',
+                'icon': 'bi bi-people',
+                'layers': [
+                  { 'id': 'population', 'name': 'População', 'isActive': false, 'isNew': false }
+                ]
+              }
+            ]
+          };
+        } else {
+          const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${this.cd_mun}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          data = await response.json();
         }
 
-        const data = await response.json();
         if (!data?.categories) {
           throw new Error('No categories in response');
         }
 
         // Filtra as categorias se o estado não for SP
-        if (this.uf && this.uf !== 'SP') {
-          this.categories = data.categories.filter(category => category.id === 'census');
-        } else {
-          this.categories = data.categories;
+        if (this.viewMode === 'map') {
+          if (this.uf && this.uf !== 'SP') {
+            this.categories = data.categories.filter(category => category.id === 'census');
+
+          } else {
+            this.categories = data.categories;
+          }
+        }
+
+        if (this.viewMode === 'policies') {
+          if (this.cd_mun && ![3547809, 3548708, 3548807, 3513801, 3529401, 3543303, 3544004].includes(this.cd_mun)) {
+            this.categories = data.categories.filter(category => category.id === 'overview');
+          } else {
+            this.categories = data.categories;
+          }
         }
 
         // If we have a current layer, check if it exists in new categories

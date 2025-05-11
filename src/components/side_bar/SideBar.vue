@@ -33,7 +33,7 @@
       </Transition>
 
       <Transition name="fade">
-        <div v-if="showContent" class="view-mode-selector">
+        <div v-if="isSearchDone" class="view-mode-selector">
           <ViewModeDropdown />
         </div>
       </Transition>
@@ -41,7 +41,7 @@
       <template v-if="isSearchDone">
         <Transition name="fade">
           <div v-if="showContent" class="categories-area">
-            <DropDown />
+            <CategoriesDropDown />
           </div>
         </Transition>
 
@@ -72,7 +72,7 @@ import { useLocationStore } from '@/stores/locationStore';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
-import DropDown from './drop_down/CategoriesDropdown.vue';
+import CategoriesDropDown from './drop_down/CategoriesDropdown.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
 import ViewModeDropdown from './drop_down/ViewModeDropdown.vue';
 

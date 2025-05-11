@@ -118,6 +118,7 @@ const toggleDropdown = () => {
 const selectMode = (modeId) => {
   selectedMode.value = modeId;
   locationStore.setViewMode(modeId);
+  locationStore.fetchCategories();
   isOpen.value = false;
 };
 </script>
