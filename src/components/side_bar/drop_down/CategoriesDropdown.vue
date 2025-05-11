@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/side_bar/drop_down/CategoriesDropdown.vue -->
 <template>
   <div class="container" ref="containerRef">
-    <span class="header-title body-caption-regular">CAMADAS</span>
+    <span class="header-title body-caption-regular">CATEGORIAS</span>
 
     <div class="categories-list">
       <div v-for="(category) in categories" :key="category.id" class="category-dropdown">
