@@ -124,10 +124,14 @@ const selectMode = (modeId) => {
 
   &.national-selected {
     background: linear-gradient(90deg, #ABE1C6 0%, #D2E8DD 100%);
+    outline: 3px solid var(--Primary-Fade-200, #ABE1C6);
+    outline-offset: -3px;
   }
 
   &.policies-selected {
     background: linear-gradient(90deg, #FFE69C 0%, #FFF3CD 100%);
+    outline: 3px solid var(--Yellow-200, #FFE69C);
+    outline-offset: -3px;
   }
 
   &:hover {}
@@ -208,11 +212,13 @@ const selectMode = (modeId) => {
   &.national-selected {
 
     background: linear-gradient(90deg, #ABE1C6 0%, #D2E8DD 100%);
+
   }
 
   &.policies-selected {
 
     background: linear-gradient(90deg, #FFE69C 0%, #FFF3CD 100%);
+
   }
 
   i {
