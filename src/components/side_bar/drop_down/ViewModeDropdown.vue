@@ -206,18 +206,18 @@ const selectMode = (modeId) => {
   border-radius: 8px;
 
   &:hover {
-    background: map-get($gray, 100);
+    background: var(--Gray-200, #E9ECEF);
   }
 
   &.national-selected {
 
-    background: linear-gradient(90deg, #ABE1C6 0%, #D2E8DD 100%);
+    background: var(--Primary-Fade-100, #D2E8DD);
 
   }
 
   &.policies-selected {
 
-    background: linear-gradient(90deg, #FFE69C 0%, #FFF3CD 100%);
+    background: var(--Yellow-100, #FFF3CD);
 
   }
 
