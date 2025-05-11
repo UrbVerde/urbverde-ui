@@ -118,12 +118,13 @@ const selectMode = (modeId) => {
   padding: 6.5px 16px;
   border: none;
   border-radius: 99px;
-  background: map-get($gray, white);
+
   cursor: pointer;
 
   &.national-selected {
     background: linear-gradient(90deg, #ABE1C6 0%, #D2E8DD 100%);
-
+    outline: 3px solid var(--Primary-Fade-200, #ABE1C6);
+    outline-offset: -3px;
   }
 
   &.policies-selected {
