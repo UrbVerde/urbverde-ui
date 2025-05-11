@@ -1,6 +1,8 @@
 <!-- urbverde-ui/src/components/side_bar/drop_down/ViewModeDropdown.vue -->
 <template>
+  <!-- Componente de dropdown para seleção de modo de visualização -->
   <div class="view-mode-container" ref="dropdownRef">
+    <!-- Botão que exibe o modo selecionado e alterna a visibilidade das opções -->
     <button class="view-mode-button"
             @click="toggleDropdown"
             :class="{
@@ -8,20 +10,25 @@
               'national-selected': selectedMode === 'map',
               'policies-selected': selectedMode === 'policies'
             }">
+      <!-- Ícone do modo selecionado -->
       <img v-if="selectedModeData.icon.includes('.png')"
            :src="selectedModeData.icon"
            class="view-mode-icon"
            alt="ícone" />
       <i v-else :class="['view-mode-icon', selectedModeData.icon]"></i>
+      <!-- Texto do modo selecionado -->
       <div class="view-mode-text-container">
         <span class="view-mode-title body-caption-regular">PAINEL</span>
         <span class="view-mode-text body-small-medium">{{ selectedModeData.label }}</span>
       </div>
+      <!-- Ícone de seta para indicar dropdown aberto/fechado -->
       <i class="bi view-mode-icon" :class="isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
     </button>
 
+    <!-- Transição para exibir/esconder opções de modo -->
     <Transition name="slide-fade">
       <div v-if="isOpen" class="view-mode-options">
+        <!-- Botões para cada modo de visualização disponível -->
         <button v-for="mode in viewModes"
                 :key="mode.id"
                 class="view-mode-option"
@@ -31,17 +38,20 @@
                   'policies-selected': mode.id === 'policies' && selectedMode === 'policies'
                 }"
                 @click="selectMode(mode.id)">
+          <!-- Ícone de seleção ou ícone do modo -->
           <i v-if="selectedMode === mode.id" class="bi bi-check2 view-mode-icon"></i>
           <img v-else-if="mode.icon.includes('.png')"
                :src="mode.icon"
                class="view-mode-icon"
                alt="ícone" />
           <i v-else :class="['view-mode-icon', mode.icon]"></i>
+          <!-- Texto descritivo do modo -->
           <div class="view-mode-option-text-container">
             <span class="view-mode-option-title body-small-regular">{{ mode.label }}</span>
             <span class="view-mode-option-text body-caption-medium">{{ mode.text }}</span>
           </div>
         </button>
+        <!-- Rodapé com link para mais detalhes -->
         <div class="view-mode-option-footer-container">
           <span class="view-mode-option-footer-text body-caption-medium">Ver mais detalhes dos painéis</span>
           <i class="bi bi-arrow-right view-mode-icon"></i>
@@ -53,11 +63,18 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useLocationStore } from '@/stores/locationStore';
 
+const locationStore = useLocationStore();
+
+// Estado para controlar se o dropdown está aberto
 const isOpen = ref(false);
-const selectedMode = ref('map');
+// Estado para armazenar o modo selecionado default
+const selectedMode = ref(locationStore.viewMode);
+// Referência para o elemento do dropdown
 const dropdownRef = ref(null);
 
+// Lista de modos de visualização disponíveis
 const viewModes = [
   {
     id: 'map',
@@ -73,14 +90,17 @@ const viewModes = [
   }
 ];
 
+// Computed para obter os dados do modo selecionado
 const selectedModeData = computed(() => viewModes.find(mode => mode.id === selectedMode.value) || viewModes[0]);
 
+// Função para fechar o dropdown ao clicar fora dele
 const handleClickOutside = (event) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
     isOpen.value = false;
   }
 };
 
+// Adiciona e remove o listener para cliques fora do dropdown
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 });
@@ -89,15 +109,16 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 
+// Alterna a visibilidade do dropdown
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 
+// Seleciona um modo e fecha o dropdown
 const selectMode = (modeId) => {
   selectedMode.value = modeId;
+  locationStore.setViewMode(modeId);
   isOpen.value = false;
-  // Aqui você pode emitir um evento para o componente pai
-  // emit('mode-changed', modeId);
 };
 </script>
 

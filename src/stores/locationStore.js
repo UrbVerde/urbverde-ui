@@ -22,6 +22,8 @@ export const useLocationStore = defineStore('locationStore', {
     // Loading states
     isLoadingCategories: false,
     error: null,
+
+    viewMode: 'map', // Adicionando viewMode ao estado
   }),
 
   getters: {
@@ -42,6 +44,7 @@ export const useLocationStore = defineStore('locationStore', {
       if (this.category) {params.category = this.category;}
       if (this.layer)   {params.layer = this.layer;}
       if (this.scale)   {params.scale = this.scale;}
+      if (this.viewMode) {params.viewMode = this.viewMode;}
 
       return params;
     },
@@ -191,6 +194,7 @@ export const useLocationStore = defineStore('locationStore', {
         category: query.category !== 'null' ? query.category : undefined,
         layer:  query.layer !== 'null'  ? query.layer : undefined,
         scale:  query.scale !== 'null'  ? query.scale : undefined,
+        viewMode: query.viewMode !== 'null' ? query.viewMode : undefined,
       };
 
       await this.setLocation(updates);
@@ -208,6 +212,10 @@ export const useLocationStore = defineStore('locationStore', {
           }
         }
       });
+    },
+
+    setViewMode(mode) {
+      this.viewMode = mode;
     },
   }
 });
