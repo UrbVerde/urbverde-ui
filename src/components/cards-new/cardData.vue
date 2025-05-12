@@ -67,9 +67,9 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import axios from 'axios';
-import CardBase from './cardBase.vue';
-import CardTitle from './cardTitle.vue';
-import NumberInsideCards from './numberInsideCards.vue';
+import CardBase from './cards-aux/cardBase.vue';
+import CardTitle from './cards-aux/cardTitle.vue';
+import NumberInsideCards from './cards-aux/numberInsideCards.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import { useCardData } from '@/utils/useCardData';
 
