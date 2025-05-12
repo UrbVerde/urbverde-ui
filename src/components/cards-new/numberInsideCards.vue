@@ -39,6 +39,7 @@ defineProps({
         justify-content: center;
         align-items: flex-start;
         gap: 8px;
+        height: 100%;
     }
 
     .value-container {
