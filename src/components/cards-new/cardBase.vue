@@ -3,6 +3,8 @@
     <div v-if="showInfoButton" class="info-button-wrapper" :class="{ 'show': showButton }">
       <div class="info-button"
            @click="openModal"
+           data-bs-toggle="tooltip"
+           data-bs-title="Saiba mais sobre o dado"
       >
         <i class="bi bi-info"></i>
       </div>
