@@ -65,14 +65,42 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import axios from 'axios';
 import CardBase from './cardBase.vue';
 import CardTitle from './cardTitle.vue';
 import NumberInsideCards from './numberInsideCards.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 
 const props = defineProps({
+  // API Configuration
+  apiEndpoint: {
+    type: String,
+    required: true
+  },
+  requiresYear: {
+    type: Boolean,
+    default: true
+  },
+  cardIndex: {
+    type: Number,
+    default: 0
+  },
+  cityCode: {
+    type: [Number, String],
+    required: true
+  },
+  year: {
+    type: [Number, String],
+    default: null
+  },
+  dataTransform: {
+    type: Function,
+    default: (data) => data
+  },
+
   // CardTitle Props
+
   showTitleSubtitle: {
     type: Boolean,
     default: false
@@ -85,11 +113,11 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  title: {
+  overrideTitle: { // Se ficar vazio, o title será buscado na API
     type: String,
-    required: true
+    default: ''
   },
-  titleSubtitle: {
+  overrideTitleSubtitle: { //Se ficar vazio, o subtitle será buscado na API
     type: String,
     default: ''
   },
@@ -103,7 +131,7 @@ const props = defineProps({
   },
 
   // numberInsideCards Props
-  numberValue: {
+  overrideNumberValue: { // Se ficar vazio, o value será buscado na API
     type: [Number, String],
     default: null
   },
@@ -137,28 +165,6 @@ const props = defineProps({
     default: null
   },
 
-  // API Props
-  apiUrl: {
-    type: String,
-    default: ''
-  },
-  cityCode: {
-    type: [Number, String],
-    required: true
-  },
-  selectedYear: {
-    type: [Number, String],
-    required: true
-  },
-  additionalParams: {
-    type: Object,
-    default: () => ({})
-  },
-  transformData: {
-    type: Function,
-    default: (data) => data
-  },
-
   // Modal Props
   showInfoButton: {
     type: Boolean,
@@ -177,60 +183,64 @@ const props = defineProps({
 // States
 const isLoading = ref(false);
 const error = ref(null);
-const apiData = ref(null);
+const cardData = ref(null);
 
-// Computed
-const isEmpty = computed(() => {
-  if (!apiData.value) {return true;}
-  if (Array.isArray(apiData.value)) {return apiData.value.length === 0;}
+// Computed properties for card display
+const title = computed(() => props.overrideTitle || cardData.value?.title || '');
+const titleSubtitle = computed(() => props.overrideTitleSubtitle || cardData.value?.subtitle || '');
+const numberValue = computed(() => props.overrideNumberValue || cardData.value?.value || '');
+const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.value);
 
-  return Object.keys(apiData.value).length === 0;
-});
-
-// Computed para combinar os parâmetros padrão com os adicionais
-const apiParams = computed(() => ({
-  city: props.cityCode,
-  year: props.selectedYear,
-  ...props.additionalParams
-}));
-
-// Methods
+// Fetch data from API
 const fetchData = async() => {
-  if (!props.apiUrl) {return;}
+  if (!props.apiEndpoint || !props.cityCode) {return;}
 
   isLoading.value = true;
   error.value = null;
 
   try {
-    const queryParams = new URLSearchParams(apiParams.value).toString();
-    const url = `${props.apiUrl}${queryParams ? `?${queryParams}` : ''}`;
+    const url = new URL(props.apiEndpoint);
+    url.searchParams.append('city', props.cityCode);
 
-    const response = await fetch(url);
-    if (!response.ok) {throw new Error();}
+    if (props.requiresYear && props.year) {
+      url.searchParams.append('year', props.year);
+    }
 
-    const data = await response.json();
-    apiData.value = props.transformData(data);
+    const response = await axios.get(url.toString());
+    const data = response.data;
+
+    if (Array.isArray(data) && data.length > 0) {
+      // Apply data transform if provided
+      const transformedData = props.dataTransform(data);
+
+      // Get the specific card data based on index
+      cardData.value = Array.isArray(transformedData)
+        ? transformedData[props.cardIndex]
+        : transformedData;
+    } else {
+      cardData.value = null;
+    }
   } catch (err) {
-    error.value = true;
-    console.error('Error fetching data:', err);
+    console.error('Error fetching card data:', err);
+    error.value = err;
+    cardData.value = null;
   } finally {
     isLoading.value = false;
   }
 };
 
-// Watch for API params changes
+// Watch for changes in props that should trigger a refetch
 watch(
-  () => apiParams.value,
-  () => fetchData(),
-  { deep: true, immediate: true }
+  [() => props.cityCode, () => props.year, () => props.apiEndpoint],
+  () => {
+    fetchData();
+  }
 );
 
-// Watch for API URL changes
-watch(
-  () => props.apiUrl,
-  () => fetchData(),
-  { immediate: true }
-);
+// Initial fetch
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <style scoped lang="scss">

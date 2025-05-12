@@ -6,8 +6,15 @@ import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection
 import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
 import SeeMoreSection from '@/components/cards/weather/seeMore/SeeMoreSection.vue';
+import CardTest from '@/components/cards-new/cardTest.vue';
 
 export default createSectionConfig((nm_mun, uf) => [
+  createSection({
+    id: 'test-cards',
+    ref: 'testCardsSection',
+    title: `Teste dos novos cards em ${nm_mun} - ${uf}`,
+    component: CardTest
+  }),
   createSection({
     id: 'stats',
     ref: 'statsSection',
