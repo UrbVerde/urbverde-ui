@@ -86,6 +86,37 @@ export const useLocationStore = defineStore('locationStore', {
                 ]
               },
               {
+                'id': 'parks',
+                'name': 'Parques e Praças',
+                'icon': 'Nature.svg',
+                'layers': [
+                  {
+                    'id': 'avg_distance_to_squares',
+                    'name': 'Distância media até as praças',
+                    'isActive': false,
+                    'isNew': false
+                  },
+                  {
+                    'id': 'square_area_per_capita',
+                    'name': 'Área de praças por habitante',
+                    'isActive': false,
+                    'isNew': false
+                  },
+                  {
+                    'id': 'square_served_area',
+                    'name': 'Área atendida pelas praças',
+                    'isActive': false,
+                    'isNew': false
+                  },
+                  {
+                    'id': 'served_population',
+                    'name': 'População atendida pelas praças',
+                    'isActive': false,
+                    'isNew': false
+                  }
+                ]
+              },
+              {
                 'id': 'vegetation',
                 'name': 'Vegetação',
                 'icon': 'Oak Tree.svg',
@@ -95,6 +126,36 @@ export const useLocationStore = defineStore('locationStore', {
                   { 'id': 'idsa', 'name': 'Desigualdade sociambiental (IDSA)', 'isActive': false, 'isNew': false },
                   { 'id': 'cvp', 'name': 'Cobertura vegetal por satélite', 'isActive': false, 'isNew': false },
                   { 'id': 'ndvi', 'name': 'Vigor da vegetação (NDVI)', 'isActive': false, 'isNew': false }
+                ]
+              },
+              {
+                'id': 'emissions',
+                'name': 'Emissões',
+                'icon': 'emissions.svg',
+                'layers': [
+                  { 'id': 'e1', 'name': 'generico 1', 'isActive': false, 'isNew': false },
+                  { 'id': 'e2', 'name': 'generico 2', 'isActive': false, 'isNew': false },
+                  { 'id': 'e3', 'name': 'generico 3', 'isActive': false, 'isNew': false }
+                ]
+              },
+              {
+                'id': 'hidro',
+                'name': 'Águas',
+                'icon': 'water.svg',
+                'layers': [
+                  { 'id': 'e1', 'name': 'generico 1', 'isActive': false, 'isNew': false },
+                  { 'id': 'e2', 'name': 'generico 2', 'isActive': false, 'isNew': false },
+                  { 'id': 'e3', 'name': 'generico 3', 'isActive': false, 'isNew': false }
+                ]
+              },
+              {
+                'id': 'agriculture',
+                'name': 'Agricultura urbana',
+                'icon': 'plant.svg',
+                'layers': [
+                  { 'id': 'e1', 'name': 'generico 1', 'isActive': false, 'isNew': false },
+                  { 'id': 'e2', 'name': 'generico 2', 'isActive': false, 'isNew': false },
+                  { 'id': 'e3', 'name': 'generico 3', 'isActive': false, 'isNew': false }
                 ]
               },
               {

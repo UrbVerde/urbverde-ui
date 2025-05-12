@@ -17,7 +17,8 @@
 
           <!-- Badge: aparece se há uma active layer, mas a categoria está fechada -->
           <div class="badge-right-menu"
-               v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)">
+               v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)"
+               :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
             <span class="textBadge body-caption-medium">1</span>
           </div>
 
@@ -31,13 +32,15 @@
           <ul class="layers-list">
             <li v-for="(layer) in category.layers"
                 :key="layer.id"
-                :class="['layer-item', { 'active-layer': layer.isActive }]"
+                :class="['layer-item', { 'active-layer': layer.isActive, 'map-mode': locationStore.viewMode === 'map', 'policies-mode': locationStore.viewMode === 'policies' }]"
                 @click="selectLayer(layer, category)">
               <span class="layer-name body-small-regular">
                 {{ layer.display_name || layer.title || layer.name }}
               </span>
 
-              <div class="new-layer-tag" v-if="layer.isNew">
+              <div class="new-layer-tag"
+                   v-if="layer.isNew"
+                   :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
                 <i class="bi bi-stars" id="imgIconNew"></i>
               </div>
             </li>
@@ -239,6 +242,10 @@ onMounted(() => {
     width: 22px;
     height: 22px;
     justify-content: center;
+
+    &.policies-mode {
+      background: map-get($yellow, 200);
+    }
   }
 
   .textBadge {
@@ -298,6 +305,15 @@ onMounted(() => {
   .active-layer {
     border-left: 3px solid map-get($theme, primary);
     background: map-get($primary-fade, 100);
+
+    &.map-mode {
+      border-left: 3px solid map-get($theme, primary);
+      background: map-get($primary-fade, 100);
+    }
+    &.policies-mode {
+      border-left: 3px solid map-get($yellow, 600);
+      background: map-get($yellow, 100);
+    }
   }
 
   .layer-name {
@@ -310,10 +326,15 @@ onMounted(() => {
     padding: 2px 8px;
     gap: 10px;
     border-radius: 4px;
-    color: map-get($theme, primary);
+
     background: map-get($primary-fade, 100);
     width: 22px;
     height: 22px;
     justify-content: center;
+
+    &.policies-mode {
+      color: map-get($theme, primary);
+      background: map-get($yellow, 300);
+    }
   }
 </style>
