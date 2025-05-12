@@ -39,7 +39,7 @@
         <slot v-else></slot>
 
         <div v-if="showCardSubtitle" class="subtitle-wrapper">
-          <p class="subtitle">{{ cardSubtitle }}</p>
+          <p class="subtitle body-small-regular">{{ cardSubtitle }}</p>
         </div>
       </template>
     </div>
@@ -201,12 +201,15 @@ watch(
 </script>
 
 <style scoped lang="scss">
+p {
+    margin: 0;
+}
+
 .content-wrapper {
     display: flex;
-    padding-bottom: 24px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 16px;
     align-self: stretch;
 }
 
@@ -220,12 +223,6 @@ watch(
 
 .subtitle {
     color: map-get($gray, 550);
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-    margin: 0;
 }
 
 .loading-state {

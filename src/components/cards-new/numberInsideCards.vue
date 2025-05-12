@@ -1,5 +1,5 @@
 <template>
-  <div class="number-wrapper" :class="{ 'composed': type === 'composed' }">
+  <div class="number-wrapper" :class="{ 'composed': type === 'composed', 'large': type === 'large' }">
     <div class="value-container">
       <span class="value">{{ value }}</span>
       <span class="unit" v-if="unit">{{ unit }}</span>
@@ -32,18 +32,21 @@ defineProps({
 
 <style scoped lang="scss">
 .number-wrapper {
+
     &.composed {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
-        gap: 12px;
+        gap: 8px;
     }
 
     .value-container {
         display: flex;
         align-items: baseline;
         gap: 4px;
+        flex-wrap: wrap;
+
     }
 
     .value, .unit {
@@ -62,23 +65,43 @@ defineProps({
     }
 
     .unit {
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: 600;
     }
 
     &.composed {
-        .value, .unit {
+        .value {
             font-size: 40px;
+        }
+
+        .unit {
+            font-size: 16px;
+            font-weight: 600;
         }
 
         .subtitle {
             color: map-get($green, 500);
-            text-align: center;
+            text-align: left;
             text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
             font-family: Montserrat;
             font-size: 24px;
             font-style: normal;
-            font-weight: 700;
+            font-weight: 600;
             line-height: 120%;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+    }
+
+    &.large {
+        .value {
+            font-size: 40px;
+        }
+
+        .unit {
+            font-size: 16px;
+            font-weight: 600;
         }
     }
 }
