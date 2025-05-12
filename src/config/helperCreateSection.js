@@ -2,7 +2,7 @@
 import { computed, h } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import CardData from '@/components/cards-new/cardData.vue';
-import Panel from '@/components/cards-new/panel-configure/SectionCards.vue';
+import Panel from '@/components/cards-new/panel-config/SectionCards.vue';
 
 /**
  * Cria uma configuração de seções com documentação padronizada
