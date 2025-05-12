@@ -3,8 +3,6 @@
   <div class="cards-container">
     <CardData
       apiEndpoint="https://api.urbverde.com.br/v1/cards/weather/temperature"
-      :cityCode="cityCode"
-      :year="selectedYear"
       :requiresYear="true"
       :cardIndex="0"
       :showInfoButton="true"
@@ -16,8 +14,6 @@
 
     <CardData
       apiEndpoint="https://api.urbverde.com.br/v1/cards/weather/temperature"
-      :cityCode="cityCode"
-      :year="selectedYear"
       :requiresYear="true"
       :cardIndex="1"
       :showInfoButton="true"

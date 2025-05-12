@@ -71,6 +71,7 @@ import CardBase from './cardBase.vue';
 import CardTitle from './cardTitle.vue';
 import NumberInsideCards from './numberInsideCards.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import { useCardData } from '@/utils/useCardData';
 
 const props = defineProps({
   // API Configuration
@@ -88,7 +89,7 @@ const props = defineProps({
   },
   cityCode: {
     type: [Number, String],
-    required: true
+    default: null
   },
   year: {
     type: [Number, String],
@@ -180,6 +181,13 @@ const props = defineProps({
   }
 });
 
+// Get injected values
+const { injectedCityCode, injectedSelectedYear } = useCardData();
+
+// Computed for actual values to use
+const actualCityCode = computed(() => props.cityCode ?? injectedCityCode.value);
+const actualYear = computed(() => props.year ?? injectedSelectedYear.value);
+
 // States
 const isLoading = ref(false);
 const error = ref(null);
@@ -193,17 +201,17 @@ const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.val
 
 // Fetch data from API
 const fetchData = async() => {
-  if (!props.apiEndpoint || !props.cityCode) {return;}
+  if (!props.apiEndpoint || !actualCityCode.value) {return;}
 
   isLoading.value = true;
   error.value = null;
 
   try {
     const url = new URL(props.apiEndpoint);
-    url.searchParams.append('city', props.cityCode);
+    url.searchParams.append('city', actualCityCode.value);
 
-    if (props.requiresYear && props.year) {
-      url.searchParams.append('year', props.year);
+    if (props.requiresYear && actualYear.value) {
+      url.searchParams.append('year', actualYear.value);
     }
 
     const response = await axios.get(url.toString());
@@ -231,7 +239,7 @@ const fetchData = async() => {
 
 // Watch for changes in props that should trigger a refetch
 watch(
-  [() => props.cityCode, () => props.year, () => props.apiEndpoint],
+  [() => actualCityCode.value, () => actualYear.value, () => props.apiEndpoint],
   () => {
     fetchData();
   }

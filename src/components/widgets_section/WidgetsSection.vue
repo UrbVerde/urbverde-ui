@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, provide } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import YearPicker from '@/components/cards/weather/YearPicker.vue';
 import { sectionConfigs, categoryToLayerMap, layerToCategoryMap, layerYearConfig } from '@/config';
@@ -85,6 +85,9 @@ export default {
       locationStore.cd_mun || props.cityCode
     );
 
+    // Provide the values for child components
+    provide('cityCode', computedCityCode);
+
     // Get layer year configuration
     const layerConfig = computed(() =>
       layerYearConfig[selectedLayer.value] || {}
@@ -102,6 +105,9 @@ export default {
 
     // Array to store selected years.
     const selectedYears = ref([]);
+
+    // Provide the selected year for the current section
+    provide('selectedYear', computed(() => selectedYears.value[0] || props.defaultYear));
 
     // Get sections for the selected layer
     const sections = computed(() => {
