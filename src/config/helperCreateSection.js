@@ -31,7 +31,7 @@ export const createSectionConfig = (configFn) =>
 
 function renderCard(cardConfig) {
   // Se for um componente direto (sem props)
-  if (typeof cardConfig === 'function' || (typeof cardConfig === 'object' && !cardConfig.type)) {
+  if (typeof cardConfig === 'function' || (typeof cardConfig === 'object' && !cardConfig.type && !cardConfig.component)) {
     return h(cardConfig);
   }
 
@@ -77,6 +77,7 @@ function renderPanel(panelConfig, isNested = false) {
  * @param {string} config.ref - Referência para o elemento
  * @param {string} config.title - Título da seção
  * @param {Component} [config.component] - Componente Vue a ser renderizado (formato antigo)
+ * @param {Object} [config.props] - Props para o componente (formato antigo)
  * @param {boolean} [config.isSeeMore] - Indica se é uma seção "Veja mais"
  * @param {Object} [config.panel] - Configuração do painel (formato novo)
  * @param {string} config.panel.variant - Variante do painel (ex: "3-1")
@@ -91,6 +92,18 @@ export const createSection = (config) => {
       component: {
         render() {
           return renderPanel(config.panel, false);
+        }
+      }
+    };
+  }
+
+  // Se tiver component com props
+  if (config.component && config.props) {
+    return {
+      ...config,
+      component: {
+        render() {
+          return h(config.component, config.props);
         }
       }
     };

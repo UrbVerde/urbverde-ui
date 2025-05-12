@@ -27,8 +27,15 @@ export default createSectionConfig((nm_mun, uf) => [
             modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.'
           }
         },
-        CardTest,
-        CardTest,
+        // Exemplo de CardTest com props
+        {
+          component: CardTest,
+          props: {
+            modalTitle: 'Card Teste com Props',
+            modalBodyText: 'Este é um exemplo de CardTest com props personalizadas!'
+          }
+        },
+        CardTest, // CardTest sem props (usará os valores padrão)
       ]
     }
   }),
@@ -41,7 +48,14 @@ export default createSectionConfig((nm_mun, uf) => [
     panel: {
       variant: '1-3',
       items: [
-        CardTest,
+        // Exemplo de CardTest com props
+        {
+          component: CardTest,
+          props: {
+            modalTitle: 'Card Teste no Painel Principal',
+            modalBodyText: 'Este é um CardTest no painel principal com props personalizadas!'
+          }
+        },
         {
           type: 'panel',
           props: {
@@ -57,7 +71,14 @@ export default createSectionConfig((nm_mun, uf) => [
                   modalBodyText: 'Descrição do card aninhado 1.'
                 }
               },
-              CardTest
+              // Exemplo de CardTest com props em painel aninhado
+              {
+                component: CardTest,
+                props: {
+                  modalTitle: 'Card Teste Aninhado',
+                  modalBodyText: 'Este é um CardTest em um painel aninhado com props personalizadas!'
+                }
+              }
             ]
           }
         },
@@ -76,7 +97,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   modalBodyText: 'Descrição do card aninhado 1.'
                 }
               },
-              CardTest
+              CardTest // CardTest sem props (usará os valores padrão)
             ]
           }
         }
@@ -89,7 +110,11 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'test-cards',
     ref: 'testCardsSection',
     title: `Teste dos novos cards em ${nm_mun} - ${uf}`,
-    component: CardTest
+    component: CardTest,
+    props: {
+      modalTitle: 'Card Teste com Props',
+      modalBodyText: 'Este é um exemplo de CardTest com props personalizadas!'
+    }
   }),
   createSection({
     id: 'stats',
