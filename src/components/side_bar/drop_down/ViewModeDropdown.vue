@@ -62,15 +62,34 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
+import { useRoute } from 'vue-router';
 
 const locationStore = useLocationStore();
+const route = useRoute();
 
 // Estado para controlar se o dropdown está aberto
 const isOpen = ref(false);
 // Estado para armazenar o modo selecionado default
-const selectedMode = ref(locationStore.viewMode);
+const selectedMode = ref('map');
+
+// Verifica se há um modo de visualização na URL
+watch(() => route.query.viewMode, (newViewMode) => {
+  if (newViewMode) {
+    selectedMode.value = newViewMode;
+    locationStore.setViewMode(newViewMode);
+    setTimeout(() => {
+      locationStore.fetchCategories(); // Atualiza as categorias com delay
+    }, 500); // Delay de 500ms
+  }
+}, { immediate: true });
+
+// Retorna o modo para 'map' quando o componente é destruído
+onUnmounted(() => {
+  locationStore.setViewMode('map');
+});
+
 // Referência para o elemento do dropdown
 const dropdownRef = ref(null);
 

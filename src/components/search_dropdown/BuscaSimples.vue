@@ -867,6 +867,16 @@ function emitLocationUpdate(payload) {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
 
+    outline: 1px solid map-get($green, 500);
+
+    &.map-mode {
+      outline: 1px solid map-get($theme, primary);
+    }
+
+    &.policies-mode {
+      outline: 1px solid map-get($yellow, 600);
+    }
+
 }
 
 .input-container-dropdown {
@@ -1188,15 +1198,9 @@ function emitLocationUpdate(payload) {
   outline-offset: -3px;
 }
 
-@include breakpoint-down('tablet') {
-  .input-container {
-    &.map-mode {
-      outline: 1px solid map-get($theme, primary);
-    }
-
-    &.policies-mode {
-      outline: 1px solid map-get($yellow, 600);
+  @include breakpoint-down('tablet') {
+    .input-container {
+      outline: 1px solid map-get($green, 500);
     }
   }
-}
 </style>
