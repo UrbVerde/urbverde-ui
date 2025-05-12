@@ -1,5 +1,9 @@
 <template>
-  <CardBase>
+  <CardBase
+    :showInfoButton="showInfoButton"
+    :modalTitle="modalTitle"
+    :modalBodyText="modalBodyText"
+  >
     <CardTitle
       :title="title"
       :subtitle="titleSubtitle"
@@ -153,6 +157,20 @@ const props = defineProps({
   transformData: {
     type: Function,
     default: (data) => data
+  },
+
+  // Modal Props
+  showInfoButton: {
+    type: Boolean,
+    default: false
+  },
+  modalTitle: {
+    type: String,
+    default: 'Informações'
+  },
+  modalBodyText: {
+    type: String,
+    default: ''
   }
 });
 
