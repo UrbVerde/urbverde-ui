@@ -334,7 +334,7 @@ onMounted(() => {
 
     &.policies-mode {
       color: map-get($theme, primary);
-      background: map-get($yellow, 300);
+      background: map-get($yellow, 200);
     }
   }
 </style>
