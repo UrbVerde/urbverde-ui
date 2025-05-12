@@ -2,6 +2,7 @@
 import { computed, h } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import CardData from '@/components/cards-new/cardData.vue';
+import CardTest from '@/components/cards-new/cardTest.vue';
 import Panel from '@/components/cards-new/panel-config/SectionCards.vue';
 
 /**
@@ -28,17 +29,43 @@ export const createSectionConfig = (configFn) =>
   }
 ;
 
+function renderCard(cardConfig) {
+  // Se for um componente direto (sem props)
+  if (typeof cardConfig === 'function' || (typeof cardConfig === 'object' && !cardConfig.type)) {
+    return h(cardConfig);
+  }
+
+  // Se tiver component com props
+  if (cardConfig.component) {
+    return h(cardConfig.component, cardConfig.props || {});
+  }
+
+  // Caso contrário, usa o formato type/props
+  const { type, props } = cardConfig;
+
+  switch (type) {
+  case 'cardData':
+    return h(CardData, props);
+  case 'cardTest':
+    return h(CardTest, props);
+  default:
+    console.warn(`Unknown card type: ${type}`);
+
+    return null;
+  }
+}
+
 function renderPanel(panelConfig, isNested = false) {
   return h(Panel,
     { variant: panelConfig.variant, nested: isNested },
-    () => panelConfig.cards.map((cardConfig, index) => {
-      if (cardConfig.panel) {
+    () => panelConfig.items.map((item) => {
+      if (item.type === 'panel') {
         // Renderiza um único Panel para o painel aninhado
-        return renderPanel(cardConfig.panel, true);
+        return renderPanel(item.props, true);
       }
 
-      // Renderiza um único CardData
-      return h(CardData, { ...cardConfig, key: index });
+      // Renderiza o card apropriado baseado no tipo ou componente
+      return renderCard(item);
     })
   );
 }
@@ -53,7 +80,7 @@ function renderPanel(panelConfig, isNested = false) {
  * @param {boolean} [config.isSeeMore] - Indica se é uma seção "Veja mais"
  * @param {Object} [config.panel] - Configuração do painel (formato novo)
  * @param {string} config.panel.variant - Variante do painel (ex: "3-1")
- * @param {Array} config.panel.cards - Array de configurações de cards
+ * @param {Array} config.panel.items - Array de configurações de itens (cards ou painéis)
  * @returns {Object} Configuração da seção
  */
 export const createSection = (config) => {

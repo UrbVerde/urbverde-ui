@@ -9,93 +9,74 @@ import SeeMoreSection from '@/components/cards/weather/seeMore/SeeMoreSection.vu
 import CardTest from '@/components/cards-new/cardTest.vue';
 
 export default createSectionConfig((nm_mun, uf) => [
-  // Exemplo do novo formato usando Panel
+  // Exemplo do novo formato usando Panel com diferentes tipos de cards
   createSection({
     id: 'new-test-cards',
     ref: 'newTestCardsSection',
     title: `Novo formato de cards em ${nm_mun} - ${uf}`,
     panel: {
-      variant: '3-1',
-      cards: [
+      variant: '1-3',
+      items: [
         {
-          apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-          cardIndex: 0,
-          showInfoButton: true,
-          modalTitle: 'Nível de ilha de calor',
-          modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.'
+          type: 'cardData',
+          props: {
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+            cardIndex: 0,
+            showInfoButton: true,
+            modalTitle: 'Nível de ilha de calor',
+            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.'
+          }
         },
-        {
-          apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-          cardIndex: 1,
-          showInfoButton: true,
-          modalTitle: 'Temperatura média da superfície',
-          modalBodyText: 'A temperatura média da superfície representa a média das temperaturas registradas em diferentes pontos da cidade.'
-        },
-        {
-          apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-          cardIndex: 2,
-          showInfoButton: true,
-          modalTitle: 'Temperatura média da superfície',
-          modalBodyText: 'A temperatura média da superfície representa a média das temperaturas registradas em diferentes pontos da cidade.'
-        }
+        CardTest,
+        CardTest,
       ]
     }
   }),
 
-  // Exemplo do novo formato com painel aninhado
+  // Exemplo do novo formato com painel aninhado e diferentes tipos de cards
   createSection({
     id: 'nested-panel-cards',
     ref: 'nestedPanelCardsSection',
     title: `Cards com painel aninhado em ${nm_mun} - ${uf}`,
     panel: {
       variant: '1-3',
-      cards: [
+      items: [
+        CardTest,
         {
-          apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-          cardIndex: 0,
-          showInfoButton: true,
-          modalTitle: 'Primeiro card',
-          modalBodyText: 'Descrição do primeiro card.'
-        },
-        {
-          panel: {
+          type: 'panel',
+          props: {
             variant: '2-1',
-            cards: [
+            items: [
               {
-                apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                cardIndex: 1,
-                showInfoButton: true,
-                modalTitle: 'Card aninhado 1',
-                modalBodyText: 'Descrição do card aninhado 1.'
+                type: 'cardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  cardIndex: 1,
+                  showInfoButton: true,
+                  modalTitle: 'Card aninhado 1',
+                  modalBodyText: 'Descrição do card aninhado 1.'
+                }
               },
-              {
-                apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                cardIndex: 2,
-                showInfoButton: true,
-                modalTitle: 'Card aninhado 2',
-                modalBodyText: 'Descrição do card aninhado 2.'
-              }
+              CardTest
             ]
           }
         },
         {
-          panel: {
+          type: 'panel',
+          props: {
             variant: '2-1',
-            cards: [
+            items: [
               {
-                apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                cardIndex: 1,
-                showInfoButton: true,
-                modalTitle: 'Card aninhado 3',
-                modalBodyText: 'Descrição do card aninhado 3.'
+                type: 'cardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  cardIndex: 1,
+                  showInfoButton: true,
+                  modalTitle: 'Card aninhado 1',
+                  modalBodyText: 'Descrição do card aninhado 1.'
+                }
               },
-              {
-                apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                cardIndex: 2,
-                showInfoButton: true,
-                modalTitle: 'Card aninhado 4',
-                modalBodyText: 'Descrição do card aninhado 4.'
-              }
+              CardTest
             ]
           }
         }
