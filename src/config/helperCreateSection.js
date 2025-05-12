@@ -1,9 +1,15 @@
 // urbverde-ui/src/config/helperCreateSection.js
 import { computed, h } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-import CardData from '@/components/cards-new/cardData.vue';
-import CardTest from '@/components/cards-new/cardTest.vue';
 import Panel from '@/components/cards-new/panel-config/SectionCards.vue';
+
+// Importação centralizada dos componentes comuns entre os .js
+import CardData from '@/components/cards-new/cardData.vue';
+
+// Mapa de componentes para facilitar o acesso
+const COMMON_COMPONENTS = {
+  CardData
+};
 
 /**
  * Cria uma configuração de seções com documentação padronizada
@@ -29,30 +35,46 @@ export const createSectionConfig = (configFn) =>
   }
 ;
 
+function getComponent(component) {
+  // Se for uma string, tenta pegar do mapa de componentes comuns
+  if (typeof component === 'string') {
+    const commonComponent = COMMON_COMPONENTS[component];
+    if (commonComponent) {
+      return commonComponent;
+    }
+    console.warn(`Common component not found: ${component}`);
+
+    return null;
+  }
+
+  // Se não for string, tenta usar o componente diretamente
+  if (typeof component === 'function' || (typeof component === 'object' && component.render)) {
+    return component;
+  }
+
+  console.warn('Invalid component:', component);
+
+  return null;
+}
+
 function renderCard(cardConfig) {
   // Se for um componente direto (sem props)
-  if (typeof cardConfig === 'function' || (typeof cardConfig === 'object' && !cardConfig.type && !cardConfig.component)) {
-    return h(cardConfig);
+  if (typeof cardConfig === 'function' || (typeof cardConfig === 'object' && !cardConfig.component)) {
+    const component = getComponent(cardConfig);
+    if (!component) {return null;}
+
+    return h(component);
   }
 
   // Se tiver component com props
   if (cardConfig.component) {
-    return h(cardConfig.component, cardConfig.props || {});
+    const component = getComponent(cardConfig.component);
+    if (!component) {return null;}
+
+    return h(component, cardConfig.props || {});
   }
 
-  // Caso contrário, usa o formato type/props
-  const { type, props } = cardConfig;
-
-  switch (type) {
-  case 'cardData':
-    return h(CardData, props);
-  case 'cardTest':
-    return h(CardTest, props);
-  default:
-    console.warn(`Unknown card type: ${type}`);
-
-    return null;
-  }
+  return null;
 }
 
 function renderPanel(panelConfig, isNested = false) {
@@ -76,10 +98,10 @@ function renderPanel(panelConfig, isNested = false) {
  * @param {string} config.id - ID da seção
  * @param {string} config.ref - Referência para o elemento
  * @param {string} config.title - Título da seção
- * @param {Component} [config.component] - Componente Vue a ser renderizado (formato antigo)
- * @param {Object} [config.props] - Props para o componente (formato antigo)
+ * @param {Component|string} [config.component] - Componente Vue a ser renderizado ou nome do componente comum
+ * @param {Object} [config.props] - Props para o componente
  * @param {boolean} [config.isSeeMore] - Indica se é uma seção "Veja mais"
- * @param {Object} [config.panel] - Configuração do painel (formato novo)
+ * @param {Object} [config.panel] - Configuração do painel
  * @param {string} config.panel.variant - Variante do painel (ex: "3-1")
  * @param {Array} config.panel.items - Array de configurações de itens (cards ou painéis)
  * @returns {Object} Configuração da seção
@@ -103,7 +125,10 @@ export const createSection = (config) => {
       ...config,
       component: {
         render() {
-          return h(config.component, config.props);
+          const component = getComponent(config.component);
+          if (!component) {return null;}
+
+          return h(component, config.props);
         }
       }
     };

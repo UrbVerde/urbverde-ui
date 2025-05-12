@@ -18,7 +18,7 @@ export default createSectionConfig((nm_mun, uf) => [
       variant: '1-3',
       items: [
         {
-          type: 'cardData',
+          component: 'CardData',
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
             cardIndex: 0,
@@ -35,7 +35,7 @@ export default createSectionConfig((nm_mun, uf) => [
             modalBodyText: 'Este é um exemplo de CardTest com props personalizadas!'
           }
         },
-        CardTest, // CardTest sem props (usará os valores padrão)
+        CardTest,
       ]
     }
   }),
@@ -62,7 +62,7 @@ export default createSectionConfig((nm_mun, uf) => [
             variant: '2-1',
             items: [
               {
-                type: 'cardData',
+                component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 1,
@@ -88,7 +88,7 @@ export default createSectionConfig((nm_mun, uf) => [
             variant: '2-1',
             items: [
               {
-                type: 'cardData',
+                component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 1,
