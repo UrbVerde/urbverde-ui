@@ -47,12 +47,16 @@
               {{ item.type }}
             </div>
             <div class="rank-card-section-value">
-              <span class="rank-card-number" :class="rankingClass(item)">
-                {{ item.number }}</span>
-              <span class="rank-card-separator"> de </span>
-              <span class="rank-card-total">{{ item.of }}</span>
+              <NumberInsideCards
+                type="small"
+                :value="`${item.number}º`"
+                :unit="`de ${item.of}`"
+              />
             </div>
           </div>
+          <!-- <div>
+            <p class="subtitle body-small-regular">O 1º lugar é a melhor posição</p>
+          </div> -->
         </div>
       </template>
     </div>
@@ -65,6 +69,7 @@ import axios from 'axios';
 import CardBase from './cards-aux/cardBase.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import { useCardData } from '@/utils/useCardData';
+import NumberInsideCards from './cards-aux/numberInsideCards.vue';
 
 const props = defineProps({
   // API Configuration
@@ -122,18 +127,6 @@ const cardData = ref(null);
 
 // Computed properties
 const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.value);
-
-// Methods
-const rankingClass = (item) => {
-  const percentile = (item.number / item.of) * 100;
-  if (percentile <= 25) {
-    return 'group-top';
-  } else if (percentile <= 75) {
-    return 'group-middle';
-  } else {
-    return 'group-bottom';
-  }
-};
 
 // Fetch data from API
 const fetchData = async() => {
@@ -218,8 +211,8 @@ p {
 .rank-card-header {
   display: flex;
   flex-direction: column;
-  padding: 0 24px 16px 32px;
-  gap: 12px;
+  padding: 0;
+  gap: 8px;
   align-self: stretch;
 }
 
@@ -239,9 +232,13 @@ p {
   align-self: stretch
 }
 
+.subtitle {
+  color: map-get($gray, 550);
+}
+
 .rank-card-sections {
   display: flex;
-  padding: 16px 32px 40px 32px;
+  padding-top: 32px;
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;
@@ -306,19 +303,6 @@ p {
   font-style: normal;
   font-weight: 700;
   line-height: 120%;
-}
-
-/* Color classes for the three ranking groups */
-.group-top {
-  color: #198754;
-}
-
-.group-middle {
-  color: #198754;
-}
-
-.group-bottom {
-  color: #198754;
 }
 
 /* Loading, Error and Empty States */
