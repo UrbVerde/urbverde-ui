@@ -169,7 +169,7 @@ const props = defineProps({
   // Card Subtitle Props
   showCardSubtitle: {
     type: Boolean,
-    default: true
+    default: false
   },
   cardSubtitle: {
     type: String,

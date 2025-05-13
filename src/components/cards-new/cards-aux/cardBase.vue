@@ -75,7 +75,7 @@ onMounted(() => {
       }
     });
   }, {
-    rootMargin: '50px 0px',
+    rootMargin: '-75px 0px',
     threshold: 0.1
   });
 
