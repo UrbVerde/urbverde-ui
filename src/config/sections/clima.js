@@ -7,6 +7,7 @@ import RankSection from '@/components/cards/weather/ranking/RankSection.vue';
 import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
 import SeeMoreSection from '@/components/cards/weather/seeMore/SeeMoreSection.vue';
 import CardTest from '@/components/cards-new/cardTest.vue';
+import cardRanking from '@/components/cards-new/cardRanking.vue';
 
 export default createSectionConfig((nm_mun, uf) => [
   // Exemplo do novo formato usando Panel com diferentes tipos de cards
@@ -50,10 +51,13 @@ export default createSectionConfig((nm_mun, uf) => [
       items: [
         // Exemplo de CardTest com props
         {
-          component: CardTest,
+          component: 'CardData',
           props: {
-            modalTitle: 'Card Teste no Painel Principal',
-            modalBodyText: 'Este é um CardTest no painel principal com props personalizadas!'
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+            cardIndex: 0,
+            showInfoButton: true,
+            modalTitle: 'Nível de ilha de calor',
+            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.'
           }
         },
         {
@@ -139,6 +143,20 @@ export default createSectionConfig((nm_mun, uf) => [
     ref: 'rankingSection',
     title: `${nm_mun} - ${uf} nos rankings de municípios`,
     component: RankSection
+  }),
+  createSection({
+    id: 'ranking',
+    ref: 'rankingSection',
+    title: `${nm_mun} - ${uf} nos rankings de municípios`,
+    component: cardRanking,
+    props: {
+      apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+      requiresYear: true,
+      showInfoButton: true,
+      modalTitle: 'Informações do Clima',
+      modalBodyText: 'Informações sobre o ranking climático...',
+      rankingIndex: 0
+    }
   }),
   createSection({
     id: 'seeMore',
