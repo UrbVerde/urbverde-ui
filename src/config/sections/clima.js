@@ -176,8 +176,8 @@ export default createSectionConfig((nm_mun, uf) => [
       apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
       cardIndex: 0,
       showButtonPrimary: true,
-      layerCategory: 'Clima',
-      layerId: 'heat_island',
+      changeToCategory: 'Clima',
+      changeToLayerId: 'heat_island',
       overrideTitle:'teste'
     }
   })

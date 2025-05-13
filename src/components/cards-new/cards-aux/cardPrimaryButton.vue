@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards-new/cards-aux/cardPrimaryButton.vue -->
 <template>
-  <div class="button-container">
+  <div class="button-wrapper">
     <PrimaryButton
       label="Ver no Mapa"
       :filled="false"
@@ -28,11 +28,11 @@ export default {
       type: Number,
       required: true
     },
-    category: {
+    changeToCategory: {
       type: String,
       required: true
     },
-    layerId: {
+    changeToLayerId: {
       type: String,
       required: true
     },
@@ -80,10 +80,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.button-container {
+.button-wrapper {
   display: flex;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 0px !important;
 }
 
 :deep(.primary-button) {

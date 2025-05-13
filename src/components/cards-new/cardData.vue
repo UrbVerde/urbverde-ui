@@ -64,7 +64,7 @@
         </div>
 
         <!-- Primary Button -->
-        <div v-if="showButtonPrimary" class="button-container">
+        <div v-if="showButtonPrimary" class="button-wrapper">
           <CardPrimaryButton
             :cityCode="actualCityCode"
             :category="layerCategory"
@@ -201,11 +201,11 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  layerCategory: {
+  changeToCategory: {
     type: String,
     default: ''
   },
-  layerId: {
+  changeToLayerId: {
     type: String,
     default: ''
   }
@@ -419,6 +419,12 @@ p {
     width: auto;
     margin: auto;
     border: none;
+}
+
+.button-wrapper {
+    display: flex;
+    width: 100%;
+    margin-top: 0px !important;
 }
 
 @keyframes spin {
