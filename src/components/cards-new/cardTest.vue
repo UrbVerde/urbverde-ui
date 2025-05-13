@@ -7,6 +7,7 @@
       :showInfoButton="true"
       :modalTitle="modalTitle"
       :modalBodyText="modalBodyText"
+      :year= null
     />
   </div>
 </template>

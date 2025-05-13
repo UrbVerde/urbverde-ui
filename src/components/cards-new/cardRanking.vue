@@ -174,13 +174,28 @@ const fetchData = async() => {
 watch(
   [() => actualCityCode.value, () => actualYear.value, () => props.apiEndpoint],
   () => {
+    console.log('Refetching data due to change in:', {
+      cityCode: actualCityCode.value,
+      year: actualYear.value,
+      endpoint: props.apiEndpoint
+    });
     fetchData();
   },
   { immediate: false }
 );
 
+// Watch specifically for year changes
+watch(
+  () => actualYear.value,
+  (newYear) => {
+    console.log('Year changed to:', newYear);
+    fetchData();
+  }
+);
+
 // Initial fetch
 onMounted(() => {
+  console.log('Initial fetch with year:', actualYear.value);
   fetchData();
 });
 </script>

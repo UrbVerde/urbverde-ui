@@ -25,7 +25,7 @@ export default createSectionConfig((nm_mun, uf) => [
             cardIndex: 0,
             showInfoButton: true,
             modalTitle: 'Nível de ilha de calor',
-            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.'
+            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
           }
         },
         // Exemplo de CardTest com props
@@ -57,7 +57,7 @@ export default createSectionConfig((nm_mun, uf) => [
             cardIndex: 0,
             showInfoButton: true,
             modalTitle: 'Nível de ilha de calor',
-            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.'
+            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
           }
         },
         {
@@ -72,7 +72,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardIndex: 1,
                   showInfoButton: true,
                   modalTitle: 'Card aninhado 1',
-                  modalBodyText: 'Descrição do card aninhado 1.'
+                  modalBodyText: 'Descrição do card aninhado 1.',
                 }
               },
               // Exemplo de CardTest com props em painel aninhado
@@ -98,7 +98,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardIndex: 1,
                   showInfoButton: true,
                   modalTitle: 'Card aninhado 1',
-                  modalBodyText: 'Descrição do card aninhado 1.'
+                  modalBodyText: 'Descrição do card aninhado 1.',
+                  year: null
                 }
               },
               CardTest // CardTest sem props (usará os valores padrão)
@@ -155,7 +156,8 @@ export default createSectionConfig((nm_mun, uf) => [
       showInfoButton: true,
       modalTitle: 'Informações do Clima',
       modalBodyText: 'Informações sobre o ranking climático...',
-      rankingIndex: 0
+      rankingIndex: 0,
+      year: null
     }
   }),
   createSection({

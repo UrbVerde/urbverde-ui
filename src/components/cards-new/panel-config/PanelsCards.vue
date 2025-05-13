@@ -36,6 +36,7 @@
         :is="section.component"
         :city-code="computedCityCode"
         :selected-year="selectedYears[index]"
+        :year="selectedYears[index]"
         :layer="selectedLayer"
         @change-layer="changeLayer"
       />
