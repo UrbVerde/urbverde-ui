@@ -35,12 +35,15 @@
             <img src="@/assets/images/cards/error-info.svg" alt="Information Not Found" class="empty-image" />
             <span class="empty-message body-small-regular">Ops, ainda não temos esses dados!</span>
           </div>
-          <PrimaryButton
-            label="Colaborar com dados"
-            :filled="false"
-            icon="bi bi-arrow-right"
-            iconPosition="right"
-          />
+          <div class="empty-button-container">
+            <PrimaryButton
+              class="empty-button"
+              label="Colaborar com dados"
+              :filled="false"
+              icon="bi bi-arrow-right"
+              iconPosition="right"
+            />
+          </div>
         </div>
       </div>
 
@@ -59,6 +62,16 @@
         <div v-if="showCardSubtitle" class="subtitle-wrapper">
           <p class="subtitle body-small-regular">{{ cardSubtitle }}</p>
         </div>
+
+        <!-- Primary Button -->
+        <div v-if="showButtonPrimary" class="button-container">
+          <CardPrimaryButton
+            :cityCode="actualCityCode"
+            :category="layerCategory"
+            :layerId="layerId"
+            :layerTitle="title"
+          />
+        </div>
       </template>
     </div>
   </CardBase>
@@ -70,11 +83,14 @@ import axios from 'axios';
 import CardBase from './cards-aux/cardBase.vue';
 import CardTitle from './cards-aux/cardTitle.vue';
 import NumberInsideCards from './cards-aux/numberInsideCards.vue';
+import CardPrimaryButton from './cards-aux/cardPrimaryButton.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import { useCardData } from '@/utils/useCardData';
 
 const props = defineProps({
+
   // API Configuration
+
   apiEndpoint: {
     type: String,
     required: true
@@ -178,6 +194,20 @@ const props = defineProps({
   modalBodyText: {
     type: String,
     default: ''
+  },
+
+  // Primary Button Props
+  showButtonPrimary: {
+    type: Boolean,
+    default: false
+  },
+  layerCategory: {
+    type: String,
+    default: ''
+  },
+  layerId: {
+    type: String,
+    default: ''
   }
 });
 
@@ -241,12 +271,28 @@ const fetchData = async() => {
 watch(
   [() => actualCityCode.value, () => actualYear.value, () => props.apiEndpoint],
   () => {
+    console.log('Refetching data due to change in:', {
+      cityCode: actualCityCode.value,
+      year: actualYear.value,
+      endpoint: props.apiEndpoint
+    });
+    fetchData();
+  },
+  { immediate: false }
+);
+
+// Watch specifically for year changes
+watch(
+  () => actualYear.value,
+  (newYear) => {
+    console.log('Year changed to:', newYear);
     fetchData();
   }
 );
 
 // Initial fetch
 onMounted(() => {
+  console.log('Initial fetch with year:', actualYear.value);
   fetchData();
 });
 </script>
@@ -274,6 +320,12 @@ p {
 
 .subtitle {
     color: map-get($gray, 550);
+}
+
+.button-container {
+    display: flex;
+    width: 100%;
+    margin-top: 16px;
 }
 
 .loading-state {
@@ -356,11 +408,18 @@ p {
     line-height: 150%;
 }
 
-:deep(.primary-button) {
+.empty-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.empty-button-container :deep(.primary-button) {
     width: auto;
     margin: auto;
     border: none;
-  }
+}
 
 @keyframes spin {
     to { transform: rotate(360deg); }

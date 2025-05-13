@@ -166,5 +166,19 @@ export default createSectionConfig((nm_mun, uf) => [
     title: 'Veja mais sobre sua cidade!',
     component: SeeMoreSection,
     isSeeMore: true
+  }),
+  createSection({
+    id: 'seeMore',
+    ref: 'seeMoreSection',
+    title: 'Veja mais sobre sua cidade!',
+    component: 'CardData',
+    props: {
+      apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+      cardIndex: 0,
+      showButtonPrimary: true,
+      layerCategory: 'Clima',
+      layerId: 'heat_island',
+      overrideTitle:'teste'
+    }
   })
 ]);
