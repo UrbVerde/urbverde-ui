@@ -1,15 +1,20 @@
 <template>
-  <div class="small-shadow card-base" @mouseenter="showButton = true" @mouseleave="showButton = false">
-    <div v-if="showInfoButton" class="info-button-wrapper" :class="{ 'show': showButton }">
-      <div class="info-button"
-           @click="openModal"
-           data-bs-toggle="tooltip"
-           data-bs-title="Saiba mais sobre o dado"
-      >
-        <i class="bi bi-info"></i>
+  <div class="card-wrapper" ref="cardWrapper">
+    <div v-if="isVisible"
+         class="small-shadow card-base"
+         @mouseenter="showButton = true"
+         @mouseleave="showButton = false">
+      <div v-if="showInfoButton" class="info-button-wrapper" :class="{ 'show': showButton }">
+        <div class="info-button"
+             @click="openModal"
+             data-bs-toggle="tooltip"
+             data-bs-title="Saiba mais sobre o dado"
+        >
+          <i class="bi bi-info"></i>
+        </div>
       </div>
+      <slot></slot>
     </div>
-    <slot></slot>
   </div>
 
   <modalBootstrap
@@ -24,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import modalBootstrap from '@/components/modal/modalBootstrap.vue';
 
 defineProps({
@@ -48,6 +53,8 @@ defineProps({
 
 const showButton = ref(false);
 const modalRef = ref(null);
+const cardWrapper = ref(null);
+const isVisible = ref(false);
 const uniqueModalId = ref(`modalCard-${Date.now()}-${Math.random().toString(36)
   .substr(2, 9)}`);
 
@@ -56,9 +63,40 @@ const openModal = () => {
     modalRef.value.show();
   }
 };
+
+let observer = null;
+
+onMounted(() => {
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        isVisible.value = true;
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin: '50px 0px',
+    threshold: 0.1
+  });
+
+  if (cardWrapper.value) {
+    observer.observe(cardWrapper.value);
+  }
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
 </script>
 
 <style scoped lang="scss">
+.card-wrapper {
+    min-height: 100px;
+    width: 100%;
+}
+
 .card-base {
     display: flex;
     padding: 24px;
@@ -73,6 +111,18 @@ const openModal = () => {
     height: 100%;
     box-sizing: border-box;
     position: relative;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .info-button-wrapper {
