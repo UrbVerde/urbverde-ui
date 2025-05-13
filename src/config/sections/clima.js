@@ -8,8 +8,59 @@ import HeatSection from '@/components/cards/weather/heat/HeatSection.vue';
 import SeeMoreSection from '@/components/cards/weather/seeMore/SeeMoreSection.vue';
 import CardTest from '@/components/cards-new/cardTest.vue';
 import cardRanking from '@/components/cards-new/cardRanking.vue';
+import CardInfo from '@/components/cards-new/cardInfo.vue';
 
 export default createSectionConfig((nm_mun, uf) => [
+  // Test section for CardInfo
+  createSection({
+    id: 'card-info-test',
+    ref: 'cardInfoTestSection',
+    title: `Teste do CardInfo em ${nm_mun} - ${uf}`,
+    panel: {
+      variant: '1-2',
+      items: [
+        {
+          component: CardInfo,
+          props: {
+            showMidia: true,
+            midiaType: 'image',
+            midiaLink: 'https://picsum.photos/400/300',
+            midiaPosition: 'bottom',
+            title: 'Título do Card',
+            subtitle: 'Subtítulo do Card',
+            showSubtitle: false,
+            type: 'paragraph-left',
+            paragraphText: 'Este é um exemplo de texto para testar o CardInfo com diferentes configurações.',
+            showPrimaryButton: true,
+            buttonLabel: 'Saiba mais',
+            buttonIcon: 'bi bi-arrow-right',
+            showInfoButton: true,
+            modalTitle: 'Informações do Card',
+            modalBodyText: 'Este é um card de teste para demonstrar as funcionalidades do CardInfo.'
+          }
+        },
+        {
+          component: CardInfo,
+          props: {
+            showMidia: true,
+            midiaType: 'image',
+            midiaLink: 'https://picsum.photos/400/300',
+            midiaPosition: 'right',
+            title: 'Card com Mídia à Esquerda',
+            type: 'paragraph-left',
+            paragraphText: 'Este é um exemplo de texto para testar o CardInfo com diferentes configurações.',
+            showPrimaryButton: true,
+            buttonLabel: 'Saiba mais',
+            buttonIcon: 'bi bi-arrow-right',
+            showInfoButton: true,
+            modalTitle: 'Informações da Lista',
+            modalBodyText: 'Este card demonstra o uso de lista com mídia à esquerda.'
+          }
+        },
+      ]
+    }
+  }),
+
   // Exemplo do novo formato usando Panel com diferentes tipos de cards
   createSection({
     id: 'new-test-cards',

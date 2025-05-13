@@ -88,14 +88,16 @@ export default {
 .midia-wrapper {
   display: flex;
   padding: 16px 24px;
+  width: 100%;
+  height: auto;
   align-items: center;
   justify-content: center;
 }
 
 .midia-image {
-  max-width: 256px;
-  max-height: 256px;
-  width: auto;
+  max-width: 280px;
+  max-height: 280px;
+  width: 100%;
   height: auto;
   object-fit: contain;
 }

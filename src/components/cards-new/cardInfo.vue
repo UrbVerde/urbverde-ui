@@ -5,32 +5,140 @@
     :modal-body-text="modalBodyText"
     :class="{ 'background-image': midiaPosition === 'background' }"
     :style="midiaPosition === 'background' ? { backgroundImage: `url(${midiaLink})` } : {}"
+    :custom-padding="'0'"
+    :custom-gap="'0'"
   >
     <div class="card-info-wrapper" :class="midiaPosition">
-      <MidiaInsideCards
-        v-if="showMidia && midiaPosition !== 'background'"
-        :type-midia="midiaType"
-        :link="midiaLink"
-      />
-      <ParagraphInsideCards
-        :show-card-title="showCardTitle"
-        :title="title"
-        :subtitle="subtitle"
-        :show-subtitle="showSubtitle"
-        :show-left-icon="showLeftIcon"
-        :show-right-icon="showRightIcon"
-        :left-icon-class="leftIconClass"
-        :right-icon-class="rightIconClass"
-        :show-paragraph-title="showParagraphTitle"
-        :paragraph-title="paragraphTitle"
-        :type="type"
-        :list-items="listItems"
-        :paragraph-text="paragraphText"
-        :show-primary-button="showPrimaryButton"
-        :button-label="buttonLabel"
-        :button-icon="buttonIcon"
-        :button-icon-type="buttonIconType"
-      />
+      <!-- Top position -->
+      <template v-if="showMidia && midiaPosition === 'top'">
+        <MidiaInsideCards
+          :type-midia="midiaType"
+          :link="midiaLink"
+        />
+        <ParagraphInsideCards
+          :show-card-title="showCardTitle"
+          :title="title"
+          :subtitle="subtitle"
+          :show-subtitle="showSubtitle"
+          :show-left-icon="showLeftIcon"
+          :show-right-icon="showRightIcon"
+          :left-icon-class="leftIconClass"
+          :right-icon-class="rightIconClass"
+          :show-paragraph-title="showParagraphTitle"
+          :paragraph-title="paragraphTitle"
+          :type="type"
+          :list-items="listItems"
+          :paragraph-text="paragraphText"
+          :show-primary-button="showPrimaryButton"
+          :button-label="buttonLabel"
+          :button-icon="buttonIcon"
+          :button-icon-type="buttonIconType"
+        />
+      </template>
+
+      <!-- Bottom position -->
+      <template v-else-if="showMidia && midiaPosition === 'bottom'">
+        <ParagraphInsideCards
+          :show-card-title="showCardTitle"
+          :title="title"
+          :subtitle="subtitle"
+          :show-subtitle="showSubtitle"
+          :show-left-icon="showLeftIcon"
+          :show-right-icon="showRightIcon"
+          :left-icon-class="leftIconClass"
+          :right-icon-class="rightIconClass"
+          :show-paragraph-title="showParagraphTitle"
+          :paragraph-title="paragraphTitle"
+          :type="type"
+          :list-items="listItems"
+          :paragraph-text="paragraphText"
+          :show-primary-button="showPrimaryButton"
+          :button-label="buttonLabel"
+          :button-icon="buttonIcon"
+          :button-icon-type="buttonIconType"
+        />
+        <MidiaInsideCards
+          :type-midia="midiaType"
+          :link="midiaLink"
+        />
+      </template>
+
+      <!-- Left position -->
+      <template v-else-if="showMidia && midiaPosition === 'left'">
+        <MidiaInsideCards
+          :type-midia="midiaType"
+          :link="midiaLink"
+        />
+        <ParagraphInsideCards
+          :show-card-title="showCardTitle"
+          :title="title"
+          :subtitle="subtitle"
+          :show-subtitle="showSubtitle"
+          :show-left-icon="showLeftIcon"
+          :show-right-icon="showRightIcon"
+          :left-icon-class="leftIconClass"
+          :right-icon-class="rightIconClass"
+          :show-paragraph-title="showParagraphTitle"
+          :paragraph-title="paragraphTitle"
+          :type="type"
+          :list-items="listItems"
+          :paragraph-text="paragraphText"
+          :show-primary-button="showPrimaryButton"
+          :button-label="buttonLabel"
+          :button-icon="buttonIcon"
+          :button-icon-type="buttonIconType"
+        />
+      </template>
+
+      <!-- Right position -->
+      <template v-else-if="showMidia && midiaPosition === 'right'">
+        <ParagraphInsideCards
+          :show-card-title="showCardTitle"
+          :title="title"
+          :subtitle="subtitle"
+          :show-subtitle="showSubtitle"
+          :show-left-icon="showLeftIcon"
+          :show-right-icon="showRightIcon"
+          :left-icon-class="leftIconClass"
+          :right-icon-class="rightIconClass"
+          :show-paragraph-title="showParagraphTitle"
+          :paragraph-title="paragraphTitle"
+          :type="type"
+          :list-items="listItems"
+          :paragraph-text="paragraphText"
+          :show-primary-button="showPrimaryButton"
+          :button-label="buttonLabel"
+          :button-icon="buttonIcon"
+          :button-icon-type="buttonIconType"
+        />
+        <MidiaInsideCards
+          :type-midia="midiaType"
+          :link="midiaLink"
+        />
+      </template>
+
+      <!-- Background or no media -->
+      <template v-else>
+        <ParagraphInsideCards
+          :show-card-title="showCardTitle"
+          :title="title"
+          :subtitle="subtitle"
+          :show-subtitle="showSubtitle"
+          :show-left-icon="showLeftIcon"
+          :show-right-icon="showRightIcon"
+          :left-icon-class="leftIconClass"
+          :right-icon-class="rightIconClass"
+          :show-paragraph-title="showParagraphTitle"
+          :paragraph-title="paragraphTitle"
+          :type="type"
+          :list-items="listItems"
+          :paragraph-text="paragraphText"
+          :show-primary-button="showPrimaryButton"
+          :button-label="buttonLabel"
+          :button-icon="buttonIcon"
+          :button-icon-type="buttonIconType"
+        />
+      </template>
     </div>
   </CardBase>
 </template>
@@ -154,11 +262,6 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
-:deep(.card-base) {
-  padding: 0px;
-  gap: 0px;
-}
-
 .card-info-wrapper {
   display: flex;
   width: 100%;
@@ -178,13 +281,13 @@ defineProps({
 
   &.top {
     :deep(.midia-wrapper) {
-      padding-bottom: 40px;
+      padding-top: 32px;
     }
   }
 
   &.bottom {
     :deep(.midia-wrapper) {
-      padding-top: 40px;
+      padding-bottom: 32px;
     }
   }
 

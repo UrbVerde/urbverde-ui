@@ -48,6 +48,14 @@ defineProps({
   modalBodyText: {
     type: String,
     default: ''
+  },
+  customPadding: {
+    type: String,
+    default: '24px'
+  },
+  customGap: {
+    type: String,
+    default: '16px'
   }
 });
 
@@ -99,10 +107,10 @@ onUnmounted(() => {
 
 .card-base {
     display: flex;
-    padding: 24px;
+    padding: v-bind('customPadding');
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: v-bind('customGap');
     align-self: stretch;
     border-radius: 16px;
     border: 1px solid map-get($gray, 200);

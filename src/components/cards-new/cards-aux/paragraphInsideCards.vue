@@ -1,15 +1,17 @@
 <template>
   <div class="card-paragraph">
-    <CardTitle
-      v-if="showCardTitle"
-      :title="title"
-      :subtitle="subtitle"
-      :show-subtitle="showSubtitle"
-      :show-left-icon="showLeftIcon"
-      :show-right-icon="showRightIcon"
-      :left-icon-class="leftIconClass"
-      :right-icon-class="rightIconClass"
-    />
+    <div class="title-wrapper">
+      <CardTitle
+        v-if="showCardTitle"
+        :title="title"
+        :subtitle="subtitle"
+        :show-subtitle="showSubtitle"
+        :show-left-icon="showLeftIcon"
+        :show-right-icon="showRightIcon"
+        :left-icon-class="leftIconClass"
+        :right-icon-class="rightIconClass"
+      />
+    </div>
     <div class="text-wrapper">
       <!-- Title Paragraph Wrapper -->
       <div v-if="showParagraphTitle" class="titleParagraphWrapper">
@@ -24,7 +26,7 @@
         <ul v-if="type === 'list'" class="benefits-card-list">
           <li v-for="(item, index) in listItems" :key="index" class="benefits-card-item">
             <span class="benefits-card-number body-small-medium">{{ index + 1 }}</span>
-            <p class="body-small-regular" v-html="item"></p>
+            <p class="text-list body-small-regular" v-html="item"></p>
           </li>
         </ul>
 
@@ -42,15 +44,15 @@
         <slot v-else></slot>
       </div>
 
-      <!-- Button Wrapper -->
-      <div v-if="showPrimaryButton" class="button-wrapper" :class="{ 'text-center': type === 'paragraph-center' }">
-        <PrimaryButton
-          :label="buttonLabel"
-          :filled="true"
-          :icon="buttonIcon"
-          :icon-type="buttonIconType"
-        />
-      </div>
+    </div>
+    <!-- Button Wrapper -->
+    <div v-if="showPrimaryButton" class="button-wrapper" :class="{ 'text-center': type === 'paragraph-center' }">
+      <PrimaryButton
+        :label="buttonLabel"
+        :filled="true"
+        :icon="buttonIcon"
+        :icon-type="buttonIconType"
+      />
     </div>
   </div>
 </template>
@@ -148,12 +150,24 @@ defineProps({
   align-items: flex-start;
 }
 
+.title-wrapper {
+  display: flex;
+  height: auto;
+  padding: 24px 24px 16px 24px;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+}
+
 .text-wrapper {
   display: flex;
-  padding-bottom: 24px;
+  padding: 0 24px 24px 24px;
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
+}
+.content {
+  padding: 0;
 }
 
 .titleParagraphWrapper {
@@ -177,7 +191,7 @@ defineProps({
 
 .paragraph-wrapper {
   display: flex;
-  padding: 0px 24px;
+  padding: 0;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -196,7 +210,7 @@ defineProps({
 
 .button-wrapper {
   display: flex;
-  padding: 24px;
+  padding: 8px 24px 24px 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
@@ -205,6 +219,10 @@ defineProps({
   &.text-center {
     align-items: center;
   }
+}
+
+:deep(.primary-button) {
+  width: 100%;
 }
 
 // List styles from TipsCard
@@ -219,11 +237,14 @@ defineProps({
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 0 24px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   &:last-child {
-    margin-bottom: 0;
+    margin-bottom: 8;
+  }
+
+  &:first-child {
+    margin-top: 8px;
   }
 }
 
@@ -234,12 +255,16 @@ defineProps({
   justify-content: center;
   align-items: center;
   border-radius: 12px;
-  background-color: map-get($gray, 100);
-  color: map-get($body-text, body-color);
+  background-color: map-get($green, 100);
+  color: map-get($green, 700);
 }
 
 .benefits-card-item p {
   margin: 0;
   flex: 1;
+}
+
+.text-list {
+  color: map-get($body-text, body-color);
 }
 </style>
