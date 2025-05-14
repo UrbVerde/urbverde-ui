@@ -5,10 +5,14 @@ import Panel from '@/components/cards-new/panel-config/SectionCards.vue';
 
 // Importação centralizada dos componentes comuns entre os .js
 import CardData from '@/components/cards-new/cardData.vue';
+import CardInfo from '@/components/cards-new/cardInfo.vue';
+import CardRanking from '@/components/cards-new/cardRanking.vue';
 
 // Mapa de componentes para facilitar o acesso
 const COMMON_COMPONENTS = {
-  CardData
+  CardData,
+  CardInfo,
+  CardRanking
 };
 
 /**

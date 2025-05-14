@@ -93,7 +93,7 @@ const props = defineProps({
     type: Function,
     default: (data) => data
   },
-  rankingIndex: {
+  cardIndex: {
     type: Number,
     default: 0
   },
@@ -148,7 +148,7 @@ const fetchData = async() => {
 
     if (data && Array.isArray(data) && data.length > 0) {
       // Get the specific ranking based on index
-      const selectedRanking = data[props.rankingIndex];
+      const selectedRanking = data[props.cardIndex];
       // Apply data transform if provided
       cardData.value = props.dataTransform(selectedRanking);
     } else {

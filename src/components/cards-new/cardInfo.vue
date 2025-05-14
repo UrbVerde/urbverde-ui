@@ -158,47 +158,6 @@ import MidiaInsideCards from './cards-aux/midiaInsideCards.vue';
 import ParagraphInsideCards from './cards-aux/paragraphInsideCards.vue';
 
 defineProps({
-  // CardBase props
-  showInfoButton: {
-    type: Boolean,
-    default: false
-  },
-  modalTitle: {
-    type: String,
-    default: 'Informações'
-  },
-  modalBodyText: {
-    type: String,
-    default: ''
-  },
-
-  // MidiaInsideCards props
-  showMidia: {
-    type: Boolean,
-    default: false
-  },
-  midiaType: {
-    type: String,
-    validator: (value) => ['image', 'video'].includes(value)
-  },
-  midiaLink: {
-    type: [String, Object],
-    default: ''
-  },
-  imageSrc: {
-    type: [String, Object],
-    default: undefined
-  },
-  videoUrl: {
-    type: String,
-    default: undefined
-  },
-  midiaPosition: {
-    type: String,
-    default: null,
-    validator: (value) => [null, 'top', 'bottom', 'left', 'right', 'background'].includes(value)
-  },
-
   // CardTitle props (from ParagraphInsideCards)
   showCardTitle: {
     type: Boolean,
@@ -256,6 +215,47 @@ defineProps({
   paragraphText: {
     type: String,
     default: ''
+  },
+
+  // CardBase props
+  showInfoButton: {
+    type: Boolean,
+    default: false
+  },
+  modalTitle: {
+    type: String,
+    default: 'Informações'
+  },
+  modalBodyText: {
+    type: String,
+    default: ''
+  },
+
+  // MidiaInsideCards props
+  showMidia: {
+    type: Boolean,
+    default: false
+  },
+  midiaType: {
+    type: String,
+    validator: (value) => ['image', 'video'].includes(value)
+  },
+  midiaLink: {
+    type: [String, Object],
+    default: ''
+  },
+  imageSrc: {
+    type: [String, Object],
+    default: undefined
+  },
+  videoUrl: {
+    type: String,
+    default: undefined
+  },
+  midiaPosition: {
+    type: String,
+    default: null,
+    validator: (value) => [null, 'top', 'bottom', 'left', 'right', 'background'].includes(value)
   },
 
   // Button props (from ParagraphInsideCards)
