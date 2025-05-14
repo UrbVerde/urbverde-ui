@@ -196,7 +196,7 @@ a{
 
 .titleParagraphWrapper {
   display: flex;
-  padding: 24px;
+  padding: 0 0 24px 0;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -252,19 +252,19 @@ a{
 // List styles from TipsCard
 .benefits-card-list {
   list-style: none;
-  padding: 0;
+  padding: 0 0 24px 0;
   margin: 0;
   width: 100%;
 }
 
 .benefits-card-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 
   &:last-child {
-    margin-bottom: 8;
+    margin-bottom: 4px;
   }
 
   &:first-child {

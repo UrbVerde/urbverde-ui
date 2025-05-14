@@ -35,10 +35,13 @@ const panelClass = computed(() => {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .panel {
   display: grid;
   gap: 16px;
   width: 100%;
+  height: 100%;
 }
 
 .panel-cell {
@@ -58,8 +61,9 @@ const panelClass = computed(() => {
   }
 }
 
-// Responsivo
-@media (max-width: 768px) {
+// Responsividade
+
+@include breakpoint-down('mobile-large') {
   .panel {
     grid-template-columns: 1fr !important;
     grid-template-rows: auto !important;

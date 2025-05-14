@@ -5,7 +5,7 @@
     :modal-body-text="modalBodyText"
     :class="{ 'background-image': midiaPosition === 'background' }"
     :style="midiaPosition === 'background' ? { backgroundImage: `url(${midiaLink})` } : {}"
-    :custom-padding="'0'"
+    :custom-padding="'8px'"
     :custom-gap="'0'"
   >
     <div class="card-info-wrapper" :class="midiaPosition">
