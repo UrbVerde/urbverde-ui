@@ -45,10 +45,8 @@ export default createSectionConfig((nm_mun, uf) => [
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                  cardIndex: 1,
+                  cardIndex: 3,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'É a diferença entre a temperatura mais quente e a mais fria',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -65,8 +63,10 @@ export default createSectionConfig((nm_mun, uf) => [
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                  cardIndex: 2,
+                  cardIndex: 1,
                   showInfoButton: true,
+                  showCardSubtitle: true,
+                  cardSubtitle: 'É a diferença entre a temperatura mais quente e a mais fria',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -75,7 +75,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
-                  cardIndex: 3,
+                  cardIndex: 2,
                   showInfoButton: true,
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
