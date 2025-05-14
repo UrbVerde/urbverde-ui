@@ -67,8 +67,8 @@
         <div v-if="showButtonPrimary" class="button-wrapper">
           <CardPrimaryButton
             :cityCode="actualCityCode"
-            :category="layerCategory"
-            :layerId="layerId"
+            :changeToCategory="changeToCategory"
+            :changeToLayerId="changeToLayerId"
             :layerTitle="title"
           />
         </div>

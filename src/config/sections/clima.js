@@ -211,8 +211,8 @@ export default createSectionConfig((nm_mun, uf) => [
     }
   }),
   createSection({
-    id: 'stats',
-    ref: 'statsSection',
+    id: 'seeMore',
+    ref: 'seeMoreSection',
     title: 'Veja mais sobre sua cidade!',
     panel: {
       variant: '1-3',
@@ -246,8 +246,22 @@ export default createSectionConfig((nm_mun, uf) => [
             changeToCategory: 'Parques+e+Praças',
             changeToLayerId: 'avg_distance_to_squares',
           }
-        },
+        }
       ]
     }
   }),
+  createSection({
+    id: 'seeMore',
+    ref: 'seeMoreSection',
+    title: 'Veja mais sobre sua cidade!',
+    component: 'CardData',
+    props: {
+      apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+      cardIndex: 0,
+      showButtonPrimary: true,
+      changeToCategory: 'Clima',
+      changeToLayerId: 'heat_island',
+      overrideTitle:'teste'
+    }
+  })
 ]);

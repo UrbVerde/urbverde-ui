@@ -52,28 +52,10 @@ export default {
   },
   methods: {
     handleClick() {
-      // Update the store with the new layer
-      this.locationStore.setLocation({
-        category: this.category,
-        layer: this.layerId,
-        layerName: this.layerTitle
-      });
-
-      // Get the current year from the store or use a default
       const currentYear = this.locationStore.year || '2021';
 
-      // Navigate to the map with the new layer
-      this.router.push({
-        path: '/mapa',
-        query: {
-          code: this.cityCode,
-          type: 'city',
-          year: currentYear,
-          category: this.category,
-          layer: this.layerId,
-          scale: 'intraurbana'
-        }
-      });
+      // Navigate directly using window.location.href
+      window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=${currentYear}&category=${this.changeToCategory}&layer=${this.changeToLayerId}&scale=intraurbana`;
     }
   }
 };
