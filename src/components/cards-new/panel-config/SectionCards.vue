@@ -62,7 +62,6 @@ const panelClass = computed(() => {
 }
 
 // Responsividade
-
 @include breakpoint-down('mobile-large') {
   .panel {
     grid-template-columns: 1fr !important;
