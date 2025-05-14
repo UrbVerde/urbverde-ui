@@ -1,7 +1,7 @@
 <template>
   <div class="card-wrapper" ref="cardWrapper">
     <div v-if="isVisible"
-         class="small-shadow card-base"
+         class="shadow-sm card-base"
          @mouseenter="showButton = true"
          @mouseleave="showButton = false">
       <div v-if="showInfoButton" class="info-button-wrapper" :class="{ 'show': showButton }">
@@ -103,6 +103,7 @@ onUnmounted(() => {
 .card-wrapper {
     min-height: 100px;
     width: 100%;
+    height: 100%;
 }
 
 .card-base {

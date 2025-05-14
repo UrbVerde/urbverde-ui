@@ -47,7 +47,21 @@
     </div>
     <!-- Button Wrapper -->
     <div v-if="showPrimaryButton" class="button-wrapper" :class="{ 'text-center': type === 'paragraph-center' }">
+      <a
+        v-if="buttonLink"
+        :href="buttonLink"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <PrimaryButton
+          :label="buttonLabel"
+          :filled="true"
+          :icon="buttonIcon"
+          :icon-type="buttonIconType"
+        />
+      </a>
       <PrimaryButton
+        v-else
         :label="buttonLabel"
         :filled="true"
         :icon="buttonIcon"
@@ -138,11 +152,21 @@ defineProps({
   buttonIconType: {
     type: String,
     default: 'bootstrap'
+  },
+  buttonLink: {
+    type: String,
+    default: ''
   }
 });
 </script>
 
 <style scoped lang="scss">
+a{
+  text-decoration: none;
+  display: flex;
+  width: 100%;
+  height: auto;
+}
 .card-paragraph {
   display: flex;
   width: 100%;

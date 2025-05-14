@@ -9,6 +9,7 @@ import SeeMoreSection from '@/components/cards/weather/seeMore/SeeMoreSection.vu
 import CardTest from '@/components/cards-new/cardTest.vue';
 import cardRanking from '@/components/cards-new/cardRanking.vue';
 import CardInfo from '@/components/cards-new/cardInfo.vue';
+import imagem from '@/assets/images/cards/youngFarmer.svg';
 
 export default createSectionConfig((nm_mun, uf) => [
   // Test section for CardInfo
@@ -17,44 +18,27 @@ export default createSectionConfig((nm_mun, uf) => [
     ref: 'cardInfoTestSection',
     title: `Teste do CardInfo em ${nm_mun} - ${uf}`,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: CardInfo,
           props: {
             showMidia: true,
             midiaType: 'image',
-            midiaLink: 'https://picsum.photos/400/300',
-            midiaPosition: 'bottom',
+            imageSrc: imagem,
+            midiaPosition: 'right',
             title: 'Título do Card',
             subtitle: 'Subtítulo do Card',
             showSubtitle: false,
             type: 'paragraph-left',
             paragraphText: 'Este é um exemplo de texto para testar o CardInfo com diferentes configurações.',
             showPrimaryButton: true,
-            buttonLabel: 'Saiba mais',
+            buttonLabel: 'texto',
             buttonIcon: 'bi bi-arrow-right',
+            buttonLink: 'https://www.google.com',
             showInfoButton: true,
             modalTitle: 'Informações do Card',
             modalBodyText: 'Este é um card de teste para demonstrar as funcionalidades do CardInfo.'
-          }
-        },
-        {
-          component: CardInfo,
-          props: {
-            showMidia: true,
-            midiaType: 'image',
-            midiaLink: 'https://picsum.photos/400/300',
-            midiaPosition: 'right',
-            title: 'Card com Mídia à Esquerda',
-            type: 'paragraph-left',
-            paragraphText: 'Este é um exemplo de texto para testar o CardInfo com diferentes configurações.',
-            showPrimaryButton: true,
-            buttonLabel: 'Saiba mais',
-            buttonIcon: 'bi bi-arrow-right',
-            showInfoButton: true,
-            modalTitle: 'Informações da Lista',
-            modalBodyText: 'Este card demonstra o uso de lista com mídia à esquerda.'
           }
         },
       ]
@@ -70,6 +54,27 @@ export default createSectionConfig((nm_mun, uf) => [
       variant: '1-3',
       items: [
         {
+          component: CardInfo,
+          props: {
+            showMidia: true,
+            midiaType: 'image',
+            midiaLink: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpt.vecteezy.com%2Ffotos-gratis%2Fimagem&psig=AOvVaw01rn4yfw7k0nHSXyWHIOEQ&ust=1747266799347000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKDn9pjSoY0DFQAAAAAdAAAAABAE',
+            midiaPosition: 'top',
+            title: 'Título do Card',
+            subtitle: 'Subtítulo do Card',
+            showSubtitle: false,
+            type: 'paragraph-left',
+            paragraphText: 'Este é um exemplo de texto para testar o CardInfo com diferentes configurações.',
+            showPrimaryButton: false,
+            buttonLabel: 'Saiba mais',
+            buttonIcon: 'bi bi-arrow-right',
+            showInfoButton: true,
+            modalTitle: 'Informações do Card',
+            modalBodyText: 'Este é um card de teste para demonstrar as funcionalidades do CardInfo.'
+          }
+        },
+        // Exemplo de CardTest com props
+        {
           component: 'CardData',
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
@@ -79,15 +84,16 @@ export default createSectionConfig((nm_mun, uf) => [
             modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
           }
         },
-        // Exemplo de CardTest com props
         {
-          component: CardTest,
+          component: 'CardData',
           props: {
-            modalTitle: 'Card Teste com Props',
-            modalBodyText: 'Este é um exemplo de CardTest com props personalizadas!'
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+            cardIndex: 3,
+            showInfoButton: true,
+            modalTitle: 'Nível de ilha de calor',
+            modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
           }
         },
-        CardTest,
       ]
     }
   }),

@@ -13,7 +13,8 @@
       <template v-if="showMidia && midiaPosition === 'top'">
         <MidiaInsideCards
           :type-midia="midiaType"
-          :link="midiaLink"
+          :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
+          :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
         />
         <ParagraphInsideCards
           :show-card-title="showCardTitle"
@@ -33,6 +34,7 @@
           :button-label="buttonLabel"
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
+          :button-link="buttonLink"
         />
       </template>
 
@@ -56,10 +58,12 @@
           :button-label="buttonLabel"
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
+          :button-link="buttonLink"
         />
         <MidiaInsideCards
           :type-midia="midiaType"
-          :link="midiaLink"
+          :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
+          :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
         />
       </template>
 
@@ -67,7 +71,8 @@
       <template v-else-if="showMidia && midiaPosition === 'left'">
         <MidiaInsideCards
           :type-midia="midiaType"
-          :link="midiaLink"
+          :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
+          :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
         />
         <ParagraphInsideCards
           :show-card-title="showCardTitle"
@@ -87,6 +92,7 @@
           :button-label="buttonLabel"
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
+          :button-link="buttonLink"
         />
       </template>
 
@@ -110,10 +116,12 @@
           :button-label="buttonLabel"
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
+          :button-link="buttonLink"
         />
         <MidiaInsideCards
           :type-midia="midiaType"
-          :link="midiaLink"
+          :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
+          :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
         />
       </template>
 
@@ -137,6 +145,7 @@
           :button-label="buttonLabel"
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
+          :button-link="buttonLink"
         />
       </template>
     </div>
@@ -173,8 +182,16 @@ defineProps({
     validator: (value) => ['image', 'video'].includes(value)
   },
   midiaLink: {
-    type: String,
+    type: [String, Object],
     default: ''
+  },
+  imageSrc: {
+    type: [String, Object],
+    default: undefined
+  },
+  videoUrl: {
+    type: String,
+    default: undefined
   },
   midiaPosition: {
     type: String,
@@ -257,6 +274,10 @@ defineProps({
   buttonIconType: {
     type: String,
     default: 'bootstrap'
+  },
+  buttonLink: {
+    type: String,
+    default: ''
   }
 });
 </script>
