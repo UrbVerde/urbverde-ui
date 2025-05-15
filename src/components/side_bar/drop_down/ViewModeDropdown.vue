@@ -62,6 +62,8 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { useRoute } from 'vue-router';
+import worldMapIcon from '@/assets/icons/world-map.svg';
+import publicPoliciesIcon from '@/assets/icons/public-policies.svg';
 
 const locationStore = useLocationStore();
 const route = useRoute();
@@ -95,14 +97,14 @@ const viewModes = [
   {
     id: 'map',
     label: 'Nacional',
-    icon: '/src/assets/icons/world-map.svg',
+    icon: worldMapIcon,
     text: '5570 cidades'
   },
   {
     id: 'policies',
     label: 'Políticas Públicas',
     text: '7 cidades',
-    icon: '/src/assets/icons/public-policies.svg'
+    icon: publicPoliciesIcon
   }
 ];
 
