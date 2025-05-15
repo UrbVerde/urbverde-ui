@@ -194,7 +194,7 @@ const selectMode = (modeId) => {
 }
 
 .view-mode-title {
-  color: var(--Theme-Secondary, #525960);
+  color: map-get($theme, secondary);
 
   display: flex;
   flex-direction: column;
@@ -204,7 +204,7 @@ const selectMode = (modeId) => {
 
 .view-mode-text {
 
-  color: var(--Body-Text-Body-Color, #212529);
+  color: map-get($body-text, body-color);
 
 }
 
@@ -323,7 +323,7 @@ const selectMode = (modeId) => {
 
 .view-mode-option-title {
   overflow: hidden;
-  color: var(--Body-Text-Body-Color, #212529);
+  color: map-get($body-text, body-color);
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -334,7 +334,7 @@ const selectMode = (modeId) => {
 
 .view-mode-option-text {
   overflow: hidden;
-  color: var(--Theme-Secondary, #525960);
+  color: map-get($theme, secondary);
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;

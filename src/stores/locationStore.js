@@ -39,12 +39,12 @@ export const useLocationStore = defineStore('locationStore', {
     urlParams() {
       const params = {};
       if (this.cd_mun)  {params.code = this.cd_mun;}
+      if (this.viewMode) {params.viewMode = this.viewMode;}
       if (this.type)    {params.type = this.type;}
       if (this.year)    {params.year = this.year;}
       if (this.category) {params.category = this.category;}
       if (this.layer)   {params.layer = this.layer;}
       if (this.scale)   {params.scale = this.scale;}
-      if (this.viewMode) {params.viewMode = this.viewMode;}
 
       return params;
     },
