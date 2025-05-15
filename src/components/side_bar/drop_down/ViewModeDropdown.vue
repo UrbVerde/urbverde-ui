@@ -11,11 +11,9 @@
               'policies-selected': selectedMode === 'policies'
             }">
       <!-- Ícone do modo selecionado -->
-      <img v-if="selectedModeData.icon.includes('.png') || selectedModeData.icon.includes('.svg')"
-           :src="selectedModeData.icon"
+      <img :src="selectedModeData.icon"
            class="view-mode-icon"
            alt="ícone" />
-      <i v-else :class="['view-mode-icon', selectedModeData.icon]"></i>
       <!-- Texto do modo selecionado -->
       <div class="view-mode-text-container">
         <span class="view-mode-title body-caption-regular">PAINEL</span>
@@ -40,11 +38,10 @@
                 @click="selectMode(mode.id)">
           <!-- Ícone de seleção ou ícone do modo -->
           <i v-if="selectedMode === mode.id" class="bi bi-check2 view-mode-icon"></i>
-          <img v-else-if="mode.icon.includes('.svg')"
+          <img v-else
                :src="mode.icon"
                class="view-mode-icon"
                alt="ícone" />
-          <i v-else :class="['view-mode-icon', mode.icon]"></i>
           <!-- Texto descritivo do modo -->
           <div class="view-mode-option-text-container">
             <span class="view-mode-option-title body-small-regular">{{ mode.label }}</span>
