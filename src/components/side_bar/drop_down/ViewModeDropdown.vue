@@ -40,7 +40,7 @@
                 @click="selectMode(mode.id)">
           <!-- Ícone de seleção ou ícone do modo -->
           <i v-if="selectedMode === mode.id" class="bi bi-check2 view-mode-icon"></i>
-          <img v-else-if="mode.icon.includes('.png')"
+          <img v-else-if="mode.icon.includes('.svg')"
                :src="mode.icon"
                class="view-mode-icon"
                alt="ícone" />
@@ -98,14 +98,14 @@ const viewModes = [
   {
     id: 'map',
     label: 'Nacional',
-    icon: '/src/assets/icons/world-map.png',
+    icon: '/src/assets/icons/world-map.svg',
     text: '5570 cidades'
   },
   {
     id: 'policies',
     label: 'Políticas Públicas',
     text: '7 cidades',
-    icon: '/src/assets/icons/public-policies.png'
+    icon: '/src/assets/icons/public-policies.svg'
   }
 ];
 
