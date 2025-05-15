@@ -14,7 +14,7 @@ export const useLayersStore = defineStore('layersStore', {
     activeLayers: [],
     setoresVisible: false,
     error: null,
-    layerOpacity: 0.7
+    layerOpacity: 0.7,
   }),
 
   getters: {

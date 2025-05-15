@@ -3,7 +3,13 @@
   <GetUserLocation @location-updated="updateLocationData" @location-error="handleLocationFailure" />
   <div class="search-wrapper">
     <div ref="inputContainer"
-         :class="{ 'input-container shadow-sm': !dropdown && !isError, 'input-container-dropdown shadow': dropdown && !isError, 'input-container-error shake-animation shadow': isError  }"
+         :class="{
+           'input-container shadow-sm': !dropdown && !isError,
+           'input-container-dropdown shadow': dropdown && !isError,
+           'input-container-error shake-animation shadow': isError,
+           'map-mode': viewMode === 'map',
+           'policies-mode': viewMode === 'policies'
+         }"
          @click="activateInput">
       <div class="input-overlay">
         <input ref="inputField"
@@ -158,6 +164,12 @@ const isError = ref(false);
 const codes = ref({});
 
 const locationStore = useLocationStore();
+
+const viewMode = ref(locationStore.viewMode);
+
+watch(() => locationStore.viewMode, (newMode) => {
+  viewMode.value = newMode;
+});
 
 // Watch para monitorar mudanças no store de localização
 watch(
@@ -855,15 +867,33 @@ function emitLocationUpdate(payload) {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
 
+    outline: 1px solid map-get($green, 500);
+
+    &.map-mode {
+      outline: 1px solid map-get($theme, primary);
+    }
+
+    &.policies-mode {
+      outline: 1px solid map-get($yellow, 600);
+    }
+
 }
 
 .input-container-dropdown {
   border-radius: 99px;
   background: var(--Gray-100, #F8F9FA);
-  outline: 3px solid #418377;
+  outline: 3px solid map-get($theme, primary);
   outline-offset: -3px;
   user-select: none;
   cursor: default;
+
+  &.map-mode {
+    outline: 3px solid map-get($theme, primary);
+  }
+
+  &.policies-mode {
+    outline: 3px solid map-get($yellow, 600);
+  }
 }
 
 /* Input and overlay */

@@ -2,7 +2,7 @@
 <template>
 
   <aside>
-    <!-- Overlay fundo preto (mobile only) -->
+    <!-- Overlay fundo escuro (mobile only) -->
     <div
       v-if="isOpen && !largerThan('tablet')"
       class="sidebar-overlay"
@@ -27,20 +27,26 @@
         />
       </div>
       <Transition name="fade">
-        <div v-if="showContent" class="search-area">
-          <BuscaSimples @api-error="$emit('api-error')" :openDelay="2000" /><!-- :openDelay="2000" -->
+        <div v-if="showContent" class="city-search-area">
+          <BuscaSimples @api-error="$emit('api-error')" :openDelay="2000" />
+        </div>
+      </Transition>
+
+      <Transition name="fade">
+        <div v-if="isSearchDone" class="view-mode-selector">
+          <ViewModeDropdown />
         </div>
       </Transition>
 
       <template v-if="isSearchDone">
         <Transition name="fade">
-          <div v-if="showContent" class="middle-area">
-            <DropDown />
+          <div v-if="showContent" class="categories-area">
+            <CategoriesDropDown />
           </div>
         </Transition>
 
         <Transition name="fade">
-          <div v-if="showContent" class="bottom-area">
+          <div v-if="showContent" class="action-links-area">
             <a href="/parceiro"
                class="link-button"
                target="_blank"
@@ -66,8 +72,9 @@ import { useLocationStore } from '@/stores/locationStore';
 import MinimizeButton from './buttons/MinimizeButton.vue';
 import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
-import DropDown from './drop_down/CategoriesDropdown.vue';
+import CategoriesDropDown from './drop_down/CategoriesDropdown.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
+import ViewModeDropdown from './drop_down/ViewModeDropdown.vue';
 
 // Props
 const props = defineProps({
@@ -253,7 +260,29 @@ async function toggleSidebar() {
   width: 100%;
 }
 
-.middle-area {
+.city-search-area {
+  display: flex;
+  padding: 0px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  height: auto;
+  min-height: 48px;
+  overflow: visible;
+  width: 100%;
+}
+
+.view-mode-selector {
+  display: flex;
+  padding: 8px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+}
+
+.categories-area {
   display: flex;
   padding: 32px 12px 16px 16px;
   flex-direction: column;
@@ -266,19 +295,7 @@ async function toggleSidebar() {
   width: 100%;
 }
 
-.search-area {
-  display: flex;
-  padding: 0px 16px;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-  height: auto;
-  min-height: 48px;
-  overflow: visible;
-  width: 100%;
-}
-
-.bottom-area {
+.action-links-area {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
