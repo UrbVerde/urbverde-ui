@@ -11,7 +11,7 @@
               'policies-selected': selectedMode === 'policies'
             }">
       <!-- Ícone do modo selecionado -->
-      <img v-if="selectedModeData.icon.includes('.png')"
+      <img v-if="selectedModeData.icon.includes('.png') || selectedModeData.icon.includes('.svg')"
            :src="selectedModeData.icon"
            class="view-mode-icon"
            alt="ícone" />
