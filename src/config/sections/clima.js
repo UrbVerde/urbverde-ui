@@ -179,8 +179,8 @@ export default createSectionConfig((nm_mun, uf) => [
                     'Políticas públicas podem promover mais áreas verdes nas cidades.',
                   ],
                   showPrimaryButton: true,
-                  buttonLabel: 'Saiba mais',
-                  buttonLink: 'https://www.google.com',
+                  buttonLabel: 'Ver mais dicas',
+                  buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas/temperatura',
                 }
               },
             ]
