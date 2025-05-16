@@ -195,18 +195,16 @@ p {
   gap: 12px;
   align-items: center;
   font-size: 14px;
-  color: #374151;
+  color: map-get($theme, secondary);
 }
 
 .benefits-card-number {
   display: flex;
   width: 24px;
   height: 24px;
-  padding: 0px 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
   border-radius: 99px;
   background: map-get($green, 100);
 }

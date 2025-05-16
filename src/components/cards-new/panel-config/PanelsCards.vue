@@ -19,11 +19,16 @@
       class="box"
     >
       <div class="statistics-container">
-        <span class="title-statistics-container heading-h5">
-          {{ section.title }}
-        </span>
+        <div class="title-container">
+          <span class="title-statistics-container heading-h5">
+            {{ section.title }}
+          </span>
+          <span v-if="section.subtitle" class="subtitle-statistics-container body-small-medium">
+            {{ section.subtitle }}
+          </span>
+        </div>
         <YearPicker
-          v-if="!section.isSeeMore && showYearPicker"
+          v-if="section.showYearPicker !== false && showYearPicker"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
           :city-code="computedCityCode"
@@ -213,20 +218,35 @@ p, h5 {
 
 .box {
   display: flex;
-  padding: 40px 48px 32px 48px;
+  padding: 48px 48px 32px 48px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 32px;
+  gap: 40px;
   align-self: stretch;
   flex-grow: 1;
   width: 100%;
+
+  &:first-child {
+    padding-top: 72px;
+  }
+
+  &:last-child {
+    padding-bottom: 104px;
+  }
 }
 
 .statistics-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
   align-self: stretch;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 0 0;
 }
 
 .title-statistics-container {
@@ -234,7 +254,15 @@ p, h5 {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  flex: 1 0 0;
+  color: map-get($theme, secondary);
+}
+
+.subtitle-statistics-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: map-get($gray, 550);
 }
 
 .empty-state-wrapper {

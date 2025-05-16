@@ -222,7 +222,7 @@ a{
   align-self: stretch;
 
   .paragraph {
-    color: map-get($body-text, body-color);
+    color: map-get($theme, secondary);
     text-align: left;
     margin: 0;
 
@@ -234,7 +234,7 @@ a{
 
 .button-wrapper {
   display: flex;
-  padding: 8px 24px 24px 24px;
+  padding: 0px 24px 24px 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
@@ -264,7 +264,7 @@ a{
   margin-bottom: 16px;
 
   &:last-child {
-    margin-bottom: 4px;
+    margin-bottom: 0px;
   }
 
   &:first-child {
@@ -289,6 +289,6 @@ a{
 }
 
 .text-list {
-  color: map-get($body-text, body-color);
+  color: map-get($theme, secondary);
 }
 </style>

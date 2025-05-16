@@ -102,9 +102,10 @@ function renderPanel(panelConfig, isNested = false) {
  * @param {string} config.id - ID da seção
  * @param {string} config.ref - Referência para o elemento
  * @param {string} config.title - Título da seção
+ * @param {string} [config.subtitle=false] - Subtítulo da seção
  * @param {Component|string} [config.component] - Componente Vue a ser renderizado ou nome do componente comum
  * @param {Object} [config.props] - Props para o componente
- * @param {boolean} [config.isSeeMore] - Indica se é uma seção "Veja mais"
+ * @param {boolean} [config.showYearPicker=true] - Indica se a seção deve mostrar o seletor de ano
  * @param {Object} [config.panel] - Configuração do painel
  * @param {string} config.panel.variant - Variante do painel (ex: "3-1")
  * @param {Array} config.panel.items - Array de configurações de itens (cards ou painéis)

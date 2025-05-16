@@ -1,5 +1,6 @@
 // urbverde-ui/src/config/sections/clima.js
 import { createSectionConfig, createSection } from '@/config/helperCreateSection';
+import TGraphicSection from '@/components/cards/weather/graphics/TGraphicSection.vue';
 
 import globalwarming from '@/assets/images/cards/globalwarming.svg';
 import environmentalcampaign from '@/assets/images/cards/environmentalcampaign.svg';
@@ -89,7 +90,13 @@ export default createSectionConfig((nm_mun, uf) => [
   }),
   createSection({
     id: 'stats',
-    ref: 'statsSection',
+    ref: 'graphicSection',
+    title: `Temperatura média em ${nm_mun} - ${uf} ao longo do tempo`,
+    component: TGraphicSection
+  }),
+  createSection({
+    id: 'stats',
+    ref: 'vulnerableSection',
     title: `Quem é mais afetado pelo calor extremo em ${nm_mun}?`,
     panel: {
       variant: '2-1',
@@ -171,6 +178,9 @@ export default createSectionConfig((nm_mun, uf) => [
                     'Rios e lagos naturalizados ajudam a resfriar o clima urbano.',
                     'Políticas públicas podem promover mais áreas verdes nas cidades.',
                   ],
+                  showPrimaryButton: true,
+                  buttonLabel: 'Saiba mais',
+                  buttonLink: 'https://www.google.com',
                 }
               },
             ]
@@ -180,8 +190,8 @@ export default createSectionConfig((nm_mun, uf) => [
     }
   }),
   createSection({
-    id: 'stats',
-    ref: 'statsSection',
+    id: 'ranking',
+    ref: 'rankingSection',
     title: `${nm_mun} - ${uf} no rankings de municípios`,
     panel: {
       variant: '1-3',
@@ -214,6 +224,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'seeMore',
     ref: 'seeMoreSection',
     title: 'Veja mais sobre sua cidade!',
+    showYearPicker: false,
     panel: {
       variant: '1-3',
       items: [
