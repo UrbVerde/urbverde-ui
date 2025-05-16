@@ -226,38 +226,49 @@ export default createSectionConfig((nm_mun, uf) => [
     title: 'Veja mais sobre sua cidade!',
     showYearPicker: false,
     panel: {
-      variant: '1-3',
+      variant: '2-1',
       items: [
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
-            cardIndex: 0,
-            showButtonPrimary: true,
-            changeToCategory: 'Clima',
-            changeToLayerId: 'heat_island',
+            variant: '1-3',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
+                  cardIndex: 0,
+                  showButtonPrimary: true,
+                  changeToCategory: 'Clima',
+                  changeToLayerId: 'heat_island',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
+                  cardIndex: 1,
+                  showButtonPrimary: true,
+                  changeToCategory: 'Parques+e+Praças',
+                  changeToLayerId: 'served_population',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
+                  cardIndex: 2,
+                  showButtonPrimary: true,
+                  changeToCategory: 'Parques+e+Praças',
+                  changeToLayerId: 'avg_distance_to_squares',
+                }
+              }
+            ],
           }
         },
         {
-          component: 'CardData',
-          props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
-            cardIndex: 1,
-            showButtonPrimary: true,
-            changeToCategory: 'Parques+e+Praças',
-            changeToLayerId: 'served_population',
-          }
+          component: 'CardDownload'
         },
-        {
-          component: 'CardData',
-          props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
-            cardIndex: 2,
-            showButtonPrimary: true,
-            changeToCategory: 'Parques+e+Praças',
-            changeToLayerId: 'avg_distance_to_squares',
-          }
-        }
       ]
     }
   }),

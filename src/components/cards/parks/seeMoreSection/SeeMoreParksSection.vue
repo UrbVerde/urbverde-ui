@@ -20,7 +20,7 @@
 import { computed } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import SeeMoreCard from '../../SeeMoreCard.vue';
-import DownloadCard from '../../DownloadCard.vue';
+import DownloadCard from '../../../cards-new/cardDownload.vue';
 
 export default {
   name: 'SeeMoreSection',

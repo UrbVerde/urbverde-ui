@@ -2,7 +2,7 @@
 import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 
 import globalwarming from '@/assets/images/cards/globalwarming-park.svg';
-import environmentalcampaign from '@/assets/images/cards/environmentalcampaign.svg';
+import airpollution from '@/assets/images/cards/airPollutionFree.svg';
 
 export default createSectionConfig((nm_mun, uf) => [
   createSection({
@@ -55,14 +55,18 @@ export default createSectionConfig((nm_mun, uf) => [
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
-                  cardIndex: 2
+                  cardIndex: 2,
+                  showCardSubtitle: true,
+                  cardSubtitle: 'Quantas vezes moradores próximos a praças tem em média mais renda',
                 }
               },
               {
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
-                  cardIndex: 3
+                  cardIndex: 3,
+                  showCardSubtitle: true,
+                  cardSubtitle: 'População negra ou indígena que vive fora da vizinhança das praças',
                 }
               },
             ]
@@ -86,49 +90,37 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 0,
-                  showInfoButton: true,
                   showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 1,
-                  showInfoButton: true,
                   showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 2,
-                  showInfoButton: true,
                   showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 3,
-                  showInfoButton: true,
                   showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
             ]
@@ -145,19 +137,19 @@ export default createSectionConfig((nm_mun, uf) => [
                   showMidia: true,
                   showCardTitle: false,
                   showParagraphTitle: true,
-                  paragraphTitle: 'Como podemos tornar as cidades mais frescas?',
+                  paragraphTitle: 'Quais os benefícios dos parques e praças?',
                   midiaType: 'image',
-                  imageSrc: environmentalcampaign,
+                  imageSrc: airpollution,
                   midiaPosition: 'right',
                   type: 'list',
                   listItems: [
-                    'Árvores ajudam a reduzir o calor e melhorar a qualidade do ar.',
-                    'Rios e lagos naturalizados ajudam a resfriar o clima urbano.',
-                    'Políticas públicas podem promover mais áreas verdes nas cidades.',
+                    'Incentivam a atividade física, ajudando a prevenir problemas de saúde.',
+                    'Ajudam a reduzir o estresse, promovendo saúde mental e bem-estar',
+                    'Políticas públicas ajudam a promover e manter esses espaços.',
                   ],
                   showPrimaryButton: true,
                   buttonLabel: 'Ver mais dicas',
-                  buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas/temperatura',
+                  buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas/praças-e-parques',
                 }
               },
             ]
@@ -176,21 +168,21 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
             cardIndex: 0,
           }
         },
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
             cardIndex: 1,
           }
         },
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
             cardIndex: 2,
           }
         }
@@ -203,38 +195,49 @@ export default createSectionConfig((nm_mun, uf) => [
     title: 'Veja mais sobre sua cidade!',
     showYearPicker: false,
     panel: {
-      variant: '1-3',
+      variant: '2-1',
       items: [
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
-            cardIndex: 0,
-            showButtonPrimary: true,
-            changeToCategory: 'Clima',
-            changeToLayerId: 'heat_island',
+            variant: '1-3',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/info',
+                  cardIndex: 0,
+                  showButtonPrimary: true,
+                  changeToCategory: 'Clima',
+                  changeToLayerId: 'heat_island',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/info',
+                  cardIndex: 1,
+                  showButtonPrimary: true,
+                  changeToCategory: 'Parques+e+Praças',
+                  changeToLayerId: 'served_population',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/info',
+                  cardIndex: 2,
+                  showButtonPrimary: true,
+                  changeToCategory: 'Parques+e+Praças',
+                  changeToLayerId: 'avg_distance_to_squares',
+                }
+              }
+            ],
           }
         },
         {
-          component: 'CardData',
-          props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
-            cardIndex: 1,
-            showButtonPrimary: true,
-            changeToCategory: 'Parques+e+Praças',
-            changeToLayerId: 'served_population',
-          }
+          component: 'CardDownload'
         },
-        {
-          component: 'CardData',
-          props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
-            cardIndex: 2,
-            showButtonPrimary: true,
-            changeToCategory: 'Parques+e+Praças',
-            changeToLayerId: 'avg_distance_to_squares',
-          }
-        }
       ]
     }
   }),
