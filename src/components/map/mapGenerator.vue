@@ -45,6 +45,8 @@ import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
 import { reorderAllLayers } from '@/utils/layersOrder';
+import { getPopupContent } from '@/utils/popupContent';
+import { setupLayerPopup, removePopupHandlers } from '@/utils/popupHandlers';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -85,7 +87,6 @@ const rasterPopup = ref(null);
 
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
-let pinnedFeatureId = null;
 let hoveredSetorId = null;
 
 // Map constants
@@ -98,7 +99,6 @@ const currentLayer = computed(() => route.query.layer);
 const currentScale = computed(() => route.query.scale);
 const currentYear = computed(() => route.query.year || '2021');
 const currentCode = computed(() => route.query.code);
-console.log('currentCode', currentCode);
 const initialCode = ref(route.query.code);
 
 watch(
@@ -106,7 +106,7 @@ watch(
     () => locationStore.cd_mun,
     () => currentLayer.value,
     () => currentScale.value,
-    () => currentYear.value, // Add year to the watch array
+    () => currentYear.value,
     () => route.query.code
   ],
   async([newCdMun], [oldCdMun]) => {
@@ -118,7 +118,7 @@ watch(
 
     if (mapLoaded.value) {
       removeDynamicLayer();
-      await setupDynamicLayer(); // Make this async
+      await setupDynamicLayer();
     }
 
     if (map.value.getLayer('selected-municipality-fill')) {
@@ -175,7 +175,6 @@ function removeDynamicLayer() {
 
   // Reset state
   hoveredFeatureId = null;
-  pinnedFeatureId = null;
   hoveredSetorId = null;
   if (map.value._hoveredParkId) {
     map.value._hoveredParkId = null;
@@ -191,7 +190,6 @@ function setupDynamicLayer() {
   // Reset hover states
   hoveredFeatureId = null;
   hoveredSetorId = null;
-  pinnedFeatureId = null;
 
   const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
   if (!config || !config.source) { return; }
@@ -548,35 +546,6 @@ function setupMasterInteractionHandler(config) {
   map.value.on('mouseout', masterOutHandler);
 }
 
-function getPopupContent(feat, config) {
-  let rawValue = feat.properties[config.property];
-  if (rawValue === undefined || rawValue === null) {
-    rawValue = 'N/A';
-  } else {
-    // If a multiplier is defined, multiply the raw value
-    if (config.popup && config.popup.multiplier) {
-      rawValue = Number(rawValue) * config.popup.multiplier;
-    }
-    // If a custom format function is provided, use it
-    if (config.popup && typeof config.popup.format === 'function') {
-      rawValue = config.popup.format(rawValue);
-    } else {
-      rawValue = Number(rawValue).toFixed(2);
-    }
-  }
-  // For "escala estadual" add the municipality name (if available)
-  let prefix = '';
-  if (currentScale.value === 'estadual' && feat.properties.nm_mun) {
-    prefix = `<span style="font-size: 1.2em; font-weight: bold;">${feat.properties.nm_mun}</span><br>`;
-  }
-
-  return `
-    <div style="font-family: system-ui; padding: 8px;">
-      <p>${prefix}${config.label}:<br><strong>${rawValue} ${config.unit || ''}</strong></p>
-    </div>
-  `;
-}
-
 function setupRasterInteractions(config) {
   if (!map.value) { return; }
 
@@ -677,107 +646,21 @@ function removeRasterInteractions() {
   }
 }
 
-function removeVectorInteractions() {
-  if (!map.value) { return; }
-  map.value.off('mousemove', 'dynamic-layer');
-  map.value.off('mouseleave', 'dynamic-layer');
-  map.value.off('click', 'dynamic-layer');
+function setupVectorInteractions(config) {
+  if (!map.value) {return;}
+
+  const handlers = setupLayerPopup(map.value, config);
+
+  // Armazenar handlers para remoção posterior
+  map.value._popupHandlers = handlers;
 }
 
-function setupVectorInteractions(config) {
-  if (!map.value) { return; }
-  map.value.on('mousemove', 'dynamic-layer', onVectorMouseMove);
-  map.value.on('mouseleave', 'dynamic-layer', onVectorMouseLeave);
-  map.value.on('click', 'dynamic-layer', onVectorClick);
+function removeVectorInteractions() {
+  if (!map.value) {return;}
 
-  function onVectorMouseMove(e) {
-    // First check if the layer is visible and has opacity > 0
-    const layerOpacity = map.value.getPaintProperty('dynamic-layer', 'fill-opacity') || 0;
-    if (layerOpacity <= 0) {
-      // If opacity is 0, don't show popup or cursor change
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: hoveredFeatureId },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-        vectorPopup.value.remove();
-      }
-      map.value.getCanvas().style.cursor = '';
-
-      return;
-    }
-    if (!e.features?.length) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: hoveredFeatureId },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-        vectorPopup.value.remove();
-      }
-
-      return;
-    }
-    const feat = e.features[0];
-    const featId = feat.id;
-    if (featId !== hoveredFeatureId) {
-      if (hoveredFeatureId !== null) {
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: hoveredFeatureId },
-          { hover: false }
-        );
-      }
-      hoveredFeatureId = featId;
-      map.value.setFeatureState(
-        { source: 'dynamic-source', id: featId },
-        { hover: true }
-      );
-    }
-    const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-    vectorPopup.value
-      .setLngLat(e.lngLat)
-      .setOffset(offset)
-      .setHTML(getPopupContent(feat, config))
-      .addTo(map.value);
-    map.value.getCanvas().style.cursor = 'pointer';
-  }
-
-  function onVectorMouseLeave() {
-    if (hoveredFeatureId !== null) {
-      map.value.setFeatureState(
-        { source: 'dynamic-source', id: hoveredFeatureId },
-        { hover: false }
-      );
-      hoveredFeatureId = null;
-    }
-    vectorPopup.value.remove();
-    map.value.getCanvas().style.cursor = '';
-  }
-
-  function onVectorClick(e) {
-    if (!e.features?.length) { return; }
-    const feat = e.features[0];
-    const featId = feat.id;
-    if (e.originalEvent.ctrlKey) {
-      if (pinnedFeatureId !== null) {
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: pinnedFeatureId },
-          { pinned: false }
-        );
-      }
-      pinnedFeatureId = featId;
-      map.value.setFeatureState(
-        { source: 'dynamic-source', id: featId },
-        { pinned: true }
-      );
-      pinnedPopup.value
-        .setLngLat(e.lngLat)
-        .setHTML(getPopupContent(feat, config))
-        .addTo(map.value);
-    } else {
-      // (Optionally) you might change the locationStore or trigger other behavior here.
-    }
+  if (map.value._popupHandlers) {
+    removePopupHandlers(map.value, map.value._popupHandlers);
+    map.value._popupHandlers = null;
   }
 }
 
@@ -909,7 +792,6 @@ function initializeMap() {
   // Reset hover state
   hoveredSetorId = null;
   hoveredFeatureId = null;
-  pinnedFeatureId = null;
 
   let initialState = {
     center: [coordinates.value.lng, coordinates.value.lat],
