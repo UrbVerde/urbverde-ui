@@ -35,3 +35,24 @@ export function getPopupContent(feat, config) {
     </div>
   `;
 }
+
+/**
+ * Gera o conteúdo HTML do popup para camadas raster
+ * @param {number|null} value - O valor raster a ser exibido
+ * @param {Object} config - Configuração da camada
+ * @returns {string} HTML formatado do popup
+ */
+export function getRasterPopupContent(value, config) {
+  let formattedValue;
+  if (value !== null) {
+    if (config.popup && typeof config.popup.format === 'function') {
+      formattedValue = config.popup.format(value);
+    } else {
+      formattedValue = value.toFixed(2) + (config.popup?.unit || '');
+    }
+  } else {
+    formattedValue = 'N/A';
+  }
+
+  return `<div class="popup-content">${config.popup?.label || 'Valor'}:<br><strong>${formattedValue}</strong></div>`;
+}

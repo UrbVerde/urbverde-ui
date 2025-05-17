@@ -45,7 +45,7 @@ import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
 import { reorderAllLayers } from '@/utils/layersOrder';
-import { getPopupContent } from '@/utils/popupContent';
+import { getPopupContent, getRasterPopupContent } from '@/utils/popupContent';
 import { setupLayerPopup, removePopupHandlers } from '@/utils/popupHandlers';
 
 const locationStore = useLocationStore();
@@ -604,9 +604,7 @@ function setupRasterInteractions(config) {
           }
           rasterPopup.value
             .setLngLat(e.lngLat)
-            .setHTML(
-              `<div class="popup-content">${config.popup?.label || 'Valor'}:<br><strong>${globalLastRasterValue.value || 'N/A'}</strong></div>`
-            )
+            .setHTML(getRasterPopupContent(value, config))
             .addTo(map.value);
         })
         .catch(err => {
@@ -620,9 +618,7 @@ function setupRasterInteractions(config) {
     e.preventDefault();
     pinnedPopup.value
       .setLngLat(e.lngLat)
-      .setHTML(
-        `<div class="popup-content">${config.popup?.label || 'Valor'}:<br><strong>${globalLastRasterValue.value || 'N/A'}</strong></div>`
-      )
+      .setHTML(getRasterPopupContent(globalLastRasterValue.value, config))
       .addTo(map.value);
   };
 
@@ -711,6 +707,33 @@ async function fetchRasterValue(lng, lat, controller) {
   }
 
   return null;
+}
+
+function handleMissingImage(e) {
+  const imageId = e.id?.trim();
+  if (!imageId) { return; }
+  if (!map.value.hasImage(imageId)) {
+    const placeholder = { width: 1, height: 1, data: new Uint8Array(4).fill(0) };
+    map.value.addImage(imageId, placeholder);
+  }
+}
+
+/**
+ * Update the "scale" based on zoom.
+ */
+function getScaleFromZoom(zoom) {
+  let scale;
+  if (zoom >= 10) {
+    scale = 'intraurbana';
+  }
+  else if (zoom > 5) {
+    scale = 'estadual';
+  }
+  else {
+    scale = 'nacional';
+  }
+
+  return scale;
 }
 
 /* ---------------------------------------
@@ -1027,33 +1050,6 @@ function handleMunicipalityClick(e) {
       scale: 'intraurbana'
     });
   }
-}
-
-function handleMissingImage(e) {
-  const imageId = e.id?.trim();
-  if (!imageId) { return; }
-  if (!map.value.hasImage(imageId)) {
-    const placeholder = { width: 1, height: 1, data: new Uint8Array(4).fill(0) };
-    map.value.addImage(imageId, placeholder);
-  }
-}
-
-/**
- * Update the "scale" based on zoom.
- */
-function getScaleFromZoom(zoom) {
-  let scale;
-  if (zoom >= 10) {
-    scale = 'intraurbana';
-  }
-  else if (zoom > 5) {
-    scale = 'estadual';
-  }
-  else {
-    scale = 'nacional';
-  }
-
-  return scale;
 }
 
 /* ---------------------------------------
