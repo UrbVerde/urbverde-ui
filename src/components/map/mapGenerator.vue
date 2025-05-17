@@ -40,13 +40,24 @@ import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import { useRoute, useRouter } from 'vue-router';
 import CustomHash from './customHash';
-import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
+import { getLayerConfig } from '@/constants/layers.js';
 import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
 import { reorderAllLayers } from '@/utils/layersOrder';
-import { getPopupContent } from '@/utils/popupContent';
-import { setupLayerPopup, removePopupHandlers, setupRasterPopupHandlers, removeRasterPopupHandlers } from '@/utils/popupHandlers';
+
+import {
+  setupDynamicLayers,
+  clearPopups,
+  setupSetoresLayer
+} from '@/utils/layerManager';
+import {
+  setupRasterInteractions,
+  removeRasterInteractions,
+  setupVectorInteractions,
+  removeVectorInteractions,
+  setupSetoresInteractions
+} from '@/utils/interactionManager';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -118,8 +129,8 @@ function removeDynamicLayer() {
   if (!map.value) { return; }
 
   // Remove event handlers
-  removeRasterInteractions();
-  removeVectorInteractions();
+  removeRasterInteractions(map.value);
+  removeVectorInteractions(map.value);
 
   // Remove master interaction handler if exists
   if (map.value._masterInteractionHandler) {
@@ -168,157 +179,51 @@ function removeDynamicLayer() {
 function setupDynamicLayer() {
   if (!map.value || !currentLayer.value) { return; }
 
-  // Remove existing layers and handlers
+  // 1. Limpar layers existentes
   removeDynamicLayer();
 
-  // Reset hover states
+  // 2. Resetar estados
   hoveredFeatureId = null;
   hoveredSetorId = null;
 
+  // 3. Obter configuração
   const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
   if (!config || !config.source) { return; }
 
-  // Clear any existing popups
-  if (vectorPopup.value) { vectorPopup.value.remove(); }
-  if (rasterPopup.value) { rasterPopup.value.remove(); }
-  if (pinnedPopup.value) { pinnedPopup.value.remove(); }
+  // 4. Limpar popups existentes
+  clearPopups({
+    vector: vectorPopup.value,
+    raster: rasterPopup.value,
+    pinned: pinnedPopup.value
+  });
 
   try {
-    const sourceUrl = config.source.tiles[0];
-    const urlHasQuery = sourceUrl.includes('?');
-    const isVector = config.type !== 'raster';
-    const shouldFilter = currentScale.value === 'intraurbana' && locationStore.cd_mun && isVector;
+    // 5. Configurar layers dinâmicas
+    const success = setupDynamicLayers(
+      map.value,
+      config,
+      locationStore,
+      currentScale.value,
+      (config) => setupRasterInteractions(map.value, config, fetchRasterValue),
+      (config) => setupVectorInteractions(map.value, config)
+    );
 
-    // Aplica filtro no URL: compara cd_mun como string e como número para clipar municípios
-    const filteredUrl = shouldFilter
-      ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=(cd_mun='${locationStore.cd_mun}' OR cd_mun=${locationStore.cd_mun})`
-      : sourceUrl;
-
-    map.value.addSource('dynamic-source', {
-      ...config.source,
-      tiles: [filteredUrl]
-    });
-
-    // Adiciona layer raster
-    if (config.type === 'raster') {
-      map.value.addLayer({
-        id: 'dynamic-layer',
-        type: 'raster',
-        source: 'dynamic-source',
-        paint: config.paint
-      });
-
-      if (currentScale.value === 'intraurbana' && currentCode.value) {
+    // 6. Configurar layers adicionais se necessário
+    if (success && currentScale.value === 'intraurbana' && currentCode.value) {
+      if (config.type === 'raster') {
+        addParksLayer();
+      } else {
+        setupSetoresLayer(map.value, locationStore);
+        setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
       }
-
-      setupRasterInteractions(config);
-
-    } else {
-      // Adiciona layer vetorial
-      map.value.addLayer({
-        id: 'dynamic-layer',
-        type: 'fill',
-        source: 'dynamic-source',
-        'source-layer': config.source.sourceLayer,
-        paint: getLayerPaint(config)
-      });
-
-      // Filtro local como fallback
-      if (shouldFilter) {
-        map.value.setFilter('dynamic-layer', [
-          'any',
-          ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
-          ['==', ['get', 'cd_mun'], locationStore.cd_mun]
-        ]);
-      }
-
-      // Adiciona camada de contorno base
-      map.value.addLayer({
-        id: 'dynamic-layer-outline',
-        type: 'line',
-        source: 'dynamic-source',
-        'source-layer': config.source.sourceLayer,
-        paint: {
-          'line-color': '#666666',
-          'line-width': 1,
-          'line-opacity': 0.3
-        }
-      });
-
-      if (shouldFilter) {
-        map.value.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
-      }
-
-      // Adiciona camada de setores hover se estiver na escala intraurbana
-      if (currentScale.value === 'intraurbana' && currentCode.value && config.type !== 'raster') {
-        // Adiciona source dos setores
-        map.value.addSource('setores-source', {
-          type: 'vector',
-          tiles: [
-            'https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf'
-          ],
-          minzoom: 0,
-          maxzoom: 22
-        });
-
-        // Adiciona camada de setores para hover
-        map.value.addLayer({
-          id: 'setores-layer',
-          type: 'fill',
-          source: 'setores-source',
-          'source-layer': 'public.geom_setores',
-          paint: {
-            'fill-color': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              '#666666',
-              'transparent'
-            ],
-            'fill-opacity': 0.2
-          }
-        });
-
-        if (shouldFilter) {
-          map.value.setFilter('setores-layer', ['==', 'cd_mun', locationStore.cd_mun]);
-        }
-
-        // Setup setores interactions
-        map.value.on('mousemove', 'setores-layer', (e) => {
-          if (e.features.length > 0) {
-            if (hoveredSetorId) {
-              map.value.setFeatureState(
-                { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-                { hover: false }
-              );
-            }
-            hoveredSetorId = e.features[0].id;
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: true }
-            );
-          }
-        });
-
-        map.value.on('mouseleave', 'setores-layer', () => {
-          if (hoveredSetorId) {
-            map.value.setFeatureState(
-              { source: 'setores-source', id: hoveredSetorId, sourceLayer: 'public.geom_setores' },
-              { hover: false }
-            );
-            hoveredSetorId = null;
-          }
-        });
-        addParksLayer();
-      }
-      setupVectorInteractions(config);
     }
 
-    setupMasterInteractionHandler(config);
+    // 7. Reordenar layers
+    reorderAllLayers(map.value);
   } catch (error) {
-    console.error('Error setting up dynamic layer:', error);
+    console.error('Erro ao configurar layers:', error);
   }
-  reorderAllLayers(map.value);
 }
 
 // Helper function to add parks layer
@@ -344,223 +249,6 @@ function addParksLayer() {
 
   // Filtrar pois ainda não funciona cql diretamente no tile
   map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
-}
-
-// This function sets up a master event handler for interaction priority
-function setupMasterInteractionHandler(config) {
-  // Remove previous master handler if it exists
-  if (map.value._masterInteractionHandler) {
-    map.value.off('mousemove', map.value._masterInteractionHandler);
-    map.value._masterInteractionHandler = null;
-  }
-
-  // Let's create a single handler for mousemove that decides which layer should respond
-  const masterHandler = (e) => {
-    // First check if we're hovering over parks
-    const parksFeatures = map.value.queryRenderedFeatures(e.point, { layers: ['parks-layer'] });
-
-    // Get parks layer opacity
-    const parksOpacity = map.value.getPaintProperty('parks-layer', 'fill-opacity') || 0;
-
-    // If we're over parks and parks layer has opacity > 0, show parks popup
-    if (parksFeatures.length > 0 && parksOpacity > 0) {
-      // Disable other layers hover states
-      if (hoveredFeatureId) {
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: hoveredFeatureId },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-      }
-
-      // Handle parks hover specifically
-      const feat = parksFeatures[0];
-      const featId = feat.id;
-
-      // Set hover state on parks feature
-      const hoveredParkId = map.value._hoveredParkId;
-
-      if (hoveredParkId !== featId) {
-        if (hoveredParkId) {
-          map.value.setFeatureState(
-            { source: 'parks-source', id: hoveredParkId, sourceLayer: 'public.geom_pracas' },
-            { hover: false }
-          );
-        }
-
-        map.value.setFeatureState(
-          { source: 'parks-source', id: featId, sourceLayer: 'public.geom_pracas' },
-          { hover: true }
-        );
-
-        map.value._hoveredParkId = featId;
-      }
-
-      // Show parks popup
-      vectorPopup.value
-        .setLngLat(e.lngLat)
-        .setHTML(`<div style="font-family: system-ui; padding: 8px;">
-        <strong>${feat.properties.nm_praca || 'Área sem nome'}</strong>
-        <br>
-        Área: ${(feat.properties.aream2 || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²
-      </div>`)
-        .addTo(map.value);
-
-      map.value.getCanvas().style.cursor = 'pointer';
-
-      // Stop propagation - don't let other handlers run
-      return;
-    }
-
-    // If we're not over parks or parks opacity is 0, check dynamic layer
-    const dynamicLayerId = config.type === 'raster' ? 'dynamic-layer' : 'dynamic-layer';
-    const dynamicOpacityProp = config.type === 'raster' ? 'raster-opacity' : 'fill-opacity';
-    const dynamicOpacity = map.value.getPaintProperty(dynamicLayerId, dynamicOpacityProp) || 0;
-
-    // Remove parks hover if it was active
-    if (map.value._hoveredParkId) {
-      map.value.setFeatureState(
-        { source: 'parks-source', id: map.value._hoveredParkId, sourceLayer: 'public.geom_pracas' },
-        { hover: false }
-      );
-      map.value._hoveredParkId = null;
-    }
-
-    // If dynamic layer has opacity <= 0, remove all hover effects
-    if (dynamicOpacity <= 0) {
-      if (hoveredFeatureId) {
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: hoveredFeatureId },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-      }
-
-      vectorPopup.value.remove();
-      map.value.getCanvas().style.cursor = '';
-
-      return;
-    }
-
-    // Default to the original handlers for the layer type
-    if (config.type === 'raster') {
-      // Call the existing raster mousemove handler directly
-      if (map.value._rasterPopupHandlers?.onRasterMouseMove) {
-        map.value._rasterPopupHandlers.onRasterMouseMove(e);
-      }
-    } else {
-      // For vector layers, check features and handle hover
-      const features = map.value.queryRenderedFeatures(e.point, { layers: ['dynamic-layer'] });
-
-      if (!features.length) {
-        if (hoveredFeatureId !== null) {
-          map.value.setFeatureState(
-            { source: 'dynamic-source', id: hoveredFeatureId },
-            { hover: false }
-          );
-          hoveredFeatureId = null;
-          vectorPopup.value.remove();
-          map.value.getCanvas().style.cursor = '';
-        }
-
-        return;
-      }
-
-      const feat = features[0];
-      const featId = feat.id;
-
-      if (featId !== hoveredFeatureId) {
-        if (hoveredFeatureId !== null) {
-          map.value.setFeatureState(
-            { source: 'dynamic-source', id: hoveredFeatureId },
-            { hover: false }
-          );
-        }
-        hoveredFeatureId = featId;
-        map.value.setFeatureState(
-          { source: 'dynamic-source', id: featId },
-          { hover: true }
-        );
-      }
-
-      const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-      vectorPopup.value
-        .setLngLat(e.lngLat)
-        .setOffset(offset)
-        .setHTML(getPopupContent(feat, config))
-        .addTo(map.value);
-
-      map.value.getCanvas().style.cursor = 'pointer';
-    }
-  };
-
-  // Store the handler so we can remove it later
-  map.value._masterInteractionHandler = masterHandler;
-
-  // Add the master handler
-  map.value.on('mousemove', masterHandler);
-
-  // Handle mouseleave for the entire map
-  const masterOutHandler = () => {
-    // Clear all hover states
-    if (hoveredFeatureId) {
-      map.value.setFeatureState(
-        { source: 'dynamic-source', id: hoveredFeatureId },
-        { hover: false }
-      );
-      hoveredFeatureId = null;
-    }
-
-    if (map.value._hoveredParkId) {
-      map.value.setFeatureState(
-        { source: 'parks-source', id: map.value._hoveredParkId, sourceLayer: 'public.geom_pracas' },
-        { hover: false }
-      );
-      map.value._hoveredParkId = null;
-    }
-
-    vectorPopup.value.remove();
-    if (rasterPopup.value) {
-      rasterPopup.value.remove();
-    }
-    map.value.getCanvas().style.cursor = '';
-  };
-
-  map.value._masterOutHandler = masterOutHandler;
-  map.value.on('mouseout', masterOutHandler);
-}
-
-function setupRasterInteractions(config) {
-  if (!map.value) { return; }
-
-  const handlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
-  map.value._rasterPopupHandlers = handlers;
-}
-
-function removeRasterInteractions() {
-  if (!map.value) { return; }
-  if (map.value._rasterPopupHandlers) {
-    removeRasterPopupHandlers(map.value, map.value._rasterPopupHandlers);
-    map.value._rasterPopupHandlers = null;
-  }
-}
-
-function setupVectorInteractions(config) {
-  if (!map.value) {return;}
-
-  const handlers = setupLayerPopup(map.value, config);
-
-  // Armazenar handlers para remoção posterior
-  map.value._popupHandlers = handlers;
-}
-
-function removeVectorInteractions() {
-  if (!map.value) {return;}
-
-  if (map.value._popupHandlers) {
-    removePopupHandlers(map.value, map.value._popupHandlers);
-    map.value._popupHandlers = null;
-  }
 }
 
 /**
