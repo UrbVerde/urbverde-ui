@@ -2,8 +2,8 @@
 import { createSectionConfig, createSection } from '@/config/helperCreateSection';
 import VGraphicSection from '@/components/cards/vegetation/vgraphics/VGraphicSection.vue';
 
-import globalwarming from '@/assets/images/cards/globalwarming.svg';
-import environmentalcampaign from '@/assets/images/cards/environmentalcampaign.svg';
+import globalwarming from '@/assets/images/cards/globalwarming-vegetation.svg';
+import environmentalcampaign from '@/assets/images/cards/plantingATreeTogether.svg';
 import field from '@/assets/images/cards/img.svg';
 
 export default createSectionConfig((nm_mun, uf) => [
@@ -77,7 +77,8 @@ export default createSectionConfig((nm_mun, uf) => [
   createSection({
     id: 'stats',
     ref: 'vulnerableSection',
-    title: `Quem é mais afetado pelo calor extremo em ${nm_mun}?`,
+    title: 'Desigualdade ambiental e a vegetação',
+    showYearPicker: false,
     panel: {
       variant: '1-1',
       items: [
@@ -87,7 +88,7 @@ export default createSectionConfig((nm_mun, uf) => [
             showMidia: true,
             showCardTitle: false,
             showParagraphTitle: true,
-            paragraphTitle: 'Como podemos tornar as cidades mais frescas?',
+            paragraphTitle: 'Quais os benefícios de uma cidade arborizada?',
             midiaType: 'image',
             imageSrc: environmentalcampaign,
             midiaPosition: 'right',
@@ -102,6 +103,37 @@ export default createSectionConfig((nm_mun, uf) => [
             buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas/vegetação',
           }
         },
+      ]
+    }
+  }),
+  createSection({
+    id: 'ranking',
+    ref: 'rankingSection',
+    title: `${nm_mun} - ${uf} no rankings de municípios`,
+    panel: {
+      variant: '1-3',
+      items: [
+        {
+          component: 'CardRanking',
+          props: {
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
+            cardIndex: 0,
+          }
+        },
+        {
+          component: 'CardRanking',
+          props: {
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
+            cardIndex: 1,
+          }
+        },
+        {
+          component: 'CardRanking',
+          props: {
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
+            cardIndex: 2,
+          }
+        }
       ]
     }
   }),
