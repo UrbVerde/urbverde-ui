@@ -36,8 +36,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 0,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'Conta o número de crianças e idosos morando em áreas mais quentes. Quanto maior, maior a vulnerabilidade',
+                  overrideCardSubtitle: 'Conta o número de crianças e idosos morando em áreas mais quentes. Quanto maior, maior a vulnerabilidade',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -66,8 +65,6 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 1,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'É a diferença entre a temperatura mais quente e a mais fria',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -112,8 +109,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 0,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -124,8 +120,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 1,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -136,8 +131,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 2,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }
@@ -148,8 +142,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 3,
                   showInfoButton: true,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo nas regiões mais quentes',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
                 }

@@ -181,11 +181,7 @@ const props = defineProps({
   },
 
   // Card Subtitle Props
-  showCardSubtitle: {
-    type: Boolean,
-    default: false
-  },
-  cardSubtitle: {
+  overrideCardSubtitle: { // Se ficar vazio, o subtitle será buscado na API
     type: String,
     default: ''
   },
@@ -241,6 +237,8 @@ const cardData = ref(null);
 const title = computed(() => props.overrideTitle || cardData.value?.title || '');
 const titleSubtitle = computed(() => props.overrideTitleSubtitle || cardData.value?.subtitle || '');
 const numberValue = computed(() => props.overrideNumberValue || cardData.value?.value || '');
+const cardSubtitle = computed(() => props.overrideCardSubtitle || cardData.value?.subtitle || '');
+const showCardSubtitle = computed(() => !!cardSubtitle.value);
 const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.value);
 
 // Fetch data from API

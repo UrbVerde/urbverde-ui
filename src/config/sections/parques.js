@@ -56,8 +56,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 2,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'Quantas vezes moradores próximos a praças tem em média mais renda',
+                  overrideCardSubtitle: 'Quantas vezes moradores próximos a praças tem em média mais renda',
                 }
               },
               {
@@ -65,8 +64,6 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 3,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'População negra ou indígena que vive fora da vizinhança das praças',
                 }
               },
             ]
@@ -92,8 +89,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 0,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
@@ -101,8 +97,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 1,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
@@ -110,8 +105,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 2,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
@@ -119,8 +113,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
                   cardIndex: 3,
-                  showCardSubtitle: true,
-                  cardSubtitle: 'do total de pessoas vivendo fora da vizinhança de praças',
+                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
             ]
