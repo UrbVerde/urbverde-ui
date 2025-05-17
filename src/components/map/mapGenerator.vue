@@ -79,7 +79,7 @@ let globalRasterMouseMove = null;
 let globalRasterMouseClick = null;
 
 // Standard popups
-const hoverPopup = ref(null);
+const vectorPopup = ref(null);
 const pinnedPopup = ref(null);
 const rasterPopup = ref(null);
 
@@ -146,7 +146,7 @@ function removeDynamicLayer() {
   }
 
   // Remove popups
-  if (hoverPopup.value) { hoverPopup.value.remove(); }
+  if (vectorPopup.value) { vectorPopup.value.remove(); }
   if (rasterPopup.value) { rasterPopup.value.remove(); }
   if (pinnedPopup.value) { pinnedPopup.value.remove(); }
 
@@ -197,7 +197,7 @@ function setupDynamicLayer() {
   if (!config || !config.source) { return; }
 
   // Clear any existing popups
-  if (hoverPopup.value) { hoverPopup.value.remove(); }
+  if (vectorPopup.value) { vectorPopup.value.remove(); }
   if (rasterPopup.value) { rasterPopup.value.remove(); }
   if (pinnedPopup.value) { pinnedPopup.value.remove(); }
 
@@ -415,7 +415,7 @@ function setupMasterInteractionHandler(config) {
       }
 
       // Show parks popup
-      hoverPopup.value
+      vectorPopup.value
         .setLngLat(e.lngLat)
         .setHTML(`<div style="font-family: system-ui; padding: 8px;">
         <strong>${feat.properties.nm_praca || 'Área sem nome'}</strong>
@@ -454,7 +454,7 @@ function setupMasterInteractionHandler(config) {
         hoveredFeatureId = null;
       }
 
-      hoverPopup.value.remove();
+      vectorPopup.value.remove();
       map.value.getCanvas().style.cursor = '';
 
       return;
@@ -477,7 +477,7 @@ function setupMasterInteractionHandler(config) {
             { hover: false }
           );
           hoveredFeatureId = null;
-          hoverPopup.value.remove();
+          vectorPopup.value.remove();
           map.value.getCanvas().style.cursor = '';
         }
 
@@ -502,7 +502,7 @@ function setupMasterInteractionHandler(config) {
       }
 
       const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-      hoverPopup.value
+      vectorPopup.value
         .setLngLat(e.lngLat)
         .setOffset(offset)
         .setHTML(getPopupContent(feat, config))
@@ -537,7 +537,7 @@ function setupMasterInteractionHandler(config) {
       map.value._hoveredParkId = null;
     }
 
-    hoverPopup.value.remove();
+    vectorPopup.value.remove();
     if (rasterPopup.value) {
       rasterPopup.value.remove();
     }
@@ -701,7 +701,7 @@ function setupVectorInteractions(config) {
           { hover: false }
         );
         hoveredFeatureId = null;
-        hoverPopup.value.remove();
+        vectorPopup.value.remove();
       }
       map.value.getCanvas().style.cursor = '';
 
@@ -714,7 +714,7 @@ function setupVectorInteractions(config) {
           { hover: false }
         );
         hoveredFeatureId = null;
-        hoverPopup.value.remove();
+        vectorPopup.value.remove();
       }
 
       return;
@@ -735,7 +735,7 @@ function setupVectorInteractions(config) {
       );
     }
     const offset = e.point.y < 50 ? [0, 20] : [0, -10];
-    hoverPopup.value
+    vectorPopup.value
       .setLngLat(e.lngLat)
       .setOffset(offset)
       .setHTML(getPopupContent(feat, config))
@@ -751,7 +751,7 @@ function setupVectorInteractions(config) {
       );
       hoveredFeatureId = null;
     }
-    hoverPopup.value.remove();
+    vectorPopup.value.remove();
     map.value.getCanvas().style.cursor = '';
   }
 
@@ -856,7 +856,7 @@ async function loadCoordinates(code) {
     }
 
     // Remove any existing popups
-    if (hoverPopup.value) { hoverPopup.value.remove(); }
+    if (vectorPopup.value) { vectorPopup.value.remove(); }
 
     // Set scale and trigger layer setup
     await locationStore.setLocation({ scale: 'intraurbana' });
@@ -939,7 +939,7 @@ function initializeMap() {
 
   map.value.on('load', () => {
     mapLoaded.value = true;
-    hoverPopup.value = new maplibregl.Popup({
+    vectorPopup.value = new maplibregl.Popup({
       closeButton: false,
       closeOnClick: false,
       trackPointer: true,
