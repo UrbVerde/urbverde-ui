@@ -4,6 +4,11 @@
     :modalTitle="modalTitle"
     :modalBodyText="modalBodyText"
   >
+    <!-- Image at the top -->
+    <template v-if="showImage">
+      <img :src="imageSrc" alt="Ilustração" class="card-image" />
+    </template>
+
     <CardTitle
       :title="title"
       :subtitle="titleSubtitle"
@@ -88,6 +93,15 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import { useCardData } from '@/utils/useCardData';
 
 const props = defineProps({
+  // Image props
+  showImage: {
+    type: Boolean,
+    default: false
+  },
+  imageSrc: {
+    type: [String, Object],
+    default: ''
+  },
 
   // API Configuration
 
@@ -300,6 +314,15 @@ onMounted(() => {
 <style scoped lang="scss">
 p {
     margin: 0;
+}
+
+.card-image {
+    display: flex;
+    width: 100%;
+    height: auto;
+    padding-bottom: 24px;
+    max-width: 180px;
+    margin: 0 auto;
 }
 
 .content-wrapper {
