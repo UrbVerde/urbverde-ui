@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl';
-import { getPopupContent } from './popupContent';
+import { getPopupContent, getRasterPopupContent } from './popupContent';
 
 /**
  * Configura o popup para uma camada específica
@@ -151,4 +151,117 @@ export function removePopupHandlers(map, handlers) {
 
   if (handlers.vectorPopup) {handlers.vectorPopup.remove();}
   if (handlers.pinnedPopup) {handlers.pinnedPopup.remove();}
+}
+
+/**
+ * Configura os handlers de interação para camadas raster
+ * @param {Object} map - Instância do mapa
+ * @param {Object} config - Configuração da camada
+ * @param {Function} fetchRasterValue - Função para buscar valor raster
+ * @returns {Object} Objeto com handlers de interação
+ */
+export function setupRasterPopupHandlers(map, config, fetchRasterValue) {
+  if (!map) { return null; }
+
+  const rasterPopup = new maplibregl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+    offset: [0, -20],
+    className: 'hover-popup',
+    trackPointer: true
+  });
+
+  const pinnedPopup = new maplibregl.Popup({
+    closeButton: true,
+    closeOnClick: false,
+    offset: { top: [0, 20], bottom: [0, -20] },
+    className: 'pinned-popup'
+  });
+
+  let currentRequest = null;
+  let debounceTimeout;
+  const debounceDelay = 50;
+  let globalLastRasterValue = null;
+
+  const onRasterMouseMove = (e) => {
+    const layerOpacity = map.getPaintProperty('dynamic-layer', 'raster-opacity') || 0;
+    if (layerOpacity <= 0) {
+      if (rasterPopup) {
+        rasterPopup.remove();
+      }
+      map.getCanvas().style.cursor = '';
+
+      return;
+    }
+
+    const features = map.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
+    const isMouseWithinMunicipality = features.length > 0;
+    if (!isMouseWithinMunicipality) {
+      return;
+    }
+
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      if (currentRequest) {
+        currentRequest.abort();
+        currentRequest = null;
+      }
+      const controller = new AbortController();
+      currentRequest = controller;
+
+      fetchRasterValue(e.lngLat.lng, e.lngLat.lat, controller)
+        .then((value) => {
+          if (value !== null) {
+            if (config.popup && typeof config.popup.format === 'function') {
+              globalLastRasterValue = config.popup.format(value);
+            } else {
+              globalLastRasterValue = value.toFixed(2) + (config.popup?.unit || '');
+            }
+          }
+          rasterPopup
+            .setLngLat(e.lngLat)
+            .setHTML(getRasterPopupContent(value, config))
+            .addTo(map);
+        })
+        .catch(err => {
+          if (err.name !== 'AbortError') { console.error(err); }
+        });
+    }, debounceDelay);
+  };
+
+  const onRasterMouseClick = (e) => {
+    if (!e.originalEvent.ctrlKey) { return; }
+    e.preventDefault();
+    pinnedPopup
+      .setLngLat(e.lngLat)
+      .setHTML(getRasterPopupContent(globalLastRasterValue, config))
+      .addTo(map);
+  };
+
+  // Anexar os handlers ao mapa
+  map.on('mousemove', onRasterMouseMove);
+  map.on('click', onRasterMouseClick);
+
+  return {
+    rasterPopup,
+    pinnedPopup,
+    onRasterMouseMove,
+    onRasterMouseClick,
+    globalLastRasterValue
+  };
+}
+
+/**
+ * Remove os handlers de interação do popup raster
+ * @param {Object} map - Instância do mapa
+ * @param {Object} handlers - Handlers de interação
+ */
+export function removeRasterPopupHandlers(map, handlers) {
+  if (!map || !handlers) { return; }
+
+  map.off('mousemove', handlers.onRasterMouseMove);
+  map.off('click', handlers.onRasterMouseClick);
+
+  if (handlers.rasterPopup) { handlers.rasterPopup.remove(); }
+  if (handlers.pinnedPopup) { handlers.pinnedPopup.remove(); }
 }

@@ -45,8 +45,8 @@ import MapControls from './controls/MapControls.vue';
 import AttributionBar from './AttributionBar.vue';
 import CustomTerrainControl from './controls/customTerrainControl';
 import { reorderAllLayers } from '@/utils/layersOrder';
-import { getPopupContent, getRasterPopupContent } from '@/utils/popupContent';
-import { setupLayerPopup, removePopupHandlers } from '@/utils/popupHandlers';
+import { getPopupContent } from '@/utils/popupContent';
+import { setupLayerPopup, removePopupHandlers, setupRasterPopupHandlers, removeRasterPopupHandlers } from '@/utils/popupHandlers';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -65,21 +65,6 @@ const mapLoaded = ref(false);
 const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
 
-function handleTerrainToggle(enabled) {
-  terrainEnabled.value = enabled;
-}
-
-function handleLocationFound(coords) {
-  // Maybe store the location or update some UI state
-  console.log('User location found:', coords);
-}
-
-const globalLastRasterValue = ref(null);
-const isMouseWithinMunicipality = ref(false);
-const isHandlingScaleChange = ref(false);
-let globalRasterMouseMove = null;
-let globalRasterMouseClick = null;
-
 // Standard popups
 const vectorPopup = ref(null);
 const pinnedPopup = ref(null);
@@ -92,7 +77,6 @@ let hoveredSetorId = null;
 // Map constants
 const MAP_ZOOM_START = 14;
 const MAP_ZOOM_FINAL = 14;
-const MAP_ANIMATION_DURATION = 1000;
 
 // Get current layer id, scale and year from the URL query.
 const currentLayer = computed(() => route.query.layer);
@@ -461,8 +445,8 @@ function setupMasterInteractionHandler(config) {
     // Default to the original handlers for the layer type
     if (config.type === 'raster') {
       // Call the existing raster mousemove handler directly
-      if (globalRasterMouseMove) {
-        globalRasterMouseMove(e);
+      if (map.value._rasterPopupHandlers?.onRasterMouseMove) {
+        map.value._rasterPopupHandlers.onRasterMouseMove(e);
       }
     } else {
       // For vector layers, check features and handle hover
@@ -549,96 +533,15 @@ function setupMasterInteractionHandler(config) {
 function setupRasterInteractions(config) {
   if (!map.value) { return; }
 
-  if (!rasterPopup.value) {
-    rasterPopup.value = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      offset: [0, -20],
-      className: 'hover-popup',
-      trackPointer: true
-    });
-  }
-
-  let currentRequest = null;
-  let debounceTimeout;
-  const debounceDelay = 50;
-
-  const onRasterMouseMove = (e) => {
-    // First check if the layer is visible and has opacity > 0
-    const layerOpacity = map.value.getPaintProperty('dynamic-layer', 'raster-opacity') || 0;
-    if (layerOpacity <= 0) {
-      // If opacity is 0, don't show popup or cursor change
-      if (rasterPopup.value) {
-        rasterPopup.value.remove();
-      }
-      map.value.getCanvas().style.cursor = '';
-
-      return;
-    }
-    // Query for municipality features if desired
-    const features = map.value.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
-    isMouseWithinMunicipality.value = features.length > 0;
-    if (!isMouseWithinMunicipality.value) {
-      // Optionally hide the popup if not over a municipality:
-      return;
-    }
-
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      if (currentRequest) {
-        currentRequest.abort();
-        currentRequest = null;
-      }
-      const controller = new AbortController();
-      currentRequest = controller;
-
-      fetchRasterValue(e.lngLat.lng, e.lngLat.lat, controller)
-        .then((value) => {
-          if (value !== null) {
-            // Use the format function if available; update our ref.
-            if (config.popup && typeof config.popup.format === 'function') {
-              globalLastRasterValue.value = config.popup.format(value);
-            } else {
-              globalLastRasterValue.value = value.toFixed(2) + (config.popup?.unit || '');
-            }
-          }
-          rasterPopup.value
-            .setLngLat(e.lngLat)
-            .setHTML(getRasterPopupContent(value, config))
-            .addTo(map.value);
-        })
-        .catch(err => {
-          if (err.name !== 'AbortError') { console.error(err); }
-        });
-    }, debounceDelay);
-  };
-
-  const onRasterMouseClick = (e) => {
-    if (!e.originalEvent.ctrlKey) { return; }
-    e.preventDefault();
-    pinnedPopup.value
-      .setLngLat(e.lngLat)
-      .setHTML(getRasterPopupContent(globalLastRasterValue.value, config))
-      .addTo(map.value);
-  };
-
-  // Store these handlers in global variables for later removal
-  globalRasterMouseMove = onRasterMouseMove;
-  globalRasterMouseClick = onRasterMouseClick;
-
-  map.value.on('mousemove', onRasterMouseMove);
-  map.value.on('click', onRasterMouseClick);
+  const handlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
+  map.value._rasterPopupHandlers = handlers;
 }
 
 function removeRasterInteractions() {
   if (!map.value) { return; }
-  if (globalRasterMouseMove) {
-    map.value.off('mousemove', globalRasterMouseMove);
-    globalRasterMouseMove = null;
-  }
-  if (globalRasterMouseClick) {
-    map.value.off('click', globalRasterMouseClick);
-    globalRasterMouseClick = null;
+  if (map.value._rasterPopupHandlers) {
+    removeRasterPopupHandlers(map.value, map.value._rasterPopupHandlers);
+    map.value._rasterPopupHandlers = null;
   }
 }
 
@@ -743,7 +646,6 @@ function getScaleFromZoom(zoom) {
 /** Load city coordinates and initialize or fly the map. */
 async function loadCoordinates(code) {
   isLoadingCoordinates.value = true;
-  isHandlingScaleChange.value = true;
 
   try {
     const currentHash = window.location.hash;
@@ -799,9 +701,6 @@ async function loadCoordinates(code) {
     console.error('Error loading coords:', err);
   } finally {
     isLoadingCoordinates.value = false;
-    setTimeout(() => {
-      isHandlingScaleChange.value = false;
-    }, MAP_ANIMATION_DURATION + 100);
   }
 }
 
@@ -898,8 +797,6 @@ function initializeMap() {
   customHash.value.addTo(map.value);
   map.value.on('styleimagemissing', handleMissingImage);
   map.value.on('zoomend', () => {
-    isHandlingScaleChange.value = false;
-
     const newScale = getScaleFromZoom(map.value.getZoom());
 
     if (locationStore.scale !== newScale) {
