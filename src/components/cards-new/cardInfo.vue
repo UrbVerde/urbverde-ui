@@ -70,6 +70,7 @@
       <!-- Left position -->
       <template v-else-if="showMidia && midiaPosition === 'left'">
         <MidiaInsideCards
+          v-if="largerThan('tablet')"
           :type-midia="midiaType"
           :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
           :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
@@ -94,10 +95,22 @@
           :button-icon-type="buttonIconType"
           :button-link="buttonLink"
         />
+        <MidiaInsideCards
+          v-if="!largerThan('tablet')"
+          :type-midia="midiaType"
+          :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
+          :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
+        />
       </template>
 
       <!-- Right position -->
       <template v-else-if="showMidia && midiaPosition === 'right'">
+        <MidiaInsideCards
+          v-if="!largerThan('tablet')"
+          :type-midia="midiaType"
+          :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
+          :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
+        />
         <ParagraphInsideCards
           :show-card-title="showCardTitle"
           :title="title"
@@ -119,6 +132,7 @@
           :button-link="buttonLink"
         />
         <MidiaInsideCards
+          v-if="largerThan('tablet')"
           :type-midia="midiaType"
           :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
           :videoUrl="videoUrl || (midiaType === 'video' ? midiaLink : undefined)"
@@ -156,6 +170,9 @@
 import CardBase from './cards-aux/cardBase.vue';
 import MidiaInsideCards from './cards-aux/midiaInsideCards.vue';
 import ParagraphInsideCards from './cards-aux/paragraphInsideCards.vue';
+import { useWindowSize } from '@/utils/useWindowsSize';
+
+const { largerThan } = useWindowSize();
 
 defineProps({
   // CardTitle props (from ParagraphInsideCards)
@@ -283,6 +300,8 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .card-info-wrapper {
   display: flex;
   width: 100%;
@@ -318,7 +337,15 @@ defineProps({
     align-items: center;
 
     :deep(.card-paragraph) {
-      width: 400px;
+      max-width: 600px;
+    }
+
+    @include breakpoint-down('tablet') {
+      flex-direction: column;
+
+      :deep(.midia-wrapper) {
+        padding: 16px 24px;
+      }
     }
   }
 

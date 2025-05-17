@@ -90,17 +90,13 @@ p, h2 {
   margin: 0;
 }
 
-:deep(.card-base) {
-  justify-content: center;
-  align-items: center !important;
-}
-
 .content {
   display: flex;
-  max-width: 620px;
+  max-width: 800px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
   gap: 32px;
   flex: 1 0 0;
 
@@ -114,6 +110,7 @@ p, h2 {
 .content-left {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 32px;
   flex: 1;
 }

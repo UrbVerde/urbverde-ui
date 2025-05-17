@@ -26,18 +26,18 @@
         <ul v-if="type === 'list'" class="benefits-card-list">
           <li v-for="(item, index) in listItems" :key="index" class="benefits-card-item">
             <span class="benefits-card-number body-small-medium">{{ index + 1 }}</span>
-            <p class="text-list body-small-regular" v-html="item"></p>
+            <p class="text-list body-small-medium" v-html="item"></p>
           </li>
         </ul>
 
         <!-- Paragraph Left Type -->
         <div v-else-if="type === 'paragraph-left'" class="paragraph-wrapper">
-          <p class="paragraph body-small-regular">{{ paragraphText }}</p>
+          <p class="paragraph body-small-medium">{{ paragraphText }}</p>
         </div>
 
         <!-- Paragraph Center Type -->
         <div v-else-if="type === 'paragraph-center'" class="paragraph-wrapper">
-          <p class="paragraph body-small-regular text-center">{{ paragraphText }}</p>
+          <p class="paragraph body-small-medium text-center">{{ paragraphText }}</p>
         </div>
 
         <!-- Slot Type -->
@@ -161,11 +161,14 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 a{
   text-decoration: none;
   display: flex;
   width: 100%;
   height: auto;
+  max-width: 300px;
 }
 .card-paragraph {
   display: flex;
@@ -197,8 +200,8 @@ a{
 .titleParagraphWrapper {
   display: flex;
   padding: 0 0 24px 0;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: self-start;
   gap: 10px;
   align-self: stretch;
 
@@ -208,6 +211,17 @@ a{
     margin: 0;
 
     &.text-center {
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  @include breakpoint-down('tablet') {
+    justify-content: center;
+    align-items: center;
+
+    h5 {
       text-align: center;
     }
   }
@@ -245,8 +259,20 @@ a{
   }
 }
 
+@include breakpoint-down('tablet') {
+  .button-wrapper {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content {
+    margin: 0 auto;
+  }
+}
+
 :deep(.primary-button) {
   width: 100%;
+  max-width: 300px;
 }
 
 // List styles from TipsCard
@@ -261,7 +287,7 @@ a{
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   &:last-child {
     margin-bottom: 0px;
