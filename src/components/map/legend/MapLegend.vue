@@ -58,20 +58,27 @@
           @order-change="handleLayerOrderChange"
         />
 
-        <!-- Dynamic Layer Card -->
-        <LegendCard
-          v-if="currentLayerName"
-          :showMenu="false"
-          :title="currentLayerName"
-          :icon="currentCategory?.icon"
-          :layerId="currentLayerId"
-          :year="currentYear"
-          :scale="scale"
-          :showLegendLines="false"
-          @opacity-change="handleDataLayerOpacity"
-          @colorbar-click="handleColorbarClick"
-          @order-change="handleLayerOrderChange"
-        />
+        <!-- Dynamic Layer Cards -->
+        <template v-for="layer in activeLayers" :key="layer.id">
+          <LegendCard
+            v-if="layer.id !== 'parks'"
+            :showMenu="false"
+            :title="getLayerConfig(layer.id)?.label"
+            :icon="getLayerIcon(layer.id)"
+            :layerId="layer.id"
+            :year="currentYear"
+            :scale="scale"
+            :showLegendLines="false"
+            :showOpacity="true"
+            :showColorScale="true"
+            :stops="getLayerConfig(layer.id)?.stops"
+            :unit="getLayerConfig(layer.id)?.unit"
+            :showLayerCut="false"
+            @opacity-change="handleDataLayerOpacity"
+            @colorbar-click="handleColorbarClick"
+            @order-change="handleLayerOrderChange"
+          />
+        </template>
       </div>
     </div>
 
@@ -115,6 +122,7 @@ import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import { useWindowSize } from '@/utils/useWindowsSize';
+import { getLayerConfig } from '@/constants/layers';
 
 // Import components
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
@@ -129,7 +137,7 @@ import wrapperIcon from '@/assets/icons/wrapper.svg';
 // Store setup
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
-const { year: storeYear, category, categories, layer, scale } = storeToRefs(locationStore);
+const { year: storeYear, categories, scale } = storeToRefs(locationStore);
 
 // Reactive state
 const isOpen = ref(true);
@@ -154,16 +162,29 @@ onMounted(() => {
 
 // Computed properties
 const currentYear = computed(() => storeYear.value || 2021);
-const currentLayerName = computed(() => locationStore.currentLayerName);
-const currentCategory = computed(() =>
-  categories.value?.find(cat => cat.name === category.value)
-);
-const currentLayerId = computed(() => layer.value);
+// const currentLayerName = computed(() => locationStore.currentLayerName);
+// const currentCategory = computed(() =>
+//   categories.value?.find(cat => cat.name === category.value)
+// );
+// const currentLayerId = computed(() => layer.value);
 const currentLayerAllowedYears = computed(() =>
   // Get the allowed years for the current layer from your layer config
   // This is a placeholder - implement according to your layer management system
   [2016, 2017, 2018, 2019, 2020, 2021]
 );
+
+const activeLayers = computed(() => layersStore.getActiveLayers);
+
+// Função para obter o ícone da camada
+const getLayerIcon = (layerId) => {
+  // Encontra a categoria que contém a camada
+  const category = categories.value?.find(cat =>
+    cat.layers?.some(l => l.id === layerId)
+  );
+
+  // Retorna o ícone da categoria ou um ícone padrão
+  return category?.icon || 'bi-question-circle';
+};
 
 // Event handlers
 const toggleLegend = () => {

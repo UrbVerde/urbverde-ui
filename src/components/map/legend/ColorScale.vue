@@ -13,73 +13,54 @@
 
 <script setup>
 import { computed } from 'vue';
-import { getLayerConfig } from '@/constants/layers.js';
 
 const props = defineProps({
   currentLayerId: { type: String, required: true },
-  currentYear: { type: Number, required: true },
-  scale: { type: String, required: true }
+  currentYear: { type: [Number, String], required: true },
+  scale: { type: String, required: true },
+  stops: { type: Array, default: () => [] },
+  unit: { type: String, default: '' }
 });
 
 const emit = defineEmits(['colorbar-click']);
 
-// Compute the configuration for the current layer with null safety
-const config = computed(() => {
-  try {
-    console.log('[ColorScale] Props:', props.currentLayerId, props.currentYear, props.scale);
-    const layerConfig = getLayerConfig(props.currentLayerId, props.currentYear, props.scale);
-    console.log('[ColorScale] Layer Config:', layerConfig);
-
-    return layerConfig || {};
-  } catch (error) {
-    console.warn('Error getting layer config:', error);
-
-    return {};
-  }
-});
-
 const getFormattedValue = (value) => {
   if (!value) {return '0';}
-  const multiplier = config.value?.popup?.multiplier || 1;
-  const formatted = value * multiplier;
 
-  return formatted.toFixed(formatted % 1 === 0 ? 0 : 2);
+  return value.toFixed(value % 1 === 0 ? 0 : 2);
 };
 
 const minStop = computed(() => {
-  if (!config.value?.stops?.length) {return '0';}
+  if (!props.stops?.length) {return '0';}
 
-  return getFormattedValue(config.value.stops[0][0]);
+  return getFormattedValue(props.stops[0][0]);
 });
 
 const maxStop = computed(() => {
-  if (!config.value?.stops?.length) {return '100';}
-  const lastIndex = config.value.stops.length - 1;
+  if (!props.stops?.length) {return '100';}
+  const lastIndex = props.stops.length - 1;
 
-  return getFormattedValue(config.value.stops[lastIndex][0]);
+  return getFormattedValue(props.stops[lastIndex][0]);
 });
 
 const centerStop = computed(() => {
-  if (!config.value?.stops?.length) {return '50';}
-  const midIndex = Math.floor(config.value.stops.length / 2);
+  if (!props.stops?.length) {return '50';}
+  const midIndex = Math.floor(props.stops.length / 2);
 
-  return getFormattedValue(config.value.stops[midIndex][0]);
+  return getFormattedValue(props.stops[midIndex][0]);
 });
 
-const unit = computed(() => config.value?.unit || '');
-
 const computedGradient = computed(() => {
-  console.log('[ColorScale] Computed Gradient. Config:', config.value);
-  if (!config.value?.stops?.length) {
+  if (!props.stops?.length) {
     return 'linear-gradient(to right, #ccc, #ccc)';
   }
 
   // Special case for population layer (viridis color scheme)
-  if (config.value.property === 'v0001') {
+  if (props.currentLayerId === 'population') {
     return 'linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725)';
   }
 
-  const stops = config.value.stops;
+  const stops = props.stops;
   const count = stops.length - 1;
   const gradientPieces = stops.map((pair, idx) => {
     const color = pair[1];

@@ -20,7 +20,7 @@
         </div>
 
         <!-- Recorte da camada - only show for non-parks layers -->
-        <LayerCut v-if="layerId !== 'parks-layer'" class="layer-cut"/>
+        <LayerCut v-if="layerId !== 'parks-layer' && showLayerCut" class="layer-cut"/>
       </div>
     </div>
 
@@ -31,6 +31,8 @@
                   :currentLayerId="layerId"
                   :currentYear="year"
                   :scale="scale"
+                  :stops="stops"
+                  :unit="unit"
                   @colorbar-click="$emit('colorbar-click')" />
 
       <!-- Legend Lines -->
@@ -70,14 +72,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
+import LayerCut from './LayerCut.vue';
 // import CardLayerSwitch from './CardLayerSwitch.vue';
-// import LayerCut from './LayerCut.vue';
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: ''
@@ -92,29 +94,41 @@ defineProps({
   },
   showMenu: {
     type: Boolean,
-    default: true  // Changed to true to match original behavior
+    default: true
   },
   showOpacity: {
     type: Boolean,
-    default: true  // Changed to true to match original behavior
+    default: true
   },
   showColorScale: {
     type: Boolean,
-    default: true  // Changed to true to match original behavior
+    default: true
   },
   showLegendLines: {
     type: Boolean,
     default: false
+  },
+  showLayerCut: {
+    type: Boolean,
+    default: true
   },
   layerId: {
     type: String,
     default: ''
   },
   year: {
-    type: Number,
+    type: [Number, String],
     default: null
   },
   scale: {
+    type: String,
+    default: ''
+  },
+  stops: {
+    type: Array,
+    default: () => []
+  },
+  unit: {
     type: String,
     default: ''
   }
@@ -122,15 +136,22 @@ defineProps({
 
 const localOpacity = ref(100);
 
-console.log('[LegendCard] Initializing with opacity:', localOpacity.value);
-
-const emit = defineEmits(['opacity-change', 'colorbar-click']);
+const emit = defineEmits(['opacity-change', 'colorbar-click', 'order-change']);
 
 const handleOpacityChange = (value) => {
   console.log('[LegendCard] Opacity changed to:', value);
   localOpacity.value = value;
   emit('opacity-change', value);
 };
+
+onMounted(() => {
+  console.log('[LegendCard] Mounted with props:', {
+    layerId: props.layerId,
+    title: props.title,
+    stops: props.stops,
+    unit: props.unit
+  });
+});
 
 </script>
 
@@ -142,6 +163,7 @@ const handleOpacityChange = (value) => {
   background: map-get($gray, white);
   border-radius: 8px;
   border: 1px solid map-get($gray, 200);
+  margin-bottom: 8px;
 }
 
 .drag-handle {
@@ -190,7 +212,7 @@ const handleOpacityChange = (value) => {
   min-width: 0;
 }
 
-.layer-cut{
+.layer-cut {
   width: 100%;
   display: flex;
   align-items: left;
