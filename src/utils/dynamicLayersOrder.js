@@ -1,4 +1,5 @@
 // urbverde-ui/src/utils/dynamicLayersOrder.js
+import { LAYER_CONFIGS } from '@/constants/layers';
 
 /**
  * Configura o estado inicial das camadas
@@ -9,16 +10,10 @@ export function setDefaultLayers(activeMainLayer) {
   return [
     {
       id: 'parks',
-      year: null,
-      scale: null,
-      opacity: 0.7,
       currentMain: false
     },
     {
       id: activeMainLayer,
-      year: null,
-      scale: null,
-      opacity: 0.7,
       currentMain: true
     }
   ];
@@ -51,9 +46,6 @@ export function updateCurrentMainLayer(layers, newMainLayer, isAlreadyActive) {
     // Se a camada não está ativa, insere na posição do currentMain
     const newLayer = {
       id: newMainLayer,
-      year: null,
-      scale: null,
-      opacity: 0.7,
       currentMain: true
     };
 
@@ -81,6 +73,17 @@ export function isLayerActive(layers, layerId) {
  */
 export function getCurrentMainLayer(layers) {
   return layers.find(layer => layer.currentMain) || null;
+}
+
+/**
+ * Obtém a configuração de uma camada específica
+ * @param {string} layerId - ID da camada
+ * @param {string} year - Ano dos dados
+ * @param {string} scale - Escala atual
+ * @returns {Object} Configuração da camada
+ */
+export function getLayerConfig(layerId) {
+  return LAYER_CONFIGS[layerId];
 }
 
 /**

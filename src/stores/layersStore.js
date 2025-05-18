@@ -1,24 +1,31 @@
 // urbverde-ui/src/stores/layersStore.js
 import { defineStore } from 'pinia';
-import { setDefaultLayers, updateCurrentMainLayer, getCurrentMainLayer, clearLayers } from '@/utils/dynamicLayersOrder';
+import { setDefaultLayers, updateCurrentMainLayer, getCurrentMainLayer, clearLayers, getLayerConfig } from '@/utils/dynamicLayersOrder';
+import { LAYER_CONFIGS } from '@/constants/layers';
 
 export const useLayersStore = defineStore('layersStore', {
   state: () => ({
     mapRef: null,
     currentMunicipioId: null,
     currentScale: null,
+    currentYear: null,
     currentStatistics: null,
     activeLayers: [],
     setoresVisible: false,
     error: null,
-    layerOpacity: 0.7,
+    defaultOpacity: 0.7,
   }),
 
   getters: {
     isIntraurbanScale: (state) => state.currentScale === 'intraurbana',
     hasSetores: (state) => state.setoresVisible && state.isIntraurbanScale,
     getActiveLayers: (state) => state.activeLayers,
-    getCurrentMainLayer: (state) => getCurrentMainLayer(state.activeLayers)
+    getCurrentMainLayer: (state) => getCurrentMainLayer(state.activeLayers),
+    getLayerOpacity: (state) => (layerId) => {
+      const layerConfig = LAYER_CONFIGS[layerId];
+
+      return layerConfig?.paint?.['raster-opacity'] || state.defaultOpacity;
+    }
   },
 
   actions: {
@@ -52,22 +59,6 @@ export const useLayersStore = defineStore('layersStore', {
         console.warn('[LayersStore] Map reference is not available, cannot update opacity');
 
         return;
-      }
-
-      // First check if this layer exists in activeLayers and update its opacity
-      const layerIndex = this.activeLayers.findIndex((l) => l.id === layerId);
-
-      if (layerIndex >= 0) {
-        // Update our store's record for this specific layer
-        this.activeLayers[layerIndex].opacity = newOpacity;
-        console.log(`[LayersStore] Updated opacity for active layer ${layerId} to ${newOpacity}`);
-      } else {
-        // If not found in activeLayers, add it
-        this.activeLayers.push({
-          id: layerId,
-          opacity: newOpacity
-        });
-        console.log(`[LayersStore] Added new layer ${layerId} with opacity ${newOpacity}`);
       }
 
       // Update the layer on the map
@@ -151,5 +142,45 @@ export const useLayersStore = defineStore('layersStore', {
       this.activeLayers = clearLayers();
       console.log('[LayersStore] Cleared all active layers');
     },
+
+    /**
+     * Updates the current year for all layers
+     */
+    setCurrentYear(year) {
+      this.currentYear = year;
+      // Atualiza as camadas ativas com o novo ano
+      this.activeLayers.forEach(layer => {
+        const layerConfig = getLayerConfig(layer.id, year, this.currentScale);
+        if (layerConfig && layerConfig.allowedYears.includes(year)) {
+          // Atualiza a fonte da camada se necessário
+          if (this.mapRef && this.mapRef.getSource(layer.id)) {
+            const source = layerConfig.source(year, this.currentScale, this.currentMunicipioId);
+            if (source) {
+              this.mapRef.getSource(layer.id).setTiles(source.tiles);
+            }
+          }
+        }
+      });
+    },
+
+    /**
+     * Updates the current scale for all layers
+     */
+    setCurrentScale(scale) {
+      this.currentScale = scale;
+      // Atualiza as camadas ativas com a nova escala
+      this.activeLayers.forEach(layer => {
+        const layerConfig = getLayerConfig(layer.id, this.currentYear, scale);
+        if (layerConfig) {
+          // Atualiza a fonte da camada se necessário
+          if (this.mapRef && this.mapRef.getSource(layer.id)) {
+            const source = layerConfig.source(this.currentYear, scale, this.currentMunicipioId);
+            if (source) {
+              this.mapRef.getSource(layer.id).setTiles(source.tiles);
+            }
+          }
+        }
+      });
+    }
   },
 });
