@@ -160,8 +160,8 @@ const uf = computed(() => locationStore.uf);
 // Tabs dinâmicas baseadas na camada atual
 const tabs = computed(() => {
   // Obtém a camada atual do store
-  const currentLayer = locationStore.layer ?
-    locationStore.layer.replace('-layer', '') :
+  const currentLayer = locationStore.activeMainLayer ?
+    locationStore.activeMainLayer.replace('-layer', '') :
     categoryToLayerMap[locationStore.category] || '';
 
   console.log('NavbarMap - Camada atual:', currentLayer);
@@ -178,7 +178,7 @@ const tabs = computed(() => {
 });
 
 // Watch para atualizar a aba ativa quando a camada muda
-watch(() => locationStore.layer, () => {
+watch(() => locationStore.activeMainLayer, () => {
   // Se a aba atual não existir nas novas abas, mude para a primeira aba
   if (tabs.value.length > 0 && !tabs.value.find(tab => tab.id === activeSection)) {
     navigateTo(tabs.value[0].id);

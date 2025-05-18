@@ -18,7 +18,7 @@ export const getSectionsForLayer = (layer, sectionConfigs, locationStore) => {
 
   try {
     // Acesso direto ao locationStore para obter informações atualizadas
-    const selectedLayer = locationStore ? locationStore.layer : layer;
+    const selectedLayer = locationStore ? locationStore.activeMainLayer : layer;
     const selectedCategory = locationStore ? locationStore.category : null;
 
     // 1. Primeiro, verifica se existe configuração específica para a camada

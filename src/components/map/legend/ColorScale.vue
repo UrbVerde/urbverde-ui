@@ -26,7 +26,11 @@ const emit = defineEmits(['colorbar-click']);
 // Compute the configuration for the current layer with null safety
 const config = computed(() => {
   try {
-    return getLayerConfig(props.currentLayerId, props.currentYear, props.scale) || {};
+    console.log('[ColorScale] Props:', props.currentLayerId, props.currentYear, props.scale);
+    const layerConfig = getLayerConfig(props.currentLayerId, props.currentYear, props.scale);
+    console.log('[ColorScale] Layer Config:', layerConfig);
+
+    return layerConfig || {};
   } catch (error) {
     console.warn('Error getting layer config:', error);
 
@@ -65,6 +69,7 @@ const centerStop = computed(() => {
 const unit = computed(() => config.value?.unit || '');
 
 const computedGradient = computed(() => {
+  console.log('[ColorScale] Computed Gradient. Config:', config.value);
   if (!config.value?.stops?.length) {
     return 'linear-gradient(to right, #ccc, #ccc)';
   }

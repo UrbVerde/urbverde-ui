@@ -106,7 +106,7 @@ export default {
     // Get sections for the selected layer
     const sections = computed(() => {
       // Verifica se possui uma configuração específica para a camada
-      const layerId = locationStore.layer;
+      const layerId = locationStore.activeMainLayer;
 
       if (layerId && sectionConfigs.layers && sectionConfigs.layers[layerId]) {
         // Usa a configuração específica da camada

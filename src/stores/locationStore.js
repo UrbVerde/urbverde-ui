@@ -1,7 +1,8 @@
 // urbverde-ui/src/stores/locationStore.js
 import { defineStore } from 'pinia';
-import { watchEffect } from 'vue';
+import { watchEffect, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useLayersStore } from './layersStore';
 
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
@@ -16,7 +17,9 @@ export const useLocationStore = defineStore('locationStore', {
 
     // Layer data
     category: null,
+    activeMainLayer: null,
     layer: null,
+    lastMainLayer: null,
     categories: [],
 
     // Loading states
@@ -32,7 +35,7 @@ export const useLocationStore = defineStore('locationStore', {
     },
     currentLayerName() {
       const currentCategory = this.categories.find(cat => cat.name === this.category);
-      const currentLayer = currentCategory?.layers?.find(layer => layer.id === this.layer);
+      const currentLayer = currentCategory?.layers?.find(layer => layer.id === this.activeMainLayer);
 
       return currentLayer?.name || '';
     },
@@ -46,7 +49,7 @@ export const useLocationStore = defineStore('locationStore', {
       if (this.type)    {params.type = this.type;}
       if (this.year)    {params.year = this.year;}
       if (this.category) {params.category = this.category;}
-      if (this.layer)   {params.layer = this.layer;}
+      if (this.activeMainLayer)   {params.layer = this.activeMainLayer;}
       if (this.scale)   {params.scale = this.scale;}
 
       return params;
@@ -202,9 +205,9 @@ export const useLocationStore = defineStore('locationStore', {
         }
 
         // If we have a current layer, check if it exists in new categories
-        if (this.layer) {
+        if (this.activeMainLayer) {
           const layerExists = this.categories.some(cat =>
-            cat.layers.some(l => l.id === this.layer)
+            cat.layers.some(l => l.id === this.activeMainLayer)
           );
           if (!layerExists) {
             this.setDefaultCategoryAndLayer();
@@ -230,7 +233,7 @@ export const useLocationStore = defineStore('locationStore', {
         if (firstLayer) {
           console.log('locationStore: Setting default category and layer');
           this.category = firstCategory.name;
-          this.layer = firstLayer.id;
+          this.activeMainLayer = firstLayer.id;
         }
       }
     },
@@ -274,7 +277,7 @@ export const useLocationStore = defineStore('locationStore', {
       this.nm_mun = null;
       this.uf = null;
       this.category = null;
-      this.layer = null;
+      this.activeMainLayer = null;
       this.type = null;
       this.scale = null;
       this.bbox = null;
@@ -303,7 +306,10 @@ export const useLocationStore = defineStore('locationStore', {
       }
 
       if (payload.category !== undefined) {this.category = payload.category;}
-      if (payload.layer !== undefined) {this.layer = payload.layer;}
+      if (payload.layer !== undefined) {
+        this.activeMainLayer = payload.layer;
+        this.layer = payload.layer;
+      }
     },
 
     async updateFromQueryParams(query) {
@@ -325,6 +331,8 @@ export const useLocationStore = defineStore('locationStore', {
 
     setupUrlSync() {
       const router = useRouter();
+      const layersStore = useLayersStore();
+
       watchEffect(() => {
         if (this.cd_mun) {
           const newParams = this.urlParams;
@@ -333,6 +341,23 @@ export const useLocationStore = defineStore('locationStore', {
             router.replace({ path: '/mapa', query: newParams })
               .catch(err => console.error('Error updating URL:', err));
           }
+        }
+      });
+
+      // Watcher para monitorar mudanças entre lastMainLayer e activeMainLayer
+      watch(() => this.activeMainLayer, (newLayer, oldLayer) => {
+        if (newLayer !== oldLayer) {
+          if (this.lastMainLayer === null) {
+            // Caso 1: Primeira mudança de camada
+            this.lastMainLayer = newLayer;
+            layersStore.setDefaultLayers(newLayer);
+          } else {
+            // Caso 2: Mudança subsequente
+            const isAlreadyActive = layersStore.getActiveLayers.some(layer => layer.id === newLayer);
+            layersStore.updateCurrentMainLayer(newLayer, isAlreadyActive);
+            this.lastMainLayer = oldLayer;
+          }
+          console.log('locationStore: Layer mudou de', oldLayer, 'para', newLayer);
         }
       });
     },

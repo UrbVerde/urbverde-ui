@@ -67,7 +67,7 @@ watchEffect(() => {
     categories.value = locationStore.categories;
 
     // Se já existe uma layer ativa no locationStore, marca ela e abre a categoria
-    if (locationStore.layer) {
+    if (locationStore.activeMainLayer) {
       markActiveLayer();
     } else {
       // Se não existe layer ativa, seleciona a primeira por padrão
@@ -125,7 +125,7 @@ async function toggleCategory(categoryId) {
 function markActiveLayer() {
   categories.value.forEach(cat => {
     cat.layers.forEach(lyr => {
-      if (lyr.id === locationStore.layer) {
+      if (lyr.id === locationStore.activeMainLayer) {
         lyr.isActive = true;
         // Abre a categoria que contém a layer ativa
         openCategoryIds.value = [cat.id];

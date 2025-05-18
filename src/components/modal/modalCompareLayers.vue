@@ -22,7 +22,7 @@
                    class="layer-card"
                    :class="{
                      'active': isLayerActive(layer.id),
-                     'current-layer': layer.id === locationStore.layer
+                     'current-layer': layer.id === locationStore.activeMainLayer
                    }"
                    @click="toggleLayer(layer)">
                 <div class="layer-info">
@@ -33,7 +33,7 @@
                   <span class="layer-name">{{ layer.name }}</span>
                 </div>
                 <div class="layer-status">
-                  <i v-if="layer.id === locationStore.layer" class="bi bi-lock-fill" title="Camada Principal - Altere no menu lateral"></i>
+                  <i v-if="layer.id === locationStore.activeMainLayer" class="bi bi-lock-fill" title="Camada Principal - Altere no menu lateral"></i>
                   <i v-else-if="isLayerActive(layer.id)" class="bi bi-check-circle-fill"></i>
                   <i v-else class="bi bi-circle"></i>
                 </div>
@@ -81,7 +81,7 @@ const getIconPath = (iconName) => new URL(`../../assets/icons/${iconName}`, impo
 
 const isLayerActive = (layerId) => {
   const isInActiveLayers = layersStore.getActiveLayers.some(layer => layer.id === layerId);
-  const isCurrentLayer = layerId === locationStore.layer;
+  const isCurrentLayer = layerId === locationStore.activeMainLayer;
 
   return isInActiveLayers || isCurrentLayer;
 };

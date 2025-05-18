@@ -1,5 +1,6 @@
 // urbverde-ui/src/stores/layersStore.js
 import { defineStore } from 'pinia';
+import { setDefaultLayers, updateCurrentMainLayer, getCurrentMainLayer, clearLayers } from '@/utils/dynamicLayersOrder';
 
 export const useLayersStore = defineStore('layersStore', {
   state: () => ({
@@ -7,10 +8,6 @@ export const useLayersStore = defineStore('layersStore', {
     currentMunicipioId: null,
     currentScale: null,
     currentStatistics: null,
-    /**
-     * We'll store an array of active layers, each an object:
-     *   { id, year, scale, opacity }
-     */
     activeLayers: [],
     setoresVisible: false,
     error: null,
@@ -20,10 +17,30 @@ export const useLayersStore = defineStore('layersStore', {
   getters: {
     isIntraurbanScale: (state) => state.currentScale === 'intraurbana',
     hasSetores: (state) => state.setoresVisible && state.isIntraurbanScale,
-    getActiveLayers: (state) => state.activeLayers
+    getActiveLayers: (state) => state.activeLayers,
+    getCurrentMainLayer: (state) => getCurrentMainLayer(state.activeLayers)
   },
 
   actions: {
+    /**
+     * Sets the default layers configuration
+     * @param {string} activeMainLayer - The main layer to be set as current
+     */
+    setDefaultLayers(activeMainLayer) {
+      this.activeLayers = setDefaultLayers(activeMainLayer);
+      console.log('[LayersStore] Set default layers configuration:', this.activeLayers);
+    },
+
+    /**
+     * Updates the current main layer
+     * @param {string} newMainLayer - The new main layer
+     * @param {boolean} isAlreadyActive - Whether the new layer is already active
+     */
+    updateCurrentMainLayer(newMainLayer, isAlreadyActive) {
+      this.activeLayers = updateCurrentMainLayer(this.activeLayers, newMainLayer, isAlreadyActive);
+      console.log('[LayersStore] Updated current main layer:', this.activeLayers);
+    },
+
     /**
      * Sets the opacity for *one* of the currently active layers
      * (identified by layerId).
@@ -131,7 +148,7 @@ export const useLayersStore = defineStore('layersStore', {
      * Clear all active layers
      */
     clearActiveLayers() {
-      this.activeLayers = [];
+      this.activeLayers = clearLayers();
       console.log('[LayersStore] Cleared all active layers');
     },
   },
