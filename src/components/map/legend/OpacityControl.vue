@@ -29,13 +29,12 @@
     <div v-show="showSlider" class="slider-wrapper">
       <div class="progress-container">
         <input
+          ref="sliderRef"
           type="range"
           :value="modelValue"
           @input="handleSliderInput($event.target.value)"
-          @mousedown="sliderDragging = true"
-          @mouseup="sliderDragging = false"
-          @touchstart="sliderDragging = true"
-          @touchend="sliderDragging = false"
+          @mousedown="handleMouseDown"
+          @touchstart="handleMouseDown"
           min="0"
           max="100"
           class="opacity-slider"
@@ -72,8 +71,9 @@ const layersStore = useLayersStore();
 const opacityValue = ref(props.modelValue);
 const showSlider = ref(false);
 const isInvalid = ref(false);
-const sliderDragging = ref(false);
+const isDragging = ref(false);
 const hasSliderBeenDragged = ref(false);
+const sliderRef = ref(null);
 
 // Assistir mudanças no modelValue para atualizar o input
 watch(() => props.modelValue, (newValue) => {
@@ -98,12 +98,10 @@ onMounted(() => {
     const currentLayer = layersStore.activeLayers.find(l => l.id === props.layerId);
     if (currentLayer && currentLayer.opacity !== undefined) {
       const newOpacity = Math.round(currentLayer.opacity * 100);
-      console.log(`[OpacityControl] Initializing opacity for layer ${props.layerId} to ${newOpacity}%`);
       emit('update:modelValue', newOpacity);
       opacityValue.value = newOpacity;
     } else {
       // If layer not found in store, initialize with current model value
-      console.log(`[OpacityControl] Layer ${props.layerId} not found in store, using model value: ${props.modelValue}%`);
       opacityValue.value = props.modelValue;
     }
   }
@@ -146,7 +144,7 @@ const handleMouseLeave = () => {
 
 const handleSliderInput = (value) => {
   // Marcar que o slider foi arrastado
-  if (sliderDragging.value) {
+  if (isDragging.value) {
     hasSliderBeenDragged.value = true;
   }
 
@@ -182,14 +180,38 @@ const validateAndUpdate = () => {
   updateOpacity(num);
 };
 
+const handleMouseDown = () => {
+  isDragging.value = true;
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', handleMouseUp);
+};
+
+const handleMouseMove = (e) => {
+  if (!isDragging.value) {return;}
+  updateOpacityFromEvent(e);
+};
+
+const handleMouseUp = () => {
+  isDragging.value = false;
+  document.removeEventListener('mousemove', handleMouseMove);
+  document.removeEventListener('mouseup', handleMouseUp);
+};
+
+const updateOpacityFromEvent = (e) => {
+  const rect = sliderRef.value.getBoundingClientRect();
+  const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+  const newOpacity = Math.round((x / rect.width) * 100);
+  updateOpacity(newOpacity);
+};
+
 const updateOpacity = (value) => {
-  emit('update:modelValue', value);
-  // Make sure we have a valid layerId before updating opacity
-  if (props.layerId) {
-    console.log(`[OpacityControl] Updating layer ${props.layerId} to opacity ${value/100}`);
-    layersStore.setLayerOpacity(props.layerId, value / 100);
-  } else {
-    console.warn('[OpacityControl] No layerId provided, cannot update opacity');
+  if (value >= 0 && value <= 100) {
+    opacityValue.value = value;
+    emit('update:modelValue', value);
+    // Make sure we have a valid layerId before updating opacity
+    if (props.layerId) {
+      layersStore.setLayerOpacity(props.layerId, value / 100);
+    }
   }
 };
 </script>

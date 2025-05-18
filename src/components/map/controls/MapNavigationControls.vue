@@ -1,7 +1,7 @@
 <!-- urbverde-ui/src/components/map/controls/MapControls.vue -->
 <template>
   <div>
-    <BasemapSwitcher
+    <MapStyleToggle
       :map="map"
       :current-style="currentStyle"
       @style-change="onStyleChange"
@@ -16,7 +16,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-import BasemapSwitcher from './BasemapSwitcher.vue';
+import MapStyleToggle from './MapStyleToggle.vue';
 import LocationControl from './LocationControl.vue';
 
 defineProps({

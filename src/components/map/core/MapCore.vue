@@ -29,7 +29,7 @@
       :map="map"
     />
 
-    <slot></slot>
+    <slot :map="map"></slot>
   </div>
 </template>
 
@@ -39,11 +39,11 @@ import maplibregl from 'maplibre-gl';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import { useRoute, useRouter } from 'vue-router';
-import CustomHash from './customHash';
+import CustomHash from '@/components/map/core/MapStateManager.js';
 import { getLayerConfig } from '@/constants/layers.js';
-import MapControls from './controls/MapControls.vue';
-import AttributionBar from './AttributionBar.vue';
-import CustomTerrainControl from './controls/customTerrainControl';
+import MapControls from '@/components/map/controls/MapNavigationControls.vue';
+import AttributionBar from '@/components/map/info/MapInfoBar.vue';
+import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
 import { reorderAllLayers } from '@/utils/layersOrder';
 
 import {

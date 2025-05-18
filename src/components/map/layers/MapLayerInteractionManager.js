@@ -1,4 +1,4 @@
-import { setupLayerPopup, removePopupHandlers, setupRasterPopupHandlers, removeRasterPopupHandlers } from '@/components/map/popups/popupHandlers';
+import { setupLayerPopup, removePopupHandlers, setupRasterPopupHandlers, removeRasterPopupHandlers } from '@/components/map/popups/MapPopupManager';
 
 /**
  * Funções para gerenciar as interações do mapa

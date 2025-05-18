@@ -118,10 +118,10 @@ import { useLayersStore } from '@/stores/layersStore';
 import { useWindowSize } from '@/utils/useWindowsSize';
 
 // Import components
-import PrimaryButton from '../buttons/PrimaryButton.vue';
-import LegendYearSelector from './LegendYearSelector.vue';
-import LegendCard from './LegendCard.vue';
-import modalWaitList from '../modal/modalWaitList.vue';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
+import LegendYearSelector from '@/components/map/legend/LegendYearSelector.vue';
+import LegendCard from '@/components/map/legend/LegendCard.vue';
+import modalWaitList from '@/components/modal/modalWaitList.vue';
 
 // Import icons
 import wrapperIcon from '@/assets/icons/wrapper.svg';
@@ -176,27 +176,24 @@ const handleYearChange = (year) => {
 };
 
 const handleColorbarClick = () => {
-  console.log('Color options clicked');
+  // Color options clicked
 };
 
 const handleCompare = () => {
-  console.log('Compare layers clicked');
+  // Compare layers clicked
 };
 
 const handleDownload = () => {
-  console.warn('Downloading data...');
+  // Downloading data...
 };
 
 // Opacity handlers
-const onLegendOpacityChange = (opacity) => {
+const onLegendOpacityChange = () => {
   // Handle base layer opacity if needed
-  console.log('Base layer opacity:', opacity);
 };
 
 // Parks layer opacity handler
 const handlerParksLayerOpacity = (opacity) => {
-  console.log('[MapLegend] Handling parks opacity change:', opacity);
-
   // Convert from percentage (0-100) to decimal (0-1)
   const decimalOpacity = opacity / 100;
 
@@ -205,8 +202,6 @@ const handlerParksLayerOpacity = (opacity) => {
 };
 
 const handleDataLayerOpacity = (opacity) => {
-  console.log('[MapLegend] Handling opacity change:', opacity, 'for layer:', currentLayerId.value);
-
   // Convert from percentage (0-100) to decimal (0-1)
   const decimalOpacity = opacity / 100;
 
@@ -215,8 +210,8 @@ const handleDataLayerOpacity = (opacity) => {
 };
 
 // Layer order handling
-const handleLayerOrderChange = (direction) => {
-  console.log('Layer order change:', direction);
+const handleLayerOrderChange = () => {
+  // Layer order change
 };
 
 // Referenca o modal para utilizar seus métodos

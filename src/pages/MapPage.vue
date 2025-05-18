@@ -47,8 +47,8 @@
                  ref="Mapa"
                  class="map-container"
                  :style="mapContainerStyle">
-              <MapBox :coordinates="coordinates" class="map-box">
-                <Legend />
+              <MapBox :coordinates="coordinates" class="map-box" v-slot="{ map }">
+                <Legend :map="map" />
               </MapBox>
             </div>
           </div>
@@ -90,8 +90,8 @@ import { useWindowSize } from '@/utils/useWindowsSize';
 
 import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/NavbarMap.vue';
-import MapBox from '../components/map/mapGenerator.vue';
-import Legend from '../components/legend/MapLegend.vue';
+import MapBox from '../components/map/core/MapCore.vue';
+import Legend from '../components/map/legend/MapLegend.vue';
 import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
@@ -309,9 +309,7 @@ const pageContentStyle = computed(() => {
 });
 
 // When municipality is selected or changes, recalculate navbar height
-watch(() => locationStore.cd_mun, (newValue, oldValue) => {
-  console.log('Municipality changed from', oldValue, 'to', newValue);
-
+watch(() => locationStore.cd_mun, (newValue) => {
   if (newValue) {
     setTimeout(() => {
       measureNavbarHeight();
@@ -352,8 +350,6 @@ onMounted(async() => {
   handleScroll();
 
   const attemptMeasurement = (attempt = 1, maxAttempts = 5) => {
-    console.log(`Measurement attempt ${attempt} of ${maxAttempts}`);
-
     measureNavbarHeight();
 
     // If measurement failed and we haven't reached the max attempts, try again

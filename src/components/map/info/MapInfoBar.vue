@@ -31,7 +31,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, reactive, computed } from 'vue';
 import maplibregl from 'maplibre-gl';
-import modalMapInfo from '../modal/modalMapInfo.vue';
+import modalMapInfo from '@/components/modal/modalMapInfo.vue';
 import { useLocationStore } from '@/stores/locationStore';
 
 const props = defineProps({
