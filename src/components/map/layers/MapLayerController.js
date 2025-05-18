@@ -1,4 +1,5 @@
 import { getLayerPaint, getLayerConfig } from '@/constants/layers.js';
+import { useLocationStore } from '@/stores/locationStore';
 
 const logger = {
   debug: (message, ...args) => {
@@ -6,7 +7,6 @@ const logger = {
     console.debug(message, ...args);
   },
   error: (message, ...args) => {
-
     console.error(message, ...args);
   }
 };
@@ -111,14 +111,14 @@ export function applyLayerFilters(map, config, locationStore, currentScale) {
  * Configura as layers dinâmicas
  * @param {Object} map - Instância do mapa
  * @param {string} layerId - ID da layer
- * @param {string} year - Ano
- * @param {string} scale - Escala
- * @param {Object} locationStore - Store de localização
  * @param {Function} setupRasterInteractions - Função para configurar interações raster
  * @param {Function} setupVectorInteractions - Função para configurar interações vetoriais
  * @returns {boolean} Sucesso da operação
  */
-export function setupDynamicLayers(map, layerId, year, scale, locationStore, setupRasterInteractions, setupVectorInteractions) {
+export function setupDynamicLayers(map, layerId, setupRasterInteractions, setupVectorInteractions) {
+  const locationStore = useLocationStore();
+  const { year, scale } = locationStore;
+
   logger.debug('Configurando layers dinâmicas:', { layerId, year, scale });
 
   try {

@@ -199,9 +199,6 @@ function initializeMapLayers() {
     const success = setupDynamicLayers(
       map.value,
       currentLayer.value,
-      currentYear.value,
-      currentScale.value,
-      locationStore,
       (config) => setupRasterInteractions(map.value, config, fetchRasterValue),
       (config) => setupVectorInteractions(map.value, config)
     );
