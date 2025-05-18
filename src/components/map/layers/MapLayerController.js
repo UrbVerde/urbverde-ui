@@ -1,4 +1,4 @@
-import { getLayerPaint } from '@/constants/layers.js';
+import { getLayerPaint, getLayerConfig } from '@/constants/layers.js';
 
 const logger = {
   debug: (message, ...args) => {
@@ -110,19 +110,28 @@ export function applyLayerFilters(map, config, locationStore, currentScale) {
 /**
  * Configura as layers dinâmicas
  * @param {Object} map - Instância do mapa
- * @param {Object} config - Configuração da layer
+ * @param {string} layerId - ID da layer
+ * @param {string} year - Ano
+ * @param {string} scale - Escala
  * @param {Object} locationStore - Store de localização
- * @param {string} currentScale - Escala atual
  * @param {Function} setupRasterInteractions - Função para configurar interações raster
  * @param {Function} setupVectorInteractions - Função para configurar interações vetoriais
  * @returns {boolean} Sucesso da operação
  */
-export function setupDynamicLayers(map, config, locationStore, currentScale, setupRasterInteractions, setupVectorInteractions) {
-  logger.debug('Configurando layers dinâmicas:', { config, currentScale });
+export function setupDynamicLayers(map, layerId, year, scale, locationStore, setupRasterInteractions, setupVectorInteractions) {
+  logger.debug('Configurando layers dinâmicas:', { layerId, year, scale });
 
   try {
+    // Obter configuração da layer
+    const config = getLayerConfig(layerId, year, scale);
+    if (!config || !config.source) {
+      logger.error('Configuração inválida para a layer:', layerId);
+
+      return false;
+    }
+
     // Configurar source
-    const sourceConfig = setupDynamicSource(config, locationStore, currentScale);
+    const sourceConfig = setupDynamicSource(config, locationStore, scale);
     logger.debug('Source configurado:', sourceConfig);
 
     // Adicionar source ao mapa
@@ -144,7 +153,7 @@ export function setupDynamicLayers(map, config, locationStore, currentScale, set
     }
 
     // Aplicar filtros se necessário
-    applyLayerFilters(map, config, locationStore, currentScale);
+    applyLayerFilters(map, config, locationStore, scale);
 
     // Configurar interações
     if (config.type === 'raster') {

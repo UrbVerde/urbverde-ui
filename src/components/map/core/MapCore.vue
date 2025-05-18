@@ -49,7 +49,8 @@ import { reorderAllLayers } from '@/components/map/layers/layersOrder';
 import {
   setupDynamicLayers,
   clearPopups,
-  setupSetoresLayer
+  setupSetoresLayer,
+  setupDynamicSource
 } from '@/components/map/layers/MapLayerController.js';
 import {
   setupRasterInteractions,
@@ -113,7 +114,7 @@ watch(
 
     if (mapLoaded.value) {
       removeDynamicLayer();
-      await setupDynamicLayer();
+      await initializeMapLayers();
     }
 
     if (map.value.getLayer('selected-municipality-fill')) {
@@ -176,7 +177,7 @@ function removeDynamicLayer() {
   }
 }
 
-function setupDynamicLayer() {
+function initializeMapLayers() {
   if (!map.value || !currentLayer.value) { return; }
 
   // 1. Limpar layers existentes
@@ -186,11 +187,7 @@ function setupDynamicLayer() {
   hoveredFeatureId = null;
   hoveredSetorId = null;
 
-  // 3. Obter configuração
-  const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
-  if (!config || !config.source) { return; }
-
-  // 4. Limpar popups existentes
+  // 3. Limpar popups existentes
   clearPopups({
     vector: vectorPopup.value,
     raster: rasterPopup.value,
@@ -198,18 +195,20 @@ function setupDynamicLayer() {
   });
 
   try {
-    // 5. Configurar layers dinâmicas
+    // 4. Configurar layers dinâmicas
     const success = setupDynamicLayers(
       map.value,
-      config,
-      locationStore,
+      currentLayer.value,
+      currentYear.value,
       currentScale.value,
+      locationStore,
       (config) => setupRasterInteractions(map.value, config, fetchRasterValue),
       (config) => setupVectorInteractions(map.value, config)
     );
 
-    // 6. Configurar layers adicionais se necessário
+    // 5. Configurar layers adicionais se necessário
     if (success && currentScale.value === 'intraurbana' && currentCode.value) {
+      const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
       if (config.type === 'raster') {
         addParksLayer();
       } else {
@@ -219,7 +218,7 @@ function setupDynamicLayer() {
       }
     }
 
-    // 7. Reordenar layers
+    // 6. Reordenar layers
     reorderAllLayers(map.value);
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
@@ -228,23 +227,29 @@ function setupDynamicLayer() {
 
 // Helper function to add parks layer
 function addParksLayer() {
-  const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value, locationStore.cd_mun);
+  const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value);
   if (!parksConfig) {return;}
 
-  // Adiciona o source, se ainda não existir
+  // Adiciona o source usando setupDynamicSource
+  const sourceConfig = setupDynamicSource(parksConfig, locationStore, currentScale.value);
   if (!map.value.getSource('parks-source')) {
-    map.value.addSource('parks-source', parksConfig.source);
+    map.value.addSource('parks-source', sourceConfig);
   }
 
-  // Adiciona a layer, se ainda não existir
+  // Adiciona a layer
   if (!map.value.getLayer('parks-layer')) {
-    map.value.addLayer({
+    const parksLayer = {
       id: 'parks-layer',
       type: 'fill',
       source: 'parks-source',
       'source-layer': parksConfig.source.sourceLayer,
-      paint: parksConfig.paint
-    });
+      paint: parksConfig.paint || {
+        'fill-color': '#40826D',
+        'fill-opacity': 0.7,
+        'fill-outline-color': '#40826D'
+      }
+    };
+    map.value.addLayer(parksLayer);
   }
 
   // Filtrar pois ainda não funciona cql diretamente no tile
@@ -358,7 +363,7 @@ async function loadCoordinates(code) {
     await locationStore.setLocation({ scale: 'intraurbana' });
     if (mapLoaded.value) {
       removeDynamicLayer();
-      await setupDynamicLayer();
+      await initializeMapLayers();
     }
 
     const coords = await locationStore.fetchCoordinatesByCode(code);
@@ -446,7 +451,7 @@ function initializeMap() {
     });
 
     addBaseMunicipalitiesLayer();
-    setupDynamicLayer();
+    initializeMapLayers();
     if (!hash) {
       map.value.jumpTo({
         center: [coordinates.value.lng, coordinates.value.lat],
