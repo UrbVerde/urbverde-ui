@@ -44,20 +44,20 @@ import { getLayerConfig } from '@/constants/layers.js';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
 import AttributionBar from '@/components/map/info/MapInfoBar.vue';
 import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
-import { reorderAllLayers } from '@/utils/layersOrder';
+import { reorderAllLayers } from '@/components/map/layers/layersOrder';
 
 import {
   setupDynamicLayers,
   clearPopups,
   setupSetoresLayer
-} from '@/utils/layerManager';
+} from '@/components/map/layers/MapLayerController.js';
 import {
   setupRasterInteractions,
   removeRasterInteractions,
   setupVectorInteractions,
   removeVectorInteractions,
   setupSetoresInteractions
-} from '@/utils/interactionManager';
+} from '@/components/map/layers/MapLayerInteractionManager.js';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
