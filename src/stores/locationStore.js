@@ -36,6 +36,9 @@ export const useLocationStore = defineStore('locationStore', {
 
       return currentLayer?.name || '';
     },
+    getCategories() {
+      return this.categories;
+    },
     urlParams() {
       const params = {};
       if (this.cd_mun)  {params.code = this.cd_mun;}

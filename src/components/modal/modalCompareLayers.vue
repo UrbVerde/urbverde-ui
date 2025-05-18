@@ -20,7 +20,10 @@
               <div v-for="layer in category.layers"
                    :key="layer.id"
                    class="layer-card"
-                   :class="{ 'active': isLayerActive(layer.id) }"
+                   :class="{
+                     'active': isLayerActive(layer.id),
+                     'current-layer': layer.id === locationStore.layer
+                   }"
                    @click="toggleLayer(layer)">
                 <div class="layer-info">
                   <img v-if="category.icon"
@@ -30,7 +33,8 @@
                   <span class="layer-name">{{ layer.name }}</span>
                 </div>
                 <div class="layer-status">
-                  <i v-if="isLayerActive(layer.id)" class="bi bi-check-circle-fill"></i>
+                  <i v-if="layer.id === locationStore.layer" class="bi bi-lock-fill" title="Camada Principal - Altere no menu lateral"></i>
+                  <i v-else-if="isLayerActive(layer.id)" class="bi bi-check-circle-fill"></i>
                   <i v-else class="bi bi-circle"></i>
                 </div>
               </div>
@@ -53,10 +57,11 @@ const locationStore = useLocationStore();
 const layersStore = useLayersStore();
 
 // Computed properties
-const categories = computed(() => locationStore.categories || []);
+const categories = computed(() => locationStore.getCategories || []);
+// const currentLayerName = computed(() => locationStore.currentLayerName);
 
 // Get active layers with their names
-const activeLayersWithNames = computed(() => layersStore.activeLayers.map(activeLayer => {
+const activeLayersWithNames = computed(() => layersStore.getActiveLayers.map((activeLayer, index) => {
   // Find the category and layer that matches this active layer
   const category = categories.value.find(cat =>
     cat.layers.some(layer => layer.id === activeLayer.id)
@@ -66,14 +71,20 @@ const activeLayersWithNames = computed(() => layersStore.activeLayers.map(active
   return {
     ...activeLayer,
     name: layer?.name || activeLayer.id,
-    category: category?.name || 'Sem categoria'
+    category: category?.name || 'Sem categoria',
+    position: index + 1 // Adicionando a posição (começando em 1)
   };
 }));
 
 // Methods
 const getIconPath = (iconName) => new URL(`../../assets/icons/${iconName}`, import.meta.url).href;
 
-const isLayerActive = (layerId) => layersStore.activeLayers.some(layer => layer.id === layerId);
+const isLayerActive = (layerId) => {
+  const isInActiveLayers = layersStore.getActiveLayers.some(layer => layer.id === layerId);
+  const isCurrentLayer = layerId === locationStore.layer;
+
+  return isInActiveLayers || isCurrentLayer;
+};
 
 const toggleLayer = (layer) => {
   if (isLayerActive(layer.id)) {
@@ -93,7 +104,7 @@ const toggleLayer = (layer) => {
 const handleClose = () => {
   if (activeLayersWithNames.value.length > 0) {
     const layersList = activeLayersWithNames.value
-      .map(layer => `- ${layer.name} (${layer.category})`)
+      .map(layer => `${layer.position}. ${layer.name} (${layer.category})`)
       .join('\n');
 
     alert(`Camadas ativas:\n\n${layersList}`);
@@ -159,6 +170,17 @@ defineExpose({ show, hide });
     border-color: map-get($theme, primary);
     background-color: map-get($primary-fade, 100);
   }
+
+  &.current-layer {
+    border-color: map-get($theme, primary);
+    background-color: map-get($primary-fade, 100);
+    cursor: not-allowed;
+    opacity: 0.8;
+
+    &:hover {
+      background-color: map-get($theme, 100);
+    }
+  }
 }
 
 .layer-info {
@@ -181,5 +203,9 @@ defineExpose({ show, hide });
 .layer-status {
   color: map-get($theme, primary);
   font-size: 18px;
+
+  .bi-lock-fill {
+    color: map-get($theme, primary);
+  }
 }
 </style>
