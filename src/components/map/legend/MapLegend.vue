@@ -83,7 +83,7 @@
           :filled="false"
           icon="bi-layers"
           icon-position="left"
-          @click="() => { handleCompare(); refModalWaitlistLegend.show(); }"
+          @click="() => { handleCompare(); refModalCompareLayers.show(); }"
         />
         <PrimaryButton
           label="Baixar"
@@ -97,9 +97,8 @@
   </div>
 
   <!-- Modal -->
-  <modalWaitList
-    ref="refModalWaitlistLegend"
-    :modalId="'modalWaitlistLegend'"
+  <modalCompareLayers
+    ref="refModalCompareLayers"
   />
 
   <!-- Visual indicators for drag operations -->
@@ -121,7 +120,7 @@ import { useWindowSize } from '@/utils/useWindowsSize';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import LegendYearSelector from '@/components/map/legend/LegendYearSelector.vue';
 import LegendCard from '@/components/map/legend/LegendCard.vue';
-import modalWaitList from '@/components/modal/modalWaitList.vue';
+import modalCompareLayers from '@/components/modal/modalCompareLayers.vue';
 
 // Import icons
 import wrapperIcon from '@/assets/icons/wrapper.svg';
@@ -180,7 +179,7 @@ const handleColorbarClick = () => {
 };
 
 const handleCompare = () => {
-  // Compare layers clicked
+  refModalCompareLayers.value.show();
 };
 
 const handleDownload = () => {
@@ -216,6 +215,7 @@ const handleLayerOrderChange = () => {
 
 // Referenca o modal para utilizar seus métodos
 const refModalWaitlistLegend = ref(null);
+const refModalCompareLayers = ref(null);
 
 </script>
 

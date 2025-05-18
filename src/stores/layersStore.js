@@ -19,7 +19,8 @@ export const useLayersStore = defineStore('layersStore', {
 
   getters: {
     isIntraurbanScale: (state) => state.currentScale === 'intraurbana',
-    hasSetores: (state) => state.setoresVisible && state.isIntraurbanScale
+    hasSetores: (state) => state.setoresVisible && state.isIntraurbanScale,
+    getActiveLayers: (state) => state.activeLayers
   },
 
   actions: {
@@ -106,6 +107,32 @@ export const useLayersStore = defineStore('layersStore', {
       this.mapRef.setPaintProperty(layerId, opacityProp, newOpacity);
 
       console.log(`[LayersStore] Updated map layer ${layerId} opacity to ${newOpacity} (property: ${opacityProp})`);
+    },
+
+    /**
+     * Add a new layer to the active layers list
+     */
+    addLayer(layer) {
+      if (!this.activeLayers.some(l => l.id === layer.id)) {
+        this.activeLayers.push(layer);
+        console.log(`[LayersStore] Added new layer ${layer.id}`);
+      }
+    },
+
+    /**
+     * Remove a layer from the active layers list
+     */
+    removeLayer(layerId) {
+      this.activeLayers = this.activeLayers.filter(layer => layer.id !== layerId);
+      console.log(`[LayersStore] Removed layer ${layerId}`);
+    },
+
+    /**
+     * Clear all active layers
+     */
+    clearActiveLayers() {
+      this.activeLayers = [];
+      console.log('[LayersStore] Cleared all active layers');
     },
   },
 });

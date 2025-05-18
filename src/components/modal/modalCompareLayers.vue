@@ -1,0 +1,185 @@
+<!-- urbverde-ui/src/components/modal/modalCompareLayers.vue -->
+<template>
+  <teleport to="body">
+    <modalBootstrap
+      ref="refModal"
+      modalId="modalCompareLayers"
+      title="Comparar Camadas"
+      :showSecondaryButton="false"
+      :showPrimaryButton="true"
+      primaryButtonText="Fechar"
+      :primaryButtonClosesModal="true"
+      size="lg"
+      @closePrimary="handleClose"
+    >
+      <template #body>
+        <div class="layers-content body-normal-regular">
+          <div v-for="category in categories" :key="category.id" class="category-section">
+            <h3 class="category-title heading-h6">{{ category.name }}</h3>
+            <div class="layers-grid">
+              <div v-for="layer in category.layers"
+                   :key="layer.id"
+                   class="layer-card"
+                   :class="{ 'active': isLayerActive(layer.id) }"
+                   @click="toggleLayer(layer)">
+                <div class="layer-info">
+                  <img v-if="category.icon"
+                       :src="getIconPath(category.icon)"
+                       :alt="category.name"
+                       class="category-icon" />
+                  <span class="layer-name">{{ layer.name }}</span>
+                </div>
+                <div class="layer-status">
+                  <i v-if="isLayerActive(layer.id)" class="bi bi-check-circle-fill"></i>
+                  <i v-else class="bi bi-circle"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </modalBootstrap>
+  </teleport>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import modalBootstrap from './modalBootstrap.vue';
+import { useLocationStore } from '@/stores/locationStore';
+import { useLayersStore } from '@/stores/layersStore';
+
+const refModal = ref(null);
+const locationStore = useLocationStore();
+const layersStore = useLayersStore();
+
+// Computed properties
+const categories = computed(() => locationStore.categories || []);
+
+// Get active layers with their names
+const activeLayersWithNames = computed(() => layersStore.activeLayers.map(activeLayer => {
+  // Find the category and layer that matches this active layer
+  const category = categories.value.find(cat =>
+    cat.layers.some(layer => layer.id === activeLayer.id)
+  );
+  const layer = category?.layers.find(layer => layer.id === activeLayer.id);
+
+  return {
+    ...activeLayer,
+    name: layer?.name || activeLayer.id,
+    category: category?.name || 'Sem categoria'
+  };
+}));
+
+// Methods
+const getIconPath = (iconName) => new URL(`../../assets/icons/${iconName}`, import.meta.url).href;
+
+const isLayerActive = (layerId) => layersStore.activeLayers.some(layer => layer.id === layerId);
+
+const toggleLayer = (layer) => {
+  if (isLayerActive(layer.id)) {
+    // Remove layer
+    layersStore.removeLayer(layer.id);
+  } else {
+    // Add layer
+    layersStore.addLayer({
+      id: layer.id,
+      year: locationStore.year,
+      scale: locationStore.scale,
+      opacity: 0.7
+    });
+  }
+};
+
+const handleClose = () => {
+  if (activeLayersWithNames.value.length > 0) {
+    const layersList = activeLayersWithNames.value
+      .map(layer => `- ${layer.name} (${layer.category})`)
+      .join('\n');
+
+    alert(`Camadas ativas:\n\n${layersList}`);
+  } else {
+    alert('Nenhuma camada selecionada');
+  }
+};
+
+// Public methods
+function show() {
+  refModal.value.show();
+}
+
+function hide() {
+  refModal.value.hide();
+}
+
+defineExpose({ show, hide });
+</script>
+
+<style scoped lang="scss">
+.layers-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.category-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-title {
+  color: map-get($theme, secondary);
+  margin: 0;
+}
+
+.layers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.layer-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid map-get($gray, 300);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: map-get($gray, 100);
+  }
+
+  &.active {
+    border-color: map-get($theme, primary);
+    background-color: map-get($primary-fade, 100);
+  }
+}
+
+.layer-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.layer-name {
+  font-size: 14px;
+  color: map-get($body-text, body-color);
+}
+
+.layer-status {
+  color: map-get($theme, primary);
+  font-size: 18px;
+}
+</style>
