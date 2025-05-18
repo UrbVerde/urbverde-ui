@@ -22,7 +22,8 @@
     "vue": "^3.4.29",
     "vue-google-autocomplete": "^1.1.4",
     "vue-meta": "^2.4.0",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -1,11 +1,6 @@
 <!-- urbverde-ui/src/components/legend/LegendCard.vue -->
 <template>
   <div class="card-container">
-    <!-- Drag handle -->
-    <div v-if="draggable" class="drag-handle">
-      <IconComponent name="drag" size="20" />
-    </div>
-
     <!-- Header -->
     <div class="header" v-if="title || icon || showMenu">
       <div v-if="icon" class="icon-wrapper">
@@ -62,11 +57,11 @@
       />
 
       <!-- Card Layer Switch -->
-      <!-- <CardLayerSwitch
+      <CardLayerSwitch
         v-if="layerId"
         class="grip-control"
         :layerId="layerId"
-      /> -->
+      />
     </div>
   </div>
 </template>
@@ -77,7 +72,7 @@ import IconComponent from '@/components/icons/IconComponent.vue';
 import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
 import LayerCut from './LayerCut.vue';
-// import CardLayerSwitch from './CardLayerSwitch.vue';
+import CardLayerSwitch from './CardLayerSwitch.vue';
 
 const props = defineProps({
   title: {
@@ -164,15 +159,12 @@ onMounted(() => {
   border-radius: 8px;
   border: 1px solid map-get($gray, 200);
   margin-bottom: 8px;
-}
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-.drag-handle {
-  position: absolute;
-  left: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: move;
-  color: #6C757D;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .header {
@@ -285,5 +277,4 @@ onMounted(() => {
 .card-container:hover :deep(.layer-cut-icon) {
   color: map-get($theme, primary);
 }
-
 </style>

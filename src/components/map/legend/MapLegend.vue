@@ -31,7 +31,6 @@
       <div class="layers-section">
         <div class="layers-header body-caption-medium">
           <p>LEGENDA</p>
-          <!-- <img :src="addIcon" /> -->
         </div>
 
         <!-- Basemap Lines Layer Card -->
@@ -55,30 +54,16 @@
           :scale="scale"
           :showLegendLines="true"
           @opacity-change="handlerParksLayerOpacity"
-          @order-change="handleLayerOrderChange"
         />
 
         <!-- Dynamic Layer Cards -->
-        <template v-for="layer in activeLayers" :key="layer.id">
-          <LegendCard
-            v-if="layer.id !== 'parks'"
-            :showMenu="false"
-            :title="getLayerConfig(layer.id)?.label"
-            :icon="getLayerIcon(layer.id)"
-            :layerId="layer.id"
-            :year="currentYear"
-            :scale="scale"
-            :showLegendLines="false"
-            :showOpacity="true"
-            :showColorScale="true"
-            :stops="getLayerConfig(layer.id)?.stops"
-            :unit="getLayerConfig(layer.id)?.unit"
-            :showLayerCut="false"
-            @opacity-change="handleDataLayerOpacity"
-            @colorbar-click="handleColorbarClick"
-            @order-change="handleLayerOrderChange"
-          />
-        </template>
+        <DraggableLayerList
+          v-model:layers="activeLayers"
+          :current-year="currentYear"
+          :scale="scale"
+          @opacity-change="handleDataLayerOpacity"
+          @colorbar-click="handleColorbarClick"
+        />
       </div>
     </div>
 
@@ -107,13 +92,6 @@
   <modalCompareLayers
     ref="refModalCompareLayers"
   />
-
-  <!-- Visual indicators for drag operations -->
-  <div v-if="isDragging"
-       class="drag-indicator"
-       :style="dragIndicatorStyle"
-       :class="{'above': dragDirection === 'above', 'below': dragDirection === 'below'}">
-  </div>
 </template>
 
 <script setup>
@@ -122,34 +100,26 @@ import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import { useWindowSize } from '@/utils/useWindowsSize';
-import { getLayerConfig } from '@/constants/layers';
+// import { getLayerConfig } from '@/constants/layers';
 
 // Import components
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import LegendYearSelector from '@/components/map/legend/LegendYearSelector.vue';
 import LegendCard from '@/components/map/legend/LegendCard.vue';
+import DraggableLayerList from '@/components/map/legend/DraggableLayerList.vue';
 import modalCompareLayers from '@/components/modal/modalCompareLayers.vue';
 
 // Import icons
 import wrapperIcon from '@/assets/icons/wrapper.svg';
-//import addIcon from '@/assets/icons/add.svg';
 
 // Store setup
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
-const { year: storeYear, categories, scale } = storeToRefs(locationStore);
+const { year: storeYear, scale } = storeToRefs(locationStore);
 
 // Reactive state
 const isOpen = ref(true);
 const isLegendHovered = ref(false);
-const isDragging = ref(false);
-const dragDirection = ref(null); // 'above' or 'below'
-const dragIndicatorStyle = ref({
-  top: '0px',
-  left: '0px',
-  width: '100%',
-  height: '4px'
-});
 
 const { smallerThan } = useWindowSize();
 
@@ -162,29 +132,11 @@ onMounted(() => {
 
 // Computed properties
 const currentYear = computed(() => storeYear.value || 2021);
-// const currentLayerName = computed(() => locationStore.currentLayerName);
-// const currentCategory = computed(() =>
-//   categories.value?.find(cat => cat.name === category.value)
-// );
-// const currentLayerId = computed(() => layer.value);
 const currentLayerAllowedYears = computed(() =>
-  // Get the allowed years for the current layer from your layer config
-  // This is a placeholder - implement according to your layer management system
   [2016, 2017, 2018, 2019, 2020, 2021]
 );
 
 const activeLayers = computed(() => layersStore.getActiveLayers);
-
-// Função para obter o ícone da camada
-const getLayerIcon = (layerId) => {
-  // Encontra a categoria que contém a camada
-  const category = categories.value?.find(cat =>
-    cat.layers?.some(l => l.id === layerId)
-  );
-
-  // Retorna o ícone da categoria ou um ícone padrão
-  return category?.icon || 'bi-question-circle';
-};
 
 // Event handlers
 const toggleLegend = () => {
@@ -212,32 +164,19 @@ const onLegendOpacityChange = () => {
   // Handle base layer opacity if needed
 };
 
-// Parks layer opacity handler
 const handlerParksLayerOpacity = (opacity) => {
-  // Convert from percentage (0-100) to decimal (0-1)
   const decimalOpacity = opacity / 100;
-
-  // Update through layersStore to ensure we track this layer's opacity
   layersStore.setLayerOpacity('parks-layer', decimalOpacity);
 };
 
 const handleDataLayerOpacity = (opacity) => {
-  // Convert from percentage (0-100) to decimal (0-1)
   const decimalOpacity = opacity / 100;
-
-  // Track the opacity for this layer ID in the store
   layersStore.setLayerOpacity('dynamic-layer', decimalOpacity);
-};
-
-// Layer order handling
-const handleLayerOrderChange = () => {
-  // Layer order change
 };
 
 // Referenca o modal para utilizar seus métodos
 const refModalWaitlistLegend = ref(null);
 const refModalCompareLayers = ref(null);
-
 </script>
 
 <style scoped lang="scss">
@@ -313,12 +252,6 @@ const refModalCompareLayers = ref(null);
   color: map-get($theme, secondary);
 }
 
-.layers-header img {
-  width: 16px;
-  height: 16px;
-  /* cursor: pointer; */
-}
-
 .buttons-container {
   background-color: map-get($gray, white);
   border-top: 1px solid #e0e0e0;
@@ -338,30 +271,5 @@ const refModalCompareLayers = ref(null);
 .buttons-space :deep(button) {
   width: 100%;
   border-radius: 12px;
-}
-
-/* Drag indicator styles */
-.drag-indicator {
-  position: absolute;
-  background-color: #4CAF50;
-  z-index: 1000;
-  pointer-events: none;
-  transition: all 0.1s ease;
-}
-
-.drag-indicator.above {
-  border-top: 2px solid #4CAF50;
-}
-
-.drag-indicator.below {
-  border-bottom: 2px solid #4CAF50;
-}
-
-/* Card being dragged */
-.card-dragging {
-  opacity: 0.7;
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 10;
 }
 </style>
