@@ -482,6 +482,72 @@ export const LAYER_CONFIGS = {
       format: (v) => v.toFixed(0)
     }
   },
+
+  // Base layers
+  base_municipalities: {
+    type: 'vector',
+    label: 'Municípios Base',
+    source: (year) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+    }),
+    paint: {
+      'fill-color': 'transparent',
+      'fill-opacity': 1
+    }
+  },
+
+  selected_municipality: {
+    type: 'vector',
+    label: 'Município Selecionado',
+    source: (year) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+    }),
+    paint: {
+      'line-color': '#212529',
+      'line-opacity': 1,
+      'line-width': 3
+    }
+  },
+
+  municipalities_outline: {
+    type: 'vector',
+    label: 'Contorno dos Municípios',
+    source: (year) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+    }),
+    paint: {
+      'line-color': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        '#86919B',
+        '#ADB5BD'
+      ],
+      'line-width': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        3,
+        1
+      ]
+    }
+  },
 };
 
 // Helper function to get layer config

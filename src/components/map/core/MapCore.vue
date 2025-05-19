@@ -470,63 +470,49 @@ function initializeMap() {
 function addBaseMunicipalitiesLayer() {
   if (!map.value) { return; }
 
-  map.value.addSource('base-municipalities', {
-    type: 'vector',
-    tiles: [
-      `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${currentYear.value}/{z}/{x}/{y}.pbf`
-    ],
-    minzoom: 0,
-    maxzoom: 22
-  });
+  // Obter configurações das layers base
+  const baseConfig = getLayerConfig('base_municipalities', currentYear.value);
+  const selectedConfig = getLayerConfig('selected_municipality', currentYear.value);
+  const outlineConfig = getLayerConfig('municipalities_outline', currentYear.value);
 
-  // Camada de preenchimento do município selecionado
-  map.value.addLayer({
+  // Adicionar source
+  map.value.addSource('base-municipalities', baseConfig.source);
+
+  // Configurar layers
+  const selectedMunicipalityConfig = {
     id: 'selected-municipality-fill',
     type: 'line',
     source: 'base-municipalities',
-    'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
-    paint: {
-      'line-color': '#212529',
-      'line-opacity': 1,
-      'line-width' : 3
-    },
+    'source-layer': baseConfig.source.sourceLayer,
+    paint: selectedConfig.paint,
     filter: ['==', 'cd_mun', locationStore.cd_mun]
-  });
+  };
 
-  // Camada de preenchimento estadual - sem efeito de hover
-  map.value.addLayer({
+  const baseMunicipalitiesConfig = {
     id: 'municipalities-base',
     type: 'fill',
     source: 'base-municipalities',
-    'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
-    paint: {
-      'fill-color': 'transparent',  // Sempre transparente
-      'fill-opacity': 1
-    }
-  });
+    'source-layer': baseConfig.source.sourceLayer,
+    paint: baseConfig.paint
+  };
 
-  // Camada de contorno estadual - com efeito de hover
-  map.value.addLayer({
+  const baseOutlineConfig = {
     id: 'municipalities-base-outline',
     type: 'line',
     source: 'base-municipalities',
-    'source-layer': `public.geodata_temperatura_por_municipio_${currentYear.value}`,
-    paint: {
-      'line-color': [
-        'case',
-        ['boolean', ['feature-state', 'hover'], false],
-        '#86919B',  // Cor cinza no hover
-        '#ADB5BD'      // Cor cinza por padrão
-      ],
-      'line-width': [
-        'case',
-        ['boolean', ['feature-state', 'hover'], false],
-        3,         // Largura da linha durante o hover (3px)
-        1           // Largura da linha padrão
-      ]
-    }
-  })
-  ;
+    'source-layer': baseConfig.source.sourceLayer,
+    paint: outlineConfig.paint
+  };
+
+  // Registrar as layers no registry
+  layerRegistry.register('selected-municipality-fill', selectedMunicipalityConfig);
+  layerRegistry.register('municipalities-base', baseMunicipalitiesConfig);
+  layerRegistry.register('municipalities-base-outline', baseOutlineConfig);
+
+  // Adicionar as layers ao mapa
+  map.value.addLayer(selectedMunicipalityConfig);
+  map.value.addLayer(baseMunicipalitiesConfig);
+  map.value.addLayer(baseOutlineConfig);
 
   // Events
   map.value.on('mousemove', 'municipalities-base', handleMunicipalityMouseMove);
