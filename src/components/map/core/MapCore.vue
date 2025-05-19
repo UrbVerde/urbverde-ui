@@ -105,8 +105,7 @@ const MAP_ZOOM_FINAL = 14;
 const currentLayer = computed(() => locationStore.activeMainLayer);
 const currentScale = computed(() => locationStore.scale);
 const currentYear = computed(() => locationStore.year || '2021');
-const currentCode = computed(() => route.query.code);
-const initialCode = ref(route.query.code);
+const currentCode = computed(() => locationStore.cd_mun);
 
 // No setup
 const layerRegistry = new LayerRegistry();
@@ -117,13 +116,11 @@ watch(
     () => locationStore.cd_mun,
     () => currentLayer.value,
     () => currentScale.value,
-    () => currentYear.value,
-    () => route.query.code
+    () => currentYear.value
   ],
   async([newCdMun], [oldCdMun]) => {
     // Only load coordinates if cd_mun changes AND it's a new municipality
     if (newCdMun && newCdMun !== oldCdMun) {
-      initialCode.value = route.query.code;
       await loadCoordinates(newCdMun);
     }
 
