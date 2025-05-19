@@ -406,6 +406,15 @@ async function loadCoordinates(code) {
 /* ---------------------------------------
    MAP INITIALIZATION
 ---------------------------------------*/
+// Função para criar o estado inicial do mapa
+function createInitialMapState(coordinates, mapState) {
+  return {
+    center: mapState.center || [coordinates.lng, coordinates.lat],
+    zoom: mapState.zoom || MAP_ZOOM_START,
+    pitch: mapState.pitch || 20
+  };
+}
+
 // Função para criar o mapa
 function createMapInstance(container, initialState) {
   return new maplibregl.Map({
@@ -423,11 +432,7 @@ function initializeMap() {
   if (!coordinates.value) {return;}
 
   const mapState = locationStore.getMapState();
-  const initialState = {
-    center: mapState.center || [coordinates.value.lng, coordinates.value.lat],
-    zoom: mapState.zoom || MAP_ZOOM_START,
-    pitch: mapState.pitch || 20
-  };
+  const initialState = createInitialMapState(coordinates.value, mapState);
 
   // Usando a função createMapInstance
   map.value = createMapInstance(mapContainer.value, initialState);
