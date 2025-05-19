@@ -420,7 +420,7 @@ h5, p{
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background-color: #F8F9FACC;
+  background-color: map-get($primary-fade, 50);
   overflow-x: hidden;
   position: relative;
 }

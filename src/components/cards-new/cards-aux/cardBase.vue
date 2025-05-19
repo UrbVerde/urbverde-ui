@@ -1,7 +1,7 @@
 <template>
   <div class="card-wrapper" ref="cardWrapper">
     <div v-if="isVisible"
-         class="shadow-sm card-base"
+         class="card-base"
          @mouseenter="showButton = true"
          @mouseleave="showButton = false">
       <div v-if="showInfoButton" class="info-button-wrapper" :class="{ 'show': showButton }">
@@ -114,13 +114,19 @@ onUnmounted(() => {
     gap: v-bind('customGap');
     align-self: stretch;
     border-radius: 16px;
-    border: 1px solid map-get($gray, 200);
     background: map-get($gray, white);
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     position: relative;
     animation: fadeIn 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    box-shadow: rgba(35, 38, 33, 0.1) 0px 10px 10px -10px;
+
+    &:hover {
+        box-shadow: rgba(74, 156, 19, 0.3) 0px 10px 10px -10px;
+        transform: scale(1.02);
+    }
 }
 
 @keyframes fadeIn {

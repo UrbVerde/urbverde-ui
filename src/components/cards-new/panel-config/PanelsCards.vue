@@ -254,7 +254,7 @@ p, h5 {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  color: map-get($theme, secondary);
+  color: map-get($primary-fade, 600);
 }
 
 .subtitle-statistics-container {
