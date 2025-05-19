@@ -121,7 +121,7 @@ watch(
   async([newCdMun], [oldCdMun]) => {
     // Only load coordinates if cd_mun changes AND it's a new municipality
     if (newCdMun && newCdMun !== oldCdMun) {
-      await loadCoordinates(newCdMun);
+      await initializeMapLocation(newCdMun);
     }
 
     if (mapLoaded.value) {
@@ -348,8 +348,30 @@ function handleMissingImage(e) {
    CORE FUNCTIONS
 ---------------------------------------*/
 
-/** Load city coordinates and initialize or fly the map. */
-async function loadCoordinates(code) {
+/** Busca as coordenadas de um município pelo código */
+async function fetchMunicipalityCoordinates(code) {
+  try {
+    const coords = await locationStore.fetchCoordinatesByCode(code);
+    if (coords?.lat && coords?.lng) {
+      coordinates.value = coords;
+      await locationStore.setLocation({
+        lng: coords.lng,
+        lat: coords.lat
+      });
+
+      return coords;
+    }
+
+    return null;
+  } catch (err) {
+    console.error('Error fetching municipality coordinates:', err);
+
+    return null;
+  }
+}
+
+/** Inicializa ou atualiza a localização do mapa */
+async function initializeMapLocation(code) {
   isLoadingCoordinates.value = true;
 
   try {
@@ -365,16 +387,8 @@ async function loadCoordinates(code) {
       await initializeMapLayers();
     }
 
-    const coords = await locationStore.fetchCoordinatesByCode(code);
-    if (coords?.lat && coords?.lng) {
-      coordinates.value = coords;
-
-      // Atualiza o store com as coordenadas
-      await locationStore.setLocation({
-        lng: coords.lng,
-        lat: coords.lat
-      });
-
+    const coords = await fetchMunicipalityCoordinates(code);
+    if (coords) {
       if (map.value) {
         map.value.jumpTo({
           center: [coords.lng, coords.lat],
@@ -386,7 +400,7 @@ async function loadCoordinates(code) {
       }
     }
   } catch (err) {
-    console.error('Error loading coords:', err);
+    console.error('Error initializing map location:', err);
   } finally {
     isLoadingCoordinates.value = false;
   }
@@ -596,7 +610,7 @@ function handleMunicipalityClick(e) {
 ---------------------------------------*/
 onMounted(() => {
   if (locationStore.cd_mun) {
-    loadCoordinates(locationStore.cd_mun);
+    initializeMapLocation(locationStore.cd_mun);
   }
   // Set map reference in store
   layersStore.mapRef = map.value;
