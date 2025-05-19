@@ -4,33 +4,34 @@
          class="card-base"
          @mouseenter="showButton = true"
          @mouseleave="showButton = false">
-      <div v-if="showInfoButton" class="info-button-wrapper" :class="{ 'show': showButton }">
-        <div class="info-button"
-             @click="openModal"
-             data-bs-toggle="tooltip"
-             data-bs-title="Saiba mais sobre o dado"
-        >
-          <i class="bi bi-info"></i>
-        </div>
+      <div v-if="showInfoButton || showSeeOnMap" class="info-button-wrapper" :class="{ 'show': showButton }">
+        <cardSeeOnMap
+          v-if="showSeeOnMap"
+          :showSeeOnMap="showSeeOnMap"
+          :seeOnMapLayerID="seeOnMapLayerID"
+        />
+        <CardHoverButton
+          v-if="showInfoButton"
+          iconClass="bi bi-info-lg"
+          @click="openModal"
+        />
       </div>
       <slot></slot>
     </div>
   </div>
 
-  <modalBootstrap
+  <cardModal
     :ref="el => { if (el) modalRef = el }"
-    :modalId="uniqueModalId"
     :title="modalTitle"
     :bodyText="modalBodyText"
-    :showSecondaryButton="false"
-    primaryButtonText="Ok"
-    :primaryButtonClosesModal="true"
   />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import modalBootstrap from '@/components/modal/modalBootstrap.vue';
+import cardModal from './cardModal.vue';
+import cardSeeOnMap from './cardSeeOnMap.vue';
+import CardHoverButton from '@/components/buttons/CardHoverButton.vue';
 
 defineProps({
   customClass: {
@@ -40,6 +41,14 @@ defineProps({
   showInfoButton: {
     type: Boolean,
     default: false
+  },
+  showSeeOnMap: {
+    type: Boolean,
+    default: false
+  },
+  seeOnMapLayerID: {
+    type: String,
+    default: ''
   },
   modalTitle: {
     type: String,
@@ -63,8 +72,6 @@ const showButton = ref(false);
 const modalRef = ref(null);
 const cardWrapper = ref(null);
 const isVisible = ref(false);
-const uniqueModalId = ref(`modalCard-${Date.now()}-${Math.random().toString(36)
-  .substr(2, 9)}`);
 
 const openModal = () => {
   if (modalRef.value) {
@@ -148,7 +155,7 @@ onUnmounted(() => {
     display: flex;
     padding: 12px;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     pointer-events: none;
@@ -157,31 +164,6 @@ onUnmounted(() => {
     &.show {
         opacity: 1;
         pointer-events: all;
-    }
-}
-
-.info-button {
-    display: flex;
-    width: 40px;
-    height: 40px;
-    padding: 8px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    border-radius: 8px;
-    border: 2px solid map-get($gray, 200);
-    background: map-get($gray, white);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-        border-color: map-get($green, 500);
-        color: map-get($green, 500);
-    }
-
-    i {
-        font-size: 28px;
-        color: map-get($body-text, body-color);
     }
 }
 </style>

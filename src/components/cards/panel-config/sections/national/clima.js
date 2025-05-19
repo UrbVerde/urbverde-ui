@@ -39,6 +39,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   overrideCardSubtitle: 'Conta o número de crianças e idosos morando em áreas mais quentes. Quanto maior, maior a vulnerabilidade',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'heat_island',
                 }
               },
               {
@@ -49,6 +51,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   showInfoButton: true,
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'max_surface_temp',
                 }
               },
             ]
@@ -77,6 +81,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   showInfoButton: true,
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'surface_temp',
                 }
               },
             ]

@@ -3,6 +3,9 @@
     :show-info-button="showInfoButton"
     :modal-title="modalTitle"
     :modal-body-text="modalBodyText"
+    :show-see-on-map="showSeeOnMap"
+    :seeOnMapLayerID="seeOnMapLayerID"
+    :city-code="cityCode"
     :class="{ 'background-image': midiaPosition === 'background' }"
     :style="midiaPosition === 'background' ? { backgroundImage: `url(${midiaLink})` } : {}"
     :custom-padding="'8px'"
@@ -273,6 +276,16 @@ defineProps({
     type: String,
     default: null,
     validator: (value) => [null, 'top', 'bottom', 'left', 'right', 'background'].includes(value)
+  },
+
+  // See on Map props
+  showSeeOnMap: {
+    type: Boolean,
+    default: false
+  },
+  seeOnMapLayerID: {
+    type: String,
+    default: ''
   },
 
   // Button props (from ParagraphInsideCards)

@@ -33,14 +33,16 @@ export default createSectionConfig((nm_mun, uf) => [
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
-                  cardIndex: 0
+                  cardIndex: 0,
                 }
               },
               {
                 component: 'CardData',
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
-                  cardIndex: 1
+                  cardIndex: 1,
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'avg_distance_to_squares',
                 }
               },
             ]

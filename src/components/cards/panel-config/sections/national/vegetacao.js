@@ -50,6 +50,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardSubtitle: 'É a diferença entre a temperatura mais quente e a mais fria',
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'pcv',
                 }
               },
               {
@@ -60,6 +62,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   showInfoButton: true,
                   modalTitle: 'Nível de ilha de calor',
                   modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'pcv',
                 }
               },
             ]
