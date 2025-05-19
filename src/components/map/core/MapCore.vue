@@ -60,6 +60,8 @@ import {
   setupSetoresInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
+import { useMapPopups } from '@/composables/useMapPopups';
+
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
 const route = useRoute();
@@ -78,9 +80,15 @@ const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
 
 // Standard popups
-const vectorPopup = ref(null);
-const pinnedPopup = ref(null);
-const rasterPopup = ref(null);
+const {
+  createPopups,
+  setupVectorPopupHandlers,
+  setupRasterPopupHandlers,
+  removeHandlers,
+  vectorPopup,
+  rasterPopup,
+  pinnedPopup
+} = useMapPopups();
 
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
@@ -141,10 +149,14 @@ function removeDynamicLayer() {
     map.value._masterOutHandler = null;
   }
 
-  // Remove popups
-  if (vectorPopup.value) { vectorPopup.value.remove(); }
-  if (rasterPopup.value) { rasterPopup.value.remove(); }
-  if (pinnedPopup.value) { pinnedPopup.value.remove(); }
+  // Remove popups using the composable
+  removeHandlers(map.value, {
+    onMouseMove: map.value._vectorPopupHandlers?.onMouseMove,
+    onMouseLeave: map.value._vectorPopupHandlers?.onMouseLeave,
+    onClick: map.value._vectorPopupHandlers?.onClick,
+    onRasterMouseMove: map.value._rasterPopupHandlers?.onRasterMouseMove,
+    onRasterMouseClick: map.value._rasterPopupHandlers?.onRasterMouseClick
+  });
 
   // Reset hover state
   hoveredSetorId = null;
@@ -212,6 +224,13 @@ function initializeMapLayers() {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
+      }
+
+      // Configurar handlers de popup
+      if (config.type === 'vector') {
+        map.value._vectorPopupHandlers = setupVectorPopupHandlers(map.value, config);
+      } else if (config.type === 'raster') {
+        map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
       }
     }
 
@@ -433,20 +452,7 @@ function initializeMap() {
 
   map.value.on('load', () => {
     mapLoaded.value = true;
-    vectorPopup.value = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      trackPointer: true,
-      offset: { top: [0, 20], bottom: [0, -20] },
-      className: 'hover-popup'
-    });
-    pinnedPopup.value = new maplibregl.Popup({
-      closeButton: true,
-      closeOnClick: false,
-      offset: { top: [0, 20], bottom: [0, -20] },
-      className: 'pinned-popup'
-    });
-
+    createPopups();
     addBaseMunicipalitiesLayer();
     initializeMapLayers();
     if (!hash) {
