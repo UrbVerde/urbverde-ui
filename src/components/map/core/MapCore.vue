@@ -38,7 +38,7 @@ import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
 import maplibregl from 'maplibre-gl';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
-import { useRoute, useRouter } from 'vue-router';
+// import { useRoute, useRouter } from 'vue-router';
 import CustomHash from '@/components/map/core/MapStateManager.js';
 import { getLayerConfig } from '@/constants/layers.js';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
@@ -67,8 +67,8 @@ import { LayerRegistry } from '@/components/map/layers/layerRegistry';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
-const route = useRoute();
-const router = useRouter();
+// const route = useRoute();
+// const router = useRouter();
 
 const mapContainer = ref(null);
 const map = ref(null);
@@ -329,20 +329,20 @@ function handleMissingImage(e) {
 /**
  * Update the "scale" based on zoom.
  */
-function getScaleFromZoom(zoom) {
-  let scale;
-  if (zoom >= 10) {
-    scale = 'intraurbana';
-  }
-  else if (zoom > 5) {
-    scale = 'estadual';
-  }
-  else {
-    scale = 'nacional';
-  }
+// function getScaleFromZoom(zoom) {
+//   let scale;
+//   if (zoom >= 10) {
+//     scale = 'intraurbana';
+//   }
+//   else if (zoom > 5) {
+//     scale = 'estadual';
+//   }
+//   else {
+//     scale = 'nacional';
+//   }
 
-  return scale;
-}
+//   return scale;
+// }
 
 /* ---------------------------------------
    CORE FUNCTIONS
@@ -408,28 +408,19 @@ async function loadCoordinates(code) {
 ---------------------------------------*/
 /** Initialize the map (if not already created). */
 function initializeMap() {
-  if (!coordinates.value) { return; }
+  if (!coordinates.value) {return;}
 
   // Reset hover state
   hoveredSetorId = null;
   hoveredFeatureId = null;
 
-  let initialState = {
-    center: [coordinates.value.lng, coordinates.value.lat],
-    zoom: MAP_ZOOM_START,
-    pitch: 20
+  // Usa o estado do mapa do locationStore ou valores padrão
+  const mapState = locationStore.getMapState();
+  const initialState = {
+    center: mapState.center || [coordinates.value.lng, coordinates.value.lat],
+    zoom: mapState.zoom || MAP_ZOOM_START,
+    pitch: mapState.pitch || 20
   };
-  const hash = window.location.hash.slice(1);
-  if (hash) {
-    const match = hash.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*),(\d+\.?\d*)z/);
-    if (match) {
-      initialState = {
-        center: [parseFloat(match[2]), parseFloat(match[1])],
-        zoom: parseFloat(match[3]),
-        pitch: 20
-      };
-    }
-  }
 
   map.value = new maplibregl.Map({
     container: mapContainer.value,
@@ -445,7 +436,9 @@ function initializeMap() {
     createPopups();
     addBaseMunicipalitiesLayer();
     initializeMapLayers();
-    if (!hash) {
+
+    // Se não houver estado do mapa, move para a posição inicial
+    if (!mapState.center) {
       map.value.jumpTo({
         center: [coordinates.value.lng, coordinates.value.lat],
         zoom: MAP_ZOOM_FINAL,
@@ -483,16 +476,7 @@ function initializeMap() {
   customHash.value.addTo(map.value);
   map.value.on('styleimagemissing', handleMissingImage);
   map.value.on('zoomend', () => {
-    const newScale = getScaleFromZoom(map.value.getZoom());
-
-    if (locationStore.scale !== newScale) {
-      const currentHash = window.location.hash.slice(1); // Remove # symbol
-      locationStore.setLocation({ scale: newScale });
-      router.replace({
-        query: { ...route.query, scale: newScale },
-        hash: currentHash // Don't slice here
-      });
-    }
+    locationStore.updateScaleFromZoom(map.value.getZoom());
   });
 }
 

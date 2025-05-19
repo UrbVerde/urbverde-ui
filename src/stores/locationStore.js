@@ -36,7 +36,7 @@ export const useLocationStore = defineStore('locationStore', {
     isLoadingCategories: false,
     error: null,
 
-    viewMode: 'map', // Adicionando viewMode ao estado
+    viewMode: 'map',
   }),
 
   getters: {
@@ -72,6 +72,11 @@ export const useLocationStore = defineStore('locationStore', {
       }
 
       return params;
+    },
+    urlHash() {
+      if (!this.mapState.center || !this.mapState.zoom) {return '';}
+
+      return `@${this.mapState.center[1].toFixed(4)},${this.mapState.center[0].toFixed(4)},${this.mapState.zoom}z,${this.mapState.bearing}b,${this.mapState.pitch}p`;
     },
     hasLocation() {
       return Boolean(this.cd_mun && this.nm_mun && this.uf);
@@ -348,12 +353,12 @@ export const useLocationStore = defineStore('locationStore', {
 
       // Atualiza o estado do mapa se os parâmetros existirem
       if (query.lat && query.lng && query.zoom) {
-        this.mapState = {
+        this.updateMapState({
           center: [parseFloat(query.lng), parseFloat(query.lat)],
           zoom: parseFloat(query.zoom),
           bearing: query.bearing ? parseInt(query.bearing) : 0,
           pitch: query.pitch ? parseInt(query.pitch) : 0
-        };
+        });
       }
 
       await this.setLocation(updates);
@@ -376,9 +381,7 @@ export const useLocationStore = defineStore('locationStore', {
             router.replace({
               path: '/mapa',
               query: newParams,
-              hash: this.mapState.center ?
-                `@${this.mapState.center[1].toFixed(4)},${this.mapState.center[0].toFixed(4)},${this.mapState.zoom}z,${this.mapState.bearing}b,${this.mapState.pitch}p`
-                : ''
+              hash: this.urlHash
             }).catch(err => console.error('Error updating URL:', err));
           }
         }
@@ -409,9 +412,16 @@ export const useLocationStore = defineStore('locationStore', {
     async updateMunicipalityUrl(code, coords) {
       const router = useRouter();
       const route = useRoute();
-      const currentHash = window.location.hash;
 
-      // Atualiza a URL com as novas coordenadas
+      // Atualiza o estado do mapa
+      this.updateMapState({
+        center: [coords.lng, coords.lat],
+        zoom: 14, // Zoom padrão para município
+        bearing: 0,
+        pitch: 20
+      });
+
+      // Atualiza a URL
       await router.replace({
         query: {
           ...route.query,
@@ -419,7 +429,7 @@ export const useLocationStore = defineStore('locationStore', {
           lng: coords.lng,
           lat: coords.lat
         },
-        hash: currentHash
+        hash: this.urlHash
       });
     },
 
@@ -434,6 +444,20 @@ export const useLocationStore = defineStore('locationStore', {
 
     getMapState() {
       return this.mapState;
+    },
+
+    updateScaleFromZoom(zoom) {
+      const newScale = this.getScaleFromZoom(zoom);
+      if (this.scale !== newScale) {
+        this.setLocation({ scale: newScale });
+      }
+    },
+
+    getScaleFromZoom(zoom) {
+      if (zoom >= 10) {return 'intraurbana';}
+      if (zoom > 5) {return 'estadual';}
+
+      return 'nacional';
     }
   }
 });
