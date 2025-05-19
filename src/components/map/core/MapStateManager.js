@@ -1,9 +1,12 @@
 // urbverde-ui/src/components/map/customHash.js
+import { useLocationStore } from '@/stores/locationStore';
+
 class CustomHash {
   constructor() {
     this._onHashChange = this._onHashChange.bind(this);
     this._updateHash = this._updateHash.bind(this);
     this._updatingHash = false;
+    this.locationStore = useLocationStore();
   }
 
   addTo(map) {
@@ -16,6 +19,8 @@ class CustomHash {
       const state = this._parseHash(window.location.hash.slice(1));
       if (state) {
         this._map.jumpTo(state);
+        // Atualiza o locationStore com o estado inicial do mapa
+        this.locationStore.updateMapState(state);
       }
     }
 
@@ -49,12 +54,14 @@ class CustomHash {
     const zoom = this._map.getZoom().toFixed(2);
     const bearing = Math.round(this._map.getBearing());
     const pitch = Math.round(this._map.getPitch());
-    const hash = `@${center.lat.toFixed(4)},${center.lng.toFixed(
-      4
-    )},${zoom}z,${bearing}b,${pitch}p`;
 
-    const baseUrl = window.location.href.split('#')[0];
-    window.history.replaceState(null, null, `${baseUrl}#${hash}`);
+    // Atualiza o estado no locationStore
+    this.locationStore.updateMapState({
+      center: [center.lng, center.lat],
+      zoom: parseFloat(zoom),
+      bearing,
+      pitch
+    });
   }
 
   _onHashChange() {
@@ -68,6 +75,8 @@ class CustomHash {
         duration: 8000,
         essential: true,
       });
+      // Atualiza o locationStore com o novo estado
+      this.locationStore.updateMapState(state);
       setTimeout(() => {
         this._updatingHash = false;
       }, 0);

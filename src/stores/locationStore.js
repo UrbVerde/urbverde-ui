@@ -17,6 +17,14 @@ export const useLocationStore = defineStore('locationStore', {
     lng: null,
     lat: null,
 
+    // Map state
+    mapState: {
+      center: null,
+      zoom: null,
+      bearing: 0,
+      pitch: 0
+    },
+
     // Layer data
     category: null,
     activeMainLayer: null,
@@ -53,6 +61,15 @@ export const useLocationStore = defineStore('locationStore', {
       if (this.category) {params.category = this.category;}
       if (this.activeMainLayer)   {params.layer = this.activeMainLayer;}
       if (this.scale)   {params.scale = this.scale;}
+
+      // Adiciona parâmetros do mapa se existirem
+      if (this.mapState.center && this.mapState.zoom) {
+        params.lat = this.mapState.center[1];
+        params.lng = this.mapState.center[0];
+        params.zoom = this.mapState.zoom;
+        params.bearing = this.mapState.bearing;
+        params.pitch = this.mapState.pitch;
+      }
 
       return params;
     },
@@ -320,14 +337,24 @@ export const useLocationStore = defineStore('locationStore', {
       console.log('locationStore: Updating from query params:', query);
 
       const updates = {
-        cd_mun: query.code !== 'null'   ? parseInt(query.code) : undefined,
-        type:   query.type !== 'null'   ? query.type : undefined,
-        year:   query.year !== 'null'   ? parseInt(query.year) : undefined,
+        cd_mun: query.code !== 'null' ? parseInt(query.code) : undefined,
+        type: query.type !== 'null' ? query.type : undefined,
+        year: query.year !== 'null' ? parseInt(query.year) : undefined,
         category: query.category !== 'null' ? query.category : undefined,
-        layer:  query.layer !== 'null'  ? query.layer : undefined,
-        scale:  query.scale !== 'null'  ? query.scale : undefined,
+        layer: query.layer !== 'null' ? query.layer : undefined,
+        scale: query.scale !== 'null' ? query.scale : undefined,
         viewMode: query.viewMode !== 'null' ? query.viewMode : undefined,
       };
+
+      // Atualiza o estado do mapa se os parâmetros existirem
+      if (query.lat && query.lng && query.zoom) {
+        this.mapState = {
+          center: [parseFloat(query.lng), parseFloat(query.lat)],
+          zoom: parseFloat(query.zoom),
+          bearing: query.bearing ? parseInt(query.bearing) : 0,
+          pitch: query.pitch ? parseInt(query.pitch) : 0
+        };
+      }
 
       await this.setLocation(updates);
     },
@@ -340,9 +367,19 @@ export const useLocationStore = defineStore('locationStore', {
         if (this.cd_mun) {
           const newParams = this.urlParams;
           const currentQuery = router.currentRoute.value.query;
-          if (JSON.stringify(newParams) !== JSON.stringify(currentQuery)) {
-            router.replace({ path: '/mapa', query: newParams })
-              .catch(err => console.error('Error updating URL:', err));
+
+          // Compara apenas os parâmetros relevantes, ignorando o hash
+          const currentParams = { ...currentQuery };
+          delete currentParams.hash;
+
+          if (JSON.stringify(newParams) !== JSON.stringify(currentParams)) {
+            router.replace({
+              path: '/mapa',
+              query: newParams,
+              hash: this.mapState.center ?
+                `@${this.mapState.center[1].toFixed(4)},${this.mapState.center[0].toFixed(4)},${this.mapState.zoom}z,${this.mapState.bearing}b,${this.mapState.pitch}p`
+                : ''
+            }).catch(err => console.error('Error updating URL:', err));
           }
         }
       });
@@ -384,6 +421,19 @@ export const useLocationStore = defineStore('locationStore', {
         },
         hash: currentHash
       });
+    },
+
+    updateMapState(state) {
+      this.mapState = {
+        center: state.center,
+        zoom: state.zoom,
+        bearing: state.bearing || 0,
+        pitch: state.pitch || 0
+      };
+    },
+
+    getMapState() {
+      return this.mapState;
     }
   }
 });
