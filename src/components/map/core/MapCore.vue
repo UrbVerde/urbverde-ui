@@ -353,8 +353,6 @@ async function loadCoordinates(code) {
   isLoadingCoordinates.value = true;
 
   try {
-    const currentHash = window.location.hash;
-
     // Clear municipality hover state if it exists
     if (hoveredFeatureId) {
       map.value.setFeatureState(
@@ -382,14 +380,10 @@ async function loadCoordinates(code) {
     if (coords?.lat && coords?.lng) {
       coordinates.value = coords;
 
-      router.replace({
-        query: {
-          ...route.query,
-          scale: 'intraurbana',
-          lng: coords.lng,
-          lat: coords.lat
-        },
-        hash: currentHash
+      // Atualiza o store com as coordenadas
+      await locationStore.setLocation({
+        lng: coords.lng,
+        lat: coords.lat
       });
 
       if (map.value) {

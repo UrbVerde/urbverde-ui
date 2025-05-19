@@ -1,7 +1,7 @@
 // urbverde-ui/src/stores/locationStore.js
 import { defineStore } from 'pinia';
 import { watchEffect, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useLayersStore } from './layersStore';
 
 export const useLocationStore = defineStore('locationStore', {
@@ -14,6 +14,8 @@ export const useLocationStore = defineStore('locationStore', {
     year: null,
     scale: null,
     bbox: null,
+    lng: null,
+    lat: null,
 
     // Layer data
     category: null,
@@ -299,9 +301,10 @@ export const useLocationStore = defineStore('locationStore', {
       if (payload.type !== undefined)   {this.type = payload.type;}
       if (payload.year !== undefined)   {this.year = payload.year;}
       if (payload.scale !== undefined)  {this.scale = payload.scale;}
+      if (payload.lng !== undefined)    {this.lng = payload.lng;}
+      if (payload.lat !== undefined)    {this.lat = payload.lat;}
 
       if (payload.cd_mun !== undefined) {
-        // const coords = await this.fetchCoordinatesByCode(payload.cd_mun);
         await this.fetchCategories();
       }
 
@@ -365,5 +368,22 @@ export const useLocationStore = defineStore('locationStore', {
     setViewMode(mode) {
       this.viewMode = mode;
     },
+
+    async updateMunicipalityUrl(code, coords) {
+      const router = useRouter();
+      const route = useRoute();
+      const currentHash = window.location.hash;
+
+      // Atualiza a URL com as novas coordenadas
+      await router.replace({
+        query: {
+          ...route.query,
+          scale: 'intraurbana',
+          lng: coords.lng,
+          lat: coords.lat
+        },
+        hash: currentHash
+      });
+    }
   }
 });
