@@ -44,23 +44,26 @@ import { getLayerConfig } from '@/constants/layers.js';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
 import AttributionBar from '@/components/map/info/MapInfoBar.vue';
 import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
-import { reorderAllLayers } from '@/components/map/layers/layersOrder';
+// import { reorderAllLayers } from '@/components/map/layers/layersOrder';
 
 import {
-  setupDynamicLayers,
+  // setupDynamicLayers,
   clearPopups,
   setupSetoresLayer,
   setupDynamicSource
 } from '@/components/map/layers/MapLayerController.js';
 import {
-  setupRasterInteractions,
+  // setupRasterInteractions,
   removeRasterInteractions,
-  setupVectorInteractions,
+  // setupVectorInteractions,
   removeVectorInteractions,
   setupSetoresInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { useMapPopups } from '@/composables/useMapPopups';
+import { useMapLayers } from '@/composables/useMapLayers';
+import { LayerRegistry } from '@/components/map/layers/layerRegistry';
+// import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
@@ -105,6 +108,10 @@ const currentYear = computed(() => route.query.year || '2021');
 const currentCode = computed(() => route.query.code);
 const initialCode = ref(route.query.code);
 
+// No setup
+const layerRegistry = new LayerRegistry();
+const { addLayer} = useMapLayers(map);
+
 watch(
   [
     () => locationStore.cd_mun,
@@ -135,53 +142,53 @@ watch(
    HELPER FUNCTIONS
 ---------------------------------------*/
 function removeDynamicLayer() {
-  if (!map.value) { return; }
+  if (!map.value) {return;}
 
-  // Remove event handlers
+  // Remover handlers de eventos
   removeRasterInteractions(map.value);
   removeVectorInteractions(map.value);
 
-  // Remove master interaction handler if exists
-  if (map.value._masterInteractionHandler) {
-    map.value.off('mousemove', map.value._masterInteractionHandler);
-    map.value.off('mouseout', map.value._masterOutHandler);
-    map.value._masterInteractionHandler = null;
-    map.value._masterOutHandler = null;
+  // Remover handlers de popup
+  if (map.value._vectorPopupHandlers) {
+    removeHandlers(map.value, {
+      onMouseMove: map.value._vectorPopupHandlers.onMouseMove,
+      onMouseLeave: map.value._vectorPopupHandlers.onMouseLeave,
+      onClick: map.value._vectorPopupHandlers.onClick
+    });
+    map.value._vectorPopupHandlers = null;
   }
 
-  // Remove popups using the composable
-  removeHandlers(map.value, {
-    onMouseMove: map.value._vectorPopupHandlers?.onMouseMove,
-    onMouseLeave: map.value._vectorPopupHandlers?.onMouseLeave,
-    onClick: map.value._vectorPopupHandlers?.onClick,
-    onRasterMouseMove: map.value._rasterPopupHandlers?.onRasterMouseMove,
-    onRasterMouseClick: map.value._rasterPopupHandlers?.onRasterMouseClick
+  if (map.value._rasterPopupHandlers) {
+    removeHandlers(map.value, {
+      onRasterMouseMove: map.value._rasterPopupHandlers.onRasterMouseMove,
+      onRasterMouseClick: map.value._rasterPopupHandlers.onRasterMouseClick
+    });
+    map.value._rasterPopupHandlers = null;
+  }
+
+  // Limpar popups existentes
+  clearPopups({
+    vector: vectorPopup.value,
+    raster: rasterPopup.value,
+    pinned: pinnedPopup.value
   });
 
-  // Reset hover state
-  hoveredSetorId = null;
-
-  // Remove event listeners específicos para dynamic-layer
-  if (map.value.getLayer('dynamic-layer')) {
-    map.value.off('mousemove', 'dynamic-layer');
-    map.value.off('mouseleave', 'dynamic-layer');
-  }
-
-  // Remove layers
+  // Remover camadas
   ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
+      layerRegistry.unregister(id);
     }
   });
 
-  // Remove sources
+  // Remover sources
   ['dynamic-source', 'parks-source', 'setores-source'].forEach(id => {
     if (map.value.getSource(id)) {
       map.value.removeSource(id);
     }
   });
 
-  // Reset state
+  // Resetar estados
   hoveredFeatureId = null;
   hoveredSetorId = null;
   if (map.value._hoveredParkId) {
@@ -189,70 +196,63 @@ function removeDynamicLayer() {
   }
 }
 
-function initializeMapLayers() {
+// Função para inicializar as camadas
+async function initializeMapLayers() {
   if (!map.value || !currentLayer.value) { return; }
 
-  // 1. Limpar layers existentes
-  removeDynamicLayer();
-
-  // 2. Resetar estados
-  hoveredFeatureId = null;
-  hoveredSetorId = null;
-
-  // 3. Limpar popups existentes
-  clearPopups({
-    vector: vectorPopup.value,
-    raster: rasterPopup.value,
-    pinned: pinnedPopup.value
-  });
-
   try {
-    // 4. Configurar layers dinâmicas
-    const success = setupDynamicLayers(
-      map.value,
-      currentLayer.value,
-      (config) => setupRasterInteractions(map.value, config, fetchRasterValue),
-      (config) => setupVectorInteractions(map.value, config)
-    );
+    // Registrar a camada atual
+    const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
+    layerRegistry.register(currentLayer.value, {
+      ...config,
+      dependencies: ['base-municipalities']
+    });
 
-    // 5. Configurar layers adicionais se necessário
-    if (success && currentScale.value === 'intraurbana' && currentCode.value) {
-      const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
+    // Adicionar a camada
+    await addLayer(currentLayer.value, config);
+
+    // Adicionar camadas adicionais se necessário
+    if (currentScale.value === 'intraurbana' && currentCode.value) {
       if (config.type === 'raster') {
         addParksLayer();
+        // Configurar handlers de popup para raster
+        map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
       } else {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
-      }
-
-      // Configurar handlers de popup
-      if (config.type === 'vector') {
+        // Configurar handlers de popup para vector
         map.value._vectorPopupHandlers = setupVectorPopupHandlers(map.value, config);
-      } else if (config.type === 'raster') {
-        map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
       }
     }
 
-    // 6. Reordenar layers
-    reorderAllLayers(map.value);
+    // Limpar popups existentes
+    clearPopups({
+      vector: vectorPopup.value,
+      raster: rasterPopup.value,
+      pinned: pinnedPopup.value
+    });
+
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
   }
 }
 
-// Helper function to add parks layer
+// Função para adicionar camada de parques
 function addParksLayer() {
   const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value);
   if (!parksConfig) {return;}
 
-  // Adiciona o source usando setupDynamicSource
+  layerRegistry.register('parks-layer', {
+    ...parksConfig,
+    dependencies: ['base-municipalities']
+  });
+
   const sourceConfig = setupDynamicSource(parksConfig, locationStore, currentScale.value);
   if (!map.value.getSource('parks-source')) {
     map.value.addSource('parks-source', sourceConfig);
   }
 
-  // Adiciona a layer
   if (!map.value.getLayer('parks-layer')) {
     const parksLayer = {
       id: 'parks-layer',
@@ -268,7 +268,6 @@ function addParksLayer() {
     map.value.addLayer(parksLayer);
   }
 
-  // Filtrar pois ainda não funciona cql diretamente no tile
   map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
 }
 
