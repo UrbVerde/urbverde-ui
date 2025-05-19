@@ -10,24 +10,20 @@
     <div class="map-wrapper"></div>
 
     <!-- All map controls in one component -->
-    <MapControls
-      v-if="mapLoaded && map"
-      :map="map"
-      :current-style="currentStyle"
-      :terrain-enabled="terrainEnabled"
-      @terrain-toggle="handleTerrainToggle"
-      @location-found="handleLocationFound"
-    />
+    <MapControls v-if="mapLoaded && map"
+                 :map="map"
+                 :current-style="currentStyle"
+                 :terrain-enabled="terrainEnabled"
+                 @terrain-toggle="handleTerrainToggle"
+                 @location-found="handleLocationFound" />
 
     <!-- Custom Attribution Bar -->
-    <AttributionBar
-      v-if="mapLoaded"
-      :scale-metric="computedScaleMetric"
-      :scale-proportion="computedScaleProportion"
-      :coordinates="currentCoordinates"
-      :altitude="computedAltitude"
-      :map="map"
-    />
+    <AttributionBar v-if="mapLoaded"
+                    :scale-metric="computedScaleMetric"
+                    :scale-proportion="computedScaleProportion"
+                    :coordinates="currentCoordinates"
+                    :altitude="computedAltitude"
+                    :map="map" />
 
     <slot :map="map"></slot>
   </div>
@@ -96,7 +92,7 @@ const currentCode = computed(() => locationStore.cd_mun);
 
 // No setup
 const layerRegistry = new LayerRegistry();
-const { addLayer} = useMapLayers(map);
+const { addLayer } = useMapLayers(map);
 
 watch(
   [
@@ -126,7 +122,7 @@ watch(
    HELPER FUNCTIONS
 ---------------------------------------*/
 function removeDynamicLayer() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
 
   // Remover handlers de eventos
   removeRasterInteractions(map.value);
@@ -192,7 +188,7 @@ async function initializeMapLayers() {
 // Função para adicionar camada de parques
 function addParksLayer() {
   const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value);
-  if (!parksConfig) {return;}
+  if (!parksConfig) { return; }
 
   layerRegistry.register('parks-layer', {
     ...parksConfig,
@@ -386,7 +382,7 @@ function createMapInstance(container, initialState) {
 
 // Função refatorada
 function initializeMap() {
-  if (!coordinates.value) {return;}
+  if (!coordinates.value) { return; }
 
   const mapState = locationStore.getMapState();
   const initialState = createInitialMapState(coordinates.value, mapState);
@@ -487,6 +483,48 @@ function addBaseMunicipalitiesLayer() {
   map.value.on('click', 'municipalities-base', handleMunicipalityClick);
 }
 
+function generateBaseLayers() {
+  if (!map.value) { return; }
+
+  const baseConfig = getLayerConfig('base_layer', currentYear.value, currentScale.value, locationStore.cd_mun);
+
+  // Adicionar source se ainda não existir
+  if (!map.value.getSource('base-municipalities')) {
+    map.value.addSource('base-municipalities', baseConfig.source);
+  }
+
+  // Gerar e adicionar cada layer baseada nos roles
+  Object.entries(baseConfig.roles).forEach(([roleName, role]) => {
+    const layerId = `scale-${roleName}`;//colocar escala dinâmica
+
+    // Se a layer já existe, não adiciona novamente
+    if (map.value.getLayer(layerId)) { return; }
+
+    // Usar a configuração do role diretamente, apenas adicionando o necessário
+    const layerConfig = {
+      id: layerId,
+      source: 'base-municipalities',
+      'source-layer': baseConfig.source.sourceLayer,
+      ...role
+    };
+
+    // Se o role tem um filter que é uma função, chamar com o codmun
+    if (typeof layerConfig.filter === 'function') {
+      layerConfig.filter = layerConfig.filter(locationStore.cd_mun);
+    }
+
+    // Registrar e adicionar a layer
+    layerRegistry.register(layerId, layerConfig);
+    map.value.addLayer(layerConfig);
+  });
+
+  // Configurar eventos de interação usando o ID da layer de preenchimento
+  const clickableLayerId = 'scale-out_selected_clickable_fill';
+  map.value.on('mousemove', clickableLayerId, handleMunicipalityMouseMove);
+  map.value.on('mouseleave', clickableLayerId, handleMunicipalityMouseLeave);
+  map.value.on('click', clickableLayerId, handleMunicipalityClick);
+}
+
 function handleMunicipalityMouseMove(e) {
   const features = e.features;
   if (!features?.length) {
@@ -514,7 +552,7 @@ function handleMunicipalityMouseMove(e) {
 }
 
 function clearMunicipalityHoverState() {
-  if (!hoveredFeatureId || !map.value) {return;}
+  if (!hoveredFeatureId || !map.value) { return; }
 
   map.value.setFeatureState(
     {
@@ -562,7 +600,7 @@ function handleMunicipalityClick(e) {
    LIFECYCLE
 ---------------------------------------*/
 async function setupMap() {
-  if (!locationStore.cd_mun) {return;}
+  if (!locationStore.cd_mun) { return; }
 
   try {
     // 1. Buscar coordenadas do município
@@ -581,7 +619,7 @@ async function setupMap() {
     // 3. Configurar eventos de carregamento do mapa
     map.value.on('load', async() => {
       mapLoaded.value = true;
-      addBaseMunicipalitiesLayer();
+      generateBaseLayers();
       await setupLayers();
     });
 
@@ -606,7 +644,7 @@ async function setupMap() {
 }
 
 function setupMapControls() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
 
   // Controle de navegação
   map.value.addControl(
@@ -637,14 +675,14 @@ function setupMapControls() {
 }
 
 function setupUrlStateManagement() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
 
   customHash.value = new CustomHash();
   customHash.value.addTo(map.value);
 }
 
 function setupMapEventHandlers() {
-  if (!map.value) {return;}
+  if (!map.value) { return; }
 
   // Handler para imagens faltantes
   map.value.on('styleimagemissing', handleMissingImage);

@@ -80,10 +80,19 @@ export function getCurrentMainLayer(layers) {
  * @param {string} layerId - ID da camada
  * @param {string} year - Ano dos dados
  * @param {string} scale - Escala atual
+ * @param {string} codmun - Código do município
  * @returns {Object} Configuração da camada
  */
-export function getLayerConfig(layerId) {
-  return LAYER_CONFIGS[layerId];
+export function getLayerConfig(layerId, year, scale, codmun) {
+  const base = LAYER_CONFIGS[layerId];
+  if (!base) { return null; }
+
+  // Se base.source é uma função, chama ela com os parâmetros
+  const source = typeof base.source === 'function'
+    ? base.source(year, scale, codmun)
+    : base.source;
+
+  return { ...base, source };
 }
 
 /**

@@ -548,6 +548,60 @@ export const LAYER_CONFIGS = {
       ]
     }
   },
+
+  base_layer: {
+    data: 'vector',
+    label: 'Context Base Layers',
+    source: (year) => {
+      // Configuração base da fonte
+      const baseSource = {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+        ],
+        minzoom: 0,
+        maxzoom: 22,
+        sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+      };
+
+      return baseSource;
+    },
+    roles: {
+      highlight_selected: {
+        type: 'line',
+        paint: {
+          'line-color': '#212529',
+          'line-opacity': 1,
+          'line-width': 3
+        },
+        filter: (codmun) => ['==', 'cd_mun', codmun]
+      },
+      out_selected_clickable_fill: {
+        type: 'fill',
+        paint: {
+          'fill-color': 'transparent',
+          'fill-opacity': 1
+        }
+      },
+      out_selected_outline: {
+        type: 'line',
+        paint: {
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            '#86919B',
+            '#ADB5BD'
+          ],
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            3,
+            1
+          ]
+        }
+      }
+    }
+  }
 };
 
 // Helper function to get layer config
