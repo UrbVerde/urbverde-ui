@@ -48,19 +48,17 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 
 import {
   // setupDynamicLayers,
-  clearPopups,
   setupSetoresLayer,
   setupDynamicSource
 } from '@/components/map/layers/MapLayerController.js';
 import {
-  // setupRasterInteractions,
+  setupRasterInteractions,
   removeRasterInteractions,
-  // setupVectorInteractions,
+  setupVectorInteractions,
   removeVectorInteractions,
   setupSetoresInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
-import { useMapPopups } from '@/composables/useMapPopups';
 import { useMapLayers } from '@/composables/useMapLayers';
 import { LayerRegistry } from '@/components/map/layers/layerRegistry';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
@@ -81,17 +79,6 @@ const mapLoaded = ref(false);
 // Map style state
 const currentStyle = ref('streets');
 const terrainEnabled = ref(false);
-
-// Standard popups
-const {
-  createPopups,
-  setupVectorPopupHandlers,
-  setupRasterPopupHandlers,
-  removeHandlers,
-  vectorPopup,
-  rasterPopup,
-  pinnedPopup
-} = useMapPopups();
 
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
@@ -145,31 +132,6 @@ function removeDynamicLayer() {
   removeRasterInteractions(map.value);
   removeVectorInteractions(map.value);
 
-  // Remover handlers de popup
-  if (map.value._vectorPopupHandlers) {
-    removeHandlers(map.value, {
-      onMouseMove: map.value._vectorPopupHandlers.onMouseMove,
-      onMouseLeave: map.value._vectorPopupHandlers.onMouseLeave,
-      onClick: map.value._vectorPopupHandlers.onClick
-    });
-    map.value._vectorPopupHandlers = null;
-  }
-
-  if (map.value._rasterPopupHandlers) {
-    removeHandlers(map.value, {
-      onRasterMouseMove: map.value._rasterPopupHandlers.onRasterMouseMove,
-      onRasterMouseClick: map.value._rasterPopupHandlers.onRasterMouseClick
-    });
-    map.value._rasterPopupHandlers = null;
-  }
-
-  // Limpar popups existentes
-  clearPopups({
-    vector: vectorPopup.value,
-    raster: rasterPopup.value,
-    pinned: pinnedPopup.value
-  });
-
   // Remover camadas
   ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
@@ -213,23 +175,15 @@ async function initializeMapLayers() {
       if (config.type === 'raster') {
         addParksLayer();
         // Configurar handlers de popup para raster
-        map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
+        setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
         // Configurar handlers de popup para vector
-        map.value._vectorPopupHandlers = setupVectorPopupHandlers(map.value, config);
+        setupVectorInteractions(map.value, config);
       }
     }
-
-    // Limpar popups existentes
-    clearPopups({
-      vector: vectorPopup.value,
-      raster: rasterPopup.value,
-      pinned: pinnedPopup.value
-    });
-
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
   }
@@ -378,7 +332,7 @@ async function initializeMapLocation(code) {
     clearMunicipalityHoverState();
 
     // Remove any existing popups
-    if (vectorPopup.value) { vectorPopup.value.remove(); }
+    // if (vectorPopup.value) { vectorPopup.value.remove(); }
 
     // Set scale and trigger layer setup
     await locationStore.setLocation({ scale: 'intraurbana' });
@@ -442,7 +396,6 @@ function initializeMap() {
 
   map.value.on('load', () => {
     mapLoaded.value = true;
-    createPopups();
     addBaseMunicipalitiesLayer();
     initializeMapLayers();
   });
@@ -628,7 +581,6 @@ async function setupMap() {
     // 3. Configurar eventos de carregamento do mapa
     map.value.on('load', async() => {
       mapLoaded.value = true;
-      createPopups();
       addBaseMunicipalitiesLayer();
       await setupLayers();
     });
@@ -722,23 +674,15 @@ async function setupLayers() {
       if (config.type === 'raster') {
         addParksLayer();
         // Configurar handlers de popup para raster
-        map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
+        setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
         // Configurar handlers de popup para vector
-        map.value._vectorPopupHandlers = setupVectorPopupHandlers(map.value, config);
+        setupVectorInteractions(map.value, config);
       }
     }
-
-    // Limpar popups existentes
-    clearPopups({
-      vector: vectorPopup.value,
-      raster: rasterPopup.value,
-      pinned: pinnedPopup.value
-    });
-
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
   }

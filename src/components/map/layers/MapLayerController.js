@@ -111,11 +111,9 @@ export function applyLayerFilters(map, config, locationStore, currentScale) {
  * Configura as layers dinâmicas
  * @param {Object} map - Instância do mapa
  * @param {string} layerId - ID da layer
- * @param {Function} setupRasterInteractions - Função para configurar interações raster
- * @param {Function} setupVectorInteractions - Função para configurar interações vetoriais
  * @returns {boolean} Sucesso da operação
  */
-export function setupDynamicLayers(map, layerId, setupRasterInteractions, setupVectorInteractions) {
+export function setupDynamicLayers(map, layerId) {
   const locationStore = useLocationStore();
   const { year, scale } = locationStore;
 
@@ -155,12 +153,12 @@ export function setupDynamicLayers(map, layerId, setupRasterInteractions, setupV
     // Aplicar filtros se necessário
     applyLayerFilters(map, config, locationStore, scale);
 
-    // Configurar interações
-    if (config.type === 'raster') {
-      setupRasterInteractions(config);
-    } else {
-      setupVectorInteractions(config);
-    }
+    // // Configurar interações
+    // if (config.type === 'raster') {
+    //   setupRasterInteractions(config);
+    // } else {
+    //   setupVectorInteractions(config);
+    // }
 
     return true;
   } catch (error) {

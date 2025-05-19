@@ -21,9 +21,7 @@ export function useMapLayers(map) {
       // Configurar a camada
       const success = await setupDynamicLayers(
         map.value,
-        layerId,
-        config.setupRasterInteractions,
-        config.setupVectorInteractions
+        layerId
       );
 
       if (success) {

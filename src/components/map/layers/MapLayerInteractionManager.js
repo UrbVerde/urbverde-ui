@@ -1,4 +1,4 @@
-import { setupLayerPopup, removePopupHandlers, setupRasterPopupHandlers, removeRasterPopupHandlers } from '@/components/map/popups/MapPopupManager';
+import { useMapPopups } from '@/composables/useMapPopups';
 
 /**
  * Funções para gerenciar as interações do mapa
@@ -11,6 +11,8 @@ import { setupLayerPopup, removePopupHandlers, setupRasterPopupHandlers, removeR
  * @param {Function} fetchRasterValue - Função para buscar valor raster
  */
 export function setupRasterInteractions(map, config, fetchRasterValue) {
+  const { createPopups, setupRasterPopupHandlers } = useMapPopups();
+  createPopups();
   const handlers = setupRasterPopupHandlers(map, config, fetchRasterValue);
   map._rasterPopupHandlers = handlers;
 }
@@ -22,7 +24,8 @@ export function setupRasterInteractions(map, config, fetchRasterValue) {
 export function removeRasterInteractions(map) {
   if (!map) { return; }
   if (map._rasterPopupHandlers) {
-    removeRasterPopupHandlers(map, map._rasterPopupHandlers);
+    const { removeHandlers } = useMapPopups();
+    removeHandlers(map, map._rasterPopupHandlers);
     map._rasterPopupHandlers = null;
   }
 }
@@ -34,7 +37,9 @@ export function removeRasterInteractions(map) {
  */
 export function setupVectorInteractions(map, config) {
   if (!map) { return; }
-  const handlers = setupLayerPopup(map, config);
+  const { createPopups, setupVectorPopupHandlers } = useMapPopups();
+  createPopups();
+  const handlers = setupVectorPopupHandlers(map, config);
   map._popupHandlers = handlers;
 }
 
@@ -45,7 +50,8 @@ export function setupVectorInteractions(map, config) {
 export function removeVectorInteractions(map) {
   if (!map) { return; }
   if (map._popupHandlers) {
-    removePopupHandlers(map, map._popupHandlers);
+    const { removeHandlers } = useMapPopups();
+    removeHandlers(map, map._popupHandlers);
     map._popupHandlers = null;
   }
 }
