@@ -406,15 +406,22 @@ async function loadCoordinates(code) {
 /* ---------------------------------------
    MAP INITIALIZATION
 ---------------------------------------*/
-/** Initialize the map (if not already created). */
+// Função para criar o mapa
+function createMapInstance(container, initialState) {
+  return new maplibregl.Map({
+    container,
+    style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=zuxU0KiQ4drdRZ555olV',
+    ...initialState,
+    attributionControl: false,
+    minZoom: 3.5,
+    maxZoom: 18,
+  });
+}
+
+// Função refatorada
 function initializeMap() {
   if (!coordinates.value) {return;}
 
-  // Reset hover state
-  hoveredSetorId = null;
-  hoveredFeatureId = null;
-
-  // Usa o estado do mapa do locationStore ou valores padrão
   const mapState = locationStore.getMapState();
   const initialState = {
     center: mapState.center || [coordinates.value.lng, coordinates.value.lat],
@@ -422,29 +429,14 @@ function initializeMap() {
     pitch: mapState.pitch || 20
   };
 
-  map.value = new maplibregl.Map({
-    container: mapContainer.value,
-    style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=zuxU0KiQ4drdRZ555olV',
-    ...initialState,
-    attributionControl: false,
-    minZoom: 3.5,
-    maxZoom: 18,
-  });
+  // Usando a função createMapInstance
+  map.value = createMapInstance(mapContainer.value, initialState);
 
   map.value.on('load', () => {
     mapLoaded.value = true;
     createPopups();
     addBaseMunicipalitiesLayer();
     initializeMapLayers();
-
-    // Se não houver estado do mapa, move para a posição inicial
-    if (!mapState.center) {
-      map.value.jumpTo({
-        center: [coordinates.value.lng, coordinates.value.lat],
-        zoom: MAP_ZOOM_FINAL,
-        essential: true
-      });
-    }
   });
 
   layersStore.mapRef = map.value;
