@@ -124,8 +124,9 @@ onUnmounted(() => {
     box-shadow: rgba(35, 38, 33, 0.1) 0px 10px 10px -10px;
 
     &:hover {
-        box-shadow: rgba(74, 156, 19, 0.3) 0px 10px 10px -10px;
         transform: scale(1.02);
+        box-shadow: rgba(74, 156, 19, 0.2) 0px 13px 13px -10px;
+        border-color: map-get($green, 200);
     }
 }
 

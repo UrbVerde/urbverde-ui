@@ -250,7 +250,7 @@ a {
   width: 100%;
   top: 0;
   z-index: 9;
-  background-color: #F8F9FACC;
+  background-color: #f2f8f5c9;
   box-sizing: border-box;
   display: flex;
   backdrop-filter: blur(10px);
