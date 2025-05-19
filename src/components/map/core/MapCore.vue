@@ -630,7 +630,7 @@ async function setupMap() {
       mapLoaded.value = true;
       createPopups();
       addBaseMunicipalitiesLayer();
-      await initializeMapLayers();
+      await setupLayers();
     });
 
     // 4. Configurar referência do mapa no store
@@ -701,6 +701,47 @@ function setupMapEventHandlers() {
   map.value.on('zoomend', () => {
     locationStore.updateScaleFromZoom(map.value.getZoom());
   });
+}
+
+async function setupLayers() {
+  if (!map.value || !currentLayer.value) { return; }
+
+  try {
+    // Registrar a camada atual
+    const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
+    layerRegistry.register(currentLayer.value, {
+      ...config,
+      dependencies: ['base-municipalities']
+    });
+
+    // Adicionar a camada
+    await addLayer(currentLayer.value, config);
+
+    // Adicionar camadas adicionais se necessário
+    if (currentScale.value === 'intraurbana' && currentCode.value) {
+      if (config.type === 'raster') {
+        addParksLayer();
+        // Configurar handlers de popup para raster
+        map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
+      } else {
+        setupSetoresLayer(map.value, locationStore);
+        setupSetoresInteractions(map.value, hoveredSetorId);
+        addParksLayer();
+        // Configurar handlers de popup para vector
+        map.value._vectorPopupHandlers = setupVectorPopupHandlers(map.value, config);
+      }
+    }
+
+    // Limpar popups existentes
+    clearPopups({
+      vector: vectorPopup.value,
+      raster: rasterPopup.value,
+      pinned: pinnedPopup.value
+    });
+
+  } catch (error) {
+    console.error('Erro ao configurar layers:', error);
+  }
 }
 
 onMounted(() => {
