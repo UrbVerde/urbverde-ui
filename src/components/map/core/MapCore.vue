@@ -102,9 +102,9 @@ const MAP_ZOOM_START = 14;
 const MAP_ZOOM_FINAL = 14;
 
 // Get current layer id, scale and year from the URL query.
-const currentLayer = computed(() => route.query.layer);
-const currentScale = computed(() => route.query.scale);
-const currentYear = computed(() => route.query.year || '2021');
+const currentLayer = computed(() => locationStore.activeMainLayer);
+const currentScale = computed(() => locationStore.scale);
+const currentYear = computed(() => locationStore.year || '2021');
 const currentCode = computed(() => route.query.code);
 const initialCode = ref(route.query.code);
 
