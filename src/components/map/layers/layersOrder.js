@@ -86,8 +86,43 @@ export function bringBasemapLabelsToFront(map) {
  * @param {Object} map - Instância do mapa
  */
 export function reorderAllLayers(map) {
-  reorderLayers(map);
-  bringBasemapLabelsToFront(map);
+  if (!map) {
+    console.warn('reorderAllLayers: Mapa não definido');
+
+    return;
+  }
+
+  try {
+    // 1. Primeiro, mover todas as camadas base para o fundo
+    LAYER_ORDER[LAYER_TYPES.BASE].forEach(layerId => {
+      if (map.getLayer(layerId)) {
+        map.moveLayer(layerId);
+      }
+    });
+
+    // 2. Em seguida, mover as camadas de parques
+    LAYER_ORDER[LAYER_GROUPS.PARKS].forEach(layerId => {
+      if (map.getLayer(layerId)) {
+        map.moveLayer(layerId);
+      }
+    });
+
+    // 3. Depois, mover as camadas dinâmicas
+    LAYER_ORDER[LAYER_GROUPS.DYNAMIC].forEach(layerId => {
+      if (map.getLayer(layerId)) {
+        map.moveLayer(layerId);
+      }
+    });
+
+    // 4. Por fim, mover os labels para o topo
+    bringBasemapLabelsToFront(map);
+
+    // Log para debug
+    const layers = map.getStyle().layers;
+    console.debug('Ordem final das camadas:', layers.map(l => l.id));
+  } catch (error) {
+    console.error('Erro ao reordenar camadas:', error);
+  }
 }
 
 /**

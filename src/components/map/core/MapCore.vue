@@ -608,17 +608,113 @@ function handleMunicipalityClick(e) {
 /* ---------------------------------------
    LIFECYCLE
 ---------------------------------------*/
-onMounted(() => {
-  if (locationStore.cd_mun) {
-    initializeMapLocation(locationStore.cd_mun);
+async function setupMap() {
+  if (!locationStore.cd_mun) {return;}
+
+  try {
+    // 1. Buscar coordenadas do município
+    const coords = await fetchMunicipalityCoordinates(locationStore.cd_mun);
+    if (!coords) {
+      console.error('Não foi possível obter as coordenadas do município');
+
+      return;
+    }
+
+    // 2. Criar instância do mapa
+    const mapState = locationStore.getMapState();
+    const initialState = createInitialMapState(coords, mapState);
+    map.value = createMapInstance(mapContainer.value, initialState);
+
+    // 3. Configurar eventos de carregamento do mapa
+    map.value.on('load', async() => {
+      mapLoaded.value = true;
+      createPopups();
+      addBaseMunicipalitiesLayer();
+      await initializeMapLayers();
+    });
+
+    // 4. Configurar referência do mapa no store
+    layersStore.mapRef = map.value;
+
+    // 5. Adicionar controles do mapa
+    setupMapControls();
+
+    // 6. Configurar gerenciamento de estado da URL
+    setupUrlStateManagement();
+
+    // 7. Configurar handlers de eventos do mapa
+    setupMapEventHandlers();
+
+    // 8. Definir escala inicial
+    await locationStore.setLocation({ scale: 'intraurbana' });
+
+  } catch (error) {
+    console.error('Erro ao configurar mapa:', error);
   }
-  // Set map reference in store
-  layersStore.mapRef = map.value;
+}
+
+function setupMapControls() {
+  if (!map.value) {return;}
+
+  // Controle de navegação
+  map.value.addControl(
+    new maplibregl.NavigationControl({
+      visualizePitch: true,
+    }), 'top-left'
+  );
+
+  // Controle de geolocalização
+  map.value.addControl(
+    new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+      showUserLocation: true
+    }),
+    'top-left'
+  );
+
+  // Controle de terreno
+  map.value.addControl(
+    new CustomTerrainControl({
+      source: 'terrain',
+      exaggeration: 3,
+      highPerformance: false,
+      lazyLoading: true
+    }), 'top-left'
+  );
+}
+
+function setupUrlStateManagement() {
+  if (!map.value) {return;}
+
+  customHash.value = new CustomHash();
+  customHash.value.addTo(map.value);
+}
+
+function setupMapEventHandlers() {
+  if (!map.value) {return;}
+
+  // Handler para imagens faltantes
+  map.value.on('styleimagemissing', handleMissingImage);
+
+  // Handler para atualização de escala baseada no zoom
+  map.value.on('zoomend', () => {
+    locationStore.updateScaleFromZoom(map.value.getZoom());
+  });
+}
+
+onMounted(() => {
+  setupMap();
 });
+
 onBeforeUnmount(() => {
   if (map.value) {
-    if (customHash.value) { customHash.value.remove(); }
-    setTimeout(() => { map.value.remove(); }, 300);
+    if (customHash.value) {
+      customHash.value.remove();
+    }
+    setTimeout(() => {
+      map.value.remove();
+    }, 300);
   }
 });
 </script>
