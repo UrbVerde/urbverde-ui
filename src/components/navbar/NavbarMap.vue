@@ -123,7 +123,7 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-import { categoryToLayerMap, tabIdToLabelMap, sectionConfigs } from '@/components/cards-new/panel-config/index.js';
+import { categoryToLayerMap, tabIdToLabelMap, sectionConfigs } from '@/components/cards/panel-config/index.js';
 import { getTabsForLayer } from '@/components/navbar/helperNavbarTabNavegation.js';
 import modalShare from '../modal/modalShare.vue';
 import modalLayerInfo from '../modal/modalLayerInfo.vue';

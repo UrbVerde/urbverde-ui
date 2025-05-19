@@ -1,8 +1,8 @@
 // urbverde-ui/src/config/index.js
 
-import clima from './sections/clima';
-import vegetacao from './sections/vegetacao';
-import parques from './sections/parques';
+import clima from './sections/national/clima.js';
+import vegetacao from './sections/national/vegetacao.js';
+import parques from './sections/national/parques.js';
 
 // Mapa para converter categorias da UI para nomes de configuração internos
 export const categoryToLayerMap = {

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import CardBase from '@/components/cards-new/components-cards/cardsGraph/cardGraphBase.vue';
+import CardBase from '@/components/cards/components-cards/cardsGraph/cardGraphBase.vue';
 import WarmingImage from '@/assets/images/cards/warming.png';
 import CoolingImage from '@/assets/images/cards/cooling.png';
 

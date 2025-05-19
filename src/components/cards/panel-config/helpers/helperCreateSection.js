@@ -1,13 +1,13 @@
 // urbverde-ui/src/config/helperCreateSection.js
 import { computed, h } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-import Panel from '@/components/cards-new/panel-config/base/SectionCards.vue';
+import Panel from '@/components/cards/panel-config/base/SectionCards.vue';
 
 // Importação centralizada dos componentes comuns entre os .js
-import CardData from '@/components/cards-new/components-cards/cardData.vue';
-import CardInfo from '@/components/cards-new/components-cards/cardInfo.vue';
-import CardRanking from '@/components/cards-new/components-cards/cardRanking.vue';
-import CardDownload from '@/components/cards-new/components-cards/cardDownload.vue';
+import CardData from '@/components/cards/components-cards/cardData.vue';
+import CardInfo from '@/components/cards/components-cards/cardInfo.vue';
+import CardRanking from '@/components/cards/components-cards/cardRanking.vue';
+import CardDownload from '@/components/cards/components-cards/cardDownload.vue';
 
 // Mapa de componentes para facilitar o acesso
 const COMMON_COMPONENTS = {

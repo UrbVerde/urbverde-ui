@@ -1,5 +1,5 @@
 // urbverde-ui/src/config/sections/clima.js
-import { createSectionConfig, createSection } from '@/components/cards-new/panel-config/helpers/helperCreateSection';
+import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 
 import globalwarming from '@/assets/images/cards/globalwarming-park.svg';
 import airpollution from '@/assets/images/cards/airPollutionFree.svg';

@@ -1,6 +1,6 @@
 // urbverde-ui/src/config/sections/clima.js
-import { createSectionConfig, createSection } from '@/components/cards-new/panel-config/helpers/helperCreateSection';
-import VGraphicSection from '../../components-cards/cardsGraph/vegetation/VGraphicSection.vue';
+import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
+import VGraphicSection from '@/components/cards/components-cards/cardsGraph/vegetation/VGraphicSection.vue';
 
 import globalwarming from '@/assets/images/cards/globalwarming-vegetation.svg';
 import environmentalcampaign from '@/assets/images/cards/plantingATreeTogether.svg';

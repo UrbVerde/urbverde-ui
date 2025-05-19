@@ -53,7 +53,7 @@
 import { computed, ref, watch, provide } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import YearPicker from './YearPicker.vue';
-import { sectionConfigs, categoryToLayerMap, layerToCategoryMap, layerYearConfig } from '@/components/cards-new/panel-config/index.js';
+import { sectionConfigs, categoryToLayerMap, layerToCategoryMap, layerYearConfig } from '@/components/cards/panel-config/index.js';
 
 export default {
   name: 'WidgetsSection',

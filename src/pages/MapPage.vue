@@ -92,7 +92,7 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/NavbarMap.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legend from '../components/legend/MapLegend.vue';
-import WidgetsSection from '@/components/cards-new/panel-config/base/PanelsCards.vue';
+import WidgetsSection from '@/components/cards/panel-config/base/PanelsCards.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
 // Store and router setup
