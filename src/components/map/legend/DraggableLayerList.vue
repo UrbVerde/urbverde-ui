@@ -13,6 +13,19 @@
     <template #item="{ element }">
       <div class="layer-card-wrapper">
         <LegendCard
+          v-if="element.id === 'parks' && scale === 'intraurbana'"
+          :showMenu="false"
+          :showOpacity="true"
+          :showColorScale="false"
+          :layerId="'parks-layer'"
+          :year="currentYear"
+          :scale="scale"
+          :showLegendLines="true"
+          @opacity-change="handlerParksLayerOpacity"
+        />
+
+        <LegendCard
+          v-else
           :showMenu="false"
           :title="getLayerConfig(element.id)?.label"
           :icon="getLayerIcon(element.id)"
@@ -99,6 +112,10 @@ const getLayerIcon = (layerId) => {
 
 const handleDataLayerOpacity = (opacity) => {
   emit('opacity-change', opacity);
+};
+
+const handlerParksLayerOpacity = (opacity) => {
+  layersStore.setLayerOpacity('parks-layer', opacity);
 };
 
 const handleColorbarClick = () => {

@@ -44,7 +44,7 @@
         />
 
         <!-- Parks Layer Card - Always above data layer, only show in intraurbana -->
-        <LegendCard
+        <!-- <LegendCard
           v-if="scale === 'intraurbana'"
           :showMenu="false"
           :showOpacity="true"
@@ -54,7 +54,7 @@
           :scale="scale"
           :showLegendLines="true"
           @opacity-change="handlerParksLayerOpacity"
-        />
+        /> -->
 
         <!-- Dynamic Layer Cards -->
         <DraggableLayerList
@@ -164,10 +164,10 @@ const onLegendOpacityChange = () => {
   // Handle base layer opacity if needed
 };
 
-const handlerParksLayerOpacity = (opacity) => {
-  const decimalOpacity = opacity / 100;
-  layersStore.setLayerOpacity('parks-layer', decimalOpacity);
-};
+// const handlerParksLayerOpacity = (opacity) => {
+//   const decimalOpacity = opacity / 100;
+//   layersStore.setLayerOpacity('parks-layer', decimalOpacity);
+// };
 
 const handleDataLayerOpacity = (opacity) => {
   const decimalOpacity = opacity / 100;
