@@ -119,13 +119,13 @@ watch(
     () => currentYear.value
   ],
   async([newCdMun], [oldCdMun]) => {
-    // Only load coordinates if cd_mun changes AND it's a new municipality
+    // Carregar coordenadas se mudou o município
     if (newCdMun && newCdMun !== oldCdMun) {
       await loadCoordinates(newCdMun);
     }
 
+    // Inicializar camadas se o mapa estiver carregado
     if (mapLoaded.value) {
-      removeDynamicLayer();
       await initializeMapLayers();
     }
 
@@ -193,11 +193,13 @@ function removeDynamicLayer() {
   }
 }
 
-// Função para inicializar as camadas
+// Função para inicializar camadas
 async function initializeMapLayers() {
   if (!map.value || !currentLayer.value) { return; }
 
   try {
+    removeDynamicLayer();
+
     // Registrar a camada atual
     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
     layerRegistry.register(currentLayer.value, {
@@ -212,24 +214,14 @@ async function initializeMapLayers() {
     if (currentScale.value === 'intraurbana' && currentCode.value) {
       if (config.type === 'raster') {
         addParksLayer();
-        // Configurar handlers de popup para raster
         map.value._rasterPopupHandlers = setupRasterPopupHandlers(map.value, config, fetchRasterValue);
       } else {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
-        // Configurar handlers de popup para vector
         map.value._vectorPopupHandlers = setupVectorPopupHandlers(map.value, config);
       }
     }
-
-    // Limpar popups existentes
-    clearPopups({
-      vector: vectorPopup.value,
-      raster: rasterPopup.value,
-      pinned: pinnedPopup.value
-    });
-
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
   }
@@ -348,7 +340,7 @@ function handleMissingImage(e) {
    CORE FUNCTIONS
 ---------------------------------------*/
 
-/** Load city coordinates and initialize or fly the map. */
+// Função para carregar coordenadas
 async function loadCoordinates(code) {
   isLoadingCoordinates.value = true;
 
@@ -369,12 +361,8 @@ async function loadCoordinates(code) {
     // Remove any existing popups
     if (vectorPopup.value) { vectorPopup.value.remove(); }
 
-    // Set scale and trigger layer setup
+    // Set scale
     await locationStore.setLocation({ scale: 'intraurbana' });
-    if (mapLoaded.value) {
-      removeDynamicLayer();
-      await initializeMapLayers();
-    }
 
     const coords = await locationStore.fetchCoordinatesByCode(code);
     if (coords?.lat && coords?.lng) {
