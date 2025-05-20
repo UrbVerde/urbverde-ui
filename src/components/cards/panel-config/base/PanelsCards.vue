@@ -141,9 +141,10 @@ export default {
 
     // When default year changes, update if not fixed
     watch(() => props.defaultYear, (newValue) => {
-      if (!isYearPickerDisabled.value) {
-        selectedYears.value = selectedYears.value.map(() => newValue);
-      }
+      // Atualiza apenas os anos das seções que não têm fixedYear
+      selectedYears.value = sections.value.map(section =>
+        section.fixedYear || newValue
+      );
     });
 
     // Method to change the layer.
@@ -168,10 +169,11 @@ export default {
   },
   methods: {
     handleYearChange(value, index) {
-      if (!this.isYearPickerDisabled) {
-        this.selectedYears[index] = value;
-        this.$emit(`year-change-${index}`, value);
-      }
+      // Atualiza apenas os anos das seções que não têm fixedYear
+      this.selectedYears = this.sections.map((section, i) =>
+        section.fixedYear || (i === index ? value : this.selectedYears[i])
+      );
+      this.$emit(`year-change-${index}`, value);
     }
   }
 };
