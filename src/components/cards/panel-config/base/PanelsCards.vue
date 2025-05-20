@@ -103,18 +103,10 @@ export default {
     });
 
     // Check if this layer uses a fixed year
-    const isYearPickerDisabled = computed(() => {
-      const disabled = !!layerConfig.value.fixedYear;
-
-      return disabled;
-    });
+    const isYearPickerDisabled = computed(() => !!layerConfig.value.fixedYear);
 
     // Check if this layer shows the year picker
-    const showYearPicker = computed(() => {
-      const show = layerConfig.value.hasYearPicker !== false;
-
-      return show;
-    });
+    const showYearPicker = computed(() => layerConfig.value.hasYearPicker !== false);
 
     // Get sections for the selected layer
     const sections = computed(() => {
@@ -147,7 +139,9 @@ export default {
     // Initialize selectedYears when sections change
     watch(() => sections.value, (newSections) => {
       if (newSections && newSections.length > 0) {
-        selectedYears.value = new Array(newSections.length).fill(props.defaultYear);
+        // Se a camada tiver um ano fixo definido, usa ele
+        const yearToUse = layerConfig.value.fixedYear || props.defaultYear;
+        selectedYears.value = new Array(newSections.length).fill(yearToUse);
       }
     }, { immediate: true });
 
