@@ -68,7 +68,6 @@ import { ref, computed, watch, onMounted } from 'vue';
 import axios from 'axios';
 import CardBase from '../base/cardBase.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import { useCardData } from '@/utils/useCardData';
 import NumberInsideCards from '../base/numberInsideCards.vue';
 
 const props = defineProps({
@@ -83,11 +82,11 @@ const props = defineProps({
   },
   cityCode: {
     type: [Number, String],
-    default: null
+    required: true
   },
   year: {
     type: [Number, String],
-    default: null
+    required: true
   },
   dataTransform: {
     type: Function,
@@ -113,13 +112,6 @@ const props = defineProps({
   }
 });
 
-// Get injected values
-const { injectedCityCode, injectedSelectedYear } = useCardData();
-
-// Computed for actual values to use
-const actualCityCode = computed(() => props.cityCode ?? injectedCityCode.value);
-const actualYear = computed(() => props.year ?? injectedSelectedYear.value);
-
 // States
 const isLoading = ref(false);
 const error = ref(null);
@@ -130,17 +122,17 @@ const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.val
 
 // Fetch data from API
 const fetchData = async() => {
-  if (!props.apiEndpoint || !actualCityCode.value) {return;}
+  if (!props.apiEndpoint || !props.cityCode) {return;}
 
   isLoading.value = true;
   error.value = null;
 
   try {
     const url = new URL(props.apiEndpoint);
-    url.searchParams.append('city', actualCityCode.value);
+    url.searchParams.append('city', props.cityCode);
 
-    if (props.requiresYear && actualYear.value) {
-      url.searchParams.append('year', actualYear.value);
+    if (props.requiresYear && props.year) {
+      url.searchParams.append('year', props.year);
     }
 
     const response = await axios.get(url.toString());
@@ -165,11 +157,11 @@ const fetchData = async() => {
 
 // Watch for changes in props that should trigger a refetch
 watch(
-  [() => actualCityCode.value, () => actualYear.value, () => props.apiEndpoint],
+  [() => props.cityCode, () => props.year, () => props.apiEndpoint],
   () => {
     console.log('Refetching data due to change in:', {
-      cityCode: actualCityCode.value,
-      year: actualYear.value,
+      cityCode: props.cityCode,
+      year: props.year,
       endpoint: props.apiEndpoint
     });
     fetchData();
@@ -179,7 +171,7 @@ watch(
 
 // Watch specifically for year changes
 watch(
-  () => actualYear.value,
+  () => props.year,
   (newYear) => {
     console.log('Year changed to:', newYear);
     fetchData();
@@ -188,7 +180,7 @@ watch(
 
 // Initial fetch
 onMounted(() => {
-  console.log('Initial fetch with year:', actualYear.value);
+  console.log('Initial fetch with year:', props.year);
   fetchData();
 });
 </script>

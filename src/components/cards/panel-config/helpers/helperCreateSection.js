@@ -77,25 +77,40 @@ function renderCard(cardConfig) {
     const component = getComponent(cardConfig.component);
     if (!component) {return null;}
 
-    return h(component, cardConfig.props || {});
+    // Garante que os props existam e mantenha os props originais
+    const props = {
+      ...cardConfig.props,
+      // Não sobrescreve cityCode e year aqui, eles virão do PanelsCards.vue
+    };
+
+    console.log('[helperCreateSection] Rendering card with props:', {
+      component: cardConfig.component,
+      props
+    });
+
+    return h(component, props);
   }
 
   return null;
 }
 
 function renderPanel(panelConfig, isNested = false) {
-  return h(Panel,
-    { variant: panelConfig.variant, nested: isNested },
-    () => panelConfig.items.map((item) => {
-      if (item.type === 'panel') {
-        // Renderiza um único Panel para o painel aninhado
-        return renderPanel(item.props, true);
-      }
+  // Garante que os props existam
+  const panelProps = {
+    variant: panelConfig.variant,
+    nested: isNested,
+    // Não sobrescreve cityCode e year aqui, eles virão do PanelsCards.vue
+  };
 
-      // Renderiza o card apropriado baseado no tipo ou componente
-      return renderCard(item);
-    })
-  );
+  return h(Panel, panelProps, () => panelConfig.items.map((item) => {
+    if (item.type === 'panel') {
+      // Renderiza um único Panel para o painel aninhado
+      return renderPanel(item.props, true);
+    }
+
+    // Renderiza o card apropriado baseado no tipo ou componente
+    return renderCard(item);
+  }));
 }
 
 /**
@@ -118,6 +133,7 @@ export const createSection = (config) => {
   if (config.panel) {
     return {
       ...config,
+      props: {}, // Adiciona props vazio para o panel
       component: {
         render() {
           return renderPanel(config.panel, false);
@@ -130,6 +146,7 @@ export const createSection = (config) => {
   if (config.component && config.props) {
     return {
       ...config,
+      props: config.props, // Mantém os props originais
       component: {
         render() {
           const component = getComponent(config.component);
@@ -142,5 +159,8 @@ export const createSection = (config) => {
   }
 
   // Caso contrário, mantém o formato com componentes
-  return config;
+  return {
+    ...config,
+    props: {} // Adiciona props vazio para outros casos
+  };
 };

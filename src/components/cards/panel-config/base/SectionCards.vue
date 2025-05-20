@@ -2,7 +2,7 @@
   <div class="panel" :class="[panelClass, { 'nested-panel': nested }]">
     <template v-for="(child, i) in $slots.default ? $slots.default() : []" :key="i">
       <div class="panel-cell">
-        <component :is="child" />
+        <component :is="child" v-bind="$attrs" />
       </div>
     </template>
   </div>
@@ -25,6 +25,11 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
+});
+
+// Define que o componente pode receber props adicionais
+defineOptions({
+  inheritAttrs: false
 });
 
 const panelClass = computed(() => {

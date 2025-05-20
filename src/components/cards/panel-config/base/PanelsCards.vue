@@ -39,10 +39,12 @@
       </div>
       <component
         :is="section.component"
-        :city-code="computedCityCode"
-        :selected-year="selectedYears[index]"
-        :year="selectedYears[index]"
-        :layer="selectedLayer"
+        v-bind="{
+          'city-code': computedCityCode,
+          year: selectedYears[index],
+          layer: selectedLayer,
+          ...section.props
+        }"
         @change-layer="changeLayer"
       />
     </div>
@@ -50,7 +52,7 @@
 </template>
 
 <script>
-import { computed, ref, watch, provide } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import YearPicker from './YearPicker.vue';
 import { sectionConfigs, categoryToLayerMap, layerToCategoryMap, layerYearConfig } from '@/components/cards/panel-config/index.js';
@@ -87,87 +89,115 @@ export default {
     });
 
     // Rename this to avoid collision with props.cityCode
-    const computedCityCode = computed(() =>
-      locationStore.cd_mun || props.cityCode
-    );
+    const computedCityCode = computed(() => {
+      const cityCode = locationStore.cd_mun || props.cityCode;
+      console.log('[PanelsCards] Computed city code:', cityCode);
 
-    // Provide the values for child components
-    provide('cityCode', computedCityCode);
+      return cityCode;
+    });
 
     // Get layer year configuration
-    const layerConfig = computed(() =>
-      layerYearConfig[selectedLayer.value] || {}
-    );
+    const layerConfig = computed(() => {
+      const config = layerYearConfig[selectedLayer.value] || {};
+      console.log('[PanelsCards] Layer config:', config);
+
+      return config;
+    });
 
     // Check if this layer uses a fixed year
-    const isYearPickerDisabled = computed(() =>
-      !!layerConfig.value.fixedYear
-    );
+    const isYearPickerDisabled = computed(() => {
+      const disabled = !!layerConfig.value.fixedYear;
+      console.log('[PanelsCards] Is year picker disabled:', disabled);
+
+      return disabled;
+    });
 
     // Check if this layer shows the year picker
-    const showYearPicker = computed(() =>
-      layerConfig.value.hasYearPicker !== false
-    );
+    const showYearPicker = computed(() => {
+      const show = layerConfig.value.hasYearPicker !== false;
+      console.log('[PanelsCards] Show year picker:', show);
 
-    // Array to store selected years.
-    const selectedYears = ref([]);
-
-    // Provide the selected year for the current section
-    provide('selectedYear', computed(() => selectedYears.value[0] || props.defaultYear));
+      return show;
+    });
 
     // Get sections for the selected layer
     const sections = computed(() => {
       // Verifica se possui uma configuração específica para a camada
       const layerId = locationStore.layer;
+      console.log('[PanelsCards] Current layer ID:', layerId);
 
       if (layerId && sectionConfigs.layers && sectionConfigs.layers[layerId]) {
         // Usa a configuração específica da camada
-        console.log(`Usando configuração específica para a camada: ${layerId}`);
+        console.log(`[PanelsCards] Usando configuração específica para a camada: ${layerId}`);
         const layerSpecificConfig = sectionConfigs.layers[layerId];
         const sectionsComputed = layerSpecificConfig();
+        console.log('[PanelsCards] Sections from layer config:', sectionsComputed.value);
 
         return sectionsComputed.value;
       }
 
       // Se não, verifica se possui uma configuração de categoria
       const configGetter = sectionConfigs[selectedLayer.value];
+      console.log('[PanelsCards] Selected layer:', selectedLayer.value);
 
       if (!configGetter) {
-        console.log(`Nenhuma configuração encontrada para: ${selectedLayer.value}`);
+        console.log(`[PanelsCards] Nenhuma configuração encontrada para: ${selectedLayer.value}`);
 
         return [];
       }
 
-      console.log(`Usando configuração de categoria para: ${selectedLayer.value}`);
+      console.log(`[PanelsCards] Usando configuração de categoria para: ${selectedLayer.value}`);
       const sectionsComputed = configGetter();
+      console.log('[PanelsCards] Sections from category config:', sectionsComputed.value);
 
       return sectionsComputed.value;
     });
 
-    // Initialize selected years when sections change
-    watch(sections, (newSections) => {
-      // If this layer has a fixed year, use that
-      const year = layerConfig.value.fixedYear || props.defaultYear;
-      selectedYears.value = Array(newSections.length).fill(year);
-    }, { immediate: true });
+    // Array to store selected years.
+    const selectedYears = ref([]);
 
-    // When the category changes, reset the years accordingly.
-    watch(() => locationStore.category, (newCategory) => {
-      if (newCategory) {
-        const layer = categoryToLayerMap[newCategory];
-        const config = layerYearConfig[layer] || {};
-        const year = config.fixedYear || props.defaultYear;
-
-        selectedYears.value = selectedYears.value.map(() => year);
+    // Initialize selectedYears when sections change
+    watch(() => sections.value, (newSections) => {
+      console.log('[PanelsCards] Sections changed:', newSections);
+      if (newSections && newSections.length > 0) {
+        selectedYears.value = new Array(newSections.length).fill(props.defaultYear);
+        console.log('[PanelsCards] Initialized selected years:', selectedYears.value);
       }
-    });
+    }, { immediate: true });
 
     // When default year changes, update if not fixed
     watch(() => props.defaultYear, (newValue) => {
+      console.log('[PanelsCards] Default year changed:', newValue);
       if (!isYearPickerDisabled.value) {
         selectedYears.value = selectedYears.value.map(() => newValue);
+        console.log('[PanelsCards] Updated selected years:', selectedYears.value);
       }
     });
+
+    // Debug props being passed to components
+    watch(() => sections.value, (newSections) => {
+      if (newSections && newSections.length > 0) {
+        newSections.forEach((section, index) => {
+          const props = {
+            'city-code': computedCityCode.value,
+            year: selectedYears.value[index],
+            layer: selectedLayer.value,
+            ...section.props
+          };
+          console.log(`[PanelsCards] Props for section ${index}:`, props);
+          console.log(`[PanelsCards] Section ${index} component:`, section.component);
+        });
+      }
+    }, { immediate: true });
+
+    // Debug when props change
+    watch([computedCityCode, selectedYears, selectedLayer], () => {
+      console.log('[PanelsCards] Props changed:', {
+        cityCode: computedCityCode.value,
+        selectedYears: selectedYears.value,
+        layer: selectedLayer.value
+      });
+    }, { deep: true });
 
     // Method to change the layer.
     const changeLayer = (layer) => {
@@ -192,7 +222,7 @@ export default {
   },
   methods: {
     handleYearChange(value, index) {
-      if (!this.isYearPickerDisabled) {
+      if (!this.isYearPickerDisabled.value) {
         this.selectedYears[index] = value;
         this.$emit(`year-change-${index}`, value);
       }
