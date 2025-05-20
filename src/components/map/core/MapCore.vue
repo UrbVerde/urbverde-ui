@@ -127,6 +127,10 @@ watch(
 function updateMunicipalityFilters(mapInstance, newCdMun) {
   if (!mapInstance) { return; }
 
+  // Atualizar o filtro do out_selected_clickable_fill
+  if (mapInstance.getLayer('out_selected_clickable_fill-layer')) {
+    mapInstance.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
+  }
   // Obter todas as camadas do mapa
   const layerNames = mapInstance.getStyle().layers.map(layer => layer.id);
 
@@ -146,10 +150,6 @@ function updateMunicipalityFilters(mapInstance, newCdMun) {
     mapInstance.setFilter('highlight_selected-layer', ['==', 'cd_mun', newCdMun]);
   }
 
-  // Atualizar o filtro do out_selected_clickable_fill
-  if (mapInstance.getLayer('out_selected_clickable_fill-layer')) {
-    mapInstance.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
-  }
 }
 
 /* ---------------------------------------
