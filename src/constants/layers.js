@@ -587,15 +587,7 @@ export const LAYER_CONFIGS = {
       sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
     }),
     roles: {
-      highlight_selected: {
-        renderType: 'line',
-        paint: {
-          'line-color': '#212529',
-          'line-opacity': 1,
-          'line-width': 3
-        },
-        filter: (codmun) => ['==', 'cd_mun', codmun]
-      },
+
       out_selected_clickable_fill: {
         renderType: 'fill',
         filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
@@ -620,6 +612,15 @@ export const LAYER_CONFIGS = {
             1
           ]
         }
+      },
+      highlight_selected: {
+        renderType: 'line',
+        paint: {
+          'line-color': '#212529',
+          'line-opacity': 1,
+          'line-width': 3
+        },
+        filter: (codmun) => ['==', 'cd_mun', codmun]
       }
     }
   }

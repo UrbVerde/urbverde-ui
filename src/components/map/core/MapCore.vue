@@ -110,7 +110,7 @@ watch(
 
     if (mapLoaded.value) {
       removeDynamicLayer();
-      await initializeMapLayers();
+      //await initializeMapLayers();
     }
 
     if (map.value.getLayer('selected-municipality-fill')) {
@@ -524,11 +524,9 @@ function generateBaseLayers() {
       paint: role.paint
     };
 
-    // Aplicar filtro específico para highlight_selected
-    if (roleName === 'highlight_selected') {
-      layerConfig.filter = ['==', 'cd_mun', locationStore.cd_mun];
-    } else if (roleName === 'out_selected_clickable_fill') {
-      layerConfig.filter = ['!=', 'cd_mun', locationStore.cd_mun];
+    // Aplicar filtro se existir na configuração do role
+    if (role.filter) {
+      layerConfig.filter = role.filter(locationStore.cd_mun);
     }
 
     // Registrar e adicionar a layer

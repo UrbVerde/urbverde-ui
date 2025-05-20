@@ -29,9 +29,9 @@ export const LAYER_ORDER = {
     // Será preenchido dinamicamente
   ],
   [LAYER_GROUPS.BASE_LAYERS]: [
-    'base-municipalities',
-    'selected-municipality-fill',
-    'municipalities-base-outline'
+    'out_selected_clickable_fill-layer',  // Área clicável (por baixo)
+    'out_selected_outline-layer',         // Contorno (meio)
+    'highlight_selected-layer',           // Destaque (por cima)
   ],
   [LAYER_GROUPS.SYMBOLS]: [
     // Será preenchido dinamicamente com camadas do tipo 'symbol'
