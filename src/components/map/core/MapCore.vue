@@ -103,6 +103,7 @@ watch(
   ],
   async([newCdMun], [oldCdMun]) => {
     // Only load coordinates if cd_mun changes AND it's a new municipality
+    // O mapa é direcionado para o novo município
     if (newCdMun && newCdMun !== oldCdMun) {
       await initializeMapLocation(newCdMun);
     }
@@ -213,6 +214,7 @@ function addParksLayer() {
       }
     };
     map.value.addLayer(parksLayer);
+
   }
 
   map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
