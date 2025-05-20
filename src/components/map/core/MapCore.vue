@@ -36,7 +36,7 @@ import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 // import { useRoute, useRouter } from 'vue-router';
 import CustomHash from '@/components/map/core/MapStateManager.js';
-import { getLayerConfig } from '@/constants/layers.js';
+import { getLayerConfig, LAYER_CONFIGS } from '@/constants/layers.js';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
 import AttributionBar from '@/components/map/info/MapInfoBar.vue';
 import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
@@ -127,16 +127,20 @@ watch(
 function updateMunicipalityFilters(mapInstance, newCdMun) {
   if (!mapInstance) { return; }
 
-  // Percorrer todas as camadas instanciadas no mapa
-  mapInstance.getStyle().layers.forEach(layer => {
-    // Verificar se é uma camada dinâmica e vetorial
-    if (layer.id.endsWith('-layer') && layer.type === 'fill') {
-      // Aplicar filtro para excluir o município selecionado
-      mapInstance.setFilter(layer.id, ['==', 'cd_mun', newCdMun]);
+  // Obter todas as camadas do mapa
+  const layerNames = mapInstance.getStyle().layers.map(layer => layer.id);
+
+  // Percorrer cada camada do mapa
+  layerNames.forEach(layerId => {
+    // Verificar se existe uma configuração correspondente em LAYER_CONFIGS
+    const layerConfig = Object.values(LAYER_CONFIGS).find(config => config.id === layerId);
+
+    // Se encontrou uma configuração correspondente, aplicar o filtro
+    if (layerConfig) {
+      mapInstance.setFilter(layerId, ['==', 'cd_mun', newCdMun]);
     }
   });
 
-  map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
   // Atualizar o filtro do highlight_selected
   if (mapInstance.getLayer('highlight_selected-layer')) {
     mapInstance.setFilter('highlight_selected-layer', ['==', 'cd_mun', newCdMun]);
@@ -146,7 +150,6 @@ function updateMunicipalityFilters(mapInstance, newCdMun) {
   if (mapInstance.getLayer('out_selected_clickable_fill-layer')) {
     mapInstance.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
   }
-
 }
 
 /* ---------------------------------------
