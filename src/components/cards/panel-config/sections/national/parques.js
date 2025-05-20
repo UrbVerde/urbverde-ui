@@ -79,6 +79,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'parksSquaresSection',
     title: 'Quem vive distante de parques e praças?',
+    fixedYear: 2021,
     panel: {
       variant: '2-1',
       items: [
@@ -158,6 +159,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'ranking',
     ref: 'rankingSection',
     title: `${nm_mun} - ${uf} no rankings de municípios`,
+    fixedYear: 2021,
     panel: {
       variant: '1-3',
       items: [

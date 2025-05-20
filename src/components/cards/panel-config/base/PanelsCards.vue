@@ -33,7 +33,7 @@
           :default-year="defaultYear"
           :city-code="computedCityCode"
           :layer="selectedLayer"
-          :disabled="isYearPickerDisabled"
+          :disabled="section.fixedYear !== undefined"
           @update:modelValue="(value) => handleYearChange(value, index)"
         />
       </div>
@@ -134,9 +134,8 @@ export default {
     // Initialize selectedYears when sections change
     watch(() => sections.value, (newSections) => {
       if (newSections && newSections.length > 0) {
-        // Se a seção tiver um ano fixo definido, usa ele
-        const yearToUse = newSections[0]?.fixedYear || props.defaultYear;
-        selectedYears.value = new Array(newSections.length).fill(yearToUse);
+        // Usa o fixedYear de cada seção individualmente, ou o defaultYear se não houver
+        selectedYears.value = newSections.map(section => section.fixedYear || props.defaultYear);
       }
     }, { immediate: true });
 
