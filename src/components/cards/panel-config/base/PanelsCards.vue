@@ -28,7 +28,7 @@
           </span>
         </div>
         <YearPicker
-          v-if="section.showYearPicker !== false && showYearPicker"
+          v-if="section.showYearPicker !== false && !isYearPickerDisabled"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
           :city-code="computedCityCode"
@@ -55,7 +55,7 @@
 import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import YearPicker from './YearPicker.vue';
-import { sectionConfigs, categoryToLayerMap, layerToCategoryMap, layerYearConfig } from '@/components/cards/panel-config/index.js';
+import { sectionConfigs, categoryToLayerMap, layerToCategoryMap } from '@/components/cards/panel-config/index.js';
 
 export default {
   name: 'WidgetsSection',
@@ -95,18 +95,13 @@ export default {
       return cityCode;
     });
 
-    // Get layer year configuration
-    const layerConfig = computed(() => {
-      const config = layerYearConfig[selectedLayer.value] || {};
-
-      return config;
-    });
-
     // Check if this layer uses a fixed year
-    const isYearPickerDisabled = computed(() => !!layerConfig.value.fixedYear);
+    const isYearPickerDisabled = computed(() => {
+      // Verifica se a seção atual tem um ano fixo definido
+      const currentSection = sections.value[0];
 
-    // Check if this layer shows the year picker
-    const showYearPicker = computed(() => layerConfig.value.hasYearPicker !== false);
+      return currentSection?.fixedYear !== undefined;
+    });
 
     // Get sections for the selected layer
     const sections = computed(() => {
@@ -139,8 +134,8 @@ export default {
     // Initialize selectedYears when sections change
     watch(() => sections.value, (newSections) => {
       if (newSections && newSections.length > 0) {
-        // Se a camada tiver um ano fixo definido, usa ele
-        const yearToUse = layerConfig.value.fixedYear || props.defaultYear;
+        // Se a seção tiver um ano fixo definido, usa ele
+        const yearToUse = newSections[0]?.fixedYear || props.defaultYear;
         selectedYears.value = new Array(newSections.length).fill(yearToUse);
       }
     }, { immediate: true });
@@ -169,13 +164,12 @@ export default {
       sections,
       selectedYears,
       changeLayer,
-      isYearPickerDisabled,
-      showYearPicker
+      isYearPickerDisabled
     };
   },
   methods: {
     handleYearChange(value, index) {
-      if (!this.isYearPickerDisabled.value) {
+      if (!this.isYearPickerDisabled) {
         this.selectedYears[index] = value;
         this.$emit(`year-change-${index}`, value);
       }

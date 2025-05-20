@@ -9,6 +9,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'statsSection',
     title: `Parques e praças em ${nm_mun} - ${uf}`,
+    fixedYear: 2021,
     panel: {
       variant: '1-3',
       items: [

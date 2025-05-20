@@ -30,15 +30,6 @@ export const sectionConfigs = {
   //}
 };
 
-// RESTRIÇÕES DE CAMADAS ESPECÍFICAS
-export const layerYearConfig = {
-  parques: {
-    fixedYear: 2021,
-    hasYearPicker: false
-  },
-  // Adicione configurações para outras camadas conforme necessário
-};
-
 // Mapeamento de IDs para labels amigáveis nas abas
 export const tabIdToLabelMap = {
   'map': 'Mapa',
