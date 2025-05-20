@@ -28,7 +28,7 @@
           </span>
         </div>
         <YearPicker
-          v-if="section.showYearPicker !== false && !isYearPickerDisabled"
+          v-if="section.showYearPicker !== false"
           v-model="selectedYears[index]"
           :default-year="defaultYear"
           :city-code="computedCityCode"
