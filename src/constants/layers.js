@@ -578,7 +578,10 @@ export const LAYER_CONFIGS = {
       },
       out_selected_clickable_fill: {
         type: 'fill',
+        filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
         paint: {
+          // 'fill-color': '#90EE90', futuramente colocar uma camada de desfoco em cima de outros municipios
+          // 'fill-opacity': 0.9
           'fill-color': 'transparent',
           'fill-opacity': 1
         }

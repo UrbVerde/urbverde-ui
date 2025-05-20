@@ -392,7 +392,7 @@ function initializeMap() {
 
   map.value.on('load', () => {
     mapLoaded.value = true;
-    addBaseMunicipalitiesLayer();
+    generateBaseLayers();
     initializeMapLayers();
   });
 
@@ -430,58 +430,58 @@ function initializeMap() {
 }
 
 /** Add municipality outline, click and move effects - ONLY SP STATE */
-function addBaseMunicipalitiesLayer() {
-  if (!map.value) { return; }
+// function addBaseMunicipalitiesLayer() {
+//   if (!map.value) { return; }
 
-  // Obter configurações das layers base
-  const baseConfig = getLayerConfig('base_municipalities', currentYear.value);
-  const selectedConfig = getLayerConfig('selected_municipality', currentYear.value);
-  const outlineConfig = getLayerConfig('municipalities_outline', currentYear.value);
+//   // Obter configurações das layers base
+//   const baseConfig = getLayerConfig('base_municipalities', currentYear.value);
+//   const selectedConfig = getLayerConfig('selected_municipality', currentYear.value);
+//   const outlineConfig = getLayerConfig('municipalities_outline', currentYear.value);
 
-  // Adicionar source
-  map.value.addSource('base-municipalities', baseConfig.source);
+//   // Adicionar source
+//   map.value.addSource('base-municipalities', baseConfig.source);
 
-  // Configurar layers
-  const selectedMunicipalityConfig = {
-    id: 'selected-municipality-fill',
-    type: 'line',
-    source: 'base-municipalities',
-    'source-layer': baseConfig.source.sourceLayer,
-    paint: selectedConfig.paint,
-    filter: ['==', 'cd_mun', locationStore.cd_mun]
-  };
+//   // Configurar layers
+//   const selectedMunicipalityConfig = {
+//     id: 'selected-municipality-fill',
+//     type: 'line',
+//     source: 'base-municipalities',
+//     'source-layer': baseConfig.source.sourceLayer,
+//     paint: selectedConfig.paint,
+//     filter: ['==', 'cd_mun', locationStore.cd_mun]
+//   };
 
-  const baseMunicipalitiesConfig = {
-    id: 'municipalities-base',
-    type: 'fill',
-    source: 'base-municipalities',
-    'source-layer': baseConfig.source.sourceLayer,
-    paint: baseConfig.paint
-  };
+//   const baseMunicipalitiesConfig = {
+//     id: 'municipalities-base',
+//     type: 'fill',
+//     source: 'base-municipalities',
+//     'source-layer': baseConfig.source.sourceLayer,
+//     paint: baseConfig.paint
+//   };
 
-  const baseOutlineConfig = {
-    id: 'municipalities-base-outline',
-    type: 'line',
-    source: 'base-municipalities',
-    'source-layer': baseConfig.source.sourceLayer,
-    paint: outlineConfig.paint
-  };
+//   const baseOutlineConfig = {
+//     id: 'municipalities-base-outline',
+//     type: 'line',
+//     source: 'base-municipalities',
+//     'source-layer': baseConfig.source.sourceLayer,
+//     paint: outlineConfig.paint
+//   };
 
-  // Registrar as layers no registry
-  layerRegistry.register('selected-municipality-fill', selectedMunicipalityConfig);
-  layerRegistry.register('municipalities-base', baseMunicipalitiesConfig);
-  layerRegistry.register('municipalities-base-outline', baseOutlineConfig);
+//   // Registrar as layers no registry
+//   layerRegistry.register('selected-municipality-fill', selectedMunicipalityConfig);
+//   layerRegistry.register('municipalities-base', baseMunicipalitiesConfig);
+//   layerRegistry.register('municipalities-base-outline', baseOutlineConfig);
 
-  // Adicionar as layers ao mapa
-  map.value.addLayer(selectedMunicipalityConfig);
-  map.value.addLayer(baseMunicipalitiesConfig);
-  map.value.addLayer(baseOutlineConfig);
+//   // Adicionar as layers ao mapa
+//   map.value.addLayer(selectedMunicipalityConfig);
+//   map.value.addLayer(baseMunicipalitiesConfig);
+//   map.value.addLayer(baseOutlineConfig);
 
-  // Events
-  map.value.on('mousemove', 'municipalities-base', handleMunicipalityMouseMove);
-  map.value.on('mouseleave', 'municipalities-base', handleMunicipalityMouseLeave);
-  map.value.on('click', 'municipalities-base', handleMunicipalityClick);
-}
+//   // Events
+//   map.value.on('mousemove', 'municipalities-base', handleMunicipalityMouseMove);
+//   map.value.on('mouseleave', 'municipalities-base', handleMunicipalityMouseLeave);
+//   map.value.on('click', 'municipalities-base', handleMunicipalityClick);
+// }
 
 function generateBaseLayers() {
   if (!map.value) { return; }
