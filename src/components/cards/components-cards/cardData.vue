@@ -233,19 +233,7 @@ const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.val
 
 // Fetch data from API
 const fetchData = async() => {
-  console.log('[CardData] Fetching data with props:', {
-    apiEndpoint: props.apiEndpoint,
-    cityCode: props.cityCode,
-    year: props.year,
-    cardIndex: props.cardIndex
-  });
-
   if (!props.apiEndpoint || !props.cityCode) {
-    console.log('[CardData] Missing required props:', {
-      hasEndpoint: !!props.apiEndpoint,
-      hasCityCode: !!props.cityCode
-    });
-
     return;
   }
 
@@ -260,28 +248,21 @@ const fetchData = async() => {
       url.searchParams.append('year', props.year);
     }
 
-    console.log('[CardData] Making API request to:', url.toString());
     const response = await axios.get(url.toString());
-    console.log('[CardData] API response:', response.data);
-
     const data = response.data;
 
     if (Array.isArray(data) && data.length > 0) {
       // Apply data transform if provided
       const transformedData = props.dataTransform(data);
-      console.log('[CardData] Transformed data:', transformedData);
 
       // Get the specific card data based on index
       cardData.value = Array.isArray(transformedData)
         ? transformedData[props.cardIndex]
         : transformedData;
-      console.log('[CardData] Final card data:', cardData.value);
     } else {
-      console.log('[CardData] No data returned from API');
       cardData.value = null;
     }
   } catch (err) {
-    console.error('[CardData] Error fetching card data:', err);
     error.value = err;
     cardData.value = null;
   } finally {
@@ -293,11 +274,6 @@ const fetchData = async() => {
 watch(
   [() => props.cityCode, () => props.year, () => props.apiEndpoint],
   () => {
-    console.log('[CardData] Props changed:', {
-      cityCode: props.cityCode,
-      year: props.year,
-      endpoint: props.apiEndpoint
-    });
     fetchData();
   },
   { immediate: false }
@@ -306,19 +282,13 @@ watch(
 // Watch specifically for year changes
 watch(
   () => props.year,
-  (newYear) => {
-    console.log('[CardData] Year changed to:', newYear);
+  () => {
     fetchData();
   }
 );
 
 // Initial fetch
 onMounted(() => {
-  console.log('[CardData] Component mounted with props:', {
-    cityCode: props.cityCode,
-    year: props.year,
-    endpoint: props.apiEndpoint
-  });
   fetchData();
 });
 </script>

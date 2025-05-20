@@ -159,11 +159,6 @@ const fetchData = async() => {
 watch(
   [() => props.cityCode, () => props.year, () => props.apiEndpoint],
   () => {
-    console.log('Refetching data due to change in:', {
-      cityCode: props.cityCode,
-      year: props.year,
-      endpoint: props.apiEndpoint
-    });
     fetchData();
   },
   { immediate: false }
@@ -172,15 +167,13 @@ watch(
 // Watch specifically for year changes
 watch(
   () => props.year,
-  (newYear) => {
-    console.log('Year changed to:', newYear);
+  () => {
     fetchData();
   }
 );
 
 // Initial fetch
 onMounted(() => {
-  console.log('Initial fetch with year:', props.year);
   fetchData();
 });
 </script>

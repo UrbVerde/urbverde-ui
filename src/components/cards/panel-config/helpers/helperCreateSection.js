@@ -48,7 +48,6 @@ function getComponent(component) {
     if (commonComponent) {
       return commonComponent;
     }
-    console.warn(`Common component not found: ${component}`);
 
     return null;
   }
@@ -57,8 +56,6 @@ function getComponent(component) {
   if (typeof component === 'function' || (typeof component === 'object' && component.render)) {
     return component;
   }
-
-  console.warn('Invalid component:', component);
 
   return null;
 }
@@ -82,11 +79,6 @@ function renderCard(cardConfig) {
       ...cardConfig.props,
       // Não sobrescreve cityCode e year aqui, eles virão do PanelsCards.vue
     };
-
-    console.log('[helperCreateSection] Rendering card with props:', {
-      component: cardConfig.component,
-      props
-    });
 
     return h(component, props);
   }

@@ -101,7 +101,6 @@ const years = ref([]);
 // Função para atualizar o estado yearModified com base nos valores atuais
 const updateYearModifiedState = () => {
   yearModified.value = currentYear.value !== props.defaultYear;
-  console.log(`Recalculating yearModified: ${yearModified.value} (current: ${currentYear.value}, default: ${props.defaultYear})`);
 };
 
 // Função para buscar os anos disponíveis
@@ -124,14 +123,12 @@ const fetchYears = async(cityCode) => {
       apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
     }
 
-    console.log(`Fetching years from API: ${apiUrl}`);
     const response = await fetch(apiUrl);
     if (!response.ok) {
       throw new Error('Failed to fetch years');
     }
     const data = await response.json();
     years.value = data;
-    console.log(`Available years for city ${cityCode}: ${JSON.stringify(years.value)}`);
 
     // After fetching years, check if the current year is valid
     // If not, set it to the default year if available in the years list,
@@ -140,21 +137,17 @@ const fetchYears = async(cityCode) => {
       if (years.value.includes(props.defaultYear)) {
         currentYear.value = props.defaultYear;
         emit('update:modelValue', props.defaultYear);
-        console.log(`Setting year to default: ${props.defaultYear}`);
-
       } else if (years.value.length > 0) {
         // If default year is not available, use the most recent year
         const mostRecentYear = Math.max(...years.value);
         currentYear.value = mostRecentYear;
         emit('update:modelValue', mostRecentYear);
-        console.log(`Setting year to most recent: ${mostRecentYear}`);
       }
     }
 
     // Recalculate the modified state after setting the year
     updateYearModifiedState();
-  } catch (error) {
-    console.error('Error fetching years:', error);
+  } catch {
     years.value = [];
   }
 };
@@ -164,7 +157,6 @@ watch(
   () => props.modelValue,
   (newValue) => {
     currentYear.value = newValue;
-    console.log(`modelValue changed to: ${newValue}`);
     // Recalculate yearModified when modelValue changes
     updateYearModifiedState();
   },
@@ -174,8 +166,7 @@ watch(
 // Watch for changes in defaultYear and update the yearModified state
 watch(
   () => props.defaultYear,
-  (newDefaultYear) => {
-    console.log(`defaultYear changed to: ${newDefaultYear}`);
+  () => {
     // Recalculate yearModified when defaultYear changes
     updateYearModifiedState();
   },
@@ -186,7 +177,6 @@ watch(
 watch(
   () => props.cityCode,
   async(newCityCode) => {
-    console.log(`cityCode changed to: ${newCityCode}`);
     await fetchYears(newCityCode);
   },
   { immediate: true }
@@ -232,7 +222,6 @@ const selectYear = (year) => {
   currentYear.value = year;
   emit('update:modelValue', year);
   hideYearSelector();
-  console.log(`Year selected: ${year}`);
   // updateYearModifiedState será chamado pelo watcher de modelValue
 };
 
@@ -255,7 +244,6 @@ onMounted(async() => {
     currentYear.value = props.defaultYear;
   }
 
-  console.log(`YearPicker mounted with defaultYear: ${props.defaultYear}, cityCode: ${props.cityCode}, layer: ${props.layer}`);
   await fetchYears(props.cityCode);
   // Initial calculation of yearModified
   updateYearModifiedState();
