@@ -26,15 +26,21 @@ export const LAYER_ORDER = {
   ],
 
   [LAYER_GROUPS.DYNAMIC]: [
+    'surface-temp-layer',
+    'parks',
+
     // Será preenchido dinamicamente
+
   ],
   [LAYER_GROUPS.BASE_LAYERS]: [
+
     'out_selected_clickable_fill-layer',  // Área clicável (por baixo)
     'out_selected_outline-layer',         // Contorno (meio)
     'highlight_selected-layer',           // Destaque (por cima)
   ],
   [LAYER_GROUPS.SYMBOLS]: [
-    // Será preenchido dinamicamente com camadas do tipo 'symbol'
+    // Camadas de texto nativas do MapTiler
+
   ]
 };
 
@@ -64,10 +70,11 @@ export class LayerOrderManager {
    * @param {string} layerId - ID da camada
    * @param {string} group - Grupo da camada
    */
-  addLayerToGroup(layerId, group) {
-    if (this.layerGroups.has(group)) {
-      this.layerGroups.get(group).add(layerId);
+  addLayerToGroup(layerId, group = LAYER_GROUPS.DYNAMIC) {
+    if (!this.layerGroups.has(group)) {
+      this.layerGroups.set(group, new Set());
     }
+    this.layerGroups.get(group).add(layerId);
   }
 
   /**
@@ -251,7 +258,7 @@ export class LayerOrderManager {
    * @returns {boolean} True se a camada existe
    */
   hasLayer(layerId) {
-    return this.map && this.map.getLayer(layerId);
+    return this.map.getLayer(layerId) !== undefined;
   }
 
   /**
@@ -270,6 +277,51 @@ export class LayerOrderManager {
     this.symbolLayers.clear();
     this.layerGroups.get(LAYER_GROUPS.DYNAMIC).clear();
     this.updateLayerOrder();
+  }
+
+  // Método para listar camadas ativas
+  listLayers() {
+    return Array.from(this.dynamicLayers);
+  }
+
+  // Método para obter configuração de uma camada
+  getLayerConfig(layerId) {
+    const layer = this.map.getLayer(layerId);
+    if (!layer) {return null;}
+
+    return {
+      id: layer.id,
+      type: layer.type,
+      source: layer.source,
+      'source-layer': layer['source-layer'],
+      paint: layer.paint,
+      layout: layer.layout
+    };
+  }
+
+  /**
+   * Valida se uma camada pode ser adicionada
+   * @param {string} layerId - ID da camada
+   * @returns {boolean} Se a camada pode ser adicionada
+   */
+  validateLayer(layerId) {
+    if (!this.map) {return false;}
+
+    // Verificar se a camada já existe
+    if (this.map.getLayer(layerId)) {
+      console.warn(`Camada ${layerId} já existe`);
+
+      return false;
+    }
+
+    // Verificar se o ID é válido
+    if (!layerId || typeof layerId !== 'string') {
+      console.warn('ID de camada inválido');
+
+      return false;
+    }
+
+    return true;
   }
 }
 

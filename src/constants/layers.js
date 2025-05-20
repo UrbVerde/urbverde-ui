@@ -23,6 +23,7 @@ const CENSUS_YEARS = [2022];
 export const LAYER_CONFIGS = {
 
   population: {
+    id: 'population-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'População',
@@ -55,6 +56,7 @@ export const LAYER_CONFIGS = {
   },
 
   setores: {
+    id: 'setores-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Setores Censitários',
@@ -83,6 +85,7 @@ export const LAYER_CONFIGS = {
 
   // Climate layers
   surface_temp: {
+    id: 'surface-temp-layer',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura de Superfície',
@@ -117,6 +120,7 @@ export const LAYER_CONFIGS = {
   },
 
   max_surface_temp: {
+    id: 'max-surface-temp-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura Máxima de Superfície',
@@ -149,6 +153,7 @@ export const LAYER_CONFIGS = {
   },
 
   heat_island: {
+    id: 'heat-island-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Nível de exposição à ilha de calor',
@@ -180,6 +185,7 @@ export const LAYER_CONFIGS = {
 
   // Vegetation layers
   pcv: {
+    id: 'pcv-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Percentual de Cobertura Vegetal',
@@ -218,6 +224,7 @@ export const LAYER_CONFIGS = {
   },
 
   icv: {
+    id: 'icv-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Índice de Cobertura Vegetal',
@@ -247,6 +254,7 @@ export const LAYER_CONFIGS = {
   },
 
   idsa: {
+    id: 'idsa-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Índice de Desigualdade Socioambiental',
@@ -275,6 +283,7 @@ export const LAYER_CONFIGS = {
   },
 
   cvp: {
+    id: 'cvp-layer',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Cobertura Vegetal por Pixel',
@@ -317,6 +326,7 @@ export const LAYER_CONFIGS = {
   },
 
   ndvi: {
+    id: 'ndvi-layer',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Vigor da Vegetação (NDVI)',
@@ -374,6 +384,7 @@ export const LAYER_CONFIGS = {
   },
 
   avg_distance_to_squares: {
+    id: 'avg-distance-to-squares-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Distância Média até as Praças',
@@ -401,6 +412,7 @@ export const LAYER_CONFIGS = {
   },
 
   square_area_per_capita: {
+    id: 'square-area-per-capita-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Área de Praças por Habitante',
@@ -431,6 +443,7 @@ export const LAYER_CONFIGS = {
   },
 
   square_served_area: {
+    id: 'square-served-area-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Área Atendida pelas Praças',
@@ -460,6 +473,7 @@ export const LAYER_CONFIGS = {
   },
 
   served_population: {
+    id: 'served-population-layer',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'População Atendida pelas Praças',
@@ -502,74 +516,77 @@ export const LAYER_CONFIGS = {
     }
   },
 
-  // Base layers
-  base_municipalities: {
-    type: LAYER_DATA_TYPES.VECTOR,
-    group: LAYER_GROUPS.BASE_LAYERS,
-    label: 'Municípios Base',
-    source: (year) => ({
-      type: 'vector',
-      tiles: [
-        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
-      ],
-      minzoom: 0,
-      maxzoom: 22,
-      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
-    }),
-    paint: {
-      'fill-color': 'transparent',
-      'fill-opacity': 1
-    }
-  },
+  // // Base layers
+  // base_municipalities: {
+  //   id: 'base-municipalities-layer',
+  //   type: LAYER_DATA_TYPES.VECTOR,
+  //   group: LAYER_GROUPS.BASE_LAYERS,
+  //   label: 'Municípios Base',
+  //   source: (year) => ({
+  //     type: 'vector',
+  //     tiles: [
+  //       `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+  //     ],
+  //     minzoom: 0,
+  //     maxzoom: 22,
+  //     sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+  //   }),
+  //   paint: {
+  //     'fill-color': 'transparent',
+  //     'fill-opacity': 1
+  //   }
+  // },
 
-  selected_municipality: {
-    type: LAYER_DATA_TYPES.VECTOR,
-    group: LAYER_GROUPS.BASE_LAYERS,
-    label: 'Município Selecionado',
-    source: (year) => ({
-      type: 'vector',
-      tiles: [
-        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
-      ],
-      minzoom: 0,
-      maxzoom: 22,
-      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
-    }),
-    paint: {
-      'line-color': '#212529',
-      'line-opacity': 1,
-      'line-width': 3
-    }
-  },
+  // selected_municipality: {
+  //   id: 'selected-municipality-layer',
+  //   type: LAYER_DATA_TYPES.VECTOR,
+  //   group: LAYER_GROUPS.BASE_LAYERS,
+  //   label: 'Município Selecionado',
+  //   source: (year) => ({
+  //     type: 'vector',
+  //     tiles: [
+  //       `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+  //     ],
+  //     minzoom: 0,
+  //     maxzoom: 22,
+  //     sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+  //   }),
+  //   paint: {
+  //     'line-color': '#212529',
+  //     'line-opacity': 1,
+  //     'line-width': 3
+  //   }
+  // },
 
-  municipalities_outline: {
-    type: LAYER_DATA_TYPES.VECTOR,
-    group: LAYER_GROUPS.BASE_LAYERS,
-    label: 'Contorno dos Municípios',
-    source: (year) => ({
-      type: 'vector',
-      tiles: [
-        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
-      ],
-      minzoom: 0,
-      maxzoom: 22,
-      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
-    }),
-    paint: {
-      'line-color': [
-        'case',
-        ['boolean', ['feature-state', 'hover'], false],
-        '#86919B',
-        '#ADB5BD'
-      ],
-      'line-width': [
-        'case',
-        ['boolean', ['feature-state', 'hover'], false],
-        3,
-        1
-      ]
-    }
-  },
+  // municipalities_outline: {
+  //   id: 'municipalities-outline-layer',
+  //   type: LAYER_DATA_TYPES.VECTOR,
+  //   group: LAYER_GROUPS.BASE_LAYERS,
+  //   label: 'Contorno dos Municípios',
+  //   source: (year) => ({
+  //     type: 'vector',
+  //     tiles: [
+  //       `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+  //     ],
+  //     minzoom: 0,
+  //     maxzoom: 22,
+  //     sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+  //   }),
+  //   paint: {
+  //     'line-color': [
+  //       'case',
+  //       ['boolean', ['feature-state', 'hover'], false],
+  //       '#86919B',
+  //       '#ADB5BD'
+  //     ],
+  //     'line-width': [
+  //       'case',
+  //       ['boolean', ['feature-state', 'hover'], false],
+  //       3,
+  //       1
+  //     ]
+  //   }
+  // },
 
   base_layer: {
     id: 'base-layer',

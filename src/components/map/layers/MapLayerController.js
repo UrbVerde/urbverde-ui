@@ -1,16 +1,6 @@
 import { getLayerPaint, getLayerConfig } from '@/constants/layers.js';
 import { useLocationStore } from '@/stores/locationStore';
 
-const logger = {
-  debug: (message, ...args) => {
-    // eslint-disable-next-line no-console
-    console.debug(message, ...args);
-  },
-  error: (message, ...args) => {
-    console.error(message, ...args);
-  }
-};
-
 /**
  * Funções para gerenciar as layers do mapa
  */
@@ -21,10 +11,12 @@ const logger = {
  * @returns {Object} Configuração da layer raster
  */
 export function createRasterLayer(config) {
+  console.log('Criando layer raster:', config);
+
   return {
-    id: 'dynamic-layer',
+    id: config.id,
     type: 'raster',
-    source: 'dynamic-source',
+    source: config.id,
     paint: config.paint
   };
 }
@@ -35,10 +27,12 @@ export function createRasterLayer(config) {
  * @returns {Object} Configuração da layer vetorial
  */
 export function createVectorLayer(config) {
+  console.log('Criando layer vetorial:', config);
+
   return {
-    id: 'dynamic-layer',
+    id: config.id,
     type: 'fill',
-    source: 'dynamic-source',
+    source: config.id,
     'source-layer': config.source.sourceLayer,
     paint: getLayerPaint(config)
   };
@@ -50,10 +44,12 @@ export function createVectorLayer(config) {
  * @returns {Object} Configuração da layer de contorno
  */
 export function createOutlineLayer(config) {
+  console.log('Criando layer de contorno:', config);
+
   return {
-    id: 'dynamic-layer-outline',
+    id: `${config.id}-outline`,
     type: 'line',
-    source: 'dynamic-source',
+    source: config.id,
     'source-layer': config.source.sourceLayer,
     paint: {
       'line-color': '#666666',
@@ -71,6 +67,8 @@ export function createOutlineLayer(config) {
  * @returns {Object} Configuração da fonte
  */
 export function setupDynamicSource(config, locationStore, currentScale) {
+  console.log('Configurando source dinâmica:', { config, locationStore, currentScale });
+
   const sourceUrl = config.source.tiles[0];
   const urlHasQuery = sourceUrl.includes('?');
   const isVector = config.type !== 'raster';
@@ -80,10 +78,14 @@ export function setupDynamicSource(config, locationStore, currentScale) {
     ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=(cd_mun='${locationStore.cd_mun}' OR cd_mun=${locationStore.cd_mun})`
     : sourceUrl;
 
-  return {
+  const sourceConfig = {
     ...config.source,
     tiles: [filteredUrl]
   };
+
+  console.log('Source configurada:', sourceConfig);
+
+  return sourceConfig;
 }
 
 /**
@@ -94,75 +96,100 @@ export function setupDynamicSource(config, locationStore, currentScale) {
  * @param {string} currentScale - Escala atual
  */
 export function applyLayerFilters(map, config, locationStore, currentScale) {
+  console.log('Aplicando filtros:', { config, locationStore, currentScale });
+
   const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun && config.type !== 'raster';
 
   if (shouldFilter) {
-    map.setFilter('dynamic-layer', [
+    map.setFilter(config.id, [
       'any',
       ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
       ['==', ['get', 'cd_mun'], locationStore.cd_mun]
     ]);
 
-    map.setFilter('dynamic-layer-outline', ['==', 'cd_mun', locationStore.cd_mun]);
+    map.setFilter(`${config.id}-outline`, ['==', 'cd_mun', locationStore.cd_mun]);
   }
 }
 
 /**
  * Configura as layers dinâmicas
  * @param {Object} map - Instância do mapa
- * @param {string} layerId - ID da layer
+ * @param {string} layerId - ID da configuração da layer
  * @returns {boolean} Sucesso da operação
  */
 export function setupDynamicLayers(map, layerId) {
   const locationStore = useLocationStore();
   const { year, scale } = locationStore;
 
-  logger.debug('Configurando layers dinâmicas:', { layerId, year, scale });
+  console.log('Iniciando setupDynamicLayers:', { layerId, year, scale });
 
   try {
     // Obter configuração da layer
     const config = getLayerConfig(layerId, year, scale);
+    console.log('Configuração obtida:', config);
+
     if (!config || !config.source) {
-      logger.error('Configuração inválida para a layer:', layerId);
+      console.error('Configuração inválida para a layer:', layerId);
+
+      return false;
+    }
+
+    // Validar tipo da camada
+    if (!config.type || !['raster', 'vector'].includes(config.type)) {
+      console.error('Tipo de camada inválido:', config.type);
 
       return false;
     }
 
     // Configurar source
     const sourceConfig = setupDynamicSource(config, locationStore, scale);
-    logger.debug('Source configurado:', sourceConfig);
+    console.log('Source configurado:', sourceConfig);
+
+    if (!sourceConfig) {
+      console.error('Falha ao configurar source para a layer:', layerId);
+
+      return false;
+    }
 
     // Adicionar source ao mapa
-    map.addSource('dynamic-source', sourceConfig);
+    console.log('Adicionando source ao mapa:', config.id);
+    map.addSource(config.id, sourceConfig);
 
     // Criar e adicionar layer principal
-    const mainLayer = config.type === 'raster'
-      ? createRasterLayer(config)
-      : createVectorLayer(config);
-    logger.debug('Layer principal criada:', mainLayer);
+    let mainLayer;
+    if (config.type === 'raster') {
+      mainLayer = createRasterLayer(config);
+    } else if (config.type === 'vector') {
+      mainLayer = createVectorLayer(config);
+    }
 
+    if (!mainLayer) {
+      console.error('Falha ao criar layer principal:', config.id);
+
+      return false;
+    }
+
+    console.log('Layer principal criada:', mainLayer);
     map.addLayer(mainLayer);
+    console.log('Layer principal adicionada ao mapa');
 
     // Se for vector, adicionar outline
     if (config.type === 'vector') {
       const outlineLayer = createOutlineLayer(config);
-      logger.debug('Layer de outline criada:', outlineLayer);
-      map.addLayer(outlineLayer);
+      if (outlineLayer) {
+        console.log('Layer de outline criada:', outlineLayer);
+        map.addLayer(outlineLayer);
+        console.log('Layer de outline adicionada ao mapa');
+      }
     }
 
     // Aplicar filtros se necessário
     applyLayerFilters(map, config, locationStore, scale);
-
-    // // Configurar interações
-    // if (config.type === 'raster') {
-    //   setupRasterInteractions(config);
-    // } else {
-    //   setupVectorInteractions(config);
-    // }
+    console.log('Filtros aplicados');
 
     return true;
   } catch (error) {
-    logger.error('Erro ao configurar layers dinâmicas:', error);
+    console.error('Erro ao configurar layers dinâmicas:', error);
 
     return false;
   }
@@ -214,4 +241,60 @@ export function setupSetoresLayer(map, locationStore) {
   if (locationStore.cd_mun) {
     map.setFilter('setores-layer', ['==', 'cd_mun', locationStore.cd_mun]);
   }
+}
+
+/**
+ * Atualiza os filtros de município em todas as camadas dinâmicas
+ * @param {Object} map - Instância do mapa
+ * @param {string} cd_mun - Código do município
+ */
+export function updateMunicipalityFilters(map, cd_mun) {
+  console.log('Atualizando filtros de município:', cd_mun);
+
+  // Obter todas as camadas do mapa
+  const layers = map.getStyle().layers;
+
+  // Filtrar apenas as camadas dinâmicas (que não são outline)
+  const dynamicLayers = layers.filter(layer => {
+    const isDynamic = layer.id.includes('-layer') && !layer.id.includes('-outline');
+
+    return isDynamic;
+  });
+
+  console.log('Camadas dinâmicas encontradas:', dynamicLayers.map(l => l.id));
+
+  // Atualizar filtros para cada camada
+  dynamicLayers.forEach(layer => {
+    try {
+      // Verificar se a camada tem source-layer (é vetorial)
+      if (layer['source-layer']) {
+        // Aplicar filtro para camadas vetoriais
+        map.setFilter(layer.id, [
+          'any',
+          ['==', ['to-string', ['get', 'cd_mun']], String(cd_mun)],
+          ['==', ['get', 'cd_mun'], cd_mun]
+        ]);
+
+        // Atualizar também a camada de outline se existir
+        const outlineLayerId = `${layer.id}-outline`;
+        if (map.getLayer(outlineLayerId)) {
+          map.setFilter(outlineLayerId, ['==', 'cd_mun', cd_mun]);
+        }
+      } else {
+        // Para camadas raster, atualizar a URL do source
+        const source = map.getSource(layer.source);
+        if (source && source.tiles) {
+          const currentUrl = source.tiles[0];
+          const urlHasQuery = currentUrl.includes('?');
+          const newUrl = `${currentUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun=${cd_mun}`;
+
+          source.setTiles([newUrl]);
+        }
+      }
+    } catch (error) {
+      console.error(`Erro ao atualizar filtros para a camada ${layer.id}:`, error);
+    }
+  });
+
+  console.log('Filtros de município atualizados com sucesso');
 }

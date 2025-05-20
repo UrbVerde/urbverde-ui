@@ -40,6 +40,7 @@ import { getLayerConfig } from '@/constants/layers.js';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
 import AttributionBar from '@/components/map/info/MapInfoBar.vue';
 import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
+// import { LAYER_CONFIGS } from '@/constants/layers';
 // import { reorderAllLayers } from '@/components/map/layers/layersOrder';
 
 import {
@@ -56,7 +57,7 @@ import {
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { useMapLayers } from '@/composables/useMapLayers';
-import { LayerRegistry } from '@/components/map/layers/layerRegistry';
+// import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
 const locationStore = useLocationStore();
@@ -91,7 +92,6 @@ const currentYear = computed(() => locationStore.year || '2021');
 const currentCode = computed(() => locationStore.cd_mun);
 
 // No setup
-const layerRegistry = new LayerRegistry();
 const { addLayer } = useMapLayers(map);
 
 watch(
@@ -106,11 +106,15 @@ watch(
     // O mapa é direcionado para o novo município
     if (newCdMun && newCdMun !== oldCdMun) {
       await initializeMapLocation(newCdMun);
+
+      // Atualizar filtros de município em todas as camadas dinâmicas
+      updateMunicipalityFilters(map.value, newCdMun);
+
     }
 
     if (mapLoaded.value) {
       removeDynamicLayer();
-      //await initializeMapLayers();
+
     }
 
     if (map.value.getLayer('selected-municipality-fill')) {
@@ -119,23 +123,31 @@ watch(
   }
 );
 
-// Adicionar após os outros watchers existentes
-watch(
-  () => locationStore.cd_mun,
-  (newCdMun) => {
-    if (!map.value) {return;}
+// Função para atualizar os filtros do município
+function updateMunicipalityFilters(mapInstance, newCdMun) {
+  if (!mapInstance) { return; }
 
-    // Atualizar o filtro do highlight_selected
-    if (map.value.getLayer('highlight_selected-layer')) {
-      map.value.setFilter('highlight_selected-layer', ['==', 'cd_mun', newCdMun]);
+  // Percorrer todas as camadas instanciadas no mapa
+  mapInstance.getStyle().layers.forEach(layer => {
+    // Verificar se é uma camada dinâmica e vetorial
+    if (layer.id.endsWith('-layer') && layer.type === 'fill') {
+      // Aplicar filtro para excluir o município selecionado
+      mapInstance.setFilter(layer.id, ['==', 'cd_mun', newCdMun]);
     }
+  });
 
-    // Atualizar o filtro do out_selected_clickable_fill
-    if (map.value.getLayer('out_selected_clickable_fill-layer')) {
-      map.value.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
-    }
+  map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
+  // Atualizar o filtro do highlight_selected
+  if (mapInstance.getLayer('highlight_selected-layer')) {
+    mapInstance.setFilter('highlight_selected-layer', ['==', 'cd_mun', newCdMun]);
   }
-);
+
+  // Atualizar o filtro do out_selected_clickable_fill
+  if (mapInstance.getLayer('out_selected_clickable_fill-layer')) {
+    mapInstance.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
+  }
+
+}
 
 /* ---------------------------------------
    HELPER FUNCTIONS
@@ -151,7 +163,6 @@ function removeDynamicLayer() {
   ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
-      layerRegistry.unregister(id);
     }
   });
 
@@ -175,12 +186,8 @@ async function initializeMapLayers() {
   if (!map.value || !currentLayer.value) { return; }
 
   try {
-    // Registrar a camada atual
+    // Obter configuração da camada
     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
-    layerRegistry.register(currentLayer.value, {
-      ...config,
-      dependencies: ['base-municipalities']
-    });
 
     // Adicionar a camada
     await addLayer(currentLayer.value, config);
@@ -189,13 +196,11 @@ async function initializeMapLayers() {
     if (currentScale.value === 'intraurbana' && currentCode.value) {
       if (config.type === 'raster') {
         addParksLayer();
-        // Configurar handlers de popup para raster
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
-        // Configurar handlers de popup para vector
         setupVectorInteractions(map.value, config);
       }
     }
@@ -208,11 +213,6 @@ async function initializeMapLayers() {
 function addParksLayer() {
   const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value);
   if (!parksConfig) { return; }
-
-  layerRegistry.register(parksConfig.id, {
-    ...parksConfig,
-    dependencies: ['base-municipalities']
-  });
 
   const sourceConfig = setupDynamicSource(parksConfig, locationStore, currentScale.value);
   if (!map.value.getSource('parks-source')) {
@@ -529,8 +529,7 @@ function generateBaseLayers() {
       layerConfig.filter = role.filter(locationStore.cd_mun);
     }
 
-    // Registrar e adicionar a layer
-    layerRegistry.register(layerId, layerConfig);
+    // Adicionar a layer ao mapa
     map.value.addLayer(layerConfig);
   });
 
@@ -720,27 +719,22 @@ async function setupLayers() {
   if (!map.value || !currentLayer.value) { return; }
 
   try {
-    // Registrar a camada atual
+    // Obter configuração da camada
     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
-    layerRegistry.register(currentLayer.value, {
-      ...config,
-      dependencies: ['base-municipalities']
-    });
 
-    // Adicionar a camada
-    await addLayer(currentLayer.value, config);
+    alert(currentLayer.value);
+    // Adicionar a camada usando o LayerOrderManager
+    await addLayer(currentLayer.value);
 
     // Adicionar camadas adicionais se necessário
     if (currentScale.value === 'intraurbana' && currentCode.value) {
       if (config.type === 'raster') {
         addParksLayer();
-        // Configurar handlers de popup para raster
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
         setupSetoresLayer(map.value, locationStore);
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
-        // Configurar handlers de popup para vector
         setupVectorInteractions(map.value, config);
       }
     }

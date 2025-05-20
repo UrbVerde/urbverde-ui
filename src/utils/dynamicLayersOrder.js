@@ -85,12 +85,36 @@ export function getCurrentMainLayer(layers) {
  */
 export function getLayerConfig(layerId, year, scale, codmun) {
   const base = LAYER_CONFIGS[layerId];
-  if (!base) { return null; }
+  if (!base) {
+    console.error(`Configuração base não encontrada para a camada: ${layerId}`);
+
+    return null;
+  }
+
+  // Validar tipo da camada
+  if (!base.type || !['raster', 'vector'].includes(base.type)) {
+    console.error(`Tipo inválido para a camada ${layerId}: ${base.type}`);
+
+    return null;
+  }
 
   // Se base.source é uma função, chama ela com os parâmetros
-  const source = typeof base.source === 'function'
-    ? base.source(year, scale, codmun)
-    : base.source;
+  let source;
+  try {
+    source = typeof base.source === 'function'
+      ? base.source(year, scale, codmun)
+      : base.source;
+  } catch (error) {
+    console.error(`Erro ao obter source para a camada ${layerId}:`, error);
+
+    return null;
+  }
+
+  if (!source) {
+    console.error(`Source não encontrado para a camada ${layerId}`);
+
+    return null;
+  }
 
   return { ...base, source };
 }
