@@ -119,6 +119,24 @@ watch(
   }
 );
 
+// Adicionar após os outros watchers existentes
+watch(
+  () => locationStore.cd_mun,
+  (newCdMun) => {
+    if (!map.value) {return;}
+
+    // Atualizar o filtro do highlight_selected
+    if (map.value.getLayer('highlight_selected-layer')) {
+      map.value.setFilter('highlight_selected-layer', ['==', 'cd_mun', newCdMun]);
+    }
+
+    // Atualizar o filtro do out_selected_clickable_fill
+    if (map.value.getLayer('out_selected_clickable_fill-layer')) {
+      map.value.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
+    }
+  }
+);
+
 /* ---------------------------------------
    HELPER FUNCTIONS
 ---------------------------------------*/
@@ -191,7 +209,7 @@ function addParksLayer() {
   const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value);
   if (!parksConfig) { return; }
 
-  layerRegistry.register('parks-layer', {
+  layerRegistry.register(parksConfig.id, {
     ...parksConfig,
     dependencies: ['base-municipalities']
   });
@@ -201,23 +219,18 @@ function addParksLayer() {
     map.value.addSource('parks-source', sourceConfig);
   }
 
-  if (!map.value.getLayer('parks-layer')) {
+  if (!map.value.getLayer(parksConfig.id)) {
     const parksLayer = {
-      id: 'parks-layer',
-      type: 'fill',
+      id: parksConfig.id,
+      type: parksConfig.renderType,
       source: 'parks-source',
       'source-layer': parksConfig.source.sourceLayer,
-      paint: parksConfig.paint || {
-        'fill-color': '#40826D',
-        'fill-opacity': 0.7,
-        'fill-outline-color': '#40826D'
-      }
+      paint: parksConfig.paint
     };
     map.value.addLayer(parksLayer);
-
   }
 
-  map.value.setFilter('parks-layer', ['==', 'cd_mun', String(locationStore.cd_mun)]);
+  map.value.setFilter(parksConfig.id, ['==', 'cd_mun', String(locationStore.cd_mun)]);
 }
 
 /**
@@ -497,7 +510,7 @@ function generateBaseLayers() {
 
   // Gerar e adicionar cada layer baseada nos roles
   Object.entries(baseConfig.roles).forEach(([roleName, role]) => {
-    const layerId = `scale-${roleName}`;//colocar escala dinâmica
+    const layerId = `${roleName}-layer`;
 
     // Se a layer já existe, não adiciona novamente
     if (map.value.getLayer(layerId)) { return; }
@@ -505,14 +518,17 @@ function generateBaseLayers() {
     // Usar a configuração do role diretamente, apenas adicionando o necessário
     const layerConfig = {
       id: layerId,
+      type: role.renderType,
       source: 'base-municipalities',
       'source-layer': baseConfig.source.sourceLayer,
-      ...role
+      paint: role.paint
     };
 
-    // Se o role tem um filter que é uma função, chamar com o codmun
-    if (typeof layerConfig.filter === 'function') {
-      layerConfig.filter = layerConfig.filter(locationStore.cd_mun);
+    // Aplicar filtro específico para highlight_selected
+    if (roleName === 'highlight_selected') {
+      layerConfig.filter = ['==', 'cd_mun', locationStore.cd_mun];
+    } else if (roleName === 'out_selected_clickable_fill') {
+      layerConfig.filter = ['!=', 'cd_mun', locationStore.cd_mun];
     }
 
     // Registrar e adicionar a layer
@@ -521,10 +537,17 @@ function generateBaseLayers() {
   });
 
   // Configurar eventos de interação usando o ID da layer de preenchimento
-  const clickableLayerId = 'scale-out_selected_clickable_fill';
+  const clickableLayerId = 'out_selected_clickable_fill-layer';
+  const outlineLayerId = 'out_selected_outline-layer';
+
+  // Configurar eventos de hover para a camada clicável
   map.value.on('mousemove', clickableLayerId, handleMunicipalityMouseMove);
   map.value.on('mouseleave', clickableLayerId, handleMunicipalityMouseLeave);
   map.value.on('click', clickableLayerId, handleMunicipalityClick);
+
+  // Configurar eventos de hover para a camada de outline
+  map.value.on('mousemove', outlineLayerId, handleMunicipalityMouseMove);
+  map.value.on('mouseleave', outlineLayerId, handleMunicipalityMouseLeave);
 }
 
 function handleMunicipalityMouseMove(e) {

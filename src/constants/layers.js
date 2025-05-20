@@ -340,7 +340,9 @@ export const LAYER_CONFIGS = {
 
   // Parks layers
   parks: {
-    type: 'vector',
+    id: 'parks-layer',
+    dataType: 'vector',
+    renderType: 'fill',
     label: 'Praças',
     source: (year, scale, municipioId) => ({
       type: 'vector',
@@ -550,25 +552,22 @@ export const LAYER_CONFIGS = {
   },
 
   base_layer: {
-    data: 'vector',
+    id: 'base-layer',
+    dataType: 'vector',
+    renderType: 'fill',
     label: 'Context Base Layers',
-    source: (year) => {
-      // Configuração base da fonte
-      const baseSource = {
-        type: 'vector',
-        tiles: [
-          `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
-        ],
-        minzoom: 0,
-        maxzoom: 22,
-        sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
-      };
-
-      return baseSource;
-    },
+    source: (year) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_temperatura_por_municipio_${year}/{z}/{x}/{y}.pbf`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: `public.geodata_temperatura_por_municipio_${year}`
+    }),
     roles: {
       highlight_selected: {
-        type: 'line',
+        renderType: 'line',
         paint: {
           'line-color': '#212529',
           'line-opacity': 1,
@@ -577,17 +576,15 @@ export const LAYER_CONFIGS = {
         filter: (codmun) => ['==', 'cd_mun', codmun]
       },
       out_selected_clickable_fill: {
-        type: 'fill',
+        renderType: 'fill',
         filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
         paint: {
-          // 'fill-color': '#90EE90', futuramente colocar uma camada de desfoco em cima de outros municipios
-          // 'fill-opacity': 0.9
           'fill-color': 'transparent',
           'fill-opacity': 1
         }
       },
       out_selected_outline: {
-        type: 'line',
+        renderType: 'line',
         paint: {
           'line-color': [
             'case',
