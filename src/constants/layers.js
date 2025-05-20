@@ -1,5 +1,7 @@
 // urbverde-ui/src/constants/layers.js
 
+import { LAYER_DATA_TYPES, LAYER_GROUPS } from '@/components/map/layers/layerOrderManager';
+
 // Declare allowed years
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, '2016-2021'];
@@ -21,7 +23,8 @@ const CENSUS_YEARS = [2022];
 export const LAYER_CONFIGS = {
 
   population: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'População',
     allowedYears: CENSUS_YEARS,
     filterable: false, // Para o caso de vetores que não devem ser filtrados para determinado município
@@ -52,7 +55,8 @@ export const LAYER_CONFIGS = {
   },
 
   setores: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Setores Censitários',
     allowedYears: VECTOR_YEARS,
     source: (year, scale, municipioId) => {
@@ -79,7 +83,8 @@ export const LAYER_CONFIGS = {
 
   // Climate layers
   surface_temp: {
-    type: 'raster',
+    type: LAYER_DATA_TYPES.RASTER,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura de Superfície',
     allowedYears: RASTER_YEARS,
     source: {
@@ -112,7 +117,8 @@ export const LAYER_CONFIGS = {
   },
 
   max_surface_temp: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura Máxima de Superfície',
     allowedYears: VECTOR_YEARS,
     source: (year, scale) => {
@@ -143,7 +149,8 @@ export const LAYER_CONFIGS = {
   },
 
   heat_island: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Nível de exposição à ilha de calor',
     allowedYears: VECTOR_YEARS,
     source: (year, scale) => {
@@ -173,7 +180,8 @@ export const LAYER_CONFIGS = {
 
   // Vegetation layers
   pcv: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Percentual de Cobertura Vegetal',
     allowedYears: VECTOR_YEARS,
     source: (year, scale) => {
@@ -210,7 +218,8 @@ export const LAYER_CONFIGS = {
   },
 
   icv: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Índice de Cobertura Vegetal',
     allowedYears: VECTOR_YEARS,
     source: (year, scale) => {
@@ -238,7 +247,8 @@ export const LAYER_CONFIGS = {
   },
 
   idsa: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Índice de Desigualdade Socioambiental',
     allowedYears: VECTOR_YEARS,
     source: (year, scale) => {
@@ -265,7 +275,8 @@ export const LAYER_CONFIGS = {
   },
 
   cvp: {
-    type: 'raster',
+    type: LAYER_DATA_TYPES.RASTER,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Cobertura Vegetal por Pixel',
     allowedYears: RASTER_YEARS,
     source: (year) => ({
@@ -306,7 +317,8 @@ export const LAYER_CONFIGS = {
   },
 
   ndvi: {
-    type: 'raster',
+    type: LAYER_DATA_TYPES.RASTER,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Vigor da Vegetação (NDVI)',
     allowedYears: RASTER_YEARS,
     source: (year) => ({
@@ -341,7 +353,8 @@ export const LAYER_CONFIGS = {
   // Parks layers
   parks: {
     id: 'parks-layer',
-    dataType: 'vector',
+    dataType: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     renderType: 'fill',
     label: 'Praças',
     source: (year, scale, municipioId) => ({
@@ -361,7 +374,8 @@ export const LAYER_CONFIGS = {
   },
 
   avg_distance_to_squares: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Distância Média até as Praças',
     allowedYears: PARKS_YEARS,
     source: (year, scale) => {
@@ -387,7 +401,8 @@ export const LAYER_CONFIGS = {
   },
 
   square_area_per_capita: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Área de Praças por Habitante',
     allowedYears: PARKS_YEARS,
     source: (year, scale) => {
@@ -416,7 +431,8 @@ export const LAYER_CONFIGS = {
   },
 
   square_served_area: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'Área Atendida pelas Praças',
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
@@ -444,7 +460,8 @@ export const LAYER_CONFIGS = {
   },
 
   served_population: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.DYNAMIC,
     label: 'População Atendida pelas Praças',
     allowedYears: PARKS_YEARS,
     source: (year, scale) => {
@@ -487,7 +504,8 @@ export const LAYER_CONFIGS = {
 
   // Base layers
   base_municipalities: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.BASE_LAYERS,
     label: 'Municípios Base',
     source: (year) => ({
       type: 'vector',
@@ -505,7 +523,8 @@ export const LAYER_CONFIGS = {
   },
 
   selected_municipality: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.BASE_LAYERS,
     label: 'Município Selecionado',
     source: (year) => ({
       type: 'vector',
@@ -524,7 +543,8 @@ export const LAYER_CONFIGS = {
   },
 
   municipalities_outline: {
-    type: 'vector',
+    type: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.BASE_LAYERS,
     label: 'Contorno dos Municípios',
     source: (year) => ({
       type: 'vector',
@@ -553,7 +573,8 @@ export const LAYER_CONFIGS = {
 
   base_layer: {
     id: 'base-layer',
-    dataType: 'vector',
+    dataType: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.BASE_LAYERS,
     renderType: 'fill',
     label: 'Context Base Layers',
     source: (year) => ({
