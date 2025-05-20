@@ -24,13 +24,14 @@ export const LAYER_ORDER = {
   [LAYER_GROUPS.BASEMAP]: [
     // Camadas do MapTiler (não precisamos listar, pois são gerenciadas pelo próprio MapTiler)
   ],
+
+  [LAYER_GROUPS.DYNAMIC]: [
+    // Será preenchido dinamicamente
+  ],
   [LAYER_GROUPS.BASE_LAYERS]: [
     'base-municipalities',
     'selected-municipality-fill',
     'municipalities-base-outline'
-  ],
-  [LAYER_GROUPS.DYNAMIC]: [
-    // Será preenchido dinamicamente
   ],
   [LAYER_GROUPS.SYMBOLS]: [
     // Será preenchido dinamicamente com camadas do tipo 'symbol'
@@ -45,6 +46,39 @@ export class LayerOrderManager {
     this.map = map;
     this.dynamicLayers = new Set();
     this.symbolLayers = new Set();
+    this.layerGroups = new Map();
+    this.initializeLayerGroups();
+  }
+
+  /**
+   * Inicializa os grupos de camadas
+   */
+  initializeLayerGroups() {
+    Object.values(LAYER_GROUPS).forEach(group => {
+      this.layerGroups.set(group, new Set());
+    });
+  }
+
+  /**
+   * Adiciona uma camada ao seu grupo correspondente
+   * @param {string} layerId - ID da camada
+   * @param {string} group - Grupo da camada
+   */
+  addLayerToGroup(layerId, group) {
+    if (this.layerGroups.has(group)) {
+      this.layerGroups.get(group).add(layerId);
+    }
+  }
+
+  /**
+   * Remove uma camada do seu grupo
+   * @param {string} layerId - ID da camada
+   * @param {string} group - Grupo da camada
+   */
+  removeLayerFromGroup(layerId, group) {
+    if (this.layerGroups.has(group)) {
+      this.layerGroups.get(group).delete(layerId);
+    }
   }
 
   /**
@@ -94,8 +128,18 @@ export class LayerOrderManager {
       this.map.addLayer(layerConfig);
     }
 
-    // Registra a camada como dinâmica
-    this.dynamicLayers.add(id);
+    // Registra a camada no grupo correspondente
+    this.addLayerToGroup(id, group);
+
+    // Registra a camada como dinâmica se for do grupo DYNAMIC
+    if (group === LAYER_GROUPS.DYNAMIC) {
+      this.dynamicLayers.add(id);
+    }
+
+    // Registra a camada como símbolo se for do tipo SYMBOL
+    if (dataType === LAYER_DATA_TYPES.SYMBOL) {
+      this.symbolLayers.add(id);
+    }
 
     // Atualiza a ordem
     this.updateLayerOrder();
@@ -110,27 +154,21 @@ export class LayerOrderManager {
     if (!this.map) {return null;}
 
     const layers = this.map.getStyle().layers;
+    const groupLayers = this.layerGroups.get(group);
+
+    if (!groupLayers || groupLayers.size === 0) {
+      return null;
+    }
 
     // Para camadas base, retorna a primeira camada da lista
     if (group === LAYER_GROUPS.BASE_LAYERS) {
       return LAYER_ORDER[group][0];
     }
 
-    // Para camadas dinâmicas, retorna a primeira camada dinâmica encontrada
-    if (group === LAYER_GROUPS.DYNAMIC) {
-      for (const layer of layers) {
-        if (this.dynamicLayers.has(layer.id)) {
-          return layer.id;
-        }
-      }
-    }
-
-    // Para símbolos, retorna a primeira camada do tipo symbol
-    if (group === LAYER_GROUPS.SYMBOLS) {
-      for (const layer of layers) {
-        if (layer.type === LAYER_DATA_TYPES.SYMBOL) {
-          return layer.id;
-        }
+    // Para outros grupos, retorna a primeira camada encontrada
+    for (const layer of layers) {
+      if (groupLayers.has(layer.id)) {
+        return layer.id;
       }
     }
 
@@ -140,8 +178,9 @@ export class LayerOrderManager {
   /**
    * Remove uma camada dinâmica
    * @param {string} layerId - ID da camada
+   * @param {string} group - Grupo da camada
    */
-  removeDynamicLayer(layerId) {
+  removeDynamicLayer(layerId, group = LAYER_GROUPS.DYNAMIC) {
     if (!this.map || !layerId) {return;}
 
     // Remove a camada do mapa
@@ -151,6 +190,8 @@ export class LayerOrderManager {
 
     // Remove do registro de camadas dinâmicas
     this.dynamicLayers.delete(layerId);
+    this.symbolLayers.delete(layerId);
+    this.removeLayerFromGroup(layerId, group);
 
     // Atualiza a ordem
     this.updateLayerOrder();
@@ -190,7 +231,6 @@ export class LayerOrderManager {
     layers.forEach(layer => {
       if (layer.type === LAYER_DATA_TYPES.SYMBOL) {
         this.map.moveLayer(layer.id);
-        this.symbolLayers.add(layer.id);
       }
     });
   }
@@ -227,6 +267,8 @@ export class LayerOrderManager {
     });
 
     this.dynamicLayers.clear();
+    this.symbolLayers.clear();
+    this.layerGroups.get(LAYER_GROUPS.DYNAMIC).clear();
     this.updateLayerOrder();
   }
 }
