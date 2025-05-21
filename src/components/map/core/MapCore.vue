@@ -578,7 +578,8 @@ function generateMaskLayers(recorte = 'setores', censo = '2010') {
       type: layer.type,
       source: sourceId,
       'source-layer': sourceConfig.sourceLayer,
-      paint: layer.paint
+      paint: layer.paint,
+      filter: ['==', 'cd_mun', locationStore.cd_mun]
     };
 
     map.value.addLayer(layerConfig);
