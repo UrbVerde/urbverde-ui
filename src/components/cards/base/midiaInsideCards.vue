@@ -110,8 +110,8 @@ export default {
 .midia-image {
   max-width: 280px;
   max-height: 280px;
-  min-width: 200px;
-  min-height: 200px;
+  min-width: 180;
+  min-height: 180;
   width: 100%;
   height: auto;
   object-fit: contain;

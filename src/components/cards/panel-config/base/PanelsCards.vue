@@ -314,9 +314,4 @@ p, h5 {
   }
 }
 
-@include breakpoint-down('mobile-small') {
-  .widgets-section{
-    max-width: 300px;
-  }
-}
 </style>
