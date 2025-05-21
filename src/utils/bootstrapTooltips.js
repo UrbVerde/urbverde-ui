@@ -1,3 +1,4 @@
+// urbverde-ui/src/utils/bootstrapTooltips.js
 import { Tooltip } from 'bootstrap';
 
 export function initializeTooltips() {

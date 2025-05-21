@@ -1,4 +1,4 @@
-// urbverde-ui/src/config/index.js
+// urbverde-ui/src/components/cards/panel-config/index.js
 
 import clima from './sections/national/clima.js';
 import vegetacao from './sections/national/vegetacao.js';

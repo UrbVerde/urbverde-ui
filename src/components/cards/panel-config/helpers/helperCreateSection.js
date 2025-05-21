@@ -1,4 +1,4 @@
-// urbverde-ui/src/config/helperCreateSection.js
+// urbverde-ui/src/components/cards/panel-config/helpers/helperCreateSection.js
 import { computed, h } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import Panel from '@/components/cards/panel-config/base/SectionCards.vue';

@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/components-cards/cardsGraph/cardGraphBase.vue -->
 <!-- urbverde-ui/src/components/cards/Card.vue -->
 <!-- CardBase.vue -->
 <template>

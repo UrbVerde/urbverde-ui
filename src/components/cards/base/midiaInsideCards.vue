@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/midiaInsideCards.vue -->
 <template>
   <div class="midia-wrapper">
     <!-- Image handling -->

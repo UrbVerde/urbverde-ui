@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/cardSeeOnMap.vue -->
 <template>
   <CardHoverButton
     iconClass="bi bi-map"

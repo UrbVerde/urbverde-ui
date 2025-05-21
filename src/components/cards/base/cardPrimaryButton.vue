@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/cards/cards-aux/cardPrimaryButton.vue -->
+<!-- urbverde-ui/src/components/cards/base/cardPrimaryButton.vue -->
 <template>
   <div class="button-wrapper">
     <PrimaryButton

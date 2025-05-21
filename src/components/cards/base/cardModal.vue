@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/cardModal.vue -->
 <template>
   <modalBootstrap
     :ref="el => { if (el) modalRef = el }"

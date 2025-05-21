@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/buttons/CardHoverButton.vue -->
 <template>
   <div class="info-button"
        @click="$emit('click')"

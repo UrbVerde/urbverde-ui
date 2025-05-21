@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/cards/graphics/PizzaGraphic.vue -->
+<!-- urbverde-ui/src/components/cards/components-cards/cardsGraph/graphics-base/PizzaGraphic.vue -->
 <!-- PizzaGraphic.vue -->
 <template>
   <div class="pizza-chart-wrapper" ref="chartContainer">

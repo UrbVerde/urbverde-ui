@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/numberInsideCards.vue -->
 <template>
   <div class="number-wrapper" :class="{ 'composed': type === 'composed', 'large': type === 'large' }">
     <div class="value-container">

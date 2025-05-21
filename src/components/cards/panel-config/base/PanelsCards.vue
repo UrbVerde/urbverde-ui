@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/panel-config/base/PanelsCards.vue -->
 <!-- urbverde-ui/src/components/widgets_section/WidgetsSection.vue -->
 <template>
   <div class="widgets-section">

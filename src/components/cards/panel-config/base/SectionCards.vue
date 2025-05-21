@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/panel-config/base/SectionCards.vue -->
 <template>
   <div class="panel" :class="[panelClass, { 'nested-panel': nested }]">
     <template v-for="(child, i) in $slots.default ? $slots.default() : []" :key="i">

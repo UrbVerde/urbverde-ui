@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/paragraphInsideCards.vue -->
 <template>
   <div class="card-paragraph">
     <div class="title-wrapper">

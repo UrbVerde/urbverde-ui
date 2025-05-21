@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/components-cards/cardInfo.vue -->
 <template>
   <CardBase
     :show-info-button="showInfoButton"

@@ -1,4 +1,4 @@
-<!-- urbverde-ui/src/components/cards/weather/graphics/TGraphicSection.vue -->
+<!-- urbverde-ui/src/components/cards/components-cards/cardsGraph/weather/TGraphicSection.vue -->
 <template>
   <div class="third-row">
     <div class="cards-container">

@@ -1,4 +1,4 @@
-// urbverde-ui/src/config/helperNavbarTabNavegation.js
+// urbverde-ui/src/components/navbar/helperNavbarTabNavegation.js
 import { categoryToLayerMap } from '@/components/cards/panel-config/index.js';
 
 // IDs que devem ser excluídos das abas de navegação

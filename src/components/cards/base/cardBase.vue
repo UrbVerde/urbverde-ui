@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/cardBase.vue -->
 <template>
   <div class="card-wrapper" ref="cardWrapper">
     <div v-if="isVisible"

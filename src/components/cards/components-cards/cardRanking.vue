@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/components-cards/cardRanking.vue -->
 <template>
   <CardBase
     :showInfoButton="showModalButton"

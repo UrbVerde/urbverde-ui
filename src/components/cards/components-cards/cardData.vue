@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/components-cards/cardData.vue -->
 <template>
   <CardBase
     :showInfoButton="showModalButton"

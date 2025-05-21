@@ -1,4 +1,4 @@
-// urbverde-ui/src/config/sections/clima.js
+// urbverde-ui/src/components/cards/panel-config/sections/national/clima.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import TGraphicSection from '@/components/cards/components-cards/cardsGraph/weather/TGraphicSection.vue';
 
