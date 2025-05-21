@@ -1,10 +1,6 @@
 /* urbverde-ui/src/assets/main.css */
 @import './base.css';
 
-#app {
-  background-color: #F8F9FACC;
-}
-
 a,
 .green {
   text-decoration: none;

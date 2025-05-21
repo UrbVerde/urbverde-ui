@@ -123,8 +123,8 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
-import { categoryToLayerMap, tabIdToLabelMap, sectionConfigs } from '@/config';
-import { getTabsForLayer } from '@/config/helperNavbarTabNavegation';
+import { categoryToLayerMap, tabIdToLabelMap, sectionConfigs } from '@/components/cards/panel-config/index.js';
+import { getTabsForLayer } from '@/components/navbar/helperNavbarTabNavegation.js';
 import modalShare from '../modal/modalShare.vue';
 import modalLayerInfo from '../modal/modalLayerInfo.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
@@ -250,7 +250,7 @@ a {
   width: 100%;
   top: 0;
   z-index: 9;
-  background-color: #F8F9FACC;
+  background-color: #f2f8f5c9;
   box-sizing: border-box;
   display: flex;
   backdrop-filter: blur(10px);
