@@ -66,11 +66,83 @@ const panelClass = computed(() => {
   }
 }
 
-// Responsividade
+// Responsividade avançada para grids aninhados
 @include breakpoint-down('mobile-large') {
-  .panel {
+  // 1-2: permanece lado a lado, mas se quebrar, cada card ocupa 100%
+  .panel-1-2 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    @media (max-width: 500px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // 1-3: duas colunas em cima, uma embaixo ocupando 100%
+  .panel-1-3 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    & > .panel-cell:nth-child(1),
+    & > .panel-cell:nth-child(2) {
+      grid-column: auto;
+      grid-row: 1;
+    }
+    & > .panel-cell:nth-child(3) {
+      grid-column: 1 / span 2;
+      grid-row: 2;
+    }
+  }
+
+  // 1-4: duas colunas em cima, duas embaixo, cada uma ocupando 50%
+  .panel-1-4 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    & > .panel-cell:nth-child(1),
+    & > .panel-cell:nth-child(2) {
+      grid-column: auto;
+      grid-row: 1;
+    }
+    & > .panel-cell:nth-child(3),
+    & > .panel-cell:nth-child(4) {
+      grid-column: auto;
+      grid-row: 2;
+    }
+  }
+
+  // Painel aninhado: se for 1-1, sempre ocupa 100%
+  .panel-1-1 {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  // Painel aninhado: se último filho de 1-3 for um painel 2-1, vira 1-2
+  .panel-1-3 > .panel-cell:last-child .panel-2-1 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+}
+
+// Para telas menores que mobile-medium, tudo empilha
+@include breakpoint-down('mobile-medium') {
+  .panel,
+  .panel .panel,
+  .panel .panel .panel,
+  .panel .panel .panel .panel {
+    display: grid !important;
     grid-template-columns: 1fr !important;
     grid-template-rows: auto !important;
+    grid-auto-flow: row !important;
+  }
+
+  // Força todos os painéis a terem uma única coluna, exceto 1-1
+  [class*="panel-"]:not(.panel-1-1) {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+  }
+
+  // Garante que os painéis aninhados também sigam o mesmo padrão
+  .panel-cell {
+    grid-column: 1 !important;
+    grid-row: auto !important;
   }
 }
 </style>
