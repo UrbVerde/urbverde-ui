@@ -57,6 +57,7 @@ import {
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { useMapLayers } from '@/composables/useMapLayers';
+import { LAYER_GROUPS } from '@/components/map/layers/layerOrderManager';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
@@ -507,8 +508,8 @@ function generateBaseLayers() {
   const baseConfig = getLayerConfig('base_layer', currentYear.value, currentScale.value, locationStore.cd_mun);
 
   // Adicionar source se ainda não existir
-  if (!map.value.getSource('base-municipalities')) {
-    map.value.addSource('base-municipalities', baseConfig.source);
+  if (!map.value.getSource(LAYER_GROUPS.BASE_LAYERS)) {
+    map.value.addSource(LAYER_GROUPS.BASE_LAYERS, baseConfig.source);
   }
 
   // Gerar e adicionar cada layer baseada nos roles
@@ -522,7 +523,7 @@ function generateBaseLayers() {
     const layerConfig = {
       id: layerId,
       type: role.renderType,
-      source: 'base-municipalities',
+      source: LAYER_GROUPS.BASE_LAYERS,
       'source-layer': baseConfig.source.sourceLayer,
       paint: role.paint
     };
@@ -581,7 +582,7 @@ function clearMunicipalityHoverState() {
 
   map.value.setFeatureState(
     {
-      source: 'base-municipalities',
+      source: LAYER_GROUPS.BASE_LAYERS,
       id: hoveredFeatureId,
       sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
     },
@@ -594,7 +595,7 @@ function setHoveredState(featureId) {
   hoveredFeatureId = featureId;
   map.value.setFeatureState(
     {
-      source: 'base-municipalities',
+      source: LAYER_GROUPS.BASE_LAYERS,
       id: featureId,
       sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
     },

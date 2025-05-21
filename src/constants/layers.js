@@ -588,6 +588,70 @@ export const LAYER_CONFIGS = {
   //   }
   // },
 
+  mask_layer: {
+    id: 'mask-layer',
+    dataType: LAYER_DATA_TYPES.VECTOR,
+    group: LAYER_GROUPS.MASK_LAYERS,
+    label: 'Context Mask Layers',
+    source: () => ({
+      type: 'vector',
+      tiles: [
+        'https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf'
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geom_setores'
+    }),
+
+    roles: {
+
+      mask_line: {
+        renderType: 'line',
+        filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
+
+        paint: {
+          'line-color': '#666666',
+          'line-width': 1,
+          'line-opacity': 0.3
+        },
+      },
+
+      mask_hover_fill: {
+        renderType: 'fill',
+        filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
+        paint: {
+          'fill-color': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            '#666666',
+            'transparent'
+          ],
+          'fill-opacity': 0.2
+        }
+      },
+
+      mask_line_hover: {
+        renderType: 'line',
+        paint: {
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            '#86919B',
+            '#ADB5BD'
+          ],
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            3,
+            1
+          ]
+        }
+      },
+
+    }
+
+  },
+
   base_layer: {
     id: 'base-layer',
     dataType: LAYER_DATA_TYPES.VECTOR,

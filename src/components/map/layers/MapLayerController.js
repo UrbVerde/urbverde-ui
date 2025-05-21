@@ -243,58 +243,58 @@ export function setupSetoresLayer(map, locationStore) {
   }
 }
 
-/**
- * Atualiza os filtros de município em todas as camadas dinâmicas
- * @param {Object} map - Instância do mapa
- * @param {string} cd_mun - Código do município
- */
-export function updateMunicipalityFilters(map, cd_mun) {
-  console.log('Atualizando filtros de município:', cd_mun);
+// /**
+//  * Atualiza os filtros de município em todas as camadas dinâmicas
+//  * @param {Object} map - Instância do mapa
+//  * @param {string} cd_mun - Código do município
+//  */
+// export function updateMunicipalityFilters(map, cd_mun) {
+//   console.log('Atualizando filtros de município:', cd_mun);
 
-  // Obter todas as camadas do mapa
-  const layers = map.getStyle().layers;
+//   // Obter todas as camadas do mapa
+//   const layers = map.getStyle().layers;
 
-  // Filtrar apenas as camadas dinâmicas (que não são outline)
-  const dynamicLayers = layers.filter(layer => {
-    const isDynamic = layer.id.includes('-layer') && !layer.id.includes('-outline');
+//   // Filtrar apenas as camadas dinâmicas (que não são outline)
+//   const dynamicLayers = layers.filter(layer => {
+//     const isDynamic = layer.id.includes('-layer') && !layer.id.includes('-outline');
 
-    return isDynamic;
-  });
+//     return isDynamic;
+//   });
 
-  console.log('Camadas dinâmicas encontradas:', dynamicLayers.map(l => l.id));
+//   console.log('Camadas dinâmicas encontradas:', dynamicLayers.map(l => l.id));
 
-  // Atualizar filtros para cada camada
-  dynamicLayers.forEach(layer => {
-    try {
-      // Verificar se a camada tem source-layer (é vetorial)
-      if (layer['source-layer']) {
-        // Aplicar filtro para camadas vetoriais
-        map.setFilter(layer.id, [
-          'any',
-          ['==', ['to-string', ['get', 'cd_mun']], String(cd_mun)],
-          ['==', ['get', 'cd_mun'], cd_mun]
-        ]);
+//   // Atualizar filtros para cada camada
+//   dynamicLayers.forEach(layer => {
+//     try {
+//       // Verificar se a camada tem source-layer (é vetorial)
+//       if (layer['source-layer']) {
+//         // Aplicar filtro para camadas vetoriais
+//         map.setFilter(layer.id, [
+//           'any',
+//           ['==', ['to-string', ['get', 'cd_mun']], String(cd_mun)],
+//           ['==', ['get', 'cd_mun'], cd_mun]
+//         ]);
 
-        // Atualizar também a camada de outline se existir
-        const outlineLayerId = `${layer.id}-outline`;
-        if (map.getLayer(outlineLayerId)) {
-          map.setFilter(outlineLayerId, ['==', 'cd_mun', cd_mun]);
-        }
-      } else {
-        // Para camadas raster, atualizar a URL do source
-        const source = map.getSource(layer.source);
-        if (source && source.tiles) {
-          const currentUrl = source.tiles[0];
-          const urlHasQuery = currentUrl.includes('?');
-          const newUrl = `${currentUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun=${cd_mun}`;
+//         // Atualizar também a camada de outline se existir
+//         const outlineLayerId = `${layer.id}-outline`;
+//         if (map.getLayer(outlineLayerId)) {
+//           map.setFilter(outlineLayerId, ['==', 'cd_mun', cd_mun]);
+//         }
+//       } else {
+//         // Para camadas raster, atualizar a URL do source
+//         const source = map.getSource(layer.source);
+//         if (source && source.tiles) {
+//           const currentUrl = source.tiles[0];
+//           const urlHasQuery = currentUrl.includes('?');
+//           const newUrl = `${currentUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun=${cd_mun}`;
 
-          source.setTiles([newUrl]);
-        }
-      }
-    } catch (error) {
-      console.error(`Erro ao atualizar filtros para a camada ${layer.id}:`, error);
-    }
-  });
+//           source.setTiles([newUrl]);
+//         }
+//       }
+//     } catch (error) {
+//       console.error(`Erro ao atualizar filtros para a camada ${layer.id}:`, error);
+//     }
+//   });
 
-  console.log('Filtros de município atualizados com sucesso');
-}
+//   console.log('Filtros de município atualizados com sucesso');
+// }

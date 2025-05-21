@@ -14,6 +14,7 @@ export const LAYER_GROUPS = {
   BASEMAP: 'basemap',      // Camadas do MapTiler
   BASE_LAYERS: 'base',     // Camadas base do sistema
   DYNAMIC: 'dynamic',      // Camadas dinâmicas
+  MASK_LAYERS: 'mask',      // Camadas de recortes (hover, selected, interações)
   SYMBOLS: 'symbols'       // Símbolos e labels
 };
 
@@ -37,6 +38,10 @@ export const LAYER_ORDER = {
     'out_selected_clickable_fill-layer',  // Área clicável (por baixo)
     'out_selected_outline-layer',         // Contorno (meio)
     'highlight_selected-layer',           // Destaque (por cima)
+  ],
+  [LAYER_GROUPS.MASK_LAYERS]: [
+    // Camadas de texto nativas do MapTiler
+
   ],
   [LAYER_GROUPS.SYMBOLS]: [
     // Camadas de texto nativas do MapTiler
