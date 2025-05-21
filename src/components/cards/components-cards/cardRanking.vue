@@ -1,8 +1,10 @@
 <template>
   <CardBase
-    :showInfoButton="showInfoButton"
+    :showInfoButton="showModalButton"
     :modalTitle="modalTitle"
     :modalBodyText="modalBodyText"
+    :showSeeOnMap="showSeeOnMap"
+    :seeOnMapLayerID="seeOnMapLayerID"
   >
     <div class="rank-card-container">
       <!-- Loading State -->
@@ -98,7 +100,7 @@ const props = defineProps({
   },
 
   // Modal Props
-  showInfoButton: {
+  showModalButton: {
     type: Boolean,
     default: false
   },
@@ -107,6 +109,14 @@ const props = defineProps({
     default: 'Informações'
   },
   modalBodyText: {
+    type: String,
+    default: ''
+  },
+  showSeeOnMap: {
+    type: Boolean,
+    default: false
+  },
+  seeOnMapLayerID: {
     type: String,
     default: ''
   }

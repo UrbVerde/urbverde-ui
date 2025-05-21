@@ -1,6 +1,6 @@
 <template>
   <CardBase
-    :showInfoButton="showInfoButton"
+    :showInfoButton="showModalButton"
     :modalTitle="modalTitle"
     :modalBodyText="modalBodyText"
   >
@@ -190,7 +190,7 @@ const props = defineProps({
   },
 
   // Modal Props
-  showInfoButton: {
+  showModalButton: {
     type: Boolean,
     default: false
   },

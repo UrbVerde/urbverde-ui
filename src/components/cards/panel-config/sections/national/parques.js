@@ -35,6 +35,9 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 0,
+                  showModalButton: true,
+                  modalTitle: 'Moradores próximos a praças',
+                  modalBodyText: 'Representa o percentual de moradores que vivem em um raio de 400 metros de praças e parques, considerando a recomendação da OMS para acesso a áreas verdes.',
                 }
               },
               {
@@ -44,6 +47,9 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardIndex: 1,
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'avg_distance_to_squares',
+                  showModalButton: true,
+                  modalTitle: 'Distância média até as praças',
+                  modalBodyText: 'Representa a distância média que os moradores precisam percorrer para chegar à praça ou parque mais próximo de suas residências.',
                 }
               },
             ]
@@ -60,6 +66,9 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 2,
                   overrideCardSubtitle: 'Quantas vezes moradores próximos a praças tem em média mais renda',
+                  showModalButton: true,
+                  modalTitle: 'Desigualdade de renda',
+                  modalBodyText: 'Este dado mostra a diferença de renda entre as pessoas que moram próximas a praças e parques em comparação com aquelas que moram mais distantes dessas áreas.',
                 }
               },
               {
@@ -67,6 +76,9 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 3,
+                  showModalButton: true,
+                  modalTitle: 'Racismo ambiental',
+                  modalBodyText: 'Este dado mostra a proporção de pessoas negras e indígenas entre aquelas que moram mais distantes de praças e parques, evidenciando desigualdades no acesso a áreas verdes.',
                 }
               },
             ]
@@ -168,6 +180,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
             cardIndex: 0,
+            showModalButton: true,
+            modalTitle: 'Municipios do Estado',
+            modalBodyText: 'Este ranking compara dados de acesso a praças e parques da sua cidade com as demais cidades do Estado de São Paulo. O primeiro lugar indica a melhor posição para este dado.',
           }
         },
         {
@@ -175,6 +190,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
             cardIndex: 1,
+            showModalButton: true,
+            modalTitle: 'Municipios da Mesorregião',
+            modalBodyText: 'Este ranking compara dados de acesso a praças e parques da sua cidade com as demais cidades da mesorregião. O primeiro lugar indica a melhor posição para este dado.',
           }
         },
         {
@@ -182,6 +200,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
             cardIndex: 2,
+            showModalButton: true,
+            modalTitle: 'Municipios da Microrregião',
+            modalBodyText: 'Este ranking compara dados de acesso a praças e parques da sua cidade com as demais cidades da microrregião. O primeiro lugar indica a melhor posição para este dado.',
           }
         }
       ]

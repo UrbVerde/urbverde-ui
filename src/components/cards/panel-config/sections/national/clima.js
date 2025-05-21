@@ -35,10 +35,10 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 0,
-                  showInfoButton: true,
+                  showModalButton: true,
                   overrideCardSubtitle: 'Conta o número de crianças e idosos morando em áreas mais quentes. Quanto maior, maior a vulnerabilidade',
                   modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  modalBodyText: 'Mede a intensidade da ilha de calor urbana considerando a vulnerabilidade populacional. Esse índice ajuda a identificar áreas críticas onde idosos e crianças estão mais expostos a altas temperaturas, sendo que, quanto maior o nível, maior a vulnerabilidade.',
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'heat_island',
                 }
@@ -48,9 +48,9 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 3,
-                  showInfoButton: true,
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showModalButton: true,
+                  modalTitle: 'Temperatura máxima da superfície',
+                  modalBodyText: 'Representa o maior valor da temperatura de superfície terrestre registrado anualmente em todo o território urbano.',
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'max_surface_temp',
                 }
@@ -68,9 +68,9 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 1,
-                  showInfoButton: true,
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showModalButton: true,
+                  modalTitle: 'Temperatura média da superfície',
+                  modalBodyText: 'Representa o valor médio da temperatura de superfície terrestre registrado anualmente em todo o território urbano.',
                 }
               },
               {
@@ -78,9 +78,9 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
                   cardIndex: 2,
-                  showInfoButton: true,
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showModalButton: true,
+                  modalTitle: 'Maior amplitude',
+                  modalBodyText: 'Representa a maior diferença entre as temperaturas mínima e máxima da superfície terrestre registrada anualmente em todo o território urbano.',
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'surface_temp',
                 }
@@ -114,10 +114,10 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 0,
-                  showInfoButton: true,
+                  showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  modalTitle: 'Negros e indígenas afetados',
+                  modalBodyText: 'Este dado mostra a proporção de pessoas negras e indígenas entre todas as pessoas que vivem nas áreas mais quentes da cidade.',
                 }
               },
               {
@@ -125,10 +125,10 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 1,
-                  showInfoButton: true,
+                  showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  modalTitle: 'Mulheres afetadas',
+                  modalBodyText: 'Este dado mostra a proporção de mulheres entre todas as pessoas que vivem nas áreas mais quentes da cidade.',
                 }
               },
               {
@@ -136,10 +136,10 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 2,
-                  showInfoButton: true,
+                  showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  modalTitle: 'Crianças afetadas',
+                  modalBodyText: 'Este dado mostra a proporção de crianças entre todas as pessoas que vivem nas áreas mais quentes da cidade.',
                 }
               },
               {
@@ -147,10 +147,10 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
                   cardIndex: 3,
-                  showInfoButton: true,
+                  showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  modalTitle: 'Idosos afetados',
+                  modalBodyText: 'Este dado mostra a proporção de idosos entre todas as pessoas que vivem nas áreas mais quentes da cidade.',
                 }
               },
             ]
@@ -200,6 +200,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
             cardIndex: 0,
+            showModalButton: true,
+            modalTitle: 'Municipios do Estado',
+            modalBodyText: 'Este ranking compara dados de temperatura da sua cidade com as demais cidades do Estado de São Paulo. O primeiro lugar indica a melhor posição para este dado.',
           }
         },
         {
@@ -207,6 +210,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
             cardIndex: 1,
+            showModalButton: true,
+            modalTitle: 'Municipios da Mesorregião',
+            modalBodyText: 'Este ranking compara dados de temperatura da sua cidade com as demais cidades da mesorregião. O primeiro lugar indica a melhor posição para este dado.',
           }
         },
         {
@@ -214,6 +220,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
             cardIndex: 2,
+            showModalButton: true,
+            modalTitle: 'Municipios da Microrregião',
+            modalBodyText: 'Este ranking compara dados de temperatura da sua cidade com as demais cidades da microrregião. O primeiro lugar indica a melhor posição para este dado.',
           }
         }
       ]
@@ -259,7 +268,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardIndex: 2,
                   showButtonPrimary: true,
                   changeToCategory: 'Parques+e+Praças',
-                  changeToLayerId: 'avg_distance_to_squares',
+                  changeToLayerId: 'idsa',
                 }
               }
             ],

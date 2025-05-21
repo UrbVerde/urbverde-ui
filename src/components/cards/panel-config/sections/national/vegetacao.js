@@ -45,11 +45,11 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/cover',
                   cardIndex: 1,
-                  showInfoButton: true,
+                  showModalButton: true,
                   showCardSubtitle: true,
                   cardSubtitle: 'É a diferença entre a temperatura mais quente e a mais fria',
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  modalTitle: 'Média da cobertura vegetal',
+                  modalBodyText: 'Representa o valor médio da cobertura vegetal registrado anualmente em todo o território urbano.',
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'pcv',
                 }
@@ -59,9 +59,9 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/cover',
                   cardIndex: 2,
-                  showInfoButton: true,
-                  modalTitle: 'Nível de ilha de calor',
-                  modalBodyText: 'O nível de ilha de calor indica a intensidade do efeito de aquecimento urbano em relação às áreas rurais circundantes.',
+                  showModalButton: true,
+                  modalTitle: 'A cobertura vegetal na cidade varia entre',
+                  modalBodyText: 'Representa os dados de cobertura vegetal mínimo e máximo registrados anualmente em todo o território urbano.',
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'pcv',
                 }
@@ -122,6 +122,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
             cardIndex: 0,
+            showModalButton: true,
+            modalTitle: 'Municipios do Estado',
+            modalBodyText: 'Este ranking compara dados de cobertura vegetal da sua cidade com as demais cidades do Estado de São Paulo. O primeiro lugar indica a melhor posição para este dado.',
           }
         },
         {
@@ -129,6 +132,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
             cardIndex: 1,
+            showModalButton: true,
+            modalTitle: 'Municipios da Mesorregião',
+            modalBodyText: 'Este ranking compara dados de cobertura vegetal da sua cidade com as demais cidades da mesorregião. O primeiro lugar indica a melhor posição para este dado.',
           }
         },
         {
@@ -136,6 +142,9 @@ export default createSectionConfig((nm_mun, uf) => [
           props: {
             apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
             cardIndex: 2,
+            showModalButton: true,
+            modalTitle: 'Municipios da Microrregião',
+            modalBodyText: 'Este ranking compara dados de cobertura vegetal da sua cidade com as demais cidades da microrregião. O primeiro lugar indica a melhor posição para este dado.',
           }
         }
       ]
