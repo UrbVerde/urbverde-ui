@@ -37,6 +37,7 @@ import { useLayersStore } from '@/stores/layersStore';
 // import { useRoute, useRouter } from 'vue-router';
 import CustomHash from '@/components/map/core/MapStateManager.js';
 import { getLayerConfig, LAYER_CONFIGS } from '@/constants/layers.js';
+import { LAYER_GROUPS } from '@/components/map/layers/layerOrderManager';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
 import AttributionBar from '@/components/map/info/MapInfoBar.vue';
 import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
@@ -513,7 +514,7 @@ function handleSetorMouseMove(e) {
   if (hoveredSetorId) {
     map.value.setFeatureState(
       {
-        source: 'base-mask',
+        source: LAYER_GROUPS.MASK_LAYERS,
         sourceLayer: 'public.geom_setores',
         id: hoveredSetorId
       },
@@ -525,7 +526,7 @@ function handleSetorMouseMove(e) {
   hoveredSetorId = featureId;
   map.value.setFeatureState(
     {
-      source: 'base-mask',
+      source: LAYER_GROUPS.MASK_LAYERS,
       sourceLayer: 'public.geom_setores',
       id: featureId
     },
@@ -538,7 +539,7 @@ function handleSetorMouseLeave() {
 
   map.value.setFeatureState(
     {
-      source: 'base-mask',
+      source: LAYER_GROUPS.MASK_LAYERS,
       sourceLayer: 'public.geom_setores',
       id: hoveredSetorId
     },
@@ -556,10 +557,11 @@ function generateMaskLayers(recorte = 'setores', censo = '2010') {
 
   // Configurar a source com os parâmetros de recorte e censo
   const sourceConfig = baseConfig.source(recorte, censo);
+  const sourceId = baseConfig.group;
 
   // Adicionar source se ainda não existir
-  if (!map.value.getSource('base-mask')) {
-    map.value.addSource('base-mask', sourceConfig);
+  if (!map.value.getSource(sourceId)) {
+    map.value.addSource(sourceId, sourceConfig);
   }
 
   // Remover camadas existentes se houver
@@ -574,7 +576,7 @@ function generateMaskLayers(recorte = 'setores', censo = '2010') {
     const layerConfig = {
       id: layer.id,
       type: layer.type,
-      source: 'base-mask',
+      source: sourceId,
       'source-layer': sourceConfig.sourceLayer,
       paint: layer.paint
     };
@@ -591,10 +593,11 @@ function generateBaseLayers() {
   if (!map.value) { return; }
 
   const baseConfig = getLayerConfig('base_layer', currentYear.value, currentScale.value, locationStore.cd_mun);
+  const sourceId = baseConfig.group;
 
   // Adicionar source se ainda não existir
-  if (!map.value.getSource('base-municipalities')) {
-    map.value.addSource('base-municipalities', baseConfig.source);
+  if (!map.value.getSource(sourceId)) {
+    map.value.addSource(sourceId, baseConfig.source);
   }
 
   // Gerar e adicionar cada layer baseada nos roles
@@ -608,7 +611,7 @@ function generateBaseLayers() {
     const layerConfig = {
       id: layerId,
       type: role.renderType,
-      source: 'base-municipalities',
+      source: sourceId,
       'source-layer': baseConfig.source.sourceLayer,
       paint: role.paint
     };
@@ -667,7 +670,7 @@ function clearMunicipalityHoverState() {
 
   map.value.setFeatureState(
     {
-      source: 'base-municipalities',
+      source: LAYER_GROUPS.BASE_LAYERS,
       id: hoveredFeatureId,
       sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
     },
@@ -680,7 +683,7 @@ function setHoveredState(featureId) {
   hoveredFeatureId = featureId;
   map.value.setFeatureState(
     {
-      source: 'base-municipalities',
+      source: LAYER_GROUPS.BASE_LAYERS,
       id: featureId,
       sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
     },
