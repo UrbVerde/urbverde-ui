@@ -40,8 +40,9 @@ export const LAYER_ORDER = {
     'highlight_selected-layer',           // Destaque (por cima)
   ],
   [LAYER_GROUPS.MASK_LAYERS]: [
-    // Camadas de texto nativas do MapTiler
-
+    // Camadas de máscara
+    'mask_hover_fill-layer',  // Primeiro o hover fill
+    'mask_line-layer',        // Depois a linha
   ],
   [LAYER_GROUPS.SYMBOLS]: [
     // Camadas de texto nativas do MapTiler

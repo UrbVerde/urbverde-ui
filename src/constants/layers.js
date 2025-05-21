@@ -593,32 +593,41 @@ export const LAYER_CONFIGS = {
     dataType: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.MASK_LAYERS,
     label: 'Context Mask Layers',
-    source: () => ({
-      type: 'vector',
-      tiles: [
-        'https://urbverde.iau.usp.br/dados/public.geom_setores/{z}/{x}/{y}.pbf'
-      ],
-      minzoom: 0,
-      maxzoom: 22,
-      sourceLayer: 'public.geom_setores'
-    }),
+    source: (recorte = 'setores', censo = '2022') => {
+      // Define a sourceLayer baseada no recorte e censo
+      let sourceLayer;
+      switch(recorte) {
+      case 'setores':
+        sourceLayer = censo === '2022' ? 'public.geom_setores_2022' : 'public.geom_setores';
+        break;
+      case 'municipios':
+        sourceLayer = 'public.geom_municipios';
+        break;
+      case 'microrregioes':
+        sourceLayer = 'public.geom_microrregioes';
+        break;
+      case 'mesorregioes':
+        sourceLayer = 'public.geom_mesorregioes';
+        break;
+      default:
+        sourceLayer = 'public.geom_setores_2022';
+      }
 
-    roles: {
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        minzoom: 0,
+        maxzoom: 22,
+        sourceLayer
+      };
+    },
 
-      mask_line: {
-        renderType: 'line',
-        filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
-
-        paint: {
-          'line-color': '#666666',
-          'line-width': 1,
-          'line-opacity': 0.3
-        },
-      },
-
-      mask_hover_fill: {
-        renderType: 'fill',
-        filter: (codmun) => ['!=', ['get', 'cd_mun'], codmun],
+    layers: {
+      hover_fill: {
+        id: 'mask_hover_fill-layer',
+        type: 'fill',
         paint: {
           'fill-color': [
             'case',
@@ -629,27 +638,31 @@ export const LAYER_CONFIGS = {
           'fill-opacity': 0.2
         }
       },
-
-      mask_line_hover: {
-        renderType: 'line',
+      line: {
+        id: 'mask_line-layer',
+        type: 'line',
         paint: {
           'line-color': [
             'case',
             ['boolean', ['feature-state', 'hover'], false],
-            '#86919B',
-            '#ADB5BD'
+            '#000000',
+            '#666666'
           ],
           'line-width': [
             'case',
             ['boolean', ['feature-state', 'hover'], false],
-            3,
+            2,
             1
+          ],
+          'line-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            0.8,
+            0.3
           ]
         }
-      },
-
+      }
     }
-
   },
 
   base_layer: {

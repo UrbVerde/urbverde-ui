@@ -45,7 +45,6 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 
 import {
   // setupDynamicLayers,
-  setupSetoresLayer,
   setupDynamicSource
 } from '@/components/map/layers/MapLayerController.js';
 import {
@@ -57,7 +56,6 @@ import {
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { useMapLayers } from '@/composables/useMapLayers';
-import { LAYER_GROUPS } from '@/components/map/layers/layerOrderManager';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
@@ -202,7 +200,7 @@ async function initializeMapLayers() {
         addParksLayer();
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
-        setupSetoresLayer(map.value, locationStore);
+        generateMaskLayers('setores', '2010');
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
         setupVectorInteractions(map.value, config);
@@ -502,14 +500,101 @@ function initializeMap() {
 //   map.value.on('click', 'municipalities-base', handleMunicipalityClick);
 // }
 
+function handleSetorMouseMove(e) {
+  if (!map.value || !e.features?.length) { return; }
+
+  const feature = e.features[0];
+  const featureId = feature.id || feature.properties.cd_setor;
+
+  // Se já estamos com hover neste setor, não faz nada
+  if (featureId === hoveredSetorId) { return; }
+
+  // Limpa o hover anterior
+  if (hoveredSetorId) {
+    map.value.setFeatureState(
+      {
+        source: 'base-mask',
+        sourceLayer: 'public.geom_setores',
+        id: hoveredSetorId
+      },
+      { hover: false }
+    );
+  }
+
+  // Define o novo hover
+  hoveredSetorId = featureId;
+  map.value.setFeatureState(
+    {
+      source: 'base-mask',
+      sourceLayer: 'public.geom_setores',
+      id: featureId
+    },
+    { hover: true }
+  );
+}
+
+function handleSetorMouseLeave() {
+  if (!map.value || !hoveredSetorId) { return; }
+
+  map.value.setFeatureState(
+    {
+      source: 'base-mask',
+      sourceLayer: 'public.geom_setores',
+      id: hoveredSetorId
+    },
+    { hover: false }
+  );
+  hoveredSetorId = null;
+}
+
+function generateMaskLayers(recorte = 'setores', censo = '2010') {
+  if (!map.value) { return; }
+
+  // Usar diretamente a configuração do mask_layer
+  const baseConfig = LAYER_CONFIGS.mask_layer;
+  if (!baseConfig) { return; }
+
+  // Configurar a source com os parâmetros de recorte e censo
+  const sourceConfig = baseConfig.source(recorte, censo);
+
+  // Adicionar source se ainda não existir
+  if (!map.value.getSource('base-mask')) {
+    map.value.addSource('base-mask', sourceConfig);
+  }
+
+  // Remover camadas existentes se houver
+  Object.values(baseConfig.layers).forEach(layer => {
+    if (map.value.getLayer(layer.id)) {
+      map.value.removeLayer(layer.id);
+    }
+  });
+
+  // Adicionar as camadas na ordem correta
+  Object.values(baseConfig.layers).forEach(layer => {
+    const layerConfig = {
+      id: layer.id,
+      type: layer.type,
+      source: 'base-mask',
+      'source-layer': sourceConfig.sourceLayer,
+      paint: layer.paint
+    };
+
+    map.value.addLayer(layerConfig);
+  });
+
+  // Configurar eventos de hover
+  map.value.on('mousemove', 'mask_hover_fill-layer', handleSetorMouseMove);
+  map.value.on('mouseleave', 'mask_hover_fill-layer', handleSetorMouseLeave);
+}
+
 function generateBaseLayers() {
   if (!map.value) { return; }
 
   const baseConfig = getLayerConfig('base_layer', currentYear.value, currentScale.value, locationStore.cd_mun);
 
   // Adicionar source se ainda não existir
-  if (!map.value.getSource(LAYER_GROUPS.BASE_LAYERS)) {
-    map.value.addSource(LAYER_GROUPS.BASE_LAYERS, baseConfig.source);
+  if (!map.value.getSource('base-municipalities')) {
+    map.value.addSource('base-municipalities', baseConfig.source);
   }
 
   // Gerar e adicionar cada layer baseada nos roles
@@ -523,7 +608,7 @@ function generateBaseLayers() {
     const layerConfig = {
       id: layerId,
       type: role.renderType,
-      source: LAYER_GROUPS.BASE_LAYERS,
+      source: 'base-municipalities',
       'source-layer': baseConfig.source.sourceLayer,
       paint: role.paint
     };
@@ -582,7 +667,7 @@ function clearMunicipalityHoverState() {
 
   map.value.setFeatureState(
     {
-      source: LAYER_GROUPS.BASE_LAYERS,
+      source: 'base-municipalities',
       id: hoveredFeatureId,
       sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
     },
@@ -595,7 +680,7 @@ function setHoveredState(featureId) {
   hoveredFeatureId = featureId;
   map.value.setFeatureState(
     {
-      source: LAYER_GROUPS.BASE_LAYERS,
+      source: 'base-municipalities',
       id: featureId,
       sourceLayer: `public.geodata_temperatura_por_municipio_${currentYear.value}`
     },
@@ -726,7 +811,6 @@ async function setupLayers() {
     // Obter configuração da camada
     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
 
-    alert(currentLayer.value);
     // Adicionar a camada usando o LayerOrderManager
     await addLayer(currentLayer.value);
 
@@ -736,7 +820,7 @@ async function setupLayers() {
         addParksLayer();
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
-        setupSetoresLayer(map.value, locationStore);
+        generateMaskLayers('setores', '2010');
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
         setupVectorInteractions(map.value, config);
