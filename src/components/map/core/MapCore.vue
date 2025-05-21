@@ -112,14 +112,14 @@ watch(
 
     }
 
-    if (mapLoaded.value) {
-      removeDynamicLayer();
+    // if (mapLoaded.value) {
+    //   removeDynamicLayer();
 
-    }
+    // }
 
-    if (map.value.getLayer('selected-municipality-fill')) {
-      map.value.setFilter('selected-municipality-fill', ['==', 'cd_mun', locationStore.cd_mun]);
-    }
+    // if (map.value.getLayer('selected-municipality-fill')) {
+    //   map.value.setFilter('selected-municipality-fill', ['==', 'cd_mun', locationStore.cd_mun]);
+    // }
   }
 );
 
@@ -201,7 +201,7 @@ async function initializeMapLayers() {
         addParksLayer();
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
-        generateMaskLayers('setores', '2010');
+        generateMaskLayers('municipios');
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
         setupVectorInteractions(map.value, config);
@@ -505,9 +505,9 @@ function handleSetorMouseMove(e) {
   if (!map.value || !e.features?.length) { return; }
 
   const feature = e.features[0];
-  const featureId = feature.id || feature.properties.cd_setor;
+  const featureId = feature.id || feature.properties.cd_mun;
 
-  // Se já estamos com hover neste setor, não faz nada
+  // Se já estamos com hover neste município, não faz nada
   if (featureId === hoveredSetorId) { return; }
 
   // Limpa o hover anterior
@@ -515,7 +515,7 @@ function handleSetorMouseMove(e) {
     map.value.setFeatureState(
       {
         source: LAYER_GROUPS.MASK_LAYERS,
-        sourceLayer: 'public.geom_setores',
+        sourceLayer: 'public.geom_municipios',
         id: hoveredSetorId
       },
       { hover: false }
@@ -527,7 +527,7 @@ function handleSetorMouseMove(e) {
   map.value.setFeatureState(
     {
       source: LAYER_GROUPS.MASK_LAYERS,
-      sourceLayer: 'public.geom_setores',
+      sourceLayer: 'public.geom_municipios',
       id: featureId
     },
     { hover: true }
@@ -540,7 +540,7 @@ function handleSetorMouseLeave() {
   map.value.setFeatureState(
     {
       source: LAYER_GROUPS.MASK_LAYERS,
-      sourceLayer: 'public.geom_setores',
+      sourceLayer: 'public.geom_municipios',
       id: hoveredSetorId
     },
     { hover: false }
@@ -548,15 +548,15 @@ function handleSetorMouseLeave() {
   hoveredSetorId = null;
 }
 
-function generateMaskLayers(recorte = 'setores', censo = '2010') {
+function generateMaskLayers(recorte = 'setores') {
   if (!map.value) { return; }
 
   // Usar diretamente a configuração do mask_layer
   const baseConfig = LAYER_CONFIGS.mask_layer;
   if (!baseConfig) { return; }
 
-  // Configurar a source com os parâmetros de recorte e censo
-  const sourceConfig = baseConfig.source(recorte, censo);
+  // Configurar a source com o parâmetro de recorte
+  const sourceConfig = baseConfig.source(recorte);
   const sourceId = baseConfig.group;
 
   // Adicionar source se ainda não existir
@@ -583,11 +583,12 @@ function generateMaskLayers(recorte = 'setores', censo = '2010') {
     };
 
     map.value.addLayer(layerConfig);
-  });
 
-  // Configurar eventos de hover
-  map.value.on('mousemove', 'mask_hover_fill-layer', handleSetorMouseMove);
-  map.value.on('mouseleave', 'mask_hover_fill-layer', handleSetorMouseLeave);
+    if (layer.id === 'mask_hover_fill-layer'){
+      map.value.on('mousemove', 'mask_hover_fill-layer', handleSetorMouseMove);
+      map.value.on('mouseleave', 'mask_hover_fill-layer', handleSetorMouseLeave);
+    }
+  });
 }
 
 function generateBaseLayers() {
@@ -734,7 +735,7 @@ async function setupMap() {
     // 3. Configurar eventos de carregamento do mapa
     map.value.on('load', async() => {
       mapLoaded.value = true;
-      generateBaseLayers();
+      // generateBaseLayers();
       await setupLayers();
     });
 
@@ -824,7 +825,7 @@ async function setupLayers() {
         addParksLayer();
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
-        generateMaskLayers('setores', '2010');
+        generateMaskLayers('municipios');
         setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
         setupVectorInteractions(map.value, config);

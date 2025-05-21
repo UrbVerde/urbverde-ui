@@ -593,12 +593,15 @@ export const LAYER_CONFIGS = {
     dataType: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.MASK_LAYERS,
     label: 'Context Mask Layers',
-    source: (recorte = 'setores', censo = '2022') => {
-      // Define a sourceLayer baseada no recorte e censo
+    source: (recorte = 'setores') => {
+      // Define a sourceLayer baseada no recorte
       let sourceLayer;
       switch(recorte) {
       case 'setores':
-        sourceLayer = censo === '2022' ? 'public.geom_setores_2022' : 'public.geom_setores';
+        sourceLayer = 'public.geom_setores';
+        break;
+      case 'setores_2022':
+        sourceLayer = 'public.geom_setores_2022';
         break;
       case 'municipios':
         sourceLayer = 'public.geom_municipios';
@@ -610,7 +613,7 @@ export const LAYER_CONFIGS = {
         sourceLayer = 'public.geom_mesorregioes';
         break;
       default:
-        sourceLayer = 'public.geom_setores_2022';
+        sourceLayer = 'public.geom_setores';
       }
 
       return {
