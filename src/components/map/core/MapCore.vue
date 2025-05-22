@@ -105,30 +105,38 @@ const currentCode = computed(() => locationStore.cd_mun);
 const { addLayer } = useMapLayers(map);
 
 watch(
-  [
-    () => locationStore.cd_mun,
-    () => currentLayer.value,
-    () => currentScale.value,
-    () => currentYear.value
-  ],
-  async([newCdMun], [oldCdMun]) => {
-    // Only load coordinates if cd_mun changes AND it's a new municipality
-    // O mapa é direcionado para o novo município
+  () => locationStore.cd_mun,
+  async(newCdMun, oldCdMun) => {
     if (newCdMun && newCdMun !== oldCdMun) {
       await initializeMapLocation(newCdMun);
-
-      // Atualizar filtros de município em todas as camadas dinâmicas
       updateMunicipalityFilters(map.value, newCdMun);
-
     }
+  }
+);
 
-    if (mapLoaded.value) {
-      removeDynamicLayer();
-
+watch(
+  () => currentScale.value,
+  async(newScale, oldScale) => {
+    if (newScale !== oldScale) {
+      console.log(`Escala alterada de ${oldScale} para ${newScale}`);
+      alert('teste');
+      if (mapLoaded.value) {
+        removeDynamicLayer();
+      }
     }
+  }
+);
 
-    if (map.value.getLayer('selected-municipality-fill')) {
-      map.value.setFilter('selected-municipality-fill', ['==', 'cd_mun', locationStore.cd_mun]);
+watch(
+  () => currentYear.value,
+  async(newYear, oldYear) => {
+    if (newYear !== oldYear) {
+      console.log(`Ano alterado de ${oldYear} para ${newYear}`);
+      if (mapLoaded.value) {
+
+        removeDynamicLayer();
+        setupLayers();
+      }
     }
   }
 );
@@ -195,32 +203,32 @@ function removeDynamicLayer() {
 }
 
 // Função para inicializar as camadas
-async function initializeMapLayers() {
-  if (!map.value || !currentLayer.value) { return; }
+// async function initializeMapLayers() {
+//   if (!map.value || !currentLayer.value) { return; }
 
-  try {
-    // Obter configuração da camada
-    const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
+//   try {
+//     // Obter configuração da camada
+//     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
 
-    // Adicionar a camada
-    await addLayer(currentLayer.value, config);
+//     // Adicionar a camada
+//     await addLayer(currentLayer.value, config);
 
-    // Adicionar camadas adicionais se necessário
-    if (currentScale.value === 'intraurbana' && currentCode.value) {
-      if (config.type === 'raster') {
-        addParksLayer();
-        setupRasterInteractions(map.value, config, fetchRasterValue);
-      } else {
-        setupSetoresLayer(map.value, locationStore);
-        setupSetoresInteractions(map.value, hoveredSetorId);
-        addParksLayer();
-        setupVectorInteractions(map.value, config);
-      }
-    }
-  } catch (error) {
-    console.error('Erro ao configurar layers:', error);
-  }
-}
+//     // Adicionar camadas adicionais se necessário
+//     if (currentScale.value === 'intraurbana' && currentCode.value) {
+//       if (config.type === 'raster') {
+//         addParksLayer();
+//         setupRasterInteractions(map.value, config, fetchRasterValue);
+//       } else {
+//         setupSetoresLayer(map.value, locationStore);
+//         setupSetoresInteractions(map.value, hoveredSetorId);
+//         addParksLayer();
+//         setupVectorInteractions(map.value, config);
+//       }
+//     }
+//   } catch (error) {
+//     console.error('Erro ao configurar layers:', error);
+//   }
+// }
 
 // Função para adicionar camada de parques
 function addParksLayer() {
@@ -353,14 +361,14 @@ async function initializeMapLocation(code) {
   isLoadingCoordinates.value = true;
 
   try {
-    clearMunicipalityHoverState();
+    // clearMunicipalityHoverState();
 
     // Remove any existing popups
     // if (vectorPopup.value) { vectorPopup.value.remove(); }
 
     if (mapLoaded.value) {
-      removeDynamicLayer();
-      await initializeMapLayers();
+      // removeDynamicLayer();
+      // await initializeMapLayers();
     }
 
     const coords = await fetchMunicipalityCoordinates(code);
@@ -372,7 +380,7 @@ async function initializeMapLocation(code) {
           essential: true
         });
       } else {
-        initializeMap();
+        // initializeMap();
       }
     }
   } catch (err) {
@@ -407,53 +415,53 @@ function createMapInstance(container, initialState) {
 }
 
 // Função refatorada
-function initializeMap() {
-  if (!coordinates.value) { return; }
+// function initializeMap() {
+//   if (!coordinates.value) { return; }
 
-  const mapState = locationStore.getMapState();
-  const initialState = createInitialMapState(coordinates.value, mapState);
+//   const mapState = locationStore.getMapState();
+//   const initialState = createInitialMapState(coordinates.value, mapState);
 
-  // Usando a função createMapInstance
-  map.value = createMapInstance(mapContainer.value, initialState);
+//   // Usando a função createMapInstance
+//   map.value = createMapInstance(mapContainer.value, initialState);
 
-  map.value.on('load', () => {
-    mapLoaded.value = true;
-    generateBaseLayers();
-    initializeMapLayers();
-  });
+//   map.value.on('load', () => {
+//     mapLoaded.value = true;
+//     generateBaseLayers();
+//     initializeMapLayers();
+//   });
 
-  layersStore.mapRef = map.value;
+//   layersStore.mapRef = map.value;
 
-  map.value.addControl(
-    new maplibregl.NavigationControl({
-      visualizePitch: true,
-    }), 'top-left');
+//   map.value.addControl(
+//     new maplibregl.NavigationControl({
+//       visualizePitch: true,
+//     }), 'top-left');
 
-  map.value.addControl(
-    new maplibregl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: true,
-      showUserLocation: true
-    }),
-    'top-left'
-  );
+//   map.value.addControl(
+//     new maplibregl.GeolocateControl({
+//       positionOptions: { enableHighAccuracy: true },
+//       trackUserLocation: true,
+//       showUserLocation: true
+//     }),
+//     'top-left'
+//   );
 
-  map.value.addControl(
-    new CustomTerrainControl({
-      source: 'terrain',
-      exaggeration: 3,
-      highPerformance: false,
-      lazyLoading: true
-    }), 'top-left'
-  );
+//   map.value.addControl(
+//     new CustomTerrainControl({
+//       source: 'terrain',
+//       exaggeration: 3,
+//       highPerformance: false,
+//       lazyLoading: true
+//     }), 'top-left'
+//   );
 
-  customHash.value = new CustomHash();
-  customHash.value.addTo(map.value);
-  map.value.on('styleimagemissing', handleMissingImage);
-  map.value.on('zoomend', () => {
-    locationStore.updateScaleFromZoom(map.value.getZoom());
-  });
-}
+//   customHash.value = new CustomHash();
+//   customHash.value.addTo(map.value);
+//   map.value.on('styleimagemissing', handleMissingImage);
+//   map.value.on('zoomend', () => {
+//     locationStore.updateScaleFromZoom(map.value.getZoom());
+//   });
+// }
 
 /** Add municipality outline, click and move effects - ONLY SP STATE */
 // function addBaseMunicipalitiesLayer() {
