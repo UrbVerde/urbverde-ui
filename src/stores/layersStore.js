@@ -54,6 +54,8 @@ export const useLayersStore = defineStore('layersStore', {
      */
     setLayerOpacity(layerId, newOpacity) {
       console.log(`[LayersStore] Setting opacity for layer ${layerId} to ${newOpacity}`);
+      console.log('[LayersStore] Map reference:', this.mapRef);
+      console.log('[LayersStore] Active layers:', this.activeLayers);
 
       if (!this.mapRef) {
         console.warn('[LayersStore] Map reference is not available, cannot update opacity');
@@ -61,45 +63,56 @@ export const useLayersStore = defineStore('layersStore', {
         return;
       }
 
-      // Update the layer on the map
-      this.updateMapLayerOpacity(layerId, newOpacity);
+      // Verifica se a layer existe no mapa
+      if (!this.mapRef.getLayer(layerId)) {
+        console.warn(`[LayersStore] Layer ${layerId} not found in map`);
 
-      // Handle special cases for dynamic-layer and parks-layer
-      if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
-        this.updateMapLayerOpacity('dynamic-layer-outline', newOpacity, true);
+        return;
       }
 
-      // Handle visibility based on opacity
-      if (newOpacity === 0) {
-        if (this.mapRef.getLayer(layerId)) {
-          this.mapRef.setLayoutProperty(layerId, 'visibility', 'none');
-          console.log(`[LayersStore] Disabled visibility for ${layerId} with 0 opacity`);
-        }
+      // Atualiza opacidade do layer principal
+      this.updateMapLayerOpacity(layerId, newOpacity);
 
-        // Special case for dynamic-layer-outline
-        if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
-          this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'none');
-        }
-      } else {
-        if (this.mapRef.getLayer(layerId)) {
-          this.mapRef.setLayoutProperty(layerId, 'visibility', 'visible');
-          console.log(`[LayersStore] Enabled visibility for ${layerId} with ${newOpacity} opacity`);
-        }
+      // Se existir camada de contorno (outline), atualiza também
+      const outlineLayerId = `${layerId}-outline`;
+      if (this.mapRef.getLayer(outlineLayerId)) {
+        this.updateMapLayerOpacity(outlineLayerId, newOpacity, true);
+      }
 
-        // Special case for dynamic-layer-outline
-        if (layerId === 'dynamic-layer' && this.mapRef.getLayer('dynamic-layer-outline')) {
-          this.mapRef.setLayoutProperty('dynamic-layer-outline', 'visibility', 'visible');
-        }
+      // Atualiza visibilidade com base na opacidade
+      const visibility = newOpacity === 0 ? 'none' : 'visible';
+
+      if (this.mapRef.getLayer(layerId)) {
+        this.mapRef.setLayoutProperty(layerId, 'visibility', visibility);
+        console.log(`[LayersStore] Set ${layerId} visibility to ${visibility}`);
+      }
+
+      if (this.mapRef.getLayer(outlineLayerId)) {
+        this.mapRef.setLayoutProperty(outlineLayerId, 'visibility', visibility);
+        console.log(`[LayersStore] Set ${outlineLayerId} visibility to ${visibility}`);
       }
     },
 
     updateMapLayerOpacity(layerId, newOpacity, isOutline = false) {
-      if (!this.mapRef || !this.mapRef.getLayer(layerId)) {
+      console.log(`[LayersStore] Updating map layer opacity for ${layerId} to ${newOpacity}`);
+      console.log(`[LayersStore] Is outline: ${isOutline}`);
+      console.log(`[LayersStore] Map reference available: ${!!this.mapRef}`);
+
+      if (!this.mapRef) {
+        console.warn('[LayersStore] Cannot update opacity - map reference not available');
+
         return;
       }
 
-      // Determine layer type to set the correct opacity property
       const layer = this.mapRef.getLayer(layerId);
+      console.log(`[LayersStore] Layer found: ${!!layer}`);
+      console.log(`[LayersStore] Layer type: ${layer?.type}`);
+
+      if (!layer) {
+        console.warn(`[LayersStore] Cannot update opacity - layer not found: ${layerId}`);
+
+        return;
+      }
 
       // For outline layers, we always use 'line-opacity'
       // For other layers, check the type
@@ -110,6 +123,8 @@ export const useLayersStore = defineStore('layersStore', {
         const isRaster = layer.type === 'raster';
         opacityProp = isRaster ? 'raster-opacity' : 'fill-opacity';
       }
+
+      console.log(`[LayersStore] Using opacity property: ${opacityProp}`);
 
       // Update layer opacity
       this.mapRef.setPaintProperty(layerId, opacityProp, newOpacity);

@@ -168,10 +168,9 @@ const onLegendOpacityChange = () => {
 //   const decimalOpacity = opacity / 100;
 //   layersStore.setLayerOpacity('parks-layer', decimalOpacity);
 // };
-
-const handleDataLayerOpacity = (opacity) => {
+const handleDataLayerOpacity = (opacity, layerId) => {
   const decimalOpacity = opacity / 100;
-  layersStore.setLayerOpacity('dynamic-layer', decimalOpacity);
+  layersStore.setLayerOpacity(layerId, decimalOpacity);
 };
 
 // Referenca o modal para utilizar seus métodos

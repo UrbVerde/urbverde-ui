@@ -121,38 +121,38 @@ export function setupDynamicLayers(map, layerId) {
   const locationStore = useLocationStore();
   const { year, scale } = locationStore;
 
-  console.log('Iniciando setupDynamicLayers:', { layerId, year, scale });
+  console.log('[MapLayerController] Iniciando setupDynamicLayers:', { layerId, year, scale });
 
   try {
     // Obter configuração da layer
     const config = getLayerConfig(layerId, year, scale);
-    console.log('Configuração obtida:', config);
+    console.log('[MapLayerController] Configuração obtida:', config);
 
     if (!config || !config.source) {
-      console.error('Configuração inválida para a layer:', layerId);
+      console.error('[MapLayerController] Configuração inválida para a layer:', layerId);
 
       return false;
     }
 
     // Validar tipo da camada
     if (!config.type || !['raster', 'vector'].includes(config.type)) {
-      console.error('Tipo de camada inválido:', config.type);
+      console.error('[MapLayerController] Tipo de camada inválido:', config.type);
 
       return false;
     }
 
     // Configurar source
     const sourceConfig = setupDynamicSource(config, locationStore, scale);
-    console.log('Source configurado:', sourceConfig);
+    console.log('[MapLayerController] Source configurado:', sourceConfig);
 
     if (!sourceConfig) {
-      console.error('Falha ao configurar source para a layer:', layerId);
+      console.error('[MapLayerController] Falha ao configurar source para a layer:', layerId);
 
       return false;
     }
 
     // Adicionar source ao mapa
-    console.log('Adicionando source ao mapa:', config.id);
+    console.log('[MapLayerController] Adicionando source ao mapa:', config.id);
     map.addSource(config.id, sourceConfig);
 
     // Criar e adicionar layer principal
@@ -164,32 +164,32 @@ export function setupDynamicLayers(map, layerId) {
     }
 
     if (!mainLayer) {
-      console.error('Falha ao criar layer principal:', config.id);
+      console.error('[MapLayerController] Falha ao criar layer principal:', config.id);
 
       return false;
     }
 
-    console.log('Layer principal criada:', mainLayer);
+    console.log('[MapLayerController] Layer principal criada:', mainLayer);
     map.addLayer(mainLayer);
-    console.log('Layer principal adicionada ao mapa');
+    console.log('[MapLayerController] Layer principal adicionada ao mapa');
 
     // Se for vector, adicionar outline
     if (config.type === 'vector') {
       const outlineLayer = createOutlineLayer(config);
       if (outlineLayer) {
-        console.log('Layer de outline criada:', outlineLayer);
+        console.log('[MapLayerController] Layer de outline criada:', outlineLayer);
         map.addLayer(outlineLayer);
-        console.log('Layer de outline adicionada ao mapa');
+        console.log('[MapLayerController] Layer de outline adicionada ao mapa');
       }
     }
 
     // Aplicar filtros se necessário
     applyLayerFilters(map, config, locationStore, scale);
-    console.log('Filtros aplicados');
+    console.log('[MapLayerController] Filtros aplicados');
 
     return true;
   } catch (error) {
-    console.error('Erro ao configurar layers dinâmicas:', error);
+    console.error('[MapLayerController] Erro ao configurar layers dinâmicas:', error);
 
     return false;
   }

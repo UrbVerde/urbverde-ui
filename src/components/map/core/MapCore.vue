@@ -120,9 +120,9 @@ watch(
     if (newScale !== oldScale) {
       console.log(`Escala alterada de ${oldScale} para ${newScale}`);
       alert('teste');
-      if (mapLoaded.value) {
-        removeDynamicLayer();
-      }
+      // if (mapLoaded.value) {
+
+      // }
     }
   }
 );
@@ -665,7 +665,9 @@ async function setupMap() {
     });
 
     // 4. Configurar referência do mapa no store
+    console.log('[MapCore] Setting map reference in layersStore');
     layersStore.mapRef = map.value;
+    console.log('[MapCore] Map reference set:', layersStore.mapRef);
 
     // 5. Adicionar controles do mapa
     setupMapControls();

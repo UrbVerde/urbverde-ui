@@ -39,7 +39,7 @@
           :unit="getLayerConfig(element.id)?.unit"
           :showLayerCut="false"
           :draggable="true"
-          @opacity-change="handleDataLayerOpacity"
+          @opacity-change="(opacity) => handleDataLayerOpacity(opacity, element.id)"
           @colorbar-click="handleColorbarClick"
         />
       </div>
@@ -117,12 +117,21 @@ const getLayerIcon = (layerId) => {
   return category?.icon || 'bi-question-circle';
 };
 
-const handleDataLayerOpacity = (opacity) => {
-  emit('opacity-change', opacity);
+const handleDataLayerOpacity = (opacity, layerId) => {
+  console.log('[DraggableLayerList] Handling data layer opacity:', { layerId, opacity });
+  // Obter o ID correto da layer da configuração
+  const layerConfig = getLayerConfig(layerId);
+  if (!layerConfig) {
+    console.error(`[DraggableLayerList] Configuração não encontrada para a layer: ${layerId}`);
+
+    return;
+  }
+  layersStore.setLayerOpacity(layerConfig.id, opacity / 100);
 };
 
 const handlerParksLayerOpacity = (opacity) => {
-  layersStore.setLayerOpacity('parks-layer', opacity);
+  console.log('[DraggableLayerList] Handling parks layer opacity:', { opacity });
+  layersStore.setLayerOpacity('parks-layer', opacity / 100);
 };
 
 const handleColorbarClick = () => {
