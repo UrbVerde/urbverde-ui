@@ -34,12 +34,34 @@
       <div v-if="showLegendLines || layerId === 'parks-layer'" class="legend-lines">
         <!-- For base layer, show only setores censitários -->
         <template v-if="!layerId || layerId !== 'parks-layer'">
-          <p v-if="scale === 'intraurbana'" class="legend-item body-small-regular">
-            <span class="legend-line census"></span>Setores censitários
-          </p>
-          <p v-else class="legend-item body-small-medium">
-            <span class="legend-line municipal"></span>Municípios
-          </p>
+          <div class="scale-navigation">
+            <button
+              class="nav-button"
+              :class="{
+                'active': scale === 'intraurbana',
+                'disabled': scale === 'intraurbana'
+              }"
+              @click="scale !== 'intraurbana' && changeScale('intraurbana')"
+            >
+              <IconComponent name="bi-chevron-left" :size="16" />
+            </button>
+            <p v-if="scale === 'intraurbana'" class="legend-item body-small-regular">
+              <span class="legend-line census"></span>Setores censitários
+            </p>
+            <p v-else class="legend-item body-small-medium">
+              <span class="legend-line municipal"></span>Municípios
+            </p>
+            <button
+              class="nav-button"
+              :class="{
+                'active': scale === 'estadual',
+                'disabled': scale === 'estadual'
+              }"
+              @click="scale !== 'estadual' && changeScale('estadual')"
+            >
+              <IconComponent name="bi-chevron-right" :size="16" />
+            </button>
+          </div>
         </template>
 
         <!-- For parks layer, show only parks square -->
@@ -73,6 +95,9 @@ import ColorScale from './ColorScale.vue';
 import OpacityControl from './OpacityControl.vue';
 import LayerCut from './LayerCut.vue';
 import CardLayerSwitch from './CardLayerSwitch.vue';
+import { useLocationStore } from '@/stores/locationStore';
+
+const locationStore = useLocationStore();
 
 const props = defineProps({
   title: {
@@ -131,12 +156,17 @@ const props = defineProps({
 
 const localOpacity = ref(100);
 
-const emit = defineEmits(['opacity-change', 'colorbar-click', 'order-change']);
+const emit = defineEmits(['opacity-change', 'colorbar-click', 'order-change', 'scale-change']);
 
 const handleOpacityChange = (value) => {
   console.log('[LegendCard] Opacity changed to:', value);
   localOpacity.value = value;
   emit('opacity-change', value);
+};
+
+const changeScale = (newScale) => {
+  locationStore.setLocation({ scale: newScale });
+  emit('scale-change', newScale);
 };
 
 onMounted(() => {
@@ -276,5 +306,50 @@ onMounted(() => {
 .card-container:hover :deep(.layer-cut-text),
 .card-container:hover :deep(.layer-cut-icon) {
   color: map-get($theme, primary);
+}
+
+.scale-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+
+  .nav-button {
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    .nav-button {
+      opacity: 1;
+
+      &.active {
+        color: map-get($theme, primary);
+      }
+
+      &.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: map-get($body-text, body-color);
+  transition: all 0.2s ease;
+
+  &:hover:not(.disabled) {
+    background-color: map-get($gray, 100);
+  }
 }
 </style>
