@@ -82,8 +82,18 @@ let hoveredFeatureId = null;
 let hoveredSetorId = null;
 
 // Map constants
-const MAP_ZOOM_START = 14;
-const MAP_ZOOM_FINAL = 14;
+const MAP_ZOOM_START = computed(() => {
+  if (currentScale.value === 'estadual') {return 7;}
+  if (currentScale.value === 'nacional') {return 4;}
+
+  return 14;
+});
+const MAP_ZOOM_FINAL = computed(() => {
+  if (currentScale.value === 'estadual') {return 7;}
+  if (currentScale.value === 'nacional') {return 4;}
+
+  return 14;
+});
 
 // Get current layer id, scale and year from the URL query.
 const currentLayer = computed(() => locationStore.activeMainLayer);
@@ -348,8 +358,6 @@ async function initializeMapLocation(code) {
     // Remove any existing popups
     // if (vectorPopup.value) { vectorPopup.value.remove(); }
 
-    // Set scale and trigger layer setup
-    await locationStore.setLocation({ scale: 'intraurbana' });
     if (mapLoaded.value) {
       removeDynamicLayer();
       await initializeMapLayers();
@@ -360,7 +368,7 @@ async function initializeMapLocation(code) {
       if (map.value) {
         map.value.jumpTo({
           center: [coords.lng, coords.lat],
-          zoom: MAP_ZOOM_FINAL,
+          zoom: MAP_ZOOM_FINAL.value,
           essential: true
         });
       } else {
@@ -381,7 +389,7 @@ async function initializeMapLocation(code) {
 function createInitialMapState(coordinates, mapState) {
   return {
     center: mapState.center || [coordinates.lng, coordinates.lat],
-    zoom: mapState.zoom || MAP_ZOOM_START,
+    zoom: mapState.zoom || MAP_ZOOM_START.value,
     pitch: mapState.pitch || 20
   };
 }
@@ -659,9 +667,6 @@ async function setupMap() {
 
     // 7. Configurar handlers de eventos do mapa
     setupMapEventHandlers();
-
-    // 8. Definir escala inicial
-    await locationStore.setLocation({ scale: 'intraurbana' });
 
   } catch (error) {
     console.error('Erro ao configurar mapa:', error);
