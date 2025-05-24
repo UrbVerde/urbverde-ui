@@ -82,12 +82,12 @@ let hoveredFeatureId = null;
 let hoveredSetorId = null;
 
 // Map constants
-const MAP_ZOOM_START = computed(() => {
-  if (currentScale.value === 'estadual') {return 7;}
-  if (currentScale.value === 'nacional') {return 4;}
+// const MAP_ZOOM_START = computed(() => {
+//   if (currentScale.value === 'estadual') {return 7;}
+//   if (currentScale.value === 'nacional') {return 4;}
 
-  return 14;
-});
+//   return 14;
+// });
 const MAP_ZOOM_FINAL = computed(() => {
   if (currentScale.value === 'estadual') {return 7;}
   if (currentScale.value === 'nacional') {return 4;}
@@ -118,11 +118,12 @@ watch(
   () => currentScale.value,
   async(newScale, oldScale) => {
     if (newScale !== oldScale) {
-      console.log(`Escala alterada de ${oldScale} para ${newScale}`);
-      alert('teste');
-      // if (mapLoaded.value) {
+      alert(`Escala alterada de ${oldScale} para ${newScale}`);
+      if (mapLoaded.value) {
 
-      // }
+        layersStore.removeLayerFromMap('parks-layer');
+        setupLayers();
+      }
     }
   }
 );
@@ -181,7 +182,7 @@ function removeDynamicLayer() {
   removeVectorInteractions(map.value);
 
   // Remover camadas
-  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer', 'setores-layer'].forEach(id => {
+  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer','pcv-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }
@@ -395,9 +396,14 @@ async function initializeMapLocation(code) {
 ---------------------------------------*/
 // Função para criar o estado inicial do mapa
 function createInitialMapState(coordinates, mapState) {
+  // Se não houver zoom definido no mapState, usar o zoom baseado na escala atual
+  const initialZoom = mapState.zoom || (currentScale.value === 'intraurbana' ? 14 :
+    currentScale.value === 'estadual' ? 7 :
+      currentScale.value === 'nacional' ? 4 : 14);
+
   return {
     center: mapState.center || [coordinates.lng, coordinates.lat],
-    zoom: mapState.zoom || MAP_ZOOM_START.value,
+    zoom: initialZoom,
     pitch: mapState.pitch || 20
   };
 }
@@ -657,25 +663,29 @@ async function setupMap() {
     const initialState = createInitialMapState(coords, mapState);
     map.value = createMapInstance(mapContainer.value, initialState);
 
-    // 3. Configurar eventos de carregamento do mapa
+    // 3. Definir escala inicial baseada no zoom
+    const initialZoom = initialState.zoom;
+    locationStore.updateScaleFromZoom(initialZoom);
+
+    // 4. Configurar eventos de carregamento do mapa
     map.value.on('load', async() => {
       mapLoaded.value = true;
       generateBaseLayers();
       await setupLayers();
     });
 
-    // 4. Configurar referência do mapa no store
+    // 5. Configurar referência do mapa no store
     console.log('[MapCore] Setting map reference in layersStore');
     layersStore.mapRef = map.value;
     console.log('[MapCore] Map reference set:', layersStore.mapRef);
 
-    // 5. Adicionar controles do mapa
+    // 6. Adicionar controles do mapa
     setupMapControls();
 
-    // 6. Configurar gerenciamento de estado da URL
+    // 7. Configurar gerenciamento de estado da URL
     setupUrlStateManagement();
 
-    // 7. Configurar handlers de eventos do mapa
+    // 8. Configurar handlers de eventos do mapa
     setupMapEventHandlers();
 
   } catch (error) {

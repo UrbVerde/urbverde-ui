@@ -29,6 +29,39 @@ export const useLayersStore = defineStore('layersStore', {
   },
 
   actions: {
+    removeLayerFromMap(layerId) {
+      const map = this.mapRef;
+      if (!map) {return;}
+
+      // Tenta remover a camada principal e a de contorno
+      const layersToRemove = [layerId, `${layerId}-outline`];
+      layersToRemove.forEach(id => {
+        if (map.getLayer(id)) {
+          map.removeLayer(id);
+          console.log(`[Map] Removed layer: ${id}`);
+        }
+      });
+
+      // Tenta remover a fonte se não for usada por outra camada ativa
+      const otherLayersUsingSource = this.activeLayers
+        .filter(l => l.id !== layerId)
+        .some(l => {
+          const conf = getLayerConfig(l.id, this.currentYear, this.currentScale);
+          const thisConf = getLayerConfig(layerId, this.currentYear, this.currentScale);
+
+          return conf?.sourceLayer === thisConf?.sourceLayer;
+        });
+
+      const sourceId = layerId; // Adapte aqui se você usa IDs diferentes entre layer e source
+      if (!otherLayersUsingSource && map.getSource(sourceId)) {
+        map.removeSource(sourceId);
+        console.log(`[Map] Removed source: ${sourceId}`);
+      }
+
+      // Remove do estado
+      this.removeLayer(layerId);
+    },
+
     /**
      * Sets the default layers configuration
      * @param {string} activeMainLayer - The main layer to be set as current
