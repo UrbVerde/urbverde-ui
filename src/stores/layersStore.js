@@ -10,7 +10,7 @@ export const useLayersStore = defineStore('layersStore', {
     currentScale: null,
     currentYear: null,
     currentStatistics: null,
-    activeLayers: [],
+    activeLayers: [], // Array de objetos com {id, order, currentMain, opacity}
     setoresVisible: false,
     error: null,
     defaultOpacity: 0.7,
@@ -166,20 +166,56 @@ export const useLayersStore = defineStore('layersStore', {
     },
 
     /**
-     * Add a new layer to the active layers list
+     * Reordena as camadas ativas
+     * @param {string} layerId - ID da camada a ser movida
+     * @param {number} newIndex - Nova posição da camada
+     */
+    reorderLayer(layerId, newIndex) {
+      const currentIndex = this.activeLayers.findIndex(layer => layer.id === layerId);
+      if (currentIndex === -1) {return;}
+
+      const layer = this.activeLayers[currentIndex];
+      const newLayers = [...this.activeLayers];
+      newLayers.splice(currentIndex, 1);
+      newLayers.splice(newIndex, 0, layer);
+
+      this.activeLayers = newLayers;
+
+      // Atualiza a ordem das camadas no mapa
+      if (this.mapRef) {
+        this.activeLayers.forEach(layer => {
+          if (this.mapRef.getLayer(layer.id)) {
+            this.mapRef.moveLayer(layer.id);
+          }
+        });
+      }
+    },
+
+    /**
+     * Adiciona uma nova camada à lista de camadas ativas
+     * @param {Object} layer - Objeto da camada a ser adicionada
      */
     addLayer(layer) {
       if (!this.activeLayers.some(l => l.id === layer.id)) {
-        this.activeLayers.push(layer);
+        const newLayer = {
+          id: layer.id,
+          currentMain: false,
+          opacity: layer.opacity || this.defaultOpacity
+        };
+        this.activeLayers.push(newLayer);
         console.log(`[LayersStore] Added new layer ${layer.id}`);
       }
     },
 
     /**
-     * Remove a layer from the active layers list
+     * Remove uma camada da lista de camadas ativas
+     * @param {string} layerId - ID da camada a ser removida
      */
     removeLayer(layerId) {
-      this.activeLayers = this.activeLayers.filter(layer => layer.id !== layerId);
+      const layerIndex = this.activeLayers.findIndex(layer => layer.id === layerId);
+      if (layerIndex === -1) {return;}
+
+      this.activeLayers.splice(layerIndex, 1);
       console.log(`[LayersStore] Removed layer ${layerId}`);
     },
 

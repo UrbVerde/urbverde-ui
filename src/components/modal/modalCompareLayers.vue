@@ -40,6 +40,36 @@
               </div>
             </div>
           </div>
+
+          <!-- Lista de camadas ativas com drag and drop -->
+          <div v-if="activeLayersWithNames.length > 0" class="active-layers-section">
+            <h3 class="category-title heading-h6">Camadas Ativas</h3>
+            <draggable
+              v-model="activeLayersWithNames"
+              item-key="id"
+              handle=".drag-handle"
+              @end="handleDragEnd"
+              class="active-layers-list"
+            >
+              <template #item="{ element: layer, index }">
+                <div class="active-layer-item">
+                  <div class="drag-handle">
+                    <i class="bi bi-grip-vertical"></i>
+                  </div>
+                  <div class="layer-info">
+                    <span class="layer-position">{{ index + 1 }}</span>
+                    <span class="layer-name">{{ layer.name }}</span>
+                    <span class="layer-category">({{ layer.category }})</span>
+                  </div>
+                  <div class="layer-actions">
+                    <button class="btn-remove" @click="removeLayer(layer.id)" title="Remover camada">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </draggable>
+          </div>
         </div>
       </template>
     </modalBootstrap>
@@ -51,6 +81,7 @@ import { ref, computed } from 'vue';
 import modalBootstrap from './modalBootstrap.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
+import draggable from 'vuedraggable';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -58,23 +89,29 @@ const layersStore = useLayersStore();
 
 // Computed properties
 const categories = computed(() => locationStore.getCategories || []);
-// const currentLayerName = computed(() => locationStore.currentLayerName);
 
 // Get active layers with their names
-const activeLayersWithNames = computed(() => layersStore.getActiveLayers.map((activeLayer, index) => {
-  // Find the category and layer that matches this active layer
-  const category = categories.value.find(cat =>
-    cat.layers.some(layer => layer.id === activeLayer.id)
-  );
-  const layer = category?.layers.find(layer => layer.id === activeLayer.id);
+const activeLayersWithNames = computed({
+  get: () => layersStore.getActiveLayers.map((activeLayer, index) => {
+    const category = categories.value.find(cat =>
+      cat.layers.some(layer => layer.id === activeLayer.id)
+    );
+    const layer = category?.layers.find(layer => layer.id === activeLayer.id);
 
-  return {
-    ...activeLayer,
-    name: layer?.name || activeLayer.id,
-    category: category?.name || 'Sem categoria',
-    position: index + 1 // Adicionando a posição (começando em 1)
-  };
-}));
+    return {
+      ...activeLayer,
+      name: layer?.name || activeLayer.id,
+      category: category?.name || 'Sem categoria',
+      order: index
+    };
+  }),
+  set: (newValue) => {
+    // Atualiza a ordem das camadas no store
+    newValue.forEach((layer, index) => {
+      layersStore.reorderLayer(layer.id, index);
+    });
+  }
+});
 
 // Methods
 const getIconPath = (iconName) => new URL(`../../assets/icons/${iconName}`, import.meta.url).href;
@@ -101,10 +138,18 @@ const toggleLayer = (layer) => {
   }
 };
 
+const handleDragEnd = (evt) => {
+  console.log('Drag ended:', evt);
+};
+
+const removeLayer = (layerId) => {
+  layersStore.removeLayer(layerId);
+};
+
 const handleClose = () => {
   if (activeLayersWithNames.value.length > 0) {
     const layersList = activeLayersWithNames.value
-      .map(layer => `${layer.position}. ${layer.name} (${layer.category})`)
+      .map((layer, index) => `${index + 1}. ${layer.name} (${layer.category})`)
       .join('\n');
 
     alert(`Camadas ativas:\n\n${layersList}`);
@@ -206,6 +251,78 @@ defineExpose({ show, hide });
 
   .bi-lock-fill {
     color: map-get($theme, primary);
+  }
+}
+
+.active-layers-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid map-get($gray, 300);
+}
+
+.active-layers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.active-layer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border: 1px solid map-get($gray, 200);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: map-get($gray, 50);
+  }
+}
+
+.drag-handle {
+  cursor: move;
+  color: map-get($gray, 400);
+  padding: 4px;
+
+  &:hover {
+    color: map-get($gray, 600);
+  }
+}
+
+.layer-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layer-position {
+  font-weight: 600;
+  color: map-get($theme, primary);
+  min-width: 24px;
+}
+
+.layer-category {
+  color: map-get($gray, 500);
+  font-size: 0.9em;
+}
+
+.layer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  color: map-get($gray, 400);
+  cursor: pointer;
+  padding: 4px;
+
+  &:hover {
+    color: map-get($red, 500);
   }
 }
 </style>

@@ -28,7 +28,6 @@ export function useMapLayers(map) {
     try {
       console.log('Iniciando addLayer com:', layerId_config);
 
-      // Buscar o ID correto da camada no arquivo de configuração
       const layerConfig = LAYER_CONFIGS[layerId_config];
       console.log('Configuração encontrada:', layerConfig);
 
@@ -38,7 +37,6 @@ export function useMapLayers(map) {
         return false;
       }
 
-      // Obter o ID real da camada
       const layerId = layerConfig.id;
       console.log('ID real da camada:', layerId);
 
@@ -48,26 +46,27 @@ export function useMapLayers(map) {
         return false;
       }
 
-      // Inicializar o LayerOrderManager se ainda não existir
       if (!layerOrderManager.value) {
         console.log('Inicializando LayerOrderManager');
         initializeLayerOrderManager();
       }
 
-      // Validar se a camada pode ser adicionada
       if (!layerOrderManager.value.validateLayer(layerId)) {
         console.error('Camada não validada pelo LayerOrderManager');
 
         return false;
       }
 
-      // Registrar a camada como ativa
-      activeLayers.value.add(layerId);
+      // Registrar a camada como ativa com o novo formato
+      activeLayers.value.add({
+        id: layerId,
+        currentMain: false,
+        opacity: layerConfig.defaultOpacity || 0.7
+      });
+
       layerConfigs.value.set(layerId, layerConfig);
       console.log('Camada registrada como ativa');
 
-      // Configurar a camada usando o LayerOrderManager
-      console.log('Chamando setupDynamicLayers com:', layerId_config);
       const success = await setupDynamicLayers(
         map.value,
         layerId_config
@@ -75,7 +74,6 @@ export function useMapLayers(map) {
       console.log('Resultado do setupDynamicLayers:', success);
 
       if (success) {
-        // Adicionar ao grupo correto e atualizar ordem
         layerOrderManager.value.addLayerToGroup(layerId, layerConfig.group || 'dynamic');
         layerOrderManager.value.updateLayerOrder();
         console.log('Camada adicionada ao grupo e ordem atualizada');
@@ -96,7 +94,6 @@ export function useMapLayers(map) {
       const config = layerConfigs.value.get(layerId);
       if (!config) {return;}
 
-      // Remover camadas relacionadas
       const layerIds = [layerId];
       if (config.type === 'vector') {
         layerIds.push(`${layerId}-outline`);
@@ -108,16 +105,13 @@ export function useMapLayers(map) {
         }
       });
 
-      // Remover source
       if (map.value.getSource(config.source.id)) {
         map.value.removeSource(config.source.id);
       }
 
-      // Limpar estado
       activeLayers.value.delete(layerId);
       layerConfigs.value.delete(layerId);
 
-      // Remover do grupo e reordenar
       if (layerOrderManager.value) {
         layerOrderManager.value.removeLayerFromGroup(layerId, config.group || 'dynamic');
         layerOrderManager.value.updateLayerOrder();
@@ -131,10 +125,8 @@ export function useMapLayers(map) {
     if (!map.value || !layerId) {return false;}
 
     try {
-      // Remover camada existente
       removeLayer(layerId);
 
-      // Adicionar com nova configuração
       return await addLayer(layerId, newConfig);
     } catch (error) {
       console.error('Erro ao atualizar camada:', error);
