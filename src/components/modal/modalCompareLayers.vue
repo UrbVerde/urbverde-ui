@@ -82,6 +82,7 @@ import modalBootstrap from './modalBootstrap.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import draggable from 'vuedraggable';
+import { setupDynamicLayers } from '@/components/map/layers/MapLayerController';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -135,6 +136,11 @@ const toggleLayer = (layer) => {
       scale: locationStore.scale,
       opacity: 0.7
     });
+
+    // Configura a camada dinâmica no mapa
+    if (layersStore.mapRef) {
+      setupDynamicLayers(layersStore.mapRef, layer.id);
+    }
   }
 };
 

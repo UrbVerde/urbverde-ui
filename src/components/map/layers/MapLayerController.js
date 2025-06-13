@@ -117,6 +117,7 @@ export function applyLayerFilters(map, config, locationStore, currentScale) {
  * @param {string} layerId - ID da configuração da layer
  * @returns {boolean} Sucesso da operação
  */
+
 export function setupDynamicLayers(map, layerId) {
   const locationStore = useLocationStore();
   const { year, scale } = locationStore;

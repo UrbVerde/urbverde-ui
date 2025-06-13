@@ -202,7 +202,19 @@ export const useLayersStore = defineStore('layersStore', {
           currentMain: false,
           opacity: layer.opacity || this.defaultOpacity
         };
-        this.activeLayers.push(newLayer);
+
+        // Verifica se parks está no topo
+        const parksIndex = this.activeLayers.findIndex(l => l.id === 'parks');
+        const isParksOnTop = parksIndex === 0;
+
+        if (isParksOnTop) {
+          // Se parks está no topo, insere na segunda posição
+          this.activeLayers.splice(1, 0, newLayer);
+        } else {
+          // Se parks não está no topo, insere no topo
+          this.activeLayers.unshift(newLayer);
+        }
+
         console.log(`[LayersStore] Added new layer ${layer.id}`);
       }
     },
