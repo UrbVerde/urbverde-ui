@@ -55,23 +55,20 @@ import { useLayersStore } from '@/stores/layersStore';
 import { useLocationStore } from '@/stores/locationStore';
 import { getLayerConfig } from '@/constants/layers';
 import LegendCard from './LegendCard.vue';
+import { reorderLayerSetup } from '@/components/map/layers/MapLayerController';
 
-const props = defineProps({
-  layers: {
-    type: Array,
-    required: true
-  },
-  currentYear: {
-    type: [Number, String],
-    required: true
-  },
-  scale: {
-    type: String,
-    required: true
-  }
-});
+// const props = defineProps({
+//   currentYear: {
+//     type: [Number, String],
+//     required: true
+//   },
+//   scale: {
+//     type: String,
+//     required: true
+//   }
+// });
 
-const emit = defineEmits(['update:layers', 'opacity-change', 'colorbar-click']);
+const emit = defineEmits(['opacity-change', 'colorbar-click']);
 const layersStore = useLayersStore();
 const locationStore = useLocationStore();
 const { categories } = storeToRefs(locationStore);
@@ -85,11 +82,12 @@ watch(() => locationStore.activeMainLayer, (newLayer) => {
 
 // Computed para gerenciar o estado local e sincronizar com o store
 const localLayers = computed({
-  get: () => props.layers,
-  set: (value) => {
-    emit('update:layers', value);
-    // Atualiza o store com a nova ordem
-    layersStore.$patch({ activeLayers: value });
+  get: () => layersStore.getActiveLayers,
+  set: (newValue) => {
+    // Atualiza a ordem das camadas no store
+    newValue.forEach((layer, index) => {
+      layersStore.reorderLayer(layer.id, index);
+    });
   }
 });
 
@@ -106,6 +104,30 @@ const onChange = (evt) => {
   console.log('[DraggableLayerList] Order changed', evt);
   // O Vue.Draggable já atualiza o v-model automaticamente
   // A atualização do store é feita através do computed localLayers
+
+  // Se houver um item movido, reordena a camada no mapa
+  if (evt.moved) {
+    const { newIndex, oldIndex } = evt.moved;
+    const activeLayers = layersStore.getActiveLayers;
+    const movedLayer = activeLayers[newIndex];
+
+    console.log('[DraggableLayerList] Movendo camada:', {
+      camada: movedLayer?.id,
+      de: oldIndex,
+      para: newIndex,
+      todasCamadas: activeLayers.map(l => l.id)
+    });
+
+    if (movedLayer && layersStore.mapRef) {
+      reorderLayerSetup(layersStore.mapRef, activeLayers);
+      console.log('[DraggableLayerList] Camada reordenada com sucesso');
+    } else {
+      console.warn('[DraggableLayerList] Não foi possível reordenar a camada:', {
+        camada: movedLayer?.id,
+        temMapa: !!layersStore.mapRef
+      });
+    }
+  }
 };
 
 // Funções auxiliares

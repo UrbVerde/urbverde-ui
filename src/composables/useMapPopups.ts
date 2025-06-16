@@ -95,6 +95,12 @@ export function useMapPopups() {
     const debounceDelay = 50;
 
     const onRasterMouseMove = (e) => {
+      if (!map.getLayer('dynamic-layer') || map.getLayer('dynamic-layer').type !== 'raster') {
+        rasterPopup.value?.remove();
+        map.getCanvas().style.cursor = '';
+        return;
+      }
+
       const layerOpacity = map.getPaintProperty('dynamic-layer', 'raster-opacity') || 0;
       if (layerOpacity <= 0) {
         rasterPopup.value?.remove();

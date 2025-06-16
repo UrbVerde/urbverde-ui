@@ -23,7 +23,7 @@ const CENSUS_YEARS = [2022];
 export const LAYER_CONFIGS = {
 
   population: {
-    id: 'population-layer',
+    id: 'population',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'População',
@@ -56,7 +56,7 @@ export const LAYER_CONFIGS = {
   },
 
   setores: {
-    id: 'setores-layer',
+    id: 'setores',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Setores Censitários',
@@ -85,7 +85,7 @@ export const LAYER_CONFIGS = {
 
   // Climate layers
   surface_temp: {
-    id: 'surface-temp-layer',
+    id: 'surface-temp',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura de Superfície',
@@ -120,7 +120,7 @@ export const LAYER_CONFIGS = {
   },
 
   max_surface_temp: {
-    id: 'max-surface-temp-layer',
+    id: 'max_surface_temp',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura Máxima de Superfície',
@@ -153,7 +153,7 @@ export const LAYER_CONFIGS = {
   },
 
   heat_island: {
-    id: 'heat-island-layer',
+    id: 'heat-island',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Nível de exposição à ilha de calor',
@@ -185,7 +185,7 @@ export const LAYER_CONFIGS = {
 
   // Vegetation layers
   pcv: {
-    id: 'pcv-layer',
+    id: 'pcv',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Percentual de Cobertura Vegetal',
@@ -224,7 +224,7 @@ export const LAYER_CONFIGS = {
   },
 
   icv: {
-    id: 'icv-layer',
+    id: 'icv',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Índice de Cobertura Vegetal',
@@ -254,7 +254,7 @@ export const LAYER_CONFIGS = {
   },
 
   idsa: {
-    id: 'idsa-layer',
+    id: 'idsa',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Índice de Desigualdade Socioambiental',
@@ -283,7 +283,7 @@ export const LAYER_CONFIGS = {
   },
 
   cvp: {
-    id: 'cvp-layer',
+    id: 'cvp',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Cobertura Vegetal por Pixel',
@@ -326,7 +326,7 @@ export const LAYER_CONFIGS = {
   },
 
   ndvi: {
-    id: 'ndvi-layer',
+    id: 'ndvi',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Vigor da Vegetação (NDVI)',
@@ -362,7 +362,7 @@ export const LAYER_CONFIGS = {
 
   // Parks layers
   parks: {
-    id: 'parks-layer',
+    id: 'parks',
     dataType: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     renderType: 'fill',
@@ -384,7 +384,7 @@ export const LAYER_CONFIGS = {
   },
 
   avg_distance_to_squares: {
-    id: 'avg-distance-to-squares-layer',
+    id: 'avg-distance-to-squares',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Distância Média até as Praças',
@@ -412,7 +412,7 @@ export const LAYER_CONFIGS = {
   },
 
   square_area_per_capita: {
-    id: 'square-area-per-capita-layer',
+    id: 'square-area-per-capita',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Área de Praças por Habitante',
@@ -443,7 +443,7 @@ export const LAYER_CONFIGS = {
   },
 
   square_served_area: {
-    id: 'square-served-area-layer',
+    id: 'square-served-area',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Área Atendida pelas Praças',
@@ -473,7 +473,7 @@ export const LAYER_CONFIGS = {
   },
 
   served_population: {
-    id: 'served-population-layer',
+    id: 'served-population',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'População Atendida pelas Praças',

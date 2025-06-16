@@ -175,14 +175,14 @@ export function setupDynamicLayers(map, layerId) {
     console.log('[MapLayerController] Layer principal adicionada ao mapa');
 
     // Se for vector, adicionar outline
-    if (config.type === 'vector') {
-      const outlineLayer = createOutlineLayer(config);
-      if (outlineLayer) {
-        console.log('[MapLayerController] Layer de outline criada:', outlineLayer);
-        map.addLayer(outlineLayer);
-        console.log('[MapLayerController] Layer de outline adicionada ao mapa');
-      }
-    }
+    // if (config.type === 'vector') {
+    //   const outlineLayer = createOutlineLayer(config);
+    //   if (outlineLayer) {
+    //     console.log('[MapLayerController] Layer de outline criada:', outlineLayer);
+    //     map.addLayer(outlineLayer);
+    //     console.log('[MapLayerController] Layer de outline adicionada ao mapa');
+    //   }
+    // }
 
     // Aplicar filtros se necessário
     applyLayerFilters(map, config, locationStore, scale);
@@ -298,4 +298,63 @@ export function updateMunicipalityFilters(map, cd_mun) {
   });
 
   console.log('Filtros de município atualizados com sucesso');
+}
+
+/**
+ * Reordena todas as camadas ativas no mapa
+ * @param {Object} map - Instância do mapa
+ * @param {Array} activeLayers - Array de camadas ativas (em ordem do topo para o fundo)
+ * @returns {boolean} Sucesso da operação
+ */
+export function reorderLayerSetup(map, activeLayers) {
+  console.log('\n[MapLayerController] ===== INÍCIO DA REORDENAÇÃO GERAL =====');
+  console.log('[MapLayerController] Camadas ativas:', activeLayers.map(l => l.id));
+
+  if (!map || !activeLayers || !Array.isArray(activeLayers)) {
+    console.error('[MapLayerController] Parâmetros inválidos para reorderLayerSetup');
+
+    return false;
+  }
+
+  try {
+    // Verificar se a camada highlight_selected-layer existe
+    if (!map.getLayer('highlight_selected-layer')) {
+      console.error('[MapLayerController] Camada highlight_selected-layer não encontrada');
+
+      return false;
+    }
+
+    // Reordenar cada camada ativa
+    activeLayers.forEach((layer, index) => {
+      const layerId = layer.id;
+
+      // Verificar se a camada existe no mapa
+      if (!map.getLayer(layerId)) {
+        console.warn(`[MapLayerController] Camada ${layerId} não encontrada no mapa`);
+
+        return;
+      }
+
+      // Determinar o beforeId
+      const beforeId = index === 0
+        ? 'highlight_selected-layer'
+        : activeLayers[index - 1].id;
+
+      console.log(`[MapLayerController] Movendo camada ${layerId} para antes de ${beforeId}`);
+
+      // Mover a camada
+      map.moveLayer(layerId, beforeId);
+    });
+
+    console.log('[MapLayerController] ===== FIM DA REORDENAÇÃO GERAL =====\n');
+
+    const allLayers2 = map.getStyle().layers.map((l, i) => `${i}: ${l.id}`);
+    console.log(`[MapLibre] Ordem completa das camadas após movimentação:\n${  allLayers2.join('\n')}`);
+
+    return true;
+  } catch (error) {
+    console.error('[MapLayerController] Erro ao reordenar camadas:', error);
+
+    return false;
+  }
 }

@@ -82,7 +82,9 @@ import modalBootstrap from './modalBootstrap.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import draggable from 'vuedraggable';
-import { setupDynamicLayers } from '@/components/map/layers/MapLayerController';
+// import { setupDynamicLayers } from '@/components/map/layers/MapLayerController';
+import { getLayerConfig, getLayerPaint } from '@/constants/layers';
+import { reorderLayerSetup } from '@/components/map/layers/MapLayerController';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -125,13 +127,17 @@ const isLayerActive = (layerId) => {
 };
 
 const toggleLayer = (layer) => {
-  if (isLayerActive(layer.id)) {
+  if (isLayerActive(`${layer.id}`)) {
     // Remove layer
-    layersStore.removeLayer(layer.id);
+    layersStore.removeLayer(`${layer.id}`);
   } else {
+    // Obtém a lista de camadas ativas
+    const activeLayers = [...layersStore.getActiveLayers];
+    console.log('[CompareLayers] Camadas ativas:', activeLayers.map(l => l.id));
+
     // Add layer
     layersStore.addLayer({
-      id: layer.id,
+      id: `${layer.id}`,
       year: locationStore.year,
       scale: locationStore.scale,
       opacity: 0.7
@@ -139,7 +145,76 @@ const toggleLayer = (layer) => {
 
     // Configura a camada dinâmica no mapa
     if (layersStore.mapRef) {
-      setupDynamicLayers(layersStore.mapRef, layer.id);
+      const layerConfig = getLayerConfig(layer.id, locationStore.year, locationStore.scale);
+      if (!layerConfig) {
+        console.warn('[CompareLayers] Configuração da camada não encontrada:', layer.id);
+
+        return;
+      }
+
+      // Determina o beforeId baseado na camada mais superior
+      let beforeId;
+      const topLayer = activeLayers[0];
+
+      if (topLayer && topLayer.id === 'parks') {
+        // Se a camada mais superior for parks, adiciona abaixo dela
+        beforeId = 'parks';
+      } else {
+        // Caso contrário, adiciona abaixo de highlight_selected-layer
+        beforeId = 'highlight_selected-layer';
+      }
+
+      console.log('[CompareLayers] Adicionando camada:', {
+        camada: layer.id,
+        antesDe: beforeId,
+        totalCamadas: activeLayers.length
+      });
+
+      // Adiciona a fonte da camada
+      const source = typeof layerConfig.source === 'function'
+        ? layerConfig.source(locationStore.year, locationStore.scale, locationStore.currentMunicipioId)
+        : layerConfig.source;
+
+      if (source) {
+        layersStore.mapRef.addSource(layer.id, source);
+      }
+
+      // Adiciona a camada ao mapa com o beforeId
+      if (layerConfig.type === 'raster') {
+        layersStore.mapRef.addLayer({
+          id: layer.id,
+          type: 'raster',
+          source: layer.id,
+          paint: layerConfig.paint
+        }, beforeId);
+      } else {
+        // Para camadas vetoriais, precisamos especificar o source-layer
+        const layerObject = {
+          id: layer.id,
+          type: 'fill',
+          source: layer.id,
+          'source-layer': source.sourceLayer,
+          paint: getLayerPaint(layerConfig, {
+            scale: locationStore.scale,
+            municipioId: locationStore.currentMunicipioId,
+            statistics: layersStore.currentStatistics
+          })
+        };
+
+        console.log('[CompareLayers] Adicionando camada vetorial:', {
+          id: layer.id,
+          sourceLayer: source.sourceLayer,
+          beforeId
+        });
+
+        layersStore.mapRef.addLayer(layerObject, beforeId);
+      }
+
+      console.log('[CompareLayers] Camada adicionada com sucesso:', layer.id);
+
+      // Reordena todas as camadas após adicionar a nova
+      const updatedActiveLayers = [...layersStore.getActiveLayers];
+      reorderLayerSetup(layersStore.mapRef, updatedActiveLayers);
     }
   }
 };

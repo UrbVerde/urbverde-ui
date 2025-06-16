@@ -58,7 +58,6 @@
 
         <!-- Dynamic Layer Cards -->
         <DraggableLayerList
-          v-model:layers="activeLayers"
           :current-year="currentYear"
           :scale="scale"
           @opacity-change="handleDataLayerOpacity"
@@ -136,7 +135,7 @@ const currentLayerAllowedYears = computed(() =>
   [2016, 2017, 2018, 2019, 2020, 2021]
 );
 
-const activeLayers = computed(() => layersStore.getActiveLayers);
+// const activeLayers = computed(() => layersStore.getActiveLayers);
 
 // Event handlers
 const toggleLegend = () => {
@@ -176,6 +175,13 @@ const handleDataLayerOpacity = (opacity, layerId) => {
 // Referenca o modal para utilizar seus métodos
 const refModalWaitlistLegend = ref(null);
 const refModalCompareLayers = ref(null);
+
+// const props = defineProps({
+//   map: {
+//     type: Object,
+//     required: true
+//   }
+// });
 </script>
 
 <style scoped lang="scss">

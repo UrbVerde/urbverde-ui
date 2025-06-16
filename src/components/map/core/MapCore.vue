@@ -45,15 +45,15 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 
 import {
   // setupDynamicLayers,
-  setupSetoresLayer,
+  // setupSetoresLayer,
   setupDynamicSource
 } from '@/components/map/layers/MapLayerController.js';
 import {
   setupRasterInteractions,
   removeRasterInteractions,
-  setupVectorInteractions,
+  // setupVectorInteractions,
   removeVectorInteractions,
-  setupSetoresInteractions
+  // setupSetoresInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { useMapLayers } from '@/composables/useMapLayers';
@@ -79,7 +79,7 @@ const terrainEnabled = ref(false);
 
 // For managing feature state on vector layers
 let hoveredFeatureId = null;
-let hoveredSetorId = null;
+// let hoveredSetorId = null;
 
 // Map constants
 // const MAP_ZOOM_START = computed(() => {
@@ -121,7 +121,7 @@ watch(
       alert(`Escala alterada de ${oldScale} para ${newScale}`);
       if (mapLoaded.value) {
 
-        layersStore.removeLayerFromMap('parks-layer');
+        layersStore.removeLayerFromMap('parks');
         setupLayers();
       }
     }
@@ -197,7 +197,7 @@ function removeDynamicLayer() {
 
   // Resetar estados
   hoveredFeatureId = null;
-  hoveredSetorId = null;
+  // hoveredSetorId = null;
   if (map.value._hoveredParkId) {
     map.value._hoveredParkId = null;
   }
@@ -750,7 +750,6 @@ async function setupLayers() {
     // Obter configuração da camada
     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
 
-    alert(currentLayer.value);
     // Adicionar a camada usando o LayerOrderManager
     await addLayer(currentLayer.value);
 
@@ -760,10 +759,10 @@ async function setupLayers() {
         addParksLayer();
         setupRasterInteractions(map.value, config, fetchRasterValue);
       } else {
-        setupSetoresLayer(map.value, locationStore);
-        setupSetoresInteractions(map.value, hoveredSetorId);
+        // setupSetoresLayer(map.value, locationStore);
+        // setupSetoresInteractions(map.value, hoveredSetorId);
         addParksLayer();
-        setupVectorInteractions(map.value, config);
+        // setupVectorInteractions(map.value, config);
       }
     }
   } catch (error) {
