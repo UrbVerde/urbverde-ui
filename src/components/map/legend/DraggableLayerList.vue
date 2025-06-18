@@ -12,36 +12,38 @@
   >
     <template #item="{ element }">
       <div class="layer-card-wrapper">
-        <LegendCard
-          v-if="element.id === 'parks' && scale === 'intraurbana'"
-          :showMenu="false"
-          :showOpacity="true"
-          :showColorScale="false"
-          :layerId="'parks-layer'"
-          :year="currentYear"
-          :scale="scale"
-          :showLegendLines="true"
-          @opacity-change="handlerParksLayerOpacity"
-        />
+        <div v-if="element.id === 'parks' && props.scale === 'intraurbana'">
+          <LegendCard
 
-        <LegendCard
-          v-else
-          :showMenu="false"
-          :title="getLayerConfig(element.id)?.label"
-          :icon="getLayerIcon(element.id)"
-          :layerId="element.id"
-          :year="currentYear"
-          :scale="scale"
-          :showLegendLines="false"
-          :showOpacity="true"
-          :showColorScale="true"
-          :stops="getLayerConfig(element.id)?.stops"
-          :unit="getLayerConfig(element.id)?.unit"
-          :showLayerCut="false"
-          :draggable="true"
-          @opacity-change="(opacity) => handleDataLayerOpacity(opacity, element.id)"
-          @colorbar-click="handleColorbarClick"
-        />
+            :showMenu="false"
+            :showOpacity="true"
+            :showColorScale="false"
+            :layerId="'parks-layer'"
+            :year="currentYear"
+            :scale="props.scale"
+            :showLegendLines="true"
+            @opacity-change="handlerParksLayerOpacity"
+          />
+        </div>
+        <div v-else>
+          <LegendCard
+            :showMenu="false"
+            :title="getLayerConfig(element.id)?.label"
+            :icon="getLayerIcon(element.id)"
+            :layerId="element.id"
+            :year="currentYear"
+            :scale="props.scale"
+            :showLegendLines="false"
+            :showOpacity="true"
+            :showColorScale="true"
+            :stops="getLayerConfig(element.id)?.stops"
+            :unit="getLayerConfig(element.id)?.unit"
+            :showLayerCut="false"
+            :draggable="true"
+            @opacity-change="(opacity) => handleDataLayerOpacity(opacity, element.id)"
+            @colorbar-click="handleColorbarClick"
+          />
+        </div>
       </div>
     </template>
   </draggable>
@@ -57,16 +59,16 @@ import { getLayerConfig } from '@/constants/layers';
 import LegendCard from './LegendCard.vue';
 import { reorderLayerSetup } from '@/components/map/layers/MapLayerController';
 
-// const props = defineProps({
-//   currentYear: {
-//     type: [Number, String],
-//     required: true
-//   },
-//   scale: {
-//     type: String,
-//     required: true
-//   }
-// });
+const props = defineProps({
+  // currentYear: {
+  //   type: [Number, String],
+  //   required: true
+  // },
+  scale: {
+    type: String,
+    required: true
+  }
+});
 
 const emit = defineEmits(['opacity-change', 'colorbar-click']);
 const layersStore = useLayersStore();
@@ -153,7 +155,7 @@ const handleDataLayerOpacity = (opacity, layerId) => {
 
 const handlerParksLayerOpacity = (opacity) => {
   console.log('[DraggableLayerList] Handling parks layer opacity:', { opacity });
-  layersStore.setLayerOpacity('parks-layer', opacity / 100);
+  layersStore.setLayerOpacity('parks', opacity / 100);
 };
 
 const handleColorbarClick = () => {
