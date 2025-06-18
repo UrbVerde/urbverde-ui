@@ -1,6 +1,6 @@
 // urbverde-ui/src/stores/layersStore.js
 import { defineStore } from 'pinia';
-import { setDefaultLayers, updateCurrentMainLayer, getCurrentMainLayer, clearLayers, getLayerConfig } from '@/utils/dynamicLayersOrder';
+import { updateCurrentMainLayer, getCurrentMainLayer, clearLayers, getLayerConfig } from '@/utils/dynamicLayersOrder';
 import { LAYER_CONFIGS } from '@/constants/layers';
 
 export const useLayersStore = defineStore('layersStore', {
@@ -67,7 +67,23 @@ export const useLayersStore = defineStore('layersStore', {
      * @param {string} activeMainLayer - The main layer to be set as current
      */
     setDefaultLayers(activeMainLayer) {
-      this.activeLayers = setDefaultLayers(activeMainLayer);
+      const parksConfig = getLayerConfig('parks', this.currentYear, this.currentScale, this.currentMunicipioId);
+      const mainLayerConfig = getLayerConfig(activeMainLayer, this.currentYear, this.currentScale, this.currentMunicipioId);
+
+      this.activeLayers = [
+        {
+          id: 'parks',
+          currentMain: false,
+          source: parksConfig?.source,
+          opacity: this.defaultOpacity
+        },
+        {
+          id: activeMainLayer,
+          currentMain: true,
+          source: mainLayerConfig?.source,
+          opacity: this.defaultOpacity
+        }
+      ];
       console.log('[LayersStore] Set default layers configuration:', this.activeLayers);
     },
 
@@ -200,7 +216,8 @@ export const useLayersStore = defineStore('layersStore', {
         const newLayer = {
           id: layer.id,
           currentMain: false,
-          opacity: layer.opacity || this.defaultOpacity
+          opacity: layer.opacity || this.defaultOpacity,
+          source: layer.source
         };
 
         // Verifica se parks está no topo

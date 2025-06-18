@@ -15,7 +15,7 @@
         </div>
 
         <!-- Recorte da camada - only show for non-parks layers -->
-        <LayerCut v-if="layerId !== 'parks-layer' && showLayerCut" class="layer-cut"/>
+        <LayerCut v-if="layerId !== 'parks' && showLayerCut" class="layer-cut"/>
       </div>
     </div>
 
@@ -31,9 +31,9 @@
                   @colorbar-click="$emit('colorbar-click')" />
 
       <!-- Legend Lines -->
-      <div v-if="showLegendLines || layerId === 'parks-layer'" class="legend-lines">
+      <div v-if="showLegendLines || layerId === 'parks'" class="legend-lines">
         <!-- For base layer, show only setores censitários -->
-        <template v-if="!layerId || layerId !== 'parks-layer'">
+        <template v-if="!layerId || layerId !== 'parks'">
           <div class="scale-navigation">
             <button
               class="nav-button"
@@ -65,7 +65,7 @@
         </template>
 
         <!-- For parks layer, show only parks square -->
-        <p v-if="layerId === 'parks-layer' && scale === 'intraurbana'" class="legend-item body-small-regular">
+        <p v-if="layerId === 'parks' && scale === 'intraurbana'" class="legend-item body-small-regular">
           <span class="legend-square parks"></span>Áreas verdes urbanas
         </p>
       </div>

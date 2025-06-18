@@ -4,8 +4,8 @@ import { ref, computed } from 'vue';
 export const useMapStore = defineStore('map', () => {
   // Estado
   const layers = ref({
-    'parks-layer': {
-      id: 'parks-layer',
+    'parks': {
+      id: 'parks',
       title: 'Áreas Verdes Urbanas',
       icon: 'bi-tree',
       showOpacity: true,

@@ -85,7 +85,7 @@ export const LAYER_CONFIGS = {
 
   // Climate layers
   surface_temp: {
-    id: 'surface-temp',
+    id: 'surface_temp',
     type: LAYER_DATA_TYPES.RASTER,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Temperatura de Superfície',
@@ -153,7 +153,7 @@ export const LAYER_CONFIGS = {
   },
 
   heat_island: {
-    id: 'heat-island',
+    id: 'heat_island',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Nível de exposição à ilha de calor',
@@ -384,7 +384,7 @@ export const LAYER_CONFIGS = {
   },
 
   avg_distance_to_squares: {
-    id: 'avg-distance-to-squares',
+    id: 'avg_distance_to_squares',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Distância Média até as Praças',
@@ -412,7 +412,7 @@ export const LAYER_CONFIGS = {
   },
 
   square_area_per_capita: {
-    id: 'square-area-per-capita',
+    id: 'square_area_per_capita',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Área de Praças por Habitante',
@@ -443,7 +443,7 @@ export const LAYER_CONFIGS = {
   },
 
   square_served_area: {
-    id: 'square-served-area',
+    id: 'square_served_area',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'Área Atendida pelas Praças',
@@ -473,7 +473,7 @@ export const LAYER_CONFIGS = {
   },
 
   served_population: {
-    id: 'served-population',
+    id: 'served_population',
     type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
     label: 'População Atendida pelas Praças',

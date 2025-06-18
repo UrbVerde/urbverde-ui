@@ -182,7 +182,7 @@ function removeDynamicLayer() {
   removeVectorInteractions(map.value);
 
   // Remover camadas
-  ['dynamic-layer', 'dynamic-layer-outline', 'parks-layer','pcv-layer', 'setores-layer'].forEach(id => {
+  ['dynamic-layer', 'dynamic-layer-outline', 'parks','pcv-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }

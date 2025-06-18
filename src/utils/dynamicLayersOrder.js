@@ -2,24 +2,6 @@
 import { LAYER_CONFIGS } from '@/constants/layers';
 
 /**
- * Configura o estado inicial das camadas
- * @param {string} activeMainLayer - A camada principal a ser definida
- * @returns {Array} Array com as camadas configuradas
- */
-export function setDefaultLayers(activeMainLayer) {
-  return [
-    {
-      id: 'parks',
-      currentMain: false
-    },
-    {
-      id: activeMainLayer,
-      currentMain: true
-    }
-  ];
-}
-
-/**
  * Atualiza a camada principal atual
  * @param {Array} layers - Array atual de camadas
  * @param {string} newMainLayer - A nova camada principal
@@ -44,9 +26,11 @@ export function updateCurrentMainLayer(layers, newMainLayer, isAlreadyActive) {
     newLayers[newLayerIndex].currentMain = false;
   } else {
     // Se a camada não está ativa, insere na posição do currentMain
+    const newLayerConfig = getLayerConfig(newMainLayer);
     const newLayer = {
       id: newMainLayer,
-      currentMain: true
+      currentMain: true,
+      source: newLayerConfig?.source
     };
 
     // Remove a camada antiga e insere a nova

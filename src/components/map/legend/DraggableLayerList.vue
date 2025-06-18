@@ -18,7 +18,7 @@
             :showMenu="false"
             :showOpacity="true"
             :showColorScale="false"
-            :layerId="'parks-layer'"
+            :layerId="'parks'"
             :year="currentYear"
             :scale="props.scale"
             :showLegendLines="true"
