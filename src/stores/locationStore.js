@@ -55,148 +55,32 @@ export const useLocationStore = defineStore('locationStore', {
 
   actions: {
     async fetchCategories() {
-      if (!this.cd_mun || this.isLoadingCategories) {return;}
-
       this.isLoadingCategories = true;
       console.log('locationStore: Fetching categories for city:', this.cd_mun);
 
       try {
-        let data;
-        if (this.viewMode === 'policies') {
-          // JSON mockado para o modo 'policies'
-          data = {
-            'categories': [
-              {
-                'id': 'overview',
-                'name': 'Síntese dos indicadores',
-                'icon': 'stats.svg',
-                'layers': [
-                  { 'id': 'about_city', 'name': 'Sobre a cidade', 'isActive': false, 'isNew': true },
-                  { 'id': 'danger_zone', 'name': 'Zonas de risco climático', 'isActive': false, 'isNew': false }
-                ]
-              },
-              {
-                'id': 'climate',
-                'name': 'Clima',
-                'icon': 'Snowy Sunny Day.svg',
-                'layers': [
-                  { 'id': 'surface_temp', 'name': 'Temperatura de superfície', 'isActive': false, 'isNew': true },
-                  { 'id': 'max_surface_temp', 'name': 'Temperatura máxima de superfície', 'isActive': false, 'isNew': false },
-                  { 'id': 'heat_island', 'name': 'Nível de exposição à ilha de calor', 'isActive': false, 'isNew': false }
-                ]
-              },
-              {
-                'id': 'parks',
-                'name': 'Parques e Praças',
-                'icon': 'Nature.svg',
-                'layers': [
-                  {
-                    'id': 'avg_distance_to_squares',
-                    'name': 'Distância media até as praças',
-                    'isActive': false,
-                    'isNew': false
-                  },
-                  {
-                    'id': 'square_area_per_capita',
-                    'name': 'Área de praças por habitante',
-                    'isActive': false,
-                    'isNew': false
-                  },
-                  {
-                    'id': 'square_served_area',
-                    'name': 'Área atendida pelas praças',
-                    'isActive': false,
-                    'isNew': false
-                  },
-                  {
-                    'id': 'served_population',
-                    'name': 'População atendida pelas praças',
-                    'isActive': false,
-                    'isNew': false
-                  }
-                ]
-              },
-              {
-                'id': 'vegetation',
-                'name': 'Vegetação',
-                'icon': 'Oak Tree.svg',
-                'layers': [
-                  { 'id': 'pcv', 'name': 'Cobertura vegetal (PCV)', 'isActive': false, 'isNew': false },
-                  { 'id': 'icv', 'name': 'Cobertura vegetal por habitante (ICV)', 'isActive': false, 'isNew': false },
-                  { 'id': 'idsa', 'name': 'Desigualdade sociambiental (IDSA)', 'isActive': false, 'isNew': false },
-                  { 'id': 'cvp', 'name': 'Cobertura vegetal por satélite', 'isActive': false, 'isNew': false },
-                  { 'id': 'ndvi', 'name': 'Vigor da vegetação (NDVI)', 'isActive': false, 'isNew': false }
-                ]
-              },
-              {
-                'id': 'emissions',
-                'name': 'Emissões',
-                'icon': 'emissions.svg',
-                'layers': [
-                  { 'id': 'e1', 'name': 'generico 1', 'isActive': false, 'isNew': false },
-                  { 'id': 'e2', 'name': 'generico 2', 'isActive': false, 'isNew': false },
-                  { 'id': 'e3', 'name': 'generico 3', 'isActive': false, 'isNew': false }
-                ]
-              },
-              {
-                'id': 'hidro',
-                'name': 'Águas',
-                'icon': 'water.svg',
-                'layers': [
-                  { 'id': 'e1', 'name': 'generico 1', 'isActive': false, 'isNew': false },
-                  { 'id': 'e2', 'name': 'generico 2', 'isActive': false, 'isNew': false },
-                  { 'id': 'e3', 'name': 'generico 3', 'isActive': false, 'isNew': false }
-                ]
-              },
-              {
-                'id': 'agriculture',
-                'name': 'Agricultura urbana',
-                'icon': 'plant.svg',
-                'layers': [
-                  { 'id': 'e1', 'name': 'generico 1', 'isActive': false, 'isNew': false },
-                  { 'id': 'e2', 'name': 'generico 2', 'isActive': false, 'isNew': false },
-                  { 'id': 'e3', 'name': 'generico 3', 'isActive': false, 'isNew': false }
-                ]
-              },
-              {
-                'id': 'census',
-                'name': 'Censo',
-                'icon': 'bi bi-people',
-                'layers': [
-                  { 'id': 'population', 'name': 'População', 'isActive': false, 'isNew': false }
-                ]
-              }
-            ]
-          };
-        } else {
-          const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${this.cd_mun}`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          data = await response.json();
+        // Construir URL com parâmetros
+        const url = new URL('http://localhost:8080/v1/categories');
+        url.searchParams.append('city', this.cd_mun);
+
+        // Adicionar viewMode se estiver definido
+        if (this.viewMode) {
+          url.searchParams.append('viewMode', this.viewMode);
         }
+
+        const response = await fetch(url.toString());
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
 
         if (!data?.categories) {
           throw new Error('No categories in response');
         }
 
-        // Filtra as categorias se o estado não for SP
-        if (this.viewMode === 'map') {
-          if (this.uf && this.uf !== 'SP') {
-            this.categories = data.categories.filter(category => category.id === 'census');
-
-          } else {
-            this.categories = data.categories;
-          }
-        }
-
-        if (this.viewMode === 'policies') {
-          if (this.cd_mun && ![3547809, 3548708, 3548807, 3513801, 3529401, 3543303, 3544004].includes(this.cd_mun)) {
-            this.categories = data.categories.filter(category => category.id === 'overview');
-          } else {
-            this.categories = data.categories;
-          }
-        }
+        // A lógica de filtragem agora é tratada no backend
+        this.categories = data.categories;
 
         // If we have a current layer, check if it exists in new categories
         if (this.layer) {
@@ -235,7 +119,7 @@ export const useLocationStore = defineStore('locationStore', {
     async fetchCoordinatesByCode(cd_mun) {
       console.log('Fetching coordinates for municipal code:', cd_mun);
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/address/data?code=${cd_mun}`);
+        const response = await fetch(`http://localhost:8080/v1/address/data?code=${cd_mun}`);
         const data = await response.json();
         console.log('Received coordinate data:', data);
 
