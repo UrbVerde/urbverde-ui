@@ -70,13 +70,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   gap: 32px;
-  flex: 1 0 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .top {
@@ -111,11 +115,17 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    flex: 1 0 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
 
     .title {
       color: map-get($body-text, body-color);
       margin: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      text-align: left;
     }
   }
 }
@@ -128,5 +138,21 @@ export default {
   gap: 8px;
   flex-wrap: wrap;
   opacity: 0.8;
+}
+
+@include breakpoint-down('tablet') {
+  .top {
+    .number {
+        width: 56px;
+        height: 56px;
+
+        .number-text {
+        font-size: 48px;
+        font-style: normal;
+        font-weight: 800;
+        line-height: 150%; /* 96px */
+        }
+    }
+    }
 }
 </style>
