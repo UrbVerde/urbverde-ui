@@ -5,20 +5,20 @@ import vegetacao from './sections/national/vegetacao.js';
 import parques from './sections/national/parques.js';
 import overview from './sections/policies/sintese.js';
 
-// Mapa para converter categorias da UI para nomes de configuração internos
+// Mapa para converter IDs de categorias para nomes de configuração internos
 export const categoryToLayerMap = {
-  'Clima': 'temperatura',
-  'Vegetação': 'vegetação',
-  'Parques e Praças': 'parques',
-  'Panorama geral': 'overview',
+  'climate': 'temperatura',
+  'vegetation': 'vegetação',
+  'parks': 'parques',
+  'overview': 'overview',
 };
 
-// Mapa inverso para converter de interno para categorias da UI
+// Mapa inverso para converter de interno para IDs de categorias
 export const layerToCategoryMap = {
-  'temperatura': 'Clima',
-  'vegetação': 'Vegetação',
-  'parques': 'Parques e Praças',
-  'overview': 'Panorama geral',
+  'temperatura': 'climate',
+  'vegetação': 'vegetation',
+  'parques': 'parks',
+  'overview': 'overview',
 };
 
 // Configurações de seções para cada tipo de camada

@@ -28,10 +28,12 @@ export const useLocationStore = defineStore('locationStore', {
 
   getters: {
     currentCategoryName() {
-      return this.category;
+      const currentCategory = this.categories.find(cat => cat.id === this.category);
+
+      return currentCategory?.name || this.category;
     },
     currentLayerName() {
-      const currentCategory = this.categories.find(cat => cat.name === this.category);
+      const currentCategory = this.categories.find(cat => cat.id === this.category);
       const currentLayer = currentCategory?.layers?.find(layer => layer.id === this.layer);
 
       return currentLayer?.name || '';
@@ -110,7 +112,7 @@ export const useLocationStore = defineStore('locationStore', {
         const firstLayer = firstCategory.layers?.[0];
         if (firstLayer) {
           console.log('locationStore: Setting default category and layer');
-          this.category = firstCategory.name;
+          this.category = firstCategory.id;
           this.layer = firstLayer.id;
         }
       }

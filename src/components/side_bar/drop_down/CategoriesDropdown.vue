@@ -77,7 +77,7 @@ watchEffect(() => {
         firstLayer.isActive = true;
         openCategoryIds.value = [firstCategory.id];
         locationStore.setLocation({
-          category: firstCategory.name,
+          category: firstCategory.id,
           layer: firstLayer.id,
           layerName: firstLayer.display_name || firstLayer.title || firstLayer.name
         });
@@ -94,7 +94,7 @@ function selectLayer(layer, categoryObj) {
   });
   layer.isActive = true;
   locationStore.setLocation({
-    category: categoryObj.name,
+    category: categoryObj.id,
     layer: layer.id
   });
 

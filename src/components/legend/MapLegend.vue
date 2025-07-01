@@ -157,7 +157,7 @@ onMounted(() => {
 const currentYear = computed(() => storeYear.value || 2021);
 const currentLayerName = computed(() => locationStore.currentLayerName);
 const currentCategory = computed(() =>
-  categories.value?.find(cat => cat.name === category.value)
+  categories.value?.find(cat => cat.id === category.value)
 );
 const currentLayerId = computed(() => layer.value);
 const currentLayerAllowedYears = computed(() =>
