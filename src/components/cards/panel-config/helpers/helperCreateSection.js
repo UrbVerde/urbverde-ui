@@ -8,13 +8,15 @@ import CardData from '@/components/cards/components-cards/cardData.vue';
 import CardInfo from '@/components/cards/components-cards/cardInfo.vue';
 import CardRanking from '@/components/cards/components-cards/cardRanking.vue';
 import CardDownload from '@/components/cards/components-cards/cardDownload.vue';
+import CardAction from '@/components/cards/components-cards/cardAction.vue';
 
 // Mapa de componentes para facilitar o acesso
 const COMMON_COMPONENTS = {
   CardData,
   CardInfo,
   CardRanking,
-  CardDownload
+  CardDownload,
+  CardAction
 };
 
 /**

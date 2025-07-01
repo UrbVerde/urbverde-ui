@@ -2,7 +2,7 @@
 
 import clima from './sections/national/clima.js';
 import vegetacao from './sections/national/vegetacao.js';
-import parques from './sections/national/parques.js';
+import parques from './sections/policies/sintese.js';
 
 // Mapa para converter categorias da UI para nomes de configuração internos
 export const categoryToLayerMap = {
