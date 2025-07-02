@@ -168,6 +168,15 @@
       </template>
     </div>
   </CardBase>
+  <CardBase
+    v-if="showInfoButton"
+    :show-info-button="showInfoButton"
+    :modal-title="modalTitle"
+    :modal-body-text="modalBodyText"
+    :show-see-on-map="showSeeOnMap"
+    :seeOnMapLayerID="seeOnMapLayerID"
+    :city-code="cityCode"
+    style="display: none;" />
 </template>
 
 <script setup>

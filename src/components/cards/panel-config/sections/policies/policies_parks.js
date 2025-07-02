@@ -276,7 +276,7 @@ export default createSectionConfig((nm_mun) => [
               'Construir praças, parques e espaços públicos permeáveis, que absorvam a água da chuva',
             ],
             showPrimaryButton: true,
-            buttonLabel: 'Ver mais dicas',
+            buttonLabel: 'Ver mais orientações',
             buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas',
           }
         }

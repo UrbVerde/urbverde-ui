@@ -28,17 +28,19 @@
     </div>
 
     <!-- Video Modal -->
-    <div v-if="showVideoModal" class="video-modal" @click="closeVideoModal">
-      <div class="modal-content" @click.stop>
-        <button class="close-button" @click="closeVideoModal">&times;</button>
-        <iframe
-          :src="getEmbedUrl(videoUrl)"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+    <teleport to="body">
+      <div v-if="showVideoModal" class="video-modal" @click="closeVideoModal">
+        <div class="modal-content" @click.stop>
+          <button class="close-button" @click="closeVideoModal">&times;</button>
+          <iframe
+            :src="getEmbedUrl(videoUrl)"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
       </div>
-    </div>
+    </teleport>
   </div>
 </template>
 
@@ -120,8 +122,8 @@ export default {
 }
 
 .video-container {
-  width: 448px;
-  height: 252px;
+  width: 504px;
+  height: 284.7px;
   position: relative;
   cursor: pointer;
   border-radius: 16px;
