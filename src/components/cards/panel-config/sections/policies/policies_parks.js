@@ -52,23 +52,15 @@ export default createSectionConfig((nm_mun) => [
     title: `Ações e indicadores em ${nm_mun}`,
     showYearPicker: false,
     panel: {
-      variant: '2-2',
+      variant: '3-2',
       items: [
         {
-          type: 'panel',
+          component: 'CardAction',
           props: {
-            variant: '1-1',
-            items: [
-              {
-                component: 'CardAction',
-                props: {
-                  number: 1,
-                  actionTitle: 'Ação 1 - Aumentar disponibilidade de praças e parques por habitante, para melhorar a qualidade ambiental da cidade',
-                  ods: '3, 10, 11',
-                  badgeStatus: 'nao-informado'
-                }
-              }
-            ]
+            number: 1,
+            actionTitle: 'Ação 1 - Aumentar disponibilidade de praças e parques por habitante, para melhorar a qualidade ambiental da cidade',
+            ods: '3, 10, 11',
+            badgeStatus: 'nao-informado'
           }
         },
         {
@@ -81,66 +73,51 @@ export default createSectionConfig((nm_mun) => [
           }
         },
         {
-          type: 'panel',
+
+          component: 'CardAction',
           props: {
-            variant: '1-1',
-            items: [
-              {
-                component: 'CardAction',
-                props: {
-                  number: 2,
-                  actionTitle: 'Garantir acesso a praças e parques para todos habitantes em até 15 minutos de caminhada',
-                  ods: '3, 11, 13',
-                  badgeStatus: 'em-andamento'
-                }
-              }
-            ]
+            number: 2,
+            actionTitle: 'Ação 2 - Garantir acesso a praças e parques para todos habitantes em até 15 minutos de caminhada',
+            ods: '3, 11, 13',
+            badgeStatus: 'em-andamento'
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideNumberValue: '291',
-            numberUnit: 'm',
             overrideTitle: 'Distância média até chegar em praças e parques',
-            overrideCardSubtitle: 'Recomendação da ONU: até 300 m',
+            overrideNumberValue: '291 m',
+            numberType: 'composed',
+            numberSubtitle: 'Recomendação da ONU: até 300 m',
           }
         },
         {
-          type: 'panel',
+
+          component: 'CardAction',
           props: {
-            variant: '1-1',
-            items: [
-              {
-                component: 'CardAction',
-                props: {
-                  number: 3,
-                  actionTitle: 'Ampliar a distribuição de praças e parques em todas regiões da cidade',
-                  ods: '3, 11, 13',
-                  badgeStatus: 'em-andamento'
-                }
-              }
-            ]
+            number: 3,
+            actionTitle: 'Ação 3 - Ampliar a distribuição de praças e parques em todas regiões da cidade',
+            ods: '3, 11, 13',
+            badgeStatus: 'em-andamento'
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideNumberValue: '9082',
-            numberUnit: 'm',
             overrideTitle: 'Área total destinada para praças e parques',
-            overrideCardSubtitle: 'Valor equivalente a 32 campos de futebol',
+            overrideNumberValue: '9082 m',
+            numberType: 'composed',
+            numberSubtitle: 'Valor equivalente a 32 campos de futebol',
           }
         },
       ]
     }
   }),
 
-  // Seção: Benefícios dos parques e praças
   createSection({
     id: 'beneficios',
     ref: 'beneficiosSection',
-    title: 'Descubra os benefícios dos parques e das praças',
+    showYearPicker: false,
     panel: {
       variant: '1-1',
       items: [
@@ -152,15 +129,16 @@ export default createSectionConfig((nm_mun) => [
             imageSrc: placeholderImg,
             midiaPosition: 'right',
             type: 'list',
+            title: 'Descubra os benefícios dos parques e das praças',
             listItems: [
               'Deixam as cidades mais preparadas para as mudanças climáticas e melhoram a saúde da população ao redor',
               'Ajudam a cidade a crescer de forma sustentável, com potencial de gerar créditos de carbono ao município',
-              'Melhoram a vida de crianças e idosos durante eventos climáticos extremos',
+              'Melhoram o ar da cidade e são refúgios durante eventos climáticos extremos',
               'Incentivam a participação das pessoas em ações de cultura e meio ambiente'
             ],
             showPrimaryButton: true,
             buttonLabel: 'Ver mais dicas',
-            buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas/temperatura',
+            buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas',
           }
         }
       ]
@@ -171,57 +149,51 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'indicadores2',
     ref: 'indicadoresSection2',
-    title: '',
+    showYearPicker: false,
     panel: {
       variant: '1-2',
       items: [
-        // Primeira coluna: CardAction
         {
           component: 'CardAction',
           props: {
             number: 4,
-            actionTitle: 'Garantir o acesso a praças e parques para toda a população',
+            actionTitle: 'Ação 4 - Garantir o acesso a praças e parques para toda a população',
             ods: '3, 10, 17',
             badgeStatus: 'em-andamento'
           }
         },
-        // Segunda coluna: painel 2-2 com os quatro CardData
         {
-          type: 'panel',
+          component: 'CardData',
           props: {
-            variant: '2-2',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  overrideNumberValue: '89%',
-                  overrideTitle: 'População atendida por praças e parques',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideNumberValue: '59%',
-                  overrideTitle: 'Idosos e crianças atendidos por praças e parques',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideNumberValue: '49%',
-                  overrideTitle: 'Pretos, pardos e indígenas atendidos por praças e parques',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideNumberValue: '39%',
-                  overrideTitle: 'Mulheres chefes de família atendidas por praças e praças',
-                }
-              }
-            ]
+            overrideTitle: 'População atendida por praças e parques',
+            overrideNumberValue: '89%',
+            numberType: 'default',
           }
-        }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Idosos e crianças atendidos por praças e parques',
+            overrideNumberValue: '59%',
+            numberType: 'default',
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Pretos, pardos e indígenas atendidos por praças e parques',
+            overrideNumberValue: '49%',
+            numberType: 'default',
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Mulheres chefes de família atendidas por praças e praças',
+            overrideNumberValue: '39%',
+            numberType: 'default',
+          }
+        },
       ]
     }
   }),
