@@ -86,7 +86,7 @@ defineProps({
             text-align: left;
             text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
             font-family: Montserrat;
-            font-size: 24px;
+            font-size: 16px;
             font-style: normal;
             font-weight: 600;
             line-height: 120%;

@@ -230,7 +230,15 @@ const titleSubtitle = computed(() => props.overrideTitleSubtitle || cardData.val
 const numberValue = computed(() => props.overrideNumberValue || cardData.value?.value || '');
 const cardSubtitle = computed(() => props.overrideCardSubtitle || cardData.value?.subtitle || '');
 const showCardSubtitle = computed(() => !!cardSubtitle.value);
-const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.value);
+
+// Se houver overrideNumberValue, nunca mostrar empty
+const hasOverrideNumberValue = computed(() => props.overrideNumberValue !== null && props.overrideNumberValue !== '' && props.overrideNumberValue !== undefined);
+
+const isEmpty = computed(() => {
+  if (hasOverrideNumberValue.value) {return false;}
+
+  return !isLoading.value && !error.value && !cardData.value;
+});
 
 // Fetch data from API
 const fetchData = async() => {

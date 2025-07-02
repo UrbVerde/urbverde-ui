@@ -4,6 +4,7 @@ import clima from './sections/national/clima.js';
 import vegetacao from './sections/national/vegetacao.js';
 import parques from './sections/national/parques.js';
 import overview from './sections/policies/sintese.js';
+import policies_parks from './sections/policies/policies_parks.js';
 
 // Mapa para converter IDs de categorias para nomes de configuração internos
 export const categoryToLayerMap = {
@@ -11,6 +12,7 @@ export const categoryToLayerMap = {
   'vegetation': 'vegetação',
   'parks': 'parques',
   'overview': 'overview',
+  'policies_parks': 'policies_parks',
 };
 
 // Mapa inverso para converter de interno para IDs de categorias
@@ -19,6 +21,7 @@ export const layerToCategoryMap = {
   'vegetação': 'vegetation',
   'parques': 'parks',
   'overview': 'overview',
+  'policies_parks': 'policies_parks',
 };
 
 // Configurações de seções para cada tipo de camada
@@ -28,6 +31,7 @@ export const sectionConfigs = {
   vegetação: vegetacao,
   parques,
   overview,
+  policies_parks,
 
   // layers : {
   //  'id_da_layer': teste
