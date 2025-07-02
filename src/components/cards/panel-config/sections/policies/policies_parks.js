@@ -1,11 +1,12 @@
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
-import placeholderImg from '@/assets/images/mapa.png';
+import mariParks from '@/assets/images/cards/policies/mari-parks.svg';
+import mariTarget from '@/assets/images/cards/policies/mari-target-1.svg';
 
 export default createSectionConfig((nm_mun) => [
   // Seção: Eixo Parques e Praças
   createSection({
-    id: 'eixo',
-    ref: 'eixoSection',
+    id: 'metas',
+    ref: 'metasSection',
     title: `Eixo Parques e Praças em ${nm_mun}`,
     subtitle: 'Parques e praças são os principais espaços públicos de uma cidade, sendo essenciais para melhorar o ambiente e o bem-estar da população',
     showYearPicker: false,
@@ -20,7 +21,7 @@ export default createSectionConfig((nm_mun) => [
             title: 'Objetivos do eixo',
             showMidia: true,
             midiaType: 'image',
-            imageSrc: placeholderImg,
+            imageSrc: mariTarget,
             midiaPosition: 'right',
             type: 'paragraph-left',
             paragraphText: 'Promover ações e iniciativas para aumentar a disponibilidade, acessibilidade, distribuição e melhorias das praças e parques na cidade, contribuindo para a redução da desigualdade local',
@@ -113,8 +114,8 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   createSection({
-    id: 'beneficios',
-    ref: 'beneficiosSection',
+    id: 'indicadores',
+    ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
       variant: '1-1',
@@ -124,7 +125,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             showMidia: true,
             midiaType: 'image',
-            imageSrc: placeholderImg,
+            imageSrc: mariParks,
             midiaPosition: 'right',
             type: 'list',
             title: 'Descubra os benefícios dos parques e das praças',
@@ -254,8 +255,8 @@ export default createSectionConfig((nm_mun) => [
 
   // Seção: Orientações para o planejamento climático
   createSection({
-    id: 'orientacoes',
-    ref: 'orientacoesSection',
+    id: 'planejamento',
+    ref: 'planejamentoSection',
     title: 'Orientações para o planejamento climático da cidade',
     showYearPicker: false,
     panel: {
@@ -266,7 +267,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             showMidia: true,
             midiaType: 'video',
-            videoUrl: 'https://www.youtube.com/watch?v=RYbG2voostc',
+            videoUrl: 'https://www.youtube.com/watch?v=e_TtnmXEHKI&t=6839s',
             title: 'Projetos, iniciativas e políticas públicas de parques e praças',
             midiaPosition: 'left',
             type: 'list',
@@ -286,44 +287,19 @@ export default createSectionConfig((nm_mun) => [
 
   // Seção: ODS do eixo
   createSection({
-    id: 'ods',
-    ref: 'odsSection',
+    id: 'planejamento',
+    ref: 'planejamentoSection',
     title: 'Objetivos de Desenvolvimento Sustentável (ODS) do eixo',
+    showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
-          component: 'CardInfo',
+          component: 'CardODS',
           props: {
-            showMidia: true,
-            midiaType: 'image',
-            imageSrc: placeholderImg,
-            midiaPosition: 'left',
-            type: 'list',
-            listItems: [
-              'ODS 3: Saúde e bem-estar',
-              'ODS 10: Redução das desigualdades',
-              'ODS 11: Cidades e comunidades sustentáveis',
-              'ODS 13: Ação contra a mudança global do clima'
-            ]
+            odsNumbers: [3, 10, 11, 13],
           }
         },
-        {
-          component: 'CardInfo',
-          props: {
-            showMidia: true,
-            midiaType: 'image',
-            imageSrc: placeholderImg,
-            midiaPosition: 'right',
-            type: 'list',
-            listItems: [
-              'Garantir saúde e qualidade de vida para todas as pessoas',
-              'Eliminar as desigualdades entre etnias e povos',
-              'Tornar cidades mais seguras, inclusivas e sustentáveis',
-              'Ação contra a mudança global do clima'
-            ]
-          }
-        }
       ]
     }
   })

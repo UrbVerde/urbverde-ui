@@ -1,5 +1,5 @@
 <template>
-  <div v-if="size === 'large' && text" class="ods-wrapper">
+  <div v-if="size === 'large' && text" class="ods-list-wrapper">
     <img
       :src="getOdsImage(odsNumber)"
       :alt="`ODS ${odsNumber}`"
@@ -147,11 +147,12 @@ export default {
   height: 88px;
 }
 
-.ods-wrapper {
+.ods-list-wrapper {
   display: flex;
-  width: 324px;
+  width: 100%;
   align-items: flex-start;
   gap: 24px;
+  flex-direction: row;
 }
 
 .text-wrapper {

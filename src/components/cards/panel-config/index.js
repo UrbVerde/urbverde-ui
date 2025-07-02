@@ -43,6 +43,9 @@ export const tabIdToLabelMap = {
   'map': 'Mapa',
   'stats': 'Estatísticas',
   'ranking': 'Ranking',
-  'seeMore': 'Veja Mais'
+  'seeMore': 'Veja Mais',
+  'metas': 'Metas',
+  'indicadores': 'Indicadores',
+  'planejamento': 'Planejamento climático',
   // Adicione mais mapeamentos conforme necessário
 };

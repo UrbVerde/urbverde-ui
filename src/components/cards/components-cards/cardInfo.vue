@@ -39,7 +39,9 @@
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
           :button-link="buttonLink"
-        />
+        >
+          <slot />
+        </ParagraphInsideCards>
       </template>
 
       <!-- Bottom position -->
@@ -63,7 +65,9 @@
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
           :button-link="buttonLink"
-        />
+        >
+          <slot />
+        </ParagraphInsideCards>
         <MidiaInsideCards
           :type-midia="midiaType"
           :imageSrc="imageSrc || (midiaType === 'image' ? midiaLink : undefined)"
@@ -98,7 +102,9 @@
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
           :button-link="buttonLink"
-        />
+        >
+          <slot />
+        </ParagraphInsideCards>
         <MidiaInsideCards
           v-if="!largerThan('tablet')"
           :type-midia="midiaType"
@@ -134,7 +140,9 @@
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
           :button-link="buttonLink"
-        />
+        >
+          <slot />
+        </ParagraphInsideCards>
         <MidiaInsideCards
           v-if="largerThan('tablet')"
           :type-midia="midiaType"
@@ -164,7 +172,9 @@
           :button-icon="buttonIcon"
           :button-icon-type="buttonIconType"
           :button-link="buttonLink"
-        />
+        >
+          <slot />
+        </ParagraphInsideCards>
       </template>
     </div>
   </CardBase>
@@ -195,7 +205,7 @@ defineProps({
   },
   title: {
     type: String,
-    required: true
+    required: false
   },
   subtitle: {
     type: String,
@@ -338,7 +348,7 @@ defineProps({
     align-items: center;
 
     :deep(.midia-wrapper) {
-      padding: 16px 24px;
+      padding: 24px 16px 16px 16px;
     }
   }
 
