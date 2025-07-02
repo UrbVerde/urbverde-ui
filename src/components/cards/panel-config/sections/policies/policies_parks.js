@@ -45,7 +45,6 @@ export default createSectionConfig((nm_mun) => [
     }
   }),
 
-  // Seção: Ações e Indicadores
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
@@ -107,7 +106,6 @@ export default createSectionConfig((nm_mun) => [
             overrideTitle: 'Área total destinada para praças e parques',
             overrideNumberValue: '9082 m',
             numberType: 'composed',
-            numberSubtitle: 'Valor equivalente a 32 campos de futebol',
           }
         },
       ]
@@ -145,53 +143,109 @@ export default createSectionConfig((nm_mun) => [
     }
   }),
 
-  // Seção: Ações e indicadores (continuação)
   createSection({
-    id: 'indicadores2',
-    ref: 'indicadoresSection2',
+    id: 'indicadores',
+    ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '3-2',
       items: [
         {
           component: 'CardAction',
           props: {
             number: 4,
             actionTitle: 'Ação 4 - Garantir o acesso a praças e parques para toda a população',
-            ods: '3, 10, 17',
+            ods: '3, 10, 11',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '2-2',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'População atendida por praças e parques',
+                  overrideNumberValue: '89%',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Idosos e crianças atendidos por parques e praças',
+                  overrideNumberValue: '59%',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Pretos, pardos e indígenas atendidos por praças e parques',
+                  overrideNumberValue: '49%',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Mulheres chefes de família atendidas por parques e praças',
+                  overrideNumberValue: '39%',
+                }
+              },
+            ]
+          }
+        },
+        {
+
+          component: 'CardAction',
+          props: {
+            number: 5,
+            actionTitle: 'Ação 5 - Melhorar a oferta de serviços ecossistêmicos por praças e parques para adaptação climática',
+            ods: '3, 11, 13',
+            badgeStatus: 'em-andamento'
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Área de parques e praças coberta por vegetação',
+                  overrideNumberValue: '33%',
+                  numberType: 'large',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Área impermeável de parques e praças',
+                  overrideNumberValue: '69%',
+                  numberType: 'large',
+                }
+              },
+            ]
+          }
+        },
+        {
+
+          component: 'CardAction',
+          props: {
+            number: 6,
+            actionTitle: 'Ação 6 - Ampliar a qualidade de parques e praças',
+            ods: '3, 11, 13',
             badgeStatus: 'em-andamento'
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'População atendida por praças e parques',
-            overrideNumberValue: '89%',
-            numberType: 'default',
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Idosos e crianças atendidos por praças e parques',
-            overrideNumberValue: '59%',
-            numberType: 'default',
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Pretos, pardos e indígenas atendidos por praças e parques',
-            overrideNumberValue: '49%',
-            numberType: 'default',
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Mulheres chefes de família atendidas por praças e praças',
-            overrideNumberValue: '39%',
-            numberType: 'default',
+            overrideTitle: 'Qualidade social e ecológica de parques e praças',
+            overrideNumberValue: '0.7',
+            numberType: 'large',
+            overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
           }
         },
       ]
@@ -203,38 +257,27 @@ export default createSectionConfig((nm_mun) => [
     id: 'orientacoes',
     ref: 'orientacoesSection',
     title: 'Orientações para o planejamento climático da cidade',
+    showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: 'CardInfo',
           props: {
             showMidia: true,
-            midiaType: 'image',
-            imageSrc: placeholderImg,
+            midiaType: 'video',
+            videoUrl: 'https://www.youtube.com/watch?v=RYbG2voostc',
+            title: 'Projetos, iniciativas e políticas públicas de parques e praças',
             midiaPosition: 'left',
             type: 'list',
             listItems: [
               'Identificar áreas prioritárias na cidade para implementação de Soluções Baseadas na Natureza (SBN)',
               'Criar novas áreas verdes públicas protegidas pelo município (Unidades de Conservação)',
-              'Consultar praças, parques e espaços públicos permeáveis, que atenuam a água da chuva'
+              'Construir praças, parques e espaços públicos permeáveis, que absorvam a água da chuva',
             ],
             showPrimaryButton: true,
             buttonLabel: 'Ver mais dicas',
-            buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas/temperatura',
-          }
-        },
-        {
-          component: 'CardInfo',
-          props: {
-            showMidia: true,
-            midiaType: 'image',
-            imageSrc: placeholderImg,
-            midiaPosition: 'right',
-            type: 'list',
-            listItems: [
-              'Projetos, iniciativas e políticas públicas promovem justiça, sustentabilidade e equilíbrio.'
-            ]
+            buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas',
           }
         }
       ]
