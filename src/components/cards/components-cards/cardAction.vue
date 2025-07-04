@@ -123,7 +123,7 @@ export default {
       color: map-get($body-text, body-color);
       margin: 0;
       width: 100%;
-      height: 100%;
+      height: auto;
       box-sizing: border-box;
       text-align: left;
     }

@@ -79,7 +79,7 @@ export default createSectionConfig((nm_mun) => [
             number: 2,
             actionTitle: 'Ação 2 - Garantir acesso a praças e parques para todos habitantes em até 15 minutos de caminhada',
             ods: '3, 11, 13',
-            badgeStatus: 'em-andamento'
+            badgeStatus: 'nao-informado'
           }
         },
         {
@@ -98,7 +98,7 @@ export default createSectionConfig((nm_mun) => [
             number: 3,
             actionTitle: 'Ação 3 - Ampliar a distribuição de praças e parques em todas regiões da cidade',
             ods: '3, 11, 13',
-            badgeStatus: 'em-andamento'
+            badgeStatus: 'nao-informado'
           }
         },
         {
@@ -203,7 +203,7 @@ export default createSectionConfig((nm_mun) => [
             number: 5,
             actionTitle: 'Ação 5 - Melhorar a oferta de serviços ecossistêmicos por praças e parques para adaptação climática',
             ods: '3, 11, 13',
-            badgeStatus: 'em-andamento'
+            badgeStatus: 'nao-informado'
           }
         },
         {
@@ -236,8 +236,8 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 6,
             actionTitle: 'Ação 6 - Ampliar a qualidade de parques e praças',
-            ods: '3, 11, 13',
-            badgeStatus: 'em-andamento'
+            ods: '3, 11, 13,',
+            badgeStatus: 'nao-informado'
           }
         },
         {
@@ -297,7 +297,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardODS',
           props: {
-            odsNumbers: [3, 10, 11, 13],
+            odsNumbers: [3, 10, 11, 13, 17],
           }
         },
       ]
