@@ -7,6 +7,7 @@ import overview from './sections/policies/sintese.js';
 import policies_parks from './sections/policies/policies_parks.js';
 import policies_vegetation from './sections/policies/policies_vegetation.js';
 import policies_hidrology from './sections/policies/policies_hidrology.js';
+import agriculture from './sections/policies/agriculture.js';
 
 // Category ID to section name
 export const categoryToLayerMap = {
@@ -17,6 +18,7 @@ export const categoryToLayerMap = {
   'policies_parks': 'policies_parks',
   'policies_vegetation': 'policies_vegetation',
   'hidro': 'policies_hidrology',
+  'agriculture': 'agriculture',
 };
 
 // Inverse mapping to convert internal IDs to category IDs
@@ -28,6 +30,7 @@ export const layerToCategoryMap = {
   'policies_parks': 'policies_parks',
   'policies_vegetation': 'policies_vegetation',
   'policies_hidrology': 'hidro',
+  'agriculture': 'agriculture',
 };
 
 // Configurações de seções para cada tipo de camada
@@ -40,6 +43,7 @@ export const sectionConfigs = {
   policies_parks,
   policies_vegetation,
   policies_hidrology,
+  agriculture,
 
   // layers : {
   //  'id_da_layer': teste
