@@ -59,7 +59,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 1,
             actionTitle: 'Ação 1 - Aumentar a permeabilização do solo em áreas com baixa drenagem urbana',
-            ods: '3, 10, 11',
+            ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -78,7 +78,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 2,
             actionTitle: 'Ação 2 - Ampliar a permeabilidade nas sub-bacias hidrográficas da cidade',
-            ods: '3, 11, 13',
+            ods: '6, 10, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -97,7 +97,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 3,
             actionTitle: 'Ação 3 - Expandir áreas vegetadas nas margens de córregos (APPs)',
-            ods: '3, 11, 13',
+            ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -156,7 +156,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 4,
             actionTitle: 'Ação 4 - Ampliar vegetação nas APPs em cada sub-bacia municipal',
-            ods: '3, 10, 11',
+            ods: '6, 10, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -175,7 +175,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 5,
             actionTitle: 'Ação 5 - Desenvolver projetos de renaturalização de rios urbanos',
-            ods: '3, 11, 13',
+            ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -195,7 +195,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 6,
             actionTitle: 'Ação 6 - Implantar trechos-piloto de renaturalização de rios',
-            ods: '3, 11, 13,',
+            ods: '6, 10, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -256,7 +256,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardODS',
           props: {
-            odsNumbers: [3, 10, 11, 13, 17],
+            odsNumbers: [3, 6, 10, 11, 13, 15],
           }
         },
       ]

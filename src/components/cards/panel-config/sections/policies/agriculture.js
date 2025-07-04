@@ -61,7 +61,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 1,
             actionTitle: 'Ação 1 - Priorizar iniciativas de agricultura urbana em áreas de maior vulnerabilidade alimentar',
-            ods: '3, 10, 11',
+            ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
         },
@@ -80,7 +80,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 2,
             actionTitle: 'Ação 2 - Promover a produção primária de alimentos na cidade',
-            ods: '3, 11, 13',
+            ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
         },
@@ -143,7 +143,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 3,
             actionTitle: 'Ação 3 - Promover a agricultura urbana vertical com base em densidade demográfica, renda e tipo de assentamento',
-            ods: '3, 10, 11',
+            ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
         },
@@ -162,7 +162,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 4,
             actionTitle: 'Ação 4 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
-            ods: '3, 11, 13, 17',
+            ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
         },
@@ -222,7 +222,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardODS',
           props: {
-            odsNumbers: [3, 10, 11, 13],
+            odsNumbers: [1, 2, 3, 6, 10, 11, 12, 13, 15, 17],
           }
         },
       ]

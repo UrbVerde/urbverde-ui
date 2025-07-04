@@ -62,7 +62,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 1,
             actionTitle: 'Ação 1 - Aumentar a cobertura vegetal por habitante em áreas críticas',
-            ods: '3, 10, 11',
+            ods: '3, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -81,7 +81,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 2,
             actionTitle: 'Ação 2 - Aumentar a permeabilização do solo em áreas com baixa drenagem urbana',
-            ods: '3, 11, 13',
+            ods: '3, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -144,7 +144,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 3,
             actionTitle: 'Ação 3 - Requalificar lotes vagos com potencial para arborização e infraestrutura verde',
-            ods: '3, 10, 11',
+            ods: '3, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -164,7 +164,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             number: 4,
             actionTitle: 'Ação 4 - Aumentar a vegetação urbana a partir de dados de monitoramento anual',
-            ods: '3, 11, 13, 17',
+            ods: '3, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
@@ -226,7 +226,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardODS',
           props: {
-            odsNumbers: [3, 10, 11, 13],
+            odsNumbers: [3, 11, 13, 15],
           }
         },
       ]
