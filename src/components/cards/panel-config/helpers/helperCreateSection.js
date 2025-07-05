@@ -99,6 +99,7 @@ function renderPanel(panelConfig, isNested = false) {
   const panelProps = {
     variant: panelConfig.variant,
     nested: isNested,
+    gapColumnHeight: panelConfig.gapColumnHeight,
     // Não sobrescreve cityCode e year aqui, eles virão do PanelsCards.vue
   };
 

@@ -63,7 +63,11 @@ export const tabIdToLabelMap = {
   'metas': 'Metas',
   'indicadores': 'Indicadores',
   'planejamento': 'Planejamento climático',
-  // Adicione mais mapeamentos conforme necessário
+  'parks': 'Parques e praças',
+  'vegetation': 'Vegetação',
+  'hidro': 'Hidrologia',
+  'agriculture': 'Agricultura Urbana',
+  'climate': 'Clima',
 };
 
 // IDs de categorias ou camadas que não devem mostrar a aba "Mapa"

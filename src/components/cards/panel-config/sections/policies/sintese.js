@@ -8,13 +8,14 @@ export default createSectionConfig((nm_mun) => [
   // Seção: Eixo Parques e Praças
   // ===============================================
   createSection({
-    id: 'metas',
-    ref: 'metasSection',
+    id: 'parks',
+    ref: 'parksSection',
     title: `Eixo Parques e Praças em ${nm_mun}`,
     subtitle: 'Parques e praças são os principais espaços públicos de uma cidade, sendo essenciais para melhorar o ambiente e o bem-estar da população',
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardStamps',
@@ -66,11 +67,12 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   createSection({
-    id: 'indicadores',
-    ref: 'indicadoresSection',
+    id: 'parks',
+    ref: 'parksSection',
     showYearPicker: false,
     panel: {
       variant: '6-2',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardAction',
@@ -234,13 +236,14 @@ export default createSectionConfig((nm_mun) => [
   // Seção: Eixo Vegetação
   // ===============================================
   createSection({
-    id: 'metas',
-    ref: 'metasSection',
+    id: 'vegetation',
+    ref: 'vegetationSection',
     title: `Eixo Vegetação em ${nm_mun}`,
     subtitle: 'Vegetação corresponde às áreas verdes das cidades, como árvores, gramados e arbustos. Elas ajudam a melhorar o clima urbano, promovem justiça socioambiental e favorecem a infiltração da água no solo',
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardStamps',
@@ -292,13 +295,13 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   createSection({
-    id: 'indicadores',
-    ref: 'indicadoresSection',
+    id: 'vegetation',
+    ref: 'vegetationSection',
     showYearPicker: false,
     panel: {
       variant: '4-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 1
         {
           component: 'CardAction',
           props: {
@@ -317,7 +320,6 @@ export default createSectionConfig((nm_mun) => [
             numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
           }
         },
-        // Ação 2
         {
           component: 'CardAction',
           props: {
@@ -355,7 +357,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Terrenos vazios ou pouco usados, sem função social ou ambiental'
           }
         },
-        // Ação 4
         {
           component: 'CardAction',
           props: {
@@ -383,13 +384,14 @@ export default createSectionConfig((nm_mun) => [
   // ===============================================
 
   createSection({
-    id: 'metas',
-    ref: 'metasSection',
+    id: 'climate',
+    ref: 'climateSection',
     title: `Eixo Emissões e Clima em ${nm_mun}`,
     subtitle: 'Identificação de áreas urbanas com potencial para reduzir as temperaturas de superfície e promover o sequestro de carbono',
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardStamps',
@@ -440,13 +442,13 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   createSection({
-    id: 'indicadores',
-    ref: 'indicadoresSection',
+    id: 'climate',
+    ref: 'climateSection',
     showYearPicker: false,
     panel: {
       variant: '3-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 1
         {
           component: 'CardAction',
           props: {
@@ -465,7 +467,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Quanto mais próximo de 1.0, mais a cobertura vegetal da cidade contribui para redução da temperatura'
           }
         },
-        // Ação 2
         {
           component: 'CardAction',
           props: {
@@ -511,13 +512,14 @@ export default createSectionConfig((nm_mun) => [
   // ===============================================
 
   createSection({
-    id: 'metas',
-    ref: 'metasSection',
+    id: 'hidro',
+    ref: 'hidroSection',
     title: `Eixo Hidrologia em ${nm_mun}`,
     subtitle: 'As inundações e alagamentos urbanos são agravados pela impermeabilização e falta de planejamento. O eixo busca soluções para reduzir riscos e promover segurança hídrica da cidade',
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardStamps',
@@ -568,11 +570,12 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   createSection({
-    id: 'indicadores',
-    ref: 'indicadoresSection',
+    id: 'hidro',
+    ref: 'hidroSection',
     showYearPicker: false,
     panel: {
       variant: '6-2',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardAction',
@@ -696,13 +699,14 @@ export default createSectionConfig((nm_mun) => [
   // ===============================================
 
   createSection({
-    id: 'metas',
-    ref: 'metasSection',
+    id: 'agriculture',
+    ref: 'agricultureSection',
     title: `Eixo Agricultura Urbana em ${nm_mun}`,
     subtitle: 'Pontos de agricultura urbana são zonas verdes funcionais na cidade que produzem alimentos e promovem um ciclo alimentar mais justo, inclusivo e sustentável',
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardStamps',
@@ -753,13 +757,13 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   createSection({
-    id: 'indicadores',
-    ref: 'indicadoresSection',
+    id: 'agriculture',
+    ref: 'agricultureSection',
     showYearPicker: false,
     panel: {
       variant: '4-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 1
         {
           component: 'CardAction',
           props: {
@@ -778,7 +782,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
           }
         },
-        // Ação 2
         {
           component: 'CardAction',
           props: {
@@ -815,7 +818,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
           }
         },
-        // Ação 4
         {
           component: 'CardAction',
           props: {

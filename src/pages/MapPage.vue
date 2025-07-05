@@ -164,7 +164,7 @@ const handleScroll = () => {
   showBackToTop.value = scrollPosition > window.innerHeight * 0.2;
 
   const sectionElements = document.querySelectorAll(
-    '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"], [id^="metas"], [id^="indicadores"], [id^="planejamento"]'
+    '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"], [id^="metas"], [id^="indicadores"], [id^="planejamento"], [id^="parks"], [id^="vegetation"], [id^="hidro"], [id^="agriculture"], [id^="climate"]'
   );
 
   for (const element of sectionElements) {

@@ -1,6 +1,6 @@
 <!-- urbverde-ui/src/components/cards/panel-config/base/SectionCards.vue -->
 <template>
-  <div class="panel" :class="[panelClass, { 'nested-panel': nested }]">
+  <div class="panel" :class="[panelClass, { 'nested-panel': nested }]" :style="{ '--gap-column-height': gapColumnHeight }">
     <template v-for="(child, i) in $slots.default ? $slots.default() : []" :key="i">
       <div class="panel-cell">
         <component :is="child" v-bind="$attrs" />
@@ -25,6 +25,10 @@ const props = defineProps({
   nested: {
     type: Boolean,
     default: false
+  },
+  gapColumnHeight: {
+    type: String,
+    default: '16px'
   }
 });
 
@@ -46,6 +50,7 @@ const panelClass = computed(() => {
 .panel {
   display: grid;
   gap: 16px;
+  row-gap: var(--gap-column-height, 16px);
   width: 100%;
   height: 100%;
 }
