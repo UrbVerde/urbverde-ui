@@ -74,6 +74,7 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-2',
+      gapColumnHeight: '56px',
       items: [
         // Ação 1
         {
@@ -156,6 +157,7 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-2',
+      gapColumnHeight: '56px',
       items: [
         // Ação 3
         {
@@ -208,6 +210,7 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardInfo',

@@ -72,8 +72,8 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 1
         {
           component: 'CardAction',
           props: {
@@ -92,7 +92,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
           }
         },
-        // Ação 2
         {
           component: 'CardAction',
           props: {
@@ -147,15 +146,14 @@ export default createSectionConfig((nm_mun) => [
     }
   }),
 
-  // Ações 3 e 4
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
       variant: '2-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 3
         {
           component: 'CardAction',
           props: {
@@ -174,7 +172,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
           }
         },
-        // Ação 4
         {
           component: 'CardAction',
           props: {
@@ -204,6 +201,7 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardInfo',

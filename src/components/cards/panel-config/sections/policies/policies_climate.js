@@ -73,8 +73,9 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 1
+
         {
           component: 'CardAction',
           props: {
@@ -93,7 +94,6 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Quanto mais próximo de 1.0, mais a cobertura vegetal da cidade contribui para redução da temperatura'
           }
         },
-        // Ação 2
         {
           component: 'CardAction',
           props: {
@@ -155,8 +155,8 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '1-2',
+      gapColumnHeight: '56px',
       items: [
-        // Ação 3
         {
           component: 'CardAction',
           props: {
@@ -187,6 +187,7 @@ export default createSectionConfig((nm_mun) => [
     showYearPicker: false,
     panel: {
       variant: '2-1',
+      gapColumnHeight: '56px',
       items: [
         {
           component: 'CardInfo',
