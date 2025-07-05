@@ -28,14 +28,13 @@
         <div class="topic">
           <div class="heading-h6 topic-title">Selos da UrbVerde</div>
           <div class="body-small-regular topic-text">
-            Existem 6 selos, um para cada eixo do painel de políticas públicas:
+            Existem 5 selos, um para cada eixo do painel de políticas públicas:
             <ul>
               <li>Selo UrbVerde de Hidrologia</li>
               <li>Selo UrbVerde de Parques e Praças</li>
               <li>Selo UrbVerde de Agricultura Urbana</li>
               <li>Selo UrbVerde de Vegetação</li>
-              <li>Selo UrbVerde de Emissões</li>
-              <li>Selo UrbVerde de Mobilidade e Clima</li>
+              <li>Selo UrbVerde de Emissões e Clima</li>
             </ul>
           </div>
         </div>

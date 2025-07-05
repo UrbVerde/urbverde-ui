@@ -1,6 +1,6 @@
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariHidro from '@/assets/images/cards/policies/mari-hidrology.svg';
-import mariTarget from '@/assets/images/cards/policies/mari-target-1.svg';
+import mariTarget from '@/assets/images/cards/policies/mari-target-2.svg';
 
 export default createSectionConfig((nm_mun) => [
   // Seção: Eixo Parques e Praças

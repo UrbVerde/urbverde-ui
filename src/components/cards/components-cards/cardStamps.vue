@@ -58,10 +58,11 @@ import { ref, computed } from 'vue';
 import cardBase from '../base/cardBase.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import modalStamps from '@/components/modal/modalStamps.vue';
-import parksImg from '@/assets/images/stamps/parks.svg';
-import hidroImg from '@/assets/images/stamps/hidro.svg';
-import vegetationImg from '@/assets/images/stamps/vegetation.svg';
-import agricultureImg from '@/assets/images/stamps/agriculture.svg';
+import parksImg from '@/assets/images/stamps/parks.png';
+import hidroImg from '@/assets/images/stamps/hidro.png';
+import vegetationImg from '@/assets/images/stamps/vegetation.png';
+import agricultureImg from '@/assets/images/stamps/agriculture.png';
+import climateImg from '@/assets/images/stamps/climate.png';
 import { useWindowSize } from '@/utils/useWindowsSize.js';
 
 const props = defineProps({
@@ -95,6 +96,8 @@ const stampImageSrc = computed(() => {
     return hidroImg;
   case 'policies_vegetation':
     return vegetationImg;
+  case 'policies_climate':
+    return climateImg;
   default:
     return '';
   }
@@ -110,6 +113,8 @@ const stampTitle = computed(() => {
     return 'Selo UrbVerde de Hidrologia';
   case 'policies_vegetation':
     return 'Selo UrbVerde de Vegetação';
+  case 'policies_climate':
+    return 'Selo UrbVerde de Emissões e Clima';
   default:
     return 'Selo UrbVerde';
   }
