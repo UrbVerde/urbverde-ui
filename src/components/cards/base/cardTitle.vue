@@ -8,7 +8,7 @@
       <h5 class="title heading-h6">
         {{ title }}
       </h5>
-      <p class="subtitle body-small-medium" v-if="showSubtitle">
+      <p class="subtitle body-small-regular" v-if="showSubtitle">
         {{ subtitle }}
       </p>
     </div>

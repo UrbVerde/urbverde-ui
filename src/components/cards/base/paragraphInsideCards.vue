@@ -26,19 +26,19 @@
         <!-- List Type -->
         <ul v-if="type === 'list'" class="benefits-card-list">
           <li v-for="(item, index) in listItems" :key="index" class="benefits-card-item">
-            <span class="benefits-card-number body-small-medium">{{ index + 1 }}</span>
-            <p class="text-list body-small-medium" v-html="item"></p>
+            <span class="benefits-card-number body-small-regular">{{ index + 1 }}</span>
+            <p class="text-list body-small-regular" v-html="item"></p>
           </li>
         </ul>
 
         <!-- Paragraph Left Type -->
         <div v-else-if="type === 'paragraph-left'" class="paragraph-wrapper">
-          <p class="paragraph body-small-medium">{{ paragraphText }}</p>
+          <p class="paragraph body-small-regular">{{ paragraphText }}</p>
         </div>
 
         <!-- Paragraph Center Type -->
         <div v-else-if="type === 'paragraph-center'" class="paragraph-wrapper">
-          <p class="paragraph body-small-medium text-center">{{ paragraphText }}</p>
+          <p class="paragraph body-small-regular text-center">{{ paragraphText }}</p>
         </div>
 
         <!-- Slot Type -->
@@ -237,7 +237,7 @@ a{
   align-self: stretch;
 
   .paragraph {
-    color: map-get($theme, secondary);
+    color: map-get($body-text, body-color);
     text-align: left;
     margin: 0;
 
@@ -316,6 +316,6 @@ a{
 }
 
 .text-list {
-  color: map-get($theme, secondary);
+  color: map-get($body-text, body-color);
 }
 </style>

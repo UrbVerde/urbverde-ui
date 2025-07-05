@@ -46,11 +46,29 @@ export default createSectionConfig((nm_mun) => [
     }
   }),
 
-  // Seção: Ações e indicadores
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: `Ações e indicadores em ${nm_mun}`,
+    showYearPicker: false,
+    panel: {
+      variant: '1-1',
+      items: [
+        {
+          component: 'CardStamps',
+          props: {
+            eixo: 'agriculture',
+            barPercentage: [0, 6],
+          }
+        },
+      ]
+    }
+  }),
+
+  // Seção: Ações e indicadores
+  createSection({
+    id: 'indicadores',
+    ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
       variant: '2-2',

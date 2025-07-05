@@ -24,7 +24,7 @@
           <span class="title-statistics-container heading-h5">
             {{ section.title }}
           </span>
-          <span v-if="section.subtitle" class="subtitle-statistics-container body-small-medium">
+          <span v-if="section.subtitle" class="subtitle-statistics-container body-small-regular">
             {{ section.subtitle }}
           </span>
         </div>

@@ -101,6 +101,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .midia-wrapper {
   display: flex;
   padding: 16px 24px;
@@ -123,11 +125,21 @@ export default {
 
 .video-container {
   width: 504px;
-  height: 284.7px;
+  aspect-ratio: 16 / 9;
   position: relative;
   cursor: pointer;
   border-radius: 16px;
   overflow: hidden;
+  height: auto;
+}
+
+@include breakpoint-down('mobile-large') {
+  .video-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    min-width: 0;
+  }
 }
 
 .video-thumbnail {

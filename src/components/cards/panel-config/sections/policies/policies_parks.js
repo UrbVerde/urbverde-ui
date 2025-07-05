@@ -28,13 +28,6 @@ export default createSectionConfig((nm_mun) => [
           }
         },
         {
-          component: 'CardStamps',
-          props: {
-            eixo: 'policies_parks',
-            barPercentage: [4, 6],
-          }
-        },
-        {
 
           component: 'CardInfo',
           props: {
@@ -58,6 +51,24 @@ export default createSectionConfig((nm_mun) => [
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: `Ações e indicadores em ${nm_mun}`,
+    showYearPicker: false,
+    panel: {
+      variant: '1-1',
+      items: [
+        {
+          component: 'CardStamps',
+          props: {
+            eixo: 'policies_parks',
+            barPercentage: [0, 6],
+          }
+        },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'indicadores',
+    ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
       variant: '3-2',

@@ -7,7 +7,7 @@
     />
     <div class="text-wrapper">
       <h3 class="ods-title body-small-medium">{{ getOdsTitle(odsNumber) }}</h3>
-      <p class="ods-subtitle body-small-medium">{{ getOdsSubtitle(odsNumber) }}</p>
+      <p class="ods-subtitle body-small-regular">{{ getOdsSubtitle(odsNumber) }}</p>
     </div>
   </div>
   <img

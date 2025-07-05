@@ -2,43 +2,62 @@
   <cardBase>
     <div class="goals">
       <!-- Imagem do selo -->
-      <img
-        class="stamp-image"
-        :src="stampImageSrc"
-        :alt="stampTitle"
-      />
+      <div class="stamp-image-wrapper">
+        <img
+          class="stamp-image"
+          :src="stampImageSrc"
+          :alt="stampTitle"
+        />
+      </div>
       <!-- Informações à direita -->
       <div class="info-wrapper">
         <!-- Título e subtítulo -->
         <div class="title">
           <span class="heading-h6 title-text">{{ stampTitle }}</span>
-          <span class="body-small-medium subtitle-text">Complete as ações abaixo para sua cidade conquistar o selo do eixo</span>
+          <span class="body-small-regular subtitle-text">Complete as ações abaixo para sua cidade conquistar o selo do eixo</span>
         </div>
-        <!-- Barra de progresso e contagem -->
-        <div class="bar-wrapper">
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" :style="{ width: barWidth }"></div>
+        <!-- Barra e botão só se for desktop_small ou maior -->
+        <template v-if="largerThan('mobile_large')">
+          <div class="bar-wrapper">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" :style="{ width: barWidth }"></div>
+            </div>
+            <span class="progress-count heading-h5">{{ barPercentage[0] }}/{{ barPercentage[1] }}</span>
           </div>
-          <span class="progress-count heading-h4">{{ barPercentage[0] }}/{{ barPercentage[1] }}</span>
-        </div>
-        <!-- Botão que abre modal -->
-        <PrimaryButton
-          :label="'Como funcionam os selos?'"
-          :filled="false"
-          @click="showModal"
-        />
-        <!-- Modal -->
-        <modalBootstrap
-          ref="refModal"
-          modalId="modalStampsInfo"
-          title="Como funcionam os selos?"
-          bodyText="Aqui você pode colocar uma explicação sobre o funcionamento dos selos."
-          :showSecondaryButton="false"
-          :showPrimaryButton="true"
-          primaryButtonText="Fechar"
-        />
+          <PrimaryButton
+            :label="'Como funcionam os selos?'"
+            :filled="false"
+            @click="showModal"
+          />
+        </template>
       </div>
     </div>
+    <!-- Se for menor que desktop_small, barra e botão embaixo -->
+    <div v-if="!largerThan('mobile_large')" class="responsive-actions">
+      <div class="bar-wrapper">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" :style="{ width: barWidth }"></div>
+        </div>
+        <span class="progress-count heading-h5">{{ barPercentage[0] }}/{{ barPercentage[1] }}</span>
+      </div>
+      <PrimaryButton
+        :label="'Como funcionam os selos?'"
+        :filled="false"
+        @click="showModal"
+      />
+    </div>
+    <!-- Modal -->
+    <teleport to="body">
+      <modalBootstrap
+        ref="refModal"
+        modalId="modalStampsInfo"
+        title="Como funcionam os selos?"
+        bodyText="Aqui você pode colocar uma explicação sobre o funcionamento dos selos."
+        :showSecondaryButton="false"
+        :showPrimaryButton="true"
+        primaryButtonText="Fechar"
+      />
+    </teleport>
   </cardBase>
 </template>
 
@@ -47,12 +66,11 @@ import { ref, computed } from 'vue';
 import cardBase from '../base/cardBase.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import modalBootstrap from '@/components/modal/modalBootstrap.vue';
-
-// Importação estática das imagens
-import parksImg from '@/assets/images/stamps/policies_parks.png';
-import hidroImg from '@/assets/images/stamps/hidro.png';
-import vegetationImg from '@/assets/images/stamps/policies_vegetation.png';
-import agricultureImg from '@/assets/images/stamps/agriculture.png';
+import parksImg from '@/assets/images/stamps/parks.svg';
+import hidroImg from '@/assets/images/stamps/hidro.svg';
+import vegetationImg from '@/assets/images/stamps/vegetation.svg';
+import agricultureImg from '@/assets/images/stamps/agriculture.svg';
+import { useWindowSize } from '@/utils/useWindowsSize.js';
 
 const props = defineProps({
   eixo: {
@@ -67,6 +85,7 @@ const props = defineProps({
 });
 
 const refModal = ref(null);
+const { largerThan } = useWindowSize();
 
 const showModal = () => {
   if (refModal.value && refModal.value.show) {
@@ -74,38 +93,35 @@ const showModal = () => {
   }
 };
 
-const stampData = computed(() => {
+const stampImageSrc = computed(() => {
   switch (props.eixo) {
   case 'policies_parks':
-    return {
-      img: parksImg,
-      title: 'Selo UrbVerde de Parques e Praças'
-    };
+    return parksImg;
   case 'agriculture':
-    return {
-      img: agricultureImg,
-      title: 'Selo UrbVerde de Agricultura Urbana'
-    };
+    return agricultureImg;
   case 'hidro':
-    return {
-      img: hidroImg,
-      title: 'Selo UrbVerde de Hidrologia'
-    };
+    return hidroImg;
   case 'policies_vegetation':
-    return {
-      img: vegetationImg,
-      title: 'Selo UrbVerde de Vegetação'
-    };
+    return vegetationImg;
   default:
-    return {
-      img: '',
-      title: 'Selo UrbVerde'
-    };
+    return '';
   }
 });
 
-const stampImageSrc = computed(() => stampData.value.img);
-const stampTitle = computed(() => stampData.value.title);
+const stampTitle = computed(() => {
+  switch (props.eixo) {
+  case 'policies_parks':
+    return 'Selo UrbVerde de Parques e Praças';
+  case 'agriculture':
+    return 'Selo UrbVerde de Agricultura Urbana';
+  case 'hidro':
+    return 'Selo UrbVerde de Hidrologia';
+  case 'policies_vegetation':
+    return 'Selo UrbVerde de Vegetação';
+  default:
+    return 'Selo UrbVerde';
+  }
+});
 
 const barWidth = computed(() => {
   const [current, total] = props.barPercentage;
@@ -117,12 +133,21 @@ const barWidth = computed(() => {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .goals {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 80px;
+  gap: 64px;
   align-self: stretch;
+  width: 100%;
+  height: auto;
+}
+.stamp-image-wrapper {
+  width: 128px;
+  height: 128px;
+  margin-left: 24px;
 }
 .stamp-image {
   width: 128px;
@@ -136,6 +161,7 @@ const barWidth = computed(() => {
   align-items: flex-start;
   gap: 24px;
   flex: 1 0 0;
+  width: 100%;
 }
 .title {
   display: flex;
@@ -173,5 +199,21 @@ const barWidth = computed(() => {
 .progress-count {
   color: map-get($green, 600);
   margin-left: 8px;
+}
+.responsive-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+@include breakpoint-down('desktop-large') {
+  .goals {
+    gap: 40px;
+  }
+  .stamp-image-wrapper {
+    margin-left: 8px;
+  }
 }
 </style>
