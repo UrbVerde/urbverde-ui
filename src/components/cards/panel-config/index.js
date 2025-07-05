@@ -9,6 +9,8 @@ import policies_vegetation from './sections/policies/policies_vegetation.js';
 import policies_hidrology from './sections/policies/policies_hidrology.js';
 import agriculture from './sections/policies/agriculture.js';
 import policies_climate from './sections/policies/policies_climate.js';
+import risks_heat_wave from './sections/policies/risks_heat_wave.js';
+import risks_alimentar_insecurity from './sections/policies/risks_alimentar_insecurity.js';
 
 // Category ID to section name
 export const categoryToLayerMap = {
@@ -49,9 +51,10 @@ export const sectionConfigs = {
   agriculture,
   policies_climate,
 
-  // layers : {
-  //  'id_da_layer': teste
-  //}
+  layers : {
+    'heat_wave_risks': risks_heat_wave,
+    'food_insecurity': risks_alimentar_insecurity,
+  }
 };
 
 // Mapeamento de IDs para labels amigáveis nas abas
