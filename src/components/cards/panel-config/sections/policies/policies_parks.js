@@ -28,6 +28,14 @@ export default createSectionConfig((nm_mun) => [
           }
         },
         {
+          component: 'CardStamps',
+          props: {
+            eixo: 'policies_parks',
+            barPercentage: [4, 6],
+          }
+        },
+        {
+
           component: 'CardInfo',
           props: {
             showMidia: false,
