@@ -1,7 +1,7 @@
 <template>
   <modalBootstrap
     ref="refModal"
-    :modalId="modalId"
+    modalId="modalStamps"
     :title="'Como funcionam os selos?'"
     bodyText=""
     :showSecondaryButton="true"

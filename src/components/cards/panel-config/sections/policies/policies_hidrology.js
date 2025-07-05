@@ -237,7 +237,7 @@ export default createSectionConfig((nm_mun) => [
     title: 'Orientações para o planejamento climático da cidade',
     showYearPicker: false,
     panel: {
-      variant: '1-1',
+      variant: '2-1',
       items: [
         {
           component: 'CardInfo',
@@ -257,6 +257,9 @@ export default createSectionConfig((nm_mun) => [
             buttonLabel: 'Ver mais orientações',
             buttonLink: 'https://urbverde-educa.tawk.help/category/categorias-e-camadas',
           }
+        },
+        {
+          component: 'CardSendData',
         }
       ]
     }
