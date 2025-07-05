@@ -286,7 +286,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             showMidia: true,
             midiaType: 'video',
-            videoUrl: 'https://www.youtube.com/watch?v=e_TtnmXEHKI&t=6839s',
+            videoUrl: 'https://www.youtube.com/watch?v=406y7gDN-ZE',
             title: 'Projetos, iniciativas e políticas públicas de parques e praças',
             midiaPosition: 'left',
             type: 'list',
