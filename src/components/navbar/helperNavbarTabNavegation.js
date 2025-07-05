@@ -1,5 +1,5 @@
 // urbverde-ui/src/components/navbar/helperNavbarTabNavegation.js
-import { categoryToLayerMap } from '@/components/cards/panel-config/index.js';
+import { categoryToLayerMap, NO_MAP_TAB_IDS } from '@/components/cards/panel-config/index.js';
 
 // IDs que devem ser excluídos das abas de navegação
 const EXCLUDED_TAB_IDS = ['seeMore'];
@@ -94,7 +94,7 @@ const convertCategoryToKey = (category) => {
 /**
  * Gera abas de navegação com base nas seções disponíveis
  */
-export const generateTabsFromSections = (sections, tabIdToLabelMap) => {
+export const generateTabsFromSections = (sections, tabIdToLabelMap, currentCategory = null, currentLayer = null) => {
   // Se não houver seções, retorna apenas a aba padrão
   if (!sections || sections.length === 0) {
     return [{
@@ -110,8 +110,12 @@ export const generateTabsFromSections = (sections, tabIdToLabelMap) => {
       .map(section => section.id)
   )];
 
-  // Sempre adiciona 'map' como primeira aba se não existir
-  if (!uniqueIds.includes(DEFAULT_FIRST_TAB)) {
+  // Verifica se deve incluir a aba "Mapa" baseado na categoria/camada atual
+  const shouldIncludeMapTab = !NO_MAP_TAB_IDS.includes(currentCategory) &&
+                             !NO_MAP_TAB_IDS.includes(currentLayer);
+
+  // Adiciona 'map' como primeira aba se necessário e se não existir
+  if (shouldIncludeMapTab && !uniqueIds.includes(DEFAULT_FIRST_TAB)) {
     uniqueIds.unshift(DEFAULT_FIRST_TAB);
   }
 
@@ -129,7 +133,11 @@ export const generateTabsFromSections = (sections, tabIdToLabelMap) => {
 export const getTabsForLayer = (layer, sectionConfigs, tabIdToLabelMap, locationStore) => {
   const sections = getSectionsForLayer(layer, sectionConfigs, locationStore);
 
-  return generateTabsFromSections(sections, tabIdToLabelMap);
+  // Obtém a categoria e camada atual do locationStore
+  const currentCategory = locationStore ? locationStore.category : null;
+  const currentLayer = locationStore ? locationStore.layer : null;
+
+  return generateTabsFromSections(sections, tabIdToLabelMap, currentCategory, currentLayer);
 };
 
 export default {
