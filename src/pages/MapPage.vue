@@ -42,7 +42,7 @@
 
         <div class="page-content" :style="pageContentStyle">
 
-          <div class="map-section">
+          <div class="map-section" :style="{ display: shouldHideMap ? 'none' : 'block' }">
             <div id="map"
                  ref="Mapa"
                  class="map-container"
@@ -117,6 +117,19 @@ const showBackToTop = ref(false);
 const hasMunicipality = computed(() => !!locationStore.cd_mun);
 const defaultYear = computed(() => locationStore.year);
 const cityCode = ref(3547809);
+
+// Função para verificar se deve ocultar o mapa baseado no ID da categoria ou camada
+const shouldHideMap = computed(() => {
+  const hideMapIds = [
+    'overview',
+    'hydrographic_network'
+  ];
+
+  const currentCategoryId = locationStore.category;
+  const currentLayerId = locationStore.layer;
+
+  return hideMapIds.includes(currentCategoryId) || hideMapIds.includes(currentLayerId);
+});
 
 // Methods
 const toggleSidebar = () => {
@@ -213,46 +226,6 @@ const handleMobileScroll = () => {
     behavior: 'smooth'
   });
 };
-
-// Commented out for later use
-// const syncStoreWithQuery = async() => {
-//   const query = route.query;
-//   console.log('MapPage: Syncing store with query:', query);
-
-//   if (Object.keys(query).length > 0) {
-//     await locationStore.updateFromQueryParams(query);
-
-//     // If we have coordinates but they're not set, fetch them
-//     if (locationStore.cd_mun && (!coordinates.value?.lat || !coordinates.value?.lng)) {
-//       try {
-//         const coords = await locationStore.fetchCoordinatesByCode(locationStore.cd_mun);
-//         if (coords) {
-//           coordinates.value = coords;
-//         }
-//       } catch (error) {
-//         console.error('MapPage: Error fetching coordinates:', error);
-//       }
-//     }
-//   }
-// };
-
-// Add this new function to fetch categories
-// async function fetchCategoriesForLocation(code) {
-//   try {
-//     console.log('Fetching categories for location:', code);
-//     const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${code}`);
-//     const data = await response.json();
-
-//     if (data?.categories) {
-//       locationStore.setCategories(data.categories);
-//     }
-//   } catch (error) {
-//     console.error('Error fetching categories:', error);
-//   }
-// }
-
-// Lifecycle hooks
-// Initialize store with URL params
 
 // Function to measure navbar height for responsiveness
 const measureNavbarHeight = () => {
