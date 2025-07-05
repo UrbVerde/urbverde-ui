@@ -19,7 +19,7 @@ const props = defineProps({
     validator: (value) => {
       const [rows, cols] = value.split('-').map(Number);
 
-      return rows >= 1 && rows <= 4 && cols >= 1 && cols <= 4;
+      return rows >= 1 && rows <= 10 && cols >= 1 && cols <= 10;
     }
   },
   nested: {
@@ -57,9 +57,9 @@ const panelClass = computed(() => {
   flex-direction: column;
 }
 
-// Gera combinações de linhas e colunas (1-4)
-@for $rows from 1 through 4 {
-  @for $cols from 1 through 4 {
+// Gera combinações de linhas e colunas (1-10)
+@for $rows from 1 through 10 {
+  @for $cols from 1 through 10 {
     .panel-#{$rows}-#{$cols} {
       grid-template-rows: repeat($rows, auto);
       grid-template-columns: repeat($cols, minmax(0, 1fr));

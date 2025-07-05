@@ -42,7 +42,7 @@
 
         <div class="page-content" :style="pageContentStyle">
 
-          <div class="map-section" :style="{ display: shouldHideMap ? 'none' : 'block' }">
+          <div v-show="!shouldHideMap" class="map-section">
             <div id="map"
                  ref="Mapa"
                  class="map-container"
@@ -122,7 +122,6 @@ const cityCode = ref(3547809);
 const shouldHideMap = computed(() => {
   const hideMapIds = [
     'overview',
-    'hydrographic_network'
   ];
 
   const currentCategoryId = locationStore.category;

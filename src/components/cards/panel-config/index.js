@@ -69,5 +69,4 @@ export const tabIdToLabelMap = {
 // IDs de categorias ou camadas que não devem mostrar a aba "Mapa"
 export const NO_MAP_TAB_IDS = [
   'overview',
-  'hydrographic_network'
 ];
