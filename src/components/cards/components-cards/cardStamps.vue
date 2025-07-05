@@ -48,15 +48,7 @@
     </div>
     <!-- Modal -->
     <teleport to="body">
-      <modalBootstrap
-        ref="refModal"
-        modalId="modalStampsInfo"
-        title="Como funcionam os selos?"
-        bodyText="Aqui você pode colocar uma explicação sobre o funcionamento dos selos."
-        :showSecondaryButton="false"
-        :showPrimaryButton="true"
-        primaryButtonText="Fechar"
-      />
+      <modalStamps ref="refModal" />
     </teleport>
   </cardBase>
 </template>
@@ -65,7 +57,7 @@
 import { ref, computed } from 'vue';
 import cardBase from '../base/cardBase.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import modalBootstrap from '@/components/modal/modalBootstrap.vue';
+import modalStamps from '@/components/modal/modalStamps.vue';
 import parksImg from '@/assets/images/stamps/parks.svg';
 import hidroImg from '@/assets/images/stamps/hidro.svg';
 import vegetationImg from '@/assets/images/stamps/vegetation.svg';
@@ -148,6 +140,11 @@ const barWidth = computed(() => {
   width: 128px;
   height: 128px;
   margin-left: 24px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.stamp-image-wrapper:hover {
+  transform: scale(1.03);
 }
 .stamp-image {
   width: 128px;
