@@ -341,17 +341,21 @@ const filteredSuggestions = computed(() => {
 
 const visibleSuggestions = computed(() => {
   const list = filteredSuggestions.value;
+
+  // Definir o limite baseado no viewMode
+  const maxItems = viewMode.value === 'policies' ? 7 : 5;
+
   // Find first state suggestion
   const firstStateIndex = list.findIndex(s => s.type === 'state');
   if (firstStateIndex === -1) {
-    // No states found, return first 5 items
-    return list.slice(0, 5);
+    // No states found, return items based on viewMode
+    return list.slice(0, maxItems);
   }
   // separate cities from states
   const citiesBefore = list.slice(0, firstStateIndex);
   const statesAfter = list.slice(firstStateIndex);
   // ensure at least one state
-  const totalItems = Math.min(5, list.length);
+  const totalItems = Math.min(maxItems, list.length);
   const citiesCount = Math.min(citiesBefore.length, totalItems - 1); // Reserve 1 spot for state
 
   return [
