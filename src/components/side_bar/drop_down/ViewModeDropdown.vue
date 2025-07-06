@@ -70,8 +70,8 @@ const route = useRoute();
 
 // Estado para controlar se o dropdown está aberto
 const isOpen = ref(false);
-// Estado para armazenar o modo selecionado default
-const selectedMode = ref('map');
+// Estado para armazenar o modo selecionado - inicializa com o valor do store
+const selectedMode = ref(locationStore.viewMode || 'map');
 
 // Verifica se há um modo de visualização na URL
 watch(() => route.query.viewMode, (newViewMode) => {
@@ -84,9 +84,11 @@ watch(() => route.query.viewMode, (newViewMode) => {
   }
 }, { immediate: true });
 
-// Retorna o modo para 'map' quando o componente é destruído
-onUnmounted(() => {
-  locationStore.setViewMode('map');
+// Sincroniza com o store quando o componente é montado
+onMounted(() => {
+  if (locationStore.viewMode && locationStore.viewMode !== selectedMode.value) {
+    selectedMode.value = locationStore.viewMode;
+  }
 });
 
 // Referência para o elemento do dropdown

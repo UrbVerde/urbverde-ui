@@ -33,7 +33,7 @@
       </Transition>
 
       <Transition name="fade">
-        <div v-if="isSearchDone" class="view-mode-selector">
+        <div v-if="showContent && isSearchDone" class="view-mode-selector">
           <ViewModeDropdown />
         </div>
       </Transition>
@@ -279,7 +279,6 @@ async function toggleSidebar() {
   align-items: flex-start;
   align-self: stretch;
   width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.13);
 }
 
 .categories-area {
