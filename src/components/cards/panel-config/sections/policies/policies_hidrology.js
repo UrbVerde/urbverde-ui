@@ -1,3 +1,4 @@
+// urbverde-ui/src/components/cards/panel-config/sections/policies/policies_hidrology.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariHidro from '@/assets/images/cards/policies/mari-hidrology.svg';
 import mariTarget from '@/assets/images/cards/policies/mari-target-2.svg';

@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/modal/modalStamps.vue -->
 <template>
   <modalBootstrap
     ref="refModal"

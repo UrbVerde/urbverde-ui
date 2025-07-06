@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/components-cards/cardStamps.vue -->
 <template>
   <cardBase>
     <div class="goals">

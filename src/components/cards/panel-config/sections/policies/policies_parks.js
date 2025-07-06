@@ -1,3 +1,4 @@
+// urbverde-ui/src/components/cards/panel-config/sections/policies/policies_parks.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariParks from '@/assets/images/cards/policies/mari-parks.svg';
 import mariTarget from '@/assets/images/cards/policies/mari-target-1.svg';

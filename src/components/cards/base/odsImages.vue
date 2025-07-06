@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/cards/base/odsImages.vue -->
 <template>
   <div v-if="size === 'large' && text" class="ods-list-wrapper">
     <img
