@@ -124,8 +124,17 @@ const props = defineProps({
   }
 });
 
-// Constants
-// const IPDATA_API_KEY = import.meta.env.VITE_IPDATA_API_KEY;
+// Códigos dos municípios do ABC Paulista
+const ABC_PAULISTA_CODES = [
+  '3547809', // Santo André
+  '3548708', // São Bernardo do Campo
+  '3548807', // São Caetano do Sul
+  '3513801', // Diadema
+  '3529401', // Mauá
+  '3543303', // Ribeirão Pires
+  '3544103'  // Rio Grande da Serra
+];
+
 const states = [ // All this shouldnt be hardcorded here in the next versions (!)
   'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
   'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
@@ -167,8 +176,43 @@ const locationStore = useLocationStore();
 
 const viewMode = ref(locationStore.viewMode);
 
-watch(() => locationStore.viewMode, (newMode) => {
+watch(() => locationStore.viewMode, async(newMode) => {
   viewMode.value = newMode;
+
+  // Se mudou para o modo policies, direcionar automaticamente para Diadema
+  if (newMode === 'policies') {
+    // Definir Diadema como localização padrão
+    const diademaText = 'Diadema - SP';
+    const diademaCode = '3513801';
+
+    // Atualizar o input
+    inputValue.value = diademaText;
+    visibleInput.value = diademaText;
+    locationChosen.value = diademaText;
+    codes.value[diademaText] = diademaCode;
+
+    // Atualizar o store de localização
+    await locationStore.setLocation({
+      cd_mun: diademaCode,
+      nm_mun: 'Diadema',
+      uf: 'SP',
+      type: 'city',
+      year: '2021',
+    });
+
+    // Buscar coordenadas de Diadema
+    await fetchCoordinates(diademaText);
+
+    // Emitir evento de atualização de localização
+    emit('location-updated', coordinates.value);
+    emit('interaction-succeeded');
+
+    // Adicionar ao histórico
+    addToHistory(diademaText);
+
+    // Mostrar sugestões do ABC
+    generateDefaultSuggestions();
+  }
 });
 
 // Watch para monitorar mudanças no store de localização
@@ -221,6 +265,37 @@ onMounted(async() => {
         activateInput();
       }
     }, props.openDelay);
+  } else if (viewMode.value === 'policies') {
+    // Se estiver no modo policies sem localização, direcionar para Diadema
+    const diademaText = 'Diadema - SP';
+    const diademaCode = '3513801';
+
+    // Atualizar o input
+    inputValue.value = diademaText;
+    visibleInput.value = diademaText;
+    locationChosen.value = diademaText;
+    codes.value[diademaText] = diademaCode;
+
+    // Atualizar o store de localização
+    locationStore.setLocation({
+      cd_mun: diademaCode,
+      nm_mun: 'Diadema',
+      uf: 'SP',
+      type: 'city',
+      year: '2021',
+    });
+
+    // Buscar coordenadas de Diadema
+    fetchCoordinates(diademaText).then(() => {
+      emit('location-updated', coordinates.value);
+      emit('interaction-succeeded');
+    });
+
+    // Adicionar ao histórico
+    addToHistory(diademaText);
+
+    // Mostrar sugestões do ABC
+    generateDefaultSuggestions();
   }
 });
 
@@ -288,6 +363,10 @@ const visibleSuggestions = computed(() => {
 // Core Functions (in order of execution)
 function activateInput() {
   isInputActive.value = true;
+  // Se estiver no modo policies e o input estiver vazio, mostrar sugestões do ABC
+  if (viewMode.value === 'policies' && !inputValue.value) {
+    generateDefaultSuggestions();
+  }
   // emit('menu-interaction'); // Emit event for menu interaction
   nextTick(() => {
     if (inputField.value) { inputField.value.focus(); }
@@ -358,6 +437,10 @@ async function selectSuggestion(suggestion) {
 function handleFocus(event) {
   if (!dropdown.value) {
     dropdown.value = true;
+    // Se estiver no modo policies e o input estiver vazio, mostrar sugestões do ABC
+    if (viewMode.value === 'policies' && !inputValue.value) {
+      generateDefaultSuggestions();
+    }
     // emit('menu-interaction'); // Emit when dropdown opens
   }
   event.stopPropagation();
@@ -442,8 +525,16 @@ async function fetchCities(query) {
   // console.log('1 - fetchCities', data);
 
   // console.log('suggestion before', JSON.parse(JSON.stringify(suggestions.value)))
-  suggestions.value = data
-    .filter(item => !item.error)
+  let filteredData = data.filter(item => !item.error);
+
+  // Se estiver no modo policies, filtrar apenas municípios de São Paulo
+  if (viewMode.value === 'policies') {
+    filteredData = filteredData.filter(item =>
+      item.state_abbreviation === 'SP' || item.state === 'SP'
+    );
+  }
+
+  suggestions.value = filteredData
     .map(item => {
       // console.log('1 - fetchCities', item);
       const textKey = item.state_abbreviation
@@ -569,9 +660,15 @@ async function updateSuggestions(forceUpdate = false) {
     const inputLower = inputValue.value.toLowerCase();
 
     // Build suggestion arrays
-    const historySuggestions = filterHistory(inputLower);
-    const stateSuggestions = filterStates(inputLower);
+    let historySuggestions = [];
+    let stateSuggestions = [];
     const citySuggestions = filterCities(inputLower);
+
+    // No modo policies, não incluir histórico nem estados
+    if (viewMode.value !== 'policies') {
+      historySuggestions = filterHistory(inputLower);
+      stateSuggestions = filterStates(inputLower);
+    }
 
     suggestions.value = [
       ...historySuggestions.map(item => ({ text: item, type: 'history' })),
@@ -588,7 +685,14 @@ async function updateSuggestions(forceUpdate = false) {
 }
 
 function filterHistory(query) {
-  return searchHistory.value.filter(item => item.toLowerCase().startsWith(query));
+  let filteredHistory = searchHistory.value.filter(item => item.toLowerCase().startsWith(query));
+
+  // Se estiver no modo policies, filtrar apenas municípios de São Paulo
+  if (viewMode.value === 'policies') {
+    filteredHistory = filteredHistory.filter(item => item.includes(' - SP'));
+  }
+
+  return filteredHistory;
 }
 
 function filterStates(query) {
@@ -600,11 +704,18 @@ function filterStates(query) {
 }
 
 function filterCities(query) {
-  return cachedCities.value.filter(
+  let filteredCities = cachedCities.value.filter(
     city =>
       city.toLowerCase().startsWith(query) &&
       !searchHistory.value.includes(city)
   );
+
+  // Se estiver no modo policies, filtrar apenas municípios de São Paulo
+  if (viewMode.value === 'policies') {
+    filteredCities = filteredCities.filter(city => city.includes(' - SP'));
+  }
+
+  return filteredCities;
 }
 
 function updateHighlightedText() {
@@ -705,6 +816,46 @@ function loadSearchHistory() {
 }
 
 async function generateDefaultSuggestions() {
+  if (viewMode.value === 'policies') {
+    // No modo policies, mostrar apenas municípios do ABC Paulista, ignorando localização atual e histórico
+    const abcSuggestions = [
+      { text: 'Santo André - SP', type: 'city' },
+      { text: 'São Bernardo do Campo - SP', type: 'city' },
+      { text: 'São Caetano do Sul - SP', type: 'city' },
+      { text: 'Diadema - SP', type: 'city' },
+      { text: 'Mauá - SP', type: 'city' },
+      { text: 'Ribeirão Pires - SP', type: 'city' },
+      { text: 'Rio Grande da Serra - SP', type: 'city' }
+    ];
+
+    // Garantir que todos os códigos estejam disponíveis
+    abcSuggestions.forEach(suggestion => {
+      const cityName = suggestion.text.split(' - ')[0];
+      const cityCode = ABC_PAULISTA_CODES.find(code => {
+        // Buscar o código correspondente baseado no nome da cidade
+        const cityMap = {
+          'Santo André': '3547809',
+          'São Bernardo do Campo': '3548708',
+          'São Caetano do Sul': '3548807',
+          'Diadema': '3513801',
+          'Mauá': '3529401',
+          'Ribeirão Pires': '3543303',
+          'Rio Grande da Serra': '3544103'
+        };
+
+        return cityMap[cityName] === code;
+      });
+      if (cityCode) {
+        codes.value[suggestion.text] = cityCode;
+      }
+    });
+
+    suggestions.value = abcSuggestions;
+
+    return;
+  }
+
+  // Comportamento original para o modo map
   if (!locationData.value) { return; }
 
   const { city, state, stateAbbreviation } = locationData.value;
