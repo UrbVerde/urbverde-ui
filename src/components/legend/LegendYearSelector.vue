@@ -69,10 +69,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useLocationStore } from '@/stores/locationStore';
 
-// Allowed year range: fixed to 2016–2024
-const minYear = 2016;
-const maxYear = 2024;
+const locationStore = useLocationStore();
 
 const props = defineProps({
   initialYear: { type: Number, default: new Date().getFullYear() },
@@ -83,21 +82,27 @@ const props = defineProps({
 const { showControlsOnlyOnHover, legendHovered } = props;
 const emit = defineEmits(['year-change']);
 
+// Obter anos disponíveis do store
+const availableYears = computed(() => {
+  const years = locationStore.availableYears;
+
+  return years.length > 0 ? [...years].sort((a, b) => b - a) : [2024]; // ordena do mais recente para o mais antigo
+});
+
+// Obter min e max year dos anos disponíveis
+const minYear = computed(() => Math.min(...availableYears.value));
+const maxYear = computed(() => Math.max(...availableYears.value));
+
 // Validate initial year: if out-of-range, force to maxYear.
-const validInitialYear =
-  props.initialYear < minYear || props.initialYear > maxYear
-    ? maxYear
-    : props.initialYear;
+const validInitialYear = computed(() => {
+  const year = props.initialYear;
+
+  return year < minYear.value || year > maxYear.value ? maxYear.value : year;
+});
 
 // Use a string ref for the input so we can limit to 4 digits.
-const yearInput = ref(validInitialYear.toString());
-const selectedYear = ref(validInitialYear);
-
-// Build available years (newest to oldest)
-const availableYears = [];
-for (let y = maxYear; y >= minYear; y--) {
-  availableYears.push(y);
-}
+const yearInput = ref(validInitialYear.value.toString());
+const selectedYear = ref(validInitialYear.value);
 
 const isHovered = ref(false);
 const isOpen = ref(false);
@@ -110,18 +115,18 @@ const shake = ref(false);
 const showControls = computed(() => !showControlsOnlyOnHover || legendHovered || isHovered.value || isOpen.value);
 
 const canNavigateBack = computed(() =>
-  availableYears.indexOf(Number(selectedYear.value)) < availableYears.length - 1
+  availableYears.value.indexOf(Number(selectedYear.value)) < availableYears.value.length - 1
 );
 const canNavigateForward = computed(() =>
-  availableYears.indexOf(Number(selectedYear.value)) > 0
+  availableYears.value.indexOf(Number(selectedYear.value)) > 0
 );
 
 function navigateYear(direction) {
-  const currentIndex = availableYears.indexOf(Number(selectedYear.value));
+  const currentIndex = availableYears.value.indexOf(Number(selectedYear.value));
   const newIndex = currentIndex + direction;
-  if (newIndex >= 0 && newIndex < availableYears.length) {
-    selectedYear.value = availableYears[newIndex];
-    yearInput.value = availableYears[newIndex].toString();
+  if (newIndex >= 0 && newIndex < availableYears.value.length) {
+    selectedYear.value = availableYears.value[newIndex];
+    yearInput.value = availableYears.value[newIndex].toString();
     emit('year-change', selectedYear.value);
   }
 }
@@ -155,7 +160,7 @@ function onYearChange() {
   yearInput.value = yearInput.value.replace(/\D/g, '');
   if (yearInput.value.length === 4) {
     const num = Number(yearInput.value);
-    if (num < minYear || num > maxYear) {
+    if (num < minYear.value || num > maxYear.value) {
       if (!isInvalid.value) {
         triggerShake();
       }

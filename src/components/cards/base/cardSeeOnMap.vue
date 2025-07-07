@@ -30,7 +30,7 @@ const locationStore = useLocationStore();
 
 const navigateToMap = () => {
   // Get the current year and city code from the store
-  const currentYear = locationStore.year || '2021';
+  const currentYear = locationStore.currentYear;
   const currentCityCode = locationStore.cityCode;
 
   // Get the current category from the URL

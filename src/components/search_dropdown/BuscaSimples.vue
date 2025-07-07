@@ -197,7 +197,7 @@ watch(() => locationStore.viewMode, async(newMode) => {
       nm_mun: 'Diadema',
       uf: 'SP',
       type: 'city',
-      year: '2021',
+      year: locationStore.currentYear,
     });
 
     // Buscar coordenadas de Diadema
@@ -282,7 +282,7 @@ onMounted(async() => {
       nm_mun: 'Diadema',
       uf: 'SP',
       type: 'city',
-      year: '2021',
+      year: locationStore.currentYear,
     });
 
     // Buscar coordenadas de Diadema
@@ -422,7 +422,7 @@ async function selectSuggestion(suggestion) {
     nm_mun: city,
     uf: stateAbbrev,
     type: 'city',
-    year: '2021', //new Date().getFullYear()
+    year: locationStore.currentYear,
   });
 
   // Ensure coordinates are fetched after store update

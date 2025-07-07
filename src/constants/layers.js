@@ -1,9 +1,9 @@
 // urbverde-ui/src/constants/layers.js
 
 // Declare allowed years
-const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
-const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, '2016-2021'];
-const PARKS_YEARS = [2021];
+const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
+const PARKS_YEARS = [2021, 2024];
 const CENSUS_YEARS = [2022];
 
 /**

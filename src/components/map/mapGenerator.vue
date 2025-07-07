@@ -96,7 +96,7 @@ const MAP_ANIMATION_DURATION = 1000;
 // Get current layer id, scale and year from the URL query.
 const currentLayer = computed(() => route.query.layer);
 const currentScale = computed(() => route.query.scale);
-const currentYear = computed(() => route.query.year || '2021');
+const currentYear = computed(() => route.query.year || locationStore.currentYear);
 const currentCode = computed(() => route.query.code);
 console.log('currentCode', currentCode);
 const initialCode = ref(route.query.code);

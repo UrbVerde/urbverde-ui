@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     handleClick() {
-      const currentYear = this.locationStore.year || '2021';
+      const currentYear = this.locationStore.currentYear;
 
       // Navigate directly using window.location.href
       window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=${currentYear}&category=${this.changeToCategory}&layer=${this.changeToLayerId}&scale=intraurbana`;

@@ -2,6 +2,36 @@
 import { defineStore } from 'pinia';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import { LAYER_CONFIGS } from '@/constants/layers.js';
+
+// Função para obter o ano mais recente baseado no allowedYears da camada
+function getLatestYearForLayer(layerId) {
+  console.log('[LocationStore] Getting latest year for layer:', layerId);
+  const layerConfig = LAYER_CONFIGS[layerId];
+  if (layerConfig && layerConfig.allowedYears) {
+    const latestYear = Math.max(...layerConfig.allowedYears);
+    console.log('[LocationStore] Found layer config, latest year:', latestYear);
+
+    return latestYear;
+  }
+  console.log('[LocationStore] No layer config found, using fallback year: 2024');
+
+  return 2024; // fallback
+}
+
+// Função para obter anos disponíveis baseado no allowedYears da camada
+function getAvailableYearsForLayer(layerId) {
+  console.log('[LocationStore] Getting available years for layer:', layerId);
+  const layerConfig = LAYER_CONFIGS[layerId];
+  if (layerConfig && layerConfig.allowedYears) {
+    console.log('[LocationStore] Found layer config, available years:', layerConfig.allowedYears);
+
+    return [...layerConfig.allowedYears];
+  }
+  console.log('[LocationStore] No layer config found, using fallback years');
+
+  return [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]; // fallback
+}
 
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
@@ -37,6 +67,18 @@ export const useLocationStore = defineStore('locationStore', {
       const currentLayer = currentCategory?.layers?.find(layer => layer.id === this.layer);
 
       return currentLayer?.name || '';
+    },
+    currentYear() {
+      // Se já temos um ano definido, retorna ele
+      if (this.year) {
+        return this.year;
+      }
+
+      // Caso contrário, retorna o ano mais recente baseado na camada atual
+      return getLatestYearForLayer(this.layer);
+    },
+    availableYears() {
+      return getAvailableYearsForLayer(this.layer);
     },
     urlParams() {
       const params = {};
