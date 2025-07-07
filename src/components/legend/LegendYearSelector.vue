@@ -70,9 +70,9 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
-// Allowed year range: fixed to 2016–2021
+// Allowed year range: fixed to 2016–2024
 const minYear = 2016;
-const maxYear = 2021;
+const maxYear = 2024;
 
 const props = defineProps({
   initialYear: { type: Number, default: new Date().getFullYear() },

@@ -758,6 +758,32 @@ export const LAYER_CONFIGS = {
     unit: 'm'
   },
 
+  avg_distance_to_squares_5000: {
+    type: 'vector',
+    label: 'Distância Média até as Praças',
+    allowedYears: PARKS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer = scale === 'intraurbana'
+        ? `public.geodata_pracas_por_setor_${year}`
+        : `public.geodata_pracas_por_municipio_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'a4>5000m',
+    stops: [
+      [0, '#1a9850'],
+      [200, '#ffffbf'],
+      [400, '#d73027']
+    ],
+    unit: 'm'
+  },
+
   square_area_per_capita: {
     type: 'vector',
     label: 'Área de Praças por Habitante',
@@ -815,9 +841,9 @@ export const LAYER_CONFIGS = {
     unit: '%'
   },
 
-  served_population: {
+  perc_served_population: {
     type: 'vector',
-    label: 'População Atendida pelas Praças',
+    label: 'População Atendida pelas Praças (%)',
     allowedYears: PARKS_YEARS,
     source: (year, scale) => {
       // pick the correct tile url for scale
@@ -834,21 +860,16 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'a1',
+    property: 'a1_perc',
 
     // "Default" stops (for estadual)
     // E.g. 0 -> 100% coverage
     stops: [
       [0, '#d53e4f'],
-      [14.3, '#f46d43'],
-      [28.6, '#fdae61'],
-      [42.9, '#fee08b'],
-      [57.9, '#e6f598'],
-      [71.5, '#abdda4'],
-      [85.8, '#66c2a5'],
+      [50, '#e6f598'],
       [100, '#3288bd']
     ],
-    unit: 'hab',
+    unit: '%',
 
     popup: {
       label: 'População Atendida',
