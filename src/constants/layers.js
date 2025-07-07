@@ -1,7 +1,7 @@
 // urbverde-ui/src/constants/layers.js
 
 // Declare allowed years
-const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const PARKS_YEARS = [2021, 2024];
 const CENSUS_YEARS = [2022];
@@ -816,6 +816,7 @@ export const LAYER_CONFIGS = {
   square_served_area: {
     type: 'vector',
     label: 'Área Atendida pelas Praças',
+    allowedYears: PARKS_YEARS,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
         ? `public.geodata_pracas_por_setor_${year}`
@@ -831,9 +832,9 @@ export const LAYER_CONFIGS = {
     },
     property: 'a3',
     stops: [
-      [0, '#1a9850'],
+      [0, '#d73027'],
       [50, '#ffffbf'],
-      [100, '#d73027']
+      [100, '#1a9850']
     ],
     unit: '%'
   },
@@ -858,13 +859,10 @@ export const LAYER_CONFIGS = {
       };
     },
     property: 'a1_perc',
-
-    // "Default" stops (for estadual)
-    // E.g. 0 -> 100% coverage
     stops: [
-      [0, '#1a9850'],
+      [0, '#d73027'],
       [50, '#ffffbf'],
-      [100, '#d73027']
+      [100, '#1a9850']
     ],
     unit: '%',
 
