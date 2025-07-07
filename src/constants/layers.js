@@ -752,8 +752,8 @@ export const LAYER_CONFIGS = {
     property: 'a4',
     stops: [
       [0, '#1a9850'],
-      [200, '#ffffbf'],
-      [400, '#d73027']
+      [400, '#ffffbf'],
+      [800, '#d73027']
     ],
     unit: 'm'
   },
@@ -778,8 +778,8 @@ export const LAYER_CONFIGS = {
     property: 'a4>5000m',
     stops: [
       [0, '#1a9850'],
-      [200, '#ffffbf'],
-      [400, '#d73027']
+      [400, '#ffffbf'],
+      [800, '#d73027']
     ],
     unit: 'm'
   },
@@ -831,12 +831,9 @@ export const LAYER_CONFIGS = {
     },
     property: 'a3',
     stops: [
-      [0, '#d53e4f'],
-      [20, '#f46d43'],
-      [40, '#fdae61'],
-      [60, '#fee08b'],
-      [80, '#e6f598'],
-      [100, '#3288bd']
+      [0, '#1a9850'],
+      [50, '#ffffbf'],
+      [100, '#d73027']
     ],
     unit: '%'
   },
@@ -865,9 +862,9 @@ export const LAYER_CONFIGS = {
     // "Default" stops (for estadual)
     // E.g. 0 -> 100% coverage
     stops: [
-      [0, '#d53e4f'],
-      [50, '#e6f598'],
-      [100, '#3288bd']
+      [0, '#1a9850'],
+      [50, '#ffffbf'],
+      [100, '#d73027']
     ],
     unit: '%',
 

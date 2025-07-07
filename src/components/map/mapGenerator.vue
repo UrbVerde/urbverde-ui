@@ -421,6 +421,8 @@ function setupMasterInteractionHandler(config) {
         <strong>${feat.properties.nm_praca || 'Área sem nome'}</strong>
         <br>
         Área: ${(feat.properties.aream2 || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²
+        <br>
+        Tipo: ${(feat.properties.tipo || 0).toLocaleString('pt-BR')}
       </div>`)
         .addTo(map.value);
 
