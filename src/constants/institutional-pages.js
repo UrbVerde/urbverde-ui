@@ -20,6 +20,7 @@ import felipeBarreto from '@/assets/images/institutional-pages/about-us/members/
 import flaviaSossae from '@/assets/images/institutional-pages/about-us/members/flavia-sossae.png';
 import gabrielBaquero from '@/assets/images/institutional-pages/about-us/members/gabriel-baquero.jpeg';
 import guilhermeBueno from '@/assets/images/institutional-pages/about-us/members/guilherme-bueno.png';
+import gustavoMenezes from '@/assets/images/institutional-pages/about-us/members/gustavo-menezes.png';
 import isabellaAlho from '@/assets/images/institutional-pages/about-us/members/isabella-alho.jpg';
 import isabelRocha from '@/assets/images/institutional-pages/about-us/members/isabel-rocha.jpeg';
 import ivanPereira from '@/assets/images/institutional-pages/about-us/members/ivan-pereira.jpeg';
@@ -125,6 +126,13 @@ export const teamGroups = [
     title: 'Coordenação técnica',
     members: [
       {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
+      {
         backgroundImage: eduardoJustiniano,
         name: 'Eduardo Justiniano',
         linkedinUrl: 'https://www.linkedin.com/in/eduardo-justiniano-b9a4a922/',
@@ -202,6 +210,13 @@ export const teamGroups = [
         orcidUrl: 'https://orcid.org/0009-0004-6636-6360'
       },
       {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
+      {
         backgroundImage: isabelRocha,
         name: 'Isabel Rocha',
         linkedinUrl: 'https://www.linkedin.com/in/isabel-rocha-256a3296/'
@@ -259,7 +274,13 @@ export const teamGroups = [
         lattesUrl: 'http://lattes.cnpq.br/5632988444815474',
         orcidUrl: 'https://orcid.org/0000-0002-2045-6318'
       },
-
+      {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
       {
         backgroundImage: ivanPereira,
         name: 'Ivan Pereira',
@@ -363,7 +384,13 @@ export const teamGroups = [
         lattesUrl: 'http://lattes.cnpq.br/5632988444815474',
         orcidUrl: 'https://orcid.org/0000-0002-2045-6318'
       },
-
+      {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
       {
         backgroundImage: rodrigoHitoshi,
         name: 'Rodrigo Endo',
@@ -396,6 +423,13 @@ export const teamGroups = [
         linkedinUrl: 'https://www.linkedin.com/in/marina-pannunzio-ribeiro-78726626',
         lattesUrl: 'http://lattes.cnpq.br/0358232596051980',
         orcidUrl: 'https://orcid.org/0000-0002-9343-331X'
+      },
+      {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
       },
       {
         backgroundImage: edmilsonRodrigues,
@@ -541,6 +575,13 @@ export const teamGroups = [
         lattesUrl: 'http://lattes.cnpq.br/7336262924366247',
         orcidUrl: 'https://orcid.org/0009-0003-7712-3578'
       },
+      {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
     ]
   },
   {
@@ -603,7 +644,13 @@ export const teamGroups = [
         lattesUrl: 'http://lattes.cnpq.br/8245880046039472',
         orcidUrl: 'https://orcid.org/0000-0001-8531-6933'
       },
-
+      {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
       {
         backgroundImage: backgroundDefault,
         name: 'Kleyton Silva',
@@ -690,7 +737,13 @@ export const teamGroups = [
         lattesUrl: 'http://lattes.cnpq.br/7336262924366247',
         orcidUrl: 'https://orcid.org/0009-0003-7712-3578'
       },
-
+      {
+        backgroundImage: gustavoMenezes,
+        name: 'Gustavo Menezes',
+        linkedinUrl: 'https://www.linkedin.com/in/gustavopaix%C3%A3o/',
+        lattesUrl: 'https://lattes.cnpq.br/1757889532827778',
+        orcidUrl: 'https://orcid.org/0000-0002-0932-0620'
+      },
       {
         backgroundImage: luisBet,
         name: 'Luís Bet',
