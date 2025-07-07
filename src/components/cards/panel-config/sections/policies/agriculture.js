@@ -1,3 +1,4 @@
+// urbverde-ui/src/components/cards/panel-config/sections/policies/agriculture.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariAgriculture from '@/assets/images/cards/policies/mari-agriculture.svg';
 import mariTarget from '@/assets/images/cards/policies/mari-target-2.svg';

@@ -1,3 +1,4 @@
+// urbverde-ui/src/components/cards/panel-config/sections/policies/policies_climate.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariTarget from '@/assets/images/cards/policies/mari-target-1.svg';
 import mariClimate from '@/assets/images/cards/policies/mari-climate.svg';

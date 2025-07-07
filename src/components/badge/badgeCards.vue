@@ -1,3 +1,4 @@
+<!-- urbverde-ui/src/components/badge/badgeCards.vue -->
 <template>
   <div class="badge-wrapper" :class="status">
     <span class="badge-text body-caption-medium">{{ getStatusText() }}</span>
