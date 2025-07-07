@@ -304,6 +304,7 @@ onBeforeUnmount(() => {
 }
 .select-display input {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Centered dropdown (a bit smaller than the display) */
