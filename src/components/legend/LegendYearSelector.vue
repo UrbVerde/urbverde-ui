@@ -12,17 +12,12 @@
         <button
           v-if="showControls"
           class="nav-button"
-          @click="navigateYear(1)"
+          @click="navigateYear(-1)"
           :disabled="!canNavigateBack"
         >
           <i class="bi bi-chevron-left"></i>
         </button>
 
-        <!-- Input display:
-             - Type is "text" with inputmode="numeric" and maxlength="4"
-             - The container's border (contour) is visible only if showControls is true.
-             - Real-time validation: When 4 digits are entered and the value is not valid, error is shown.
-        -->
         <div class="select-display"
              :class="{
                error: isInvalid,
@@ -57,7 +52,7 @@
         <button
           v-if="showControls"
           class="nav-button"
-          @click="navigateYear(-1)"
+          @click="navigateYear(1)"
           :disabled="!canNavigateForward"
         >
           <i class="bi bi-chevron-right"></i>
@@ -114,10 +109,10 @@ watch(currentYear, (newYear) => {
 const showControls = computed(() => !showControlsOnlyOnHover || legendHovered || isHovered.value || isOpen.value);
 
 const canNavigateBack = computed(() =>
-  availableYears.value.indexOf(Number(selectedYear.value)) < availableYears.value.length - 1
+  availableYears.value.indexOf(Number(selectedYear.value)) > 0
 );
 const canNavigateForward = computed(() =>
-  availableYears.value.indexOf(Number(selectedYear.value)) > 0
+  availableYears.value.indexOf(Number(selectedYear.value)) < availableYears.value.length - 1
 );
 
 function navigateYear(direction) {
