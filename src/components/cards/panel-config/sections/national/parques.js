@@ -10,7 +10,6 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'statsSection',
     title: `Parques e praças em ${nm_mun} - ${uf}`,
-    fixedYear: 2021,
     panel: {
       variant: '1-3',
       items: [
@@ -34,7 +33,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/parks',
                   cardIndex: 0,
                   showModalButton: true,
                   modalTitle: 'Moradores próximos a praças',
@@ -44,7 +43,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/parks',
                   cardIndex: 1,
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'avg_distance_to_squares',
@@ -64,7 +63,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/parks',
                   cardIndex: 2,
                   overrideCardSubtitle: 'Quantas vezes moradores próximos a praças tem em média mais renda',
                   showModalButton: true,
@@ -75,7 +74,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/parks',
                   cardIndex: 3,
                   showModalButton: true,
                   modalTitle: 'Racismo ambiental',
@@ -92,7 +91,6 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'parksSquaresSection',
     title: 'Quem vive distante de parques e praças?',
-    fixedYear: 2021,
     panel: {
       variant: '2-1',
       items: [
@@ -104,7 +102,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 0,
                   overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
@@ -112,7 +110,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 1,
                   overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
@@ -120,7 +118,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 2,
                   overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
@@ -128,7 +126,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/inequality',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 3,
                   overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
@@ -172,14 +170,13 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'ranking',
     ref: 'rankingSection',
     title: `${nm_mun} - ${uf} no rankings de municípios`,
-    fixedYear: 2021,
     panel: {
       variant: '1-3',
       items: [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/square/ranking',
             cardIndex: 0,
             showModalButton: true,
             modalTitle: 'Municipios do Estado',
@@ -189,7 +186,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/square/ranking',
             cardIndex: 1,
             showModalButton: true,
             modalTitle: 'Municipios da Mesorregião',
@@ -199,7 +196,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/square/ranking',
             cardIndex: 2,
             showModalButton: true,
             modalTitle: 'Municipios da Microrregião',
@@ -213,7 +210,6 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'seeMore',
     ref: 'seeMoreSection',
     title: 'Veja mais sobre sua cidade!',
-    showYearPicker: false,
     panel: {
       variant: '2-1',
       items: [
@@ -225,7 +221,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/info',
                   cardIndex: 0,
                   showButtonPrimary: true,
                   changeToCategory: 'Clima',
@@ -235,7 +231,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/info',
                   cardIndex: 1,
                   showButtonPrimary: true,
                   changeToCategory: 'Parques+e+Praças',
@@ -245,7 +241,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/square/info',
                   cardIndex: 2,
                   showButtonPrimary: true,
                   changeToCategory: 'Parques+e+Praças',
