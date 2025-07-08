@@ -1,5 +1,4 @@
 // urbverde-ui/src/components/cards/panel-config/sections/national/parques.js
-// urbverde-ui/src/config/sections/clima.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 
 import globalwarming from '@/assets/images/cards/globalwarming-park.svg';
