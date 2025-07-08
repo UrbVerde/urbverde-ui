@@ -20,10 +20,8 @@
     >
       <!-- Year Selector -->
       <LegendYearSelector
-        :initial-year="currentYear"
         :showControlsOnlyOnHover="false"
         :legendHovered="isLegendHovered"
-        :available-years="currentLayerAllowedYears"
         @year-change="handleYearChange"
       />
 
@@ -160,10 +158,6 @@ const currentCategory = computed(() =>
   categories.value?.find(cat => cat.id === category.value)
 );
 const currentLayerId = computed(() => layer.value);
-const currentLayerAllowedYears = computed(() =>
-  // Get the allowed years for the current layer from the store
-  locationStore.availableYears
-);
 
 // Event handlers
 const toggleLegend = () => {
