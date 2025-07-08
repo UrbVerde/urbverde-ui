@@ -2,6 +2,36 @@
 import { defineStore } from 'pinia';
 import { watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import { LAYER_CONFIGS } from '@/constants/layers.js';
+
+// Função para obter o ano mais recente baseado no allowedYears da camada
+function getLatestYearForLayer(layerId) {
+  console.log('[LocationStore] Getting latest year for layer:', layerId);
+  const layerConfig = LAYER_CONFIGS[layerId];
+  if (layerConfig && layerConfig.allowedYears) {
+    const latestYear = Math.max(...layerConfig.allowedYears);
+    console.log('[LocationStore] Found layer config, latest year:', latestYear);
+
+    return latestYear;
+  }
+  console.log('[LocationStore] No layer config found, using fallback year: 2024');
+
+  return 2024; // fallback
+}
+
+// Função para obter anos disponíveis baseado no allowedYears da camada
+function getAvailableYearsForLayer(layerId) {
+  console.log('[LocationStore] Getting available years for layer:', layerId);
+  const layerConfig = LAYER_CONFIGS[layerId];
+  if (layerConfig && layerConfig.allowedYears) {
+    console.log('[LocationStore] Found layer config, available years:', layerConfig.allowedYears);
+
+    return [...layerConfig.allowedYears];
+  }
+  console.log('[LocationStore] No layer config found, using fallback years');
+
+  return [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]; // fallback
+}
 
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
@@ -22,21 +52,38 @@ export const useLocationStore = defineStore('locationStore', {
     // Loading states
     isLoadingCategories: false,
     error: null,
+
+    viewMode: 'map', // Adicionando viewMode ao estado
   }),
 
   getters: {
     currentCategoryName() {
-      return this.category;
+      const currentCategory = this.categories.find(cat => cat.id === this.category);
+
+      return currentCategory?.name || this.category;
     },
     currentLayerName() {
-      const currentCategory = this.categories.find(cat => cat.name === this.category);
+      const currentCategory = this.categories.find(cat => cat.id === this.category);
       const currentLayer = currentCategory?.layers?.find(layer => layer.id === this.layer);
 
       return currentLayer?.name || '';
     },
+    currentYear() {
+      // Se já temos um ano definido, retorna ele
+      if (this.year) {
+        return this.year;
+      }
+
+      // Caso contrário, retorna o ano mais recente baseado na camada atual
+      return getLatestYearForLayer(this.layer);
+    },
+    availableYears() {
+      return getAvailableYearsForLayer(this.layer);
+    },
     urlParams() {
       const params = {};
       if (this.cd_mun)  {params.code = this.cd_mun;}
+      if (this.viewMode) {params.viewMode = this.viewMode;}
       if (this.type)    {params.type = this.type;}
       if (this.year)    {params.year = this.year;}
       if (this.category) {params.category = this.category;}
@@ -52,28 +99,32 @@ export const useLocationStore = defineStore('locationStore', {
 
   actions: {
     async fetchCategories() {
-      if (!this.cd_mun || this.isLoadingCategories) {return;}
-
       this.isLoadingCategories = true;
       console.log('locationStore: Fetching categories for city:', this.cd_mun);
 
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${this.cd_mun}`);
+        // Construir URL com parâmetros
+        const url = new URL('https://api.urbverde.com.br/v1/categories');
+        url.searchParams.append('city', this.cd_mun);
+
+        // Adicionar viewMode se estiver definido
+        if (this.viewMode) {
+          url.searchParams.append('viewMode', this.viewMode);
+        }
+
+        const response = await fetch(url.toString());
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
+
         if (!data?.categories) {
           throw new Error('No categories in response');
         }
 
-        // Filtra as categorias se o estado não for SP
-        if (this.uf && this.uf !== 'SP') {
-          this.categories = data.categories.filter(category => category.id === 'census');
-        } else {
-          this.categories = data.categories;
-        }
+        // A lógica de filtragem agora é tratada no backend
+        this.categories = data.categories;
 
         // If we have a current layer, check if it exists in new categories
         if (this.layer) {
@@ -103,7 +154,7 @@ export const useLocationStore = defineStore('locationStore', {
         const firstLayer = firstCategory.layers?.[0];
         if (firstLayer) {
           console.log('locationStore: Setting default category and layer');
-          this.category = firstCategory.name;
+          this.category = firstCategory.id;
           this.layer = firstLayer.id;
         }
       }
@@ -191,6 +242,7 @@ export const useLocationStore = defineStore('locationStore', {
         category: query.category !== 'null' ? query.category : undefined,
         layer:  query.layer !== 'null'  ? query.layer : undefined,
         scale:  query.scale !== 'null'  ? query.scale : undefined,
+        viewMode: query.viewMode !== 'null' ? query.viewMode : undefined,
       };
 
       await this.setLocation(updates);
@@ -208,6 +260,10 @@ export const useLocationStore = defineStore('locationStore', {
           }
         }
       });
+    },
+
+    setViewMode(mode) {
+      this.viewMode = mode;
     },
   }
 });

@@ -154,16 +154,15 @@ onMounted(() => {
 });
 
 // Computed properties
-const currentYear = computed(() => storeYear.value || 2021);
+const currentYear = computed(() => storeYear.value || locationStore.currentYear);
 const currentLayerName = computed(() => locationStore.currentLayerName);
 const currentCategory = computed(() =>
-  categories.value?.find(cat => cat.name === category.value)
+  categories.value?.find(cat => cat.id === category.value)
 );
 const currentLayerId = computed(() => layer.value);
 const currentLayerAllowedYears = computed(() =>
-  // Get the allowed years for the current layer from your layer config
-  // This is a placeholder - implement according to your layer management system
-  [2016, 2017, 2018, 2019, 2020, 2021]
+  // Get the allowed years for the current layer from the store
+  locationStore.availableYears
 );
 
 // Event handlers

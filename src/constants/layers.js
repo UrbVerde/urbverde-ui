@@ -2,8 +2,8 @@
 
 // Declare allowed years
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
-const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, '2016-2021'];
-const PARKS_YEARS = [2021];
+const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
+const PARKS_YEARS = [2021, 2024];
 const CENSUS_YEARS = [2022];
 
 /**
@@ -24,7 +24,377 @@ export const LAYER_CONFIGS = {
     type: 'vector',
     label: 'População',
     allowedYears: CENSUS_YEARS,
-    filterable: false, // Para o caso de vetores que não devem ser filtrados para determinado município
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'v0001',
+    stops: [
+      [0, '#440154'],
+      [100, '#482576'],
+      [200, '#414387'],
+      [300, '#345f8d'],
+      [400, '#2a788e'],
+      [500, '#21908d'],
+      [600, '#23a884'],
+      [700, '#43bf70'],
+      [800, '#7ad151'],
+      [1000, '#bcdf27']
+    ],
+    unit: 'hab',
+    popup: {
+      label: 'População',
+      unit: 'habitantes',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  density: {
+    type: 'vector',
+    label: 'Densidade demográfica',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'densidade',
+    stops: [
+      [0, '#ffffff'],
+      [1000, '#ffe6e6'],
+      [2000, '#ffcccc'],
+      [3000, '#ffb3b3'],
+      [4000, '#ff9999'],
+      [5000, '#ff8080'],
+      [6000, '#ff6666'],
+      [7000, '#ff4d4d'],
+      [8000, '#ff3333'],
+      [10000, '#ff1919']
+    ],
+    unit: 'hab/km²',
+    popup: {
+      label: 'Densidade demográfica',
+      unit: 'habitantes/km²',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  literacy: {
+    type: 'vector',
+    label: 'Taxa de alfabetização (acima de 15 anos)',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'alfab%',
+    stops: [
+      [85, '#f1eef6'],
+      [90, '#74a9cf'],
+      [95, '#045a8d']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Taxa de alfabetização (acima de 15 anos)',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  children_percentage: {
+    type: 'vector',
+    label: 'Percentual de crianças (0 a 9 anos)',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'criancas_pct',
+    stops: [
+      [5, '#feebe2'],
+      [10, '#c51b8a'],
+      [15, '#7a0177']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de crianças (0 a 9 anos)',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  elderly_percentage: {
+    type: 'vector',
+    label: 'Percentual de idosos (acima de 60 anos)',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'idosos%',
+    stops: [
+      [20, '#feebe2'],
+      [30, '#c51b8a'],
+      [40, '#7a0177']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de crianças (0 a 9 anos)',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  woman_percentage: {
+    type: 'vector',
+    label: 'Percentual de mulheres',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'mulher (%)',
+    stops: [
+      [45, '#ffffcc'],
+      [50, '#ffb84d'],
+      [55, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de mulheres',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  boy_percentage: {
+    type: 'vector',
+    label: 'Percentual de homens',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'homens (%)',
+    stops: [
+      [45, '#ffffcc'],
+      [50, '#ffb84d'],
+      [55, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de homens',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  percentual_brancas: {
+    type: 'vector',
+    label: 'Percentual de pessoas brancas',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'branca%',
+    stops: [
+      [40, '#ffffcc'],
+      [60, '#ffb84d'],
+      [80, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de pessoas brancas',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  percentual_pretas: {
+    type: 'vector',
+    label: 'Percentual de pessoas pretas',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'preta%',
+    stops: [
+      [0, '#ffffcc'],
+      [10, '#ffb84d'],
+      [20, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de pessoas pretas',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  percentual_pardos: {
+    type: 'vector',
+    label: 'Percentual de pessoas pardas',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'parda%',
+    stops: [
+      [10, '#ffffcc'],
+      [30, '#ffb84d'],
+      [50, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de pessoas pardas',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  percentual_amarelas: {
+    type: 'vector',
+    label: 'Percentual de pessoas amarelas',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'amarela%',
+    stops: [
+      [0, '#ffffcc'],
+      [10, '#ffb84d'],
+      [20, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de pessoas amarelas',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  percentual_indigenas: {
+    type: 'vector',
+    label: 'Percentual de pessoas indigenas',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'indigena%',
+    stops: [
+      [0, '#ffffcc'],
+      [2.5, '#ffb84d'],
+      [5, '#e34a33']
+    ],
+    unit: '%',
+    popup: {
+      label: 'Percentual de pessoas indigenas',
+      unit: '%',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  average_income: {
+    type: 'vector',
+    label: 'Renda média do responsável da casa',
+    allowedYears: CENSUS_YEARS,
+    source: (year, scale, municipioId) => ({
+      type: 'vector',
+      tiles: [
+        `https://urbverde.iau.usp.br/dados/public.geodata_censo_por_setoresurbanosdesp_2022/{z}/{x}/{y}.pbf${municipioId ? `?cql_filter=cd_mun=${municipioId}` : ''}`
+      ],
+      minzoom: 0,
+      maxzoom: 22,
+      sourceLayer: 'public.geodata_censo_por_setoresurbanosdesp_2022'
+    }),
+    property: 'v06004',
+    stops: [
+      [1518, '#ca0020'],
+      [3036, '#db4247'],
+      [4554, '#ec846e'],
+      [6072, '#f5b599'],
+      [7590, '#f6d6c8'],
+      [9108, '#f7f7f7'],
+      [10626, '#cfe3ed'],
+      [12144, '#a6cfe3'],
+      [15180, '#76b4d5'],
+    ],
+    unit: 'R$',
+    popup: {
+      label: 'Renda média do responsável da casa',
+      unit: 'R$',
+      format: (v) => parseInt(v).toLocaleString()
+    }
+  },
+
+  population_outside_SP: {
+    type: 'vector',
+    label: 'População',
+    allowedYears: CENSUS_YEARS,
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -35,13 +405,17 @@ export const LAYER_CONFIGS = {
       sourceLayer: 'public.geodata_setores_2022'
     }),
     property: 'v0001',
-    // Using a more varied color palette - Viridis (blue to green to yellow)
     stops: [
-      [0, '#440154'],     // Dark purple
-      [250, '#3b528b'],   // Blue
-      [500, '#21918c'],   // Teal
-      [750, '#5ec962'],   // Green
-      [1000, '#fde725']   // Yellow
+      [0, '#440154'],
+      [100, '#482576'],
+      [200, '#414387'],
+      [300, '#345f8d'],
+      [400, '#2a788e'],
+      [500, '#21908d'],
+      [600, '#23a884'],
+      [700, '#43bf70'],
+      [800, '#7ad151'],
+      [900, '#bcdf27']
     ],
     unit: 'hab',
     popup: {
@@ -378,8 +752,34 @@ export const LAYER_CONFIGS = {
     property: 'a4',
     stops: [
       [0, '#1a9850'],
-      [200, '#ffffbf'],
-      [400, '#d73027']
+      [400, '#ffffbf'],
+      [800, '#d73027']
+    ],
+    unit: 'm'
+  },
+
+  avg_distance_to_squares_5000: {
+    type: 'vector',
+    label: 'Distância Média até as Praças',
+    allowedYears: PARKS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer = scale === 'intraurbana'
+        ? `public.geodata_pracas_por_setor_${year}`
+        : `public.geodata_pracas_por_municipio_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'a4>5000m',
+    stops: [
+      [0, '#1a9850'],
+      [400, '#ffffbf'],
+      [800, '#d73027']
     ],
     unit: 'm'
   },
@@ -416,6 +816,7 @@ export const LAYER_CONFIGS = {
   square_served_area: {
     type: 'vector',
     label: 'Área Atendida pelas Praças',
+    allowedYears: PARKS_YEARS,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
         ? `public.geodata_pracas_por_setor_${year}`
@@ -431,19 +832,16 @@ export const LAYER_CONFIGS = {
     },
     property: 'a3',
     stops: [
-      [0, '#d53e4f'],
-      [20, '#f46d43'],
-      [40, '#fdae61'],
-      [60, '#fee08b'],
-      [80, '#e6f598'],
-      [100, '#3288bd']
+      [0, '#d73027'],
+      [50, '#ffffbf'],
+      [100, '#1a9850']
     ],
     unit: '%'
   },
 
-  served_population: {
+  perc_served_population: {
     type: 'vector',
-    label: 'População Atendida pelas Praças',
+    label: 'População Atendida pelas Praças (%)',
     allowedYears: PARKS_YEARS,
     source: (year, scale) => {
       // pick the correct tile url for scale
@@ -460,21 +858,13 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'a1',
-
-    // "Default" stops (for estadual)
-    // E.g. 0 -> 100% coverage
+    property: 'a1_perc',
     stops: [
-      [0, '#d53e4f'],
-      [14.3, '#f46d43'],
-      [28.6, '#fdae61'],
-      [42.9, '#fee08b'],
-      [57.9, '#e6f598'],
-      [71.5, '#abdda4'],
-      [85.8, '#66c2a5'],
-      [100, '#3288bd']
+      [0, '#d73027'],
+      [50, '#ffffbf'],
+      [100, '#1a9850']
     ],
-    unit: 'hab',
+    unit: '%',
 
     popup: {
       label: 'População Atendida',

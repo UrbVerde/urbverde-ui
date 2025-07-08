@@ -42,7 +42,7 @@
 
         <div class="page-content" :style="pageContentStyle">
 
-          <div class="map-section">
+          <div v-show="!shouldHideMap" class="map-section">
             <div id="map"
                  ref="Mapa"
                  class="map-container"
@@ -92,7 +92,7 @@ import Sidebar from '../components/side_bar/SideBar.vue';
 import Navbar from '../components/navbar/NavbarMap.vue';
 import MapBox from '../components/map/mapGenerator.vue';
 import Legend from '../components/legend/MapLegend.vue';
-import WidgetsSection from '@/components/widgets_section/WidgetsSection.vue';
+import WidgetsSection from '@/components/cards/panel-config/base/PanelsCards.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
 
 // Store and router setup
@@ -117,6 +117,18 @@ const showBackToTop = ref(false);
 const hasMunicipality = computed(() => !!locationStore.cd_mun);
 const defaultYear = computed(() => locationStore.year);
 const cityCode = ref(3547809);
+
+// Função para verificar se deve ocultar o mapa baseado no ID da categoria ou camada
+const shouldHideMap = computed(() => {
+  const hideMapIds = [
+    'overview',
+  ];
+
+  const currentCategoryId = locationStore.category;
+  const currentLayerId = locationStore.layer;
+
+  return hideMapIds.includes(currentCategoryId) || hideMapIds.includes(currentLayerId);
+});
 
 // Methods
 const toggleSidebar = () => {
@@ -152,7 +164,7 @@ const handleScroll = () => {
   showBackToTop.value = scrollPosition > window.innerHeight * 0.2;
 
   const sectionElements = document.querySelectorAll(
-    '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"]'
+    '[id^="map"], [id^="stats"], [id^="vulnerable"], [id^="ranking"], [id^="data"], [id^="newsletter"], [id^="metas"], [id^="indicadores"], [id^="planejamento"], [id^="parks"], [id^="vegetation"], [id^="hidro"], [id^="agriculture"], [id^="climate"]'
   );
 
   for (const element of sectionElements) {
@@ -213,46 +225,6 @@ const handleMobileScroll = () => {
     behavior: 'smooth'
   });
 };
-
-// Commented out for later use
-// const syncStoreWithQuery = async() => {
-//   const query = route.query;
-//   console.log('MapPage: Syncing store with query:', query);
-
-//   if (Object.keys(query).length > 0) {
-//     await locationStore.updateFromQueryParams(query);
-
-//     // If we have coordinates but they're not set, fetch them
-//     if (locationStore.cd_mun && (!coordinates.value?.lat || !coordinates.value?.lng)) {
-//       try {
-//         const coords = await locationStore.fetchCoordinatesByCode(locationStore.cd_mun);
-//         if (coords) {
-//           coordinates.value = coords;
-//         }
-//       } catch (error) {
-//         console.error('MapPage: Error fetching coordinates:', error);
-//       }
-//     }
-//   }
-// };
-
-// Add this new function to fetch categories
-// async function fetchCategoriesForLocation(code) {
-//   try {
-//     console.log('Fetching categories for location:', code);
-//     const response = await fetch(`https://api.urbverde.com.br/v1/categories?city=${code}`);
-//     const data = await response.json();
-
-//     if (data?.categories) {
-//       locationStore.setCategories(data.categories);
-//     }
-//   } catch (error) {
-//     console.error('Error fetching categories:', error);
-//   }
-// }
-
-// Lifecycle hooks
-// Initialize store with URL params
 
 // Function to measure navbar height for responsiveness
 const measureNavbarHeight = () => {
@@ -420,7 +392,7 @@ h5, p{
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background-color: #F8F9FACC;
+  background-color: map-get($primary-fade, 50);
   overflow-x: hidden;
   position: relative;
 }
