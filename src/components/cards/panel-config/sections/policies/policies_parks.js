@@ -52,7 +52,6 @@ export default createSectionConfig((nm_mun) => [
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: `Ações e indicadores em ${nm_mun}`,
-    showYearPicker: false,
     panel: {
       variant: '1-1',
       items: [
@@ -87,10 +86,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Áreas de praças e parques disponíveis por habitante',
-            overrideNumberValue: '12 m',
-            numberType: 'composed',
-            numberSubtitle: 'Recomendação da ONU: mais de 15 m²/hab',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            cardIndex: 0,
+            numberType: 'large',
           }
         },
         {
@@ -106,10 +104,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Distância média até chegar em praças e parques',
-            overrideNumberValue: '291 m',
-            numberType: 'composed',
-            numberSubtitle: 'Recomendação da ONU: até 300 m',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            cardIndex: 1,
+            numberType: 'large',
           }
         },
         {
@@ -125,9 +122,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Área total destinada para praças e parques',
-            overrideNumberValue: '9082 m',
-            numberType: 'composed',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            cardIndex: 2,
+            numberType: 'large',
           }
         },
       ]
@@ -170,56 +167,90 @@ export default createSectionConfig((nm_mun) => [
     ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
-      variant: '3-2',
-      gapColumnHeight: '56px',
+      variant: '2-1',
       items: [
         {
-          component: 'CardAction',
+          type: 'panel',
           props: {
-            number: 4,
-            actionTitle: 'Ação 4 - Garantir o acesso a praças e parques para toda a população',
-            ods: '3, 10, 11, 13, 15, 17',
-            badgeStatus: 'nao-informado'
-          }
+            variant: '1-2',
+            items: [
+
+              {
+                component: 'CardAction',
+                props: {
+                  number: 4,
+                  actionTitle: 'Ação 4 - Garantir o acesso a praças e parques para toda a população',
+                  ods: '3, 10, 11, 13, 15, 17',
+                  badgeStatus: 'nao-informado'
+                }
+              },
+              {
+                type: 'panel',
+                props: {
+                  variant: '1-2',
+                  items: [
+                    {
+                      component: 'CardData',
+                      props: {
+                        apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                        cardIndex: 4,
+                      }
+                    },
+                    {
+                      component: 'CardData',
+                      props: {
+                        apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                        cardIndex: 7,
+                      }
+                    },
+                  ]
+                }
+              },
+            ]
+          },
         },
         {
           type: 'panel',
           props: {
-            variant: '2-2',
+            variant: '1-3',
             items: [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'População atendida por praças e parques',
-                  overrideNumberValue: '89%',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  cardIndex: 6,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Idosos e crianças atendidos por parques e praças',
-                  overrideNumberValue: '59%',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  cardIndex: 5,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas atendidos por praças e parques',
-                  overrideNumberValue: '49%',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Mulheres chefes de família atendidas por parques e praças',
-                  overrideNumberValue: '39%',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  cardIndex: 8,
                 }
               },
             ]
           }
         },
-        {
+      ]
+    }
+  }),
 
+  createSection({
+    id: 'indicadores',
+    ref: 'indicadoresSection',
+    showYearPicker: false,
+    panel: {
+      variant: '3-2',
+      gapColumnHeight: '56px',
+      items: [
+        {
           component: 'CardAction',
           props: {
             number: 5,
@@ -236,17 +267,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Área de parques e praças coberta por vegetação',
-                  overrideNumberValue: '33%',
-                  numberType: 'large',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  cardIndex: 9,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Área impermeável de parques e praças',
-                  overrideNumberValue: '69%',
-                  numberType: 'large',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  cardIndex: 10,
                 }
               },
             ]
@@ -265,9 +294,8 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Qualidade social e ecológica de parques e praças',
-            overrideNumberValue: '0.7',
-            numberType: 'large',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            cardIndex: 9,
             overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
           }
         },
