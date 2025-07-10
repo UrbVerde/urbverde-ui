@@ -9,6 +9,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'statsSection',
     title: `Parques e praças em ${nm_mun} - ${uf}`,
+    fixedYear: 2024,
     panel: {
       variant: '1-2',
       items: [
@@ -62,6 +63,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'parksSquaresSection',
     title: 'Quem vive longe de parques e praças?',
+    fixedYear: 2024,
     panel: {
       variant: '2-1',
       items: [
@@ -137,6 +139,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'ranking',
     ref: 'rankingSection',
     title: `${nm_mun} - ${uf} no rankings de municípios`,
+    fixedYear: 2024,
     panel: {
       variant: '1-3',
       items: [
@@ -177,6 +180,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'seeMore',
     ref: 'seeMoreSection',
     title: 'Veja mais sobre sua cidade!',
+    fixedYear: 2024,
     panel: {
       variant: '2-1',
       items: [
