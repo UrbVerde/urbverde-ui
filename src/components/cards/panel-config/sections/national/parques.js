@@ -10,7 +10,7 @@ export default createSectionConfig((nm_mun, uf) => [
     ref: 'statsSection',
     title: `Parques e praças em ${nm_mun} - ${uf}`,
     panel: {
-      variant: '1-3',
+      variant: '1-2',
       items: [
         {
           component: 'CardInfo',
@@ -36,6 +36,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardIndex: 0,
                   showModalButton: true,
                   modalTitle: 'Moradores próximos a praças',
+                  overrideCardSubtitle: 'Do total de pessoas moradores da cidade',
                   modalBodyText: 'Representa o percentual de moradores que vivem em um raio de 400 metros de praças e parques, considerando a recomendação da OMS para acesso a áreas verdes.',
                 }
               },
@@ -54,42 +55,13 @@ export default createSectionConfig((nm_mun, uf) => [
             ]
           }
         },
-        {
-          type: 'panel',
-          props: {
-            variant: '2-1',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/square/parks',
-                  cardIndex: 2,
-                  overrideCardSubtitle: 'Quantas vezes moradores próximos a praças tem em média mais renda',
-                  showModalButton: true,
-                  modalTitle: 'Desigualdade de renda',
-                  modalBodyText: 'Este dado mostra a diferença de renda entre as pessoas que moram próximas a praças e parques em comparação com aquelas que moram mais distantes dessas áreas.',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/square/parks',
-                  cardIndex: 3,
-                  showModalButton: true,
-                  modalTitle: 'Racismo ambiental',
-                  modalBodyText: 'Este dado mostra a proporção de pessoas negras e indígenas entre aquelas que moram mais distantes de praças e parques, evidenciando desigualdades no acesso a áreas verdes.',
-                }
-              },
-            ]
-          }
-        }
       ]
     }
   }),
   createSection({
     id: 'stats',
     ref: 'parksSquaresSection',
-    title: 'Quem vive distante de parques e praças?',
+    title: 'Quem vive longe de parques e praças?',
     panel: {
       variant: '2-1',
       items: [
@@ -103,7 +75,6 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 0,
-                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
@@ -111,7 +82,6 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 1,
-                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
@@ -119,7 +89,6 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 2,
-                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
               {
@@ -127,7 +96,6 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/inequality',
                   cardIndex: 3,
-                  overrideCardSubtitle: 'Do total de pessoas vivendo fora da vizinhança de praças',
                 }
               },
             ]
