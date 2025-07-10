@@ -3,6 +3,7 @@
 // Declare allowed years
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
+const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const PARKS_YEARS = [2021, 2024];
 const CENSUS_YEARS = [2022];
 
@@ -863,6 +864,66 @@ export const LAYER_CONFIGS = {
       [0, '#d73027'],
       [50, '#ffffbf'],
       [100, '#1a9850']
+    ],
+    unit: '%',
+
+    popup: {
+      label: 'População Atendida',
+      unit: '%',
+      format: (v) => v.toFixed(0)
+    }
+  },
+
+  square_pcv: {
+    type: 'vector',
+    label: 'Cobertura Vegetal em Parques e Praças',
+    allowedYears: PARKS_POLIGON_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_praca_poligono_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'pcv',
+    stops: [
+      [0, '#ff4903'],
+      [25, '#dadb00'],
+      [50, '#10901b']
+    ],
+    unit: '%',
+
+    popup: {
+      label: 'População Atendida',
+      unit: '%',
+      format: (v) => v.toFixed(0)
+    }
+  },
+
+  square_psi: {
+    type: 'vector',
+    label: 'Impermeabilização do Solo em Parques e Praças',
+    allowedYears: PARKS_POLIGON_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_praca_poligono_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'psi',
+    stops: [
+      [0, '#10901b'],
+      [25, '#dadb00'],
+      [50, '#ff4903']
     ],
     unit: '%',
 
