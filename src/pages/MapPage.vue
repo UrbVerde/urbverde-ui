@@ -21,10 +21,10 @@
     >
       <div v-if="!locationStore.cd_mun" class="placeholder-container">
         <div class="placeholder-wrapper">
-          <img src="../assets/images/setLocation.png" alt="Selecione um município" />
+          <img src="../assets/images/setLocation.svg" alt="Selecione um município" class="placeholder-image" />
           <div class="label">
-            <h5 class="heading-h5">Inicie buscando um lugar</h5>
-            <p class="body-small-regular">Experimente um município ou estado</p>
+            <h5 class="heading-h5">Inicie buscando uma cidade</h5>
+            <p class="body-small-regular">Experimente buscar onde você mora</p>
           </div>
         </div>
       </div>
@@ -519,6 +519,7 @@ h5, p{
 
 /* Placeholder styles */
 .placeholder-container {
+  opacity: 0.8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -543,6 +544,11 @@ h5, p{
     align-items: center;
     gap: 8px;
     align-self: stretch;
+  }
+
+  .placeholder-image{
+    width: 250px;
+    height: 250px;
   }
 
   /* Animações de entrada da página */

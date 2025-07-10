@@ -95,6 +95,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'graphicSection',
     title: `Temperatura média em ${nm_mun} - ${uf} ao longo do tempo`,
+    showYearPicker: false,
     component: TGraphicSection
   }),
   createSection({

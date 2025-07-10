@@ -15,6 +15,7 @@
           :showAverage="showHistoricalAverage"
         />
       </div>
+      <!--
       <div class="small-card">
         <GraphicData
           :title="selectedYearTitle"
@@ -24,6 +25,7 @@
         >
         </GraphicData>
       </div>
+      -->
     </div>
     <pre v-if="debug">{{ debugData }}</pre>
   </div>
@@ -33,14 +35,14 @@
 import { computed, ref, onMounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GraphicGenerator from './GraphicGenerator.vue';
-import GraphicData from './GraphicData.vue';
+// import GraphicData from './GraphicData.vue';
 
 export default {
   name: 'GraphicSection',
 
   components: {
     GraphicGenerator,
-    GraphicData,
+    // GraphicData,
   },
 
   props: {
@@ -268,7 +270,7 @@ export default {
 }
 
 .large-card {
-  width: 66.66%;
+  width: 100%;
   position: relative;
 }
 
