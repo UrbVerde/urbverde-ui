@@ -59,10 +59,25 @@ const layerSources = {
   'Vigor da vegetação (NDVI)': 'Sentinel tratamento UrbVerde (2025).',
   'Cobertura vegetal por habitante (ICV)': 'Censo IBGE (2010), Sentinel tratamento UrbVerde (2025).',
 
-  'Distância media até as praças': 'Landsat 8 tratamento UrbVerde (2025).',
-  'Área de praças por habitante': 'Censo IBGE (2010), Landsat 8 tratamento UrbVerde (2025).',
-  'Área atendida pelas praças': 'Landsat 8 tratamento UrbVerde (2025).',
-  'População atendida pelas praças': 'Censo IBGE (2010), Landsat 8 tratamento UrbVerde (2025).',
+  'Distância media até as praças': 'Landsat 8 tratamento UrbVerde (2025). Recorte temporal de 2021 utiliza dados do IBGE (2020). Recorte temporal de 2024, utiliza dados do IBGE (2022).',
+  'Distância media até as praças (>5000m²)': 'Landsat 8 tratamento UrbVerde (2025). Recorte temporal de 2021 utiliza dados do IBGE (2020). Recorte temporal de 2024, utiliza dados do IBGE (2022).',
+  'Área de praças por habitante': 'Landsat 8 tratamento UrbVerde (2025). Recorte temporal de 2021 utiliza dados do IBGE (2020). Recorte temporal de 2024, utiliza dados do IBGE (2022).',
+  'Área atendida pelas praças': 'Landsat 8 tratamento UrbVerde (2025). Recorte temporal de 2021 utiliza dados do IBGE (2020). Recorte temporal de 2024, utiliza dados do IBGE (2022).',
+  'População atendida pelas praças (%)': 'Landsat 8 tratamento UrbVerde (2025). Recorte temporal de 2021 utiliza dados do IBGE (2020). Recorte temporal de 2024, utiliza dados do IBGE (2022).',
+
+  'Quantidade de habitantes': 'IBGE (2022)',
+  'Densidade demográfica': 'IBGE (2022)',
+  'Percentual de alfabetizados': 'IBGE (2022)',
+  'Renda média do responsável da casa': 'IBGE (2022)',
+  'Percentual de crianças': 'IBGE (2022)',
+  'Percentual de idosos': 'IBGE (2022)',
+  'Percentual de mulheres': 'IBGE (2022)',
+  'Percentual de homens': 'IBGE (2022)',
+  'Percentual de pessoas brancas': 'IBGE (2022)',
+  'Percentual de pessoas pretas': 'IBGE (2022)',
+  'Percentual de pessoas pardas': 'IBGE (2022)',
+  'Percentual de pessoas amarelas': 'IBGE (2022)',
+  'Percentual de pessoas indigenas': 'IBGE (2022)'
 };
 
 // Fonte da camada para o modal

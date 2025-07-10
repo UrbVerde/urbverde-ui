@@ -52,6 +52,7 @@ export default createSectionConfig((nm_mun) => [
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: `Ações e indicadores em ${nm_mun}`,
+    fixedYear: 2024,
     panel: {
       variant: '1-1',
       items: [
@@ -88,7 +89,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 0,
-            numberType: 'large',
+            numberType: 'composed',
           }
         },
         {
@@ -106,7 +107,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 1,
-            numberType: 'large',
+            numberType: 'composed',
           }
         },
         {
