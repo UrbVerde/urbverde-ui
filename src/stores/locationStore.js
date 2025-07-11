@@ -132,7 +132,7 @@ export const useLocationStore = defineStore('locationStore', {
 
       try {
         // Construir URL com parâmetros
-        const url = new URL('http://localhost:8080/v1/categories');
+        const url = new URL('https://api.urbverde.com.br/v1/categories');
         url.searchParams.append('city', this.cd_mun);
 
         // Adicionar viewMode se estiver definido
@@ -200,7 +200,7 @@ export const useLocationStore = defineStore('locationStore', {
     async fetchCoordinatesByCode(cd_mun) {
       console.log('Fetching coordinates for municipal code:', cd_mun);
       try {
-        const response = await fetch(`http://localhost:8080/v1/address/data?code=${cd_mun}`);
+        const response = await fetch(`https://api.urbverde.com.br/v1/address/data?code=${cd_mun}`);
         const data = await response.json();
         console.log('Received coordinate data:', data);
 
