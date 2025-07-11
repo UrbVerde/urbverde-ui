@@ -33,6 +33,34 @@ function getAvailableYearsForLayer(layerId) {
   return [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]; // fallback
 }
 
+// Função para validar e ajustar o ano quando a camada muda
+function validateAndAdjustYear(layerId, currentYear) {
+  console.log('[LocationStore] Validating year for layer:', layerId, 'current year:', currentYear);
+
+  const layerConfig = LAYER_CONFIGS[layerId];
+  if (!layerConfig || !layerConfig.allowedYears) {
+    console.log('[LocationStore] No layer config or allowedYears found, keeping current year');
+
+    return currentYear;
+  }
+
+  const availableYears = layerConfig.allowedYears;
+  console.log('[LocationStore] Available years for layer:', availableYears);
+
+  // Se o ano atual existe na lista de anos permitidos, mantém o mesmo ano
+  if (availableYears.includes(currentYear)) {
+    console.log('[LocationStore] Current year is valid, keeping:', currentYear);
+
+    return currentYear;
+  }
+
+  // Se o ano atual não existe, vai para o ano mais recente disponível
+  const latestYear = Math.max(...availableYears);
+  console.log('[LocationStore] Current year not available, switching to latest year:', latestYear);
+
+  return latestYear;
+}
+
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
     // Location data
@@ -156,6 +184,15 @@ export const useLocationStore = defineStore('locationStore', {
           console.log('locationStore: Setting default category and layer');
           this.category = firstCategory.id;
           this.layer = firstLayer.id;
+
+          // Validar e ajustar o ano para a nova camada padrão
+          const currentYear = this.year || this.currentYear;
+          const validatedYear = validateAndAdjustYear(firstLayer.id, currentYear);
+
+          if (validatedYear !== currentYear) {
+            console.log('[LocationStore] Year adjusted for default layer from', currentYear, 'to', validatedYear);
+            this.year = validatedYear;
+          }
         }
       }
     },
@@ -227,8 +264,30 @@ export const useLocationStore = defineStore('locationStore', {
         await this.fetchCategories();
       }
 
-      if (payload.category !== undefined) {this.category = payload.category;}
-      if (payload.layer !== undefined) {this.layer = payload.layer;}
+      // Se a categoria ou camada está sendo alterada, validar e ajustar o ano
+      if (payload.category !== undefined || payload.layer !== undefined) {
+        const newLayer = payload.layer !== undefined ? payload.layer : this.layer;
+
+        // Atualizar categoria e camada primeiro
+        if (payload.category !== undefined) {this.category = payload.category;}
+        if (payload.layer !== undefined) {this.layer = payload.layer;}
+
+        // Se temos uma camada definida, validar o ano
+        if (newLayer) {
+          const currentYear = this.year || this.currentYear;
+          const validatedYear = validateAndAdjustYear(newLayer, currentYear);
+
+          // Se o ano foi alterado, atualizar o estado
+          if (validatedYear !== currentYear) {
+            console.log('[LocationStore] Year adjusted from', currentYear, 'to', validatedYear);
+            this.year = validatedYear;
+          }
+        }
+      } else {
+        // Se não está alterando categoria/camada, apenas atualizar normalmente
+        if (payload.category !== undefined) {this.category = payload.category;}
+        if (payload.layer !== undefined) {this.layer = payload.layer;}
+      }
     },
 
     async updateFromQueryParams(query) {

@@ -108,7 +108,7 @@ const fetchYears = async(cityCode) => {
   try {
     let apiUrl = '';
 
-    // Choose the API endpoint based on the layer prop.
+    // Choose the API endpoint based on the layer prop, use the categoryToLayerMap in panel-config/index.js
     switch (props.layer) {
     case 'temperatura':
       apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
@@ -117,7 +117,10 @@ const fetchYears = async(cityCode) => {
       apiUrl = `https://api.urbverde.com.br/v1/cards/vegetal/cover?city=${cityCode}`;
       break;
     case 'parques':
-      apiUrl = `https://api.urbverde.com.br/v1/cards/square/parks?city=${cityCode}`;
+      apiUrl = `http://localhost:8080/v1/cards/square/parks?city=${cityCode}`;
+      break;
+    case 'policies_parks':
+      apiUrl = `http://localhost:8080/v1/cards/pp/square?city=${cityCode}`;
       break;
     default:
       apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;

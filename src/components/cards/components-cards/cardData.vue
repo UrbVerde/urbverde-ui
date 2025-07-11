@@ -61,7 +61,7 @@
           :value="numberValue"
           :unit="numberUnit"
           :type="numberType"
-          :subtitle="numberSubtitle"
+          :subtitle="computedNumberSubtitle"
         />
         <slot v-else></slot>
 
@@ -177,6 +177,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  overrideNumberSubtitle: { // Se ficar vazio, o numberSubtitle será buscado na API
+    type: String,
+    default: ''
+  },
 
   // Card Subtitle Props
   overrideCardSubtitle: { // Se ficar vazio, o subtitle será buscado na API
@@ -228,6 +232,7 @@ const cardData = ref(null);
 const title = computed(() => props.overrideTitle || cardData.value?.title || '');
 const titleSubtitle = computed(() => props.overrideTitleSubtitle || cardData.value?.subtitle || '');
 const numberValue = computed(() => props.overrideNumberValue || cardData.value?.value || '');
+const computedNumberSubtitle = computed(() => props.overrideNumberSubtitle || cardData.value?.numberSubtitle || props.numberSubtitle || '');
 const cardSubtitle = computed(() => props.overrideCardSubtitle || cardData.value?.subtitle || '');
 const showCardSubtitle = computed(() => !!cardSubtitle.value);
 

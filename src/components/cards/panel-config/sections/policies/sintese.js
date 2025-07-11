@@ -72,7 +72,7 @@ export default createSectionConfig((nm_mun) => [
     ref: 'parksSection',
     showYearPicker: false,
     panel: {
-      variant: '6-2',
+      variant: '3-2',
       gapColumnHeight: '56px',
       items: [
         {
@@ -87,10 +87,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Áreas de praças e parques disponíveis por habitante',
-            overrideNumberValue: '12 m',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            cardIndex: 0,
             numberType: 'composed',
-            numberSubtitle: 'Recomendação da ONU: mais de 15 m²/hab',
           }
         },
         {
@@ -106,10 +105,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Distância média até chegar em praças e parques',
-            overrideNumberValue: '291 m',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            cardIndex: 1,
             numberType: 'composed',
-            numberSubtitle: 'Recomendação da ONU: até 300 m',
           }
         },
         {
@@ -125,59 +123,105 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Área total destinada para praças e parques',
-            overrideNumberValue: '9082 m',
-            numberType: 'composed',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            cardIndex: 2,
+            numberType: 'large',
           }
         },
 
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'indicadores',
+    ref: 'indicadoresSection',
+    showYearPicker: false,
+    panel: {
+      variant: '2-1',
+      items: [
         {
-          component: 'CardAction',
+          type: 'panel',
           props: {
-            number: 4,
-            actionTitle: 'Ação 4 - Garantir o acesso a praças e parques para toda a população',
-            ods: '3, 10, 11, 13, 15, 17',
-            badgeStatus: 'nao-informado'
-          }
+            variant: '1-2',
+            items: [
+
+              {
+                component: 'CardAction',
+                props: {
+                  number: 4,
+                  actionTitle: 'Ação 4 - Garantir o acesso a praças e parques para toda a população',
+                  ods: '3, 10, 11, 13, 15, 17',
+                  badgeStatus: 'nao-informado'
+                }
+              },
+              {
+                type: 'panel',
+                props: {
+                  variant: '1-2',
+                  items: [
+                    {
+                      component: 'CardData',
+                      props: {
+                        apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                        cardIndex: 4,
+                      }
+                    },
+                    {
+                      component: 'CardData',
+                      props: {
+                        apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                        cardIndex: 7,
+                      }
+                    },
+                  ]
+                }
+              },
+            ]
+          },
         },
         {
           type: 'panel',
           props: {
-            variant: '2-2',
+            variant: '1-3',
             items: [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'População atendida por praças e parques',
-                  overrideNumberValue: '89%',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  cardIndex: 6,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Idosos e crianças atendidos por parques e praças',
-                  overrideNumberValue: '59%',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  cardIndex: 5,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas atendidos por praças e parques',
-                  overrideNumberValue: '49%',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Mulheres chefes de família atendidas por parques e praças',
-                  overrideNumberValue: '39%',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  cardIndex: 8,
                 }
               },
             ]
           }
         },
-        {
+      ]
+    }
+  }),
 
+  createSection({
+    id: 'indicadores',
+    ref: 'indicadoresSection',
+    showYearPicker: false,
+    panel: {
+      variant: '3-2',
+      gapColumnHeight: '56px',
+      items: [
+        {
           component: 'CardAction',
           props: {
             number: 5,
@@ -194,17 +238,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Área de parques e praças coberta por vegetação',
-                  overrideNumberValue: '33%',
-                  numberType: 'large',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  cardIndex: 9,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Área impermeável de parques e praças',
-                  overrideNumberValue: '69%',
-                  numberType: 'large',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  cardIndex: 10,
                 }
               },
             ]
@@ -223,9 +265,8 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Qualidade social e ecológica de parques e praças',
-            overrideNumberValue: '0.7',
-            numberType: 'large',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            cardIndex: 9,
             overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
           }
         },
@@ -316,7 +357,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Cobertura vegetal por habitante',
-            overrideNumberValue: '11 m²/hab',
+            overrideNumberValue: 'X m²/hab',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
           }
@@ -334,7 +375,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: '59%',
+            overrideNumberValue: 'X%',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: reduzir 10% do PSI nos setores com mais de 75% até 2040',
           }
@@ -352,7 +393,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de lotes subutilizados',
-            overrideNumberValue: '30%',
+            overrideNumberValue: 'X%',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: utilizar todos os lotes identificados até 2030',
             overrideCardSubtitle: 'Terrenos vazios ou pouco usados, sem função social ou ambiental'
@@ -371,7 +412,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de cobertura vegetal (PCV)',
-            overrideNumberValue: '322 m',
+            overrideNumberValue: 'X m',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: alcançar 30% de PCV até 2040',
           }
@@ -463,7 +504,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Potencial da cobertura vegetal da cidade para redução da temperatura de superfície',
-            overrideNumberValue: '0.7',
+            overrideNumberValue: 'X',
             numberType: 'large',
             overrideCardSubtitle: 'Quanto mais próximo de 1.0, mais a cobertura vegetal da cidade contribui para redução da temperatura'
           }
@@ -481,7 +522,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Sequestro de carbono realizado pela vegetação da cidade no ano',
-            overrideNumberValue: '90 tCO2e',
+            overrideNumberValue: 'X tCO2e',
             numberType: 'large',
             overrideCardSubtitle: 'Sequestro de carbono é a capacidade das árvores e áreas verdes de absorverem toneladas de CO2 da atmosfera, ajudando a combater a crise climática'
           }
@@ -499,7 +540,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área pública residual total com potencial para ampliação da cobertura vegetal',
-            overrideNumberValue: '452 m²',
+            overrideNumberValue: 'X m²',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para plantio de árvores'
           }
@@ -591,7 +632,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: '59%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Solo que não deixa a água infiltrar, como asfalto e concreto',
           }
@@ -610,7 +651,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI) na sub-bacia',
-            overrideNumberValue: '62%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'É a parte da sub-bacia coberta por solo que não deixa a água infiltrar',
           }
@@ -629,7 +670,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de áreas vegetadas em APPs',
-            overrideNumberValue: '55%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Indica quanto das Áreas de Preservação Permanente (APPs), como margens de rios e córregos, estão cobertas por vegetação',
           }
@@ -647,7 +688,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de áreas vegetadas em APP por sub-bacia',
-            overrideNumberValue: '62%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Mostra quanto das Áreas de Preservação Permanente (APPs) está coberto por vegetação nas sub-bacias da cidade',
           }
@@ -667,7 +708,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de rios canalizados',
-            overrideNumberValue: '23%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Parte dos rios que foi transformada em canais de concreto, reduzindo sua função natural e aumentando o risco de enchentes',
           }
@@ -686,7 +727,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de rios canalizados por sub-bacias',
-            overrideNumberValue: '44%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Mostra quanto dos rios está canalizado em cada sub-bacia da cidade',
           }
@@ -778,7 +819,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Vulnerabilidade Alimentar',
-            overrideNumberValue: '0.6',
+            overrideNumberValue: 'X',
             numberType: 'large',
             overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
           }
@@ -796,7 +837,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área total com potencial para agricultura urbana',
-            overrideNumberValue: '291 m²',
+            overrideNumberValue: 'X m²',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
           }
@@ -814,7 +855,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área total com potencial para agricultura urbana vertical',
-            overrideNumberValue: '452 m²',
+            overrideNumberValue: 'X m²',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
           }
@@ -832,7 +873,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Distância média até alimentos saudáveis por habitante',
-            overrideNumberValue: '322 m',
+            overrideNumberValue: 'X m',
             numberType: 'large'
           }
         },

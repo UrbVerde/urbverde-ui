@@ -4,10 +4,10 @@
   <div class="widgets-section">
     <div v-if="sections.length === 0" class="empty-state-wrapper">
       <div class="empty-state">
-        <img src="@/assets/images/cards/empty-state.svg" alt="Nenhum dado disponível" />
+        <img src="@/assets/images/cards/policies/mari-search.svg" alt="Nenhum dado disponível" />
         <div class="label">
-          <h5 class="heading-h5">Sem dados estatísticos por aqui</h5>
-          <p class="body-small-regular">Parece que os dados ainda não foram plantados</p>
+          <h5 class="heading-h5">Ainda sem dados estatísticos por aqui</h5>
+          <!-- <p class="body-small-regular">Parece que os dados ainda não foram plantados</p> -->
         </div>
       </div>
     </div>
@@ -253,6 +253,7 @@ p, h5 {
 }
 
 .empty-state {
+  opacity: 0.8;
   display: flex;
   width: 100%;
   height: auto;
@@ -263,7 +264,7 @@ p, h5 {
 }
 
 .empty-state img{
-  max-width: 323px;
+  max-width: 256px;
   width: 100%;
   height: auto;
 }

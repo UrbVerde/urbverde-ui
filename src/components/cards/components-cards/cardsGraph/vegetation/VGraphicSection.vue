@@ -15,7 +15,9 @@
           :showAverage="showHistoricalAverage"
         />
       </div>
+      <!--
       <div class="small-card">
+
         <GraphicData
           :title="selectedYearTitle"
           :data="absDifferenceData"
@@ -24,6 +26,7 @@
         >
         </GraphicData>
       </div>
+      -->
     </div>
     <pre v-if="debug">{{ debugData }}</pre>
   </div>
@@ -33,14 +36,14 @@
 import { computed, ref, onMounted, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 import GraphicGenerator from './VGraphicGenerator.vue';
-import GraphicData from './VGraphicData.vue';
+// import GraphicData from './VGraphicData.vue';
 
 export default {
   name: 'VegetalCoverSection',
 
   components: {
     GraphicGenerator,
-    GraphicData,
+    //GraphicData,
   },
 
   props: {
@@ -268,7 +271,7 @@ export default {
   }
 
   .large-card {
-    width: 66.66%; /* Exatamente 2/3 */
+    width: 100%;
     min-height: 300px;
     position: relative;
   }

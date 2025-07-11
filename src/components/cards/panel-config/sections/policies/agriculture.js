@@ -88,7 +88,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Vulnerabilidade Alimentar',
-            overrideNumberValue: '0.6',
+            overrideNumberValue: 'X',
             numberType: 'large',
             overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
           }
@@ -106,7 +106,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área total com potencial para agricultura urbana',
-            overrideNumberValue: '291 m²',
+            overrideNumberValue: 'X m²',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
           }
@@ -168,7 +168,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área total com potencial para agricultura urbana vertical',
-            overrideNumberValue: '452 m²',
+            overrideNumberValue: 'X m²',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
           }
@@ -186,7 +186,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Distância média até alimentos saudáveis por habitante',
-            overrideNumberValue: '322 m',
+            overrideNumberValue: 'X m',
             numberType: 'large'
           }
         },

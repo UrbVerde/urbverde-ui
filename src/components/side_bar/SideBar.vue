@@ -32,11 +32,11 @@
         </div>
       </Transition>
 
-      <!-- <Transition name="fade">
+      <Transition name="fade">
         <div v-if="showContent && isSearchDone" class="view-mode-selector">
           <ViewModeDropdown />
         </div>
-      </Transition> -->
+      </Transition>
 
       <template v-if="isSearchDone">
         <Transition name="fade">
@@ -74,7 +74,7 @@ import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import CategoriesDropDown from './drop_down/CategoriesDropdown.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
-//import ViewModeDropdown from './drop_down/ViewModeDropdown.vue';
+import ViewModeDropdown from './drop_down/ViewModeDropdown.vue';
 
 // Props
 const props = defineProps({

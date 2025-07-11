@@ -87,7 +87,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: '59%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Solo que não deixa a água infiltrar, como asfalto e concreto',
           }
@@ -106,7 +106,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI) na sub-bacia',
-            overrideNumberValue: '62%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'É a parte da sub-bacia coberta por solo que não deixa a água infiltrar',
           }
@@ -125,7 +125,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de áreas vegetadas em APPs',
-            overrideNumberValue: '55%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Indica quanto das Áreas de Preservação Permanente (APPs), como margens de rios e córregos, estão cobertas por vegetação',
           }
@@ -185,7 +185,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de áreas vegetadas em APP por sub-bacia',
-            overrideNumberValue: '62%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Mostra quanto das Áreas de Preservação Permanente (APPs) está coberto por vegetação nas sub-bacias da cidade',
           }
@@ -205,7 +205,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de rios canalizados',
-            overrideNumberValue: '23%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Parte dos rios que foi transformada em canais de concreto, reduzindo sua função natural e aumentando o risco de enchentes',
           }
@@ -224,7 +224,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de rios canalizados por sub-bacias',
-            overrideNumberValue: '44%',
+            overrideNumberValue: 'X%',
             numberType: 'large',
             overrideCardSubtitle: 'Mostra quanto dos rios está canalizado em cada sub-bacia da cidade',
           }
