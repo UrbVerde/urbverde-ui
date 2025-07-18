@@ -7,6 +7,9 @@ const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 202
 const PARKS_YEARS = [2021, 2024];
 const CENSUS_YEARS = [2022];
 const RISKS_YEARS = [2024];
+const AGRICULTURE_YEARS_2022 = [2022];
+const AGRICULTURE_YEARS_2023 = [2023];
+const AGRICULTURE_YEARS_2025 = [2025];
 
 /**
  * A single file that holds all layer definitions.
@@ -1103,7 +1106,288 @@ export const LAYER_CONFIGS = {
     unit: '',
 
     popup: {
-      label: 'Vulnerabilidade social do risco climático a arboviroses',
+      label: 'Indicador de risco climático a inundações',
+      unit: '',
+    }
+  },
+
+  // ------- Áreas prioritárias para implantação de agricultura urbana (nivel 1) -------
+  urban_agriculture_priorit_1: {
+    type: 'vector',
+    label: 'Áreas prioritárias para implantação de agricultura urbana (nivel 1)',
+    allowedYears: AGRICULTURE_YEARS_2022,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'au_pot_1',
+    stops: [
+      [0, '#d0d1d3'],
+      [1, '#ffff00'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Áreas prioritárias para implantação de agricultura urbana (nivel 1)',
+      unit: '',
+    }
+  },
+
+  // ------- Áreas prioritárias para implantação de agricultura urbana (Nível 2) -------
+  urban_agriculture_priorit_2: {
+    type: 'vector',
+    label: 'Áreas prioritárias para implantação de agricultura urbana (Nível 2)',
+    allowedYears: AGRICULTURE_YEARS_2022,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'au_pot_2',
+    stops: [
+      [0, '#d0d1d3'],
+      [2, '#ffff00'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Áreas prioritárias para implantação de agricultura urbana (Nível 2)',
+      unit: '',
+    }
+  },
+
+  // ------- Desertos alimentares -------
+  desert_food_areas: {
+    type: 'vector',
+    label: 'Desertos alimentares',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'desertos*',
+    stops: [
+      [0, '#d0d1d3'],
+      [1, '#d7191c'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Desertos alimentares',
+      unit: '',
+    }
+  },
+
+  // ------- Pântanos alimentares -------
+  wetland_food_areas: {
+    type: 'vector',
+    label: 'Pântanos alimentares',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'pantanos*',
+    stops: [
+      [0, '#d0d1d3'],
+      [1, '#ad4413'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Pântanos alimentares',
+      unit: '',
+    }
+  },
+
+  // ------- Distancia média até pontos de agricultura urbana -------
+  urban_agriculture_distance: {
+    type: 'vector',
+    label: 'Distancia média até pontos de agricultura urbana',
+    allowedYears: AGRICULTURE_YEARS_2023,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'au_dist(m)',
+    stops: [
+      [20, '#fff5eb'],
+      [142, '#fee4ca'],
+      [209, '#fdc997'],
+      [270, '#fda45d'],
+      [320, '#f87f2c'],
+      [393, '#e5590a'],
+      [450, '#b83c02'],
+      [539, '#7f2704'],
+    ],
+    unit: 'm',
+
+    popup: {
+      label: 'Distancia média até pontos de agricultura urbana',
+      unit: 'm',
+    }
+  },
+
+  // ------- Distância média até restaurantes populares -------
+  popular_restaurants_distance: {
+    type: 'vector',
+    label: 'Distância média até restaurantes populares',
+    allowedYears: AGRICULTURE_YEARS_2023,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'san_distr',
+    stops: [
+      [72, '#fff5eb'],
+      [596, '#fee4ca'],
+      [871, '#fdc997'],
+      [1152, '#fda45d'],
+      [1394, '#f87f2c'],
+      [1640, '#e5590a'],
+      [1951, '#b83c02'],
+      [2374, '#7f2704'],
+    ],
+    unit: 'm',
+
+    popup: {
+      label: 'Distância média até restaurantes populares',
+      unit: 'm',
+    }
+  },
+
+  // ------- Distância média até feiras livres -------
+  markets_distance: {
+    type: 'vector',
+    label: 'Distância média até feiras livres',
+    allowedYears: AGRICULTURE_YEARS_2023,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'san_distf',
+    stops: [
+      [19, '#fff5eb'],
+      [192, '#fee4ca'],
+      [292, '#fdc997'],
+      [381, '#fda45d'],
+      [457, '#f87f2c'],
+      [525, '#e5590a'],
+      [642, '#b83c02'],
+      [823, '#7f2704'],
+    ],
+    unit: 'm',
+
+    popup: {
+      label: 'Distância média até feiras livres',
+      unit: 'm',
+    }
+  },
+
+  // ------- Densidade de estabelecimentos comerciais de produtos in natura -------
+  natura_density: {
+    type: 'vector',
+    label: 'Densidade de estabelecimentos comerciais de produtos in natura',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'dens_eq_n',
+    stops: [
+      [0, '#d7191c'],
+      [15, '#c4e687'],
+      [44, '#1a9641']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Densidade de estabelecimentos comerciais de produtos in natura',
+      unit: '',
+    }
+  },
+
+  // ------- Densidade de Estabelecimentos comerciais de produtos ultraprocessados -------
+  ultra_density: {
+    type: 'vector',
+    label: 'Densidade de Estabelecimentos comerciais de produtos ultraprocessados',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'dens_eq_u',
+    stops: [
+      [0, '#ffffff'],
+      [15, '#ff5555'],
+      [61, '#ff0000']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Densidade de Estabelecimentos comerciais de produtos ultraprocessados',
       unit: '',
     }
   },
