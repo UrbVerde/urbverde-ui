@@ -3,8 +3,9 @@
 // Declare allowed years
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
-const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const PARKS_YEARS = [2021, 2024];
+const PARKS_YEARS_2024 = [2024];
+const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const CENSUS_YEARS = [2022];
 const RISKS_YEARS = [2024];
 const AGRICULTURE_YEARS_2022 = [2022];
@@ -795,7 +796,7 @@ export const LAYER_CONFIGS = {
   avg_distance_to_squares_5000: {
     type: 'vector',
     label: 'Distância Média até as Praças',
-    allowedYears: PARKS_YEARS,
+    allowedYears: PARKS_YEARS_2024,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
         ? `public.geodata_pracas_por_setor_${year}`
@@ -884,7 +885,7 @@ export const LAYER_CONFIGS = {
     ],
     unit: '%',
     popup: {
-      label: 'Área Atendida pelas Praças',
+      label: 'Área Atendida',
       unit: '%',
       format: (v) => v.toFixed(0)
     }
@@ -894,7 +895,7 @@ export const LAYER_CONFIGS = {
   perc_served_population: {
     type: 'vector',
     label: 'População Atendida pelas Praças (%)',
-    allowedYears: PARKS_YEARS,
+    allowedYears: PARKS_YEARS_2024,
     source: (year, scale) => {
       // pick the correct tile url for scale
       const sourceLayer =
