@@ -6,6 +6,7 @@ const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const PARKS_YEARS = [2021, 2024];
 const CENSUS_YEARS = [2022];
+const RISKS_YEARS = [2024];
 
 /**
  * A single file that holds all layer definitions.
@@ -21,6 +22,11 @@ const CENSUS_YEARS = [2022];
 
 export const LAYER_CONFIGS = {
 
+  // ===============================
+  // Painel nacional
+  // ===============================
+
+  // ------- População -------
   population: {
     type: 'vector',
     label: 'População',
@@ -55,6 +61,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Densidade demográfica -------
   density: {
     type: 'vector',
     label: 'Densidade demográfica',
@@ -89,6 +96,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Taxa de alfabetização -------
   literacy: {
     type: 'vector',
     label: 'Taxa de alfabetização (acima de 15 anos)',
@@ -116,6 +124,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de crianças (0 a 9 anos) -------
   children_percentage: {
     type: 'vector',
     label: 'Percentual de crianças (0 a 9 anos)',
@@ -143,6 +152,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de idosos (acima de 60 anos) -------
   elderly_percentage: {
     type: 'vector',
     label: 'Percentual de idosos (acima de 60 anos)',
@@ -170,6 +180,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de mulheres -------
   woman_percentage: {
     type: 'vector',
     label: 'Percentual de mulheres',
@@ -197,6 +208,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de homens -------
   boy_percentage: {
     type: 'vector',
     label: 'Percentual de homens',
@@ -224,6 +236,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas brancas -------
   percentual_brancas: {
     type: 'vector',
     label: 'Percentual de pessoas brancas',
@@ -251,6 +264,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas pretas -------
   percentual_pretas: {
     type: 'vector',
     label: 'Percentual de pessoas pretas',
@@ -278,6 +292,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas pardas -------
   percentual_pardos: {
     type: 'vector',
     label: 'Percentual de pessoas pardas',
@@ -305,6 +320,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas amarelas -------
   percentual_amarelas: {
     type: 'vector',
     label: 'Percentual de pessoas amarelas',
@@ -332,6 +348,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas indigenas -------
   percentual_indigenas: {
     type: 'vector',
     label: 'Percentual de pessoas indigenas',
@@ -359,6 +376,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Renda média do responsável da casa -------
   average_income: {
     type: 'vector',
     label: 'Renda média do responsável da casa',
@@ -392,6 +410,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- População fora de São Paulo -------
   population_outside_SP: {
     type: 'vector',
     label: 'População',
@@ -426,6 +445,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Geometria dos setores censitários -------
   setores: {
     type: 'vector',
     label: 'Setores Censitários',
@@ -452,7 +472,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
-  // Climate layers
+  // ------- Temperatura de superfície -------
   surface_temp: {
     type: 'raster',
     label: 'Temperatura de Superfície',
@@ -486,6 +506,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Temperatura máxima de superfície -------
   max_surface_temp: {
     type: 'vector',
     label: 'Temperatura Máxima de Superfície',
@@ -517,6 +538,7 @@ export const LAYER_CONFIGS = {
     unit: '°C'
   },
 
+  // ------- Nível de exposição à ilha de calor -------
   heat_island: {
     type: 'vector',
     label: 'Nível de exposição à ilha de calor',
@@ -546,7 +568,7 @@ export const LAYER_CONFIGS = {
     unit: ''
   },
 
-  // Vegetation layers
+  // ------- Percentual de cobertura vegetal -------
   pcv: {
     type: 'vector',
     label: 'Percentual de Cobertura Vegetal',
@@ -584,6 +606,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Índice de Cobertura Vegetal -------
   icv: {
     type: 'vector',
     label: 'Índice de Cobertura Vegetal',
@@ -612,6 +635,7 @@ export const LAYER_CONFIGS = {
     unit: 'm²/hab'
   },
 
+  // ------- Índice de Desigualdade Socioambiental -------
   idsa: {
     type: 'vector',
     label: 'Índice de Desigualdade Socioambiental',
@@ -639,6 +663,7 @@ export const LAYER_CONFIGS = {
     unit: ''
   },
 
+  // ------- Cobertura Vegetal por Pixel -------
   cvp: {
     type: 'raster',
     label: 'Cobertura Vegetal por Pixel',
@@ -680,6 +705,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Vigor da Vegetação (NDVI) -------
   ndvi: {
     type: 'raster',
     label: 'Vigor da Vegetação (NDVI)',
@@ -694,9 +720,6 @@ export const LAYER_CONFIGS = {
     paint: {
       'raster-opacity': 0.7
     },
-    /**
-     * For NDVI 0–100%, define your color gradient stops:
-     */
     stops: [
       [0, '#addd8e'],
       [20, '#78c679'],
@@ -713,7 +736,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
-  // Parks layers
+  // ------- Geometria de praças nacional -------
   parks: {
     type: 'vector',
     label: 'Praças',
@@ -733,6 +756,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Distância média até as praças -------
   avg_distance_to_squares: {
     type: 'vector',
     label: 'Distância Média até as Praças',
@@ -756,9 +780,15 @@ export const LAYER_CONFIGS = {
       [400, '#ffffbf'],
       [800, '#d73027']
     ],
-    unit: 'm'
+    unit: 'm',
+    popup: {
+      label: 'Distância Média até as Praças',
+      unit: 'm',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- Distância média até as praças (acima de 5000m) -------
   avg_distance_to_squares_5000: {
     type: 'vector',
     label: 'Distância Média até as Praças',
@@ -782,9 +812,15 @@ export const LAYER_CONFIGS = {
       [400, '#ffffbf'],
       [800, '#d73027']
     ],
-    unit: 'm'
+    unit: 'm',
+    popup: {
+      label: 'Distância Média até as Praças',
+      unit: 'm',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- Área de praças por habitante -------
   square_area_per_capita: {
     type: 'vector',
     label: 'Área de Praças por Habitante',
@@ -811,9 +847,15 @@ export const LAYER_CONFIGS = {
       [10, '#e6f598'],
       [15, '#abdda4']
     ],
-    unit: 'm²/hab'
+    unit: 'm²/hab',
+    popup: {
+      label: 'Área de Praças por Habitante',
+      unit: 'm²/hab',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- Área atendida pelas praças -------
   square_served_area: {
     type: 'vector',
     label: 'Área Atendida pelas Praças',
@@ -837,9 +879,15 @@ export const LAYER_CONFIGS = {
       [50, '#ffffbf'],
       [100, '#1a9850']
     ],
-    unit: '%'
+    unit: '%',
+    popup: {
+      label: 'Área Atendida pelas Praças',
+      unit: '%',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- População atendida pelas praças (%) -------
   perc_served_population: {
     type: 'vector',
     label: 'População Atendida pelas Praças (%)',
@@ -874,6 +922,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Cobertura Vegetal em Parques e Praças -------
   square_pcv: {
     type: 'vector',
     label: 'Cobertura Vegetal em Parques e Praças',
@@ -898,12 +947,13 @@ export const LAYER_CONFIGS = {
     unit: '%',
 
     popup: {
-      label: 'População Atendida',
+      label: 'Cobertura Vegetal',
       unit: '%',
       format: (v) => v.toFixed(0)
     }
   },
 
+  // ------- Impermeabilização do Solo em Parques e Praças -------
   square_psi: {
     type: 'vector',
     label: 'Impermeabilização do Solo em Parques e Praças',
@@ -928,9 +978,133 @@ export const LAYER_CONFIGS = {
     unit: '%',
 
     popup: {
-      label: 'População Atendida',
+      label: 'Impermeabilização do Solo',
       unit: '%',
       format: (v) => v.toFixed(0)
+    }
+  },
+
+  // ===============================
+  // Exclusivo para o painel políticas públicas
+  // ===============================
+
+  // ------- Riscos a ondas de calor -------
+  heat_wave_risks: {
+    type: 'vector',
+    label: 'Riscos a ondas de calor',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'rcalor',
+    stops: [
+      [0, '#2b83ba'],
+      [0.353, '#ffffbf'],
+      [0.639, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Riscos a ondas de calor',
+      unit: '',
+    }
+  },
+
+  // ------- Risco climático a arboviroses -------
+  arbovirus_risks: {
+    type: 'vector',
+    label: 'Risco climático a arboviroses',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'rarbovirose',
+    stops: [
+      [0, '#2b83ba'],
+      [0.238, '#ffffbf'],
+      [0.448, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Risco climático a arboviroses',
+      unit: '',
+    }
+  },
+
+  // ------- Vulnerabilidade social do risco climático a arboviroses -------
+  arbovirus_vulnerability: {
+    type: 'vector',
+    label: 'Vulnerabilidade social do risco climático a arboviroses',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'vulnerabsan',
+    stops: [
+      [0, '#2b83ba'],
+      [0.425, '#ffffbf'],
+      [0.704, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Vulnerabilidade social do risco climático a arboviroses',
+      unit: '',
+    }
+  },
+
+  // ------- Indicador de risco climático a inundações -------
+  flood_risks: {
+    type: 'vector',
+    label: 'Indicador de risco climático a inundações',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'rinunda',
+    stops: [
+      [0, '#2b83ba'],
+      [0.238, '#ffffbf'],
+      [0.448, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Vulnerabilidade social do risco climático a arboviroses',
+      unit: '',
     }
   },
 };
