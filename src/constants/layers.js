@@ -1051,9 +1051,9 @@ export const LAYER_CONFIGS = {
   },
 
   // ------- Vulnerabilidade social do risco climático a arboviroses -------
-  arbovirus_vulnerability: {
+  nutrition_vulnerability: {
     type: 'vector',
-    label: 'Vulnerabilidade social do risco climático a arboviroses',
+    label: 'Vulnerabilidade alimentar e nutricional',
     allowedYears: RISKS_YEARS,
     source: (year) => {
       const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
@@ -1075,7 +1075,7 @@ export const LAYER_CONFIGS = {
     unit: '',
 
     popup: {
-      label: 'Vulnerabilidade social do risco climático a arboviroses',
+      label: 'Vulnerabilidade alimentar e nutricional',
       unit: '',
     }
   },
@@ -1106,6 +1106,36 @@ export const LAYER_CONFIGS = {
 
     popup: {
       label: 'Indicador de risco climático a inundações',
+      unit: '',
+    }
+  },
+
+  // ------- Desenvolvimento social do habitat para favelas -------
+  desh_risks: {
+    type: 'vector',
+    label: 'Desenvolvimento social do habitat para favelas',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_idesh_por_setor_fcu_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'idesh',
+    stops: [
+      [0, '#2b83ba'],
+      [0.219, '#ffffbf'],
+      [0.483, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Desenvolvimento social do habitat para favelas',
       unit: '',
     }
   },
