@@ -3,6 +3,7 @@
 // Declare allowed years
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
+const VEGETATION_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const PARKS_YEARS = [2021, 2024];
 const PARKS_YEARS_2024 = [2024];
 const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
@@ -576,11 +577,11 @@ export const LAYER_CONFIGS = {
   pcv: {
     type: 'vector',
     label: 'Percentual de Cobertura Vegetal',
-    allowedYears: VECTOR_YEARS,
+    allowedYears: VEGETATION_YEARS,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
-        ? `public.geodata_vegetacao_por_setor_${year}`
-        : `public.geodata_vegetacao_por_municipio_${year}`;
+        ? `public.geodata_icv_pcv_pop_psi_por_setor_${year}`
+        : `public.geodata_icv_pcv_pop_psi_por_municipio_${year}`;
 
       return {
         type: 'vector',
@@ -590,23 +591,16 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'b1',
+    property: 'pcv',
     stops: [
-      [0.0, '#ffffe5'],
-      [0.14, '#f7fcb9'],
-      [0.15, '#d9f0a3'],
-      [0.18, '#addd8e'],
-      [0.2, '#78c679'],
-      [0.25, '#41ab5d'],
-      [0.28, '#238443'],
-      [0.31, '#006837'],
-      [0.4, '#004529']
+      [0, '#ffffcc'],
+      [20, '#78c679'],
+      [40, '#006837']
     ],
     unit: '%',
     popup: {
       label: 'PCV',
       unit: '%',
-      multiplier: 100
     }
   },
 
@@ -614,11 +608,11 @@ export const LAYER_CONFIGS = {
   icv: {
     type: 'vector',
     label: 'Índice de Cobertura Vegetal',
-    allowedYears: VECTOR_YEARS,
+    allowedYears: VEGETATION_YEARS,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
-        ? `public.geodata_vegetacao_por_setor_${year}`
-        : `public.geodata_vegetacao_por_municipio_${year}`;
+        ? `public.geodata_icv_pcv_pop_psi_por_setor_${year}`
+        : `public.geodata_icv_pcv_pop_psi_por_municipio_${year}`;
 
       return {
         type: 'vector',
@@ -628,15 +622,40 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'b2',
+    property: 'icv',
     stops: [
-      [730, '#ffffe5'],
-      [1323, '#d9f0a3'],
-      [2083, '#78c679'],
-      [3385, '#238443'],
-      [4033, '#004529']
+      [0, '#ffffcc'],
+      [40, '#78c679'],
+      [80, '#006837']
     ],
     unit: 'm²/hab'
+  },
+
+  // ------- Impermeabilização do solo (PSI) -------
+  psi: {
+    type: 'vector',
+    label: 'Impermeabilização do solo (PSI)',
+    allowedYears: VEGETATION_YEARS,
+    source: (year, scale) => {
+      const sourceLayer = scale === 'intraurbana'
+        ? `public.geodata_icv_pcv_pop_psi_por_setor_${year}`
+        : `public.geodata_icv_pcv_pop_psi_por_municipio_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'psi',
+    stops: [
+      [20, '#d9f0d3'],
+      [50, '#ffffbf'],
+      [80, '#e34a33']
+    ],
+    unit: '%'
   },
 
   // ------- Índice de Desigualdade Socioambiental -------
@@ -682,31 +701,15 @@ export const LAYER_CONFIGS = {
     paint: {
       'raster-opacity': 0.7
     },
-    /**
-     * Example stops array with 12 colors from 0% to 100%
-     * If you have 12 exact colors, you can split 0–100 into 11 segments,
-     * e.g. every 10% or ~9%.  Below is an example with each 9% increment.
-     */
     stops: [
-      [0, '#ff4903'],
-      [9, '#ff7100'],
-      [18, '#ff9300'],
-      [27, '#ffb200'],
-      [36, '#ffd000'],
-      [45, '#edd500'],
-      [54, '#dadb00'],
-      [63, '#c5df00'],
-      [72, '#9bcc05'],
-      [81, '#73b90f'],
-      [90, '#49a416'],
-      [100, '#10901b']
+      ['100%', '#10901b'],
+      ['100%', '#10901b']
     ],
-    unit: '%',
     popup: {
-      label: 'PCV',
+      label: 'Sem dado, apenas imagem',
       unit: '',
-      multiplier: -1
-    }
+    },
+    unit: '%'
   },
 
   // ------- Vigor da Vegetação (NDVI) -------
@@ -725,18 +728,13 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [0, '#addd8e'],
-      [20, '#78c679'],
-      [40, '#41ab5d'],
-      [60, '#238443'],
-      [80, '#006837'],
-      [100, '#004529']
+      ['100%', '#10901b'],
+      ['100%', '#10901b']
     ],
     unit: '%',
     popup: {
-      label: 'NDVI',
+      label: 'Sem dado, apenas imagem',
       unit: '',
-      multiplier: 1
     }
   },
 
