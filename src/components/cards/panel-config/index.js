@@ -20,7 +20,7 @@ export const categoryToLayerMap = {
   'overview': 'overview',
   'policies_parks': 'policies_parks',
   'policies_vegetation': 'policies_vegetation',
-  'hidro': 'policies_hidrology',
+  'policies_hidro': 'policies_hidrology',
   'agriculture': 'agriculture',
   'policies_climate': 'policies_climate',
 };
@@ -33,7 +33,7 @@ export const layerToCategoryMap = {
   'overview': 'overview',
   'policies_parks': 'policies_parks',
   'policies_vegetation': 'policies_vegetation',
-  'policies_hidrology': 'hidro',
+  'policies_hidrology': 'policies_hidro',
   'agriculture': 'agriculture',
   'policies_climate': 'policies_climate',
 };

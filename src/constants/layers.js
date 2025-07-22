@@ -993,11 +993,123 @@ export const LAYER_CONFIGS = {
       format: (v) => v.toFixed(0)
     }
   },
-
-  // ------- Massas de água -------
-  hydrographic_network: {
+  // ------- Perigo de inundação Diadema -------
+  flood_diadema_classes: {
     type: 'raster',
-    label: 'Massas de água',
+    label: 'Perigo de inundação em Diadema (classes)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_6classes_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#006100'],
+      [2, '#559100'],
+      [3, '#A4C400'],
+      [4, '#FFFF00'],
+      [5, '#FFBB00'],
+      [6, '#FF7700'],
+      [7, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação em Diadema (classes)',
+      unit: '',
+    },
+    unit: '',
+  },
+
+  // ------- Perigo de inundação Estado (classes) -------
+  flood_state_classes: {
+    type: 'raster',
+    label: 'Perigo de inundação (classes)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_7classes_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#006100'],
+      [2, '#559100'],
+      [3, '#A4C400'],
+      [4, '#FFFF00'],
+      [5, '#FFBB00'],
+      [6, '#FF7700'],
+      [7, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação (classes)',
+      unit: '',
+    },
+    unit: '',
+  },
+  // ------- Perigo de inundação Diadema (porcentagem) -------
+  flood_diadema_percentage: {
+    type: 'raster',
+    label: 'Perigo de inundação em Diadema (porcentagem)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [30, '#006100'],
+      [65, '#FFFF00'],
+      [100, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação em Diadema (%)',
+      unit: '',
+    },
+    unit: '%',
+  },
+  // ------- Perigo de inundação Estado (porcentagem) -------
+  flood_state_percentage: {
+    type: 'raster',
+    label: 'Perigo de inundação (porcentagem)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [30, '#006100'],
+      [65, '#FFFF00'],
+      [100, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação (%)',
+      unit: '',
+    },
+    unit: '%',
+  },
+  // ------- Massas de água do Estado -------
+  water_bodies_state: {
+    type: 'raster',
+    label: 'Massas da água do Estado',
     allowedYears: [2020],
     source: {
       type: 'raster',
@@ -1007,15 +1119,68 @@ export const LAYER_CONFIGS = {
       tileSize: 256
     },
     paint: {
-      'raster-resampling': 'nearest'
+      'raster-opacity': 0.7
     },
     stops: [
-      [1, '#0000ff'],
-      [1, '#0000ff']
+      [1, '#4169E1'],
+      [1, '#4169E1']
     ],
     popup: {
-      label: 'Massas de água',
-    }
+      label: 'Massas de água em Diadema',
+      unit: '',
+    },
+    unit: '',
+  },
+  // ------- Massas de água em Diadema -------
+  water_bodies_diadema: {
+    type: 'raster',
+    label: 'Massas de água em Diadema',
+    allowedYears: [2002],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:raster_hidrologia_massas_dagua_diadema_2002&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#4169E1'],
+      [1, '#4169E1']
+    ],
+    popup: {
+      label: 'Massas de água em Diadema',
+      unit: '',
+    },
+    unit: '',
+  },
+
+  // ------- Rios do Estado -------
+  rivers_state: {
+    type: 'raster',
+    label: 'Rios',
+    allowedYears: [2008],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:raster_hidrologia_rios_estadosp_2008&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#4169E1'],
+      [1, '#4169E1']
+    ],
+    popup: {
+      label: 'Massas de água em Diadema',
+      unit: '',
+    },
+    unit: '',
   },
 
   // ===============================
