@@ -705,11 +705,9 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [1, '#058B1C'],
-      [25, '#85C60E'],
-      [50, '#FFFA00'],
-      [75, '#FF7502'],
-      [100, '#FF0004']
+      [0, '#FFFFCC'],
+      [50, '#78C679'],
+      [100, '#058B1C']
     ],
     popup: {
       label: 'Cobertura Vegetal por Pixel',
@@ -734,9 +732,9 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [0, '#FFFFE1'],
-      [50, '#7CBF7F'],
-      [100, '#006837']
+      [0, '#FF0004'],
+      [50, '#FFDE00'],
+      [100, '#00891D']
     ],
     unit: '%',
     popup: {
