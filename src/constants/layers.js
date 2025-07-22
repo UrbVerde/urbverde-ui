@@ -482,25 +482,28 @@ export const LAYER_CONFIGS = {
     type: 'raster',
     label: 'Temperatura de Superfície',
     allowedYears: RASTER_YEARS,
-    source: {
-      type: 'raster',
-      tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:tst-intraurbana-rel-30m-2021a2016&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
-      ],
-      tileSize: 256
+
+    source: (year, scale) => {
+      const sourceLayer = scale === 'intraurbana'
+        ? 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:tst-intraurbana-rel-30m-2021a2016&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        : `https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:tst-intraurbana-rel-30m-${year}&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true`;
+
+      return {
+        type: 'raster',
+        tiles: [
+          `${sourceLayer}`
+        ],
+        tileSize: 256,
+      };
     },
+
     paint: {
       'raster-opacity': 0.65,
       'raster-resampling': 'nearest'
     },
     stops: [
       [-8, '#3288bd'],
-      [-6, '#66c2a5'],
-      [-4, '#abdda4'],
-      [-2, '#e6f598'],
       [0, '#fee08b'],
-      [2, '#fdae61'],
-      [4, '#f46d43'],
       [8, '#d53e4f']
     ],
     unit: '°C',
@@ -702,11 +705,14 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      ['100%', '#10901b'],
-      ['100%', '#10901b']
+      [1, '#058B1C'],
+      [25, '#85C60E'],
+      [50, '#FFFA00'],
+      [75, '#FF7502'],
+      [100, '#FF0004']
     ],
     popup: {
-      label: 'Sem dado, apenas imagem',
+      label: 'Cobertura Vegetal por Pixel',
       unit: '',
     },
     unit: '%'
@@ -728,13 +734,15 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      ['100%', '#10901b'],
-      ['100%', '#10901b']
+      [0, '#FFFFE1'],
+      [50, '#7CBF7F'],
+      [100, '#006837']
     ],
     unit: '%',
     popup: {
-      label: 'Sem dado, apenas imagem',
-      unit: '',
+      label: 'NDVI',
+      unit: '%',
+      format: (v) => Number(v).toFixed(4)
     }
   },
 
@@ -983,6 +991,30 @@ export const LAYER_CONFIGS = {
       label: 'Impermeabilização do Solo',
       unit: '%',
       format: (v) => v.toFixed(0)
+    }
+  },
+
+  // ------- Massas de água -------
+  hydrographic_network: {
+    type: 'raster',
+    label: 'Massas de água',
+    allowedYears: [2020],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:raster_hidrologia_massas_dagua_ana_estadosp_2020&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-resampling': 'nearest'
+    },
+    stops: [
+      [1, '#0000ff'],
+      [1, '#0000ff']
+    ],
+    popup: {
+      label: 'Massas de água',
     }
   },
 
