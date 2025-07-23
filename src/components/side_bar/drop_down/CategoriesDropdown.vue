@@ -1,70 +1,117 @@
 <!-- urbverde-ui/src/components/side_bar/drop_down/CategoriesDropdown.vue -->
 <template>
   <div class="container" ref="containerRef">
-    <span class="header-title body-caption-regular">CATEGORIAS</span>
 
     <div class="categories-list">
-      <div v-for="(category) in categories" :key="category.id" class="category-dropdown">
-        <!-- Category Header -->
-        <div class="category-header"
-             :class="{ 'open': openCategoryIds.includes(category.id) }"
-             @click="toggleCategory(category.id)">
-
-          <div class="category-icon">
-            <IconComponent :name="category.icon" :size="20" />
-          </div>
-          <span class="category-name body-small-regular">{{ category.name }}</span>
-
-          <!-- Badge: aparece se há uma active layer, mas a categoria está fechada -->
-          <div class="badge-right-menu"
-               v-if="getActiveLayerInCategory(category) && !openCategoryIds.includes(category.id)"
-               :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
-            <span class="textBadge body-caption-medium">1</span>
-          </div>
-
-          <i :class="openCategoryIds.includes(category.id)
-            ? 'bi bi-chevron-up'
-            : 'bi bi-chevron-down'" />
+      <!-- Renderizar categorias e títulos misturados -->
+      <template v-for="(item, index) in mixedCategoriesAndTitles" :key="index">
+        <!-- Se for um título de seção -->
+        <div v-if="item.type === 'title'" class="header-title body-caption-regular">
+          {{ item.title }}
         </div>
 
-        <!-- Layers dentro da categoria -->
-        <div class="layers-wrapper" :class="{ 'expanded': openCategoryIds.includes(category.id) }">
-          <ul class="layers-list">
-            <li v-for="(layer) in category.layers"
-                :key="layer.id"
-                :class="['layer-item', { 'active-layer': layer.isActive, 'map-mode': locationStore.viewMode === 'map', 'policies-mode': locationStore.viewMode === 'policies' }]"
-                @click="selectLayer(layer, category)">
-              <span class="layer-name body-small-regular">
-                {{ layer.display_name || layer.title || layer.name }}
-              </span>
+        <!-- Se for uma categoria -->
+        <div v-else-if="item.type === 'category'" class="category-dropdown">
+          <!-- Category Header -->
+          <div class="category-header"
+               :class="{ 'open': openCategoryIds.includes(item.category.id) }"
+               @click="toggleCategory(item.category.id)">
 
-              <div class="new-layer-tag"
-                   v-if="layer.isNew"
-                   :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
-                <i class="bi bi-stars" id="imgIconNew"></i>
-              </div>
-            </li>
-          </ul>
+            <div class="category-icon">
+              <IconComponent :name="item.category.icon" :size="20" />
+            </div>
+            <span class="category-name body-small-regular">{{ item.category.name }}</span>
+
+            <!-- Badge: aparece se há uma active layer, mas a categoria está fechada -->
+            <div class="badge-right-menu"
+                 v-if="getActiveLayerInCategory(item.category) && !openCategoryIds.includes(item.category.id)"
+                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
+              <span class="textBadge body-caption-medium">1</span>
+            </div>
+
+            <i :class="openCategoryIds.includes(item.category.id)
+              ? 'bi bi-chevron-up'
+              : 'bi bi-chevron-down'" />
+          </div>
+
+          <!-- Layers dentro da categoria -->
+          <div class="layers-wrapper" :class="{ 'expanded': openCategoryIds.includes(item.category.id) }">
+            <ul class="layers-list">
+              <li v-for="(layer) in item.category.layers"
+                  :key="layer.id"
+                  :class="['layer-item', { 'active-layer': layer.isActive, 'map-mode': locationStore.viewMode === 'map', 'policies-mode': locationStore.viewMode === 'policies' }]"
+                  @click="selectLayer(layer, item.category)">
+                <span class="layer-name body-small-regular">
+                  {{ layer.display_name || layer.title || layer.name }}
+                </span>
+
+                <div class="new-layer-tag"
+                     v-if="layer.isNew"
+                     :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
+                  <i class="bi bi-stars" id="imgIconNew"></i>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect, onMounted, computed } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
 
 const locationStore = useLocationStore();
 const categories = ref([]);
+const categoryTitles = ref([]);
 const openCategoryIds = ref([]);
 const containerRef = ref(null);
+
+// Computed property para misturar categorias e títulos na ordem correta
+const mixedCategoriesAndTitles = computed(() => {
+  const result = [];
+
+  // Adicionar títulos de seção
+  if (categoryTitles.value && categoryTitles.value.length > 0) {
+    categoryTitles.value.forEach(title => {
+      result.push({
+        type: 'title',
+        title: title.categoriesTitle,
+        position: title.categoriesTitlePosition
+      });
+    });
+  }
+
+  // Adicionar categorias
+  if (categories.value && categories.value.length > 0) {
+    categories.value.forEach(category => {
+      result.push({
+        type: 'category',
+        category,
+        position: category.position || 999 // Categorias sem posição vão para o final
+      });
+    });
+  }
+
+  // Ordenar por posição
+  result.sort((a, b) => {
+    const posA = a.position || 999;
+    const posB = b.position || 999;
+
+    return posA - posB;
+  });
+
+  return result;
+});
 
 watchEffect(() => {
   if (locationStore.categories.length > 0) {
     console.log('CategoriesDropdown: Atualizando a partir da store');
     categories.value = locationStore.categories;
+    categoryTitles.value = locationStore.categoryTitles || [];
 
     // Se já existe uma layer ativa no locationStore, marca ela e abre a categoria
     if (locationStore.layer) {

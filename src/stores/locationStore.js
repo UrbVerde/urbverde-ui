@@ -76,6 +76,7 @@ export const useLocationStore = defineStore('locationStore', {
     category: null,
     layer: null,
     categories: [],
+    categoryTitles: [], // Adicionando suporte para títulos de seção
 
     // Loading states
     isLoadingCategories: false,
@@ -152,6 +153,7 @@ export const useLocationStore = defineStore('locationStore', {
         }
 
         this.categories = data.categories;
+        this.categoryTitles = data.categoryTitles || []; // Adicionar títulos das categorias
 
         // Se não temos categoria/camada definidas OU se mudamos de viewMode,
         // sempre resetar para a primeira categoria/camada disponível
@@ -249,6 +251,7 @@ export const useLocationStore = defineStore('locationStore', {
     reset() {
       this.clearLocation();
       this.categories = [];
+      this.categoryTitles = [];
       this.isLoadingCategories = false;
     },
 
