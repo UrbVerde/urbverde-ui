@@ -39,8 +39,8 @@
       </Transition>
 
       <template v-if="isSearchDone">
-        <Transition name="fade">
-          <div v-if="showContent" class="categories-area">
+        <Transition name="fade" mode="out-in">
+          <div v-if="showContent" :key="locationStore.viewMode" class="categories-area">
             <CategoriesDropDown />
           </div>
         </Transition>
