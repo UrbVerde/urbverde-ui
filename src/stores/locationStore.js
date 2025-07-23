@@ -151,19 +151,22 @@ export const useLocationStore = defineStore('locationStore', {
           throw new Error('No categories in response');
         }
 
-        // A lógica de filtragem agora é tratada no backend
         this.categories = data.categories;
 
-        // If we have a current layer, check if it exists in new categories
-        if (this.layer) {
+        // Se não temos categoria/camada definidas OU se mudamos de viewMode,
+        // sempre resetar para a primeira categoria/camada disponível
+        if (!this.category || !this.layer) {
+          console.log('[LocationStore] No category/layer defined, setting defaults');
+          this.setDefaultCategoryAndLayer();
+        } else {
+          // Verificar se a camada atual ainda existe nas novas categorias
           const layerExists = this.categories.some(cat =>
             cat.layers.some(l => l.id === this.layer)
           );
           if (!layerExists) {
+            console.log('[LocationStore] Current layer not found in new categories, setting defaults');
             this.setDefaultCategoryAndLayer();
           }
-        } else {
-          this.setDefaultCategoryAndLayer();
         }
       } catch (error) {
         console.error('locationStore: Error fetching categories:', error);
@@ -252,12 +255,27 @@ export const useLocationStore = defineStore('locationStore', {
     async setLocation(payload) {
       console.log('locationStore: setLocation called with:', payload);
 
+      // Verificar se o viewMode está mudando
+      const viewModeChanged = payload.viewMode !== undefined && payload.viewMode !== this.viewMode;
+
       if (payload.cd_mun !== undefined) {this.cd_mun = payload.cd_mun;}
       if (payload.nm_mun !== undefined) {this.nm_mun = payload.nm_mun;}
       if (payload.uf !== undefined)     {this.uf = payload.uf;}
       if (payload.type !== undefined)   {this.type = payload.type;}
       if (payload.year !== undefined)   {this.year = payload.year;}
       if (payload.scale !== undefined)  {this.scale = payload.scale;}
+
+      // Se o viewMode está mudando, usar a lógica do setViewMode
+      if (viewModeChanged) {
+        console.log('[LocationStore] ViewMode changing in setLocation from', this.viewMode, 'to', payload.viewMode);
+
+        // Limpar categoria e camada atuais para forçar reset
+        this.category = null;
+        this.layer = null;
+
+        // Atualizar o viewMode
+        this.viewMode = payload.viewMode;
+      }
 
       if (payload.cd_mun !== undefined) {
         // const coords = await this.fetchCoordinatesByCode(payload.cd_mun);
@@ -322,7 +340,23 @@ export const useLocationStore = defineStore('locationStore', {
     },
 
     setViewMode(mode) {
-      this.viewMode = mode;
+      // Se o viewMode está realmente mudando
+      if (this.viewMode !== mode) {
+        console.log('[LocationStore] ViewMode changing from', this.viewMode, 'to', mode);
+
+        // Limpar categoria e camada atuais para forçar reset
+        this.category = null;
+        this.layer = null;
+
+        // Atualizar o viewMode
+        this.viewMode = mode;
+
+        // Se temos um cd_mun definido, buscar categorias e resetar automaticamente
+        if (this.cd_mun) {
+          console.log('[LocationStore] Fetching categories for new viewMode');
+          this.fetchCategories();
+        }
+      }
     },
   }
 });
