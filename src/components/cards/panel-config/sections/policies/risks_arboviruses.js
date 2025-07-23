@@ -1,4 +1,4 @@
-// urbverde-ui/src/components/cards/panel-config/sections/policies/risks_heat_wave.js
+// urbverde-ui/src/components/cards/panel-config/sections/policies/risks_alimentar_insecurity.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariSearch from '@/assets/images/cards/policies/mari-search-2.svg';
 import mariMap from '@/assets/images/cards/policies/mari-map.svg';
@@ -7,8 +7,8 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'stats',
     ref: 'statsSection',
-    title: `Qual impacto das ondas de calor em ${nm_mun}`,
-    subtitle: 'Este índice mede o risco de uma região sofrer impactos devido a ondas de calor',
+    title: `Qual impacto da insegurança alimentar e nutricional em ${nm_mun}`,
+    subtitle: 'Este índice mede o risco de uma região sofrer impactos devido às arboviroses, como dengue, zika e chikungunya',
     showYearPicker: false,
     panel: {
       variant: '1-2',
@@ -18,19 +18,19 @@ export default createSectionConfig((nm_mun) => [
           props: {
             showLeftIcon: true,
             leftIconClass: 'bi bi-check2-circle',
-            title: 'Problemas urbanos do calor extremo',
+            title: 'Problemas urbanos das arboviroses',
             showMidia: true,
             midiaType: 'image',
             imageSrc: mariSearch,
             midiaPosition: 'right',
             type: 'paragraph-left',
-            paragraphText: 'Podem agravar problemas de saúde, principalmente em áreas densamente povoadas e com pouca infraestrutura verde. Este índice ajuda a orientar políticas públicas de adaptação climática e justiça ambiental'
+            paragraphText: 'São mais comuns em áreas com más condições de saneamento, alta densidade populacional e presença de criadouros do mosquito. Afetam principalmente populações vulneráveis, com menos acesso à saúde e à informação'
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Regiões da cidade mais afetadas por ondas de calor',
+            overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
             overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
@@ -55,7 +55,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas com risco de ondas de calor',
+                  overrideTitle: 'Pretos, pardos e indígenas em áreas com riscos de arboviroses',
                   overrideNumberValue: 'Em breve',
                 }
               },
@@ -77,7 +77,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Renda nas áreas com risco de ondas de calor',
+                  overrideTitle: 'Renda nas áreas com riscos de arboviroses',
                   overrideNumberValue: 'Em breve',
                 }
               },
@@ -99,7 +99,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com risco de ondas de calor',
+                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com riscos de arboviroses',
                   overrideNumberValue: 'Em breve',
                 }
               },
@@ -134,10 +134,10 @@ export default createSectionConfig((nm_mun) => [
             type: 'list',
             title: 'Como o índice foi construído?',
             listItems: [
-              'Foram feitos cálculos com mapas para ver onde o risco de calor é maior, usando dados de ameaça, exposição e vulnerabilidade',
-              'Ameaça: foi analisado os locais mais quentes da cidade',
-              'Exposição: locais com muita gente e longos deslocamentos para o trabalho são mais expostos ao calor',
-              'Vulnerabilidade: regiões com mais crianças e idosos, baixa renda e pouco acesso a saúde, água e áreas verdes são mais vulneráveis'
+              'Foram feitos cálculos com mapas para ver onde o risco de arboviroses é maior, usando dados de ameaça, exposição e vulnerabilidade',
+              'Ameaça: combina temperatura média, número de casos de dengue e índice de chuvas – quanto maior esses fatores, maior o risco',
+              'Exposição: locais com maior densidade de pessoas têm mais chance de espalhar doenças transmitidas por mosquitos',
+              'Vulnerabilidade: locais com pouca água potável, sem coleta de lixo e baixa renda têm menos condições de enfrentar as arboviroses'
             ],
           }
         }
