@@ -283,7 +283,7 @@ async function toggleSidebar() {
 
 .categories-area {
   display: flex;
-  padding: 32px 12px 16px 16px;
+  padding: 8px 12px 16px 16px;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;

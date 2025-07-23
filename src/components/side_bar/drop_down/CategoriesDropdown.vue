@@ -230,11 +230,11 @@ onMounted(() => {
   .header-title {
     color: map-get($theme, secondary);
     position: sticky;
+    padding: 24px 0 8px 0;
     top: 0;
     z-index: 2;
     background-color: map-get($gray, white);
     margin: 0;
-    border-bottom: 4px solid map-get($gray, white);
   }
 
   .categories-list {
@@ -325,7 +325,7 @@ onMounted(() => {
 
   .layers-list {
     list-style-type: none;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     padding: 8px 0;
     border-top: 4px solid white;
     display: flex;
