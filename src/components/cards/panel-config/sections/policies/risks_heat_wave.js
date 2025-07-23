@@ -45,38 +45,76 @@ export default createSectionConfig((nm_mun) => [
     ref: 'statsSection',
     showYearPicker: false,
     panel: {
-      variant: '1-4',
+      variant: '1-3',
       items: [
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'População impactada pelas ondas de calor',
-            overrideNumberValue: 'Em breve',
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Pretos, pardos e indígenas em áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Pretos, pardos e indígenas fora de áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+            ]
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Pretos, pardos e indígenas impactados pelas ondas de calor',
-            overrideNumberValue: 'Em breve',
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Renda nas áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Renda fora de áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+            ]
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Idosos e crianças impactados pelas ondas de calor',
-            overrideNumberValue: 'Em breve',
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Mulheres impactadas pelas ondas de calor',
-            overrideNumberValue: 'Em breve',
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Mulheres chefes de família não alfabetizadas nas áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Mulheres chefes de família não alfabetizadas fora de áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+            ]
           }
         },
       ]
-    }
+    },
   }),
 
   createSection({
