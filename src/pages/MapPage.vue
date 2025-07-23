@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div v-else class="content-wrapper content-animate">
+      <div v-else :key="locationStore.viewMode" class="content-wrapper content-animate">
 
         <Navbar
           ref="navbarRef"
@@ -300,6 +300,9 @@ watch([
   }
 }, { immediate: true });
 
+// Watch para viewMode para garantir que a animação seja executada
+watch(() => locationStore.viewMode, () => {});
+
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
 
@@ -519,7 +522,6 @@ h5, p{
 
 /* Placeholder styles */
 .placeholder-container {
-  opacity: 0.8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -547,6 +549,7 @@ h5, p{
   }
 
   .placeholder-image{
+    transform: scaleX(-1);
     width: 250px;
     height: 250px;
   }
