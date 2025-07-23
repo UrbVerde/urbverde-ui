@@ -31,7 +31,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
-            overrideNumberValue: 'X regiões',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
           }
@@ -51,28 +51,28 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'População impactada pela insegurança alimentar',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
         {
           component: 'CardData',
           props: {
             overrideTitle: 'Idosos e crianças impactados  pela insegurança alimentar',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
         {
           component: 'CardData',
           props: {
             overrideTitle: 'Pretos, pardos e indígenas  impactados  pela insegurança alimentar',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
         {
           component: 'CardData',
           props: {
             overrideTitle: 'Mulheres impactadas pela insegurança alimentar',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
       ]

@@ -31,7 +31,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Regiões da cidade mais afetadas por ondas de calor',
-            overrideNumberValue: 'X regiões',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
           }
@@ -51,28 +51,28 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'População impactada pelas ondas de calor',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
         {
           component: 'CardData',
           props: {
             overrideTitle: 'Pretos, pardos e indígenas impactados pelas ondas de calor',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
         {
           component: 'CardData',
           props: {
             overrideTitle: 'Idosos e crianças impactados pelas ondas de calor',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
         {
           component: 'CardData',
           props: {
             overrideTitle: 'Mulheres impactadas pelas ondas de calor',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
           }
         },
       ]

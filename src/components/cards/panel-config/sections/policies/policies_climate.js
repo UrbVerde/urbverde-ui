@@ -90,7 +90,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Potencial da cobertura vegetal da cidade para redução da temperatura de superfície',
-            overrideNumberValue: 'X',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Quanto mais próximo de 1.0, mais a cobertura vegetal da cidade contribui para redução da temperatura'
           }
@@ -108,7 +108,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Sequestro de carbono realizado pela vegetação da cidade no ano',
-            overrideNumberValue: 'X tCO2e',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Sequestro de carbono é a capacidade das árvores e áreas verdes de absorverem toneladas de CO2 da atmosfera, ajudando a combater a crise climática'
           }
@@ -171,7 +171,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área pública residual total com potencial para ampliação da cobertura vegetal',
-            overrideNumberValue: 'X m²',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para plantio de árvores'
           }

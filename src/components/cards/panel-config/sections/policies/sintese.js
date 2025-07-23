@@ -357,7 +357,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Cobertura vegetal por habitante',
-            overrideNumberValue: 'X m²/hab',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
           }
@@ -375,7 +375,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: reduzir 10% do PSI nos setores com mais de 75% até 2040',
           }
@@ -393,7 +393,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de lotes subutilizados',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: utilizar todos os lotes identificados até 2030',
             overrideCardSubtitle: 'Terrenos vazios ou pouco usados, sem função social ou ambiental'
@@ -412,7 +412,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de cobertura vegetal (PCV)',
-            overrideNumberValue: 'X m',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: alcançar 30% de PCV até 2040',
           }
@@ -504,7 +504,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Potencial da cobertura vegetal da cidade para redução da temperatura de superfície',
-            overrideNumberValue: 'X',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Quanto mais próximo de 1.0, mais a cobertura vegetal da cidade contribui para redução da temperatura'
           }
@@ -522,7 +522,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Sequestro de carbono realizado pela vegetação da cidade no ano',
-            overrideNumberValue: 'X tCO2e',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Sequestro de carbono é a capacidade das árvores e áreas verdes de absorverem toneladas de CO2 da atmosfera, ajudando a combater a crise climática'
           }
@@ -540,7 +540,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área pública residual total com potencial para ampliação da cobertura vegetal',
-            overrideNumberValue: 'X m²',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para plantio de árvores'
           }
@@ -632,7 +632,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Solo que não deixa a água infiltrar, como asfalto e concreto',
           }
@@ -651,7 +651,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI) na sub-bacia',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'É a parte da sub-bacia coberta por solo que não deixa a água infiltrar',
           }
@@ -670,7 +670,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de áreas vegetadas em APPs',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Indica quanto das Áreas de Preservação Permanente (APPs), como margens de rios e córregos, estão cobertas por vegetação',
           }
@@ -688,7 +688,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de áreas vegetadas em APP por sub-bacia',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Mostra quanto das Áreas de Preservação Permanente (APPs) está coberto por vegetação nas sub-bacias da cidade',
           }
@@ -708,7 +708,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de rios canalizados',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Parte dos rios que foi transformada em canais de concreto, reduzindo sua função natural e aumentando o risco de enchentes',
           }
@@ -727,7 +727,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de rios canalizados por sub-bacias',
-            overrideNumberValue: 'X%',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Mostra quanto dos rios está canalizado em cada sub-bacia da cidade',
           }
@@ -819,7 +819,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Vulnerabilidade Alimentar',
-            overrideNumberValue: 'X',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
           }
@@ -837,7 +837,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área total com potencial para agricultura urbana',
-            overrideNumberValue: 'X m²',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
           }
@@ -855,7 +855,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Área total com potencial para agricultura urbana vertical',
-            overrideNumberValue: 'X m²',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
           }
@@ -873,7 +873,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Distância média até alimentos saudáveis por habitante',
-            overrideNumberValue: 'X m',
+            overrideNumberValue: 'Em breve',
             numberType: 'large'
           }
         },
