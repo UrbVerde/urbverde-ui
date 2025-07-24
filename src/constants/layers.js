@@ -3,8 +3,15 @@
 // Declare allowed years
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
+const VEGETATION_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const PARKS_YEARS = [2021, 2024];
+const PARKS_YEARS_2024 = [2024];
+const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 const CENSUS_YEARS = [2022];
+const RISKS_YEARS = [2024];
+const AGRICULTURE_YEARS_2022 = [2022];
+const AGRICULTURE_YEARS_2023 = [2023];
+const AGRICULTURE_YEARS_2025 = [2025];
 
 /**
  * A single file that holds all layer definitions.
@@ -20,6 +27,11 @@ const CENSUS_YEARS = [2022];
 
 export const LAYER_CONFIGS = {
 
+  // ===============================
+  // Painel nacional
+  // ===============================
+
+  // ------- População -------
   population: {
     type: 'vector',
     label: 'População',
@@ -54,6 +66,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Densidade demográfica -------
   density: {
     type: 'vector',
     label: 'Densidade demográfica',
@@ -88,6 +101,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Taxa de alfabetização -------
   literacy: {
     type: 'vector',
     label: 'Taxa de alfabetização (acima de 15 anos)',
@@ -115,6 +129,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de crianças (0 a 9 anos) -------
   children_percentage: {
     type: 'vector',
     label: 'Percentual de crianças (0 a 9 anos)',
@@ -142,6 +157,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de idosos (acima de 60 anos) -------
   elderly_percentage: {
     type: 'vector',
     label: 'Percentual de idosos (acima de 60 anos)',
@@ -169,6 +185,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de mulheres -------
   woman_percentage: {
     type: 'vector',
     label: 'Percentual de mulheres',
@@ -196,6 +213,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de homens -------
   boy_percentage: {
     type: 'vector',
     label: 'Percentual de homens',
@@ -223,6 +241,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas brancas -------
   percentual_brancas: {
     type: 'vector',
     label: 'Percentual de pessoas brancas',
@@ -250,6 +269,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas pretas -------
   percentual_pretas: {
     type: 'vector',
     label: 'Percentual de pessoas pretas',
@@ -277,6 +297,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas pardas -------
   percentual_pardos: {
     type: 'vector',
     label: 'Percentual de pessoas pardas',
@@ -304,6 +325,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas amarelas -------
   percentual_amarelas: {
     type: 'vector',
     label: 'Percentual de pessoas amarelas',
@@ -331,6 +353,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Percentual de pessoas indigenas -------
   percentual_indigenas: {
     type: 'vector',
     label: 'Percentual de pessoas indigenas',
@@ -358,6 +381,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Renda média do responsável da casa -------
   average_income: {
     type: 'vector',
     label: 'Renda média do responsável da casa',
@@ -391,6 +415,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- População fora de São Paulo -------
   population_outside_SP: {
     type: 'vector',
     label: 'População',
@@ -425,6 +450,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Geometria dos setores censitários -------
   setores: {
     type: 'vector',
     label: 'Setores Censitários',
@@ -451,30 +477,33 @@ export const LAYER_CONFIGS = {
     }
   },
 
-  // Climate layers
+  // ------- Temperatura de superfície -------
   surface_temp: {
     type: 'raster',
     label: 'Temperatura de Superfície',
     allowedYears: RASTER_YEARS,
-    source: {
-      type: 'raster',
-      tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:tst-intraurbana-rel-30m-2021a2016&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
-      ],
-      tileSize: 256
+
+    source: (year, scale) => {
+      const sourceLayer = scale === 'intraurbana'
+        ? 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:tst-intraurbana-rel-30m-2021a2016&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        : `https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:tst-intraurbana-rel-30m-${year}&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true`;
+
+      return {
+        type: 'raster',
+        tiles: [
+          `${sourceLayer}`
+        ],
+        tileSize: 256,
+      };
     },
+
     paint: {
       'raster-opacity': 0.65,
       'raster-resampling': 'nearest'
     },
     stops: [
       [-8, '#3288bd'],
-      [-6, '#66c2a5'],
-      [-4, '#abdda4'],
-      [-2, '#e6f598'],
       [0, '#fee08b'],
-      [2, '#fdae61'],
-      [4, '#f46d43'],
       [8, '#d53e4f']
     ],
     unit: '°C',
@@ -485,6 +514,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Temperatura máxima de superfície -------
   max_surface_temp: {
     type: 'vector',
     label: 'Temperatura Máxima de Superfície',
@@ -516,6 +546,7 @@ export const LAYER_CONFIGS = {
     unit: '°C'
   },
 
+  // ------- Nível de exposição à ilha de calor -------
   heat_island: {
     type: 'vector',
     label: 'Nível de exposição à ilha de calor',
@@ -545,15 +576,15 @@ export const LAYER_CONFIGS = {
     unit: ''
   },
 
-  // Vegetation layers
+  // ------- Percentual de cobertura vegetal -------
   pcv: {
     type: 'vector',
     label: 'Percentual de Cobertura Vegetal',
-    allowedYears: VECTOR_YEARS,
+    allowedYears: VEGETATION_YEARS,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
-        ? `public.geodata_vegetacao_por_setor_${year}`
-        : `public.geodata_vegetacao_por_municipio_${year}`;
+        ? `public.geodata_icv_pcv_pop_psi_por_setor_${year}`
+        : `public.geodata_icv_pcv_pop_psi_por_municipio_${year}`;
 
       return {
         type: 'vector',
@@ -563,34 +594,28 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'b1',
+    property: 'pcv',
     stops: [
-      [0.0, '#ffffe5'],
-      [0.14, '#f7fcb9'],
-      [0.15, '#d9f0a3'],
-      [0.18, '#addd8e'],
-      [0.2, '#78c679'],
-      [0.25, '#41ab5d'],
-      [0.28, '#238443'],
-      [0.31, '#006837'],
-      [0.4, '#004529']
+      [0, '#ffffcc'],
+      [20, '#78c679'],
+      [40, '#006837']
     ],
     unit: '%',
     popup: {
       label: 'PCV',
       unit: '%',
-      multiplier: 100
     }
   },
 
+  // ------- Índice de Cobertura Vegetal -------
   icv: {
     type: 'vector',
     label: 'Índice de Cobertura Vegetal',
-    allowedYears: VECTOR_YEARS,
+    allowedYears: VEGETATION_YEARS,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
-        ? `public.geodata_vegetacao_por_setor_${year}`
-        : `public.geodata_vegetacao_por_municipio_${year}`;
+        ? `public.geodata_icv_pcv_pop_psi_por_setor_${year}`
+        : `public.geodata_icv_pcv_pop_psi_por_municipio_${year}`;
 
       return {
         type: 'vector',
@@ -600,17 +625,43 @@ export const LAYER_CONFIGS = {
         sourceLayer
       };
     },
-    property: 'b2',
+    property: 'icv',
     stops: [
-      [730, '#ffffe5'],
-      [1323, '#d9f0a3'],
-      [2083, '#78c679'],
-      [3385, '#238443'],
-      [4033, '#004529']
+      [0, '#ffffcc'],
+      [40, '#78c679'],
+      [80, '#006837']
     ],
     unit: 'm²/hab'
   },
 
+  // ------- Impermeabilização do solo (PSI) -------
+  psi: {
+    type: 'vector',
+    label: 'Impermeabilização do solo (PSI)',
+    allowedYears: VEGETATION_YEARS,
+    source: (year, scale) => {
+      const sourceLayer = scale === 'intraurbana'
+        ? `public.geodata_icv_pcv_pop_psi_por_setor_${year}`
+        : `public.geodata_icv_pcv_pop_psi_por_municipio_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'psi',
+    stops: [
+      [20, '#d9f0d3'],
+      [50, '#ffffbf'],
+      [80, '#e34a33']
+    ],
+    unit: '%'
+  },
+
+  // ------- Índice de Desigualdade Socioambiental -------
   idsa: {
     type: 'vector',
     label: 'Índice de Desigualdade Socioambiental',
@@ -638,6 +689,7 @@ export const LAYER_CONFIGS = {
     unit: ''
   },
 
+  // ------- Cobertura Vegetal por Pixel -------
   cvp: {
     type: 'raster',
     label: 'Cobertura Vegetal por Pixel',
@@ -652,33 +704,19 @@ export const LAYER_CONFIGS = {
     paint: {
       'raster-opacity': 0.7
     },
-    /**
-     * Example stops array with 12 colors from 0% to 100%
-     * If you have 12 exact colors, you can split 0–100 into 11 segments,
-     * e.g. every 10% or ~9%.  Below is an example with each 9% increment.
-     */
     stops: [
-      [0, '#ff4903'],
-      [9, '#ff7100'],
-      [18, '#ff9300'],
-      [27, '#ffb200'],
-      [36, '#ffd000'],
-      [45, '#edd500'],
-      [54, '#dadb00'],
-      [63, '#c5df00'],
-      [72, '#9bcc05'],
-      [81, '#73b90f'],
-      [90, '#49a416'],
-      [100, '#10901b']
+      [0, '#FFFFCC'],
+      [50, '#78C679'],
+      [100, '#058B1C']
     ],
-    unit: '%',
     popup: {
-      label: 'PCV',
+      label: 'Cobertura Vegetal por Pixel',
       unit: '',
-      multiplier: -1
-    }
+    },
+    unit: '%'
   },
 
+  // ------- Vigor da Vegetação (NDVI) -------
   ndvi: {
     type: 'raster',
     label: 'Vigor da Vegetação (NDVI)',
@@ -693,26 +731,20 @@ export const LAYER_CONFIGS = {
     paint: {
       'raster-opacity': 0.7
     },
-    /**
-     * For NDVI 0–100%, define your color gradient stops:
-     */
     stops: [
-      [0, '#addd8e'],
-      [20, '#78c679'],
-      [40, '#41ab5d'],
-      [60, '#238443'],
-      [80, '#006837'],
-      [100, '#004529']
+      [0, '#FF0004'],
+      [50, '#FFDE00'],
+      [100, '#00891D']
     ],
     unit: '%',
     popup: {
       label: 'NDVI',
-      unit: '',
-      multiplier: 1
+      unit: '%',
+      format: (v) => Number(v).toFixed(4)
     }
   },
 
-  // Parks layers
+  // ------- Geometria de praças nacional -------
   parks: {
     type: 'vector',
     label: 'Praças',
@@ -732,6 +764,7 @@ export const LAYER_CONFIGS = {
     }
   },
 
+  // ------- Distância média até as praças -------
   avg_distance_to_squares: {
     type: 'vector',
     label: 'Distância Média até as Praças',
@@ -755,13 +788,19 @@ export const LAYER_CONFIGS = {
       [400, '#ffffbf'],
       [800, '#d73027']
     ],
-    unit: 'm'
+    unit: 'm',
+    popup: {
+      label: 'Distância Média até as Praças',
+      unit: 'm',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- Distância média até as praças (acima de 5000m) -------
   avg_distance_to_squares_5000: {
     type: 'vector',
     label: 'Distância Média até as Praças',
-    allowedYears: PARKS_YEARS,
+    allowedYears: PARKS_YEARS_2024,
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
         ? `public.geodata_pracas_por_setor_${year}`
@@ -781,9 +820,15 @@ export const LAYER_CONFIGS = {
       [400, '#ffffbf'],
       [800, '#d73027']
     ],
-    unit: 'm'
+    unit: 'm',
+    popup: {
+      label: 'Distância Média até as Praças',
+      unit: 'm',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- Área de praças por habitante -------
   square_area_per_capita: {
     type: 'vector',
     label: 'Área de Praças por Habitante',
@@ -810,9 +855,15 @@ export const LAYER_CONFIGS = {
       [10, '#e6f598'],
       [15, '#abdda4']
     ],
-    unit: 'm²/hab'
+    unit: 'm²/hab',
+    popup: {
+      label: 'Área de Praças por Habitante',
+      unit: 'm²/hab',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- Área atendida pelas praças -------
   square_served_area: {
     type: 'vector',
     label: 'Área Atendida pelas Praças',
@@ -836,13 +887,19 @@ export const LAYER_CONFIGS = {
       [50, '#ffffbf'],
       [100, '#1a9850']
     ],
-    unit: '%'
+    unit: '%',
+    popup: {
+      label: 'Área Atendida',
+      unit: '%',
+      format: (v) => v.toFixed(0)
+    }
   },
 
+  // ------- População atendida pelas praças (%) -------
   perc_served_population: {
     type: 'vector',
     label: 'População Atendida pelas Praças (%)',
-    allowedYears: PARKS_YEARS,
+    allowedYears: PARKS_YEARS_2024,
     source: (year, scale) => {
       // pick the correct tile url for scale
       const sourceLayer =
@@ -870,6 +927,692 @@ export const LAYER_CONFIGS = {
       label: 'População Atendida',
       unit: '%',
       format: (v) => v.toFixed(0)
+    }
+  },
+
+  // ------- Cobertura Vegetal em Parques e Praças -------
+  square_pcv: {
+    type: 'vector',
+    label: 'Cobertura Vegetal em Parques e Praças',
+    allowedYears: PARKS_POLIGON_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_praca_poligono_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'pcv',
+    stops: [
+      [0, '#ff4903'],
+      [25, '#dadb00'],
+      [50, '#10901b']
+    ],
+    unit: '%',
+
+    popup: {
+      label: 'Cobertura Vegetal',
+      unit: '%',
+      format: (v) => v.toFixed(0)
+    }
+  },
+
+  // ------- Impermeabilização do Solo em Parques e Praças -------
+  square_psi: {
+    type: 'vector',
+    label: 'Impermeabilização do Solo em Parques e Praças',
+    allowedYears: PARKS_POLIGON_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_praca_poligono_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'psi',
+    stops: [
+      [0, '#10901b'],
+      [25, '#dadb00'],
+      [50, '#ff4903']
+    ],
+    unit: '%',
+
+    popup: {
+      label: 'Impermeabilização do Solo',
+      unit: '%',
+      format: (v) => v.toFixed(0)
+    }
+  },
+  // ------- Perigo de inundação Diadema -------
+  flood_diadema_classes: {
+    type: 'raster',
+    label: 'Perigo de inundação em Diadema (classes)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_6classes_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#006100'],
+      [2, '#559100'],
+      [3, '#A4C400'],
+      [4, '#FFFF00'],
+      [5, '#FFBB00'],
+      [6, '#FF7700'],
+      [7, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação em Diadema (classes)',
+      unit: '',
+    },
+    unit: '',
+  },
+
+  // ------- Perigo de inundação Estado (classes) -------
+  flood_state_classes: {
+    type: 'raster',
+    label: 'Perigo de inundação (classes)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_7classes_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#006100'],
+      [2, '#559100'],
+      [3, '#A4C400'],
+      [4, '#FFFF00'],
+      [5, '#FFBB00'],
+      [6, '#FF7700'],
+      [7, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação (classes)',
+      unit: '',
+    },
+    unit: '',
+  },
+  // ------- Perigo de inundação Diadema (porcentagem) -------
+  flood_diadema_percentage: {
+    type: 'raster',
+    label: 'Perigo de inundação em Diadema (porcentagem)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [30, '#006100'],
+      [65, '#FFFF00'],
+      [100, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação em Diadema (%)',
+      unit: '',
+    },
+    unit: '%',
+  },
+  // ------- Perigo de inundação Estado (porcentagem) -------
+  flood_state_percentage: {
+    type: 'raster',
+    label: 'Perigo de inundação (porcentagem)',
+    allowedYears: [2025],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [30, '#006100'],
+      [65, '#FFFF00'],
+      [100, '#FF2600']
+    ],
+    popup: {
+      label: 'Perigo de inundação (%)',
+      unit: '',
+    },
+    unit: '%',
+  },
+  // ------- Massas de água do Estado -------
+  water_bodies_state: {
+    type: 'raster',
+    label: 'Massas da água do Estado',
+    allowedYears: [2020],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:raster_hidrologia_massas_dagua_ana_estadosp_2020&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#4169E1'],
+      [1, '#4169E1']
+    ],
+    popup: {
+      label: 'Massas de água em Diadema',
+      unit: '',
+    },
+    unit: '',
+  },
+  // ------- Massas de água em Diadema -------
+  water_bodies_diadema: {
+    type: 'raster',
+    label: 'Massas de água em Diadema',
+    allowedYears: [2002],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:raster_hidrologia_massas_dagua_diadema_2002&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#4169E1'],
+      [1, '#4169E1']
+    ],
+    popup: {
+      label: 'Massas de água em Diadema',
+      unit: '',
+    },
+    unit: '',
+  },
+
+  // ------- Rios do Estado -------
+  rivers_state: {
+    type: 'raster',
+    label: 'Rios',
+    allowedYears: [2008],
+    source: {
+      type: 'raster',
+      tiles: [
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:raster_hidrologia_rios_estadosp_2008&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+      ],
+      tileSize: 256
+    },
+    paint: {
+      'raster-opacity': 0.7
+    },
+    stops: [
+      [1, '#4169E1'],
+      [1, '#4169E1']
+    ],
+    popup: {
+      label: 'Massas de água em Diadema',
+      unit: '',
+    },
+    unit: '',
+  },
+
+  // ===============================
+  // Exclusivo para o painel políticas públicas
+  // ===============================
+
+  // ------- Riscos a ondas de calor -------
+  heat_wave_risks: {
+    type: 'vector',
+    label: 'Riscos a ondas de calor',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'rcalor',
+    stops: [
+      [0, '#2b83ba'],
+      [0.353, '#ffffbf'],
+      [0.639, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Riscos a ondas de calor',
+      unit: '',
+    }
+  },
+
+  // ------- Risco climático a arboviroses -------
+  arbovirus_risks: {
+    type: 'vector',
+    label: 'Risco climático a arboviroses',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'rarbovirose',
+    stops: [
+      [0, '#2b83ba'],
+      [0.238, '#ffffbf'],
+      [0.448, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Risco climático a arboviroses',
+      unit: '',
+    }
+  },
+
+  // ------- Vulnerabilidade social do risco climático a arboviroses -------
+  nutrition_vulnerability: {
+    type: 'vector',
+    label: 'Vulnerabilidade alimentar e nutricional',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'vulnerabsan',
+    stops: [
+      [0, '#2b83ba'],
+      [0.425, '#ffffbf'],
+      [0.704, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Vulnerabilidade alimentar e nutricional',
+      unit: '',
+    }
+  },
+
+  // ------- Indicador de risco climático a inundações -------
+  flood_risks: {
+    type: 'vector',
+    label: 'Indicador de risco climático a inundações',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'rinunda',
+    stops: [
+      [0, '#2b83ba'],
+      [0.238, '#ffffbf'],
+      [0.448, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Indicador de risco climático a inundações',
+      unit: '',
+    }
+  },
+
+  // ------- Desenvolvimento social do habitat para favelas -------
+  desh_risks: {
+    type: 'vector',
+    label: 'Desenvolvimento social do habitat para favelas',
+    allowedYears: RISKS_YEARS,
+    source: (year) => {
+      const sourceLayer = `public.geodata_idesh_por_setor_fcu_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'idesh',
+    stops: [
+      [0, '#2b83ba'],
+      [0.219, '#ffffbf'],
+      [0.483, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Desenvolvimento social do habitat para favelas',
+      unit: '',
+    }
+  },
+
+  // ------- Áreas prioritárias para implantação de agricultura urbana (nivel 1) -------
+  urban_agriculture_priorit_1: {
+    type: 'vector',
+    label: 'Áreas prioritárias para implantação de agricultura urbana (nivel 1)',
+    allowedYears: AGRICULTURE_YEARS_2022,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'au_pot_1',
+    stops: [
+      [0, '#d0d1d3'],
+      [1, '#ffff00'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Áreas prioritárias para implantação de agricultura urbana (nivel 1)',
+      unit: '',
+    }
+  },
+
+  // ------- Áreas prioritárias para implantação de agricultura urbana (Nível 2) -------
+  urban_agriculture_priorit_2: {
+    type: 'vector',
+    label: 'Áreas prioritárias para implantação de agricultura urbana (Nível 2)',
+    allowedYears: AGRICULTURE_YEARS_2022,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'au_pot_2',
+    stops: [
+      [0, '#d0d1d3'],
+      [2, '#ffff00'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Áreas prioritárias para implantação de agricultura urbana (Nível 2)',
+      unit: '',
+    }
+  },
+
+  // ------- Desertos alimentares -------
+  desert_food_areas: {
+    type: 'vector',
+    label: 'Desertos alimentares',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'desertos*',
+    stops: [
+      [0, '#d0d1d3'],
+      [1, '#d7191c'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Desertos alimentares',
+      unit: '',
+    }
+  },
+
+  // ------- Pântanos alimentares -------
+  wetland_food_areas: {
+    type: 'vector',
+    label: 'Pântanos alimentares',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'pantanos*',
+    stops: [
+      [0, '#d0d1d3'],
+      [1, '#ad4413'],
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Pântanos alimentares',
+      unit: '',
+    }
+  },
+
+  // ------- Distancia média até pontos de agricultura urbana -------
+  urban_agriculture_distance: {
+    type: 'vector',
+    label: 'Distancia média até pontos de agricultura urbana',
+    allowedYears: AGRICULTURE_YEARS_2023,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'au_dist(m)',
+    stops: [
+      [20, '#fff5eb'],
+      [142, '#fee4ca'],
+      [209, '#fdc997'],
+      [270, '#fda45d'],
+      [320, '#f87f2c'],
+      [393, '#e5590a'],
+      [450, '#b83c02'],
+      [539, '#7f2704'],
+    ],
+    unit: 'm',
+
+    popup: {
+      label: 'Distancia média até pontos de agricultura urbana',
+      unit: 'm',
+    }
+  },
+
+  // ------- Distância média até restaurantes populares -------
+  popular_restaurants_distance: {
+    type: 'vector',
+    label: 'Distância média até restaurantes populares',
+    allowedYears: AGRICULTURE_YEARS_2023,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'san_distr',
+    stops: [
+      [72, '#fff5eb'],
+      [596, '#fee4ca'],
+      [871, '#fdc997'],
+      [1152, '#fda45d'],
+      [1394, '#f87f2c'],
+      [1640, '#e5590a'],
+      [1951, '#b83c02'],
+      [2374, '#7f2704'],
+    ],
+    unit: 'm',
+
+    popup: {
+      label: 'Distância média até restaurantes populares',
+      unit: 'm',
+    }
+  },
+
+  // ------- Distância média até feiras livres -------
+  markets_distance: {
+    type: 'vector',
+    label: 'Distância média até feiras livres',
+    allowedYears: AGRICULTURE_YEARS_2023,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'san_distf',
+    stops: [
+      [19, '#fff5eb'],
+      [192, '#fee4ca'],
+      [292, '#fdc997'],
+      [381, '#fda45d'],
+      [457, '#f87f2c'],
+      [525, '#e5590a'],
+      [642, '#b83c02'],
+      [823, '#7f2704'],
+    ],
+    unit: 'm',
+
+    popup: {
+      label: 'Distância média até feiras livres',
+      unit: 'm',
+    }
+  },
+
+  // ------- Densidade de estabelecimentos comerciais de produtos in natura -------
+  natura_density: {
+    type: 'vector',
+    label: 'Densidade de estabelecimentos comerciais de produtos in natura',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'dens_eq_n',
+    stops: [
+      [0, '#d7191c'],
+      [15, '#c4e687'],
+      [44, '#1a9641']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Densidade de estabelecimentos comerciais de produtos in natura',
+      unit: '',
+    }
+  },
+
+  // ------- Densidade de Estabelecimentos comerciais de produtos ultraprocessados -------
+  ultra_density: {
+    type: 'vector',
+    label: 'Densidade de Estabelecimentos comerciais de produtos ultraprocessados',
+    allowedYears: AGRICULTURE_YEARS_2025,
+    source: (year) => {
+      const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'dens_eq_u',
+    stops: [
+      [0, '#ffffff'],
+      [15, '#ff5555'],
+      [61, '#ff0000']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Densidade de Estabelecimentos comerciais de produtos ultraprocessados',
+      unit: '',
     }
   },
 };

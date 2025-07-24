@@ -91,7 +91,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Cobertura vegetal por habitante',
-            overrideNumberValue: '11 m²/hab',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
           }
@@ -110,7 +110,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: '59%',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: reduzir 10% do PSI nos setores com mais de 75% até 2040',
           }
@@ -174,7 +174,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Porcentagem de lotes subutilizados',
-            overrideNumberValue: '30%',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: utilizar todos os lotes identificados até 2030',
             overrideCardSubtitle: 'Terrenos vazios ou pouco usados, sem função social ou ambiental'
@@ -194,7 +194,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual de cobertura vegetal (PCV)',
-            overrideNumberValue: '322 m',
+            overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: alcançar 30% de PCV até 2040',
           }

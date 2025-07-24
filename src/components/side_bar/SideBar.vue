@@ -32,15 +32,15 @@
         </div>
       </Transition>
 
-      <!-- <Transition name="fade">
+      <Transition name="fade">
         <div v-if="showContent && isSearchDone" class="view-mode-selector">
           <ViewModeDropdown />
         </div>
-      </Transition> -->
+      </Transition>
 
       <template v-if="isSearchDone">
-        <Transition name="fade">
-          <div v-if="showContent" class="categories-area">
+        <Transition name="fade" mode="out-in">
+          <div v-if="showContent" :key="locationStore.viewMode" class="categories-area">
             <CategoriesDropDown />
           </div>
         </Transition>
@@ -74,7 +74,7 @@ import LogoButton from './buttons/LogoButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
 import CategoriesDropDown from './drop_down/CategoriesDropdown.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
-//import ViewModeDropdown from './drop_down/ViewModeDropdown.vue';
+import ViewModeDropdown from './drop_down/ViewModeDropdown.vue';
 
 // Props
 const props = defineProps({
@@ -283,7 +283,7 @@ async function toggleSidebar() {
 
 .categories-area {
   display: flex;
-  padding: 32px 12px 16px 16px;
+  padding: 8px 12px 16px 16px;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;

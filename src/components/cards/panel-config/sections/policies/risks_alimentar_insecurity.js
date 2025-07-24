@@ -31,7 +31,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
-            overrideNumberValue: '9 regiões',
+            overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
           }
@@ -45,38 +45,76 @@ export default createSectionConfig((nm_mun) => [
     ref: 'statsSection',
     showYearPicker: false,
     panel: {
-      variant: '1-4',
+      variant: '1-3',
       items: [
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'População impactada pela insegurança alimentar',
-            overrideNumberValue: '89%',
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Pretos, pardos e indígenas em áreas vulneráveis de insegurança alimentar',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Pretos, pardos e indígenas fora das áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+            ]
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Idosos e crianças impactados  pela insegurança alimentar',
-            overrideNumberValue: '49%',
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Renda nas áreas vulneráveis de insegurança alimentar',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Renda fora das áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+            ]
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Pretos, pardos e indígenas  impactados  pela insegurança alimentar',
-            overrideNumberValue: '39%',
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Mulheres impactadas pela insegurança alimentar',
-            overrideNumberValue: '39%',
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas vulneráveis de insegurança alimentar',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Mulheres chefes de família não alfabetizadas fora das áreas vulneráveis',
+                  overrideNumberValue: 'Em breve',
+                }
+              },
+            ]
           }
         },
       ]
-    }
+    },
   }),
 
   createSection({
@@ -99,7 +137,7 @@ export default createSectionConfig((nm_mun) => [
               'Foram feitos cálculos com mapas para ver onde o risco alimentar é maior, usando dados de sensibilidade, domiciliar e capacidade adaptativa',
               'Sensibilidade: leva em conta crianças pequenas, acesso à Bolsa Família, poucas refeições e consumo alto de ultraprocessados',
               'Ambiente domiciliar: altas densidades por domicílio e pouco acesso à água indicam maior risco alimentar',
-              'Capacidade adaptativa: Renda baixa, acesso ruim à energia e poucos restaurantes populares dificultam uma boa alimentação'
+              'Capacidade adaptativa: renda baixa, acesso ruim à energia e poucos restaurantes populares dificultam uma boa alimentação'
             ],
           }
         }

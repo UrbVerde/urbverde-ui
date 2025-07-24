@@ -12,17 +12,12 @@
         <button
           v-if="showControls"
           class="nav-button"
-          @click="navigateYear(1)"
+          @click="navigateYear(-1)"
           :disabled="!canNavigateBack"
         >
           <i class="bi bi-chevron-left"></i>
         </button>
 
-        <!-- Input display:
-             - Type is "text" with inputmode="numeric" and maxlength="4"
-             - The container's border (contour) is visible only if showControls is true.
-             - Real-time validation: When 4 digits are entered and the value is not valid, error is shown.
-        -->
         <div class="select-display"
              :class="{
                error: isInvalid,
@@ -57,7 +52,7 @@
         <button
           v-if="showControls"
           class="nav-button"
-          @click="navigateYear(-1)"
+          @click="navigateYear(1)"
           :disabled="!canNavigateForward"
         >
           <i class="bi bi-chevron-right"></i>
@@ -68,13 +63,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useLocationStore } from '@/stores/locationStore';
 
 const locationStore = useLocationStore();
 
 const props = defineProps({
-  initialYear: { type: Number, default: new Date().getFullYear() },
   showControlsOnlyOnHover: { type: Boolean, default: false },
   // Passed from the parent to indicate if the full legend is hovered
   legendHovered: { type: Boolean, default: false }
@@ -82,32 +76,32 @@ const props = defineProps({
 const { showControlsOnlyOnHover, legendHovered } = props;
 const emit = defineEmits(['year-change']);
 
-// Obter anos disponíveis do store
-const availableYears = computed(() => {
-  const years = locationStore.availableYears;
+// Obter anos disponíveis do store (já ordenados do mais recente para o mais antigo)
+const availableYears = computed(() => locationStore.availableYears);
 
-  return years.length > 0 ? [...years].sort((a, b) => b - a) : [2024]; // ordena do mais recente para o mais antigo
-});
+// Obter o ano atual do store
+const currentYear = computed(() => locationStore.currentYear);
 
 // Obter min e max year dos anos disponíveis
 const minYear = computed(() => Math.min(...availableYears.value));
 const maxYear = computed(() => Math.max(...availableYears.value));
 
-// Validate initial year: if out-of-range, force to maxYear.
-const validInitialYear = computed(() => {
-  const year = props.initialYear;
-
-  return year < minYear.value || year > maxYear.value ? maxYear.value : year;
-});
-
 // Use a string ref for the input so we can limit to 4 digits.
-const yearInput = ref(validInitialYear.value.toString());
-const selectedYear = ref(validInitialYear.value);
+const yearInput = ref(currentYear.value.toString());
+const selectedYear = ref(currentYear.value);
 
 const isHovered = ref(false);
 const isOpen = ref(false);
 const isInvalid = ref(false);
 const shake = ref(false);
+
+// Sincronizar com o ano atual do store
+watch(currentYear, (newYear) => {
+  console.log('[LegendYearSelector] Current year changed to:', newYear);
+  selectedYear.value = newYear;
+  yearInput.value = newYear.toString();
+  isInvalid.value = false;
+}, { immediate: true });
 
 // Compute whether to show controls (arrows and border)
 // If showControlsOnlyOnHover is false → always show.
@@ -115,19 +109,20 @@ const shake = ref(false);
 const showControls = computed(() => !showControlsOnlyOnHover || legendHovered || isHovered.value || isOpen.value);
 
 const canNavigateBack = computed(() =>
-  availableYears.value.indexOf(Number(selectedYear.value)) < availableYears.value.length - 1
+  availableYears.value.indexOf(Number(selectedYear.value)) > 0
 );
 const canNavigateForward = computed(() =>
-  availableYears.value.indexOf(Number(selectedYear.value)) > 0
+  availableYears.value.indexOf(Number(selectedYear.value)) < availableYears.value.length - 1
 );
 
 function navigateYear(direction) {
   const currentIndex = availableYears.value.indexOf(Number(selectedYear.value));
   const newIndex = currentIndex + direction;
   if (newIndex >= 0 && newIndex < availableYears.value.length) {
-    selectedYear.value = availableYears.value[newIndex];
-    yearInput.value = availableYears.value[newIndex].toString();
-    emit('year-change', selectedYear.value);
+    const newYear = availableYears.value[newIndex];
+    selectedYear.value = newYear;
+    yearInput.value = newYear.toString();
+    updateStoreYear(newYear);
   }
 }
 
@@ -140,6 +135,13 @@ function selectYear(year) {
   yearInput.value = year.toString();
   isOpen.value = false;
   isInvalid.value = false;
+  updateStoreYear(year);
+}
+
+// Função para atualizar o ano no store
+function updateStoreYear(year) {
+  console.log('[LegendYearSelector] Updating store year to:', year);
+  locationStore.setLocation({ year });
   emit('year-change', year);
 }
 
@@ -168,7 +170,7 @@ function onYearChange() {
     } else {
       isInvalid.value = false;
       selectedYear.value = num;
-      emit('year-change', num);
+      updateStoreYear(num);
     }
   } else {
     isInvalid.value = false;

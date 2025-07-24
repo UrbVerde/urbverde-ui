@@ -33,6 +33,34 @@ function getAvailableYearsForLayer(layerId) {
   return [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]; // fallback
 }
 
+// Função para validar e ajustar o ano quando a camada muda
+function validateAndAdjustYear(layerId, currentYear) {
+  console.log('[LocationStore] Validating year for layer:', layerId, 'current year:', currentYear);
+
+  const layerConfig = LAYER_CONFIGS[layerId];
+  if (!layerConfig || !layerConfig.allowedYears) {
+    console.log('[LocationStore] No layer config or allowedYears found, keeping current year');
+
+    return currentYear;
+  }
+
+  const availableYears = layerConfig.allowedYears;
+  console.log('[LocationStore] Available years for layer:', availableYears);
+
+  // Se o ano atual existe na lista de anos permitidos, mantém o mesmo ano
+  if (availableYears.includes(currentYear)) {
+    console.log('[LocationStore] Current year is valid, keeping:', currentYear);
+
+    return currentYear;
+  }
+
+  // Se o ano atual não existe, vai para o ano mais recente disponível
+  const latestYear = Math.max(...availableYears);
+  console.log('[LocationStore] Current year not available, switching to latest year:', latestYear);
+
+  return latestYear;
+}
+
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
     // Location data
@@ -48,6 +76,7 @@ export const useLocationStore = defineStore('locationStore', {
     category: null,
     layer: null,
     categories: [],
+    categoryTitles: [], // Adicionando suporte para títulos de seção
 
     // Loading states
     isLoadingCategories: false,
@@ -123,19 +152,23 @@ export const useLocationStore = defineStore('locationStore', {
           throw new Error('No categories in response');
         }
 
-        // A lógica de filtragem agora é tratada no backend
         this.categories = data.categories;
+        this.categoryTitles = data.categoryTitles || []; // Adicionar títulos das categorias
 
-        // If we have a current layer, check if it exists in new categories
-        if (this.layer) {
+        // Se não temos categoria/camada definidas OU se mudamos de viewMode,
+        // sempre resetar para a primeira categoria/camada disponível
+        if (!this.category || !this.layer) {
+          console.log('[LocationStore] No category/layer defined, setting defaults');
+          this.setDefaultCategoryAndLayer();
+        } else {
+          // Verificar se a camada atual ainda existe nas novas categorias
           const layerExists = this.categories.some(cat =>
             cat.layers.some(l => l.id === this.layer)
           );
           if (!layerExists) {
+            console.log('[LocationStore] Current layer not found in new categories, setting defaults');
             this.setDefaultCategoryAndLayer();
           }
-        } else {
-          this.setDefaultCategoryAndLayer();
         }
       } catch (error) {
         console.error('locationStore: Error fetching categories:', error);
@@ -156,6 +189,15 @@ export const useLocationStore = defineStore('locationStore', {
           console.log('locationStore: Setting default category and layer');
           this.category = firstCategory.id;
           this.layer = firstLayer.id;
+
+          // Validar e ajustar o ano para a nova camada padrão
+          const currentYear = this.year || this.currentYear;
+          const validatedYear = validateAndAdjustYear(firstLayer.id, currentYear);
+
+          if (validatedYear !== currentYear) {
+            console.log('[LocationStore] Year adjusted for default layer from', currentYear, 'to', validatedYear);
+            this.year = validatedYear;
+          }
         }
       }
     },
@@ -209,11 +251,15 @@ export const useLocationStore = defineStore('locationStore', {
     reset() {
       this.clearLocation();
       this.categories = [];
+      this.categoryTitles = [];
       this.isLoadingCategories = false;
     },
 
     async setLocation(payload) {
       console.log('locationStore: setLocation called with:', payload);
+
+      // Verificar se o viewMode está mudando
+      const viewModeChanged = payload.viewMode !== undefined && payload.viewMode !== this.viewMode;
 
       if (payload.cd_mun !== undefined) {this.cd_mun = payload.cd_mun;}
       if (payload.nm_mun !== undefined) {this.nm_mun = payload.nm_mun;}
@@ -222,13 +268,47 @@ export const useLocationStore = defineStore('locationStore', {
       if (payload.year !== undefined)   {this.year = payload.year;}
       if (payload.scale !== undefined)  {this.scale = payload.scale;}
 
+      // Se o viewMode está mudando, usar a lógica do setViewMode
+      if (viewModeChanged) {
+        console.log('[LocationStore] ViewMode changing in setLocation from', this.viewMode, 'to', payload.viewMode);
+
+        // Limpar categoria e camada atuais para forçar reset
+        this.category = null;
+        this.layer = null;
+
+        // Atualizar o viewMode
+        this.viewMode = payload.viewMode;
+      }
+
       if (payload.cd_mun !== undefined) {
         // const coords = await this.fetchCoordinatesByCode(payload.cd_mun);
         await this.fetchCategories();
       }
 
-      if (payload.category !== undefined) {this.category = payload.category;}
-      if (payload.layer !== undefined) {this.layer = payload.layer;}
+      // Se a categoria ou camada está sendo alterada, validar e ajustar o ano
+      if (payload.category !== undefined || payload.layer !== undefined) {
+        const newLayer = payload.layer !== undefined ? payload.layer : this.layer;
+
+        // Atualizar categoria e camada primeiro
+        if (payload.category !== undefined) {this.category = payload.category;}
+        if (payload.layer !== undefined) {this.layer = payload.layer;}
+
+        // Se temos uma camada definida, validar o ano
+        if (newLayer) {
+          const currentYear = this.year || this.currentYear;
+          const validatedYear = validateAndAdjustYear(newLayer, currentYear);
+
+          // Se o ano foi alterado, atualizar o estado
+          if (validatedYear !== currentYear) {
+            console.log('[LocationStore] Year adjusted from', currentYear, 'to', validatedYear);
+            this.year = validatedYear;
+          }
+        }
+      } else {
+        // Se não está alterando categoria/camada, apenas atualizar normalmente
+        if (payload.category !== undefined) {this.category = payload.category;}
+        if (payload.layer !== undefined) {this.layer = payload.layer;}
+      }
     },
 
     async updateFromQueryParams(query) {
@@ -263,7 +343,23 @@ export const useLocationStore = defineStore('locationStore', {
     },
 
     setViewMode(mode) {
-      this.viewMode = mode;
+      // Se o viewMode está realmente mudando
+      if (this.viewMode !== mode) {
+        console.log('[LocationStore] ViewMode changing from', this.viewMode, 'to', mode);
+
+        // Limpar categoria e camada atuais para forçar reset
+        this.category = null;
+        this.layer = null;
+
+        // Atualizar o viewMode
+        this.viewMode = mode;
+
+        // Se temos um cd_mun definido, buscar categorias e resetar automaticamente
+        if (this.cd_mun) {
+          console.log('[LocationStore] Fetching categories for new viewMode');
+          this.fetchCategories();
+        }
+      }
     },
   }
 });

@@ -21,15 +21,15 @@
     >
       <div v-if="!locationStore.cd_mun" class="placeholder-container">
         <div class="placeholder-wrapper">
-          <img src="../assets/images/setLocation.png" alt="Selecione um município" />
+          <img src="../assets/images/setLocation.svg" alt="Selecione um município" class="placeholder-image" />
           <div class="label">
-            <h5 class="heading-h5">Inicie buscando um lugar</h5>
-            <p class="body-small-regular">Experimente um município ou estado</p>
+            <h5 class="heading-h5">Inicie buscando uma cidade</h5>
+            <p class="body-small-regular">Experimente buscar onde você mora</p>
           </div>
         </div>
       </div>
 
-      <div v-else class="content-wrapper content-animate">
+      <div v-else :key="locationStore.viewMode" class="content-wrapper content-animate">
 
         <Navbar
           ref="navbarRef"
@@ -300,6 +300,9 @@ watch([
   }
 }, { immediate: true });
 
+// Watch para viewMode para garantir que a animação seja executada
+watch(() => locationStore.viewMode, () => {});
+
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
 
@@ -543,6 +546,12 @@ h5, p{
     align-items: center;
     gap: 8px;
     align-self: stretch;
+  }
+
+  .placeholder-image{
+    transform: scaleX(-1);
+    width: 250px;
+    height: 250px;
   }
 
   /* Animações de entrada da página */

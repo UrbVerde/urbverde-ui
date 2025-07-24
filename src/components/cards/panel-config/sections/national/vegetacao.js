@@ -77,6 +77,7 @@ export default createSectionConfig((nm_mun, uf) => [
     id: 'stats',
     ref: 'graphicSection',
     title: `Cobertura vegetal em ${nm_mun} - ${uf} ao longo do tempo`,
+    showYearPicker: false,
     component: VGraphicSection
   }),
   createSection({

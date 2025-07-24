@@ -11,6 +11,9 @@ import agriculture from './sections/policies/agriculture.js';
 import policies_climate from './sections/policies/policies_climate.js';
 import risks_heat_wave from './sections/policies/risks_heat_wave.js';
 import risks_alimentar_insecurity from './sections/policies/risks_alimentar_insecurity.js';
+import risks_flood from './sections/policies/risks_flood.js';
+import risks_arboviruses from './sections/policies/risks_arboviruses.js';
+import risks_idesh from './sections/policies/risks_idesh.js';
 
 // Category ID to section name
 export const categoryToLayerMap = {
@@ -20,7 +23,7 @@ export const categoryToLayerMap = {
   'overview': 'overview',
   'policies_parks': 'policies_parks',
   'policies_vegetation': 'policies_vegetation',
-  'hidro': 'policies_hidrology',
+  'policies_hidro': 'policies_hidrology',
   'agriculture': 'agriculture',
   'policies_climate': 'policies_climate',
 };
@@ -33,7 +36,7 @@ export const layerToCategoryMap = {
   'overview': 'overview',
   'policies_parks': 'policies_parks',
   'policies_vegetation': 'policies_vegetation',
-  'policies_hidrology': 'hidro',
+  'policies_hidrology': 'policies_hidro',
   'agriculture': 'agriculture',
   'policies_climate': 'policies_climate',
 };
@@ -53,7 +56,10 @@ export const sectionConfigs = {
 
   layers : {
     'heat_wave_risks': risks_heat_wave,
-    'food_insecurity': risks_alimentar_insecurity,
+    'nutrition_vulnerability': risks_alimentar_insecurity,
+    'flood_risks': risks_flood,
+    'arbovirus_risks': risks_arboviruses,
+    'desh_risks': risks_idesh,
   }
 };
 

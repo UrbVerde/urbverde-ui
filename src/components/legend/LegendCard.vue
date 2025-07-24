@@ -174,7 +174,7 @@ const handleOpacityChange = (value) => {
 .label-wrapper {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: left;
   justify-content: space-between;
   gap: 3px;
   min-width: 0;
