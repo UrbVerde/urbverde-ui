@@ -402,7 +402,7 @@ async function selectSuggestion(suggestion) {
   if (!code) {
     try {
       // Buscar o código do município da API
-      const response = await fetch(`http://localhost:8080/v1/address/suggestions?query=${city}`);
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
       const data = await response.json();
       if (data?.[0]?.cd_mun) {
         code = data[0].cd_mun;
@@ -524,7 +524,7 @@ function parseCityState(text) {
 
 async function fetchCities(query) {
   // console.log('1 - fetchCities', query);
-  const response = await fetch(`http://localhost:8080/v1/address/suggestions?query=${parseCityState(query).city}`);
+  const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${parseCityState(query).city}`);
   const data = await response.json();
   // console.log('1 - fetchCities', data);
 
@@ -565,7 +565,7 @@ async function fetchCoordinates(address) {
 
   try {
     // Fetch coordinates from the API
-    const response = await fetch(`http://localhost:8080/v1/address/suggestions?query=${city}`);
+    const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
     const data = await response.json();
 
     if (data?.[0]?.coordinates) {
@@ -868,7 +868,7 @@ async function generateDefaultSuggestions() {
   // Fetch city data if we don't have the code
   if (!codes.value[cityWithState]) {
     try {
-      const response = await fetch(`http://localhost:8080/v1/address/suggestions?query=${city}`);
+      const response = await fetch(`https://api.urbverde.com.br/v1/address/suggestions?query=${city}`);
       const data = await response.json();
 
       if (data && data.length > 0 && !data[0].error) {

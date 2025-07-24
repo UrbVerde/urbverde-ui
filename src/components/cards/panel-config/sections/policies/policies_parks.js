@@ -87,7 +87,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
             cardIndex: 0,
             numberType: 'composed',
           }
@@ -105,7 +105,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
             cardIndex: 1,
             numberType: 'composed',
           }
@@ -123,7 +123,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
             cardIndex: 2,
             numberType: 'large',
           }
@@ -193,14 +193,14 @@ export default createSectionConfig((nm_mun) => [
                     {
                       component: 'CardData',
                       props: {
-                        apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                        apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                         cardIndex: 4,
                       }
                     },
                     {
                       component: 'CardData',
                       props: {
-                        apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                        apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                         cardIndex: 7,
                       }
                     },
@@ -218,21 +218,21 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                   cardIndex: 6,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                   cardIndex: 5,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                   cardIndex: 8,
                 }
               },
@@ -268,14 +268,14 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                   cardIndex: 9,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
                   cardIndex: 10,
                 }
               },
@@ -295,7 +295,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
             cardIndex: 9,
             overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
           }
