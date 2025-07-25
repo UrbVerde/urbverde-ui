@@ -227,7 +227,7 @@ export default createSectionConfig((nm_mun) => [
     ref: 'parksSection',
     showYearPicker: false,
     panel: {
-      variant: '3-2',
+      variant: '2-2',
       gapColumnHeight: '56px',
       items: [
         {
@@ -285,6 +285,30 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
           }
         },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'parks',
+    ref: 'parksSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'policies_parks',
+            changeToLayerId: 'avg_distance_to_squares',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
       ]
     }
   }),
@@ -445,6 +469,30 @@ export default createSectionConfig((nm_mun) => [
     }
   }),
 
+  createSection({
+    id: 'vegetation',
+    ref: 'vegetationSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'policies_vegetation',
+            changeToLayerId: 'pcv',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
+      ]
+    }
+  }),
+
   // ===============================================
   // Seção: Eixo Emissões e Clima
   // ===============================================
@@ -569,6 +617,30 @@ export default createSectionConfig((nm_mun) => [
             overrideCardSubtitle: 'Essa área pode ser usada para plantio de árvores'
           }
         },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'climate',
+    ref: 'climateSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'policies_climate',
+            changeToLayerId: 'vegetation_temp_reduction',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
       ]
     }
   }),
@@ -760,6 +832,30 @@ export default createSectionConfig((nm_mun) => [
     }
   }),
 
+  createSection({
+    id: 'hidro',
+    ref: 'hidroSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'policies_hidro',
+            changeToLayerId: 'flood_diadema_classes',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
+      ]
+    }
+  }),
+
   // ===============================================
   // Seção: Eixo Agricultura
   // ===============================================
@@ -903,6 +999,30 @@ export default createSectionConfig((nm_mun) => [
         },
       ]
     }
-  })
+  }),
+
+  createSection({
+    id: 'agriculture',
+    ref: 'agricultureSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'agriculture',
+            changeToLayerId: 'urban_agriculture_distance',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
+      ]
+    }
+  }),
 
 ]);
