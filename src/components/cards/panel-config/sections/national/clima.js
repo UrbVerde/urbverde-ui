@@ -248,8 +248,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 0,
                   showButtonPrimary: true,
-                  changeToCategory: 'Clima',
-                  changeToLayerId: 'heat_island',
+                  changeToCategory: 'vegetation',
+                  changeToLayerId: 'pcv',
                 }
               },
               {
@@ -258,8 +258,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 1,
                   showButtonPrimary: true,
-                  changeToCategory: 'Parques+e+Praças',
-                  changeToLayerId: 'served_population',
+                  changeToCategory: 'parks',
+                  changeToLayerId: 'perc_served_population',
                 }
               },
               {
@@ -268,7 +268,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 2,
                   showButtonPrimary: true,
-                  changeToCategory: 'Parques+e+Praças',
+                  changeToCategory: 'parks',
                   changeToLayerId: 'idsa',
                 }
               }

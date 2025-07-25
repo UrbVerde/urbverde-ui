@@ -94,6 +94,8 @@ export default createSectionConfig((nm_mun) => [
             overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'icv',
           }
         },
         // Ação 2
@@ -113,6 +115,8 @@ export default createSectionConfig((nm_mun) => [
             overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: reduzir 10% do PSI nos setores com mais de 75% até 2040',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'psi',
           }
         },
       ]
@@ -197,6 +201,8 @@ export default createSectionConfig((nm_mun) => [
             overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: alcançar 30% de PCV até 2040',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'pcv',
           }
         },
       ]

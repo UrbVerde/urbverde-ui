@@ -90,6 +90,9 @@ export default createSectionConfig((nm_mun) => [
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 0,
             numberType: 'composed',
+            showSeeOnMap: true,
+            targetCategory: 'policies_parks',
+            targetLayerId: 'square_area_per_capita',
           }
         },
         {
@@ -108,6 +111,9 @@ export default createSectionConfig((nm_mun) => [
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 1,
             numberType: 'composed',
+            showSeeOnMap: true,
+            targetCategory: 'policies_parks',
+            targetLayerId: 'avg_distance_to_squares',
           }
         },
         {
@@ -126,6 +132,9 @@ export default createSectionConfig((nm_mun) => [
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 2,
             numberType: 'large',
+            showSeeOnMap: true,
+            targetCategory: 'policies_parks',
+            targetLayerId: 'square_served_area',
           }
         },
 
@@ -240,6 +249,9 @@ export default createSectionConfig((nm_mun) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 9,
+                  showSeeOnMap: true,
+                  targetCategory: 'policies_parks',
+                  targetLayerId: 'square_pcv',
                 }
               },
               {
@@ -247,6 +259,9 @@ export default createSectionConfig((nm_mun) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 10,
+                  showSeeOnMap: true,
+                  targetCategory: 'policies_parks',
+                  targetLayerId: 'square_psi',
                 }
               },
             ]
@@ -360,6 +375,9 @@ export default createSectionConfig((nm_mun) => [
             overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
+            showSeeOnMap: true,
+            targetCategory: 'policies_vegetation',
+            targetLayerId: 'icv',
           }
         },
         {
@@ -378,6 +396,9 @@ export default createSectionConfig((nm_mun) => [
             overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: reduzir 10% do PSI nos setores com mais de 75% até 2040',
+            showSeeOnMap: true,
+            targetCategory: 'policies_vegetation',
+            targetLayerId: 'psi',
           }
         },
         {
@@ -415,6 +436,9 @@ export default createSectionConfig((nm_mun) => [
             overrideNumberValue: 'Em breve',
             numberType: 'composed',
             numberSubtitle: 'Recomendação: alcançar 30% de PCV até 2040',
+            showSeeOnMap: true,
+            targetCategory: 'policies_vegetation',
+            targetLayerId: 'pcv',
           }
         },
       ]

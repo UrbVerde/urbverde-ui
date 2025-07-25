@@ -195,8 +195,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/info',
                   cardIndex: 0,
                   showButtonPrimary: true,
-                  changeToCategory: 'Clima',
-                  changeToLayerId: 'heat_island',
+                  changeToCategory: 'climate',
+                  changeToLayerId: 'surface_temp',
                 }
               },
               {
@@ -205,8 +205,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/info',
                   cardIndex: 1,
                   showButtonPrimary: true,
-                  changeToCategory: 'Parques+e+Praças',
-                  changeToLayerId: 'served_population',
+                  changeToCategory: 'vegetation',
+                  changeToLayerId: 'pcv',
                 }
               },
               {
@@ -215,8 +215,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/square/info',
                   cardIndex: 2,
                   showButtonPrimary: true,
-                  changeToCategory: 'Parques+e+Praças',
-                  changeToLayerId: 'avg_distance_to_squares',
+                  changeToCategory: 'vegetation',
+                  changeToLayerId: 'idsa',
                 }
               }
             ],

@@ -90,6 +90,8 @@ export default createSectionConfig((nm_mun) => [
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 0,
             numberType: 'composed',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'square_area_per_capita',
           }
         },
         {
@@ -108,6 +110,8 @@ export default createSectionConfig((nm_mun) => [
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 1,
             numberType: 'composed',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'avg_distance_to_squares',
           }
         },
         {
@@ -126,6 +130,8 @@ export default createSectionConfig((nm_mun) => [
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 2,
             numberType: 'large',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'square_served_area',
           }
         },
       ]
@@ -270,6 +276,8 @@ export default createSectionConfig((nm_mun) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 9,
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'square_pcv',
                 }
               },
               {
@@ -277,6 +285,8 @@ export default createSectionConfig((nm_mun) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 10,
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'square_psi',
                 }
               },
             ]
@@ -296,7 +306,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
-            cardIndex: 9,
+            cardIndex: 11,
             overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
           }
         },
