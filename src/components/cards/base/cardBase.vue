@@ -10,6 +10,10 @@
           v-if="showSeeOnMap"
           :showSeeOnMap="showSeeOnMap"
           :seeOnMapLayerID="seeOnMapLayerID"
+          :targetCityCode="targetCityCode"
+          :targetCategory="targetCategory"
+          :targetLayerId="targetLayerId"
+          :targetLayerTitle="targetLayerTitle"
         />
         <CardHoverButton
           v-if="showInfoButton"
@@ -50,6 +54,23 @@ defineProps({
   seeOnMapLayerID: {
     type: String,
     default: ''
+  },
+  // Propriedades para navegação entre camadas de categorias diferentes
+  targetCityCode: {
+    type: Number,
+    required: false
+  },
+  targetCategory: {
+    type: String,
+    required: false
+  },
+  targetLayerId: {
+    type: String,
+    required: false
+  },
+  targetLayerTitle: {
+    type: String,
+    required: false
   },
   modalTitle: {
     type: String,
