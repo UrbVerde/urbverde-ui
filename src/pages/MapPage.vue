@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div v-else :key="locationStore.viewMode" class="content-wrapper content-animate">
+      <div v-else class="content-wrapper content-animate">
 
         <Navbar
           ref="navbarRef"
@@ -287,9 +287,6 @@ watch([
     isSidebarOpen.value = true;
   }
 }, { immediate: true });
-
-// Watch para viewMode para garantir que a animação seja executada
-watch(() => locationStore.viewMode, () => {});
 
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
