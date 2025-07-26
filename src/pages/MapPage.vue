@@ -29,8 +29,7 @@
         </div>
       </div>
 
-      <div v-else :key="locationStore.viewMode" class="content-wrapper content-animate">
-
+      <div v-else class="content-wrapper content-animate" :class="{ 'fade-transition': isViewModeTransitioning }">
         <Navbar
           ref="navbarRef"
           :class="{ 'navbar-collapsed': !isSidebarOpen }"
@@ -107,9 +106,23 @@ const route = useRoute();
 const activeSection = ref('map');
 const isSidebarOpen = ref(true);
 const showBackToTop = ref(false);
+const isViewModeTransitioning = ref(false);
 const hasMunicipality = computed(() => !!locationStore.cd_mun);
 const defaultYear = computed(() => locationStore.year);
 const cityCode = ref(3547809);
+
+// Watcher para controlar a animação de fade quando viewMode muda
+watch(() => locationStore.viewMode, (newMode, oldMode) => {
+  if (newMode !== oldMode) {
+    // Iniciar transição
+    isViewModeTransitioning.value = true;
+
+    // Resetar após a animação completa
+    setTimeout(() => {
+      isViewModeTransitioning.value = false;
+    }, 500);
+  }
+});
 
 // Função para verificar se deve ocultar o mapa baseado no ID da categoria ou camada
 const shouldHideMap = computed(() => {
@@ -287,9 +300,6 @@ watch([
     isSidebarOpen.value = true;
   }
 }, { immediate: true });
-
-// Watch para viewMode para garantir que a animação seja executada
-watch(() => locationStore.viewMode, () => {});
 
 const navbarRef = ref(null);
 const navbarHeight = ref(0);
@@ -573,6 +583,17 @@ h5, p{
     to {
       opacity: 1;
     }
+  }
+
+  /* Animação simples de fade quando viewMode muda */
+  .content-wrapper {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .content-wrapper.fade-transition {
+    opacity: 0;
+    transition: opacity 0.0s ease-in-out;
   }
 
   @include breakpoint-down('tablet') {
