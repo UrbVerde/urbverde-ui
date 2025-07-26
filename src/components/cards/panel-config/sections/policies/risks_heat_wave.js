@@ -11,7 +11,7 @@ export default createSectionConfig((nm_mun) => [
     subtitle: 'Este índice mede o risco de uma região sofrer impactos devido a ondas de calor',
     showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: 'CardInfo',
@@ -27,15 +27,6 @@ export default createSectionConfig((nm_mun) => [
             paragraphText: 'Podem agravar problemas de saúde, principalmente em áreas densamente povoadas e com pouca infraestrutura verde. Este índice ajuda a orientar políticas públicas de adaptação climática e justiça ambiental'
           }
         },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Regiões da cidade mais afetadas por ondas de calor',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
-          }
-        }
       ]
     }
   }),
@@ -55,37 +46,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas com risco de ondas de calor',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 0,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-            ]
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '2-1',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda nas áreas com risco de ondas de calor',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 1,
                 }
               },
             ]
@@ -99,15 +68,37 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com risco de ondas de calor',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 2,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 3,
+                }
+              },
+            ]
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 4,
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 5,
                 }
               },
             ]

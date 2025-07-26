@@ -11,7 +11,7 @@ export default createSectionConfig((nm_mun) => [
     subtitle: 'Este índice mede as condições de desenvolvimento social das favelas, considerando moradia, infraestrutura urbana e vulnerabilidades sociais',
     showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: 'CardInfo',
@@ -27,15 +27,6 @@ export default createSectionConfig((nm_mun) => [
             paragraphText: 'Aparecem em regiões com baixa renda, pouca escolaridade, moradias precárias e falta de serviços públicos. Afetam o bem-estar e aumentam a vulnerabilidade a outros riscos urbanos.',
           }
         },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
-          }
-        }
       ]
     }
   }),
@@ -55,37 +46,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas com pior desenvolvimento social (DESH)',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 24,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas com melhor desenvolvimento social (DESH)',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-            ]
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '2-1',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda nas áreas com pior desenvolvimento social (DESH)',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda nas áreas com melhor desenvolvimento social (DESH)',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 25,
                 }
               },
             ]
@@ -99,15 +68,37 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com pior desenvolvimento social (DESH)',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 26,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com melhor desenvolvimento social (DESH)',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 27,
+                }
+              },
+            ]
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 28,
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
+                  cardIndex: 29,
                 }
               },
             ]
