@@ -4,6 +4,12 @@
     :showInfoButton="showModalButton"
     :modalTitle="modalTitle"
     :modalBodyText="modalBodyText"
+    :showSeeOnMap="showSeeOnMap"
+    :seeOnMapLayerID="seeOnMapLayerID"
+    :targetCityCode="targetCityCode"
+    :targetCategory="targetCategory"
+    :targetLayerId="targetLayerId"
+    :targetLayerTitle="targetLayerTitle"
   >
     <!-- Image at the top -->
     <template v-if="showImage">
@@ -220,6 +226,35 @@ const props = defineProps({
   changeToLayerId: {
     type: String,
     default: ''
+  },
+
+  // Ativar o botão de ver o dado no mapa
+  showSeeOnMap: {
+    type: Boolean,
+    default: false
+  },
+
+  // Propriedade para navegar entre camadas da mesma categoria
+  seeOnMapLayerID: {
+    type: String,
+    default: ''
+  },
+  // Propriedades para navegação entre camadas de categorias diferentes
+  targetCityCode: {
+    type: Number,
+    required: false
+  },
+  targetCategory: {
+    type: String,
+    required: false
+  },
+  targetLayerId: {
+    type: String,
+    required: false
+  },
+  targetLayerTitle: {
+    type: String,
+    required: false
   }
 });
 

@@ -12,7 +12,7 @@ export default createSectionConfig((nm_mun) => [
     subtitle: 'Este índice mede o risco de uma região sofrer impactos devido às arboviroses, como dengue, zika e chikungunya',
     showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: 'CardInfo',
@@ -28,15 +28,6 @@ export default createSectionConfig((nm_mun) => [
             paragraphText: 'São mais comuns em áreas com más condições de saneamento, alta densidade populacional e presença de criadouros do mosquito. Afetam principalmente populações vulneráveis, com menos acesso à saúde e à informação'
           }
         },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
-          }
-        }
       ]
     }
   }),
@@ -56,37 +47,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas com riscos de arboviroses',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 6,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-            ]
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '2-1',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda nas áreas com riscos de arboviroses',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 7,
                 }
               },
             ]
@@ -100,15 +69,37 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com riscos de arboviroses',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 8,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 9,
+                }
+              },
+            ]
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 10,
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 11,
                 }
               },
             ]

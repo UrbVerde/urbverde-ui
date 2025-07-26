@@ -78,6 +78,9 @@
     <div class="back-to-top shadow" :class="{ 'visible': showBackToTop }" @click="scrollToTop">
       <i class="bi bi-arrow-up"></i>
     </div>
+
+    <!-- Modal de Políticas Públicas -->
+    <ModalPolicies />
   </div>
 </template>
 
@@ -94,6 +97,7 @@ import MapBox from '../components/map/mapGenerator.vue';
 import Legend from '../components/legend/MapLegend.vue';
 import WidgetsSection from '@/components/cards/panel-config/base/PanelsCards.vue';
 import UrbVerdeFooter from '@/components/homepage/UrbVerdeFooter.vue';
+import ModalPolicies from '@/components/modal/modalPolicies.vue';
 
 // Store and router setup
 const locationStore = useLocationStore();
@@ -103,17 +107,6 @@ const route = useRoute();
 const activeSection = ref('map');
 const isSidebarOpen = ref(true);
 const showBackToTop = ref(false);
-// const coordinates = ref({ lat: null, lng: null });
-
-// Computed Properties
-// const category = computed(() => locationStore.category || 'category?');
-// const currentLayerName = computed(() => locationStore.currentLayerName);
-// const currentLayer = computed(() => locationStore.layer || 'layer?');
-// const cityName = computed(() => locationStore.nm_mun || 'city?');
-// const uf = computed(() => locationStore.uf || 'uf?');
-
-// Data
-
 const hasMunicipality = computed(() => !!locationStore.cd_mun);
 const defaultYear = computed(() => locationStore.year);
 const cityCode = ref(3547809);
@@ -144,11 +137,6 @@ const toggleSidebar = () => {
 
   isSidebarOpen.value = !isSidebarOpen.value;
 };
-
-// const updateCoordinates = (newCoordinates) => {
-//   coordinates.value = newCoordinates;
-//   locationStore.setCoordinates(newCoordinates);
-// };
 
 const { smallerThan } = useWindowSize();
 

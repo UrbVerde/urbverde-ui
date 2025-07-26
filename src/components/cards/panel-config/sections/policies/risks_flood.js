@@ -12,7 +12,7 @@ export default createSectionConfig((nm_mun) => [
     subtitle: 'Este índice mede o risco de uma região sofrer impactos climáticos causados por inundações urbanas',
     showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: 'CardInfo',
@@ -28,15 +28,6 @@ export default createSectionConfig((nm_mun) => [
             paragraphText: 'Acontecem com mais frequência em locais com pouca drenagem, ruas mal estruturadas e ocupações em áreas de risco. Podem causar perdas materiais, doenças e impactos na mobilidade',
           }
         },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
-          }
-        }
       ]
     }
   }),
@@ -56,37 +47,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas com risco de inundações',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 18,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-            ]
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '2-1',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda nas áreas com risco de inundações',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 19,
                 }
               },
             ]
@@ -100,15 +69,37 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas com risco de inundações',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 20,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas fora das áreas de risco',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 21,
+                }
+              },
+            ]
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 22,
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 23,
                 }
               },
             ]

@@ -19,7 +19,7 @@
 
           <button @click="showLayerInfo" class="nav-button">
             <i class="bi bi-info-circle"></i>
-            <p class="body-small-regular">Entender esse dado</p>
+            <p class="body-small-regular">Ver metodologia</p>
           </button>
         </div>
       </div>

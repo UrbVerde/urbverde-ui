@@ -12,6 +12,7 @@ import CardAction from '@/components/cards/components-cards/cardAction.vue';
 import CardODS from '@/components/cards/components-cards/cardODS.vue';
 import CardStamps from '@/components/cards/components-cards/cardStamps.vue';
 import CardSendData from '@/components/cards/components-cards/cardSendData.vue';
+import CardPrimaryButton from '@/components/cards/base/cardPrimaryButton.vue';
 
 // Mapa de componentes para facilitar o acesso
 const COMMON_COMPONENTS = {
@@ -22,7 +23,8 @@ const COMMON_COMPONENTS = {
   CardAction,
   CardODS,
   CardStamps,
-  CardSendData
+  CardSendData,
+  CardPrimaryButton
 };
 
 /**
@@ -124,6 +126,8 @@ function renderPanel(panelConfig, isNested = false) {
  * @param {Component|string} [config.component] - Componente Vue a ser renderizado ou nome do componente comum
  * @param {Object} [config.props] - Props para o componente
  * @param {boolean} [config.showYearPicker=true] - Indica se a seção deve mostrar o seletor de ano
+ * @param {string} [config.boxPadding] - Padding personalizado do box (ex: '0px', '24px 16px')
+ * @param {string} [config.boxGap] - Gap personalizado do box (ex: '0px', '16px')
  * @param {Object} [config.panel] - Configuração do painel
  * @param {string} config.panel.variant - Variante do painel (ex: "3-1")
  * @param {Array} config.panel.items - Array de configurações de itens (cards ou painéis)

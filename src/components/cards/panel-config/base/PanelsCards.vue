@@ -18,6 +18,10 @@
       :id="section.id"
       :ref="section.ref"
       class="box"
+      :style="{
+        padding: section.boxPadding || '48px 48px 32px 48px',
+        gap: section.boxGap || '40px'
+      }"
     >
       <div class="statistics-container">
         <div class="title-container">
@@ -197,10 +201,8 @@ p, h5 {
 
 .box {
   display: flex;
-  padding: 48px 48px 32px 48px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 40px;
   align-self: stretch;
   flex-grow: 1;
   width: 100%;

@@ -11,7 +11,7 @@ export default createSectionConfig((nm_mun) => [
     subtitle: 'Este índice mede o risco de uma região sofrer impactos devido a insegurança alimentar e nutricional',
     showYearPicker: false,
     panel: {
-      variant: '1-2',
+      variant: '1-1',
       items: [
         {
           component: 'CardInfo',
@@ -27,15 +27,6 @@ export default createSectionConfig((nm_mun) => [
             paragraphText: 'Afetam mais as populações urbanas vulneráveis, especialmente em áreas com pouco acesso a equipamentos públicos, hortas e mercados locais. Este índice orienta políticas de soberania alimentar, saúde e justiça socioambiental'
           }
         },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Regiões da cidade mais afetadas pela insegurança alimentar e nutricional',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essas regiões representam 10% das áreas urbanas mais vulneráveis da cidade',
-          }
-        }
       ]
     }
   }),
@@ -55,37 +46,15 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas em áreas vulneráveis de insegurança alimentar',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 12,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Pretos, pardos e indígenas fora das áreas vulneráveis',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-            ]
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '2-1',
-            items: [
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda nas áreas vulneráveis de insegurança alimentar',
-                  overrideNumberValue: 'Em breve',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Renda fora das áreas vulneráveis',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 13,
                 }
               },
             ]
@@ -99,15 +68,37 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas em áreas vulneráveis de insegurança alimentar',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 14,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Mulheres chefes de família não alfabetizadas fora das áreas vulneráveis',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 15,
+                }
+              },
+            ]
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '2-1',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 16,
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  cardIndex: 17,
                 }
               },
             ]

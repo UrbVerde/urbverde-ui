@@ -122,6 +122,9 @@ const fetchYears = async(cityCode) => {
     case 'policies_parks':
       apiUrl = `https://api.urbverde.com.br/v1/cards/pp/square?city=${cityCode}`;
       break;
+    case 'policies_vegetation':
+      apiUrl = `https://api.urbverde.com.br/v1/cards/pp/vegetation?city=${cityCode}`;
+      break;
     default:
       apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
     }

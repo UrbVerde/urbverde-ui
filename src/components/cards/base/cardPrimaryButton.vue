@@ -2,11 +2,11 @@
 <template>
   <div class="button-wrapper">
     <PrimaryButton
-      label="Ver no Mapa"
+      :label="buttonLabel"
       :filled="false"
-      icon="bi-map"
+      :icon="buttonIcon"
       iconType="bootstrap"
-      iconPosition="left"
+      :iconPosition="buttonIconPosition"
       class="card-button"
       @click="handleClick"
     />
@@ -39,6 +39,19 @@ export default {
     layerTitle: {
       type: String,
       required: true
+    },
+    // Propriedades para personalizar o botão
+    buttonLabel: {
+      type: String,
+      default: 'Ver no Mapa'
+    },
+    buttonIcon: {
+      type: String,
+      default: 'bi-map'
+    },
+    buttonIconPosition: {
+      type: String,
+      default: 'left',
     }
   },
   setup() {
@@ -53,9 +66,10 @@ export default {
   methods: {
     handleClick() {
       const currentYear = this.locationStore.currentYear;
+      const currentViewMode = this.locationStore.viewMode;
 
       // Navigate directly using window.location.href
-      window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&type=city&year=${currentYear}&category=${this.changeToCategory}&layer=${this.changeToLayerId}&scale=intraurbana`;
+      window.location.href = `https://urbverde.iau.usp.br/mapa?code=${this.cityCode}&viewMode=${currentViewMode}&type=city&year=${currentYear}&category=${this.changeToCategory}&layer=${this.changeToLayerId}&scale=intraurbana`;
     }
   }
 };
@@ -65,7 +79,9 @@ export default {
 .button-wrapper {
   display: flex;
   width: 100%;
+  max-width: 320px;
   margin-top: 0px !important;
+  margin: auto;
 }
 
 :deep(.primary-button) {
