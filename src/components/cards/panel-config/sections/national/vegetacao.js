@@ -5,7 +5,6 @@ import VGraphicSection from '@/components/cards/components-cards/cardsGraph/vege
 
 import globalwarming from '@/assets/images/cards/globalwarming-vegetation.svg';
 import environmentalcampaign from '@/assets/images/cards/plantingATreeTogether.svg';
-import field from '@/assets/images/cards/img.svg';
 
 export default createSectionConfig((nm_mun, uf) => [
   createSection({
@@ -13,7 +12,7 @@ export default createSectionConfig((nm_mun, uf) => [
     ref: 'statsSection',
     title: `Temperatura e clima em ${nm_mun} - ${uf}`,
     panel: {
-      variant: '1-3',
+      variant: '1-2',
       items: [
         {
           component: 'CardInfo',
@@ -21,25 +20,16 @@ export default createSectionConfig((nm_mun, uf) => [
             showMidia: true,
             midiaType: 'image',
             imageSrc: globalwarming,
-            midiaPosition: 'top',
+            midiaPosition: 'right',
             title: 'O que é cobertura vegetal?',
             type: 'paragraph-left',
             paragraphText: 'Áreas da cidade cobertas por vegetação, como árvores e gramíneas.',
           }
         },
         {
-          component: 'CardData',
-          props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/cover',
-            cardIndex: 0,
-            showImage: true,
-            imageSrc: field
-          }
-        },
-        {
           type: 'panel',
           props: {
-            variant: '2-1',
+            variant: '1-2',
             items: [
               {
                 component: 'CardData',
@@ -48,6 +38,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   cardIndex: 1,
                   showModalButton: true,
                   showCardSubtitle: true,
+                  numberType: 'large',
                   cardSubtitle: 'É a diferença entre a temperatura mais quente e a mais fria',
                   modalTitle: 'Média da cobertura vegetal',
                   modalBodyText: 'Representa o valor médio da cobertura vegetal registrado anualmente em todo o território urbano.',
@@ -61,6 +52,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/cover',
                   cardIndex: 2,
                   showModalButton: true,
+                  numberType: 'large',
                   modalTitle: 'A cobertura vegetal na cidade varia entre',
                   modalBodyText: 'Representa os dados de cobertura vegetal mínimo e máximo registrados anualmente em todo o território urbano.',
                   showSeeOnMap: true,
