@@ -131,7 +131,7 @@ export default createSectionConfig((nm_mun) => [
           props: {
             apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 2,
-            numberType: 'large',
+            numberType: 'composed',
             showSeeOnMap: true,
             targetCategory: 'policies_parks',
             targetLayerId: 'square_served_area',
@@ -250,6 +250,7 @@ export default createSectionConfig((nm_mun) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 9,
                   showSeeOnMap: true,
+                  numberType: 'large',
                   targetCategory: 'policies_parks',
                   targetLayerId: 'square_pcv',
                 }
@@ -259,6 +260,7 @@ export default createSectionConfig((nm_mun) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 10,
+                  numberType: 'large',
                   showSeeOnMap: true,
                   targetCategory: 'policies_parks',
                   targetLayerId: 'square_psi',
@@ -280,9 +282,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
-            cardIndex: 9,
-            overrideCardSubtitle: 'Considera fatores como saúde, educação, segurança, acesso a recursos e preservação do meio ambiente, tendo o valor ideal igual a 1.0',
+            overrideTitle: 'Indice de qualificação climática/socioambiental',
+            overrideNumberValue: 'Em breve',
+            overrideCardSubtitle: 'Considera o papel ecológico, social, de lazer e estético das praças e parques para as cidades',
           }
         },
       ]
@@ -380,7 +382,7 @@ export default createSectionConfig((nm_mun) => [
     ref: 'vegetationSection',
     showYearPicker: false,
     panel: {
-      variant: '4-2',
+      variant: '5-2',
       gapColumnHeight: '56px',
       items: [
         {
@@ -395,13 +397,11 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Cobertura vegetal por habitante',
-            overrideNumberValue: 'Em breve',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
+            cardIndex: 0,
             numberType: 'composed',
-            numberSubtitle: 'Recomendação: mais de 12 m²/hab até 2030',
             showSeeOnMap: true,
-            targetCategory: 'policies_vegetation',
-            targetLayerId: 'icv',
+            seeOnMapLayerID: 'icv',
           }
         },
         {
@@ -416,20 +416,54 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: 'Em breve',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
+            cardIndex: 1,
             numberType: 'composed',
-            numberSubtitle: 'Recomendação: reduzir 10% do PSI nos setores com mais de 75% até 2040',
             showSeeOnMap: true,
-            targetCategory: 'policies_vegetation',
-            targetLayerId: 'psi',
+            seeOnMapLayerID: 'psi',
           }
         },
         {
           component: 'CardAction',
           props: {
             number: 3,
-            actionTitle: 'Ação 3 - Requalificar lotes vagos com potencial para arborização e infraestrutura verde',
+            actionTitle: 'Ação 3 - Aumentar a vegetação urbana a partir de dados de monitoramento anual',
+            ods: '3, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
+            cardIndex: 2,
+            numberType: 'composed',
+            showSeeOnMap: true,
+            seeOnMapLayerID: 'pcv',
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 4,
+            actionTitle: 'Ação 4 - Aumentar o índice de área verde disponível para a população',
+            ods: '3, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
+            cardIndex: 3,
+            numberType: 'composed',
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 5,
+            actionTitle: 'Ação 5 - Requalificar lotes vagos com potencial para arborização e infraestrutura verde',
             ods: '3, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -442,27 +476,6 @@ export default createSectionConfig((nm_mun) => [
             numberType: 'composed',
             numberSubtitle: 'Recomendação: utilizar todos os lotes identificados até 2030',
             overrideCardSubtitle: 'Terrenos vazios ou pouco usados, sem função social ou ambiental'
-          }
-        },
-        {
-          component: 'CardAction',
-          props: {
-            number: 4,
-            actionTitle: 'Ação 4 - Aumentar a vegetação urbana a partir de dados de monitoramento anual',
-            ods: '3, 11, 13, 15',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Percentual de cobertura vegetal (PCV)',
-            overrideNumberValue: 'Em breve',
-            numberType: 'composed',
-            numberSubtitle: 'Recomendação: alcançar 30% de PCV até 2040',
-            showSeeOnMap: true,
-            targetCategory: 'policies_vegetation',
-            targetLayerId: 'pcv',
           }
         },
       ]
