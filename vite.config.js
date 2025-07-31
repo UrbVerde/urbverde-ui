@@ -33,14 +33,14 @@ export default defineConfig({
     assetsDir: 'assets',
     rollupOptions: {
       output: {
-        chunkFileNames: 'js/[name].[hash].js',
-        entryFileNames: 'js/[name].[hash].js',
+        chunkFileNames:  'assets/js/[name].[hash].js',
+        entryFileNames:  'assets/js/[name].[hash].js',
         assetFileNames: ({ name }) => {
           if (/\.(gif|jpe?g|png|svg)$/.test(name ?? '')) {
-            return 'img/[name].[hash].[ext]';
+            return 'assets/img/[name].[hash].[ext]';
           }
           if (/\.css$/.test(name ?? '')) {
-            return 'css/[name].[hash].[ext]';
+            return 'assets/css/[name].[hash].[ext]';
           }
 
           return 'assets/[name].[hash].[ext]';
