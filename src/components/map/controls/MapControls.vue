@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
 import BasemapSwitcher from './BasemapSwitcher.vue';
 import LocationControl from './LocationControl.vue';
 

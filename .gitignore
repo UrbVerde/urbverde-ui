@@ -33,3 +33,5 @@ coverage
 _flatten
 .urbverde-ui_flatten
 .src_clipboard.txt
+*-npm-cache
+*_clipboard.txt
