@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
+  base: 'https://urbverde.iau.usp.br/',
   plugins: [
     vue(),
   ],
