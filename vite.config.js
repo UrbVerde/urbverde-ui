@@ -31,6 +31,7 @@ export default defineConfig({
   // Add build configuration for cache busting
   build: {
     assetsDir: 'assets',
+    cssCodeSplit: false,
     rollupOptions: {
       output: {
         chunkFileNames:  'assets/js/[name].[hash].js',
