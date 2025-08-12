@@ -87,7 +87,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 0,
             numberType: 'composed',
             showSeeOnMap: true,
@@ -108,7 +108,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 1,
             numberType: 'composed',
             showSeeOnMap: true,
@@ -129,7 +129,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
             cardIndex: 2,
             numberType: 'composed',
             showSeeOnMap: true,
@@ -172,14 +172,14 @@ export default createSectionConfig((nm_mun) => [
                     {
                       component: 'CardData',
                       props: {
-                        apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                        apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                         cardIndex: 4,
                       }
                     },
                     {
                       component: 'CardData',
                       props: {
-                        apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                        apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                         cardIndex: 7,
                       }
                     },
@@ -197,21 +197,21 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 6,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 5,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 8,
                 }
               },
@@ -247,7 +247,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 9,
                   showSeeOnMap: true,
                   numberType: 'large',
@@ -258,7 +258,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/square',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/square',
                   cardIndex: 10,
                   numberType: 'large',
                   showSeeOnMap: true,
@@ -397,7 +397,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
             cardIndex: 0,
             numberType: 'composed',
             showSeeOnMap: true,
@@ -416,7 +416,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
             cardIndex: 1,
             numberType: 'composed',
             showSeeOnMap: true,
@@ -435,7 +435,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
             cardIndex: 2,
             numberType: 'composed',
             showSeeOnMap: true,
@@ -454,7 +454,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
             cardIndex: 3,
             numberType: 'composed',
           }

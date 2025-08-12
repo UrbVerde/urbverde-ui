@@ -95,6 +95,8 @@ const modalRef = ref(null);
 const cardWrapper = ref(null);
 const isVisible = ref(false);
 
+const emit = defineEmits(['cardVisible']);
+
 const openModal = () => {
   if (modalRef.value) {
     modalRef.value.show();
@@ -108,6 +110,7 @@ onMounted(() => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         isVisible.value = true;
+        emit('cardVisible'); // Emit event when card becomes visible
         observer.unobserve(entry.target);
       }
     });

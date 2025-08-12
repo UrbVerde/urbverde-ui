@@ -6,6 +6,7 @@
     :modalBodyText="modalBodyText"
     :showSeeOnMap="showSeeOnMap"
     :seeOnMapLayerID="seeOnMapLayerID"
+    @cardVisible="onCardVisible"
   >
     <div class="rank-card-container">
       <!-- Loading State -->
@@ -100,6 +101,12 @@ const props = defineProps({
     default: 0
   },
 
+  // Lazy Loading
+  enableLazyLoading: {
+    type: Boolean,
+    default: true
+  },
+
   // Modal Props
   showModalButton: {
     type: Boolean,
@@ -127,6 +134,7 @@ const props = defineProps({
 const isLoading = ref(false);
 const error = ref(null);
 const cardData = ref(null);
+const hasBeenVisible = ref(false);
 
 // Computed properties
 const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.value);
@@ -134,6 +142,10 @@ const isEmpty = computed(() => !isLoading.value && !error.value && !cardData.val
 // Fetch data from API
 const fetchData = async() => {
   if (!props.apiEndpoint || !props.cityCode) {return;}
+
+  if (props.enableLazyLoading && !hasBeenVisible.value) {
+    return;
+  }
 
   isLoading.value = true;
   error.value = null;
@@ -166,11 +178,18 @@ const fetchData = async() => {
   }
 };
 
+const onCardVisible = () => {
+  hasBeenVisible.value = true;
+  fetchData();
+};
+
 // Watch for changes in props that should trigger a refetch
 watch(
   [() => props.cityCode, () => props.year, () => props.apiEndpoint],
   () => {
-    fetchData();
+    if (!props.enableLazyLoading || hasBeenVisible.value) {
+      fetchData();
+    }
   },
   { immediate: false }
 );
@@ -179,13 +198,17 @@ watch(
 watch(
   () => props.year,
   () => {
-    fetchData();
+    if (!props.enableLazyLoading || hasBeenVisible.value) {
+      fetchData();
+    }
   }
 );
 
 // Initial fetch
 onMounted(() => {
-  fetchData();
+  if (!props.enableLazyLoading) {
+    fetchData();
+  }
 });
 </script>
 

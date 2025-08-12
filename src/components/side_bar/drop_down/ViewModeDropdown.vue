@@ -98,7 +98,7 @@ const dropdownRef = ref(null);
 const viewModes = [
   {
     id: 'map',
-    label: 'Nacional',
+    label: 'Mapas temáticos',
     icon: worldMapIcon,
     text: '5570 cidades'
   },

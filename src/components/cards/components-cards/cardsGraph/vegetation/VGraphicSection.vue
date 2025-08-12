@@ -145,7 +145,7 @@ export default {
 
     const fetchAvailableYears = async() => {
       try {
-        const response = await fetch(`https://api.urbverde.com.br/v1/cards/vegetal/cover?city=${props.cityCode}`);
+        const response = await fetch(`http://localhost:8080/v1/cards/vegetal/cover?city=${props.cityCode}`);
         const data = await response.json();
         if (Array.isArray(data)) {
           availableYears.value = data.sort((a, b) => a - b);
@@ -174,7 +174,7 @@ export default {
 
         // Fetch vegetal cover data for each year
         const coverPromises = years.map(year =>
-          fetch(`https://api.urbverde.com.br/v1/cards/vegetal/cover?city=${props.cityCode}&year=${year}`)
+          fetch(`http://localhost:8080/v1/cards/vegetal/cover?city=${props.cityCode}&year=${year}`)
             .then(response => response.json())
             .catch(error => {
               console.error(`Error fetching data for year ${year}:`, error);
