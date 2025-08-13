@@ -1,6 +1,8 @@
 // urbverde-ui/src/components/map/controls/customTerrainControl.js
 // CustomTerrainControl.js - Versão Otimizada
 
+import { initializeTooltips, reinitializeTooltips, destroyAllTooltips } from '@/utils/bootstrapTooltips';
+
 class CustomTerrainControl {
   constructor(options = {}) {
     this.options = {
@@ -26,7 +28,9 @@ class CustomTerrainControl {
     this._terrainButton = document.createElement('div');
     this._terrainButton.className = 'custom-terrain-button';
     this._terrainButton.innerHTML = '<div class="custom-terrain-icon">3D</div>';
-    this._terrainButton.title = 'Ativar visualização 3D (pode ser pesado para alguns dispositivos)';
+    this._terrainButton.setAttribute('data-bs-toggle', 'tooltip');
+    this._terrainButton.setAttribute('data-bs-placement', 'right');
+    this._terrainButton.setAttribute('data-bs-title', 'Ativar visualização 3D (pode ser pesado para alguns dispositivos)');
 
     this._terrainButton.addEventListener('click', () => {
       // Limitar a frequência de toggle (debounce de 500ms)
@@ -38,6 +42,8 @@ class CustomTerrainControl {
     });
 
     this._container.appendChild(this._terrainButton);
+
+    initializeTooltips();
 
     // Apply styles directly
     this._applyStyles();
@@ -98,7 +104,10 @@ class CustomTerrainControl {
   _showTerrainError() {
     // Mostrar mensagem de erro para o usuário
     this._terrainButton.classList.add('error');
-    this._terrainButton.title = 'Erro ao carregar o terreno 3D. Tente novamente mais tarde.';
+    this._terrainButton.setAttribute('data-bs-title', 'Erro ao carregar o terreno 3D. Tente novamente mais tarde.');
+
+    // Atualizar o tooltip usando a função existente
+    reinitializeTooltips();
   }
 
   _toggleTerrain() {
@@ -374,6 +383,9 @@ class CustomTerrainControl {
   }
 
   onRemove() {
+    // Dispose tooltip to prevent memory leaks
+    destroyAllTooltips();
+
     if (this._container && this._container.parentNode) {
       this._container.parentNode.removeChild(this._container);
     }

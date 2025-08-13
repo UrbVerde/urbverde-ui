@@ -23,16 +23,22 @@
             <span class="category-name body-small-regular">{{ item.category.name }}</span>
 
             <!-- Exclusive category tag -->
-            <div class="exclusive-category-tag"
+            <div class="exclusive-category-tag me-2 tooltip-success"
                  v-if="item.category.isExclusive"
-                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
+                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }"
+                 data-bs-toggle="tooltip"
+                 data-bs-title="Exclusivo do município"
+                 data-bs-placement="right">
               <i class="bi bi-stars" id="imgIconExclusive"></i>
             </div>
 
             <!-- Badge: aparece se há uma active layer, mas a categoria está fechada -->
             <div class="badge-right-menu"
                  v-if="getActiveLayerInCategory(item.category) && !openCategoryIds.includes(item.category.id)"
-                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
+                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }"
+                 data-bs-toggle="tooltip"
+                 data-bs-title="Possui uma camada ativa"
+                 data-bs-placement="right">
               <span class="textBadge bi bi-dot"></span>
             </div>
 
@@ -55,7 +61,10 @@
 
                 <div class="exclusive-layer-tag"
                      v-if="layer.isExclusive"
-                     :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
+                     :class="{ 'policies-mode': locationStore.viewMode === 'policies' }"
+                     data-bs-toggle="tooltip"
+                     data-bs-title="Exclusivo do município"
+                     data-bs-placement="right">
                   <i class="bi bi-stars" id="imgIconExclusive"></i>
                 </div>
               </li>
@@ -68,9 +77,10 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted, computed } from 'vue';
+import { ref, watchEffect, onMounted, computed, nextTick } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
+import { handleReactiveTooltipUpdate } from '@/utils/bootstrapTooltips';
 
 const locationStore = useLocationStore();
 const categories = ref([]);
@@ -115,7 +125,7 @@ const mixedCategoriesAndTitles = computed(() => {
   return result;
 });
 
-watchEffect(() => {
+watchEffect(async() => {
   if (locationStore.categories.length > 0) {
     console.log('CategoriesDropdown: Atualizando a partir da store');
     categories.value = locationStore.categories;
@@ -138,6 +148,9 @@ watchEffect(() => {
         });
       }
     }
+
+    // Reinicializa tooltips automaticamente após mudanças reativas
+    await handleReactiveTooltipUpdate(nextTick);
   }
 });
 
@@ -175,6 +188,9 @@ async function toggleCategory(categoryId) {
     openCategoryIds.value = [categoryId];
     await updateCategoryHeight(categoryId);
   }
+
+  // Reinicializa tooltips após abrir/fechar categoria
+  await handleReactiveTooltipUpdate(nextTick);
 }
 
 function markActiveLayer() {
