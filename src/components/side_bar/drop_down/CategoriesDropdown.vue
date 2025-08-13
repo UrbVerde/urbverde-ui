@@ -238,11 +238,15 @@ onMounted(() => {
   .header-title {
     color: map-get($theme, secondary);
     position: sticky;
-    padding: 24px 0 8px 0;
+    padding: 24px 4px 4px 4px;
     top: 0;
     z-index: 2;
     background-color: map-get($gray, white);
     margin: 0;
+  }
+
+  .header-title:first-of-type {
+    padding: 16px 4px 4px 4px;
   }
 
   .categories-list {
@@ -340,7 +344,7 @@ onMounted(() => {
     flex-direction: column;
     border-radius: 8px;
     background: map-get($gray, 100);
-    gap: 8px;
+    gap: 6px;
   }
 
   .layer-item {

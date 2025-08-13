@@ -8,7 +8,7 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'metas',
     ref: 'metasSection',
-    title: `Eixo Parques e Praças em ${nm_mun}`,
+    title: `Eixo Parques e praças em ${nm_mun}`,
     subtitle: 'Parques e praças são os principais espaços públicos de uma cidade, sendo essenciais para melhorar o ambiente e o bem-estar da população',
     showYearPicker: false,
     panel: {
