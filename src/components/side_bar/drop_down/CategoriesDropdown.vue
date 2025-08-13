@@ -22,16 +22,24 @@
             </div>
             <span class="category-name body-small-regular">{{ item.category.name }}</span>
 
+            <!-- Exclusive category tag -->
+            <div class="exclusive-category-tag"
+                 v-if="item.category.isExclusive"
+                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
+              <i class="bi bi-stars" id="imgIconExclusive"></i>
+            </div>
+
             <!-- Badge: aparece se há uma active layer, mas a categoria está fechada -->
             <div class="badge-right-menu"
                  v-if="getActiveLayerInCategory(item.category) && !openCategoryIds.includes(item.category.id)"
                  :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
-              <span class="textBadge body-caption-medium">1</span>
+              <span class="textBadge bi bi-dot"></span>
             </div>
 
             <i :class="openCategoryIds.includes(item.category.id)
               ? 'bi bi-chevron-up'
-              : 'bi bi-chevron-down'" />
+              : 'bi bi-chevron-down'" >
+            </i>
           </div>
 
           <!-- Layers dentro da categoria -->
@@ -45,10 +53,10 @@
                   {{ layer.display_name || layer.title || layer.name }}
                 </span>
 
-                <div class="new-layer-tag"
-                     v-if="layer.isNew"
+                <div class="exclusive-layer-tag"
+                     v-if="layer.isExclusive"
                      :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
-                  <i class="bi bi-stars" id="imgIconNew"></i>
+                  <i class="bi bi-stars" id="imgIconExclusive"></i>
                 </div>
               </li>
             </ul>
@@ -281,25 +289,25 @@ onMounted(() => {
   .badge-right-menu {
     display: flex;
     align-items: center;
-    padding: 2px 8px;
-    gap: 10px;
     border-radius: 4px;
-    color: map-get($theme, primary);
-    background: map-get($primary-fade, 100);
-    width: 22px;
-    height: 22px;
+    color: map-get($green, 500);
+    background: transparent;
+    width: 20px;
+    height: 20px;
     justify-content: center;
+
+    .textBadge {
+      display: flex;
+      font-size: 40px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
     &.policies-mode {
-      background: map-get($yellow, 200);
+      color: map-get($yellow, 600);
+      background: transparent;
     }
-  }
-
-  .textBadge {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
   }
 
   .category-icon {
@@ -367,21 +375,22 @@ onMounted(() => {
     flex: 1;
   }
 
-  .new-layer-tag {
+  .exclusive-layer-tag, .exclusive-category-tag {
     display: flex;
+    font-size: 14px;
     align-items: center;
-    padding: 2px 8px;
-    gap: 10px;
-    border-radius: 4px;
-
-    background: map-get($primary-fade, 100);
-    width: 22px;
-    height: 22px;
+    color: map-get($theme, primary);
     justify-content: center;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: map-get($primary-fade, 100);
 
     &.policies-mode {
-      color: map-get($theme, primary);
-      background: map-get($yellow, 200);
+      color: map-get($yellow, 700);
+      background: map-get($yellow, 100);
     }
   }
+
 </style>

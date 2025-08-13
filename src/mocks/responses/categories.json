@@ -5,9 +5,9 @@
       "name": "Clima",
       "icon": "Snowy Sunny Day.svg",
       "layers": [
-        {"id": "surface_temp", "name": "Temperatura de superfície", "isActive": false, "isNew": true},
-        {"id": "max_surface_temp", "name": "Temperatura máxima de superfície", "isActive": false, "isNew": false},
-        {"id": "heat_island", "name": "Nível de exposição à ilha de calor", "isActive": false, "isNew": false}
+        {"id": "surface_temp", "name": "Temperatura de superfície", "isActive": false, "isExclusive": true},
+        {"id": "max_surface_temp", "name": "Temperatura máxima de superfície", "isActive": false},
+        {"id": "heat_island", "name": "Nível de exposição à ilha de calor", "isActive": false}
       ]
     },
     {
@@ -15,11 +15,11 @@
       "name": "Vegetação",
       "icon": "Oak Tree.svg",
       "layers": [
-        {"id": "pcv", "name": "Coberta vegetal (PCV)", "isActive": false, "isNew": false},
-        {"id": "icv", "name": "Cobertura vegetal por habitante (ICV)", "isActive": false, "isNew": false},
-        {"id": "idsa", "name": "Desigualdade sociambiental (IDSA)", "isActive": false, "isNew": false},
-        {"id": "cvp", "name": "Cobertura vegetal por pixel", "isActive": false, "isNew": false},
-        {"id": "ndvi", "name": "Vigor da vegetação (NDVI)", "isActive": false, "isNew": false}
+        {"id": "pcv", "name": "Coberta vegetal (PCV)", "isActive": false},
+        {"id": "icv", "name": "Cobertura vegetal por habitante (ICV)", "isActive": false},
+        {"id": "idsa", "name": "Desigualdade sociambiental (IDSA)", "isActive": false},
+        {"id": "cvp", "name": "Cobertura vegetal por pixel", "isActive": false},
+        {"id": "ndvi", "name": "Vigor da vegetação (NDVI)", "isActive": false}
       ]
     },
     {
@@ -27,76 +27,17 @@
       "name": "Parques e Praças",
       "icon": "Nature.svg",
       "layers": [
-        {"id": "park_distribution", "name": "Distribuição dos parques", "isActive": false, "isNew": false},
-        {"id": "green_area_per_capita", "name": "Área verde por habitante", "isActive": false, "isNew": false},
-        {"id": "green_area_accessibility", "name": "Acessibilidade a áreas verdes", "isActive": false, "isNew": false}
+        {"id": "park_distribution", "name": "Distribuição dos parques", "isActive": false},
+        {"id": "green_area_per_capita", "name": "Área verde por habitante", "isActive": false},
+        {"id": "green_area_accessibility", "name": "Acessibilidade a áreas verdes", "isActive": false}
       ]
     },
     {
       "id": "emissions",
       "name": "Emissões",
-      "icon": "Central Heating.svg",
+      "icon": "emissions.svg",
       "layers": [
-        {"id": "co2_emissions", "name": "Emissões de CO2", "isActive": false, "isNew": true},
-        {"id": "co2_capture", "name": "Captura Emissões de CO2 per capita", "isActive": false, "isNew": false},
-        {"id": "co2_emissions", "name": "Poluição do ar", "isActive": false, "isNew": false}
-      ]
-    },
-    {
-      "id": "urban_empty_lots",
-      "name": "Lotes Urbanos",
-      "icon": "Field.svg",
-      "layers": [
-        {"id": "empty_lots_distribution", "name": "Lotes Vazios", "isActive": false, "isNew": true},
-        {"id": "potential_uses", "name": "Áreas Residuais", "isActive": false, "isNew": false}
-      ]
-    },
-    {
-      "id": "water",
-      "name": "Águas",
-      "icon": "Water Element.svg",
-      "layers": [
-        {"id": "flood_areas", "name": "Áreas Inundáveis", "isActive": false, "isNew": true},
-        {"id": "dam_flood_areas", "name": "Barragens", "isActive": false, "isNew": true},
-        {"id": "water_quality", "name": "Qualidade da água", "isActive": false, "isNew": false},
-        {"id": "water_supply", "name": "Abastecimento de água", "isActive": false, "isNew": false},
-        {"id": "water_sewerage", "name": "Esgotamento sanitário", "isActive": false, "isNew": false}
-      ]
-    },
-    {
-      "id": "transport",
-      "name": "Mobilidade",
-      "icon": "bi bi-bicycle",
-      "layers": [
-        {"id": "bike_lanes", "name": "Ciclovias", "isActive": false, "isNew": true}
-      ]
-    },
-    {
-      "id": "agriculture",
-      "name": "Agricultura Urbana",
-      "icon": "Soil.svg",
-      "layers": [
-        {"id": "urban_garden", "name": "Hortas Urbanas", "isActive": false, "isNew": true}
-      ]
-    },
-    {
-      "id": "census",
-      "name": "Censo",
-      "icon": "bi bi-people",
-      "layers": [
-        {"id": "population", "name": "População", "isActive": false, "isNew": false},
-        {"id": "revenue", "name": "Renda per capita", "isActive": false, "isNew": false},
-        {"id": "age", "name": "Idade", "isActive": false, "isNew": false},
-        {"id": "race", "name": "Raça/Cor", "isActive": false, "isNew": false}
-      ]
-    },
-    {
-      "id": "others",
-      "name": "Outros",
-      "icon": "bi bi-lightbulb",
-      "layers": [
-        {"id": "public_lighting", "name": "Iluminação Pública", "isActive": false, "isNew": false},
-        {"id": "institutional_areas", "name": "Áreas Institucionais", "isActive": false, "isNew": false}
+        {"id": "emissions_municipality", "name": "Emissões do município", "isActive": false}
       ]
     }
   ]
