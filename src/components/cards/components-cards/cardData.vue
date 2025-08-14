@@ -502,6 +502,7 @@ p {
 .button-wrapper {
     display: flex;
     width: 100%;
+    margin-left: 0px;
     margin-top: 0px !important;
 }
 
