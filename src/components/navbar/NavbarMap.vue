@@ -21,6 +21,11 @@
             <i class="bi bi-info-circle"></i>
             <p class="body-small-regular">Entender esse dado</p>
           </button>
+
+          <button @click="showDebug" class="nav-button debug-button" title="Debug - Estado do LayersStore">
+            <i class="bi bi-bug"></i>
+            <p class="body-small-regular">Debug</p>
+          </button>
         </div>
       </div>
 
@@ -46,6 +51,14 @@
     <!-- Modal de informações da camada -->
     <modalLayerInfo
       ref="refModalLayerInfo"
+    />
+    <!-- Modal de debug -->
+    <modalDebug
+      ref="refModalDebug"
+    />
+    <!-- Modal de debug -->
+    <modalDebug
+      ref="refModalDebug"
     />
   </div>
 
@@ -100,6 +113,14 @@
                 <p class="body-small-regular">Entender esse dado</p>
               </div>
 
+              <div
+                class="popover-item"
+                @click="showDebug"
+              >
+                <i class="bi bi-bug"></i>
+                <p class="body-small-regular">Debug</p>
+              </div>
+
             </div>
           </div>
         </div>
@@ -127,6 +148,7 @@ import { categoryToLayerMap, tabIdToLabelMap, sectionConfigs } from '@/config';
 import { getTabsForLayer } from '@/config/helperNavbarTabNavegation';
 import modalShare from '../modal/modalShare.vue';
 import modalLayerInfo from '../modal/modalLayerInfo.vue';
+import modalDebug from '../modal/modalDebug.vue';
 import { useWindowSize } from '@/utils/useWindowsSize';
 import CollapseButton from '../side_bar/buttons/CollapseButton.vue';
 import BuscaSimples from '../search_dropdown/BuscaSimples.vue';
@@ -146,6 +168,7 @@ const { activeSection, isSidebarOpen } = defineProps({
 const emit = defineEmits(['navigate-to', 'toggle-sidebar', 'api-error']);
 const refModalShare = ref(null);
 const refModalLayerInfo = ref(null);
+const refModalDebug = ref(null);
 const locationStore = useLocationStore();
 
 // Popover refs e estado
@@ -200,6 +223,13 @@ function shareMap() {
 function showLayerInfo() {
   // Abrir o modal de informações da camada
   refModalLayerInfo.value.show();
+  // Fechar o popover caso esteja aberto (mobile)
+  isPopoverVisible.value = false;
+}
+
+function showDebug() {
+  // Abrir o modal de debug
+  refModalDebug.value.show();
   // Fechar o popover caso esteja aberto (mobile)
   isPopoverVisible.value = false;
 }
@@ -415,6 +445,20 @@ a {
 .popover-item img {
   width: 18px;
   height: 18px;
+}
+
+/* Estilo especial para o botão de debug */
+.debug-button {
+  background-color: #fef3c7 !important;
+  border-color: #f59e0b !important;
+}
+
+.debug-button:hover {
+  background-color: #fde68a !important;
+}
+
+.debug-button i {
+  color: #d97706 !important;
 }
 
 @include breakpoint-down('desktop-small') {

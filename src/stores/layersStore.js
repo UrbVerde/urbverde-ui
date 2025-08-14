@@ -215,6 +215,8 @@ export const useLayersStore = defineStore('layersStore', {
       if (!this.activeLayers.some(l => l.id === layer.id)) {
         const newLayer = {
           id: layer.id,
+          year: layer.year,
+          scale: layer.scale,
           currentMain: false,
           opacity: layer.opacity || this.defaultOpacity,
           source: layer.source
