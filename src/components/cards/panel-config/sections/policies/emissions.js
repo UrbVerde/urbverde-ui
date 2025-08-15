@@ -19,7 +19,7 @@ export default createSectionConfig((nm_mun) => [
             showLeftIcon: true,
             leftIconClass: 'bi bi-clouds',
             type: 'paragraph-left',
-            paragraphText: 'CO₂e (dióxido de carbono equivalente) é uma forma de medir e comparar o impacto de diferentes gases de efeito estufa (como CO₂, CH₄, N₂O, entre outros) no aquecimento global. Todos esses gases são convertidos para a mesma unidade, considerando seu potencial de aquecimento ao longo de 100 anos (fator GWP-100)'
+            paragraphText: 'CO₂e (dióxido de carbono equivalente) é uma forma de medir e comparar o impacto de diferentes gases de efeito estufa (como CO₂, CH₄, N₂O, entre outros) no aquecimento global. Todos esses gases são convertidos para a mesma unidade, considerando seu potencial de aquecimento ao longo de 100 anos (fator GWP-100).'
           }
         },
         {
@@ -33,7 +33,7 @@ export default createSectionConfig((nm_mun) => [
             imageSrc: mariSearch,
             midiaPosition: 'right',
             type: 'paragraph-left',
-            paragraphText: 'A liberação de gases do efeito estufa pelas cidades aumenta a retenção de calor na atmosfera, intensificando o aquecimento global e agravando eventos extremos em todo o mundo.'
+            paragraphText: 'A liberação de gases do efeito estufa aumenta a retenção de calor na atmosfera, intensificando o aquecimento global e agravando eventos extremos em todo o mundo.'
           }
         },
       ]
@@ -77,10 +77,10 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Emissões por habitante',
+                  overrideTitle: 'Emissões por habitante (IEH)',
                   overrideNumberValue: 'Em breve',
                   numberType: 'large',
-                  overrideCardSubtitle: 'Emissão de CO₂e em relação ao número de habitantes',
+                  overrideCardSubtitle: 'Emissão de CO₂e em relação ao número de habitantes. O valor nacional em 2023 foi de X tCO₂e/hab',
                 }
               }
             ]
@@ -158,7 +158,7 @@ export default createSectionConfig((nm_mun) => [
             title: 'Mitigação no contexto climático',
             listItems: [
               'Mitigação é o conjunto de ações para reduzir as emissões de gases de efeito estufa e aumentar sua remoção da atmosfera',
-              'Tem como objetivo de conter os impactos das mudanças climáticas',
+              'Tem como objetivo conter os impactos de eventos extremos causados pelas mudanças climáticas',
               'Algumas formas de mitigar incluem o uso de energia limpa, arborização urbana, transporte sustentável e gestão adequada de resíduos',
             ],
           }
