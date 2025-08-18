@@ -35,6 +35,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 0,
+                  numberType: 'large',
                   showModalButton: true,
                   overrideCardSubtitle: 'Conta o número de crianças e idosos morando em áreas mais quentes. Quanto maior, maior a vulnerabilidade',
                   modalTitle: 'Nível de ilha de calor',
@@ -48,6 +49,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 3,
+                  numberType: 'large',
                   showModalButton: true,
                   modalTitle: 'Temperatura máxima da superfície',
                   modalBodyText: 'Representa o maior valor da temperatura de superfície terrestre registrado anualmente em todo o território urbano.',
@@ -68,6 +70,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 1,
+                  numberType: 'large',
                   showModalButton: true,
                   modalTitle: 'Temperatura média da superfície',
                   modalBodyText: 'Representa o valor médio da temperatura de superfície terrestre registrado anualmente em todo o território urbano.',
@@ -78,6 +81,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 2,
+                  numberType: 'large',
                   showModalButton: true,
                   modalTitle: 'Maior amplitude',
                   modalBodyText: 'Representa a maior diferença entre as temperaturas mínima e máxima da superfície terrestre registrada anualmente em todo o território urbano.',
@@ -268,8 +272,8 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 2,
                   showButtonPrimary: true,
-                  changeToCategory: 'parks',
-                  changeToLayerId: 'idsa',
+                  changeToCategory: 'vegetation',
+                  changeToLayerId: 'psi',
                 }
               }
             ],
