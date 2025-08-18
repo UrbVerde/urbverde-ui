@@ -60,10 +60,10 @@ import LegendCard from './LegendCard.vue';
 import { reorderLayerSetup } from '@/components/map/layers/MapLayerController';
 
 const props = defineProps({
-  // currentYear: {
-  //   type: [Number, String],
-  //   required: true
-  // },
+  currentYear: {
+    type: [Number, String],
+    required: true
+  },
   scale: {
     type: String,
     required: true

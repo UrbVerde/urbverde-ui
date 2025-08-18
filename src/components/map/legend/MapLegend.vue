@@ -114,7 +114,7 @@ import wrapperIcon from '@/assets/icons/wrapper.svg';
 // Store setup
 const locationStore = useLocationStore();
 const layersStore = useLayersStore();
-const { year: storeYear, scale } = storeToRefs(locationStore);
+const { scale } = storeToRefs(locationStore);
 
 // Reactive state
 const isOpen = ref(true);
@@ -130,7 +130,7 @@ onMounted(() => {
 });
 
 // Computed properties
-const currentYear = computed(() => storeYear.value || 2021);
+const currentYear = computed(() => layersStore.getCurrentYear);
 const currentLayerAllowedYears = computed(() =>
   [2016, 2017, 2018, 2019, 2020, 2021]
 );

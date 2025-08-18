@@ -133,6 +133,8 @@ watch(
   async(newYear, oldYear) => {
     if (newYear !== oldYear) {
       console.log(`Ano alterado de ${oldYear} para ${newYear}`);
+      // Sincroniza o ano com o layersStore
+      layersStore.syncYearWithLocationStore(newYear);
       if (mapLoaded.value) {
 
         removeDynamicLayer();
@@ -751,7 +753,13 @@ async function setupLayers() {
     const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
 
     // Adicionar a camada usando o LayerOrderManager
-    await addLayer(currentLayer.value);
+    const result = await addLayer(currentLayer.value);
+
+    // Se a camada foi adicionada com sucesso e tem subcamadas, adicionar ao store
+    if (result && result.success && result.sublayers && result.sublayers.length > 0) {
+      layersStore.addSublayers(currentLayer.value, result.sublayers);
+      console.log(`[MapCore] Added ${result.sublayers.length} sublayers for ${currentLayer.value}`);
+    }
 
     // Adicionar camadas adicionais se necessário
     if (currentScale.value === 'intraurbana' && currentCode.value) {
@@ -772,6 +780,8 @@ async function setupLayers() {
 
 onMounted(() => {
   setupMap();
+  // Inicializa o ano no layersStore
+  layersStore.syncYearWithLocationStore(currentYear.value);
 });
 
 onBeforeUnmount(() => {

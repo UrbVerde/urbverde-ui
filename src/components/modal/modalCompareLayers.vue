@@ -201,6 +201,11 @@ const createAndAddLayer = (layerId) => {
   const updatedActiveLayers = [...layersStore.getActiveLayers];
   reorderLayerSetup(layersStore.mapRef, updatedActiveLayers);
 
+  // Adiciona subcamadas para camadas vetoriais
+  if (layerConfig.type === 'vector' || layerConfig.dataType === 'vector') {
+    layersStore.addSubLayer(layerId);
+  }
+
   return true;
 };
 

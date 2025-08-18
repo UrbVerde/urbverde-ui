@@ -166,6 +166,19 @@
                         <strong>Source Details: </strong>
                         <pre>{{ JSON.stringify(layer.source, null, 2) }}</pre>
                       </div>
+                      <div v-if="layer.subLayers && layer.subLayers.length > 0" class="layer-property sublayers-details">
+                        <strong>Subcamadas ({{ layer.subLayers.length }}): </strong>
+                        <div v-for="subLayer in layer.subLayers" :key="subLayer.id" class="sublayer-item">
+                          <div class="sublayer-header">
+                            <span class="sublayer-id">{{ subLayer.id }}</span>
+                            <span class="sublayer-type">{{ subLayer.type }}</span>
+                          </div>
+                          <div class="sublayer-paint">
+                            <strong>Paint: </strong>
+                            <pre>{{ JSON.stringify(subLayer.paint, null, 2) }}</pre>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -615,6 +628,62 @@ defineExpose({
 .status-error {
   color: #ef4444;
   font-weight: 600;
+}
+
+// Subcamadas styles
+.sublayers-details {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: map-get($gray, 100);
+  border-radius: 6px;
+  border-left: 3px solid map-get($theme, primary);
+}
+
+.sublayer-item {
+  margin-bottom: 12px;
+  padding: 8px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid map-get($gray, 200);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.sublayer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid map-get($gray, 200);
+}
+
+.sublayer-id {
+  font-weight: 600;
+  color: map-get($theme, primary);
+  font-size: 14px;
+}
+
+.sublayer-type {
+  background-color: map-get($gray, 200);
+  color: map-get($gray, 700);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sublayer-paint {
+  pre {
+    font-size: 11px;
+    background-color: map-get($gray, 50);
+    padding: 8px;
+    border-radius: 4px;
+    margin: 4px 0 0 0;
+    overflow-x: auto;
+  }
 }
 
 :global(.debug-modal .modal-title) {
