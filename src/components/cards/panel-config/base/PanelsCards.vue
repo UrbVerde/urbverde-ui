@@ -6,7 +6,7 @@
       <div class="empty-state">
         <img src="@/assets/images/cards/policies/mari-search.svg" alt="Nenhum dado disponível" />
         <div class="label">
-          <h5 class="heading-h5">Ainda sem dados estatísticos por aqui</h5>
+          <h5 class="heading-h5">Ainda sem estatísticas por aqui</h5>
           <!-- <p class="body-small-regular">Parece que os dados ainda não foram plantados</p> -->
         </div>
       </div>
@@ -255,7 +255,7 @@ p, h5 {
 }
 
 .empty-state {
-  opacity: 0.8;
+  opacity: 0.9;
   display: flex;
   width: 100%;
   height: auto;
