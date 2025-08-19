@@ -80,7 +80,7 @@ export const tabIdToLabelMap = {
   'vegetation': 'Vegetação',
   'hidro': 'Hidrologia',
   'agriculture': 'Agricultura Urbana',
-  'climate': 'Clima',
+  'climate': 'Temperatura',
 };
 
 // IDs de categorias ou camadas que não devem mostrar a aba "Mapa"

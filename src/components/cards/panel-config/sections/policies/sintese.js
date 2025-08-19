@@ -316,6 +316,157 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   // ===============================================
+  // Seção: Eixo Emissões e Clima
+  // ===============================================
+
+  createSection({
+    id: 'climate',
+    ref: 'climateSection',
+    title: `Eixo temperatura em ${nm_mun}`,
+    subtitle: 'Identificação de áreas urbanas com potencial para reduzir as temperaturas de superfície',
+    showYearPicker: false,
+    panel: {
+      variant: '2-1',
+      gapColumnHeight: '56px',
+      items: [
+        {
+          component: 'CardStamps',
+          props: {
+            eixo: 'policies_climate',
+            barPercentage: [0, 4],
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardInfo',
+                props: {
+                  showLeftIcon: true,
+                  leftIconClass: 'bi bi-check2-circle',
+                  title: 'Objetivos do eixo',
+                  showMidia: true,
+                  midiaType: 'image',
+                  imageSrc: mariTarget2,
+                  midiaPosition: 'right',
+                  type: 'paragraph-left',
+                  paragraphText: 'Busca melhorar o conforto urbano, reduzir as ilhas de calor, especialmente nas áreas vulneráveis, para promover um ambiente mais saudável e sustentável',
+                }
+              },
+              {
+                component: 'CardInfo',
+                props: {
+                  showMidia: false,
+                  title: 'Metas do eixo',
+                  showLeftIcon: true,
+                  leftIconClass: 'bi bi-list-check',
+                  type: 'list',
+                  listItems: [
+                    'Identificar áreas com altas emissões e calor excessivo para orientar a criação de novas zonas verdes',
+                    'Transformar zonas vulneráveis em áreas mais frescas e sustentáveis',
+                    'Reduzir as ilhas de calor urbanas (ICUs) para melhorar o conforto térmico',
+                  ]
+                }
+              },
+            ]
+          }
+        },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'climate',
+    ref: 'climateSection',
+    showYearPicker: false,
+    panel: {
+      variant: '2-1',
+      items: [
+        {
+          type: 'panel',
+          props: {
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardAction',
+                props: {
+                  number: 1,
+                  actionTitle: 'Ação 1 - Ampliar a arborização urbana em vias e espaços públicos para reduzir a temperatura da cidade e melhorar o conforto térmico',
+                  ods: '3, 10, 11, 13, 15, 17',
+                  badgeStatus: 'nao-informado'
+                }
+              },
+              {
+                component: 'CardAction',
+                props: {
+                  number: 2,
+                  actionTitle: 'Ação 2 - Promover um programa de certificação ambiental de construção sustentáveis',
+                  ods: '3, 10, 11, 13, 15, 17',
+                  badgeStatus: 'nao-informado'
+                }
+              },
+            ]
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardAction',
+                props: {
+                  number: 3,
+                  actionTitle: 'Ação 3 - Implementar telhado verdes em prédios públicos',
+                  ods: '3, 10, 11, 13, 15, 17',
+                  badgeStatus: 'nao-informado'
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
+                  cardIndex: 1,
+                  numberType: 'large',
+                  showModalButton: true,
+                  modalTitle: 'Temperatura média da superfície',
+                  modalBodyText: 'Representa o valor médio da temperatura de superfície terrestre registrado anualmente em todo o território urbano.',
+                }
+              },
+            ]
+          }
+        },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'climate',
+    ref: 'climateSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'policies_climate',
+            changeToLayerId: 'vegetation_temp_reduction',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
+      ]
+    }
+  }),
+
+  // ===============================================
   // Seção: Eixo Vegetação
   // ===============================================
   createSection({
@@ -348,7 +499,7 @@ export default createSectionConfig((nm_mun) => [
                   title: 'Objetivos do eixo',
                   showMidia: true,
                   midiaType: 'image',
-                  imageSrc: mariTarget2,
+                  imageSrc: mariTarget,
                   midiaPosition: 'right',
                   type: 'paragraph-left',
                   paragraphText: 'Busca aumentar as áreas verdes nas cidades e reduzir a impermeabilização, para melhorar o ambiente urbano, reduzir desigualdades e orientar ações sustentáveis.'
@@ -507,13 +658,183 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   // ===============================================
+  // Seção: Eixo Agricultura
+  // ===============================================
+
+  createSection({
+    id: 'agriculture',
+    ref: 'agricultureSection',
+    title: `Eixo Agricultura Urbana em ${nm_mun}`,
+    subtitle: 'Pontos de agricultura urbana são zonas verdes funcionais na cidade que produzem alimentos e promovem um ciclo alimentar mais justo, inclusivo e sustentável',
+    showYearPicker: false,
+    panel: {
+      variant: '2-1',
+      gapColumnHeight: '56px',
+      items: [
+        {
+          component: 'CardStamps',
+          props: {
+            eixo: 'agriculture',
+            barPercentage: [0, 6],
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardInfo',
+                props: {
+                  showLeftIcon: true,
+                  leftIconClass: 'bi bi-check2-circle',
+                  title: 'Objetivos do eixo',
+                  showMidia: true,
+                  midiaType: 'image',
+                  imageSrc: mariTarget,
+                  midiaPosition: 'right',
+                  type: 'paragraph-left',
+                  paragraphText: 'Busca melhorar a qualidade de vida da população através da agricultura urbana, assim como garantir a comida na mesa para todos de forma sustentável'
+                }
+              },
+              {
+                component: 'CardInfo',
+                props: {
+                  showMidia: false,
+                  title: 'Metas do eixo',
+                  showLeftIcon: true,
+                  leftIconClass: 'bi bi-list-check',
+                  type: 'list',
+                  listItems: [
+                    'Garantia da alimentação adequada e saudável à população da cidade',
+                    'Aumentar as áreas verdes da cidade, reduzindo a temperatura local e permitindo um maior sequestro de carbono e maior permeabilização do solo',
+                    'Promover agricultura urbana e acesso justo à alimentação de qualidade para todos',
+                  ]
+                }
+              },
+            ]
+          }
+        },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'agriculture',
+    ref: 'agricultureSection',
+    showYearPicker: false,
+    panel: {
+      variant: '4-2',
+      gapColumnHeight: '56px',
+      items: [
+        {
+          component: 'CardAction',
+          props: {
+            number: 1,
+            actionTitle: 'Ação 1 - Priorizar iniciativas de agricultura urbana em áreas de maior vulnerabilidade alimentar',
+            ods: '1, 2, 3, 10, 12, 17',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Vulnerabilidade Alimentar',
+            overrideNumberValue: 'Em breve',
+            numberType: 'large',
+            overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 2,
+            actionTitle: 'Ação 2 - Promover a agricultura urbana vertical, em topo de edifícios e em quintais/espaços pequenos em áreas mais necessitadas',
+            ods: '1, 2, 3, 10, 12, 17',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Área total com potencial para iniciativas de agricultura urbana',
+            overrideNumberValue: 'Em breve',
+            numberType: 'large',
+            overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 3,
+            actionTitle: 'Ação 3 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
+            ods: '1, 2, 3, 10, 12, 17',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Deserto Alimentar',
+            overrideNumberValue: 'Em breve',
+            numberType: 'large',
+            overrideCardSubtitle: 'Distância média até alimentos saudáveis para cada 1000 habitantes'
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 4,
+            actionTitle: 'Ação 4 - Realizar oficinas e iniciativas de Educação Alimentar, Nutricional e Culinária em áreas com altas densidades de estabelecimentos de venda de alimentos ultraprocessados',
+            ods: '1, 2, 3, 10, 12, 17',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Pântano Alimentar',
+            overrideNumberValue: 'Em breve',
+            numberType: 'large',
+            overrideCardSubtitle: 'Distância média até alimentos ultraprocessados para cada 1000 habitantes'
+          }
+        },
+      ]
+    }
+  }),
+
+  createSection({
+    id: 'agriculture',
+    ref: 'agricultureSection',
+    showYearPicker: false,
+    boxPadding: '40px 0px 80px 0px',
+    boxGap: '0px',
+    panel: {
+      variant: '1-1',
+      gapColumnHeight: '0px',
+      items: [
+        {
+          component: 'CardPrimaryButton',
+          props: {
+            changeToCategory: 'agriculture',
+            changeToLayerId: 'urban_agriculture_distance',
+            buttonLabel: 'Navegar pelo eixo',
+            buttonIcon: 'bi-arrow-right',
+            buttonIconPosition: 'right',
+          }
+        }
+      ]
+    }
+  }),
+
+  // ===============================================
   // Seção: Eixo Hidrologia
   // ===============================================
 
   createSection({
     id: 'hidro',
     ref: 'hidroSection',
-    title: `Eixo Hidrologia em ${nm_mun}`,
+    title: 'Eixo Hidrologia em Diadema',
     subtitle: 'As inundações e alagamentos urbanos são agravados pela impermeabilização e falta de planejamento. O eixo busca soluções para reduzir riscos e promover segurança hídrica da cidade',
     showYearPicker: false,
     panel: {
@@ -753,176 +1074,6 @@ export default createSectionConfig((nm_mun) => [
           props: {
             changeToCategory: 'policies_hidro',
             changeToLayerId: 'flood_diadema_classes',
-            buttonLabel: 'Navegar pelo eixo',
-            buttonIcon: 'bi-arrow-right',
-            buttonIconPosition: 'right',
-          }
-        }
-      ]
-    }
-  }),
-
-  // ===============================================
-  // Seção: Eixo Agricultura
-  // ===============================================
-
-  createSection({
-    id: 'agriculture',
-    ref: 'agricultureSection',
-    title: `Eixo Agricultura Urbana em ${nm_mun}`,
-    subtitle: 'Pontos de agricultura urbana são zonas verdes funcionais na cidade que produzem alimentos e promovem um ciclo alimentar mais justo, inclusivo e sustentável',
-    showYearPicker: false,
-    panel: {
-      variant: '2-1',
-      gapColumnHeight: '56px',
-      items: [
-        {
-          component: 'CardStamps',
-          props: {
-            eixo: 'agriculture',
-            barPercentage: [0, 6],
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '1-2',
-            items: [
-              {
-                component: 'CardInfo',
-                props: {
-                  showLeftIcon: true,
-                  leftIconClass: 'bi bi-check2-circle',
-                  title: 'Objetivos do eixo',
-                  showMidia: true,
-                  midiaType: 'image',
-                  imageSrc: mariTarget2,
-                  midiaPosition: 'right',
-                  type: 'paragraph-left',
-                  paragraphText: 'Busca melhorar a qualidade de vida da população através da agricultura urbana, assim como garantir a comida na mesa para todos de forma sustentável'
-                }
-              },
-              {
-                component: 'CardInfo',
-                props: {
-                  showMidia: false,
-                  title: 'Metas do eixo',
-                  showLeftIcon: true,
-                  leftIconClass: 'bi bi-list-check',
-                  type: 'list',
-                  listItems: [
-                    'Garantia da alimentação adequada e saudável à população da cidade',
-                    'Aumentar as áreas verdes da cidade, reduzindo a temperatura local e permitindo um maior sequestro de carbono e maior permeabilização do solo',
-                    'Promover agricultura urbana e acesso justo à alimentação de qualidade para todos',
-                  ]
-                }
-              },
-            ]
-          }
-        },
-      ]
-    }
-  }),
-
-  createSection({
-    id: 'agriculture',
-    ref: 'agricultureSection',
-    showYearPicker: false,
-    panel: {
-      variant: '4-2',
-      gapColumnHeight: '56px',
-      items: [
-        {
-          component: 'CardAction',
-          props: {
-            number: 1,
-            actionTitle: 'Ação 1 - Priorizar iniciativas de agricultura urbana em áreas de maior vulnerabilidade alimentar',
-            ods: '1, 2, 3, 10, 12, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Vulnerabilidade Alimentar',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Considera X, Y e Z, seu valor ideal é 1.0.',
-          }
-        },
-        {
-          component: 'CardAction',
-          props: {
-            number: 2,
-            actionTitle: 'Ação 2 - Promover a agricultura urbana vertical, em topo de edifícios e em quintais/espaços pequenos em áreas mais necessitadas',
-            ods: '1, 2, 3, 10, 12, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Área total com potencial para iniciativas de agricultura urbana',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
-          }
-        },
-        {
-          component: 'CardAction',
-          props: {
-            number: 3,
-            actionTitle: 'Ação 3 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
-            ods: '1, 2, 3, 10, 12, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Deserto Alimentar',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Distância média até alimentos saudáveis para cada 1000 habitantes'
-          }
-        },
-        {
-          component: 'CardAction',
-          props: {
-            number: 4,
-            actionTitle: 'Ação 4 - Realizar oficinas e iniciativas de Educação Alimentar, Nutricional e Culinária em áreas com altas densidades de estabelecimentos de venda de alimentos ultraprocessados',
-            ods: '1, 2, 3, 10, 12, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Pântano Alimentar',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Distância média até alimentos ultraprocessados para cada 1000 habitantes'
-          }
-        },
-      ]
-    }
-  }),
-
-  createSection({
-    id: 'agriculture',
-    ref: 'agricultureSection',
-    showYearPicker: false,
-    boxPadding: '40px 0px 80px 0px',
-    boxGap: '0px',
-    panel: {
-      variant: '1-1',
-      gapColumnHeight: '0px',
-      items: [
-        {
-          component: 'CardPrimaryButton',
-          props: {
-            changeToCategory: 'agriculture',
-            changeToLayerId: 'urban_agriculture_distance',
             buttonLabel: 'Navegar pelo eixo',
             buttonIcon: 'bi-arrow-right',
             buttonIconPosition: 'right',
