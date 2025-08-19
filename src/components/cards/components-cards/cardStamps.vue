@@ -115,7 +115,7 @@ const stampTitle = computed(() => {
   case 'policies_vegetation':
     return 'Selo UrbVerde de Vegetação';
   case 'policies_climate':
-    return 'Selo UrbVerde de Emissões e Clima';
+    return 'Selo UrbVerde de Temperatura';
   default:
     return 'Selo UrbVerde';
   }

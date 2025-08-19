@@ -97,7 +97,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 2,
-            actionTitle: 'Ação 2 - Promover a produção primária de alimentos na cidade',
+            actionTitle: 'Ação 2 - Promover a agricultura urbana vertical, em topo de edifícios e em quintais/espaços pequenos em áreas mais necessitadas',
             ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
@@ -105,7 +105,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Área total com potencial para agricultura urbana',
+            overrideTitle: 'Área total com potencial para iniciativas de agricultura urbana',
             overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
@@ -159,7 +159,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 3,
-            actionTitle: 'Ação 3 - Promover a agricultura urbana vertical com base em densidade demográfica, renda e tipo de assentamento',
+            actionTitle: 'Ação 3 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
             ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
@@ -167,17 +167,17 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Área total com potencial para agricultura urbana vertical',
+            overrideTitle: 'Deserto Alimentar',
             overrideNumberValue: 'Em breve',
             numberType: 'large',
-            overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
+            overrideCardSubtitle: 'Distância média até alimentos saudáveis para cada 1000 habitantes'
           }
         },
         {
           component: 'CardAction',
           props: {
             number: 4,
-            actionTitle: 'Ação 4 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
+            actionTitle: 'Ação 4 - Realizar oficinas e iniciativas de Educação Alimentar, Nutricional e Culinária em áreas com altas densidades de estabelecimentos de venda de alimentos ultraprocessados',
             ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
@@ -185,9 +185,10 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Distância média até alimentos saudáveis por habitante',
+            overrideTitle: 'Pântano Alimentar',
             overrideNumberValue: 'Em breve',
-            numberType: 'large'
+            numberType: 'large',
+            overrideCardSubtitle: 'Distância média até alimentos ultraprocessados para cada 1000 habitantes'
           }
         },
       ]

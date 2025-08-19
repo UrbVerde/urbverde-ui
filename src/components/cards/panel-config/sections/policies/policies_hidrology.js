@@ -51,7 +51,7 @@ export default createSectionConfig((nm_mun) => [
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: `Ações e indicadores em ${nm_mun}`,
-    showYearPicker: false,
+    fixedYear: 2024,
     panel: {
       variant: '1-1',
       items: [
@@ -71,25 +71,43 @@ export default createSectionConfig((nm_mun) => [
     ref: 'indicadoresSection',
     showYearPicker: false,
     panel: {
-      variant: '3-2',
+      variant: '4-2',
       gapColumnHeight: '56px',
       items: [
         {
           component: 'CardAction',
           props: {
             number: 1,
-            actionTitle: 'Ação 1 - Aumentar a permeabilização do solo em áreas com baixa drenagem urbana',
+            actionTitle: 'Ação 1 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Solo que não deixa a água infiltrar, como asfalto e concreto',
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
+                  cardIndex: 1,
+                  numberType: 'large',
+                }
+              },
+              {
+                component: 'CardInfo',
+                props: {
+                  showMidia: false,
+                  title: 'Infraestruturas verdes para sua cidade',
+                  showRightIcon: true,
+                  rightIconClass: 'bi bi-cone-striped',
+                  type: 'paragraph-left',
+                  paragraphText: 'Jardins de chuva, valas de infiltração, biovaletas, telhados verdes e arborização urbana são exemplos de infraestruturas verdes'
+                }
+              }
+            ]
           }
         },
         {
@@ -97,7 +115,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 2,
-            actionTitle: 'Ação 2 - Ampliar a permeabilidade nas sub-bacias hidrográficas da cidade',
+            actionTitle: 'Ação 2 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
             ods: '6, 10, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -105,10 +123,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Porcentagem de solo impermeável (PSI) na sub-bacia',
-            overrideNumberValue: 'Em breve',
+            overrideTitle: 'Percentual da área urbana com risco de inundações',
+            overrideNumberValue: '37%',
             numberType: 'large',
-            overrideCardSubtitle: 'É a parte da sub-bacia coberta por solo que não deixa a água infiltrar',
           }
         },
         {
@@ -116,7 +133,40 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 3,
-            actionTitle: 'Ação 3 - Expandir áreas vegetadas nas margens de córregos (APPs)',
+            actionTitle: 'Ação 3 – Implantar sistemas de alerta precoce para reduzir os riscos de inundação por meio de sirenes, mensagens SMS, placas de sinalização, aplicativos de monitoramento e rádios comunitárias',
+            ods: '3, 6, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          type: 'panel',
+          props: {
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Percentual de pessoas morando em áreas críticas de inundação',
+                  overrideNumberValue: '36%',
+                  numberType: 'large',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Estimativa da quantidade de domicílios em áreas críticas de inundação',
+                  overrideNumberValue: '68.396 domicílios',
+                  numberType: 'small',
+                }
+              },
+            ]
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 4,
+            actionTitle: 'Ação 4 - Melhorar continuamente a rede de drenagem urbana e a captação das águas pluviais para reduzir a ocorrência e a intensidade de alagamentos',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -124,10 +174,10 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Porcentagem de áreas vegetadas em APPs',
-            overrideNumberValue: 'Em breve',
+            overrideTitle: 'Estimativa do percentual de bocas de lobo em áreas críticas de inundação',
+            overrideNumberValue: '71%',
             numberType: 'large',
-            overrideCardSubtitle: 'Indica quanto das Áreas de Preservação Permanente (APPs), como margens de rios e córregos, estão cobertas por vegetação',
+            overrideCardSubtitle: 'Boca de lobo é um escoadouro nas ruas para as águas',
           }
         },
       ]
@@ -137,7 +187,9 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
-    showYearPicker: false,
+    title: 'Ações para Áreas de Preservação Permanente (APPs)',
+    subtitle: 'APPs são áreas protegidas, como margens de rios e nascentes, que preservam a vegetação e a água',
+    fixedYear: 2024,
     panel: {
       variant: '1-1',
       items: [
@@ -149,7 +201,7 @@ export default createSectionConfig((nm_mun) => [
             imageSrc: mariHidro,
             midiaPosition: 'right',
             type: 'list',
-            title: 'Descubra os benefícios da hidrologia urbana',
+            title: 'Descubra os benefícios de proteger as APPs',
             listItems: [
               'Redução de alagamentos e enchentes, tornando a cidade mais segura em dias de chuva',
               'Melhoria da qualidade da água e preservação dos rios urbanos com mais vegetação nas margens',
@@ -175,58 +227,53 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardAction',
           props: {
-            number: 4,
-            actionTitle: 'Ação 4 - Ampliar vegetação nas APPs em cada sub-bacia municipal',
-            ods: '6, 10, 11, 13, 15',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Porcentagem de áreas vegetadas em APP por sub-bacia',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Mostra quanto das Áreas de Preservação Permanente (APPs) está coberto por vegetação nas sub-bacias da cidade',
-          }
-        },
-        {
-
-          component: 'CardAction',
-          props: {
             number: 5,
-            actionTitle: 'Ação 5 - Desenvolver projetos de renaturalização de rios urbanos',
+            actionTitle: 'Ação 5 - Implantar programas de conservação da vegetação nativa em APPs por meio de pagamento por serviços ambientais (PSA)',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
-
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Percentual de rios canalizados',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Parte dos rios que foi transformada em canais de concreto, reduzindo sua função natural e aumentando o risco de enchentes',
-          }
-        },
-        {
-
           component: 'CardAction',
           props: {
             number: 6,
-            actionTitle: 'Ação 6 - Implantar trechos-piloto de renaturalização de rios',
-            ods: '6, 10, 11, 13, 15',
+            actionTitle: 'Ação 6 - Criar parques lineares em Áreas de Preservação Permanente (APPs), que funcionem como zonas de inundação controlada. ',
+            ods: '3, 6, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 7,
+            actionTitle: 'Ação 7 - Recuperar a dinâmica natural dos rios urbanos, restaurando suas margens e leitos para ampliar a capacidade de infiltração, reduzir riscos de inundação e promover biodiversidade',
+            ods: '3, 6, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 8,
+            actionTitle: 'Ação 8 - Criar corredores ecológicos conectando fragmentos florestais localizados em APPs para reduzir riscos de inundação e promover biodiversidade',
+            ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Percentual de rios canalizados por sub-bacias',
-            overrideNumberValue: 'Em breve',
+            overrideTitle: 'Cobertura vegetal das Área de Preservação Permanente (APPs)',
+            overrideNumberValue: '18%',
             numberType: 'large',
-            overrideCardSubtitle: 'Mostra quanto dos rios está canalizado em cada sub-bacia da cidade',
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Índice de permeabilidade do solo das Área de Preservação Permanente (APPs)',
+            overrideNumberValue: '52%',
+            numberType: 'large',
           }
         },
       ]

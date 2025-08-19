@@ -10,6 +10,7 @@
     :targetCategory="targetCategory"
     :targetLayerId="targetLayerId"
     :targetLayerTitle="targetLayerTitle"
+    @cardVisible="onCardVisible"
   >
     <!-- Image at the top -->
     <template v-if="showImage">
@@ -133,6 +134,12 @@ const props = defineProps({
   dataTransform: {
     type: Function,
     default: (data) => data
+  },
+
+  // Lazy Loading
+  enableLazyLoading: {
+    type: Boolean,
+    default: true
   },
 
   // CardTitle Props
@@ -262,6 +269,7 @@ const props = defineProps({
 const isLoading = ref(false);
 const error = ref(null);
 const cardData = ref(null);
+const hasBeenVisible = ref(false);
 
 // Computed properties for card display
 const title = computed(() => props.overrideTitle || cardData.value?.title || '');
@@ -283,6 +291,10 @@ const isEmpty = computed(() => {
 // Fetch data from API
 const fetchData = async() => {
   if (!props.apiEndpoint || !props.cityCode) {
+    return;
+  }
+
+  if (props.enableLazyLoading && !hasBeenVisible.value) {
     return;
   }
 
@@ -319,11 +331,18 @@ const fetchData = async() => {
   }
 };
 
+const onCardVisible = () => {
+  hasBeenVisible.value = true;
+  fetchData();
+};
+
 // Watch for changes in props that should trigger a refetch
 watch(
   [() => props.cityCode, () => props.year, () => props.apiEndpoint],
   () => {
-    fetchData();
+    if (!props.enableLazyLoading || hasBeenVisible.value) {
+      fetchData();
+    }
   },
   { immediate: false }
 );
@@ -332,13 +351,18 @@ watch(
 watch(
   () => props.year,
   () => {
-    fetchData();
+    // Só refaz a busca se o card já foi visível ou se lazy loading está desabilitado
+    if (!props.enableLazyLoading || hasBeenVisible.value) {
+      fetchData();
+    }
   }
 );
 
 // Initial fetch
 onMounted(() => {
-  fetchData();
+  if (!props.enableLazyLoading) {
+    fetchData();
+  }
 });
 </script>
 
@@ -478,6 +502,7 @@ p {
 .button-wrapper {
     display: flex;
     width: 100%;
+    margin-left: 0px;
     margin-top: 0px !important;
 }
 

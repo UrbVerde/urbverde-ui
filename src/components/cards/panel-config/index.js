@@ -14,6 +14,7 @@ import risks_alimentar_insecurity from './sections/policies/risks_alimentar_inse
 import risks_flood from './sections/policies/risks_flood.js';
 import risks_arboviruses from './sections/policies/risks_arboviruses.js';
 import risks_idesh from './sections/policies/risks_idesh.js';
+import emissions from './sections/policies/emissions.js';
 
 // Category ID to section name
 export const categoryToLayerMap = {
@@ -26,6 +27,7 @@ export const categoryToLayerMap = {
   'policies_hidro': 'policies_hidrology',
   'agriculture': 'agriculture',
   'policies_climate': 'policies_climate',
+  'emissions': 'emissions',
 };
 
 // Inverse mapping to convert internal IDs to category IDs
@@ -39,6 +41,7 @@ export const layerToCategoryMap = {
   'policies_hidrology': 'policies_hidro',
   'agriculture': 'agriculture',
   'policies_climate': 'policies_climate',
+  'emissions': 'emissions',
 };
 
 // Configurações de seções para cada tipo de camada
@@ -53,6 +56,7 @@ export const sectionConfigs = {
   policies_hidrology,
   agriculture,
   policies_climate,
+  emissions,
 
   layers : {
     'heat_wave_risks': risks_heat_wave,
@@ -76,7 +80,7 @@ export const tabIdToLabelMap = {
   'vegetation': 'Vegetação',
   'hidro': 'Hidrologia',
   'agriculture': 'Agricultura Urbana',
-  'climate': 'Clima',
+  'climate': 'Temperatura',
 };
 
 // IDs de categorias ou camadas que não devem mostrar a aba "Mapa"

@@ -4,14 +4,9 @@
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const VEGETATION_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const EMISSIONS_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
 const PARKS_YEARS = [2021, 2024];
-const PARKS_YEARS_2024 = [2024];
 const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
-const CENSUS_YEARS = [2022];
-const RISKS_YEARS = [2024];
-const AGRICULTURE_YEARS_2022 = [2022];
-const AGRICULTURE_YEARS_2023 = [2023];
-const AGRICULTURE_YEARS_2025 = [2025];
 
 /**
  * A single file that holds all layer definitions.
@@ -35,7 +30,7 @@ export const LAYER_CONFIGS = {
   population: {
     type: 'vector',
     label: 'População',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -70,7 +65,7 @@ export const LAYER_CONFIGS = {
   density: {
     type: 'vector',
     label: 'Densidade demográfica',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -105,7 +100,7 @@ export const LAYER_CONFIGS = {
   literacy: {
     type: 'vector',
     label: 'Taxa de alfabetização (acima de 15 anos)',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -133,7 +128,7 @@ export const LAYER_CONFIGS = {
   children_percentage: {
     type: 'vector',
     label: 'Percentual de crianças (0 a 9 anos)',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -161,7 +156,7 @@ export const LAYER_CONFIGS = {
   elderly_percentage: {
     type: 'vector',
     label: 'Percentual de idosos (acima de 60 anos)',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -189,7 +184,7 @@ export const LAYER_CONFIGS = {
   woman_percentage: {
     type: 'vector',
     label: 'Percentual de mulheres',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -217,7 +212,7 @@ export const LAYER_CONFIGS = {
   boy_percentage: {
     type: 'vector',
     label: 'Percentual de homens',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -245,7 +240,7 @@ export const LAYER_CONFIGS = {
   percentual_brancas: {
     type: 'vector',
     label: 'Percentual de pessoas brancas',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -273,7 +268,7 @@ export const LAYER_CONFIGS = {
   percentual_pretas: {
     type: 'vector',
     label: 'Percentual de pessoas pretas',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -301,7 +296,7 @@ export const LAYER_CONFIGS = {
   percentual_pardos: {
     type: 'vector',
     label: 'Percentual de pessoas pardas',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -329,7 +324,7 @@ export const LAYER_CONFIGS = {
   percentual_amarelas: {
     type: 'vector',
     label: 'Percentual de pessoas amarelas',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -357,7 +352,7 @@ export const LAYER_CONFIGS = {
   percentual_indigenas: {
     type: 'vector',
     label: 'Percentual de pessoas indigenas',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -385,7 +380,7 @@ export const LAYER_CONFIGS = {
   average_income: {
     type: 'vector',
     label: 'Renda média do responsável da casa',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -419,7 +414,7 @@ export const LAYER_CONFIGS = {
   population_outside_SP: {
     type: 'vector',
     label: 'População',
-    allowedYears: CENSUS_YEARS,
+    allowedYears: [2022],
     source: (year, scale, municipioId) => ({
       type: 'vector',
       tiles: [
@@ -800,7 +795,7 @@ export const LAYER_CONFIGS = {
   avg_distance_to_squares_5000: {
     type: 'vector',
     label: 'Distância Média até as Praças',
-    allowedYears: PARKS_YEARS_2024,
+    allowedYears: [2024],
     source: (year, scale) => {
       const sourceLayer = scale === 'intraurbana'
         ? `public.geodata_pracas_por_setor_${year}`
@@ -899,9 +894,8 @@ export const LAYER_CONFIGS = {
   perc_served_population: {
     type: 'vector',
     label: 'População Atendida pelas Praças (%)',
-    allowedYears: PARKS_YEARS_2024,
+    allowedYears: [2024],
     source: (year, scale) => {
-      // pick the correct tile url for scale
       const sourceLayer =
         scale === 'intraurbana'
           ? `public.geodata_pracas_por_setor_${year}`
@@ -926,6 +920,38 @@ export const LAYER_CONFIGS = {
     popup: {
       label: 'População Atendida',
       unit: '%',
+      format: (v) => v.toFixed(0)
+    }
+  },
+
+  // ------- Áreas residuais -------
+
+  residual_areas: {
+    type: 'vector',
+    label: 'Áreas residuais',
+    allowedYears: [2024],
+    source: () => {
+      const sourceLayer = 'public.geodata_areas_residuais_2024';
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'aream2',
+    stops: [
+      [0, '#FF8DA1'],
+      [75, '#FF4650'],
+      [150, '#FF0000']
+    ],
+    unit: 'm²',
+
+    popup: {
+      label: 'Áreas residuais ',
+      unit: 'm²',
       format: (v) => v.toFixed(0)
     }
   },
@@ -1185,11 +1211,44 @@ export const LAYER_CONFIGS = {
   // Exclusivo para o painel políticas públicas
   // ===============================
 
+  // ------- Emissões por município -------
+  emissions_municipality: {
+    type: 'vector',
+    label: 'Emissões totais do município',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+          scale === 'intraurbana'
+            ? `public.geodata_emissoes_municipios_${year}`
+            : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e',
+    stops: [
+      [0, '#2b83ba'],
+      [500000, '#ffffbf'],
+      [1000000, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões por município',
+      unit: '',
+    }
+  },
+
   // ------- Riscos a ondas de calor -------
   heat_wave_risks: {
     type: 'vector',
     label: 'Riscos a ondas de calor',
-    allowedYears: RISKS_YEARS,
+    allowedYears: [2024],
     source: (year) => {
       const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
 
@@ -1219,7 +1278,7 @@ export const LAYER_CONFIGS = {
   arbovirus_risks: {
     type: 'vector',
     label: 'Risco climático a arboviroses',
-    allowedYears: RISKS_YEARS,
+    allowedYears: [2024],
     source: (year) => {
       const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
 
@@ -1249,7 +1308,7 @@ export const LAYER_CONFIGS = {
   nutrition_vulnerability: {
     type: 'vector',
     label: 'Vulnerabilidade alimentar e nutricional',
-    allowedYears: RISKS_YEARS,
+    allowedYears: [2024],
     source: (year) => {
       const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
 
@@ -1279,7 +1338,7 @@ export const LAYER_CONFIGS = {
   flood_risks: {
     type: 'vector',
     label: 'Indicador de risco climático a inundações',
-    allowedYears: RISKS_YEARS,
+    allowedYears: [2024],
     source: (year) => {
       const sourceLayer = `public.geodata_riscos_climaticos_por_setor_${year}`;
 
@@ -1309,7 +1368,7 @@ export const LAYER_CONFIGS = {
   desh_risks: {
     type: 'vector',
     label: 'Desenvolvimento social do habitat para favelas',
-    allowedYears: RISKS_YEARS,
+    allowedYears: [2024],
     source: (year) => {
       const sourceLayer = `public.geodata_idesh_por_setor_fcu_${year}`;
 
@@ -1339,7 +1398,7 @@ export const LAYER_CONFIGS = {
   urban_agriculture_priorit_1: {
     type: 'vector',
     label: 'Áreas prioritárias para implantação de agricultura urbana (nivel 1)',
-    allowedYears: AGRICULTURE_YEARS_2022,
+    allowedYears: [2022],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1368,7 +1427,7 @@ export const LAYER_CONFIGS = {
   urban_agriculture_priorit_2: {
     type: 'vector',
     label: 'Áreas prioritárias para implantação de agricultura urbana (Nível 2)',
-    allowedYears: AGRICULTURE_YEARS_2022,
+    allowedYears: [2022],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1397,7 +1456,7 @@ export const LAYER_CONFIGS = {
   desert_food_areas: {
     type: 'vector',
     label: 'Desertos alimentares',
-    allowedYears: AGRICULTURE_YEARS_2025,
+    allowedYears: [2025],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1426,7 +1485,7 @@ export const LAYER_CONFIGS = {
   wetland_food_areas: {
     type: 'vector',
     label: 'Pântanos alimentares',
-    allowedYears: AGRICULTURE_YEARS_2025,
+    allowedYears: [2025],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1455,7 +1514,7 @@ export const LAYER_CONFIGS = {
   urban_agriculture_distance: {
     type: 'vector',
     label: 'Distancia média até pontos de agricultura urbana',
-    allowedYears: AGRICULTURE_YEARS_2023,
+    allowedYears: [2023],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1490,7 +1549,7 @@ export const LAYER_CONFIGS = {
   popular_restaurants_distance: {
     type: 'vector',
     label: 'Distância média até restaurantes populares',
-    allowedYears: AGRICULTURE_YEARS_2023,
+    allowedYears: [2023],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1525,7 +1584,7 @@ export const LAYER_CONFIGS = {
   markets_distance: {
     type: 'vector',
     label: 'Distância média até feiras livres',
-    allowedYears: AGRICULTURE_YEARS_2023,
+    allowedYears: [2023],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1560,7 +1619,7 @@ export const LAYER_CONFIGS = {
   natura_density: {
     type: 'vector',
     label: 'Densidade de estabelecimentos comerciais de produtos in natura',
-    allowedYears: AGRICULTURE_YEARS_2025,
+    allowedYears: [2025],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 
@@ -1590,7 +1649,7 @@ export const LAYER_CONFIGS = {
   ultra_density: {
     type: 'vector',
     label: 'Densidade de Estabelecimentos comerciais de produtos ultraprocessados',
-    allowedYears: AGRICULTURE_YEARS_2025,
+    allowedYears: [2025],
     source: (year) => {
       const sourceLayer = `public.geodata_ausan_por_setor_${year}`;
 

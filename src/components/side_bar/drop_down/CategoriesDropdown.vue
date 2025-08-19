@@ -22,16 +22,30 @@
             </div>
             <span class="category-name body-small-regular">{{ item.category.name }}</span>
 
+            <!-- Exclusive category tag -->
+            <div class="exclusive-category-tag me-2 tooltip-success"
+                 v-if="item.category.isExclusive"
+                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }"
+                 data-bs-toggle="tooltip"
+                 data-bs-title="Exclusivo do município"
+                 data-bs-placement="right">
+              <i class="bi bi-stars" id="imgIconExclusive"></i>
+            </div>
+
             <!-- Badge: aparece se há uma active layer, mas a categoria está fechada -->
             <div class="badge-right-menu"
                  v-if="getActiveLayerInCategory(item.category) && !openCategoryIds.includes(item.category.id)"
-                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
-              <span class="textBadge body-caption-medium">1</span>
+                 :class="{ 'policies-mode': locationStore.viewMode === 'policies' }"
+                 data-bs-toggle="tooltip"
+                 data-bs-title="Possui uma camada ativa"
+                 data-bs-placement="right">
+              <span class="textBadge bi bi-dot"></span>
             </div>
 
             <i :class="openCategoryIds.includes(item.category.id)
               ? 'bi bi-chevron-up'
-              : 'bi bi-chevron-down'" />
+              : 'bi bi-chevron-down'" >
+            </i>
           </div>
 
           <!-- Layers dentro da categoria -->
@@ -45,10 +59,13 @@
                   {{ layer.display_name || layer.title || layer.name }}
                 </span>
 
-                <div class="new-layer-tag"
-                     v-if="layer.isNew"
-                     :class="{ 'policies-mode': locationStore.viewMode === 'policies' }">
-                  <i class="bi bi-stars" id="imgIconNew"></i>
+                <div class="exclusive-layer-tag"
+                     v-if="layer.isExclusive"
+                     :class="{ 'policies-mode': locationStore.viewMode === 'policies' }"
+                     data-bs-toggle="tooltip"
+                     data-bs-title="Exclusivo do município"
+                     data-bs-placement="right">
+                  <i class="bi bi-stars" id="imgIconExclusive"></i>
                 </div>
               </li>
             </ul>
@@ -60,9 +77,10 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted, computed } from 'vue';
+import { ref, watchEffect, onMounted, computed, nextTick } from 'vue';
 import IconComponent from '@/components/icons/IconComponent.vue';
 import { useLocationStore } from '@/stores/locationStore';
+import { handleReactiveTooltipUpdate } from '@/utils/bootstrapTooltips';
 
 const locationStore = useLocationStore();
 const categories = ref([]);
@@ -107,7 +125,7 @@ const mixedCategoriesAndTitles = computed(() => {
   return result;
 });
 
-watchEffect(() => {
+watchEffect(async() => {
   if (locationStore.categories.length > 0) {
     console.log('CategoriesDropdown: Atualizando a partir da store');
     categories.value = locationStore.categories;
@@ -130,6 +148,9 @@ watchEffect(() => {
         });
       }
     }
+
+    // Reinicializa tooltips automaticamente após mudanças reativas
+    await handleReactiveTooltipUpdate(nextTick);
   }
 });
 
@@ -167,6 +188,9 @@ async function toggleCategory(categoryId) {
     openCategoryIds.value = [categoryId];
     await updateCategoryHeight(categoryId);
   }
+
+  // Reinicializa tooltips após abrir/fechar categoria
+  await handleReactiveTooltipUpdate(nextTick);
 }
 
 function markActiveLayer() {
@@ -230,11 +254,15 @@ onMounted(() => {
   .header-title {
     color: map-get($theme, secondary);
     position: sticky;
-    padding: 24px 0 8px 0;
+    padding: 24px 4px 4px 4px;
     top: 0;
     z-index: 2;
     background-color: map-get($gray, white);
     margin: 0;
+  }
+
+  .header-title:first-of-type {
+    padding: 16px 4px 4px 4px;
   }
 
   .categories-list {
@@ -281,25 +309,25 @@ onMounted(() => {
   .badge-right-menu {
     display: flex;
     align-items: center;
-    padding: 2px 8px;
-    gap: 10px;
     border-radius: 4px;
-    color: map-get($theme, primary);
-    background: map-get($primary-fade, 100);
-    width: 22px;
-    height: 22px;
+    color: map-get($green, 500);
+    background: transparent;
+    width: 20px;
+    height: 20px;
     justify-content: center;
+
+    .textBadge {
+      display: flex;
+      font-size: 40px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
     &.policies-mode {
-      background: map-get($yellow, 200);
+      color: map-get($yellow, 600);
+      background: transparent;
     }
-  }
-
-  .textBadge {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
   }
 
   .category-icon {
@@ -332,7 +360,7 @@ onMounted(() => {
     flex-direction: column;
     border-radius: 8px;
     background: map-get($gray, 100);
-    gap: 8px;
+    gap: 6px;
   }
 
   .layer-item {
@@ -367,21 +395,22 @@ onMounted(() => {
     flex: 1;
   }
 
-  .new-layer-tag {
+  .exclusive-layer-tag, .exclusive-category-tag {
     display: flex;
+    font-size: 14px;
     align-items: center;
-    padding: 2px 8px;
-    gap: 10px;
-    border-radius: 4px;
-
-    background: map-get($primary-fade, 100);
-    width: 22px;
-    height: 22px;
+    color: map-get($theme, primary);
     justify-content: center;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: map-get($primary-fade, 100);
 
     &.policies-mode {
-      color: map-get($theme, primary);
-      background: map-get($yellow, 200);
+      color: map-get($yellow, 700);
+      background: map-get($yellow, 100);
     }
   }
+
 </style>

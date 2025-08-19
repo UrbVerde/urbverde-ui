@@ -52,11 +52,7 @@
                target="_blank"
                rel="noopener noreferrer">
               <i class="bi bi-upload" tag="imgIcon"></i>
-              <span class="txtBottom body-small-regular">Enviar dados</span>
-            </a>
-            <a href="https://forms.gle/JJtUMg5j9jaAPc5x5" class="link-button" target="_blank">
-              <i class="bi bi-megaphone" tag="imgIcon"></i>
-              <span class="txtBottom body-small-regular">Informar um erro</span>
+              <span class="txtBottom body-small-regular">Colaborar com dados</span>
             </a>
           </div>
         </Transition>
@@ -232,8 +228,8 @@ async function toggleSidebar() {
 
 .top-area {
   display: flex;
-  height: 88px;
-  padding: 16px;
+  height: 80px;
+  padding: 0 16px 0 16px;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
@@ -301,7 +297,7 @@ async function toggleSidebar() {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-  padding: 16px;
+  padding: 8px 16px;
   box-shadow: -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset;
   border-top: 1px solid rgba(0, 0, 0, 0.13);
   background: map-get($gray, white);

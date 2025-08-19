@@ -129,6 +129,7 @@ const ABC_PAULISTA_CODES = [
   '3547809', // Santo André
   '3548708', // São Bernardo do Campo
   '3548807', // São Caetano do Sul
+  '3550308', // São Paulo
   '3513801', // Diadema
   '3529401', // Mauá
   '3543303', // Ribeirão Pires
@@ -826,6 +827,7 @@ async function generateDefaultSuggestions() {
       { text: 'Santo André - SP', type: 'city' },
       { text: 'São Bernardo do Campo - SP', type: 'city' },
       { text: 'São Caetano do Sul - SP', type: 'city' },
+      { text: 'São Paulo - SP', type: 'city' },
       { text: 'Diadema - SP', type: 'city' },
       { text: 'Mauá - SP', type: 'city' },
       { text: 'Ribeirão Pires - SP', type: 'city' },
@@ -841,6 +843,7 @@ async function generateDefaultSuggestions() {
           'Santo André': '3547809',
           'São Bernardo do Campo': '3548708',
           'São Caetano do Sul': '3548807',
+          'São Paulo': '3550308',
           'Diadema': '3513801',
           'Mauá': '3529401',
           'Ribeirão Pires': '3543303',

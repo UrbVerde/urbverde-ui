@@ -36,6 +36,7 @@ export default createSectionConfig((nm_mun, uf) => [
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 0,
                   showModalButton: true,
+                  numberType: 'large',
                   modalTitle: 'Moradores próximos a praças',
                   overrideCardSubtitle: 'Do total de pessoas moradores da cidade',
                   modalBodyText: 'Representa o percentual de moradores que vivem em um raio de 400 metros de praças e parques, considerando a recomendação da OMS para acesso a áreas verdes.',
@@ -46,6 +47,7 @@ export default createSectionConfig((nm_mun, uf) => [
                 props: {
                   apiEndpoint: 'https://api.urbverde.com.br/v1/cards/square/parks',
                   cardIndex: 1,
+                  numberType: 'large',
                   showSeeOnMap: true,
                   seeOnMapLayerID: 'avg_distance_to_squares',
                   showModalButton: true,
@@ -62,7 +64,7 @@ export default createSectionConfig((nm_mun, uf) => [
   createSection({
     id: 'stats',
     ref: 'parksSquaresSection',
-    title: 'Quem vive longe de parques e praças?',
+    title: 'Moradores vivendo perto de praças e parques',
     fixedYear: 2024,
     panel: {
       variant: '2-1',
