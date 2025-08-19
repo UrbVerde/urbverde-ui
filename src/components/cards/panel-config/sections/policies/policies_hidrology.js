@@ -124,7 +124,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Percentual da área urbana com risco de inundações',
-            overrideNumberValue: '36%',
+            overrideNumberValue: '37%',
             numberType: 'large',
           }
         },
@@ -147,7 +147,7 @@ export default createSectionConfig((nm_mun) => [
                 component: 'CardData',
                 props: {
                   overrideTitle: 'Percentual de pessoas morando em áreas críticas de inundação',
-                  overrideNumberValue: '64%',
+                  overrideNumberValue: '36%',
                   numberType: 'large',
                 }
               },
@@ -155,7 +155,7 @@ export default createSectionConfig((nm_mun) => [
                 component: 'CardData',
                 props: {
                   overrideTitle: 'Estimativa da quantidade de domicílios em áreas críticas de inundação',
-                  overrideNumberValue: '68.000 domicílios',
+                  overrideNumberValue: '68.396 domicílios',
                   numberType: 'small',
                 }
               },
@@ -264,7 +264,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Cobertura vegetal das Área de Preservação Permanente (APPs)',
-            overrideNumberValue: '30%',
+            overrideNumberValue: '18%',
             numberType: 'large',
           }
         },
@@ -272,7 +272,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardData',
           props: {
             overrideTitle: 'Índice de permeabilidade do solo das Área de Preservação Permanente (APPs)',
-            overrideNumberValue: '64%',
+            overrideNumberValue: '52%',
             numberType: 'large',
           }
         },
