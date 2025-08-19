@@ -78,9 +78,6 @@ watch(() => route.query.viewMode, (newViewMode) => {
   if (newViewMode) {
     selectedMode.value = newViewMode;
     locationStore.setViewMode(newViewMode);
-    setTimeout(() => {
-      locationStore.fetchCategories(); // Atualiza as categorias com delay
-    }, 500); // Delay de 500ms
   }
 }, { immediate: true });
 
@@ -138,7 +135,6 @@ const toggleDropdown = () => {
 const selectMode = (modeId) => {
   selectedMode.value = modeId;
   locationStore.setViewMode(modeId);
-  locationStore.fetchCategories();
   isOpen.value = false;
 };
 </script>

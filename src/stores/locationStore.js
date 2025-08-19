@@ -155,8 +155,7 @@ export const useLocationStore = defineStore('locationStore', {
         this.categories = data.categories;
         this.categoryTitles = data.categoryTitles || []; // Adicionar títulos das categorias
 
-        // Se não temos categoria/camada definidas OU se mudamos de viewMode,
-        // sempre resetar para a primeira categoria/camada disponível
+        // Se não temos categoria/camada definidas, sempre resetar para a primeira categoria/camada disponível
         if (!this.category || !this.layer) {
           console.log('[LocationStore] No category/layer defined, setting defaults');
           this.setDefaultCategoryAndLayer();
@@ -168,6 +167,13 @@ export const useLocationStore = defineStore('locationStore', {
           if (!layerExists) {
             console.log('[LocationStore] Current layer not found in new categories, setting defaults');
             this.setDefaultCategoryAndLayer();
+          } else {
+            // Verificar se a categoria atual ainda existe nas novas categorias
+            const categoryExists = this.categories.some(cat => cat.id === this.category);
+            if (!categoryExists) {
+              console.log('[LocationStore] Current category not found in new categories, setting defaults');
+              this.setDefaultCategoryAndLayer();
+            }
           }
         }
       } catch (error) {
