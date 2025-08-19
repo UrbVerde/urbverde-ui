@@ -507,158 +507,6 @@ export default createSectionConfig((nm_mun) => [
   }),
 
   // ===============================================
-  // Seção: Eixo Emissões e Clima
-  // ===============================================
-
-  createSection({
-    id: 'climate',
-    ref: 'climateSection',
-    title: `Eixo Emissões e Clima em ${nm_mun}`,
-    subtitle: 'Identificação de áreas urbanas com potencial para reduzir as temperaturas de superfície e promover o sequestro de carbono',
-    showYearPicker: false,
-    panel: {
-      variant: '2-1',
-      gapColumnHeight: '56px',
-      items: [
-        {
-          component: 'CardStamps',
-          props: {
-            eixo: 'policies_climate',
-            barPercentage: [0, 4],
-          }
-        },
-        {
-          type: 'panel',
-          props: {
-            variant: '1-2',
-            items: [
-              {
-                component: 'CardInfo',
-                props: {
-                  showLeftIcon: true,
-                  leftIconClass: 'bi bi-check2-circle',
-                  title: 'Objetivos do eixo',
-                  showMidia: true,
-                  midiaType: 'image',
-                  imageSrc: mariTarget,
-                  midiaPosition: 'right',
-                  type: 'paragraph-left',
-                  paragraphText: 'Busca melhorar o conforto urbano, reduzir os efeitos das ilhas de calor e minimizar as emissões de gases de efeito estufa (GEE), promovendo um ambiente mais saudável e sustentável para a população'
-                }
-              },
-              {
-                component: 'CardInfo',
-                props: {
-                  showMidia: false,
-                  title: 'Metas do eixo',
-                  showLeftIcon: true,
-                  leftIconClass: 'bi bi-list-check',
-                  type: 'list',
-                  listItems: [
-                    'Identificar áreas com altas emissões e calor excessivo para orientar a criação de novas zonas verdes',
-                    'Transformar zonas vulneráveis em áreas mais frescas e sustentáveis',
-                    'Reduzir as ilhas de calor urbanas (ICUs) e aumentar o sequestro de carbono do município',
-                  ]
-                }
-              },
-            ]
-          }
-        },
-      ]
-    }
-  }),
-
-  createSection({
-    id: 'climate',
-    ref: 'climateSection',
-    showYearPicker: false,
-    panel: {
-      variant: '3-2',
-      gapColumnHeight: '56px',
-      items: [
-        {
-          component: 'CardAction',
-          props: {
-            number: 1,
-            actionTitle: 'Ação 1 - Expandir a vegetação urbana para reduzir as ilhas de calor urbana',
-            ods: '3, 10, 11, 13, 15, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Potencial da cobertura vegetal da cidade para redução da temperatura de superfície',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Quanto mais próximo de 1.0, mais a cobertura vegetal da cidade contribui para redução da temperatura'
-          }
-        },
-        {
-          component: 'CardAction',
-          props: {
-            number: 2,
-            actionTitle: 'Ação 2 - Expandir a vegetação urbana para aumentar o sequestro de carbono do município',
-            ods: '3, 10, 11, 13, 15, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Sequestro de carbono realizado pela vegetação da cidade no ano',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Sequestro de carbono é a capacidade das árvores e áreas verdes de absorverem toneladas de CO2 da atmosfera, ajudando a combater a crise climática'
-          }
-        },
-        {
-          component: 'CardAction',
-          props: {
-            number: 3,
-            actionTitle: 'Ação 3 - Mapear áreas públicas ociosas para novos projetos de arborização urbana',
-            ods: '3, 10, 11, 13, 15, 17',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Área pública residual total com potencial para ampliação da cobertura vegetal',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Essa área pode ser usada para plantio de árvores'
-          }
-        },
-      ]
-    }
-  }),
-
-  createSection({
-    id: 'climate',
-    ref: 'climateSection',
-    showYearPicker: false,
-    boxPadding: '40px 0px 80px 0px',
-    boxGap: '0px',
-    panel: {
-      variant: '1-1',
-      gapColumnHeight: '0px',
-      items: [
-        {
-          component: 'CardPrimaryButton',
-          props: {
-            changeToCategory: 'policies_climate',
-            changeToLayerId: 'vegetation_temp_reduction',
-            buttonLabel: 'Navegar pelo eixo',
-            buttonIcon: 'bi-arrow-right',
-            buttonIconPosition: 'right',
-          }
-        }
-      ]
-    }
-  }),
-
-  // ===============================================
   // Seção: Eixo Hidrologia
   // ===============================================
 
@@ -732,18 +580,36 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 1,
-            actionTitle: 'Ação 1 - Aumentar a permeabilização do solo em áreas com baixa drenagem urbana',
+            actionTitle: 'Ação 1 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Porcentagem de solo impermeável (PSI)',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Solo que não deixa a água infiltrar, como asfalto e concreto',
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
+                  cardIndex: 1,
+                  numberType: 'large',
+                }
+              },
+              {
+                component: 'CardInfo',
+                props: {
+                  showMidia: false,
+                  title: 'Infraestruturas verdes para sua cidade',
+                  showRightIcon: true,
+                  rightIconClass: 'bi bi-cone-striped',
+                  type: 'paragraph-left',
+                  paragraphText: 'Jardins de chuva, valas de infiltração, biovaletas, telhados verdes e arborização urbana são exemplos de infraestruturas verdes'
+                }
+              }
+            ]
           }
         },
         {
@@ -751,7 +617,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 2,
-            actionTitle: 'Ação 2 - Ampliar a permeabilidade nas sub-bacias hidrográficas da cidade',
+            actionTitle: 'Ação 2 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
             ods: '6, 10, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -759,10 +625,9 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Porcentagem de solo impermeável (PSI) na sub-bacia',
-            overrideNumberValue: 'Em breve',
+            overrideTitle: 'Percentual da área urbana com risco de inundações',
+            overrideNumberValue: '37%',
             numberType: 'large',
-            overrideCardSubtitle: 'É a parte da sub-bacia coberta por solo que não deixa a água infiltrar',
           }
         },
         {
@@ -770,75 +635,103 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 3,
-            actionTitle: 'Ação 3 - Expandir áreas vegetadas nas margens de córregos (APPs)',
+            actionTitle: 'Ação 3 – Implantar sistemas de alerta precoce para reduzir os riscos de inundação por meio de sirenes, mensagens SMS, placas de sinalização, aplicativos de monitoramento e rádios comunitárias',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
-          component: 'CardData',
+          type: 'panel',
           props: {
-            overrideTitle: 'Porcentagem de áreas vegetadas em APPs',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Indica quanto das Áreas de Preservação Permanente (APPs), como margens de rios e córregos, estão cobertas por vegetação',
+            variant: '1-2',
+            items: [
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Percentual de pessoas morando em áreas críticas de inundação',
+                  overrideNumberValue: '36%',
+                  numberType: 'large',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  overrideTitle: 'Estimativa da quantidade de domicílios em áreas críticas de inundação',
+                  overrideNumberValue: '68.396 domicílios',
+                  numberType: 'small',
+                }
+              },
+            ]
           }
         },
         {
           component: 'CardAction',
           props: {
             number: 4,
-            actionTitle: 'Ação 4 - Ampliar vegetação nas APPs em cada sub-bacia municipal',
-            ods: '6, 10, 11, 13, 15',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Porcentagem de áreas vegetadas em APP por sub-bacia',
-            overrideNumberValue: 'Em breve',
-            numberType: 'large',
-            overrideCardSubtitle: 'Mostra quanto das Áreas de Preservação Permanente (APPs) está coberto por vegetação nas sub-bacias da cidade',
-          }
-        },
-        {
-
-          component: 'CardAction',
-          props: {
-            number: 5,
-            actionTitle: 'Ação 5 - Desenvolver projetos de renaturalização de rios urbanos',
+            actionTitle: 'Ação 4 - Melhorar continuamente a rede de drenagem urbana e a captação das águas pluviais para reduzir a ocorrência e a intensidade de alagamentos',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
-
           component: 'CardData',
           props: {
-            overrideTitle: 'Percentual de rios canalizados',
-            overrideNumberValue: 'Em breve',
+            overrideTitle: 'Estimativa do percentual de bocas de lobo em áreas críticas de inundação',
+            overrideNumberValue: '71%',
             numberType: 'large',
-            overrideCardSubtitle: 'Parte dos rios que foi transformada em canais de concreto, reduzindo sua função natural e aumentando o risco de enchentes',
+            overrideCardSubtitle: 'Boca de lobo é um escoadouro nas ruas para as águas',
           }
         },
         {
-
+          component: 'CardAction',
+          props: {
+            number: 5,
+            actionTitle: 'Ação 5 - Implantar programas de conservação da vegetação nativa em APPs por meio de pagamento por serviços ambientais (PSA)',
+            ods: '3, 6, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
           component: 'CardAction',
           props: {
             number: 6,
-            actionTitle: 'Ação 6 - Implantar trechos-piloto de renaturalização de rios',
-            ods: '6, 10, 11, 13, 15',
+            actionTitle: 'Ação 6 - Criar parques lineares em Áreas de Preservação Permanente (APPs), que funcionem como zonas de inundação controlada. ',
+            ods: '3, 6, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 7,
+            actionTitle: 'Ação 7 - Recuperar a dinâmica natural dos rios urbanos, restaurando suas margens e leitos para ampliar a capacidade de infiltração, reduzir riscos de inundação e promover biodiversidade',
+            ods: '3, 6, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 8,
+            actionTitle: 'Ação 8 - Criar corredores ecológicos conectando fragmentos florestais localizados em APPs para reduzir riscos de inundação e promover biodiversidade',
+            ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Percentual de rios canalizados por sub-bacias',
-            overrideNumberValue: 'Em breve',
+            overrideTitle: 'Cobertura vegetal das Área de Preservação Permanente (APPs)',
+            overrideNumberValue: '18%',
             numberType: 'large',
-            overrideCardSubtitle: 'Mostra quanto dos rios está canalizado em cada sub-bacia da cidade',
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Índice de permeabilidade do solo das Área de Preservação Permanente (APPs)',
+            overrideNumberValue: '52%',
+            numberType: 'large',
           }
         },
       ]
@@ -961,7 +854,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 2,
-            actionTitle: 'Ação 2 - Promover a produção primária de alimentos na cidade',
+            actionTitle: 'Ação 2 - Promover a agricultura urbana vertical, em topo de edifícios e em quintais/espaços pequenos em áreas mais necessitadas',
             ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
@@ -969,7 +862,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Área total com potencial para agricultura urbana',
+            overrideTitle: 'Área total com potencial para iniciativas de agricultura urbana',
             overrideNumberValue: 'Em breve',
             numberType: 'large',
             overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana',
@@ -979,7 +872,7 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 3,
-            actionTitle: 'Ação 3 - Promover a agricultura urbana vertical com base em densidade demográfica, renda e tipo de assentamento',
+            actionTitle: 'Ação 3 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
             ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
@@ -987,17 +880,17 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Área total com potencial para agricultura urbana vertical',
+            overrideTitle: 'Deserto Alimentar',
             overrideNumberValue: 'Em breve',
             numberType: 'large',
-            overrideCardSubtitle: 'Essa área pode ser usada para cultivo de agricultura urbana vertical'
+            overrideCardSubtitle: 'Distância média até alimentos saudáveis para cada 1000 habitantes'
           }
         },
         {
           component: 'CardAction',
           props: {
             number: 4,
-            actionTitle: 'Ação 4 - Reduzir a distância média até pontos de venda de alimentos saudáveis, promovendo o acesso alimentar adequado',
+            actionTitle: 'Ação 4 - Realizar oficinas e iniciativas de Educação Alimentar, Nutricional e Culinária em áreas com altas densidades de estabelecimentos de venda de alimentos ultraprocessados',
             ods: '1, 2, 3, 10, 12, 17',
             badgeStatus: 'nao-informado'
           }
@@ -1005,9 +898,10 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Distância média até alimentos saudáveis por habitante',
+            overrideTitle: 'Pântano Alimentar',
             overrideNumberValue: 'Em breve',
-            numberType: 'large'
+            numberType: 'large',
+            overrideCardSubtitle: 'Distância média até alimentos ultraprocessados para cada 1000 habitantes'
           }
         },
       ]
