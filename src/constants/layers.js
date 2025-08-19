@@ -4,6 +4,7 @@
 const VECTOR_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const RASTER_YEARS = [2016, 2017, 2018, 2019, 2020, 2021];
 const VEGETATION_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const EMISSIONS_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
 const PARKS_YEARS = [2021, 2024];
 const PARKS_POLIGON_YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 
@@ -895,7 +896,6 @@ export const LAYER_CONFIGS = {
     label: 'População Atendida pelas Praças (%)',
     allowedYears: [2024],
     source: (year, scale) => {
-      // pick the correct tile url for scale
       const sourceLayer =
         scale === 'intraurbana'
           ? `public.geodata_pracas_por_setor_${year}`
@@ -1210,6 +1210,39 @@ export const LAYER_CONFIGS = {
   // ===============================
   // Exclusivo para o painel políticas públicas
   // ===============================
+
+  // ------- Emissões por município -------
+  emissions_municipality: {
+    type: 'vector',
+    label: 'Emissões totais do município',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+          scale === 'intraurbana'
+            ? `public.geodata_emissoes_municipios_${year}`
+            : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e',
+    stops: [
+      [0, '#2b83ba'],
+      [500000, '#ffffbf'],
+      [1000000, '#d7191c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões por município',
+      unit: '',
+    }
+  },
 
   // ------- Riscos a ondas de calor -------
   heat_wave_risks: {

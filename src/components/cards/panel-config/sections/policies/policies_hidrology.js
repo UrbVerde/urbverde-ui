@@ -187,7 +187,9 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
-    showYearPicker: false,
+    title: 'Ações para Áreas de Preservação Permanente (APPs)',
+    subtitle: 'APPs são áreas protegidas, como margens de rios e nascentes, que preservam a vegetação e a água',
+    fixedYear: 2024,
     panel: {
       variant: '1-1',
       items: [
@@ -199,7 +201,7 @@ export default createSectionConfig((nm_mun) => [
             imageSrc: mariHidro,
             midiaPosition: 'right',
             type: 'list',
-            title: 'Descubra os benefícios da hidrologia urbana',
+            title: 'Descubra os benefícios de proteger as APPs',
             listItems: [
               'Redução de alagamentos e enchentes, tornando a cidade mais segura em dias de chuva',
               'Melhoria da qualidade da água e preservação dos rios urbanos com mais vegetação nas margens',
@@ -217,9 +219,7 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
-    title: 'Ações para Áreas de Preservação Permanente (APPs)',
-    subtitle: 'APPs são áreas protegidas, como margens de rios e nascentes, que preservam a vegetação e a água',
-    fixedYear: 2024,
+    showYearPicker: false,
     panel: {
       variant: '3-2',
       gapColumnHeight: '56px',
