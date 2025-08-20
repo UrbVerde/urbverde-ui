@@ -1078,7 +1078,7 @@ export const LAYER_CONFIGS = {
   // ------- PSI APPS para Diadema -------
   diadema_psi_apps: {
     type: 'raster',
-    label: 'Permeabilização do solo nas APPs',
+    label: 'Impermeabilização do solo nas APPs',
     allowedYears: [2024],
     source: {
       type: 'raster',
@@ -1091,14 +1091,14 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [0,  '#FF0004'], // vermelho forte - início
-      [20, '#FF4803'], // laranja
-      [40, '#FFFA00'], // amarelo vibrante - meio (mediana)
-      [60, '#8BC526'], // verde claro
-      [80, '#00891D']  // verde escuro - fim
+      [0,  '#00891D'],
+      [20, '#8BC526'],
+      [40, '#FFFA00'],
+      [60, '#FF4803'],
+      [80, '#FF0004']
     ],
     popup: {
-      label: 'Permeabilização do solo nas APPs',
+      label: 'Impermeabilização do solo nas APPs',
       unit: '%',
     },
     unit: '%',
