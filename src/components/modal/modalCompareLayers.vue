@@ -211,8 +211,8 @@ const createAndAddLayer = (layerId) => {
 
 const toggleLayer = (layer) => {
   if (isLayerActive(`${layer.id}`)) {
-    // Remove layer
-    layersStore.removeLayer(`${layer.id}`);
+    // Remove layer com subcamadas
+    layersStore.removeLayerWithSubLayers(`${layer.id}`);
   } else {
     // Cria e adiciona a camada no mapa
     createAndAddLayer(layer.id);
@@ -224,7 +224,7 @@ const handleDragEnd = (evt) => {
 };
 
 const removeLayer = (layerId) => {
-  layersStore.removeLayer(layerId);
+  layersStore.removeLayerWithSubLayers(layerId);
 };
 
 const handleClose = () => {
