@@ -33,7 +33,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 0,
                   numberType: 'large',
                   showModalButton: true,
@@ -47,7 +47,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 3,
                   numberType: 'large',
                   showModalButton: true,
@@ -68,7 +68,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 1,
                   numberType: 'large',
                   showModalButton: true,
@@ -79,7 +79,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 2,
                   numberType: 'large',
                   showModalButton: true,
@@ -117,7 +117,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/heat',
                   cardIndex: 0,
                   showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
@@ -128,7 +128,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/heat',
                   cardIndex: 1,
                   showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
@@ -139,7 +139,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/heat',
                   cardIndex: 2,
                   showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
@@ -150,7 +150,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/heat',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/heat',
                   cardIndex: 3,
                   showModalButton: true,
                   overrideCardSubtitle: 'Do total de pessoas vivendo nas regiões mais quentes',
@@ -203,7 +203,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/weather/ranking',
             cardIndex: 0,
             showModalButton: true,
             modalTitle: 'Municipios do Estado',
@@ -213,7 +213,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/weather/ranking',
             cardIndex: 1,
             showModalButton: true,
             modalTitle: 'Municipios da Mesorregião',
@@ -223,7 +223,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/weather/ranking',
             cardIndex: 2,
             showModalButton: true,
             modalTitle: 'Municipios da Microrregião',
@@ -249,7 +249,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 0,
                   showButtonPrimary: true,
                   changeToCategory: 'vegetation',
@@ -259,7 +259,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 1,
                   showButtonPrimary: true,
                   changeToCategory: 'parks',
@@ -269,7 +269,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/info',
                   cardIndex: 2,
                   showButtonPrimary: true,
                   changeToCategory: 'vegetation',

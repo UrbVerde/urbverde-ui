@@ -34,7 +34,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/cover',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/cover',
                   cardIndex: 1,
                   showModalButton: true,
                   showCardSubtitle: true,
@@ -49,7 +49,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/cover',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/cover',
                   cardIndex: 2,
                   showModalButton: true,
                   numberType: 'large',
@@ -114,7 +114,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/ranking',
             cardIndex: 0,
             showModalButton: true,
             modalTitle: 'Municipios do Estado',
@@ -124,7 +124,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/ranking',
             cardIndex: 1,
             showModalButton: true,
             modalTitle: 'Municipios da Mesorregião',
@@ -134,7 +134,7 @@ export default createSectionConfig((nm_mun, uf) => [
         {
           component: 'CardRanking',
           props: {
-            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/ranking',
+            apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/ranking',
             cardIndex: 2,
             showModalButton: true,
             modalTitle: 'Municipios da Microrregião',
@@ -160,7 +160,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/info',
                   cardIndex: 0,
                   showButtonPrimary: true,
                   changeToCategory: 'climate',
@@ -170,7 +170,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/info',
                   cardIndex: 1,
                   showButtonPrimary: true,
                   changeToCategory: 'parks',
@@ -180,7 +180,7 @@ export default createSectionConfig((nm_mun, uf) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/vegetal/info',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/vegetal/info',
                   cardIndex: 2,
                   showButtonPrimary: true,
                   changeToCategory: 'parks',
