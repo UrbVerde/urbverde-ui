@@ -1017,6 +1017,7 @@ export const LAYER_CONFIGS = {
       format: (v) => v.toFixed(0)
     }
   },
+
   // ------- Perigo de inundação Diadema -------
   flood_diadema_classes: {
     type: 'raster',
@@ -1025,7 +1026,7 @@ export const LAYER_CONFIGS = {
     source: {
       type: 'raster',
       tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_6classes_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_6classes_diadema_2025_r1&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
       ],
       tileSize: 256
     },
@@ -1038,8 +1039,7 @@ export const LAYER_CONFIGS = {
       [3, '#A4C400'],
       [4, '#FFFF00'],
       [5, '#FFBB00'],
-      [6, '#FF7700'],
-      [7, '#FF2600']
+      [6, '#FF2600']
     ],
     popup: {
       label: 'Perigo de inundação em Diadema (classes)',
@@ -1048,15 +1048,15 @@ export const LAYER_CONFIGS = {
     unit: '',
   },
 
-  // ------- Perigo de inundação Estado (classes) -------
-  flood_state_classes: {
+  // ------- PCV APPS para Diadema -------
+  diadema_pcv_apps: {
     type: 'raster',
-    label: 'Perigo de inundação (classes)',
-    allowedYears: [2025],
+    label: 'Cobertura vegetal nas APPs',
+    allowedYears: [2024],
     source: {
       type: 'raster',
       tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_7classes_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:hidrologia_pcv_app_diadema_2024&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
       ],
       tileSize: 256
     },
@@ -1064,55 +1064,26 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [1, '#006100'],
-      [2, '#559100'],
-      [3, '#A4C400'],
-      [4, '#FFFF00'],
-      [5, '#FFBB00'],
-      [6, '#FF7700'],
-      [7, '#FF2600']
+      [0, '#FFFFCC'],
+      [40, '#78C679'],
+      [80, '#058B1C'],
     ],
     popup: {
-      label: 'Perigo de inundação (classes)',
-      unit: '',
-    },
-    unit: '',
-  },
-  // ------- Perigo de inundação Diadema (porcentagem) -------
-  flood_diadema_percentage: {
-    type: 'raster',
-    label: 'Perigo de inundação em Diadema (porcentagem)',
-    allowedYears: [2025],
-    source: {
-      type: 'raster',
-      tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
-      ],
-      tileSize: 256
-    },
-    paint: {
-      'raster-opacity': 0.7
-    },
-    stops: [
-      [30, '#006100'],
-      [65, '#FFFF00'],
-      [100, '#FF2600']
-    ],
-    popup: {
-      label: 'Perigo de inundação em Diadema (%)',
-      unit: '',
+      label: 'Cobertura vegetal nas APPs',
+      unit: '%',
     },
     unit: '%',
   },
-  // ------- Perigo de inundação Estado (porcentagem) -------
-  flood_state_percentage: {
+
+  // ------- PSI APPS para Diadema -------
+  diadema_psi_apps: {
     type: 'raster',
-    label: 'Perigo de inundação (porcentagem)',
-    allowedYears: [2025],
+    label: 'Permeabilização do solo nas APPs',
+    allowedYears: [2024],
     source: {
       type: 'raster',
       tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:psi_app_diadema_2024&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
       ],
       tileSize: 256
     },
@@ -1120,16 +1091,19 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [30, '#006100'],
-      [65, '#FFFF00'],
-      [100, '#FF2600']
+      [0,  '#FF0004'], // vermelho forte - início
+      [20, '#FF4803'], // laranja
+      [40, '#FFFA00'], // amarelo vibrante - meio (mediana)
+      [60, '#8BC526'], // verde claro
+      [80, '#00891D']  // verde escuro - fim
     ],
     popup: {
-      label: 'Perigo de inundação (%)',
-      unit: '',
+      label: 'Permeabilização do solo nas APPs',
+      unit: '%',
     },
     unit: '%',
   },
+
   // ------- Massas de água do Estado -------
   water_bodies_state: {
     type: 'raster',
