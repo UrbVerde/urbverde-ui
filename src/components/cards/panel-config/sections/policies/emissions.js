@@ -1,3 +1,4 @@
+// urbverde-ui/src/components/cards/panel-config/sections/policies/emissions.js
 // urbverde-ui/src/components/cards/panel-config/sections/policies/risks_heat_wave.js
 import { createSectionConfig, createSection } from '@/components/cards/panel-config/helpers/helperCreateSection';
 import mariSearch from '@/assets/images/cards/policies/mari-search-2.svg';
