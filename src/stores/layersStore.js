@@ -210,11 +210,21 @@ export const useLayersStore = defineStore('layersStore', {
 
       // Atualiza a ordem das camadas no mapa
       if (this.mapRef) {
-        this.activeLayers.forEach(layer => {
-          if (this.mapRef.getLayer(layer.id)) {
-            this.mapRef.moveLayer(layer.id);
-          }
-        });
+        // Primeiro, move a camada principal para a nova posição
+        if (this.mapRef.getLayer(layerId)) {
+          this.mapRef.moveLayer(layerId);
+        }
+
+        // A reordenação das subcamadas será tratada pelo MapLayerController
+        // que é chamado após este método
+
+        // Logs de debug comentados para manter o código limpo
+        // console.log(`[LayersStore] Reordering sublayers for layer ${layerId}`);
+        // console.log(`[LayersStore] Sublayers to reorder:`, layer.subLayers.map(sl => sl.id));
+        // console.log(`[LayersStore] All layers in map:`, allLayers);
+        // console.log(`[LayersStore] Main layer index: ${mainLayerIndex}, Parks index: ${parksIndex}`);
+        // console.log(`[LayersStore] Final beforeId for sublayers: ${beforeId}`);
+        // console.log(`[LayersStore] Final layer order after reordering:`, finalLayers);
       }
     },
 

@@ -344,6 +344,25 @@ export function reorderLayerSetup(map, activeLayers) {
 
       // Mover a camada
       map.moveLayer(layerId, beforeId);
+
+      // Se a camada tem subcamadas, reordená-las também
+      if (layer.subLayers && layer.subLayers.length > 0) {
+        // console.log(`[MapLayerController] Reordenando subcamadas para ${layerId}`);
+
+        // Reordenar as subcamadas na ordem correta: outline -> fill
+        const outlineSubLayer = layer.subLayers[1]; // outline
+        const fillSubLayer = layer.subLayers[0];    // fill
+
+        if (outlineSubLayer && map.getLayer(outlineSubLayer.id)) {
+          map.moveLayer(outlineSubLayer.id, beforeId);
+          // console.log(`[MapLayerController] Moved outline sublayer ${outlineSubLayer.id} with beforeId: ${beforeId}`);
+        }
+
+        if (fillSubLayer && map.getLayer(fillSubLayer.id)) {
+          map.moveLayer(fillSubLayer.id, outlineSubLayer.id);
+          // console.log(`[MapLayerController] Moved fill sublayer ${fillSubLayer.id} with beforeId: ${outlineSubLayer.id}`);
+        }
+      }
     });
 
     console.log('[MapLayerController] ===== FIM DA REORDENAÇÃO GERAL =====\n');

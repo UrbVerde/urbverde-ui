@@ -185,6 +185,127 @@
               </div>
             </div>
 
+            <!-- Aba: Camadas no Mapa -->
+            <div v-if="activeTab === 'mapLayers'" class="tab-panel">
+              <div class="debug-section">
+                <h4>Camadas no Mapa ({{ mapLayers.length }})</h4>
+                <div class="debug-grid">
+                  <div class="debug-item">
+                    <strong>Mapa Conectado:</strong>
+                    <span :class="{ 'status-ok': layersStore.mapRef, 'status-error': !layersStore.mapRef }">
+                      {{ layersStore.mapRef ? 'Sim' : 'Não' }}
+                    </span>
+                  </div>
+                  <div class="debug-item">
+                    <strong>Total de Camadas:</strong>
+                    <span>{{ mapLayers.length }}</span>
+                  </div>
+                  <div class="debug-item">
+                    <strong>Última Atualização:</strong>
+                    <span>{{ lastMapUpdate }}</span>
+                  </div>
+                  <div class="debug-item">
+                    <button @click="refreshMapLayers" class="refresh-btn" title="Atualizar camadas do mapa">
+                      <i class="bi bi-arrow-clockwise"></i>
+                      Atualizar
+                    </button>
+                  </div>
+                  <div class="debug-item">
+                    <button @click="expandAllLayers" class="expand-all-btn" title="Expandir todas as camadas">
+                      <i class="bi bi-chevron-down"></i>
+                      Expandir Todas
+                    </button>
+                  </div>
+                  <div class="debug-item">
+                    <button @click="collapseAllLayers" class="collapse-all-btn" title="Colapsar todas as camadas">
+                      <i class="bi bi-chevron-up"></i>
+                      Colapsar Todas
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="!layersStore.mapRef" class="no-map">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  Mapa não está conectado
+                </div>
+
+                <div v-else-if="mapLayers.length === 0" class="no-layers">
+                  <i class="bi bi-layers"></i>
+                  Nenhuma camada encontrada no mapa
+                </div>
+
+                <div v-else class="map-layers-list">
+                  <div
+                    v-for="(layer, index) in mapLayers"
+                    :key="layer.id"
+                    class="map-layer-item"
+                    :class="{ 'is-sublayer': isSubLayer(layer.id), 'expanded': expandedLayers.has(layer.id) }"
+                  >
+                    <div class="map-layer-header" @click="toggleLayerExpansion(layer.id)">
+                      <div class="map-layer-info">
+                        <span class="map-layer-index">{{ index + 1 }}</span>
+                        <span class="map-layer-id">{{ layer.id }}</span>
+                        <span class="map-layer-type">{{ layer.type }}</span>
+                      </div>
+                      <div class="map-layer-badges">
+                        <span v-if="isSubLayer(layer.id)" class="sublayer-badge" title="Subcamada">
+                          <i class="bi bi-diagram-2"></i>
+                        </span>
+                        <span v-if="isActiveLayer(layer.id)" class="active-badge" title="Camada Ativa">
+                          <i class="bi bi-check-circle"></i>
+                        </span>
+                        <button class="expand-btn" :title="expandedLayers.has(layer.id) ? 'Minimizar' : 'Expandir'">
+                          <i :class="expandedLayers.has(layer.id) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div v-if="expandedLayers.has(layer.id)" class="map-layer-details">
+                      <div class="map-layer-property">
+                        <strong>ID: </strong> {{ layer.id }}
+                      </div>
+                      <div class="map-layer-property">
+                        <strong>Tipo: </strong>
+                        <span class="layer-type-badge">{{ layer.type }}</span>
+                      </div>
+                      <div class="map-layer-property">
+                        <strong>Source: </strong>
+                        <span :class="{ 'status-ok': layer.source, 'status-warning': !layer.source }">
+                          {{ layer.source || 'Nenhum' }}
+                        </span>
+                      </div>
+                      <div v-if="layer['source-layer']" class="map-layer-property">
+                        <strong>Source Layer: </strong> {{ layer['source-layer'] }}
+                      </div>
+                      <div class="map-layer-property">
+                        <strong>Visível: </strong>
+                        <span :class="{ 'status-ok': layer.layout?.visibility !== 'none', 'status-warning': layer.layout?.visibility === 'none' }">
+                          {{ layer.layout?.visibility || 'visible' }}
+                        </span>
+                      </div>
+                      <div v-if="layer.paint" class="map-layer-property paint-details">
+                        <strong>Paint Properties: </strong>
+                        <div class="paint-properties">
+                          <div v-for="(value, key) in layer.paint" :key="key" class="paint-property">
+                            <span class="paint-key">{{ key }}:</span>
+                            <span class="paint-value">{{ formatPaintValue(value) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-if="layer.layout" class="map-layer-property layout-details">
+                        <strong>Layout Properties: </strong>
+                        <div class="layout-properties">
+                          <div v-for="(value, key) in layer.layout" :key="key" class="layout-property">
+                            <span class="layout-key">{{ key }}:</span>
+                            <span class="layout-value">{{ formatLayoutValue(value) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Aba: Getters -->
             <div v-if="activeTab === 'getters'" class="tab-panel">
               <div class="debug-section">
@@ -238,7 +359,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import modalBootstrap from './modalBootstrap.vue';
 import { useLayersStore } from '@/stores/layersStore';
 import { useLocationStore } from '@/stores/locationStore';
@@ -249,6 +370,65 @@ const locationStore = useLocationStore();
 
 // Estado da aba ativa com memória
 const activeTab = ref('general');
+
+// Estado para controlar camadas expandidas
+const expandedLayers = ref(new Set());
+
+// Computed para obter as camadas do mapa
+const mapLayers = computed(() => {
+  if (!layersStore.mapRef) {return [];}
+
+  try {
+    const style = layersStore.mapRef.getStyle();
+
+    return style?.layers || [];
+  } catch (error) {
+    console.error('[DebugModal] Erro ao obter camadas do mapa:', error);
+
+    return [];
+  }
+});
+
+// Computed para última atualização
+const lastMapUpdate = computed(() => new Date().toLocaleTimeString('pt-BR'));
+
+// Função para verificar se é subcamada
+const isSubLayer = (layerId) => layerId.includes('_outline') || layerId.includes('_fill');
+
+// Função para verificar se é camada ativa
+const isActiveLayer = (layerId) => layersStore.activeLayers.some(layer => layer.id === layerId);
+
+// Função para formatar valores de paint
+const formatPaintValue = (value) => {
+  if (typeof value === 'string') {
+    return value;
+  } else if (typeof value === 'number') {
+    return value.toString();
+  } else if (Array.isArray(value)) {
+    return `[${value.map(v => typeof v === 'string' ? `"${v}"` : v).join(', ')}]`;
+  } else if (typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+
+  return String(value);
+};
+
+// Função para formatar valores de layout
+const formatLayoutValue = (value) => {
+  if (typeof value === 'string') {
+    return value;
+  } else if (typeof value === 'number') {
+    return value.toString();
+  } else if (typeof value === 'boolean') {
+    return value ? 'true' : 'false';
+  } else if (Array.isArray(value)) {
+    return `[${value.join(', ')}]`;
+  } else if (typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+
+  return String(value);
+};
 
 // Configuração das abas
 const tabs = [
@@ -269,6 +449,12 @@ const tabs = [
     label: 'Camadas',
     icon: 'bi bi-layers',
     title: 'Camadas ativas no mapa'
+  },
+  {
+    id: 'mapLayers',
+    label: 'Camadas no Mapa',
+    icon: 'bi bi-map',
+    title: 'Camadas reais no mapa'
   },
   {
     id: 'getters',
@@ -311,6 +497,37 @@ function clearLayers() {
 function refreshData() {
   // Força reatividade
   layersStore.$patch({});
+}
+
+function refreshMapLayers() {
+  // Força atualização das camadas do mapa
+  if (layersStore.mapRef) {
+    try {
+      // Força reatividade do computed mapLayers
+      layersStore.$patch({});
+      console.log('[DebugModal] Camadas do mapa atualizadas');
+    } catch (error) {
+      console.error('[DebugModal] Erro ao atualizar camadas do mapa:', error);
+    }
+  }
+}
+
+function toggleLayerExpansion(layerId) {
+  if (expandedLayers.value.has(layerId)) {
+    expandedLayers.value.delete(layerId);
+  } else {
+    expandedLayers.value.add(layerId);
+  }
+}
+
+function expandAllLayers() {
+  mapLayers.value.forEach(layer => {
+    expandedLayers.value.add(layer.id);
+  });
+}
+
+function collapseAllLayers() {
+  expandedLayers.value.clear();
 }
 
 function exportData() {
@@ -707,6 +924,263 @@ defineExpose({
     i {
       font-size: 18px;
     }
+  }
+}
+
+// Estilos para a aba de camadas no mapa
+.no-map {
+  text-align: center;
+  padding: 24px;
+  color: #ef4444;
+  font-style: italic;
+
+  i {
+    font-size: 24px;
+    margin-bottom: 8px;
+    display: block;
+  }
+}
+
+.map-layers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.map-layer-item {
+  background-color: white;
+  border: 1px solid map-get($gray, 200);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &.is-sublayer {
+    border-left: 4px solid map-get($theme, primary);
+    background-color: map-get($gray, 50);
+  }
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.map-layer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: map-get($gray, 100);
+  border-bottom: 1px solid map-get($gray, 200);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: map-get($gray, 200);
+  }
+
+  .map-layer-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .map-layer-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .map-layer-index {
+    background-color: map-get($theme, secondary);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .map-layer-id {
+    font-weight: 600;
+    color: map-get($theme, secondary);
+  }
+
+  .map-layer-type {
+    background-color: map-get($gray, 300);
+    color: map-get($gray, 700);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .sublayer-badge {
+    color: map-get($theme, primary);
+    font-size: 16px;
+  }
+
+  .active-badge {
+    color: #10b981;
+    font-size: 16px;
+  }
+
+  .expand-btn {
+    background: none;
+    border: none;
+    color: map-get($gray, 600);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: map-get($gray, 300);
+      color: map-get($theme, primary);
+    }
+
+    i {
+      font-size: 16px;
+    }
+  }
+}
+
+.map-layer-details {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    transform: translateY(0);
+  }
+}
+
+.map-layer-property {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 4px 0;
+
+  strong {
+    color: map-get($theme, secondary);
+    font-size: 14px;
+  }
+}
+
+.layer-type-badge {
+  background-color: map-get($gray, 200);
+  color: map-get($gray, 700);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.paint-details,
+.layout-details {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: map-get($gray, 50);
+  border-radius: 4px;
+  border-left: 3px solid map-get($theme, primary);
+}
+
+.paint-properties,
+.layout-properties {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.paint-property,
+.layout-property {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 4px;
+  background-color: white;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.paint-key,
+.layout-key {
+  font-weight: 600;
+  color: map-get($theme, secondary);
+}
+
+.paint-value,
+.layout-value {
+  color: map-get($gray, 700);
+  font-family: monospace;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.refresh-btn,
+.expand-all-btn,
+.collapse-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 14px;
+  }
+}
+
+.refresh-btn {
+  background-color: map-get($theme, primary);
+  color: white;
+
+  &:hover {
+    background-color: darken(map-get($theme, primary), 10%);
+  }
+}
+
+.expand-all-btn {
+  background-color: #10b981;
+  color: white;
+
+  &:hover {
+    background-color: #059669;
+  }
+}
+
+.collapse-all-btn {
+  background-color: #f59e0b;
+  color: white;
+
+  &:hover {
+    background-color: #d97706;
   }
 }
 </style>
