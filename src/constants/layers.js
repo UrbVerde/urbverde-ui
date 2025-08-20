@@ -1214,7 +1214,7 @@ export const LAYER_CONFIGS = {
   // ------- Emissões por município -------
   emissions_municipality: {
     type: 'vector',
-    label: 'Emissões totais do município',
+    label: 'Emissões do município',
     allowedYears: EMISSIONS_YEARS,
     source: (year, scale) => {
       const sourceLayer =
@@ -1232,14 +1232,179 @@ export const LAYER_CONFIGS = {
     },
     property: 'co2e',
     stops: [
-      [0, '#2b83ba'],
-      [500000, '#ffffbf'],
-      [1000000, '#d7191c']
+      [0, '#cfd8dc'],
+      [500000, '#7e57c2'],
+      [1000000, '#4a148c']
     ],
     unit: '',
 
     popup: {
-      label: 'Emissões por município',
+      label: 'Emissões do município',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões por habitante -------
+  emissions_municipality_hab: {
+    type: 'vector',
+    label: 'Emissões do município por habitante',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'ieh',
+    stops: [
+      [500, '#cfd8dc'],
+      [1000, '#7e57c2'],
+      [1500, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões do município por habitante',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas da agropecuária -------
+  emissions_municipality_1: {
+    type: 'vector',
+    label: 'Emissões originadas da agropecuária',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_1',
+    stops: [
+      [0, '#cfd8dc'],
+      [500, '#7e57c2'],
+      [1000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas da agropecuária',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas de energia -------
+  emissions_municipality_2: {
+    type: 'vector',
+    label: 'Emissões originadas de energia',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_2',
+    stops: [
+      [0, '#cfd8dc'],
+      [500000, '#7e57c2'],
+      [1000000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas de energia',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas da mudanças de uso da terra e floresta -------
+  emissions_municipality_3: {
+    type: 'vector',
+    label: 'Emissões originadas da mudanças de uso da terra e floresta',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_3',
+    stops: [
+      [0, '#cfd8dc'],
+      [7500, '#7e57c2'],
+      [15000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas da mudanças de uso da terra e floresta',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas de resíduos -------
+  emissions_municipality_5: {
+    type: 'vector',
+    label: 'Emissões originadas de resíduos',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_5',
+    stops: [
+      [0, '#cfd8dc'],
+      [500000, '#7e57c2'],
+      [1000000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas de resíduos',
       unit: '',
     }
   },
