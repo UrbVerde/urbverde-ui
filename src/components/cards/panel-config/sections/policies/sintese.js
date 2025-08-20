@@ -900,6 +900,23 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardAction',
           props: {
+            number: 2,
+            actionTitle: 'Ação 2 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
+            ods: '6, 10, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Percentual da área urbana com risco de inundações',
+            overrideNumberValue: '37%',
+            numberType: 'large',
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
             number: 1,
             actionTitle: 'Ação 1 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
             ods: '3, 6, 11, 13, 15',
@@ -931,24 +948,6 @@ export default createSectionConfig((nm_mun) => [
                 }
               }
             ]
-          }
-        },
-        {
-
-          component: 'CardAction',
-          props: {
-            number: 2,
-            actionTitle: 'Ação 2 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
-            ods: '6, 10, 11, 13, 15',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Percentual da área urbana com risco de inundações',
-            overrideNumberValue: '37%',
-            numberType: 'large',
           }
         },
         {

@@ -9,7 +9,7 @@ export default createSectionConfig((nm_mun) => [
     id: 'metas',
     ref: 'metasSection',
     title: `Eixo Hidrologia em ${nm_mun}`,
-    subtitle: 'As inundações e alagamentos urbanos são agravados pela impermeabilização e falta de planejamento. O eixo busca soluções para reduzir riscos e promover segurança hídrica da cidade',
+    subtitle: 'A hidrologia é a ciência que trata da água na terra, sua ocorrência, circulação e distribuição, suas propriedades físicas e químicas e sua relação com o meio ambiente, incluindo sua relação com a vida',
     showYearPicker: false,
     panel: {
       variant: '1-2',
@@ -37,9 +37,11 @@ export default createSectionConfig((nm_mun) => [
             leftIconClass: 'bi bi-list-check',
             type: 'list',
             listItems: [
-              'Reduzir o número de mortes e de pessoas afetadas por desastres hidrometeorológicos',
-              'Reduzir as perdas econômicas diretas associadas a desastres',
-              'Garantir especial atenção à proteção de pessoas de baixa renda e em situação de vulnerabilidade'
+              'Reduzir danos por inundações por meio do mapeamento preventivo de áreas críticas',
+              'Garantir segurança e previsibilidade das ações da Defesa Civil com base em dados confiáveis',
+              'Melhorar a qualidade ambiental urbana por meio da proteção hídrica e da ampliação da vegetação',
+              'Fortalecer a justiça socioambiental ao priorizar territórios mais vulneráveis',
+              'Apoiar políticas públicas voltadas a cidades mais resilientes e sustentáveis'
             ]
           }
         }
@@ -78,7 +80,24 @@ export default createSectionConfig((nm_mun) => [
           component: 'CardAction',
           props: {
             number: 1,
-            actionTitle: 'Ação 1 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
+            actionTitle: 'Ação 1 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
+            ods: '6, 10, 11, 13, 15',
+            badgeStatus: 'nao-informado'
+          }
+        },
+        {
+          component: 'CardData',
+          props: {
+            overrideTitle: 'Percentual da área urbana com risco de inundações',
+            overrideNumberValue: '37%',
+            numberType: 'large',
+          }
+        },
+        {
+          component: 'CardAction',
+          props: {
+            number: 2,
+            actionTitle: 'Ação 2 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -108,24 +127,6 @@ export default createSectionConfig((nm_mun) => [
                 }
               }
             ]
-          }
-        },
-        {
-
-          component: 'CardAction',
-          props: {
-            number: 2,
-            actionTitle: 'Ação 2 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
-            ods: '6, 10, 11, 13, 15',
-            badgeStatus: 'nao-informado'
-          }
-        },
-        {
-          component: 'CardData',
-          props: {
-            overrideTitle: 'Percentual da área urbana com risco de inundações',
-            overrideNumberValue: '37%',
-            numberType: 'large',
           }
         },
         {
@@ -188,7 +189,7 @@ export default createSectionConfig((nm_mun) => [
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: 'Ações para Áreas de Preservação Permanente (APPs)',
-    subtitle: 'APPs são áreas protegidas, como margens de rios e nascentes, que preservam a vegetação e a água',
+    subtitle: 'Conforme definição da Lei n. 12.651/2012, Área de Preservação Permanente é uma área protegida, coberta ou não por vegetação nativa, com a função ambiental de preservar os recursos hídricos, a paisagem, a estabilidade geológica e a biodiversidade, facilitar o fluxo gênico de fauna e flora, proteger o solo e assegurar o bem-estar das populações humanas',
     fixedYear: 2024,
     panel: {
       variant: '1-1',

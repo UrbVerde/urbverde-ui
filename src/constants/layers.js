@@ -1017,6 +1017,7 @@ export const LAYER_CONFIGS = {
       format: (v) => v.toFixed(0)
     }
   },
+
   // ------- Perigo de inundação Diadema -------
   flood_diadema_classes: {
     type: 'raster',
@@ -1025,7 +1026,7 @@ export const LAYER_CONFIGS = {
     source: {
       type: 'raster',
       tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_6classes_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_6classes_diadema_2025_r1&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
       ],
       tileSize: 256
     },
@@ -1038,8 +1039,7 @@ export const LAYER_CONFIGS = {
       [3, '#A4C400'],
       [4, '#FFFF00'],
       [5, '#FFBB00'],
-      [6, '#FF7700'],
-      [7, '#FF2600']
+      [6, '#FF2600']
     ],
     popup: {
       label: 'Perigo de inundação em Diadema (classes)',
@@ -1048,15 +1048,15 @@ export const LAYER_CONFIGS = {
     unit: '',
   },
 
-  // ------- Perigo de inundação Estado (classes) -------
-  flood_state_classes: {
+  // ------- PCV APPS para Diadema -------
+  diadema_pcv_apps: {
     type: 'raster',
-    label: 'Perigo de inundação (classes)',
-    allowedYears: [2025],
+    label: 'Cobertura vegetal nas APPs',
+    allowedYears: [2024],
     source: {
       type: 'raster',
       tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_7classes_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:hidrologia_pcv_app_diadema_2024&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
       ],
       tileSize: 256
     },
@@ -1064,55 +1064,26 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [1, '#006100'],
-      [2, '#559100'],
-      [3, '#A4C400'],
-      [4, '#FFFF00'],
-      [5, '#FFBB00'],
-      [6, '#FF7700'],
-      [7, '#FF2600']
+      [0, '#FFFFCC'],
+      [40, '#78C679'],
+      [80, '#058B1C'],
     ],
     popup: {
-      label: 'Perigo de inundação (classes)',
-      unit: '',
-    },
-    unit: '',
-  },
-  // ------- Perigo de inundação Diadema (porcentagem) -------
-  flood_diadema_percentage: {
-    type: 'raster',
-    label: 'Perigo de inundação em Diadema (porcentagem)',
-    allowedYears: [2025],
-    source: {
-      type: 'raster',
-      tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_diadema_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
-      ],
-      tileSize: 256
-    },
-    paint: {
-      'raster-opacity': 0.7
-    },
-    stops: [
-      [30, '#006100'],
-      [65, '#FFFF00'],
-      [100, '#FF2600']
-    ],
-    popup: {
-      label: 'Perigo de inundação em Diadema (%)',
-      unit: '',
+      label: 'Cobertura vegetal nas APPs',
+      unit: '%',
     },
     unit: '%',
   },
-  // ------- Perigo de inundação Estado (porcentagem) -------
-  flood_state_percentage: {
+
+  // ------- PSI APPS para Diadema -------
+  diadema_psi_apps: {
     type: 'raster',
-    label: 'Perigo de inundação (porcentagem)',
-    allowedYears: [2025],
+    label: 'Impermeabilização do solo nas APPs',
+    allowedYears: [2024],
     source: {
       type: 'raster',
       tiles: [
-        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:mapa_hidrologia_perigo_inundacao_porcentagem_estadosp_2025&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
+        'https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetMap&layers=urbverde:psi_app_diadema_2024&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=image/png&transparent=true'
       ],
       tileSize: 256
     },
@@ -1120,16 +1091,19 @@ export const LAYER_CONFIGS = {
       'raster-opacity': 0.7
     },
     stops: [
-      [30, '#006100'],
-      [65, '#FFFF00'],
-      [100, '#FF2600']
+      [0,  '#00891D'],
+      [20, '#8BC526'],
+      [40, '#FFFA00'],
+      [60, '#FF4803'],
+      [80, '#FF0004']
     ],
     popup: {
-      label: 'Perigo de inundação (%)',
-      unit: '',
+      label: 'Impermeabilização do solo nas APPs',
+      unit: '%',
     },
     unit: '%',
   },
+
   // ------- Massas de água do Estado -------
   water_bodies_state: {
     type: 'raster',
@@ -1214,7 +1188,7 @@ export const LAYER_CONFIGS = {
   // ------- Emissões por município -------
   emissions_municipality: {
     type: 'vector',
-    label: 'Emissões totais do município',
+    label: 'Emissões do município',
     allowedYears: EMISSIONS_YEARS,
     source: (year, scale) => {
       const sourceLayer =
@@ -1232,14 +1206,179 @@ export const LAYER_CONFIGS = {
     },
     property: 'co2e',
     stops: [
-      [0, '#2b83ba'],
-      [500000, '#ffffbf'],
-      [1000000, '#d7191c']
+      [0, '#cfd8dc'],
+      [500000, '#7e57c2'],
+      [1000000, '#4a148c']
     ],
     unit: '',
 
     popup: {
-      label: 'Emissões por município',
+      label: 'Emissões do município',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões por habitante -------
+  emissions_municipality_hab: {
+    type: 'vector',
+    label: 'Emissões do município por habitante',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'ieh',
+    stops: [
+      [500, '#cfd8dc'],
+      [1000, '#7e57c2'],
+      [1500, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões do município por habitante',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas da agropecuária -------
+  emissions_municipality_1: {
+    type: 'vector',
+    label: 'Emissões originadas da agropecuária',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_1',
+    stops: [
+      [0, '#cfd8dc'],
+      [500, '#7e57c2'],
+      [1000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas da agropecuária',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas de energia -------
+  emissions_municipality_2: {
+    type: 'vector',
+    label: 'Emissões originadas de energia',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_2',
+    stops: [
+      [0, '#cfd8dc'],
+      [500000, '#7e57c2'],
+      [1000000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas de energia',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas da mudanças de uso da terra e floresta -------
+  emissions_municipality_3: {
+    type: 'vector',
+    label: 'Emissões originadas da mudanças de uso da terra e floresta',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_3',
+    stops: [
+      [0, '#cfd8dc'],
+      [7500, '#7e57c2'],
+      [15000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas da mudanças de uso da terra e floresta',
+      unit: '',
+    }
+  },
+
+  // ------- Emissões originadas de resíduos -------
+  emissions_municipality_5: {
+    type: 'vector',
+    label: 'Emissões originadas de resíduos',
+    allowedYears: EMISSIONS_YEARS,
+    source: (year, scale) => {
+      const sourceLayer =
+            scale === 'intraurbana'
+              ? `public.geodata_emissoes_municipios_${year}`
+              : `public.geodata_emissoes_municipios_${year}`;
+
+      return {
+        type: 'vector',
+        tiles: [
+          `https://urbverde.iau.usp.br/dados/${sourceLayer}/{z}/{x}/{y}.pbf`
+        ],
+        sourceLayer
+      };
+    },
+    property: 'co2e_5',
+    stops: [
+      [0, '#cfd8dc'],
+      [500000, '#7e57c2'],
+      [1000000, '#4a148c']
+    ],
+    unit: '',
+
+    popup: {
+      label: 'Emissões originadas de resíduos',
       unit: '',
     }
   },
