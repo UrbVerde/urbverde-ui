@@ -30,7 +30,9 @@ export const useLayersStore = defineStore('layersStore', {
       return layerConfig?.paint?.['raster-opacity'] || state.defaultOpacity;
     },
     // Getter para obter o ano atual sincronizado com locationStore
-    getCurrentYear: (state) => state.currentYear || 2021
+    getCurrentYear: (state) => state.currentYear || 2021,
+    // Getter para buscar uma camada específica
+    getLayer: (state) => (layerId) => state.activeLayers.find(layer => layer.id === layerId)
   },
 
   actions: {
@@ -44,10 +46,23 @@ export const useLayersStore = defineStore('layersStore', {
       }
     },
 
-    removeLayerFromMap(layerId) {
-      // Usa a nova função que remove camadas com subcamadas
-      const unmountLayers = createUnmountLayers();
-      unmountLayers.removeLayerWithSubLayers(layerId);
+    /**
+     * Remove uma camada da lista de camadas ativas (estado interno)
+     * @param {string} layerId - ID da camada a ser removida
+     * @returns {boolean} - true se a camada foi removida com sucesso
+     */
+    removeLayer(layerId) {
+      const layerIndex = this.activeLayers.findIndex(layer => layer.id === layerId);
+      if (layerIndex === -1) {
+        console.warn(`[LayersStore] Layer ${layerId} not found in activeLayers`);
+
+        return false;
+      }
+
+      this.activeLayers.splice(layerIndex, 1);
+      console.log(`[LayersStore] Removed layer ${layerId} from activeLayers`);
+
+      return true;
     },
 
     /**
@@ -291,6 +306,12 @@ export const useLayersStore = defineStore('layersStore', {
           }
         }
       });
+    },
+
+    removeLayerFromMap(layerId) {
+      // Usa o novo facade que remove camadas com subcamadas
+      const unmountLayers = createUnmountLayers();
+      unmountLayers.unmountLayer(layerId);
     }
   },
 });

@@ -132,7 +132,7 @@ const unmountLayers = createUnmountLayers();
 const toggleLayer = (layer) => {
   if (isLayerActive(`${layer.id}`)) {
     // Remove layer com subcamadas
-    unmountLayers.removeLayerWithSubLayers(`${layer.id}`);
+    unmountLayers.unmountLayer(`${layer.id}`);
   } else {
     // Monta a camada (adiciona ao store e ao mapa)
     mountLayers.mountLayer(layer.id);
@@ -144,7 +144,7 @@ const handleDragEnd = (evt) => {
 };
 
 const removeLayer = (layerId) => {
-  unmountLayers.removeLayerWithSubLayers(layerId);
+  unmountLayers.unmountLayer(layerId);
 };
 
 const handleClose = () => {

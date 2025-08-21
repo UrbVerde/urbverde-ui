@@ -23,19 +23,112 @@ export class UnmountLayers {
   }
 
   /**
-   * Remove uma camada da lista de camadas ativas
+   * Remove uma camada do mapa (física)
    * @param {string} layerId - ID da camada a ser removida
+   * @returns {boolean} - true se a camada foi removida com sucesso
    */
-  removeLayer(layerId) {
-    const layerIndex = this.layersStore.activeLayers.findIndex(layer => layer.id === layerId);
-    if (layerIndex === -1) {
-      console.warn(`[UnmountLayers] Layer ${layerId} not found in activeLayers`);
+  removeLayerFromMap(layerId) {
+    if (this.layersStore.mapRef.getLayer(layerId)) {
+      this.layersStore.mapRef.removeLayer(layerId);
+      console.log(`[UnmountLayers] Removed main layer from map: ${layerId}`);
 
-      return;
+      return true;
     }
 
-    this.layersStore.activeLayers.splice(layerIndex, 1);
-    console.log(`[UnmountLayers] Removed layer ${layerId} from activeLayers`);
+    console.log(`[UnmountLayers] Layer ${layerId} not found in map`);
+
+    return false;
+  }
+
+  /**
+   * Remove uma camada do store (estado)
+   * @param {string} layerId - ID da camada a ser removida
+   * @returns {boolean} - true se a camada foi removida com sucesso
+   */
+  removeLayerFromStore(layerId) {
+    return this.layersStore.removeLayer(layerId);
+  }
+
+  /**
+   * Remove subcamadas do mapa (física)
+   * @param {string} layerId - ID da camada principal
+   * @returns {boolean} - true se as subcamadas foram removidas com sucesso
+   */
+  removeSubLayersFromMap(layerId) {
+    const layer = this.layersStore.getLayer(layerId);
+    if (!layer || !layer.subLayers || layer.subLayers.length === 0) {
+      console.log(`[UnmountLayers] No sublayers found for layer: ${layerId}`);
+
+      return true;
+    }
+
+    console.log(`[UnmountLayers] Removing ${layer.subLayers.length} sublayers for layer ${layerId}`);
+
+    // Remove eventos de hover usando o HoverManager
+    if (this.layersStore.hoverManager) {
+      this.layersStore.hoverManager.removeSubLayerHoverEvents(layerId);
+    }
+
+    layer.subLayers.forEach(subLayer => {
+      if (this.layersStore.mapRef.getLayer(subLayer.id)) {
+        this.layersStore.mapRef.removeLayer(subLayer.id);
+        console.log(`[UnmountLayers] Removed sublayer from map: ${subLayer.id}`);
+      }
+    });
+
+    return true;
+  }
+
+  /**
+   * Remove subcamadas do store (estado)
+   * @param {string} layerId - ID da camada principal
+   * @returns {boolean} - true se as subcamadas foram removidas com sucesso
+   */
+  removeSubLayersFromStore(layerId) {
+    const layer = this.layersStore.getLayer(layerId);
+    if (!layer) {
+      console.warn(`[UnmountLayers] Layer ${layerId} not found in activeLayers`);
+
+      return false;
+    }
+
+    if (layer.subLayers && layer.subLayers.length > 0) {
+      layer.subLayers = [];
+      console.log(`[UnmountLayers] Removed sublayers from store for layer: ${layerId}`);
+    }
+
+    return true;
+  }
+
+  /**
+   * Remove a fonte do mapa se não estiver sendo usada por outras camadas
+   * @param {string} layerId - ID da camada (que também é o ID da fonte)
+   * @returns {boolean} - true se a fonte foi removida ou não precisava ser removida
+   */
+  removeSourceIfUnused(layerId) {
+    const sourceId = layerId;
+    const otherLayersUsingSource = this.isSourceUsedByOtherLayers(sourceId, layerId);
+
+    if (!otherLayersUsingSource && this.layersStore.mapRef.getSource(sourceId)) {
+      try {
+        this.layersStore.mapRef.removeSource(sourceId);
+        console.log(`[UnmountLayers] Removed source: ${sourceId}`);
+
+        return true;
+      } catch (error) {
+        console.warn(`[UnmountLayers] Error removing source ${sourceId}:`, error);
+
+        return false;
+      }
+    } else if (otherLayersUsingSource) {
+      console.log(`[UnmountLayers] Source ${sourceId} not removed - still in use by other layers`);
+
+      return true;
+    } else {
+      console.log(`[UnmountLayers] Source ${sourceId} not found in map`);
+
+      return true;
+    }
   }
 
   /**
@@ -60,124 +153,43 @@ export class UnmountLayers {
   }
 
   /**
-   * Remove uma camada e suas subcamadas do mapa e do store
-   * @param {string} layerId - ID da camada a ser removida
-   *
-   * Esta função é responsável por remover completamente uma camada do mapa,
-   * incluindo suas subcamadas (outline e fill) e todos os eventos associados.
-   *
-   * Processo de remoção:
-   * 1. Verifica se a camada possui subcamadas e as remove primeiro
-   * 2. Remove eventos de hover de todas as camadas relacionadas
-   * 3. Remove a camada principal do mapa
-   * 4. Remove a camada do estado interno do store (activeLayers)
-   * 5. Verifica se a fonte pode ser removida (se não for usada por outras camadas)
-   *
-   * Uso recomendado:
-   * - Para remover camadas quando desativadas no modal compare layers
-   * - Para limpeza completa de camadas com subcamadas
-   * - Quando você precisa garantir que todas as partes da camada sejam removidas
-   *
-   * Exemplo de uso:
-   * unmountLayers.removeLayerWithSubLayers('temperatura');
-   */
-  removeLayerWithSubLayers(layerId) {
-    console.log(`[UnmountLayers] Removing layer with sublayers: ${layerId}`);
-
-    if (!this.layersStore.mapRef) {
-      console.warn('[UnmountLayers] Map reference not available');
-
-      return;
-    }
-
-    // Encontra a camada no activeLayers
-    const layerIndex = this.layersStore.activeLayers.findIndex(layer => layer.id === layerId);
-    if (layerIndex === -1) {
-      console.warn(`[UnmountLayers] Layer ${layerId} not found in activeLayers`);
-
-      return;
-    }
-
-    const layer = this.layersStore.activeLayers[layerIndex];
-
-    // 1. Remove as subcamadas primeiro (se existirem)
-    if (layer.subLayers && layer.subLayers.length > 0) {
-      console.log(`[UnmountLayers] Removing ${layer.subLayers.length} sublayers for layer ${layerId}`);
-
-      layer.subLayers.forEach(subLayer => {
-        if (this.layersStore.mapRef.getLayer(subLayer.id)) {
-          // Remove eventos de hover das subcamadas
-          this.layersStore.mapRef.off('mousemove', subLayer.id);
-          this.layersStore.mapRef.off('mouseleave', subLayer.id);
-
-          // Remove a subcamada do mapa
-          this.layersStore.mapRef.removeLayer(subLayer.id);
-          console.log(`[UnmountLayers] Removed sublayer: ${subLayer.id}`);
-        }
-      });
-
-      // Remove eventos de hover da camada principal
-      if (this.layersStore.hoverManager) {
-        this.layersStore.hoverManager.removeSubLayerHoverEvents(layerId);
-      }
-    }
-
-    // 2. Remove a camada principal
-    if (this.layersStore.mapRef.getLayer(layerId)) {
-      // Remove eventos de hover da camada principal
-      this.layersStore.mapRef.off('mousemove', layerId);
-      this.layersStore.mapRef.off('mouseleave', layerId);
-
-      // Remove a camada do mapa
-      this.layersStore.mapRef.removeLayer(layerId);
-      console.log(`[UnmountLayers] Removed main layer: ${layerId}`);
-    }
-
-    // 3. Remove a camada do estado ANTES de verificar a source
-    this.layersStore.activeLayers.splice(layerIndex, 1);
-    console.log(`[UnmountLayers] Removed layer ${layerId} from activeLayers`);
-
-    // 4. Verifica se a fonte pode ser removida (se não for usada por outras camadas)
-    const sourceId = layerId;
-    const otherLayersUsingSource = this.isSourceUsedByOtherLayers(sourceId, layerId);
-
-    if (!otherLayersUsingSource && this.layersStore.mapRef.getSource(sourceId)) {
-      try {
-        this.layersStore.mapRef.removeSource(sourceId);
-        console.log(`[UnmountLayers] Removed source: ${sourceId}`);
-      } catch (error) {
-        console.warn(`[UnmountLayers] Error removing source ${sourceId}:`, error);
-      }
-    } else if (otherLayersUsingSource) {
-      console.log(`[UnmountLayers] Source ${sourceId} not removed - still in use by other layers`);
-    } else {
-      console.log(`[UnmountLayers] Source ${sourceId} not found in map`);
-    }
-
-    // 5. Log das camadas restantes
-    console.log('[UnmountLayers] Remaining active layers:', this.layersStore.activeLayers.map(l => l.id));
-  }
-
-  /**
-   * Facade que chama removeLayerWithSubLayers com verificações adicionais
+   * Facade que remove completamente uma camada e suas subcamadas
    * @param {string} layerId - ID da camada a ser removida
    * @returns {boolean} - true se a camada foi removida com sucesso
    */
   unmountLayer(layerId) {
     console.log(`[UnmountLayers] Unmounting layer: ${layerId}`);
 
-    // Verifica se a camada existe antes de tentar removê-la
-    const layerExists = this.layersStore.activeLayers.some(layer => layer.id === layerId);
+    // Verificação de pré-condição: mapRef deve estar disponível
+    if (!this.layersStore.mapRef) {
+      console.warn('[UnmountLayers] Map reference not available');
 
-    if (!layerExists) {
+      return false;
+    }
+
+    // Verifica se a camada existe antes de tentar removê-la
+    const layer = this.layersStore.getLayer(layerId);
+    if (!layer) {
       console.warn(`[UnmountLayers] Layer ${layerId} not found in active layers`);
 
       return false;
     }
 
-    // Remove a camada e suas subcamadas
-    this.removeLayerWithSubLayers(layerId);
+    // 1. Remove as subcamadas primeiro (se existirem)
+    this.removeSubLayersFromMap(layerId);
+    this.removeSubLayersFromStore(layerId);
 
+    // 2. Remove a camada principal
+    this.removeLayerFromMap(layerId);
+
+    // 3. Remove a camada do estado
+    this.removeLayerFromStore(layerId);
+
+    // 4. Verifica se a fonte pode ser removida
+    this.removeSourceIfUnused(layerId);
+
+    // 5. Log das camadas restantes
+    console.log('[UnmountLayers] Remaining active layers:', this.layersStore.activeLayers.map(l => l.id));
     console.log(`[UnmountLayers] Successfully unmounted layer ${layerId} with all sublayers`);
 
     return true;
