@@ -43,11 +43,11 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 // import { LAYER_CONFIGS } from '@/constants/layers';
 // import { reorderAllLayers } from '@/components/map/layers/layersOrder';
 
-import {
-  // setupDynamicLayers,
-  // setupSetoresLayer,
-  setupDynamicSource
-} from '@/components/map/layers/MapLayerController.js';
+// import {
+//   // setupDynamicLayers,
+//   // setupSetoresLayer,
+//   setupDynamicSource
+// } from '@/components/map/layers/MapLayerController.js';
 import {
   setupRasterInteractions,
   removeRasterInteractions,
@@ -57,6 +57,7 @@ import {
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { useMapLayers } from '@/composables/useMapLayers';
+import { createMountLayers } from '@/components/map/layers/MountLayers.js';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
@@ -184,14 +185,14 @@ function removeDynamicLayer() {
   removeVectorInteractions(map.value);
 
   // Remover camadas
-  ['dynamic-layer', 'dynamic-layer-outline', 'parks','pcv-layer', 'setores-layer'].forEach(id => {
+  ['dynamic-layer', 'dynamic-layer-outline', 'parks', 'parks_fill', 'parks_outline', 'pcv-layer', 'setores-layer'].forEach(id => {
     if (map.value.getLayer(id)) {
       map.value.removeLayer(id);
     }
   });
 
   // Remover sources
-  ['dynamic-source', 'parks-source', 'setores-source'].forEach(id => {
+  ['dynamic-source', 'parks', 'setores-source'].forEach(id => {
     if (map.value.getSource(id)) {
       map.value.removeSource(id);
     }
@@ -235,26 +236,35 @@ function removeDynamicLayer() {
 
 // Função para adicionar camada de parques
 function addParksLayer() {
-  const parksConfig = getLayerConfig('parks', currentYear.value, currentScale.value);
-  if (!parksConfig) { return; }
+  // Usar o sistema MountLayers para adicionar a camada parks
+  const mountLayers = createMountLayers();
+  const success = mountLayers.mountLayer('parks');
 
-  const sourceConfig = setupDynamicSource(parksConfig, locationStore, currentScale.value);
-  if (!map.value.getSource('parks-source')) {
-    map.value.addSource('parks-source', sourceConfig);
+  if (success) {
+    console.log('[MapCore] Camada parks adicionada com sucesso usando MountLayers');
+
+    // Aplicar filtro de município se necessário
+    if (currentScale.value === 'intraurbana' && locationStore.cd_mun) {
+      const map = map.value;
+      if (map && map.getLayer('parks')) {
+        map.setFilter('parks', ['==', 'cd_mun', String(locationStore.cd_mun)]);
+
+        // Aplicar filtro nas subcamadas também
+        const fillLayerId = 'parks_fill';
+        const outlineLayerId = 'parks_outline';
+
+        if (map.getLayer(fillLayerId)) {
+          map.setFilter(fillLayerId, ['==', 'cd_mun', String(locationStore.cd_mun)]);
+        }
+
+        if (map.getLayer(outlineLayerId)) {
+          map.setFilter(outlineLayerId, ['==', 'cd_mun', String(locationStore.cd_mun)]);
+        }
+      }
+    }
+  } else {
+    console.error('[MapCore] Falha ao adicionar camada parks usando MountLayers');
   }
-
-  if (!map.value.getLayer(parksConfig.id)) {
-    const parksLayer = {
-      id: parksConfig.id,
-      type: parksConfig.renderType,
-      source: 'parks-source',
-      'source-layer': parksConfig.source.sourceLayer,
-      paint: parksConfig.paint
-    };
-    map.value.addLayer(parksLayer);
-  }
-
-  map.value.setFilter(parksConfig.id, ['==', 'cd_mun', String(locationStore.cd_mun)]);
 }
 
 /**

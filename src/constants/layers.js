@@ -363,9 +363,8 @@ export const LAYER_CONFIGS = {
   // Parks layers
   parks: {
     id: 'parks',
-    dataType: LAYER_DATA_TYPES.VECTOR,
+    type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.DYNAMIC,
-    renderType: 'fill',
     label: 'Praças',
     source: (year, scale, municipioId) => ({
       type: 'vector',
@@ -590,7 +589,7 @@ export const LAYER_CONFIGS = {
 
   base_layer: {
     id: 'base-layer',
-    dataType: LAYER_DATA_TYPES.VECTOR,
+    type: LAYER_DATA_TYPES.VECTOR,
     group: LAYER_GROUPS.BASE_LAYERS,
     renderType: 'fill',
     label: 'Context Base Layers',
@@ -659,6 +658,11 @@ export function getLayerConfig(layerId, year, scale) {
 // Helper to get layer paint properties
 export function getLayerPaint(config, { scale, municipioId, statistics } = {}) {
   if (config.type === 'raster') {
+    return config.paint;
+  }
+
+  // Verificação específica para a camada parks
+  if (config.id === 'parks') {
     return config.paint;
   }
 

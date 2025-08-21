@@ -45,13 +45,18 @@ export class MountLayers {
 
     // Configura a fonte da camada
     const source = typeof layerConfig.source === 'function'
-      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.currentMunicipioId)
+      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.cd_mun)
       : layerConfig.source;
 
     // Determina onde a camada será inserida
     const activeLayers = this.layersStore.getActiveLayers;
     const topLayer = activeLayers[0];
-    const beforeId = (topLayer && topLayer.id === 'parks') ? 'parks' : MountLayers.defaultTopLayer;
+
+    // Se a camada sendo adicionada é parks, sempre usar o defaultTopLayer
+    // Se não, verificar se parks está no topo para posicionar corretamente
+    const beforeId = (layerId === 'parks')
+      ? MountLayers.defaultTopLayer
+      : (topLayer && topLayer.id === 'parks') ? 'parks' : MountLayers.defaultTopLayer;
 
     console.log('[MountLayers] Adicionando camada ao mapa:', {
       camada: layerId,
@@ -80,7 +85,7 @@ export class MountLayers {
         'source-layer': source.sourceLayer,
         paint: getLayerPaint(layerConfig, {
           scale: this.locationStore.scale,
-          municipioId: this.locationStore.currentMunicipioId,
+          municipioId: this.locationStore.cd_mun,
           statistics: this.layersStore.currentStatistics
         })
       };
@@ -126,7 +131,7 @@ export class MountLayers {
 
     // Configura a fonte da camada
     const source = typeof layerConfig.source === 'function'
-      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.currentMunicipioId)
+      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.cd_mun)
       : layerConfig.source;
 
     // Adiciona ao store usando a função renomeada
