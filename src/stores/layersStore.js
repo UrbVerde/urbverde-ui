@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import { updateCurrentMainLayer, getCurrentMainLayer, clearLayers, getLayerConfig } from '@/utils/dynamicLayersOrder';
 import { LAYER_CONFIGS } from '@/constants/layers';
+import { createHoverManager } from '@/components/map/layers/HoverManager.js';
 
 export const useLayersStore = defineStore('layersStore', {
   state: () => ({
@@ -14,6 +15,7 @@ export const useLayersStore = defineStore('layersStore', {
     setoresVisible: false,
     error: null,
     defaultOpacity: 0.7,
+    hoverManager: null,
   }),
 
   getters: {
@@ -31,6 +33,16 @@ export const useLayersStore = defineStore('layersStore', {
   },
 
   actions: {
+    /**
+     * Inicializa o HoverManager
+     */
+    initializeHoverManager() {
+      if (!this.hoverManager) {
+        this.hoverManager = createHoverManager(this);
+        console.log('[LayersStore] HoverManager initialized');
+      }
+    },
+
     removeLayerFromMap(layerId) {
       // Usa a nova função que remove camadas com subcamadas
       this.removeLayerWithSubLayers(layerId);
@@ -223,26 +235,6 @@ export const useLayersStore = defineStore('layersStore', {
     },
 
     /**
-     * Remove eventos de hover das subcamadas
-     * @param {string} mainLayerId - ID da camada principal
-     */
-    removeSubLayerHoverEvents(mainLayerId) {
-      if (!this.mapRef) {return;}
-
-      const outlineLayerId = `${mainLayerId}_outline`;
-      const fillLayerId = `${mainLayerId}_fill`;
-
-      // Remove eventos de todas as camadas relacionadas
-      [mainLayerId, outlineLayerId, fillLayerId].forEach(layerId => {
-        if (this.mapRef.getLayer(layerId)) {
-          this.mapRef.off('mousemove', layerId);
-          this.mapRef.off('mouseleave', layerId);
-        }
-      });
-
-      console.log(`[LayersStore] Hover events removed for sublayers of ${mainLayerId}`);
-    },
-    /**
      * Remove uma camada da lista de camadas ativas
      * @param {string} layerId - ID da camada a ser removida
      */
@@ -312,7 +304,9 @@ export const useLayersStore = defineStore('layersStore', {
         });
 
         // Remove eventos de hover da camada principal
-        this.removeSubLayerHoverEvents(layerId);
+        if (this.hoverManager) {
+          this.hoverManager.removeSubLayerHoverEvents(layerId);
+        }
       }
 
       // 2. Remove a camada principal

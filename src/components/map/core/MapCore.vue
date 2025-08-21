@@ -681,13 +681,17 @@ async function setupMap() {
     layersStore.mapRef = map.value;
     console.log('[MapCore] Map reference set:', layersStore.mapRef);
 
-    // 6. Adicionar controles do mapa
+    // 6. Inicializar o HoverManager
+    layersStore.initializeHoverManager();
+    console.log('[MapCore] HoverManager initialized');
+
+    // 7. Adicionar controles do mapa
     setupMapControls();
 
-    // 7. Configurar gerenciamento de estado da URL
+    // 8. Configurar gerenciamento de estado da URL
     setupUrlStateManagement();
 
-    // 8. Configurar handlers de eventos do mapa
+    // 9. Configurar handlers de eventos do mapa
     setupMapEventHandlers();
 
   } catch (error) {

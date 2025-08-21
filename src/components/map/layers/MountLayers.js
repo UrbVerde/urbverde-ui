@@ -1,6 +1,7 @@
 import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 import { useLayersStore } from '@/stores/layersStore';
 import { useLocationStore } from '@/stores/locationStore';
+import { createHoverManager } from './HoverManager.js';
 // import { reorderLayerSetup } from './MapLayerController.js';
 
 /**
@@ -26,6 +27,7 @@ export class MountLayers {
   constructor(layersStore, locationStore) {
     this.layersStore = layersStore;
     this.locationStore = locationStore;
+    this.hoverManager = createHoverManager(layersStore);
   }
 
   /**
@@ -298,7 +300,7 @@ export class MountLayers {
       console.log(`[MountLayers] Added sublayer ${outlineSubLayer.id} with beforeID: ${fillSubLayer.id}`);
 
       // Configura eventos de hover para as subcamadas
-      this.setupSubLayerHoverEvents(layerId, outlineLayerId, fillLayerId);
+      this.hoverManager.setupSubLayerHoverEvents(layerId, outlineLayerId, fillLayerId);
     }
 
     console.log(`[MountLayers] Sublayers added to map for layer ${layerId}`);
@@ -419,118 +421,4 @@ export class MountLayers {
     return this.mountSubLayer(layerConfig);
   }
 
-  /**
-   * Configura eventos de hover para as subcamadas
-   * @param {string} mainLayerId - ID da camada principal
-   * @param {string} outlineLayerId - ID da camada de contorno
-   * @param {string} fillLayerId - ID da camada de preenchimento
-   */
-  setupSubLayerHoverEvents(mainLayerId, outlineLayerId, fillLayerId) {
-    if (!this.layersStore.mapRef) {return;}
-
-    const mainLayer = this.layersStore.getActiveLayers.find(l => l.id === mainLayerId);
-    if (!mainLayer || !mainLayer.source?.sourceLayer) {return;}
-
-    const sourceLayer = mainLayer.source.sourceLayer;
-    let hoveredFeatureId = null;
-
-    // Evento de mousemove na camada principal
-    this.layersStore.mapRef.on('mousemove', mainLayerId, (e) => {
-      if (e.features.length > 0) {
-        const feature = e.features[0];
-        const featureId = feature.id || feature.properties.cd_mun;
-
-        if (hoveredFeatureId !== featureId) {
-          // Remove hover anterior
-          if (hoveredFeatureId !== null) {
-            this.layersStore.mapRef.setFeatureState(
-              {
-                source: mainLayerId,
-                sourceLayer,
-                id: hoveredFeatureId
-              },
-              { hover: false }
-            );
-          }
-
-          // Define novo hover
-          hoveredFeatureId = featureId;
-          this.layersStore.mapRef.setFeatureState(
-            {
-              source: mainLayerId,
-              sourceLayer,
-              id: featureId
-            },
-            { hover: true }
-          );
-        }
-      }
-    });
-
-    // Evento de mouseleave na camada principal
-    this.layersStore.mapRef.on('mouseleave', mainLayerId, () => {
-      if (hoveredFeatureId !== null) {
-        this.layersStore.mapRef.setFeatureState(
-          {
-            source: mainLayerId,
-            sourceLayer,
-            id: hoveredFeatureId
-          },
-          { hover: false }
-        );
-        hoveredFeatureId = null;
-      }
-    });
-
-    // Eventos de hover também nas subcamadas para melhor responsividade
-    [outlineLayerId, fillLayerId].forEach(subLayerId => {
-      this.layersStore.mapRef.on('mousemove', subLayerId, (e) => {
-        if (e.features.length > 0) {
-          const feature = e.features[0];
-          const featureId = feature.id || feature.properties.cd_mun;
-
-          if (hoveredFeatureId !== featureId) {
-            // Remove hover anterior
-            if (hoveredFeatureId !== null) {
-              this.layersStore.mapRef.setFeatureState(
-                {
-                  source: mainLayerId,
-                  sourceLayer,
-                  id: hoveredFeatureId
-                },
-                { hover: false }
-              );
-            }
-
-            // Define novo hover
-            hoveredFeatureId = featureId;
-            this.layersStore.mapRef.setFeatureState(
-              {
-                source: mainLayerId,
-                sourceLayer,
-                id: featureId
-              },
-              { hover: true }
-            );
-          }
-        }
-      });
-
-      this.layersStore.mapRef.on('mouseleave', subLayerId, () => {
-        if (hoveredFeatureId !== null) {
-          this.layersStore.mapRef.setFeatureState(
-            {
-              source: mainLayerId,
-              sourceLayer,
-              id: hoveredFeatureId
-            },
-            { hover: false }
-          );
-          hoveredFeatureId = null;
-        }
-      });
-    });
-
-    console.log(`[MountLayers] Hover events configured for sublayers of ${mainLayerId}`);
-  }
 }
