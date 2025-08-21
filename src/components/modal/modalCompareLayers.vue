@@ -82,7 +82,7 @@ import modalBootstrap from './modalBootstrap.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import draggable from 'vuedraggable';
-import { createLayerController } from '@/components/map/layers/LayerController';
+import { createMountLayers } from '@/components/map/layers/MountLayers';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -124,8 +124,8 @@ const isLayerActive = (layerId) => {
   return isInActiveLayers || isCurrentLayer;
 };
 
-// Instância do LayerController
-const layerController = createLayerController();
+// Instância do MountLayers
+const mountLayers = createMountLayers();
 
 const toggleLayer = (layer) => {
   if (isLayerActive(`${layer.id}`)) {
@@ -133,7 +133,7 @@ const toggleLayer = (layer) => {
     layersStore.removeLayerWithSubLayers(`${layer.id}`);
   } else {
     // Monta a camada (adiciona ao store e ao mapa)
-    layerController.mountLayer(layer.id);
+    mountLayers.mountLayer(layer.id);
   }
 };
 

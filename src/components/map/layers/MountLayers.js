@@ -4,20 +4,20 @@ import { useLocationStore } from '@/stores/locationStore';
 // import { reorderLayerSetup } from './MapLayerController.js';
 
 /**
- * Função de conveniência para criar uma instância do LayerController
- * @returns {LayerController} Instância do LayerController
+ * Função de conveniência para criar uma instância do MountLayers
+ * @returns {MountLayers} Instância do MountLayers
  */
-export function createLayerController() {
+export function createMountLayers() {
   const layersStore = useLayersStore();
   const locationStore = useLocationStore();
 
-  return new LayerController(layersStore, locationStore);
+  return new MountLayers(layersStore, locationStore);
 }
 
 /**
  * Classe para controlar a criação e adição de layers no mapa
  */
-export class LayerController {
+export class MountLayers {
   // Constante para opacidade padrão das camadas
   static defaultOpacity = 0.7;
   // Constante para camada padrão de referência
@@ -36,7 +36,7 @@ export class LayerController {
    */
   addLayerToMap(layerConfig) {
     if (!this.layersStore.mapRef) {
-      console.warn('[LayerController] Map reference not available');
+      console.warn('[MountLayers] Map reference not available');
 
       return false;
     }
@@ -51,9 +51,9 @@ export class LayerController {
     // Determina onde a camada será inserida
     const activeLayers = this.layersStore.getActiveLayers;
     const topLayer = activeLayers[0];
-    const beforeId = (topLayer && topLayer.id === 'parks') ? 'parks' : LayerController.defaultTopLayer;
+    const beforeId = (topLayer && topLayer.id === 'parks') ? 'parks' : MountLayers.defaultTopLayer;
 
-    console.log('[LayerController] Adicionando camada ao mapa:', {
+    console.log('[MountLayers] Adicionando camada ao mapa:', {
       camada: layerId,
       antesDe: beforeId,
       totalCamadas: activeLayers.length
@@ -85,7 +85,7 @@ export class LayerController {
         })
       };
 
-      console.log('[LayerController] Adicionando camada vetorial ao mapa:', {
+      console.log('[MountLayers] Adicionando camada vetorial ao mapa:', {
         id: layerId,
         sourceLayer: source.sourceLayer,
         beforeId
@@ -95,7 +95,7 @@ export class LayerController {
       this.layersStore.mapRef.addLayer(layerObject, beforeId);
     }
 
-    console.log('[LayerController] Camada adicionada ao mapa com sucesso:', layerId);
+    console.log('[MountLayers] Camada adicionada ao mapa com sucesso:', layerId);
 
     // Reordena todas as camadas após adicionar a nova
     // reorderLayerSetup(this.layersStore.mapRef, activeLayers);
@@ -119,7 +119,7 @@ export class LayerController {
 
     // Verifica se a camada já existe no store
     if (this.layersStore.getActiveLayers.some(l => l.id === layerId)) {
-      console.log('[LayerController] Camada já existe no store:', layerId);
+      console.log('[MountLayers] Camada já existe no store:', layerId);
 
       return true;
     }
@@ -138,7 +138,7 @@ export class LayerController {
       source
     });
 
-    console.log('[LayerController] Camada registrada no store com sucesso:', layerId);
+    console.log('[MountLayers] Camada registrada no store com sucesso:', layerId);
 
     return true;
   }
@@ -149,28 +149,28 @@ export class LayerController {
    * @returns {boolean} Sucesso da operação
    */
   mountLayer(layerId) {
-    console.log('[LayerController] Iniciando montagem da camada:', layerId);
+    console.log('[MountLayers] Iniciando montagem da camada:', layerId);
 
     // Obtém configuração da camada
     const layerConfig = getLayerConfig(layerId, this.locationStore.year, this.locationStore.scale);
     if (!layerConfig) {
-      console.warn('[LayerController] Configuração da camada não encontrada:', layerId);
+      console.warn('[MountLayers] Configuração da camada não encontrada:', layerId);
 
       return false;
     }
 
     // Verifica se a camada já está no mapa
     if (this.layersStore.mapRef.getLayer(layerId)) {
-      console.log('[LayerController] Camada já existe no mapa:', layerId);
+      console.log('[MountLayers] Camada já existe no mapa:', layerId);
 
       return true;
     }
 
     // Adiciona ao store primeiro
-    const storeSuccess = this.addLayerToStore(layerConfig, LayerController.defaultOpacity);
+    const storeSuccess = this.addLayerToStore(layerConfig, MountLayers.defaultOpacity);
 
     if (!storeSuccess) {
-      console.error('[LayerController] Falha ao adicionar camada ao store:', layerId);
+      console.error('[MountLayers] Falha ao adicionar camada ao store:', layerId);
 
       return false;
     }
@@ -179,12 +179,12 @@ export class LayerController {
     const mapSuccess = this.addLayerToMap(layerConfig);
 
     if (!mapSuccess) {
-      console.error('[LayerController] Falha ao adicionar camada ao mapa:', layerId);
+      console.error('[MountLayers] Falha ao adicionar camada ao mapa:', layerId);
 
       return false;
     }
 
-    console.log('[LayerController] Camada montada com sucesso:', layerId);
+    console.log('[MountLayers] Camada montada com sucesso:', layerId);
 
     return true;
   }
@@ -199,7 +199,7 @@ export class LayerController {
 
     // Verifica se a camada existe e é vetorial
     if (!layerConfig || (layerConfig.type !== 'vector' && layerConfig.dataType !== 'vector')) {
-      console.warn(`[LayerController] Cannot add sublayers for non-vector layer: ${layerId}`);
+      console.warn(`[MountLayers] Cannot add sublayers for non-vector layer: ${layerId}`);
 
       return false;
     }
@@ -207,7 +207,7 @@ export class LayerController {
     // Encontra a camada principal no activeLayers
     const mainLayerIndex = this.layersStore.getActiveLayers.findIndex(l => l.id === layerId);
     if (mainLayerIndex === -1) {
-      console.warn(`[LayerController] Main layer not found in activeLayers: ${layerId}`);
+      console.warn(`[MountLayers] Main layer not found in activeLayers: ${layerId}`);
 
       return false;
     }
@@ -219,7 +219,7 @@ export class LayerController {
     const outlineLayerId = `${layerId}_outline`;
 
     if (this.layersStore.mapRef.getLayer(fillLayerId) && this.layersStore.mapRef.getLayer(outlineLayerId)) {
-      console.log(`[LayerController] Sublayers already exist in map for layer: ${layerId}`);
+      console.log(`[MountLayers] Sublayers already exist in map for layer: ${layerId}`);
 
       return true;
     }
@@ -284,24 +284,24 @@ export class LayerController {
       // Determina o beforeID baseado na posição da camada principal
       let beforeID;
       if (mainLayerIndex === 0) {
-        beforeID = LayerController.defaultTopLayer;
+        beforeID = MountLayers.defaultTopLayer;
       } else {
         beforeID = this.layersStore.getActiveLayers[mainLayerIndex - 1].id;
       }
 
       // Adiciona a primeira subcamada (fill) - deve ficar por baixo
       this.layersStore.mapRef.addLayer(fillSubLayer, beforeID);
-      console.log(`[LayerController] Added sublayer ${fillSubLayer.id} with beforeID: ${beforeID}`);
+      console.log(`[MountLayers] Added sublayer ${fillSubLayer.id} with beforeID: ${beforeID}`);
 
       // Adiciona a segunda subcamada (outline) - deve ficar por cima
       this.layersStore.mapRef.addLayer(outlineSubLayer, fillSubLayer.id);
-      console.log(`[LayerController] Added sublayer ${outlineSubLayer.id} with beforeID: ${fillSubLayer.id}`);
+      console.log(`[MountLayers] Added sublayer ${outlineSubLayer.id} with beforeID: ${fillSubLayer.id}`);
 
       // Configura eventos de hover para as subcamadas
       this.setupSubLayerHoverEvents(layerId, outlineLayerId, fillLayerId);
     }
 
-    console.log(`[LayerController] Sublayers added to map for layer ${layerId}`);
+    console.log(`[MountLayers] Sublayers added to map for layer ${layerId}`);
 
     return true;
   }
@@ -317,7 +317,7 @@ export class LayerController {
     // Encontra a camada principal no activeLayers
     const mainLayerIndex = this.layersStore.getActiveLayers.findIndex(l => l.id === layerId);
     if (mainLayerIndex === -1) {
-      console.warn(`[LayerController] Main layer not found in activeLayers: ${layerId}`);
+      console.warn(`[MountLayers] Main layer not found in activeLayers: ${layerId}`);
 
       return false;
     }
@@ -337,7 +337,7 @@ export class LayerController {
     const existingOutline = mainLayer.subLayers.find(sub => sub.id === outlineLayerId);
 
     if (existingFill && existingOutline) {
-      console.log(`[LayerController] Sublayers already exist in store for layer: ${layerId}`);
+      console.log(`[MountLayers] Sublayers already exist in store for layer: ${layerId}`);
 
       return true;
     }
@@ -365,7 +365,7 @@ export class LayerController {
       mainLayer.subLayers.push(outlineSubLayer);
     }
 
-    console.log(`[LayerController] Sublayers registered in store for layer ${layerId}:`, mainLayer.subLayers);
+    console.log(`[MountLayers] Sublayers registered in store for layer ${layerId}:`, mainLayer.subLayers);
 
     return true;
   }
@@ -377,12 +377,12 @@ export class LayerController {
    */
   mountSubLayer(layerConfig) {
     const layerId = layerConfig.id;
-    console.log(`[LayerController] Mounting sublayers for layer: ${layerId}`);
+    console.log(`[MountLayers] Mounting sublayers for layer: ${layerId}`);
 
     // Adiciona ao store primeiro
     const storeSuccess = this.addSubLayerToStore(layerConfig);
     if (!storeSuccess) {
-      console.error(`[LayerController] Failed to add sublayers to store for layer: ${layerId}`);
+      console.error(`[MountLayers] Failed to add sublayers to store for layer: ${layerId}`);
 
       return false;
     }
@@ -390,12 +390,12 @@ export class LayerController {
     // Adiciona ao mapa
     const mapSuccess = this.addSubLayerToMap(layerConfig);
     if (!mapSuccess) {
-      console.error(`[LayerController] Failed to add sublayers to map for layer: ${layerId}`);
+      console.error(`[MountLayers] Failed to add sublayers to map for layer: ${layerId}`);
 
       return false;
     }
 
-    console.log(`[LayerController] Sublayers mounted successfully for layer: ${layerId}`);
+    console.log(`[MountLayers] Sublayers mounted successfully for layer: ${layerId}`);
 
     return true;
   }
@@ -406,12 +406,12 @@ export class LayerController {
    * @param {string} layerId - ID da camada principal
    */
   addSubLayer(layerId) {
-    console.warn('[LayerController] addSubLayer is deprecated. Use mountSubLayer instead.');
+    console.warn('[MountLayers] addSubLayer is deprecated. Use mountSubLayer instead.');
 
     // Obtém configuração da camada
     const layerConfig = getLayerConfig(layerId, this.locationStore.year, this.locationStore.scale);
     if (!layerConfig) {
-      console.warn(`[LayerController] Layer configuration not found: ${layerId}`);
+      console.warn(`[MountLayers] Layer configuration not found: ${layerId}`);
 
       return;
     }
@@ -531,6 +531,6 @@ export class LayerController {
       });
     });
 
-    console.log(`[LayerController] Hover events configured for sublayers of ${mainLayerId}`);
+    console.log(`[MountLayers] Hover events configured for sublayers of ${mainLayerId}`);
   }
 }
