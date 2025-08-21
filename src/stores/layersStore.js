@@ -195,7 +195,7 @@ export const useLayersStore = defineStore('layersStore', {
      * Adiciona uma nova camada à lista de camadas ativas
      * @param {Object} layer - Objeto da camada a ser adicionada
      */
-    addLayer(layer) {
+    addLayerToStore(layer) {
       if (!this.activeLayers.some(l => l.id === layer.id)) {
         const newLayer = {
           id: layer.id,
