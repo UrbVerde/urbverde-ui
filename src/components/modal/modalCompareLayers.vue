@@ -84,6 +84,7 @@ import { useLayersStore } from '@/stores/layersStore';
 import draggable from 'vuedraggable';
 import { createMountLayers } from '@/components/map/layers/MountLayers';
 import { createUnmountLayers } from '@/components/map/layers/UnmountLayers';
+import { reorderLayer } from '@/components/map/layers/ReorderLayers';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -108,9 +109,14 @@ const activeLayersWithNames = computed({
     };
   }),
   set: (newValue) => {
-    // Atualiza a ordem das camadas no store
+    // Atualiza a ordem das camadas usando a função do ReorderLayers
     newValue.forEach((layer, index) => {
-      layersStore.reorderLayer(layer.id, index);
+      const result = reorderLayer(layersStore.getActiveLayers, layer.id, index, layersStore.mapRef);
+      layersStore.activeLayers = result.activeLayers;
+
+      if (!result.mapSuccess) {
+        console.warn(`[modalCompareLayers] Reordenação no mapa falhou para a camada ${layer.id}`);
+      }
     });
   }
 });

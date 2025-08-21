@@ -57,7 +57,7 @@ import { useLayersStore } from '@/stores/layersStore';
 import { useLocationStore } from '@/stores/locationStore';
 import { getLayerConfig } from '@/constants/layers';
 import LegendCard from './LegendCard.vue';
-import { reorderLayerSetup } from '@/components/map/layers/MapLayerController';
+import { reorderLayer } from '@/components/map/layers/ReorderLayers';
 
 const props = defineProps({
   currentYear: {
@@ -86,9 +86,14 @@ watch(() => locationStore.activeMainLayer, (newLayer) => {
 const localLayers = computed({
   get: () => layersStore.getActiveLayers,
   set: (newValue) => {
-    // Atualiza a ordem das camadas no store
+    // Atualiza a ordem das camadas usando a função do ReorderLayers
     newValue.forEach((layer, index) => {
-      layersStore.reorderLayer(layer.id, index);
+      const result = reorderLayer(layersStore.getActiveLayers, layer.id, index, layersStore.mapRef);
+      layersStore.activeLayers = result.activeLayers;
+
+      if (!result.mapSuccess) {
+        console.warn(`[DraggableLayerList] Reordenação no mapa falhou para a camada ${layer.id}`);
+      }
     });
   }
 });
@@ -121,7 +126,7 @@ const onChange = (evt) => {
     });
 
     if (movedLayer && layersStore.mapRef) {
-      reorderLayerSetup(layersStore.mapRef, activeLayers);
+      // A reordenação já foi feita no computed localLayers
       console.log('[DraggableLayerList] Camada reordenada com sucesso');
     } else {
       console.warn('[DraggableLayerList] Não foi possível reordenar a camada:', {

@@ -185,42 +185,6 @@ export const useLayersStore = defineStore('layersStore', {
     },
 
     /**
-     * Reordena as camadas ativas
-     * @param {string} layerId - ID da camada a ser movida
-     * @param {number} newIndex - Nova posição da camada
-     */
-    reorderLayer(layerId, newIndex) {
-      const currentIndex = this.activeLayers.findIndex(layer => layer.id === layerId);
-      if (currentIndex === -1) {return;}
-
-      const layer = this.activeLayers[currentIndex];
-      const newLayers = [...this.activeLayers];
-      newLayers.splice(currentIndex, 1);
-      newLayers.splice(newIndex, 0, layer);
-
-      this.activeLayers = newLayers;
-
-      // Atualiza a ordem das camadas no mapa
-      if (this.mapRef) {
-        // Primeiro, move a camada principal para a nova posição
-        if (this.mapRef.getLayer(layerId)) {
-          this.mapRef.moveLayer(layerId);
-        }
-
-        // A reordenação das subcamadas será tratada pelo MapLayerController
-        // que é chamado após este método
-
-        // Logs de debug comentados para manter o código limpo
-        // console.log(`[LayersStore] Reordering sublayers for layer ${layerId}`);
-        // console.log(`[LayersStore] Sublayers to reorder:`, layer.subLayers.map(sl => sl.id));
-        // console.log(`[LayersStore] All layers in map:`, allLayers);
-        // console.log(`[LayersStore] Main layer index: ${mainLayerIndex}, Parks index: ${parksIndex}`);
-        // console.log(`[LayersStore] Final beforeId for sublayers: ${beforeId}`);
-        // console.log(`[LayersStore] Final layer order after reordering:`, finalLayers);
-      }
-    },
-
-    /**
      * Adiciona uma nova camada à lista de camadas ativas
      * @param {Object} layer - Objeto da camada a ser adicionada
      */

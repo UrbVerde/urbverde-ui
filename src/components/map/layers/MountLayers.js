@@ -2,7 +2,7 @@ import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 import { useLayersStore } from '@/stores/layersStore';
 import { useLocationStore } from '@/stores/locationStore';
 import { createHoverManager } from './HoverManager.js';
-// import { reorderLayerSetup } from './MapLayerController.js';
+// import { reorderLayerSetup } from './ReorderLayers.js';
 
 /**
  * Função de conveniência para criar uma instância do MountLayers
