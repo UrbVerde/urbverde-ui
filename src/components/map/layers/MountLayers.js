@@ -132,7 +132,7 @@ export class MountLayers {
       : layerConfig.source;
 
     // Adiciona ao store usando a função renomeada
-    this.layersStore.addLayerToStore({
+    this.layersStore.addLayer({
       id: layerId,
       year: this.locationStore.year,
       scale: this.locationStore.scale,

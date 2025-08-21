@@ -83,6 +83,7 @@ import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import draggable from 'vuedraggable';
 import { createMountLayers } from '@/components/map/layers/MountLayers';
+import { createUnmountLayers } from '@/components/map/layers/UnmountLayers';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -124,13 +125,14 @@ const isLayerActive = (layerId) => {
   return isInActiveLayers || isCurrentLayer;
 };
 
-// Instância do MountLayers
+// Instâncias do MountLayers e UnmountLayers
 const mountLayers = createMountLayers();
+const unmountLayers = createUnmountLayers();
 
 const toggleLayer = (layer) => {
   if (isLayerActive(`${layer.id}`)) {
     // Remove layer com subcamadas
-    layersStore.removeLayerWithSubLayers(`${layer.id}`);
+    unmountLayers.removeLayerWithSubLayers(`${layer.id}`);
   } else {
     // Monta a camada (adiciona ao store e ao mapa)
     mountLayers.mountLayer(layer.id);
@@ -142,7 +144,7 @@ const handleDragEnd = (evt) => {
 };
 
 const removeLayer = (layerId) => {
-  layersStore.removeLayerWithSubLayers(layerId);
+  unmountLayers.removeLayerWithSubLayers(layerId);
 };
 
 const handleClose = () => {
