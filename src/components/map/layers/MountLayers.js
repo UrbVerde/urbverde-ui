@@ -19,8 +19,6 @@ export function createMountLayers() {
  * Classe para controlar a criação e adição de layers no mapa
  */
 export class MountLayers {
-  // Constante para opacidade padrão das camadas
-  static defaultOpacity = 0.7;
   // Constante para camada padrão de referência
   static defaultTopLayer = 'highlight_selected-layer';
 
@@ -169,7 +167,7 @@ export class MountLayers {
     }
 
     // Adiciona ao store primeiro
-    const storeSuccess = this.addLayerToStore(layerConfig, MountLayers.defaultOpacity);
+    const storeSuccess = this.addLayerToStore(layerConfig, this.layersStore.defaultOpacity);
 
     if (!storeSuccess) {
       console.error('[MountLayers] Falha ao adicionar camada ao store:', layerId);
