@@ -5,6 +5,9 @@ import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
  * Classe para controlar a criação e adição de layers no mapa
  */
 export class LayerController {
+  // Constante para opacidade padrão das camadas
+  static defaultOpacity = 0.7;
+
   constructor(layersStore, locationStore) {
     this.layersStore = layersStore;
     this.locationStore = locationStore;
@@ -13,11 +16,10 @@ export class LayerController {
   /**
    * Cria/insere a camada (e subcamadas) no mapa
    * @param {Object} layerConfig - Configuração da camada
-   * @param {Object} source - Fonte da camada já configurada
    * @param {Array} activeLayers - Lista de camadas ativas
    * @returns {boolean} Sucesso da operação
    */
-  addLayerToMap(layerConfig, source, activeLayers) {
+  addLayerToMap(layerConfig, activeLayers) {
     if (!this.layersStore.mapRef) {
       console.warn('[LayerController] Map reference not available');
 
@@ -25,6 +27,11 @@ export class LayerController {
     }
 
     const layerId = layerConfig.id;
+
+    // Configura a fonte da camada
+    const source = typeof layerConfig.source === 'function'
+      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.currentMunicipioId)
+      : layerConfig.source;
 
     // Determina onde a camada será inserida
     const topLayer = activeLayers[0];
@@ -86,14 +93,13 @@ export class LayerController {
 
   /**
    * Registra a camada no activeLayers (se ainda não existir)
-   * @param {string} layerId - ID da camada
-   * @param {Object} source - Fonte da camada
+   * @param {Object} layerConfig - Configuração da camada
    * @param {number} opacity - Opacidade da camada
-   * @param {number} year - Ano da camada
-   * @param {string} scale - Escala da camada
    * @returns {boolean} Sucesso da operação
    */
-  addLayerToStore(layerId, source, opacity, year, scale) {
+  addLayerToStore(layerConfig, opacity) {
+    const layerId = layerConfig.id;
+
     // Verifica se a camada já existe no store
     if (this.layersStore.getActiveLayers.some(l => l.id === layerId)) {
       console.log('[LayerController] Camada já existe no store:', layerId);
@@ -101,11 +107,16 @@ export class LayerController {
       return true;
     }
 
+    // Configura a fonte da camada
+    const source = typeof layerConfig.source === 'function'
+      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.currentMunicipioId)
+      : layerConfig.source;
+
     // Adiciona ao store usando a função renomeada
     this.layersStore.addLayerToStore({
       id: layerId,
-      year,
-      scale,
+      year: this.locationStore.year,
+      scale: this.locationStore.scale,
       opacity,
       source
     });
@@ -138,22 +149,11 @@ export class LayerController {
       return true;
     }
 
-    // Configura a fonte da camada
-    const source = typeof layerConfig.source === 'function'
-      ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.currentMunicipioId)
-      : layerConfig.source;
-
     // Obtém lista atual de camadas ativas
     const activeLayers = [...this.layersStore.getActiveLayers];
 
     // Adiciona ao store primeiro
-    const storeSuccess = this.addLayerToStore(
-      layerId,
-      source,
-      0.7,
-      this.locationStore.year,
-      this.locationStore.scale
-    );
+    const storeSuccess = this.addLayerToStore(layerConfig, LayerController.defaultOpacity);
 
     if (!storeSuccess) {
       console.error('[LayerController] Falha ao adicionar camada ao store:', layerId);
@@ -162,7 +162,7 @@ export class LayerController {
     }
 
     // Adiciona ao mapa
-    const mapSuccess = this.addLayerToMap(layerConfig, source, activeLayers);
+    const mapSuccess = this.addLayerToMap(layerConfig, activeLayers);
 
     if (!mapSuccess) {
       console.error('[LayerController] Falha ao adicionar camada ao mapa:', layerId);
