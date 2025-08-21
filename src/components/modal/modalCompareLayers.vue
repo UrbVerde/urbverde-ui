@@ -82,9 +82,6 @@ import modalBootstrap from './modalBootstrap.vue';
 import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 import draggable from 'vuedraggable';
-// import { setupDynamicLayers } from '@/components/map/layers/MapLayerController';
-// import { getLayerConfig, getLayerPaint } from '@/constants/layers';
-// import { reorderLayerSetup } from '@/components/map/layers/MapLayerController';
 import { createLayerController } from '@/components/map/layers/LayerController';
 
 const refModal = ref(null);
@@ -128,7 +125,7 @@ const isLayerActive = (layerId) => {
 };
 
 // Instância do LayerController
-const layerController = createLayerController(layersStore, locationStore);
+const layerController = createLayerController();
 
 const toggleLayer = (layer) => {
   if (isLayerActive(`${layer.id}`)) {

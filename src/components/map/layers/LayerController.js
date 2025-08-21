@@ -1,5 +1,18 @@
 import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
+import { useLayersStore } from '@/stores/layersStore';
+import { useLocationStore } from '@/stores/locationStore';
 // import { reorderLayerSetup } from './MapLayerController.js';
+
+/**
+ * Função de conveniência para criar uma instância do LayerController
+ * @returns {LayerController} Instância do LayerController
+ */
+export function createLayerController() {
+  const layersStore = useLayersStore();
+  const locationStore = useLocationStore();
+
+  return new LayerController(layersStore, locationStore);
+}
 
 /**
  * Classe para controlar a criação e adição de layers no mapa
@@ -7,6 +20,8 @@ import { getLayerConfig, getLayerPaint } from '@/constants/layers.js';
 export class LayerController {
   // Constante para opacidade padrão das camadas
   static defaultOpacity = 0.7;
+  // Constante para camada padrão de referência
+  static defaultTopLayer = 'highlight_selected-layer';
 
   constructor(layersStore, locationStore) {
     this.layersStore = layersStore;
@@ -19,7 +34,7 @@ export class LayerController {
    * @param {Array} activeLayers - Lista de camadas ativas
    * @returns {boolean} Sucesso da operação
    */
-  addLayerToMap(layerConfig, activeLayers) {
+  addLayerToMap(layerConfig) {
     if (!this.layersStore.mapRef) {
       console.warn('[LayerController] Map reference not available');
 
@@ -34,8 +49,9 @@ export class LayerController {
       : layerConfig.source;
 
     // Determina onde a camada será inserida
+    const activeLayers = this.layersStore.getActiveLayers;
     const topLayer = activeLayers[0];
-    const beforeId = (topLayer && topLayer.id === 'parks') ? 'parks' : 'highlight_selected-layer';
+    const beforeId = (topLayer && topLayer.id === 'parks') ? 'parks' : LayerController.defaultTopLayer;
 
     console.log('[LayerController] Adicionando camada ao mapa:', {
       camada: layerId,
@@ -74,6 +90,7 @@ export class LayerController {
         sourceLayer: source.sourceLayer,
         beforeId
       });
+      //   alert(beforeId);
 
       this.layersStore.mapRef.addLayer(layerObject, beforeId);
     }
@@ -85,7 +102,7 @@ export class LayerController {
 
     // Adiciona subcamadas para camadas vetoriais
     if (layerConfig.type === 'vector' || layerConfig.dataType === 'vector') {
-      this.layersStore.addSubLayer(layerId);
+      this.mountSubLayer(layerConfig);
     }
 
     return true;
@@ -149,9 +166,6 @@ export class LayerController {
       return true;
     }
 
-    // Obtém lista atual de camadas ativas
-    const activeLayers = [...this.layersStore.getActiveLayers];
-
     // Adiciona ao store primeiro
     const storeSuccess = this.addLayerToStore(layerConfig, LayerController.defaultOpacity);
 
@@ -162,7 +176,7 @@ export class LayerController {
     }
 
     // Adiciona ao mapa
-    const mapSuccess = this.addLayerToMap(layerConfig, activeLayers);
+    const mapSuccess = this.addLayerToMap(layerConfig);
 
     if (!mapSuccess) {
       console.error('[LayerController] Falha ao adicionar camada ao mapa:', layerId);
@@ -174,14 +188,349 @@ export class LayerController {
 
     return true;
   }
-}
 
-/**
- * Função de conveniência para criar uma instância do LayerController
- * @param {Object} layersStore - Store de layers
- * @param {Object} locationStore - Store de localização
- * @returns {LayerController} Instância do LayerController
- */
-export function createLayerController(layersStore, locationStore) {
-  return new LayerController(layersStore, locationStore);
+  /**
+   * Cria/insere subcamadas no mapa
+   * @param {Object} layerConfig - Configuração da camada principal
+   * @returns {boolean} Sucesso da operação
+   */
+  addSubLayerToMap(layerConfig) {
+    const layerId = layerConfig.id;
+
+    // Verifica se a camada existe e é vetorial
+    if (!layerConfig || (layerConfig.type !== 'vector' && layerConfig.dataType !== 'vector')) {
+      console.warn(`[LayerController] Cannot add sublayers for non-vector layer: ${layerId}`);
+
+      return false;
+    }
+
+    // Encontra a camada principal no activeLayers
+    const mainLayerIndex = this.layersStore.getActiveLayers.findIndex(l => l.id === layerId);
+    if (mainLayerIndex === -1) {
+      console.warn(`[LayerController] Main layer not found in activeLayers: ${layerId}`);
+
+      return false;
+    }
+
+    const mainLayer = this.layersStore.getActiveLayers[mainLayerIndex];
+
+    // Verifica se as subcamadas já existem no mapa
+    const fillLayerId = `${layerId}_fill`;
+    const outlineLayerId = `${layerId}_outline`;
+
+    if (this.layersStore.mapRef.getLayer(fillLayerId) && this.layersStore.mapRef.getLayer(outlineLayerId)) {
+      console.log(`[LayerController] Sublayers already exist in map for layer: ${layerId}`);
+
+      return true;
+    }
+
+    // Cria as duas subcamadas
+    const outlineSubLayer = {
+      id: outlineLayerId,
+      type: 'line',
+      source: layerId, // Usa o mesmo source da camada principal
+      'source-layer': mainLayer.source?.sourceLayer,
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          '#ffffff', // Branco no hover
+          '#666666'  // Cinza escuro normal
+        ],
+        'line-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          3,
+          1
+        ],
+        'line-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.7
+        ]
+      }
+    };
+
+    const fillSubLayer = {
+      id: fillLayerId,
+      type: 'fill',
+      source: layerId, // Usa o mesmo source da camada principal
+      'source-layer': mainLayer.source?.sourceLayer,
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'fill-color': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          'rgba(255, 255, 255, 0.2)', // Branco semi-transparente no hover
+          'transparent'
+        ],
+        'fill-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          0.5,
+          0.1
+        ]
+      }
+    };
+
+    // Adiciona as subcamadas ao mapa
+    if (this.layersStore.mapRef) {
+      // Determina o beforeID baseado na posição da camada principal
+      let beforeID;
+      if (mainLayerIndex === 0) {
+        beforeID = LayerController.defaultTopLayer;
+      } else {
+        beforeID = this.layersStore.getActiveLayers[mainLayerIndex - 1].id;
+      }
+
+      // Adiciona a primeira subcamada (fill) - deve ficar por baixo
+      this.layersStore.mapRef.addLayer(fillSubLayer, beforeID);
+      console.log(`[LayerController] Added sublayer ${fillSubLayer.id} with beforeID: ${beforeID}`);
+
+      // Adiciona a segunda subcamada (outline) - deve ficar por cima
+      this.layersStore.mapRef.addLayer(outlineSubLayer, fillSubLayer.id);
+      console.log(`[LayerController] Added sublayer ${outlineSubLayer.id} with beforeID: ${fillSubLayer.id}`);
+
+      // Configura eventos de hover para as subcamadas
+      this.setupSubLayerHoverEvents(layerId, outlineLayerId, fillLayerId);
+    }
+
+    console.log(`[LayerController] Sublayers added to map for layer ${layerId}`);
+
+    return true;
+  }
+
+  /**
+   * Registra as subcamadas no activeLayers (se ainda não existir)
+   * @param {Object} layerMeta - Metadados da camada principal
+   * @returns {boolean} Sucesso da operação
+   */
+  addSubLayerToStore(layerMeta) {
+    const layerId = layerMeta.id;
+
+    // Encontra a camada principal no activeLayers
+    const mainLayerIndex = this.layersStore.getActiveLayers.findIndex(l => l.id === layerId);
+    if (mainLayerIndex === -1) {
+      console.warn(`[LayerController] Main layer not found in activeLayers: ${layerId}`);
+
+      return false;
+    }
+
+    const mainLayer = this.layersStore.getActiveLayers[mainLayerIndex];
+
+    // Inicializa subcamadas se não existir
+    if (!mainLayer.subLayers) {
+      mainLayer.subLayers = [];
+    }
+
+    // Verifica se as subcamadas já existem no store
+    const fillLayerId = `${layerId}_fill`;
+    const outlineLayerId = `${layerId}_outline`;
+
+    const existingFill = mainLayer.subLayers.find(sub => sub.id === fillLayerId);
+    const existingOutline = mainLayer.subLayers.find(sub => sub.id === outlineLayerId);
+
+    if (existingFill && existingOutline) {
+      console.log(`[LayerController] Sublayers already exist in store for layer: ${layerId}`);
+
+      return true;
+    }
+
+    // Cria as duas subcamadas para o store
+    const outlineSubLayer = {
+      id: outlineLayerId,
+      type: 'line',
+      source: layerId,
+      'source-layer': mainLayer.source?.sourceLayer
+    };
+
+    const fillSubLayer = {
+      id: fillLayerId,
+      type: 'fill',
+      source: layerId,
+      'source-layer': mainLayer.source?.sourceLayer
+    };
+
+    // Adiciona as subcamadas ao array de subcamadas da camada principal
+    if (!existingFill) {
+      mainLayer.subLayers.push(fillSubLayer);
+    }
+    if (!existingOutline) {
+      mainLayer.subLayers.push(outlineSubLayer);
+    }
+
+    console.log(`[LayerController] Sublayers registered in store for layer ${layerId}:`, mainLayer.subLayers);
+
+    return true;
+  }
+
+  /**
+   * Facade que chama addSubLayerToStore e addSubLayerToMap em sequência (idempotente)
+   * @param {Object} layerConfig - Configuração da camada principal
+   * @returns {boolean} Sucesso da operação
+   */
+  mountSubLayer(layerConfig) {
+    const layerId = layerConfig.id;
+    console.log(`[LayerController] Mounting sublayers for layer: ${layerId}`);
+
+    // Adiciona ao store primeiro
+    const storeSuccess = this.addSubLayerToStore(layerConfig);
+    if (!storeSuccess) {
+      console.error(`[LayerController] Failed to add sublayers to store for layer: ${layerId}`);
+
+      return false;
+    }
+
+    // Adiciona ao mapa
+    const mapSuccess = this.addSubLayerToMap(layerConfig);
+    if (!mapSuccess) {
+      console.error(`[LayerController] Failed to add sublayers to map for layer: ${layerId}`);
+
+      return false;
+    }
+
+    console.log(`[LayerController] Sublayers mounted successfully for layer: ${layerId}`);
+
+    return true;
+  }
+
+  /**
+   * @deprecated Use mountSubLayer instead
+   * Adiciona subcamadas para camadas vetoriais (outline e fill)
+   * @param {string} layerId - ID da camada principal
+   */
+  addSubLayer(layerId) {
+    console.warn('[LayerController] addSubLayer is deprecated. Use mountSubLayer instead.');
+
+    // Obtém configuração da camada
+    const layerConfig = getLayerConfig(layerId, this.locationStore.year, this.locationStore.scale);
+    if (!layerConfig) {
+      console.warn(`[LayerController] Layer configuration not found: ${layerId}`);
+
+      return;
+    }
+
+    return this.mountSubLayer(layerConfig);
+  }
+
+  /**
+   * Configura eventos de hover para as subcamadas
+   * @param {string} mainLayerId - ID da camada principal
+   * @param {string} outlineLayerId - ID da camada de contorno
+   * @param {string} fillLayerId - ID da camada de preenchimento
+   */
+  setupSubLayerHoverEvents(mainLayerId, outlineLayerId, fillLayerId) {
+    if (!this.layersStore.mapRef) {return;}
+
+    const mainLayer = this.layersStore.getActiveLayers.find(l => l.id === mainLayerId);
+    if (!mainLayer || !mainLayer.source?.sourceLayer) {return;}
+
+    const sourceLayer = mainLayer.source.sourceLayer;
+    let hoveredFeatureId = null;
+
+    // Evento de mousemove na camada principal
+    this.layersStore.mapRef.on('mousemove', mainLayerId, (e) => {
+      if (e.features.length > 0) {
+        const feature = e.features[0];
+        const featureId = feature.id || feature.properties.cd_mun;
+
+        if (hoveredFeatureId !== featureId) {
+          // Remove hover anterior
+          if (hoveredFeatureId !== null) {
+            this.layersStore.mapRef.setFeatureState(
+              {
+                source: mainLayerId,
+                sourceLayer,
+                id: hoveredFeatureId
+              },
+              { hover: false }
+            );
+          }
+
+          // Define novo hover
+          hoveredFeatureId = featureId;
+          this.layersStore.mapRef.setFeatureState(
+            {
+              source: mainLayerId,
+              sourceLayer,
+              id: featureId
+            },
+            { hover: true }
+          );
+        }
+      }
+    });
+
+    // Evento de mouseleave na camada principal
+    this.layersStore.mapRef.on('mouseleave', mainLayerId, () => {
+      if (hoveredFeatureId !== null) {
+        this.layersStore.mapRef.setFeatureState(
+          {
+            source: mainLayerId,
+            sourceLayer,
+            id: hoveredFeatureId
+          },
+          { hover: false }
+        );
+        hoveredFeatureId = null;
+      }
+    });
+
+    // Eventos de hover também nas subcamadas para melhor responsividade
+    [outlineLayerId, fillLayerId].forEach(subLayerId => {
+      this.layersStore.mapRef.on('mousemove', subLayerId, (e) => {
+        if (e.features.length > 0) {
+          const feature = e.features[0];
+          const featureId = feature.id || feature.properties.cd_mun;
+
+          if (hoveredFeatureId !== featureId) {
+            // Remove hover anterior
+            if (hoveredFeatureId !== null) {
+              this.layersStore.mapRef.setFeatureState(
+                {
+                  source: mainLayerId,
+                  sourceLayer,
+                  id: hoveredFeatureId
+                },
+                { hover: false }
+              );
+            }
+
+            // Define novo hover
+            hoveredFeatureId = featureId;
+            this.layersStore.mapRef.setFeatureState(
+              {
+                source: mainLayerId,
+                sourceLayer,
+                id: featureId
+              },
+              { hover: true }
+            );
+          }
+        }
+      });
+
+      this.layersStore.mapRef.on('mouseleave', subLayerId, () => {
+        if (hoveredFeatureId !== null) {
+          this.layersStore.mapRef.setFeatureState(
+            {
+              source: mainLayerId,
+              sourceLayer,
+              id: hoveredFeatureId
+            },
+            { hover: false }
+          );
+          hoveredFeatureId = null;
+        }
+      });
+    });
+
+    console.log(`[LayerController] Hover events configured for sublayers of ${mainLayerId}`);
+  }
 }
