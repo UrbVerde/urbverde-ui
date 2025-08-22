@@ -18,7 +18,7 @@ export function addParksLayer(map, locationStore, currentScale) {
   const success = mountLayers.mountLayer('parks');
 
   if (success) {
-    console.log('[LayerController] Camada parks adicionada com sucesso usando MountLayers');
+    console.log('[SetupLayers] Camada parks adicionada com sucesso usando MountLayers');
 
     // Aplicar filtro de município se necessário
     if (currentScale === 'intraurbana' && locationStore.cd_mun) {
@@ -39,7 +39,7 @@ export function addParksLayer(map, locationStore, currentScale) {
       }
     }
   } else {
-    console.error('[LayerController] Falha ao adicionar camada parks usando MountLayers');
+    console.error('[SetupLayers] Falha ao adicionar camada parks usando MountLayers');
   }
 }
 
@@ -117,7 +117,7 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
   const locationStore = useLocationStore();
   // Log do conteúdo do vetor activeLayers antes do mount
   const layersStore = useLayersStore();
-  console.log('[LayerController] Conteúdo do activeLayers antes do mount:', JSON.stringify(layersStore.activeLayers, null, 2));
+  console.log('[SetupLayers] Conteúdo do activeLayers antes do mount:', JSON.stringify(layersStore.activeLayers, null, 2));
 
   // Usar o sistema MountLayers para adicionar camadas
   const mountLayers = createMountLayers();
@@ -131,7 +131,7 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
     const config = getLayerConfig(currentLayer, currentYear, currentScale);
 
     if (!config) {
-      console.error('[LayerController] Configuração da camada não encontrada:', currentLayer);
+      console.error('[SetupLayers] Configuração da camada não encontrada:', currentLayer);
 
       return;
     }
@@ -140,7 +140,7 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
     const success = mountLayers.mountLayer(currentLayer);
 
     if (success) {
-      console.log('[LayerController] Camada principal adicionada com sucesso usando MountLayers:', currentLayer);
+      console.log('[SetupLayers] Camada principal adicionada com sucesso usando MountLayers:', currentLayer);
 
       // Adicionar interações adicionais se necessário
       if (currentScale === 'intraurbana' && currentCode) {
@@ -155,7 +155,7 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
         }
       }
     } else {
-      console.error('[LayerController] Falha ao adicionar camada principal usando MountLayers:', currentLayer);
+      console.error('[SetupLayers] Falha ao adicionar camada principal usando MountLayers:', currentLayer);
     }
   } catch (error) {
     console.error('Erro ao configurar layers:', error);

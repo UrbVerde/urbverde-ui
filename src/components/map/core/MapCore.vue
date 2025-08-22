@@ -56,7 +56,7 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 //   // setupSetoresInteractions
 // } from '@/components/map/layers/MapLayerInteractionManager.js';
 
-import { setupLayers } from '@/components/map/core/LayerController.js';
+import { setupLayers } from '@/components/map/core/SetupLayers.js';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
