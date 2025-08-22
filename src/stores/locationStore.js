@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { watchEffect, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useLayersStore } from './layersStore';
-import { createMountLayers } from '@/components/map/layers/MountLayers.js';
+// import { createMountLayers } from '@/components/map/layers/MountLayers.js';
 
 export const useLocationStore = defineStore('locationStore', {
   state: () => ({
@@ -392,27 +392,27 @@ export const useLocationStore = defineStore('locationStore', {
       watch(() => this.activeMainLayer, (newLayer, oldLayer) => {
         if (newLayer !== oldLayer) {
           if (this.lastMainLayer === null) {
-            // Caso 1: Primeira mudança de camada
-            this.lastMainLayer = newLayer;
+            // // Caso 1: Primeira mudança de camada
+            // this.lastMainLayer = newLayer;
 
-            // Usar MountLayers ao invés de setDefaultLayers
-            const mountLayers = createMountLayers();
+            // // Usar MountLayers ao invés de setDefaultLayers
+            // const mountLayers = createMountLayers();
 
-            // Montar camada parks primeiro
-            const parksSuccess = mountLayers.mountLayer('parks');
-            if (parksSuccess) {
-              console.log('[LocationStore] Camada parks montada com sucesso via MountLayers');
-            } else {
-              console.error('[LocationStore] Falha ao montar camada parks via MountLayers');
-            }
+            // // Montar camada parks primeiro
+            // const parksSuccess = mountLayers.mountLayer('parks');
+            // if (parksSuccess) {
+            //   console.log('[LocationStore] Camada parks montada com sucesso via MountLayers');
+            // } else {
+            //   console.error('[LocationStore] Falha ao montar camada parks via MountLayers');
+            // }
 
-            // Montar camada principal
-            const mainLayerSuccess = mountLayers.mountLayer(newLayer);
-            if (mainLayerSuccess) {
-              console.log('[LocationStore] Camada principal montada com sucesso via MountLayers:', newLayer);
-            } else {
-              console.error('[LocationStore] Falha ao montar camada principal via MountLayers:', newLayer);
-            }
+            // // Montar camada principal
+            // const mainLayerSuccess = mountLayers.mountLayer(newLayer);
+            // if (mainLayerSuccess) {
+            //   console.log('[LocationStore] Camada principal montada com sucesso via MountLayers:', newLayer);
+            // } else {
+            //   console.error('[LocationStore] Falha ao montar camada principal via MountLayers:', newLayer);
+            // }
           } else {
             // Caso 2: Mudança subsequente
             const isAlreadyActive = layersStore.getActiveLayers.some(layer => layer.id === newLayer);

@@ -69,26 +69,26 @@ export const useLayersStore = defineStore('layersStore', {
      * Sets the default layers configuration
      * @param {string} activeMainLayer - The main layer to be set as current
      */
-    setDefaultLayers(activeMainLayer) {
-      const parksConfig = getLayerConfig('parks', this.currentYear, this.currentScale, this.currentMunicipioId);
-      const mainLayerConfig = getLayerConfig(activeMainLayer, this.currentYear, this.currentScale, this.currentMunicipioId);
+    // setDefaultLayers(activeMainLayer) {
+    //   const parksConfig = getLayerConfig('parks', this.currentYear, this.currentScale, this.currentMunicipioId);
+    //   const mainLayerConfig = getLayerConfig(activeMainLayer, this.currentYear, this.currentScale, this.currentMunicipioId);
 
-      this.activeLayers = [
-        {
-          id: 'parks',
-          currentMain: false,
-          source: parksConfig?.source,
-          opacity: this.defaultOpacity
-        },
-        {
-          id: activeMainLayer,
-          currentMain: true,
-          source: mainLayerConfig?.source,
-          opacity: this.defaultOpacity
-        }
-      ];
-      console.log('[LayersStore] Set default layers configuration:', this.activeLayers);
-    },
+    //   this.activeLayers = [
+    //     {
+    //       id: 'parks',
+    //       currentMain: false,
+    //       source: parksConfig?.source,
+    //       opacity: this.defaultOpacity
+    //     },
+    //     {
+    //       id: activeMainLayer,
+    //       currentMain: true,
+    //       source: mainLayerConfig?.source,
+    //       opacity: this.defaultOpacity
+    //     }
+    //   ];
+    //   console.log('[LayersStore] Set default layers configuration:', this.activeLayers);
+    // },
 
     /**
      * Updates the current main layer

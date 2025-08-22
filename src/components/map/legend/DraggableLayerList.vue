@@ -50,7 +50,9 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
+import { computed,
+  // watch
+} from 'vue';
 import { storeToRefs } from 'pinia';
 import draggable from 'vuedraggable';
 import { useLayersStore } from '@/stores/layersStore';
@@ -76,11 +78,11 @@ const locationStore = useLocationStore();
 const { categories } = storeToRefs(locationStore);
 
 // Watcher para garantir que o layersStore seja inicializado
-watch(() => locationStore.activeMainLayer, (newLayer) => {
-  if (newLayer && !layersStore.getActiveLayers.length) {
-    layersStore.setDefaultLayers(newLayer);
-  }
-}, { immediate: true });
+// watch(() => locationStore.activeMainLayer, (newLayer) => {
+//   if (newLayer && !layersStore.getActiveLayers.length) {
+//     layersStore.setDefaultLayers(newLayer);
+//   }
+// }, { immediate: true });
 
 // Computed para gerenciar o estado local e sincronizar com o store
 const localLayers = computed({

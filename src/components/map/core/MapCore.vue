@@ -48,13 +48,13 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 //   // setupSetoresLayer,
 //   setupDynamicSource
 // } from '@/components/map/layers/MapLayerController.js';
-import {
-  //setupRasterInteractions,
-  removeRasterInteractions,
-  // setupVectorInteractions,
-  removeVectorInteractions,
-  // setupSetoresInteractions
-} from '@/components/map/layers/MapLayerInteractionManager.js';
+// import {
+//   //setupRasterInteractions,
+//   removeRasterInteractions,
+//   // setupVectorInteractions,
+//   removeVectorInteractions,
+//   // setupSetoresInteractions
+// } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { setupLayers } from '@/components/map/core/LayerController.js';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
@@ -119,7 +119,7 @@ watch(
       if (mapLoaded.value) {
 
         layersStore.removeLayerFromMap('parks');
-        setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
+        // setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
       }
     }
   }
@@ -134,8 +134,8 @@ watch(
       layersStore.syncYearWithLocationStore(newYear);
       if (mapLoaded.value) {
 
-        removeDynamicLayer();
-        setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
+        // removeDynamicLayer();
+        // setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
       }
     }
   }
@@ -173,34 +173,34 @@ function updateMunicipalityFilters(mapInstance, newCdMun) {
 /* ---------------------------------------
    HELPER FUNCTIONS
 ---------------------------------------*/
-function removeDynamicLayer() {
-  if (!map.value) { return; }
+// function removeDynamicLayer() {
+//   if (!map.value) { return; }
 
-  // Remover handlers de eventos
-  removeRasterInteractions(map.value);
-  removeVectorInteractions(map.value);
+//   // Remover handlers de eventos
+//   removeRasterInteractions(map.value);
+//   removeVectorInteractions(map.value);
 
-  // Remover camadas
-  ['dynamic-layer', 'dynamic-layer-outline', 'parks', 'parks_fill', 'parks_outline', 'pcv-layer', 'setores-layer'].forEach(id => {
-    if (map.value.getLayer(id)) {
-      map.value.removeLayer(id);
-    }
-  });
+//   // Remover camadas
+//   ['dynamic-layer', 'dynamic-layer-outline', 'parks', 'parks_fill', 'parks_outline', 'pcv-layer', 'setores-layer'].forEach(id => {
+//     if (map.value.getLayer(id)) {
+//       map.value.removeLayer(id);
+//     }
+//   });
 
-  // Remover sources
-  ['dynamic-source', 'parks', 'setores-source'].forEach(id => {
-    if (map.value.getSource(id)) {
-      map.value.removeSource(id);
-    }
-  });
+//   // Remover sources
+//   ['dynamic-source', 'parks', 'setores-source'].forEach(id => {
+//     if (map.value.getSource(id)) {
+//       map.value.removeSource(id);
+//     }
+//   });
 
-  // Resetar estados
-  hoveredFeatureId = null;
-  // hoveredSetorId = null;
-  if (map.value._hoveredParkId) {
-    map.value._hoveredParkId = null;
-  }
-}
+//   // Resetar estados
+//   hoveredFeatureId = null;
+//   // hoveredSetorId = null;
+//   if (map.value._hoveredParkId) {
+//     map.value._hoveredParkId = null;
+//   }
+// }
 
 // Função para inicializar as camadas
 // async function initializeMapLayers() {
@@ -597,7 +597,7 @@ async function setupMap() {
     map.value.on('load', async() => {
       mapLoaded.value = true;
       generateBaseLayers();
-      await setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
+      setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
     });
 
     // 5. Configurar referência do mapa no store
