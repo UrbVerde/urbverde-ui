@@ -49,15 +49,14 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 //   setupDynamicSource
 // } from '@/components/map/layers/MapLayerController.js';
 import {
-  setupRasterInteractions,
+  //setupRasterInteractions,
   removeRasterInteractions,
   // setupVectorInteractions,
   removeVectorInteractions,
   // setupSetoresInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 
-import { useMapLayers } from '@/composables/useMapLayers';
-import { createMountLayers } from '@/components/map/layers/MountLayers.js';
+import { setupLayers } from '@/components/map/core/LayerController.js';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
@@ -102,9 +101,6 @@ const currentScale = computed(() => locationStore.scale);
 const currentYear = computed(() => locationStore.year || '2021');
 const currentCode = computed(() => locationStore.cd_mun);
 
-// No setup
-const { addLayer } = useMapLayers(map);
-
 watch(
   () => locationStore.cd_mun,
   async(newCdMun, oldCdMun) => {
@@ -123,7 +119,7 @@ watch(
       if (mapLoaded.value) {
 
         layersStore.removeLayerFromMap('parks');
-        setupLayers();
+        setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
       }
     }
   }
@@ -139,7 +135,7 @@ watch(
       if (mapLoaded.value) {
 
         removeDynamicLayer();
-        setupLayers();
+        setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
       }
     }
   }
@@ -233,88 +229,6 @@ function removeDynamicLayer() {
 //     console.error('Erro ao configurar layers:', error);
 //   }
 // }
-
-// Função para adicionar camada de parques
-function addParksLayer() {
-  // Usar o sistema MountLayers para adicionar a camada parks
-  const mountLayers = createMountLayers();
-  const success = mountLayers.mountLayer('parks');
-
-  if (success) {
-    console.log('[MapCore] Camada parks adicionada com sucesso usando MountLayers');
-
-    // Aplicar filtro de município se necessário
-    if (currentScale.value === 'intraurbana' && locationStore.cd_mun) {
-      const map = map.value;
-      if (map && map.getLayer('parks')) {
-        map.setFilter('parks', ['==', 'cd_mun', String(locationStore.cd_mun)]);
-
-        // Aplicar filtro nas subcamadas também
-        const fillLayerId = 'parks_fill';
-        const outlineLayerId = 'parks_outline';
-
-        if (map.getLayer(fillLayerId)) {
-          map.setFilter(fillLayerId, ['==', 'cd_mun', String(locationStore.cd_mun)]);
-        }
-
-        if (map.getLayer(outlineLayerId)) {
-          map.setFilter(outlineLayerId, ['==', 'cd_mun', String(locationStore.cd_mun)]);
-        }
-      }
-    }
-  } else {
-    console.error('[MapCore] Falha ao adicionar camada parks usando MountLayers');
-  }
-}
-
-/**
- * Fetches the raster value from the WMS.
- */
-async function fetchRasterValue(lng, lat, controller) {
-  const bboxSize = 0.0001;
-  const ts = Date.now();
-  let url;
-  if (currentLayer.value === 'ndvi') {
-    url = `https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=urbverde:NDVI-10m-${currentYear.value}&bbox=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}&width=101&height=101&srs=EPSG:4326&format=application/json&_ts=${ts}`;
-  } else {
-    url = 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?' +
-      'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&' +
-      'LAYERS=urbverde:tst-intraurbana-rel-30m-2021a2016&' +
-      'QUERY_LAYERS=urbverde:tst-intraurbana-rel-30m-2021a2016&' +
-      'INFO_FORMAT=application/json&FEATURE_COUNT=1&X=50&Y=50&' +
-      `SRS=EPSG:4326&WIDTH=101&HEIGHT=101&_ts=${ts}&` +
-      `BBOX=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}`;
-  }
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    const contentType = response.headers.get('content-type') || '';
-    if (!contentType.includes('application/json')) {
-      console.error('Expected JSON but got:', contentType);
-
-      return null;
-    }
-    const data = await response.json();
-    if (currentLayer.value === 'ndvi') {
-      if (data?.features?.[0]?.properties?.NDVI !== undefined) {
-        const val = data.features[0].properties.NDVI;
-
-        return val !== null ? Number(val) : null;
-      }
-    } else {
-      if (data?.features?.[0]?.properties?.GRAY_INDEX !== undefined) {
-        const val = data.features[0].properties.GRAY_INDEX;
-
-        return val !== null ? Number(val) : null;
-      }
-    }
-  } catch (error) {
-    console.error('Error in fetchRasterValue:', error);
-
-    return null;
-  }
-
-  return null;
-}
 
 function handleMissingImage(e) {
   const imageId = e.id?.trim();
@@ -683,7 +597,7 @@ async function setupMap() {
     map.value.on('load', async() => {
       mapLoaded.value = true;
       generateBaseLayers();
-      await setupLayers();
+      await setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
     });
 
     // 5. Configurar referência do mapa no store
@@ -757,39 +671,6 @@ function setupMapEventHandlers() {
   map.value.on('zoomend', () => {
     locationStore.updateScaleFromZoom(map.value.getZoom());
   });
-}
-
-async function setupLayers() {
-  if (!map.value || !currentLayer.value) { return; }
-
-  try {
-    // Obter configuração da camada
-    const config = getLayerConfig(currentLayer.value, currentYear.value, currentScale.value);
-
-    // Adicionar a camada usando o LayerOrderManager
-    const result = await addLayer(currentLayer.value);
-
-    // Se a camada foi adicionada com sucesso e tem subcamadas, adicionar ao store
-    if (result && result.success && result.sublayers && result.sublayers.length > 0) {
-      layersStore.addSublayers(currentLayer.value, result.sublayers);
-      console.log(`[MapCore] Added ${result.sublayers.length} sublayers for ${currentLayer.value}`);
-    }
-
-    // Adicionar camadas adicionais se necessário
-    if (currentScale.value === 'intraurbana' && currentCode.value) {
-      if (config.type === 'raster') {
-        addParksLayer();
-        setupRasterInteractions(map.value, config, fetchRasterValue);
-      } else {
-        // setupSetoresLayer(map.value, locationStore);
-        // setupSetoresInteractions(map.value, hoveredSetorId);
-        addParksLayer();
-        // setupVectorInteractions(map.value, config);
-      }
-    }
-  } catch (error) {
-    console.error('Erro ao configurar layers:', error);
-  }
 }
 
 onMounted(() => {
