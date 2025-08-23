@@ -69,19 +69,22 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Emissões totais da cidade',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 0,
                   numberType: 'large',
-                  overrideCardSubtitle: 'Quantidade que a cidade emite de CO₂e',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'emissions_municipality',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Emissões por habitante (IEH)',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 1,
                   numberType: 'large',
-                  overrideCardSubtitle: 'Emissão de CO₂e em relação ao número de habitantes. O valor nacional em 2023 foi de X tCO₂e/hab',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'emissions_municipality_hab',
+                  overrideCardSubtitle: 'O valor nacional em 2023 foi de X tCO₂e/hab',
                 }
               }
             ]
@@ -95,41 +98,49 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Emissões originadas da agropecuária',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 2,
+                  numberType: 'small',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'emissions_municipality_1',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 3,
+                  numberType: 'small',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'emissions_municipality_2',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 4,
+                  numberType: 'small',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'emissions_municipality_3',
+                }
+              },
+              {
+                component: 'CardData',
+                props: {
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 5,
                   numberType: 'small',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Emissões originadas da energia',
-                  overrideNumberValue: 'Em breve',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/emissions',
+                  cardIndex: 6,
                   numberType: 'small',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Emissões originadas da mudanças de uso da terra e floresta',
-                  overrideNumberValue: 'Em breve',
-                  numberType: 'small',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Emissões originadas de processos industriais',
-                  overrideNumberValue: 'Em breve',
-                  numberType: 'small',
-                }
-              },
-              {
-                component: 'CardData',
-                props: {
-                  overrideTitle: 'Emissões originadas de resíduos',
-                  overrideNumberValue: 'Em breve',
-                  numberType: 'small',
+                  showSeeOnMap: true,
+                  seeOnMapLayerID: 'emissions_municipality_5',
                 }
               },
             ]

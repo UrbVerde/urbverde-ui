@@ -125,6 +125,12 @@ const fetchYears = async(cityCode) => {
     case 'policies_vegetation':
       apiUrl = `http://localhost:8080/v1/cards/pp/vegetation?city=${cityCode}`;
       break;
+    case 'policies_hidro':
+      apiUrl = `http://localhost:8080/v1/cards/pp/hydrology?city=${cityCode}`;
+      break;
+    case 'emissions':
+      apiUrl = `http://localhost:8080/v1/cards/pp/emissions?city=${cityCode}`;
+      break;
     default:
       apiUrl = `http://localhost:8080/v1/cards/weather/temperature?city=${cityCode}`;
     }
