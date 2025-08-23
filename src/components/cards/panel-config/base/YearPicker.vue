@@ -132,7 +132,7 @@ const fetchYears = async(cityCode) => {
       apiUrl = `http://localhost:8080/v1/cards/pp/emissions?city=${cityCode}`;
       break;
     default:
-      apiUrl = `http://localhost:8080/v1/cards/weather/temperature?city=${cityCode}`;
+      apiUrl = `http://localhost:8080/v1/cards/weather/vegetation?city=${cityCode}`;
     }
 
     const response = await fetch(apiUrl);
