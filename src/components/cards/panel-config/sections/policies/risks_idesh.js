@@ -47,14 +47,14 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
                   cardIndex: 24,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
                   cardIndex: 25,
                 }
               },
@@ -69,14 +69,14 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
                   cardIndex: 26,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
                   cardIndex: 27,
                 }
               },
@@ -91,14 +91,14 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
                   cardIndex: 28,
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/risks',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/risks',
                   cardIndex: 29,
                 }
               },

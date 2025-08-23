@@ -183,7 +183,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
                   cardIndex: 2,
                   numberType: 'composed',
                   showButtonPrimary: true,
@@ -213,7 +213,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/weather/temperature',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/weather/temperature',
                   cardIndex: 1,
                   numberType: 'large',
                   showModalButton: true,
