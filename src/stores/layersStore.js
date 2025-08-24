@@ -1,6 +1,6 @@
 // urbverde-ui/src/stores/layersStore.js
 import { defineStore } from 'pinia';
-import { updateCurrentMainLayer, getCurrentMainLayer, clearLayers, getLayerConfig } from '@/utils/dynamicLayersOrder';
+import { getLayerConfig } from '@/utils/dynamicLayersOrder';
 import { LAYER_CONFIGS } from '@/constants/layers';
 import { createHoverManager } from '@/components/map/layers/HoverManager.js';
 import { createUnmountLayers } from '@/components/map/layers/UnmountLayers';
@@ -23,7 +23,7 @@ export const useLayersStore = defineStore('layersStore', {
     isIntraurbanScale: (state) => state.currentScale === 'intraurbana',
     hasSetores: (state) => state.setoresVisible && state.isIntraurbanScale,
     getActiveLayers: (state) => state.activeLayers,
-    getCurrentMainLayer: (state) => getCurrentMainLayer(state.activeLayers),
+    getCurrentMainLayer: (state) => state.activeLayers.find(layer => layer.currentMain) || null,
     getLayerOpacity: (state) => (layerId) => {
       const layerConfig = LAYER_CONFIGS[layerId];
 
@@ -66,6 +66,54 @@ export const useLayersStore = defineStore('layersStore', {
     },
 
     /**
+     * Atualiza a lista de camadas ativas
+     * @param {Array} newLayers - Nova lista de camadas
+     */
+    updateActiveLayers(newLayers) {
+      this.activeLayers = newLayers;
+      console.log('[LayersStore] Updated active layers:', this.activeLayers);
+    },
+
+    /**
+     * Troca a posição de duas camadas no array
+     * @param {number} index1 - Índice da primeira camada
+     * @param {number} index2 - Índice da segunda camada
+     */
+    swapLayerPositions(index1, index2) {
+      if (index1 >= 0 && index2 >= 0 && index1 < this.activeLayers.length && index2 < this.activeLayers.length) {
+        const temp = this.activeLayers[index1];
+        this.activeLayers[index1] = this.activeLayers[index2];
+        this.activeLayers[index2] = temp;
+        console.log(`[LayersStore] Swapped layers at positions ${index1} and ${index2}`);
+      }
+    },
+
+    /**
+     * Substitui uma camada em uma posição específica
+     * @param {number} index - Índice da posição
+     * @param {Object} newLayer - Nova camada
+     */
+    replaceLayerAt(index, newLayer) {
+      if (index >= 0 && index < this.activeLayers.length) {
+        this.activeLayers.splice(index, 1, newLayer);
+        console.log(`[LayersStore] Replaced layer at position ${index}:`, newLayer);
+      }
+    },
+
+    /**
+     * Atualiza a flag currentMain de uma camada específica
+     * @param {string} layerId - ID da camada
+     * @param {boolean} isMain - Se deve ser a camada principal
+     */
+    setLayerAsMain(layerId, isMain) {
+      const layer = this.activeLayers.find(l => l.id === layerId);
+      if (layer) {
+        layer.currentMain = isMain;
+        console.log(`[LayersStore] Set layer ${layerId} as main: ${isMain}`);
+      }
+    },
+
+    /**
      * Sets the default layers configuration
      * @param {string} activeMainLayer - The main layer to be set as current
      */
@@ -89,16 +137,6 @@ export const useLayersStore = defineStore('layersStore', {
     //   ];
     //   console.log('[LayersStore] Set default layers configuration:', this.activeLayers);
     // },
-
-    /**
-     * Updates the current main layer
-     * @param {string} newMainLayer - The new main layer
-     * @param {boolean} isAlreadyActive - Whether the new layer is already active
-     */
-    updateCurrentMainLayer(newMainLayer, isAlreadyActive) {
-      this.activeLayers = updateCurrentMainLayer(this.activeLayers, newMainLayer, isAlreadyActive);
-      console.log('[LayersStore] Updated current main layer:', this.activeLayers);
-    },
 
     /**
      * Sets the opacity for *one* of the currently active layers
@@ -219,7 +257,7 @@ export const useLayersStore = defineStore('layersStore', {
      * Clear all active layers
      */
     clearActiveLayers() {
-      this.activeLayers = clearLayers();
+      this.activeLayers = [];
       console.log('[LayersStore] Cleared all active layers');
     },
 

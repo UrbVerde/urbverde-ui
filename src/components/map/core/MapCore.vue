@@ -57,6 +57,7 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 // } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { setupLayers } from '@/components/map/core/SetupLayers.js';
+import { setupMapWatcher } from '@/components/map/core/MapWatcher.js';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
@@ -606,8 +607,8 @@ async function setupMap() {
     console.log('[MapCore] Map reference set:', layersStore.mapRef);
 
     // 6. Inicializar o HoverManager
-    layersStore.initializeHoverManager();
-    console.log('[MapCore] HoverManager initialized');
+    // layersStore.initializeHoverManager();
+    // console.log('[MapCore] HoverManager initialized');
 
     // 7. Adicionar controles do mapa
     setupMapControls();
@@ -617,6 +618,9 @@ async function setupMap() {
 
     // 9. Configurar handlers de eventos do mapa
     setupMapEventHandlers();
+
+    // 10. Configurar watcher para mudanças de camada principal
+    setupMapWatcher(locationStore);
 
   } catch (error) {
     console.error('Erro ao configurar mapa:', error);
