@@ -11,14 +11,20 @@ import { useLocationStore } from '@/stores/locationStore';
  * @returns {Object} Configuração da layer raster
  */
 export function createRasterLayer(config) {
-  console.log('Criando layer raster:', config);
+  console.log('[MapLayerController] === INÍCIO createRasterLayer ===');
+  console.log('[MapLayerController] Configuração recebida:', config);
 
-  return {
+  const layerConfig = {
     id: config.id,
     type: 'raster',
     source: config.id,
     paint: config.paint
   };
+
+  console.log('[MapLayerController] Layer raster criada:', layerConfig);
+  console.log('[MapLayerController] === FIM createRasterLayer ===');
+
+  return layerConfig;
 }
 
 /**
@@ -27,15 +33,21 @@ export function createRasterLayer(config) {
  * @returns {Object} Configuração da layer vetorial
  */
 export function createVectorLayer(config) {
-  console.log('Criando layer vetorial:', config);
+  console.log('[MapLayerController] === INÍCIO createVectorLayer ===');
+  console.log('[MapLayerController] Configuração recebida:', config);
 
-  return {
+  const layerConfig = {
     id: config.id,
     type: 'fill',
     source: config.id,
     'source-layer': config.source.sourceLayer,
     paint: getLayerPaint(config)
   };
+
+  console.log('[MapLayerController] Layer vetorial criada:', layerConfig);
+  console.log('[MapLayerController] === FIM createVectorLayer ===');
+
+  return layerConfig;
 }
 
 /**
@@ -44,9 +56,10 @@ export function createVectorLayer(config) {
  * @returns {Object} Configuração da layer de contorno
  */
 export function createOutlineLayer(config) {
-  console.log('Criando layer de contorno:', config);
+  console.log('[MapLayerController] === INÍCIO createOutlineLayer ===');
+  console.log('[MapLayerController] Configuração recebida:', config);
 
-  return {
+  const layerConfig = {
     id: `${config.id}-outline`,
     type: 'line',
     source: config.id,
@@ -57,6 +70,11 @@ export function createOutlineLayer(config) {
       'line-opacity': 0.3
     }
   };
+
+  console.log('[MapLayerController] Layer de contorno criada:', layerConfig);
+  console.log('[MapLayerController] === FIM createOutlineLayer ===');
+
+  return layerConfig;
 }
 
 /**
@@ -67,12 +85,15 @@ export function createOutlineLayer(config) {
  * @returns {Object} Configuração da fonte
  */
 export function setupDynamicSource(config, locationStore, currentScale) {
-  console.log('Configurando source dinâmica:', { config, locationStore, currentScale });
+  console.log('[MapLayerController] === INÍCIO setupDynamicSource ===');
+  console.log('[MapLayerController] Parâmetros:', { config, locationStore, currentScale });
 
   const sourceUrl = config.source.tiles[0];
   const urlHasQuery = sourceUrl.includes('?');
   const isVector = config.type !== 'raster';
   const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun && isVector;
+
+  console.log('[MapLayerController] Análise da URL:', { sourceUrl, urlHasQuery, isVector, shouldFilter });
 
   const filteredUrl = shouldFilter
     ? `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=(cd_mun='${locationStore.cd_mun}' OR cd_mun=${locationStore.cd_mun})`
@@ -83,7 +104,9 @@ export function setupDynamicSource(config, locationStore, currentScale) {
     tiles: [filteredUrl]
   };
 
-  console.log('Source configurada:', sourceConfig);
+  console.log('[MapLayerController] URL final:', filteredUrl);
+  console.log('[MapLayerController] Source configurada:', sourceConfig);
+  console.log('[MapLayerController] === FIM setupDynamicSource ===');
 
   return sourceConfig;
 }
@@ -96,19 +119,34 @@ export function setupDynamicSource(config, locationStore, currentScale) {
  * @param {string} currentScale - Escala atual
  */
 export function applyLayerFilters(map, config, locationStore, currentScale) {
-  console.log('Aplicando filtros:', { config, locationStore, currentScale });
+  console.log('[MapLayerController] === INÍCIO applyLayerFilters ===');
+  console.log('[MapLayerController] Parâmetros:', { config, locationStore, currentScale });
 
   const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun && config.type !== 'raster';
+  console.log('[MapLayerController] shouldFilter:', shouldFilter);
 
   if (shouldFilter) {
-    map.setFilter(config.id, [
+    console.log('[MapLayerController] Aplicando filtros para camada:', config.id);
+
+    const filter = [
       'any',
       ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
       ['==', ['get', 'cd_mun'], locationStore.cd_mun]
-    ]);
+    ];
 
-    map.setFilter(`${config.id}-outline`, ['==', 'cd_mun', locationStore.cd_mun]);
+    console.log('[MapLayerController] Filtro principal:', filter);
+    map.setFilter(config.id, filter);
+
+    const outlineFilter = ['==', 'cd_mun', locationStore.cd_mun];
+    console.log('[MapLayerController] Filtro outline:', outlineFilter);
+    map.setFilter(`${config.id}-outline`, outlineFilter);
+
+    console.log('[MapLayerController] Filtros aplicados com sucesso');
+  } else {
+    console.log('[MapLayerController] Filtros não aplicados (shouldFilter = false)');
   }
+
+  console.log('[MapLayerController] === FIM applyLayerFilters ===');
 }
 
 /**
@@ -119,35 +157,44 @@ export function applyLayerFilters(map, config, locationStore, currentScale) {
  */
 
 export function setupDynamicLayers(map, layerId) {
+  console.log('[MapLayerController] === INÍCIO setupDynamicLayers ===');
+  console.log('[MapLayerController] Parâmetros:', { map, layerId });
+
   const locationStore = useLocationStore();
   const { year, scale } = locationStore;
 
-  console.log('[MapLayerController] Iniciando setupDynamicLayers:', { layerId, year, scale });
+  console.log('[MapLayerController] Estado do locationStore:', { year, scale, cd_mun: locationStore.cd_mun });
 
   try {
     // Obter configuração da layer
+    console.log('[MapLayerController] Obtendo configuração para layerId:', layerId);
     const config = getLayerConfig(layerId, year, scale);
     console.log('[MapLayerController] Configuração obtida:', config);
 
     if (!config || !config.source) {
       console.error('[MapLayerController] Configuração inválida para a layer:', layerId);
+      console.log('[MapLayerController] === FIM setupDynamicLayers (ERRO) ===');
 
       return false;
     }
 
     // Validar tipo da camada
+    console.log('[MapLayerController] Validando tipo da camada:', config.type);
     if (!config.type || !['raster', 'vector'].includes(config.type)) {
       console.error('[MapLayerController] Tipo de camada inválido:', config.type);
+      console.log('[MapLayerController] === FIM setupDynamicLayers (ERRO) ===');
 
       return false;
     }
 
     // Configurar source
+    console.log('[MapLayerController] Configurando source...');
     const sourceConfig = setupDynamicSource(config, locationStore, scale);
     console.log('[MapLayerController] Source configurado:', sourceConfig);
 
     if (!sourceConfig) {
       console.error('[MapLayerController] Falha ao configurar source para a layer:', layerId);
+      console.log('[MapLayerController] === FIM setupDynamicLayers (ERRO) ===');
 
       return false;
     }
@@ -155,17 +202,22 @@ export function setupDynamicLayers(map, layerId) {
     // Adicionar source ao mapa
     console.log('[MapLayerController] Adicionando source ao mapa:', config.id);
     map.addSource(config.id, sourceConfig);
+    console.log('[MapLayerController] Source adicionado com sucesso');
 
     // Criar e adicionar layer principal
+    console.log('[MapLayerController] Criando layer principal...');
     let mainLayer;
     if (config.type === 'raster') {
+      console.log('[MapLayerController] Criando layer raster...');
       mainLayer = createRasterLayer(config);
     } else if (config.type === 'vector') {
+      console.log('[MapLayerController] Criando layer vetorial...');
       mainLayer = createVectorLayer(config);
     }
 
     if (!mainLayer) {
       console.error('[MapLayerController] Falha ao criar layer principal:', config.id);
+      console.log('[MapLayerController] === FIM setupDynamicLayers (ERRO) ===');
 
       return false;
     }
@@ -185,12 +237,16 @@ export function setupDynamicLayers(map, layerId) {
     // }
 
     // Aplicar filtros se necessário
+    console.log('[MapLayerController] Aplicando filtros...');
     applyLayerFilters(map, config, locationStore, scale);
     console.log('[MapLayerController] Filtros aplicados');
+
+    console.log('[MapLayerController] === FIM setupDynamicLayers (SUCESSO) ===');
 
     return true;
   } catch (error) {
     console.error('[MapLayerController] Erro ao configurar layers dinâmicas:', error);
+    console.log('[MapLayerController] === FIM setupDynamicLayers (ERRO) ===');
 
     return false;
   }

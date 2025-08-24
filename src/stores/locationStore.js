@@ -259,6 +259,9 @@ export const useLocationStore = defineStore('locationStore', {
           console.log('locationStore: Setting default category and layer');
           this.category = firstCategory.name;
           this.activeMainLayer = firstLayer.id;
+          if (this.lastMainLayer === null) {
+            this.lastMainLayer = this.activeMainLayer;
+          }
         }
       }
     },
@@ -335,6 +338,9 @@ export const useLocationStore = defineStore('locationStore', {
       if (payload.layer !== undefined) {
         this.activeMainLayer = payload.layer;
         this.layer = payload.layer;
+        if (this.lastMainLayer === null) {
+          this.lastMainLayer = this.activeMainLayer;
+        }
       }
     },
 

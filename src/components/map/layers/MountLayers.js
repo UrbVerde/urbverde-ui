@@ -9,8 +9,12 @@ import { createHoverManager } from './HoverManager.js';
  * @returns {MountLayers} Instância do MountLayers
  */
 export function createMountLayers() {
+  console.log('[MountLayers] === INÍCIO createMountLayers ===');
   const layersStore = useLayersStore();
   const locationStore = useLocationStore();
+
+  console.log('[MountLayers] Stores obtidos:', { layersStore, locationStore });
+  console.log('[MountLayers] === FIM createMountLayers ===');
 
   return new MountLayers(layersStore, locationStore);
 }
@@ -23,40 +27,68 @@ export class MountLayers {
   static defaultTopLayer = 'highlight_selected-layer';
 
   constructor(layersStore, locationStore) {
+    console.log('[MountLayers] === INÍCIO CONSTRUTOR ===');
+    console.log('[MountLayers] Parâmetros:', { layersStore, locationStore });
+
     this.layersStore = layersStore;
     this.locationStore = locationStore;
     this.hoverManager = createHoverManager(layersStore);
+
+    console.log('[MountLayers] HoverManager criado:', this.hoverManager);
+    console.log('[MountLayers] === FIM CONSTRUTOR ===');
   }
 
   /**
    * Cria/insere a camada (e subcamadas) no mapa
    * @param {Object} layerConfig - Configuração da camada
-   * @param {Array} activeLayers - Lista de camadas ativas
+   * @param {string} beforeID - ID da camada antes da qual inserir (opcional)
    * @returns {boolean} Sucesso da operação
    */
-  addLayerToMap(layerConfig) {
+  addLayerToMap(layerConfig, beforeID = null) {
+    console.log('[MountLayers] === INÍCIO addLayerToMap ===');
+    console.log('[MountLayers] Parâmetros:', { layerConfig, beforeID });
+
     if (!this.layersStore.mapRef) {
       console.warn('[MountLayers] Map reference not available');
+      console.log('[MountLayers] === FIM addLayerToMap (ERRO) ===');
 
       return false;
     }
 
     const layerId = layerConfig.id;
+    console.log('[MountLayers] LayerId:', layerId);
 
     // Configura a fonte da camada
+    console.log('[MountLayers] Configurando fonte da camada...');
     const source = typeof layerConfig.source === 'function'
       ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.cd_mun)
       : layerConfig.source;
 
-    // Determina onde a camada será inserida
-    const activeLayers = this.layersStore.getActiveLayers;
-    const topLayer = activeLayers[0];
+    console.log('[MountLayers] Fonte configurada:', source);
 
-    // Se a camada sendo adicionada é parks, sempre usar o defaultTopLayer
-    // Se não, verificar se parks está no topo para posicionar corretamente
-    const beforeId = (layerId === 'parks')
-      ? MountLayers.defaultTopLayer
-      : (topLayer && topLayer.id === 'parks') ? 'parks' : MountLayers.defaultTopLayer;
+    // Determina onde a camada será inserida
+    console.log('[MountLayers] Determinando posição de inserção...');
+    let beforeId;
+    const activeLayers = this.layersStore.getActiveLayers;
+    console.log('[MountLayers] Camadas ativas:', activeLayers.map(l => l.id));
+
+    if (beforeID) {
+      // Se beforeID foi fornecido externamente, usa ele
+      beforeId = beforeID;
+      console.log('[MountLayers] Usando beforeID fornecido:', beforeId);
+    } else {
+      // Comportamento original
+      const topLayer = activeLayers[0];
+      console.log('[MountLayers] Top layer:', topLayer);
+
+      // Se a camada sendo adicionada é parks, sempre usar o defaultTopLayer
+      // Se não, verificar se parks está no topo para posicionar corretamente
+      beforeId = (layerId === 'parks')
+        ? MountLayers.defaultTopLayer
+        : (topLayer && topLayer.id === 'parks') ? 'parks' : MountLayers.defaultTopLayer;
+
+      console.log('[MountLayers] beforeId calculado:', beforeId);
+    }
 
     console.log('[MountLayers] Adicionando camada ao mapa:', {
       camada: layerId,
@@ -66,18 +98,25 @@ export class MountLayers {
 
     // Adiciona a fonte ao mapa
     if (source) {
+      console.log('[MountLayers] Adicionando fonte ao mapa:', layerId);
       this.layersStore.mapRef.addSource(layerId, source);
+      console.log('[MountLayers] Fonte adicionada com sucesso');
     }
 
     // Adiciona a camada ao mapa
     if (layerConfig.type === 'raster') {
-      this.layersStore.mapRef.addLayer({
+      console.log('[MountLayers] Adicionando camada raster...');
+      const rasterLayer = {
         id: layerId,
         type: 'raster',
         source: layerId,
         paint: layerConfig.paint
-      }, beforeId);
+      };
+      console.log('[MountLayers] Configuração da camada raster:', rasterLayer);
+      this.layersStore.mapRef.addLayer(rasterLayer, beforeId);
+      console.log('[MountLayers] Camada raster adicionada com sucesso');
     } else {
+      console.log('[MountLayers] Adicionando camada vetorial...');
       const layerObject = {
         id: layerId,
         type: 'fill',
@@ -93,11 +132,12 @@ export class MountLayers {
       console.log('[MountLayers] Adicionando camada vetorial ao mapa:', {
         id: layerId,
         sourceLayer: source.sourceLayer,
-        beforeId
+        beforeId,
+        paint: layerObject.paint
       });
-      //   alert(beforeId);
 
       this.layersStore.mapRef.addLayer(layerObject, beforeId);
+      console.log('[MountLayers] Camada vetorial adicionada com sucesso');
     }
 
     console.log('[MountLayers] Camada adicionada ao mapa com sucesso:', layerId);
@@ -107,8 +147,11 @@ export class MountLayers {
 
     // Adiciona subcamadas para camadas vetoriais
     if (layerConfig.type === 'vector' || layerConfig.dataType === 'vector') {
+      console.log('[MountLayers] Adicionando subcamadas para camada vetorial...');
       this.mountSubLayer(layerConfig);
     }
+
+    console.log('[MountLayers] === FIM addLayerToMap (SUCESSO) ===');
 
     return true;
   }
@@ -117,33 +160,45 @@ export class MountLayers {
    * Registra a camada no activeLayers (se ainda não existir)
    * @param {Object} layerConfig - Configuração da camada
    * @param {number} opacity - Opacidade da camada
+   * @param {string} beforeID - ID da camada antes da qual inserir (opcional)
    * @returns {boolean} Sucesso da operação
    */
-  addLayerToStore(layerConfig, opacity) {
+  addLayerToStore(layerConfig, opacity, beforeID = null) {
+    console.log('[MountLayers] === INÍCIO addLayerToStore ===');
+    console.log('[MountLayers] Parâmetros:', { layerConfig, opacity, beforeID });
+
     const layerId = layerConfig.id;
+    console.log('[MountLayers] LayerId:', layerId);
 
     // Verifica se a camada já existe no store
-    if (this.layersStore.getActiveLayers.some(l => l.id === layerId)) {
+    const existingLayer = this.layersStore.getActiveLayers.find(l => l.id === layerId);
+    if (existingLayer) {
       console.log('[MountLayers] Camada já existe no store:', layerId);
+      console.log('[MountLayers] === FIM addLayerToStore (JÁ EXISTE) ===');
 
       return true;
     }
 
     // Configura a fonte da camada
+    console.log('[MountLayers] Configurando fonte da camada...');
     const source = typeof layerConfig.source === 'function'
       ? layerConfig.source(this.locationStore.year, this.locationStore.scale, this.locationStore.cd_mun)
       : layerConfig.source;
 
+    console.log('[MountLayers] Fonte configurada:', source);
+
     // Adiciona ao store usando a função renomeada
+    console.log('[MountLayers] Adicionando camada ao store...');
     this.layersStore.addLayer({
       id: layerId,
       year: this.locationStore.year,
       scale: this.locationStore.scale,
       opacity,
       source
-    });
+    }, beforeID);
 
     console.log('[MountLayers] Camada registrada no store com sucesso:', layerId);
+    console.log('[MountLayers] === FIM addLayerToStore (SUCESSO) ===');
 
     return true;
   }
@@ -151,45 +206,70 @@ export class MountLayers {
   /**
    * Facade que chama addLayerToMap e addLayerToStore em sequência (idempotente)
    * @param {string} layerId - ID da camada a ser montada
+   * @param {string} beforeID - ID da camada antes da qual inserir (opcional)
    * @returns {boolean} Sucesso da operação
+   *
+   * @example
+   * // Uso básico (comportamento original)
+   * mountLayers.mountLayer('vegetacao');
+   *
+   * // Uso com beforeID para controlar posicionamento
+   * mountLayers.mountLayer('clima', 'parks'); // Insere 'clima' antes de 'parks'
+   * mountLayers.mountLayer('temperatura', 'vegetacao'); // Insere 'temperatura' antes de 'vegetacao'
    */
-  mountLayer(layerId) {
-    console.log('[MountLayers] Iniciando montagem da camada:', layerId);
+  mountLayer(layerId, beforeID = null) {
+    console.log('[MountLayers] === INÍCIO mountLayer ===');
+    console.log('[MountLayers] Parâmetros:', { layerId, beforeID });
+    console.log('[MountLayers] Estado atual:', {
+      year: this.locationStore.year,
+      scale: this.locationStore.scale,
+      cd_mun: this.locationStore.cd_mun
+    });
 
     // Obtém configuração da camada
+    console.log('[MountLayers] Obtendo configuração da camada...');
     const layerConfig = getLayerConfig(layerId, this.locationStore.year, this.locationStore.scale);
     if (!layerConfig) {
       console.warn('[MountLayers] Configuração da camada não encontrada:', layerId);
+      console.log('[MountLayers] === FIM mountLayer (ERRO) ===');
 
       return false;
     }
+    console.log('[MountLayers] Configuração obtida:', layerConfig);
 
     // Verifica se a camada já está no mapa
-    if (this.layersStore.mapRef.getLayer(layerId)) {
+    const existingMapLayer = this.layersStore.mapRef.getLayer(layerId);
+    if (existingMapLayer) {
       console.log('[MountLayers] Camada já existe no mapa:', layerId);
+      console.log('[MountLayers] === FIM mountLayer (JÁ EXISTE) ===');
 
       return true;
     }
 
     // Adiciona ao store primeiro
-    const storeSuccess = this.addLayerToStore(layerConfig, this.layersStore.defaultOpacity);
+    console.log('[MountLayers] Adicionando camada ao store...');
+    const storeSuccess = this.addLayerToStore(layerConfig, this.layersStore.defaultOpacity, beforeID);
 
     if (!storeSuccess) {
       console.error('[MountLayers] Falha ao adicionar camada ao store:', layerId);
+      console.log('[MountLayers] === FIM mountLayer (ERRO) ===');
 
       return false;
     }
 
     // Adiciona ao mapa
-    const mapSuccess = this.addLayerToMap(layerConfig);
+    console.log('[MountLayers] Adicionando camada ao mapa...');
+    const mapSuccess = this.addLayerToMap(layerConfig, beforeID);
 
     if (!mapSuccess) {
       console.error('[MountLayers] Falha ao adicionar camada ao mapa:', layerId);
+      console.log('[MountLayers] === FIM mountLayer (ERRO) ===');
 
       return false;
     }
 
     console.log('[MountLayers] Camada montada com sucesso:', layerId);
+    console.log('[MountLayers] === FIM mountLayer (SUCESSO) ===');
 
     return true;
   }

@@ -102,14 +102,27 @@ export const useLayersStore = defineStore('layersStore', {
 
     /**
      * Atualiza a flag currentMain de uma camada específica
+     * Garante que apenas uma camada tenha currentMain = true
      * @param {string} layerId - ID da camada
      * @param {boolean} isMain - Se deve ser a camada principal
      */
     setLayerAsMain(layerId, isMain) {
+      if (isMain) {
+        // Se está definindo como principal, limpa todas as outras flags first
+        this.activeLayers.forEach(layer => {
+          if (layer.currentMain) {
+            console.log(`[LayersStore] Removendo flag currentMain de: ${layer.id}`);
+            layer.currentMain = false;
+          }
+        });
+      }
+
       const layer = this.activeLayers.find(l => l.id === layerId);
       if (layer) {
         layer.currentMain = isMain;
         console.log(`[LayersStore] Set layer ${layerId} as main: ${isMain}`);
+      } else {
+        console.warn(`[LayersStore] Layer ${layerId} não encontrada para definir como main`);
       }
     },
 
@@ -225,8 +238,9 @@ export const useLayersStore = defineStore('layersStore', {
     /**
      * Adiciona uma nova camada à lista de camadas ativas
      * @param {Object} layer - Objeto da camada a ser adicionada
+     * @param {string} beforeID - ID da camada antes da qual inserir (opcional)
      */
-    addLayer(layer) {
+    addLayer(layer, beforeID = null) {
       if (!this.activeLayers.some(l => l.id === layer.id)) {
         const newLayer = {
           id: layer.id,
@@ -237,19 +251,31 @@ export const useLayersStore = defineStore('layersStore', {
           source: layer.source
         };
 
-        // Verifica se parks está no topo
-        const parksIndex = this.activeLayers.findIndex(l => l.id === 'parks');
-        const isParksOnTop = parksIndex === 0;
-
-        if (isParksOnTop) {
-          // Se parks está no topo, insere na segunda posição
-          this.activeLayers.splice(1, 0, newLayer);
+        if (beforeID) {
+          // Se beforeID foi fornecido, insere antes da camada especificada
+          const beforeIndex = this.activeLayers.findIndex(l => l.id === beforeID);
+          if (beforeIndex !== -1) {
+            this.activeLayers.splice(beforeIndex, 0, newLayer);
+          } else {
+            // Se a camada beforeID não for encontrada, insere no topo
+            this.activeLayers.unshift(newLayer);
+          }
         } else {
-          // Se parks não está no topo, insere no topo
-          this.activeLayers.unshift(newLayer);
+          // Comportamento original
+          // Verifica se parks está no topo
+          const parksIndex = this.activeLayers.findIndex(l => l.id === 'parks');
+          const isParksOnTop = parksIndex === 0;
+
+          if (isParksOnTop) {
+            // Se parks está no topo, insere na segunda posição
+            this.activeLayers.splice(1, 0, newLayer);
+          } else {
+            // Se parks não está no topo, insere no topo
+            this.activeLayers.unshift(newLayer);
+          }
         }
 
-        console.log(`[LayersStore] Added new layer ${layer.id}`);
+        console.log(`[LayersStore] Added new layer ${layer.id}${beforeID ? ` before ${beforeID}` : ''}`);
       }
     },
 
