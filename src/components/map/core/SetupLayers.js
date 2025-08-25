@@ -5,6 +5,7 @@ import { createMountLayers } from '@/components/map/layers/MountLayers.js';
 import {
   setupRasterInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
+import { updateMunicipalityFilters } from '@/components/map/core/MunicipalityFilter.js';
 
 /**
  * Função para adicionar camada de parques
@@ -168,6 +169,12 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
       }
     } else {
       console.error('[SetupLayers] Falha ao adicionar camada principal usando MountLayers:', currentLayer);
+    }
+
+    // Atualizar filtros de município após o setup das camadas
+    if (currentCode) {
+      console.log('[SetupLayers] Atualizando filtros de município após setup das camadas');
+      updateMunicipalityFilters(map, currentCode);
     }
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
