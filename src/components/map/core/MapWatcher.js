@@ -1,6 +1,7 @@
 import { watch } from 'vue';
 import { useLayersStore } from '@/stores/layersStore';
 import { updateCurrentMainLayer } from '@/components/map/core/LayerController.js';
+import { updateMunicipalityFilters, updateMapLocation } from '@/components/map/core/MunicipalityFilter.js';
 
 /**
  * Configura o watcher para monitorar mudanças na activeMainLayer
@@ -82,4 +83,32 @@ export function setupMapWatcher(locationStore) {
 
   console.log('[MapWatcher] Watcher configurado com sucesso');
   console.log('[MapWatcher] === FIM setupMapWatcher ===');
+}
+
+/**
+ * Configura o watcher para monitorar mudanças no código do município
+ * @param {Object} locationStore - Instância do locationStore
+ * @param {Object} map - Instância do mapa
+ */
+export function setupMunicipalityWatcher(locationStore, map) {
+  console.log('[MapWatcher] === INÍCIO setupMunicipalityWatcher ===');
+
+  // Watcher para monitorar mudanças no código do município
+  watch(
+    () => locationStore.cd_mun,
+    async(newCdMun, oldCdMun) => {
+      if (newCdMun && newCdMun !== oldCdMun && map) {
+        console.log('[MapWatcher] Município alterado de', oldCdMun, 'para', newCdMun);
+
+        // Atualizar localização do mapa
+        await updateMapLocation(locationStore, map, newCdMun);
+
+        // Atualizar filtros de município
+        updateMunicipalityFilters(map, newCdMun);
+      }
+    }
+  );
+
+  console.log('[MapWatcher] Watcher de município configurado com sucesso');
+  console.log('[MapWatcher] === FIM setupMunicipalityWatcher ===');
 }

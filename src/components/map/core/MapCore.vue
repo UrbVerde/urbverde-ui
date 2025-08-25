@@ -36,7 +36,7 @@ import { useLocationStore } from '@/stores/locationStore';
 import { useLayersStore } from '@/stores/layersStore';
 // import { useRoute, useRouter } from 'vue-router';
 import CustomHash from '@/components/map/core/MapStateManager.js';
-import { getLayerConfig, LAYER_CONFIGS } from '@/constants/layers.js';
+import { getLayerConfig } from '@/constants/layers.js';
 import MapControls from '@/components/map/controls/MapNavigationControls.vue';
 import AttributionBar from '@/components/map/info/MapInfoBar.vue';
 import CustomTerrainControl from '@/components/map/controls/customTerrainControl.js';
@@ -57,7 +57,7 @@ import CustomTerrainControl from '@/components/map/controls/customTerrainControl
 // } from '@/components/map/layers/MapLayerInteractionManager.js';
 
 import { setupLayers } from '@/components/map/core/SetupLayers.js';
-import { setupMapWatcher } from '@/components/map/core/MapWatcher.js';
+import { setupMapWatcher, setupMunicipalityWatcher } from '@/components/map/core/MapWatcher.js';
 // import { LayerOrderManager } from '@/components/map/layers/layerOrderManager';
 // import { LAYER_GROUPS } from '@/components/map/layers/layersOrder';
 
@@ -89,12 +89,12 @@ let hoveredFeatureId = null;
 
 //   return 14;
 // });
-const MAP_ZOOM_FINAL = computed(() => {
-  if (currentScale.value === 'estadual') {return 7;}
-  if (currentScale.value === 'nacional') {return 4;}
+// const MAP_ZOOM_FINAL = computed(() => {
+//   if (currentScale.value === 'estadual') {return 7;}
+//   if (currentScale.value === 'nacional') {return 4;}
 
-  return 14;
-});
+//   return 14;
+// });
 
 // Get current layer id, scale and year from the URL query.
 const currentLayer = computed(() => locationStore.activeMainLayer);
@@ -102,15 +102,14 @@ const currentScale = computed(() => locationStore.scale);
 const currentYear = computed(() => locationStore.year || '2021');
 const currentCode = computed(() => locationStore.cd_mun);
 
-watch(
-  () => locationStore.cd_mun,
-  async(newCdMun, oldCdMun) => {
-    if (newCdMun && newCdMun !== oldCdMun) {
-      await initializeMapLocation(newCdMun);
-      updateMunicipalityFilters(map.value, newCdMun);
-    }
-  }
-);
+// watch(
+//   () => locationStore.cd_mun,
+//   async(newCdMun, oldCdMun) => {
+//     if (newCdMun && newCdMun !== oldCdMun) {
+
+//     }
+//   }
+// );
 
 watch(
   () => currentScale.value,
@@ -119,7 +118,7 @@ watch(
       alert(`Escala alterada de ${oldScale} para ${newScale}`);
       if (mapLoaded.value) {
 
-        layersStore.removeLayerFromMap('parks');
+        // layersStore.removeLayerFromMap('parks');
         // setupLayers(map.value, currentLayer.value, currentYear.value, currentScale.value, currentCode.value);
       }
     }
@@ -141,35 +140,6 @@ watch(
     }
   }
 );
-
-// Função para atualizar os filtros do município
-function updateMunicipalityFilters(mapInstance, newCdMun) {
-  if (!mapInstance) { return; }
-
-  // Atualizar o filtro do out_selected_clickable_fill
-  if (mapInstance.getLayer('out_selected_clickable_fill-layer')) {
-    mapInstance.setFilter('out_selected_clickable_fill-layer', ['!=', 'cd_mun', newCdMun]);
-  }
-  // Obter todas as camadas do mapa
-  const layerNames = mapInstance.getStyle().layers.map(layer => layer.id);
-
-  // Percorrer cada camada do mapa
-  layerNames.forEach(layerId => {
-    // Verificar se existe uma configuração correspondente em LAYER_CONFIGS
-    const layerConfig = Object.values(LAYER_CONFIGS).find(config => config.id === layerId);
-
-    // Se encontrou uma configuração correspondente, aplicar o filtro
-    if (layerConfig) {
-      mapInstance.setFilter(layerId, ['==', 'cd_mun', newCdMun]);
-    }
-  });
-
-  // Atualizar o filtro do highlight_selected
-  if (mapInstance.getLayer('highlight_selected-layer')) {
-    mapInstance.setFilter('highlight_selected-layer', ['==', 'cd_mun', newCdMun]);
-  }
-
-}
 
 /* ---------------------------------------
    HELPER FUNCTIONS
@@ -285,38 +255,38 @@ async function fetchMunicipalityCoordinates(code) {
 }
 
 /** Inicializa ou atualiza a localização do mapa */
-async function initializeMapLocation(code) {
-  isLoadingCoordinates.value = true;
+// async function initializeMapLocation(code) {
+//   isLoadingCoordinates.value = true;
 
-  try {
-    // clearMunicipalityHoverState();
+//   try {
+//     // clearMunicipalityHoverState();
 
-    // Remove any existing popups
-    // if (vectorPopup.value) { vectorPopup.value.remove(); }
+//     // Remove any existing popups
+//     // if (vectorPopup.value) { vectorPopup.value.remove(); }
 
-    if (mapLoaded.value) {
-      // removeDynamicLayer();
-      // await initializeMapLayers();
-    }
+//     if (mapLoaded.value) {
+//       // removeDynamicLayer();
+//       // await initializeMapLayers();
+//     }
 
-    const coords = await fetchMunicipalityCoordinates(code);
-    if (coords) {
-      if (map.value) {
-        map.value.jumpTo({
-          center: [coords.lng, coords.lat],
-          zoom: MAP_ZOOM_FINAL.value,
-          essential: true
-        });
-      } else {
-        // initializeMap();
-      }
-    }
-  } catch (err) {
-    console.error('Error initializing map location:', err);
-  } finally {
-    isLoadingCoordinates.value = false;
-  }
-}
+//     const coords = await fetchMunicipalityCoordinates(code);
+//     if (coords) {
+//       if (map.value) {
+//         map.value.jumpTo({
+//           center: [coords.lng, coords.lat],
+//           zoom: MAP_ZOOM_FINAL.value,
+//           essential: true
+//         });
+//       } else {
+//         // initializeMap();
+//       }
+//     }
+//   } catch (err) {
+//     console.error('Error initializing map location:', err);
+//   } finally {
+//     isLoadingCoordinates.value = false;
+//   }
+// }
 
 /* ---------------------------------------
    MAP INITIALIZATION
@@ -621,6 +591,9 @@ async function setupMap() {
 
     // 10. Configurar watcher para mudanças de camada principal
     setupMapWatcher(locationStore);
+
+    // 11. Configurar watcher para mudanças de município
+    setupMunicipalityWatcher(locationStore, map.value);
 
   } catch (error) {
     console.error('Erro ao configurar mapa:', error);

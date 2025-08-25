@@ -1,6 +1,7 @@
-import { getLayerConfig } from '@/constants/layers.js';
+// import { getLayerConfig } from '@/constants/layers.js';
 import { useLayersStore } from '@/stores/layersStore';
 import { useLocationStore } from '@/stores/locationStore';
+import { createHoverManager } from './HoverManager.js';
 
 /**
  * Função de conveniência para criar uma instância do UnmountLayers
@@ -27,6 +28,7 @@ export class UnmountLayers {
 
     this.layersStore = layersStore;
     this.locationStore = locationStore;
+    this.hoverManager = createHoverManager(layersStore);
 
     console.log('[UnmountLayers] === FIM CONSTRUTOR ===');
   }
@@ -97,9 +99,9 @@ export class UnmountLayers {
     console.log('[UnmountLayers] Subcamadas:', layer.subLayers.map(s => s.id));
 
     // Remove eventos de hover usando o HoverManager
-    if (this.layersStore.hoverManager) {
+    if (this.hoverManager) {
       console.log('[UnmountLayers] Removendo eventos de hover...');
-      this.layersStore.hoverManager.removeSubLayerHoverEvents(layerId);
+      this.hoverManager.removeSubLayerHoverEvents(layerId);
     } else {
       console.log('[UnmountLayers] HoverManager não disponível');
     }
@@ -209,31 +211,18 @@ export class UnmountLayers {
     console.log('[UnmountLayers] === INÍCIO isSourceUsedByOtherLayers ===');
     console.log('[UnmountLayers] Parâmetros:', { sourceId, excludeLayerId });
 
-    const thisConf = getLayerConfig(excludeLayerId, this.layersStore.currentYear, this.layersStore.currentScale);
-    console.log('[UnmountLayers] Configuração da camada atual:', thisConf);
+    // Verificar se outras camadas no mapa estão usando a mesma source
+    const mapLayers = this.layersStore.mapRef.getStyle().layers;
+    const otherLayersUsingSource = mapLayers.filter(layer =>
+      layer.id !== excludeLayerId &&
+      layer.source === sourceId
+    );
 
-    if (!thisConf?.sourceLayer) {
-      console.log('[UnmountLayers] Sem sourceLayer na configuração');
-      console.log('[UnmountLayers] === FIM isSourceUsedByOtherLayers (SEM SOURCE) ===');
-
-      return false;
-    }
-
-    const otherLayers = this.layersStore.activeLayers.filter(l => l.id !== excludeLayerId);
-    console.log('[UnmountLayers] Outras camadas ativas:', otherLayers.map(l => l.id));
-
-    const result = otherLayers.some(l => {
-      const conf = getLayerConfig(l.id, this.layersStore.currentYear, this.layersStore.currentScale);
-      const usesSameSource = conf?.sourceLayer === thisConf.sourceLayer;
-      console.log('[UnmountLayers] Verificando camada:', l.id, 'usa mesma fonte:', usesSameSource);
-
-      return usesSameSource;
-    });
-
-    console.log('[UnmountLayers] Resultado final:', result);
+    console.log('[UnmountLayers] Camadas no mapa usando a mesma source:', otherLayersUsingSource.map(l => l.id));
+    console.log('[UnmountLayers] Resultado final:', otherLayersUsingSource.length > 0);
     console.log('[UnmountLayers] === FIM isSourceUsedByOtherLayers ===');
 
-    return result;
+    return otherLayersUsingSource.length > 0;
   }
 
   /**
