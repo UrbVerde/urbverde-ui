@@ -1,7 +1,8 @@
 import { LAYER_CONFIGS } from '@/constants/layers.js';
 import { useLayersStore } from '@/stores/layersStore';
-import { createMountLayers } from '@/components/map/layers/MountLayers.js';
-import { createUnmountLayers } from '@/components/map/layers/UnmountLayers.js';
+// import { createMountLayers } from '@/components/map/layers/MountLayers.js';
+// import { createUnmountLayers } from '@/components/map/layers/UnmountLayers.js';
+import { useLocationStore } from '@/stores/locationStore';
 // import { useLocationStore } from '@/stores/locationStore';
 
 /**
@@ -13,8 +14,9 @@ export function updateMunicipalityFilters(mapInstance, newCdMun) {
   if (!mapInstance) { return; }
 
   const layersStore = useLayersStore();
-  const mountLayers = createMountLayers();
-  const unmountLayers = createUnmountLayers();
+  //   const mountLayers = createMountLayers();
+  //   const unmountLayers = createUnmountLayers();
+  const locationStore = useLocationStore();
 
   // Atualizar o filtro do out_selected_clickable_fill
   if (mapInstance.getLayer('out_selected_clickable_fill-layer')) {
@@ -26,11 +28,43 @@ export function updateMunicipalityFilters(mapInstance, newCdMun) {
 
   // Percorrer cada camada ativa
   activeLayers.forEach(layer => {
-    // Se a camada for 'parks', recriar a camada
+    // Se a camada for 'parks', aplicar filtro de município se estiver na escala intraurbana
     if (layer.id === 'parks') {
-      console.log('[MunicipalityFilter] Recriando a camada parks');
-      unmountLayers.unmountLayer('parks');
-      mountLayers.mountLayer('parks');
+      console.log('[MunicipalityFilter] Camada parks detectada - aplicando filtro de município');
+      if (locationStore.scale === 'intraurbana' && newCdMun) {
+        if (mapInstance && mapInstance.getLayer('parks')) {
+          mapInstance.setFilter('parks', ['==', 'cd_mun', String(newCdMun)]);
+
+          // Aplicar filtro nas subcamadas também
+          const fillLayerId = 'parks_fill';
+          const outlineLayerId = 'parks_outline';
+
+          if (mapInstance.getLayer(fillLayerId)) {
+            mapInstance.setFilter(fillLayerId, ['==', 'cd_mun', String(newCdMun)]);
+          }
+
+          if (mapInstance.getLayer(outlineLayerId)) {
+            mapInstance.setFilter(outlineLayerId, ['==', 'cd_mun', String(newCdMun)]);
+          }
+        }
+      } else {
+        // Se não estiver na escala intraurbana ou não houver município, remover filtros
+        console.log('[MunicipalityFilter] Removendo filtros da camada parks');
+        if (mapInstance && mapInstance.getLayer('parks')) {
+          mapInstance.setFilter('parks', null);
+
+          const fillLayerId = 'parks_fill';
+          const outlineLayerId = 'parks_outline';
+
+          if (mapInstance.getLayer(fillLayerId)) {
+            mapInstance.setFilter(fillLayerId, null);
+          }
+
+          if (mapInstance.getLayer(outlineLayerId)) {
+            mapInstance.setFilter(outlineLayerId, null);
+          }
+        }
+      }
     } else {
       // Verificar se a camada existe no mapa
       if (mapInstance.getLayer(layer.id)) {

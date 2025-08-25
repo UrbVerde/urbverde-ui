@@ -643,13 +643,13 @@ export const LAYER_CONFIGS = {
 };
 
 // Helper function to get layer config
-export function getLayerConfig(layerId, year, scale) {
+export function getLayerConfig(layerId, year, scale, municipioId) {
   const base = LAYER_CONFIGS[layerId];
   if (!base) { return null; }
 
   // If base.source is a function, call it
   const source = typeof base.source === 'function'
-    ? base.source(year, scale)
+    ? base.source(year, scale, municipioId)
     : base.source;
 
   return { ...base, source };

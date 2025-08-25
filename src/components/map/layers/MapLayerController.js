@@ -88,6 +88,36 @@ export function setupDynamicSource(config, locationStore, currentScale) {
   console.log('[MapLayerController] === INÍCIO setupDynamicSource ===');
   console.log('[MapLayerController] Parâmetros:', { config, locationStore, currentScale });
 
+  // Aplicar filtros para a camada de parques se estiver na escala intraurbana
+  if (config.id === 'parks') {
+    console.log('[MapLayerController] Camada parks detectada - aplicando filtros na URL');
+    const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun;
+
+    if (shouldFilter) {
+      const sourceUrl = config.source.tiles[0];
+      const urlHasQuery = sourceUrl.includes('?');
+      const filteredUrl = `${sourceUrl}${urlHasQuery ? '&' : '?'}cql_filter=cd_mun=${locationStore.cd_mun}`;
+
+      const sourceConfig = {
+        ...config.source,
+        tiles: [filteredUrl]
+      };
+      console.log('[MapLayerController] Source configurada para parks com filtro:', sourceConfig);
+      console.log('[MapLayerController] === FIM setupDynamicSource (PARKS COM FILTRO) ===');
+
+      return sourceConfig;
+    } else {
+      const sourceConfig = {
+        ...config.source,
+        tiles: [config.source.tiles[0]]
+      };
+      console.log('[MapLayerController] Source configurada para parks sem filtro:', sourceConfig);
+      console.log('[MapLayerController] === FIM setupDynamicSource (PARKS SEM FILTRO) ===');
+
+      return sourceConfig;
+    }
+  }
+
   const sourceUrl = config.source.tiles[0];
   const urlHasQuery = sourceUrl.includes('?');
   const isVector = config.type !== 'raster';
@@ -118,36 +148,62 @@ export function setupDynamicSource(config, locationStore, currentScale) {
  * @param {Object} locationStore - Store de localização
  * @param {string} currentScale - Escala atual
  */
-export function applyLayerFilters(map, config, locationStore, currentScale) {
-  console.log('[MapLayerController] === INÍCIO applyLayerFilters ===');
-  console.log('[MapLayerController] Parâmetros:', { config, locationStore, currentScale });
+// export function applyLayerFilters(map, config, locationStore, currentScale) {
+//   console.log('[MapLayerController] === INÍCIO applyLayerFilters ===');
+//   console.log('[MapLayerController] Parâmetros:', { config, locationStore, currentScale });
 
-  const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun && config.type !== 'raster';
-  console.log('[MapLayerController] shouldFilter:', shouldFilter);
+//   // Aplicar filtros para a camada de parques se estiver na escala intraurbana
+//   if (config.id === 'parks') {
+//     console.log('[MapLayerController] Camada parks detectada - aplicando filtros de município');
+//     const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun;
 
-  if (shouldFilter) {
-    console.log('[MapLayerController] Aplicando filtros para camada:', config.id);
+//     if (shouldFilter) {
+//       console.log('[MapLayerController] Aplicando filtros para camada parks');
+//       if (map.getLayer(config.id)) {
+//         map.setFilter(config.id, ['==', 'cd_mun', locationStore.cd_mun]);
+//       }
+//       if (map.getLayer(`${config.id}-outline`)) {
+//         map.setFilter(`${config.id}-outline`, ['==', 'cd_mun', locationStore.cd_mun]);
+//       }
+//     } else {
+//       console.log('[MapLayerController] Removendo filtros para camada parks');
+//       if (map.getLayer(config.id)) {
+//         map.setFilter(config.id, null);
+//       }
+//       if (map.getLayer(`${config.id}-outline`)) {
+//         map.setFilter(`${config.id}-outline`, null);
+//       }
+//     }
+//     console.log('[MapLayerController] === FIM applyLayerFilters (PARKS) ===');
+//     return;
+//   }
 
-    const filter = [
-      'any',
-      ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
-      ['==', ['get', 'cd_mun'], locationStore.cd_mun]
-    ];
+//   const shouldFilter = currentScale === 'intraurbana' && locationStore.cd_mun && config.type !== 'raster';
+//   console.log('[MapLayerController] shouldFilter:', shouldFilter);
 
-    console.log('[MapLayerController] Filtro principal:', filter);
-    map.setFilter(config.id, filter);
+//   if (shouldFilter) {
+//     console.log('[MapLayerController] Aplicando filtros para camada:', config.id);
 
-    const outlineFilter = ['==', 'cd_mun', locationStore.cd_mun];
-    console.log('[MapLayerController] Filtro outline:', outlineFilter);
-    map.setFilter(`${config.id}-outline`, outlineFilter);
+//     const filter = [
+//       'any',
+//       ['==', ['to-string', ['get', 'cd_mun']], String(locationStore.cd_mun)],
+//       ['==', ['get', 'cd_mun'], locationStore.cd_mun]
+//     ];
 
-    console.log('[MapLayerController] Filtros aplicados com sucesso');
-  } else {
-    console.log('[MapLayerController] Filtros não aplicados (shouldFilter = false)');
-  }
+//     console.log('[MapLayerController] Filtro principal:', filter);
+//     map.setFilter(config.id, filter);
 
-  console.log('[MapLayerController] === FIM applyLayerFilters ===');
-}
+//     const outlineFilter = ['==', 'cd_mun', locationStore.cd_mun];
+//     console.log('[MapLayerController] Filtro outline:', outlineFilter);
+//     map.setFilter(`${config.id}-outline`, outlineFilter);
+
+//     console.log('[MapLayerController] Filtros aplicados com sucesso');
+//   } else {
+//     console.log('[MapLayerController] Filtros não aplicados (shouldFilter = false)');
+//   }
+
+//   console.log('[MapLayerController] === FIM applyLayerFilters ===');
+// }
 
 /**
  * Configura as layers dinâmicas
@@ -168,7 +224,7 @@ export function setupDynamicLayers(map, layerId) {
   try {
     // Obter configuração da layer
     console.log('[MapLayerController] Obtendo configuração para layerId:', layerId);
-    const config = getLayerConfig(layerId, year, scale);
+    const config = getLayerConfig(layerId, year, scale, locationStore.cd_mun);
     console.log('[MapLayerController] Configuração obtida:', config);
 
     if (!config || !config.source) {
@@ -238,7 +294,7 @@ export function setupDynamicLayers(map, layerId) {
 
     // Aplicar filtros se necessário
     console.log('[MapLayerController] Aplicando filtros...');
-    applyLayerFilters(map, config, locationStore, scale);
+    // applyLayerFilters(map, config, locationStore, scale);
     console.log('[MapLayerController] Filtros aplicados');
 
     console.log('[MapLayerController] === FIM setupDynamicLayers (SUCESSO) ===');
@@ -323,6 +379,34 @@ export function updateMunicipalityFilters(map, cd_mun) {
   // Atualizar filtros para cada camada
   dynamicLayers.forEach(layer => {
     try {
+      // Aplicar filtros para a camada de parques se estiver na escala intraurbana
+      if (layer.id === 'parks' || layer.id.includes('parks')) {
+        console.log(`[MapLayerController] Camada ${layer.id} detectada - aplicando filtros de município`);
+        const shouldFilter = cd_mun;
+
+        if (shouldFilter) {
+          console.log(`[MapLayerController] Aplicando filtros para camada ${layer.id}`);
+          map.setFilter(layer.id, ['==', 'cd_mun', cd_mun]);
+
+          // Aplicar filtro na camada de outline se existir
+          const outlineLayerId = `${layer.id}-outline`;
+          if (map.getLayer(outlineLayerId)) {
+            map.setFilter(outlineLayerId, ['==', 'cd_mun', cd_mun]);
+          }
+        } else {
+          console.log(`[MapLayerController] Removendo filtros para camada ${layer.id}`);
+          map.setFilter(layer.id, null);
+
+          // Remover filtro da camada de outline se existir
+          const outlineLayerId = `${layer.id}-outline`;
+          if (map.getLayer(outlineLayerId)) {
+            map.setFilter(outlineLayerId, null);
+          }
+        }
+
+        return;
+      }
+
       // Verificar se a camada tem source-layer (é vetorial)
       if (layer['source-layer']) {
         // Aplicar filtro para camadas vetoriais

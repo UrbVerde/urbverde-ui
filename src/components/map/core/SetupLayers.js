@@ -19,10 +19,12 @@ export function addParksLayer(map, locationStore, currentScale) {
 
   if (success) {
     console.log('[SetupLayers] Camada parks adicionada com sucesso usando MountLayers');
+    console.log('[SetupLayers] Aplicando filtro de município na camada parks');
 
-    // Aplicar filtro de município se necessário
+    // Aplicar filtro de município na camada parks se estiver na escala intraurbana
     if (currentScale === 'intraurbana' && locationStore.cd_mun) {
       if (map && map.getLayer('parks')) {
+        console.log('[SetupLayers] Aplicando filtro na camada parks');
         map.setFilter('parks', ['==', 'cd_mun', String(locationStore.cd_mun)]);
 
         // Aplicar filtro nas subcamadas também
@@ -30,13 +32,19 @@ export function addParksLayer(map, locationStore, currentScale) {
         const outlineLayerId = 'parks_outline';
 
         if (map.getLayer(fillLayerId)) {
+          console.log('[SetupLayers] Aplicando filtro na subcamada parks_fill');
           map.setFilter(fillLayerId, ['==', 'cd_mun', String(locationStore.cd_mun)]);
         }
 
         if (map.getLayer(outlineLayerId)) {
+          console.log('[SetupLayers] Aplicando filtro na subcamada parks_outline');
           map.setFilter(outlineLayerId, ['==', 'cd_mun', String(locationStore.cd_mun)]);
         }
+      } else {
+        console.log('[SetupLayers] Camada parks não encontrada no mapa');
       }
+    } else {
+      console.log('[SetupLayers] Condições não atendidas para aplicar filtro');
     }
   } else {
     console.error('[SetupLayers] Falha ao adicionar camada parks usando MountLayers');
