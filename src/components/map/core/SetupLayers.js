@@ -136,7 +136,6 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
     addParksLayer(map, locationStore, currentScale);
 
     // Obter configuração da camada principal
-    alert(currentLayer);
     const config = getLayerConfig(currentLayer, currentYear, currentScale);
 
     if (!config) {

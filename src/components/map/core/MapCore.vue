@@ -115,7 +115,7 @@ watch(
   () => currentScale.value,
   async(newScale, oldScale) => {
     if (newScale !== oldScale) {
-      alert(`Escala alterada de ${oldScale} para ${newScale}`);
+      // alert(`Escala alterada de ${oldScale} para ${newScale}`);
       if (mapLoaded.value) {
 
         // layersStore.removeLayerFromMap('parks');
