@@ -26,7 +26,7 @@
             <span class="progress-count heading-h5">{{ barPercentage[0] }}/{{ barPercentage[1] }}</span>
           </div>
           <PrimaryButton
-            :label="'Como funcionam os selos?'"
+            :label="'Como funciona?'"
             :filled="false"
             @click="showModal"
           />
@@ -42,7 +42,7 @@
         <span class="progress-count heading-h5">{{ barPercentage[0] }}/{{ barPercentage[1] }}</span>
       </div>
       <PrimaryButton
-        :label="'Como funcionam os selos?'"
+        :label="'Como funciona?'"
         :filled="false"
         @click="showModal"
       />
@@ -133,6 +133,12 @@ const barWidth = computed(() => {
 <style scoped lang="scss">
 @import '@/assets/styles/breakpoints.scss';
 
+:deep(.primary-button) {
+  display: flex;
+  width: 100%;
+  max-width: 286px;
+}
+
 .goals {
   display: flex;
   justify-content: center;
@@ -143,8 +149,10 @@ const barWidth = computed(() => {
   height: auto;
 }
 .stamp-image-wrapper {
-  width: 128px;
-  height: 128px;
+  width: 100%;
+  height: auto;
+  max-width: 128px;
+  max-height: 128px;
   margin-left: 24px;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
@@ -153,8 +161,10 @@ const barWidth = computed(() => {
   transform: scale(1.03);
 }
 .stamp-image {
-  width: 128px;
-  height: 128px;
+  width: 100%;
+  height: auto;
+  max-width: 128px;
+  max-height: 128px;
   flex-shrink: 0;
 }
 .info-wrapper {
@@ -217,6 +227,15 @@ const barWidth = computed(() => {
   }
   .stamp-image-wrapper {
     margin-left: 8px;
+  }
+}
+
+@include breakpoint-down('mobile-large') {
+  .goals {
+    gap: 32px;
+  }
+  .subtitle-text {
+    display: none;
   }
 }
 </style>
