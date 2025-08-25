@@ -88,7 +88,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
             cardIndex: 2,
             numberType: 'large',
           }
@@ -110,7 +110,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/vegetation',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/vegetation',
                   cardIndex: 1,
                   numberType: 'large',
                 }
@@ -147,7 +147,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
                   cardIndex: 4,
                   numberType: 'large',
                 }
@@ -155,7 +155,7 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
                   cardIndex: 3,
                   numberType: 'small',
                 }
@@ -175,7 +175,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
             cardIndex: 5,
             numberType: 'large',
             overrideCardSubtitle: 'Boca de lobo é um escoadouro nas ruas para as águas',
@@ -264,7 +264,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
             cardIndex: 0,
             numberType: 'large',
           }
@@ -272,7 +272,7 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
             cardIndex: 1,
             numberType: 'large',
           }

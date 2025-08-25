@@ -111,28 +111,28 @@ const fetchYears = async(cityCode) => {
     // Choose the API endpoint based on the layer prop, use the categoryToLayerMap in panel-config/index.js
     switch (props.layer) {
     case 'temperatura':
-      apiUrl = `http://localhost:8080/v1/cards/weather/temperature?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/weather/temperature?city=${cityCode}`;
       break;
     case 'vegetação':
-      apiUrl = `http://localhost:8080/v1/cards/vegetal/cover?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/vegetal/cover?city=${cityCode}`;
       break;
     case 'parques':
-      apiUrl = `http://localhost:8080/v1/cards/square/parks?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/square/parks?city=${cityCode}`;
       break;
     case 'policies_parks':
-      apiUrl = `http://localhost:8080/v1/cards/pp/square?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/pp/square?city=${cityCode}`;
       break;
     case 'policies_vegetation':
-      apiUrl = `http://localhost:8080/v1/cards/pp/vegetation?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/pp/vegetation?city=${cityCode}`;
       break;
     case 'policies_hidro':
-      apiUrl = `http://localhost:8080/v1/cards/pp/hydrology?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/pp/hydrology?city=${cityCode}`;
       break;
     case 'emissions':
-      apiUrl = `http://localhost:8080/v1/cards/pp/emissions?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/pp/emissions?city=${cityCode}`;
       break;
     default:
-      apiUrl = `http://localhost:8080/v1/cards/weather/vegetation?city=${cityCode}`;
+      apiUrl = `https://api.urbverde.com.br/v1/cards/weather/vegetation?city=${cityCode}`;
     }
 
     const response = await fetch(apiUrl);
