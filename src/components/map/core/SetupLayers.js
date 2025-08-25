@@ -142,6 +142,10 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
     if (success) {
       console.log('[SetupLayers] Camada principal adicionada com sucesso usando MountLayers:', currentLayer);
 
+      // Definir a camada principal como currentMain = true
+      layersStore.setLayerAsMain(currentLayer, true);
+      console.log('[SetupLayers] Camada definida como principal:', currentLayer);
+
       // Adicionar interações adicionais se necessário
       if (currentScale === 'intraurbana' && currentCode) {
         if (config.type === 'raster') {
