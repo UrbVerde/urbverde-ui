@@ -834,7 +834,7 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'hidro',
     ref: 'hidroSection',
-    title: 'Eixo Hidrologia em Diadema',
+    title: `Eixo Hidrologia em ${nm_mun}`,
     subtitle: 'As inundações e alagamentos urbanos são agravados pela impermeabilização e falta de planejamento. O eixo busca soluções para reduzir riscos e promover segurança hídrica da cidade',
     showYearPicker: false,
     panel: {
@@ -900,8 +900,8 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardAction',
           props: {
-            number: 2,
-            actionTitle: 'Ação 2 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
+            number: 1,
+            actionTitle: 'Ação 1 - Implantar zonas de risco controlado e restringir novas ocupações em áreas críticas para reduzir a exposição a inundações',
             ods: '6, 10, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -909,16 +909,16 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Percentual da área urbana com risco de inundações',
-            overrideNumberValue: '37%',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            cardIndex: 2,
             numberType: 'large',
           }
         },
         {
           component: 'CardAction',
           props: {
-            number: 1,
-            actionTitle: 'Ação 1 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
+            number: 2,
+            actionTitle: 'Ação 2 – Implantar infraestrutura verde em áreas estratégicas para aumentar a permeabilidade do solo e fortalecer a resiliência urbana contra eventos climáticos',
             ods: '3, 6, 11, 13, 15',
             badgeStatus: 'nao-informado'
           }
@@ -968,16 +968,16 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Percentual de pessoas morando em áreas críticas de inundação',
-                  overrideNumberValue: '36%',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+                  cardIndex: 4,
                   numberType: 'large',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Estimativa da quantidade de domicílios em áreas críticas de inundação',
-                  overrideNumberValue: '68.396 domicílios',
+                  apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+                  cardIndex: 3,
                   numberType: 'small',
                 }
               },
@@ -996,8 +996,8 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Estimativa do percentual de bocas de lobo em áreas críticas de inundação',
-            overrideNumberValue: '71%',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            cardIndex: 5,
             numberType: 'large',
             overrideCardSubtitle: 'Boca de lobo é um escoadouro nas ruas para as águas',
           }
@@ -1041,16 +1041,16 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Cobertura vegetal das Área de Preservação Permanente (APPs)',
-            overrideNumberValue: '18%',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            cardIndex: 0,
             numberType: 'large',
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Índice de permeabilidade do solo das Área de Preservação Permanente (APPs)',
-            overrideNumberValue: '52%',
+            apiEndpoint: 'http://localhost:8080/v1/cards/pp/hydrology',
+            cardIndex: 1,
             numberType: 'large',
           }
         },
