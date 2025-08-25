@@ -2,6 +2,8 @@
 import { createMountLayers } from '@/components/map/layers/MountLayers';
 import { createUnmountLayers } from '@/components/map/layers/UnmountLayers';
 import { reorderLayer } from '@/components/map/layers/ReorderLayers';
+import { updateMunicipalityFilters } from '@/components/map/core/MunicipalityFilter.js';
+import { useLocationStore } from '@/stores/locationStore';
 
 /**
  * Atualiza a camada principal atual usando métodos encapsulados do layersStore
@@ -85,4 +87,13 @@ export async function updateCurrentMainLayer(layersStore, newMainLayer, isAlread
 
   console.log('[LayerController] Camadas ativas após atualização:', layersStore.activeLayers);
   console.log('[LayerController] Camada principal final:', layersStore.activeLayers.find(layer => layer.currentMain)?.id);
+
+  // Atualizar filtros de município após as operações de camadas
+  if (layersStore.mapRef) {
+    const locationStore = useLocationStore();
+    if (locationStore.cd_mun) {
+      console.log('[LayerController] Atualizando filtros de município após operações de camadas');
+      updateMunicipalityFilters(layersStore.mapRef, locationStore.cd_mun);
+    }
+  }
 }
