@@ -45,12 +45,14 @@
             >
               <IconComponent name="bi-chevron-left" :size="16" />
             </button>
-            <p v-if="scale === 'intraurbana'" class="legend-item body-small-regular">
-              <span class="legend-line census"></span>Setores censitários
-            </p>
-            <p v-else class="legend-item body-small-medium">
-              <span class="legend-line municipal"></span>Municípios
-            </p>
+            <div class="scale-text">
+              <p v-if="scale === 'intraurbana'" class="legend-item body-small-regular">
+                <span class="legend-line census"></span>Setores censitários
+              </p>
+              <p v-else class="legend-item body-small-medium">
+                <span class="legend-line municipal"></span>Municípios
+              </p>
+            </div>
             <button
               class="nav-button"
               :class="{
@@ -311,12 +313,30 @@ onMounted(() => {
 .scale-navigation {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   position: relative;
+  min-height: 24px;
+
+  .scale-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
 
   .nav-button {
+    position: absolute;
     opacity: 0;
     transition: all 0.2s ease;
+    z-index: 1;
+  }
+
+  .nav-button:first-child {
+    left: -16px;
+  }
+
+  .nav-button:last-child {
+    right: -16px;
   }
 
   &:hover {
@@ -336,7 +356,7 @@ onMounted(() => {
   }
 }
 
-.nav-button {
+.scale-navigation .nav-button {
   background: none;
   border: none;
   padding: 4px;

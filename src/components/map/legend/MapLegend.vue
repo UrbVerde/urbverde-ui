@@ -241,7 +241,7 @@ const refModalCompareLayers = ref(null);
 .layers-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+
 }
 
 .layers-header {

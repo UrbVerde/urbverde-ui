@@ -217,11 +217,11 @@ const handleColorbarClick = () => {
 .draggable-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+
 }
 
 .layer-card-wrapper {
-  margin: 4px 0;
+
   cursor: grab;
 
   &:active {
