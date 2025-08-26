@@ -45,7 +45,7 @@ export default createSectionConfig((nm_mun) => [
     id: 'stats',
     ref: 'statsSection',
     showYearPicker: true,
-    title: `Emissões de carbono em ${nm_mun}`,
+    title: `Emissões de carbono em ${nm_mun} (Fonte: SEEG, 2023)`,
     panel: {
       variant: '2-1',
       gapColumnHeight: '40px',
