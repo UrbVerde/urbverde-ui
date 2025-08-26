@@ -7,6 +7,7 @@ import {
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 import { updateMunicipalityFilters } from '@/components/map/core/MunicipalityFilter.js';
 import { moveSymbolLayersToTop } from '@/components/map/layers/ReorderLayers.js';
+import { createMultiLayerPopup } from '@/components/map/popups/MultiLayerPopup.js';
 
 /**
  * Função para adicionar camada de parques
@@ -182,6 +183,15 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
       console.log('Camadas symbol movidas para o topo com sucesso!');
     } else {
       console.error('Erro ao mover camadas symbol');
+    }
+
+    // Inicializar o popup multi-camada após o setup das camadas
+    const multiLayerPopup = createMultiLayerPopup(map);
+    if (multiLayerPopup) {
+      multiLayerPopup.initialize();
+      console.log('[SetupLayers] Popup multi-camada inicializado com sucesso');
+    } else {
+      console.error('[SetupLayers] Falha ao inicializar popup multi-camada');
     }
   } catch (error) {
     console.error('Erro ao configurar layers:', error);
