@@ -34,6 +34,17 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 </script>
 
 <style scoped lang="scss">
+:deep(.primary-button) {
+  display: flex;
+  width: 100%;
+  max-width: 286px;
+  margin: auto;
+}
+
+a {
+  width: 100%;
+}
+
 .content-send-wrapper {
   display: flex;
   padding: 24px 0 0 0;

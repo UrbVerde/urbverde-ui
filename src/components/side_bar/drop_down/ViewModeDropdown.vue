@@ -102,7 +102,7 @@ const viewModes = [
   {
     id: 'policies',
     label: 'Políticas Públicas',
-    text: '7 cidades',
+    text: '8 cidades',
     icon: publicPoliciesIcon
   }
 ];

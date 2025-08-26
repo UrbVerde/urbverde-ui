@@ -133,6 +133,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/breakpoints.scss';
+
 .ods-image {
   border: 1px solid map-get($gray, 300);
   border-radius: 8px;
@@ -144,8 +146,10 @@ export default {
 }
 
 .ods-image.large {
-  width: 88px;
-  height: 88px;
+  width: 100%;
+  height: auto;
+  max-width: 88px;
+  max-height: 88px;
 }
 
 .ods-list-wrapper {
@@ -174,4 +178,11 @@ export default {
   color: map-get($gray, 600);
   margin: 0;
 }
+
+@include breakpoint-down('mobile-large') {
+  .ods-subtitle {
+    display: none;
+  }
+}
+
 </style>

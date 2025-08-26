@@ -298,7 +298,7 @@ p, h5 {
 
 @include breakpoint-down('tablet') {
   .box {
-    padding: 40px 24px 32px 24px;
+    padding: 40px 24px 32px 24px !important;
   }
 
   .statistics-container {

@@ -344,7 +344,7 @@ const visibleSuggestions = computed(() => {
   const list = filteredSuggestions.value;
 
   // Definir o limite baseado no viewMode
-  const maxItems = viewMode.value === 'policies' ? 7 : 5;
+  const maxItems = viewMode.value === 'policies' ? 8 : 5;
 
   // Find first state suggestion
   const firstStateIndex = list.findIndex(s => s.type === 'state');

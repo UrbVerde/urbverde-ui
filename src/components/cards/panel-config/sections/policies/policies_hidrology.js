@@ -53,7 +53,7 @@ export default createSectionConfig((nm_mun) => [
     id: 'indicadores',
     ref: 'indicadoresSection',
     title: `Ações e indicadores em ${nm_mun}`,
-    fixedYear: 2024,
+    showYearPicker: false,
     panel: {
       variant: '1-1',
       items: [
@@ -71,7 +71,7 @@ export default createSectionConfig((nm_mun) => [
   createSection({
     id: 'indicadores',
     ref: 'indicadoresSection',
-    showYearPicker: false,
+    fixedYear: 2024,
     panel: {
       variant: '4-2',
       gapColumnHeight: '56px',
@@ -88,8 +88,8 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Percentual da área urbana com risco de inundações',
-            overrideNumberValue: '37%',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
+            cardIndex: 2,
             numberType: 'large',
           }
         },
@@ -147,16 +147,16 @@ export default createSectionConfig((nm_mun) => [
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Percentual de pessoas morando em áreas críticas de inundação',
-                  overrideNumberValue: '36%',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
+                  cardIndex: 4,
                   numberType: 'large',
                 }
               },
               {
                 component: 'CardData',
                 props: {
-                  overrideTitle: 'Estimativa da quantidade de domicílios em áreas críticas de inundação',
-                  overrideNumberValue: '68.396 domicílios',
+                  apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
+                  cardIndex: 3,
                   numberType: 'small',
                 }
               },
@@ -175,8 +175,8 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Estimativa do percentual de bocas de lobo em áreas críticas de inundação',
-            overrideNumberValue: '71%',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
+            cardIndex: 5,
             numberType: 'large',
             overrideCardSubtitle: 'Boca de lobo é um escoadouro nas ruas para as águas',
           }
@@ -264,16 +264,16 @@ export default createSectionConfig((nm_mun) => [
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Cobertura vegetal das Área de Preservação Permanente (APPs)',
-            overrideNumberValue: '18%',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
+            cardIndex: 0,
             numberType: 'large',
           }
         },
         {
           component: 'CardData',
           props: {
-            overrideTitle: 'Índice de permeabilidade do solo das Área de Preservação Permanente (APPs)',
-            overrideNumberValue: '52%',
+            apiEndpoint: 'https://api.urbverde.com.br/v1/cards/pp/hydrology',
+            cardIndex: 1,
             numberType: 'large',
           }
         },
