@@ -320,8 +320,8 @@ export const LAYER_CONFIGS = {
     unit: '%',
     popup: {
       label: 'PCV',
-      unit: '',
-      multiplier: -1
+      unit: '%',
+      multiplier: 1
     }
   },
 
@@ -355,7 +355,7 @@ export const LAYER_CONFIGS = {
     unit: '%',
     popup: {
       label: 'NDVI',
-      unit: '',
+      unit: '%',
       multiplier: 1
     }
   },

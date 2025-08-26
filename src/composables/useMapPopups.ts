@@ -108,8 +108,7 @@ export function useMapPopups() {
         return;
       }
 
-      const features = map.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
-      if (!features.length) return;
+      // Removida verificação de município para permitir popups em qualquer lugar
 
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
@@ -216,10 +215,16 @@ export function useMapPopups() {
   };
 
   const formatRasterValue = (value, config) => {
-    if (config.popup && typeof config.popup.format === 'function') {
-      return config.popup.format(value);
+    // Aplicar multiplier se configurado
+    let processedValue = value;
+    if (config.popup && config.popup.multiplier) {
+      processedValue = Number(value) * config.popup.multiplier;
     }
-    return value.toFixed(2) + (config.popup?.unit || '');
+
+    if (config.popup && typeof config.popup.format === 'function') {
+      return config.popup.format(processedValue);
+    }
+    return processedValue.toFixed(2) + (config.popup?.unit || '');
   };
 
   onUnmounted(() => {

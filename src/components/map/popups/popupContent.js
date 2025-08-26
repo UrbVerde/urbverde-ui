@@ -45,10 +45,16 @@ export function getPopupContent(feat, config) {
 export function getRasterPopupContent(value, config) {
   let formattedValue;
   if (value !== null) {
+    // Aplicar multiplier se configurado
+    let processedValue = value;
+    if (config.popup && config.popup.multiplier) {
+      processedValue = Number(value) * config.popup.multiplier;
+    }
+
     if (config.popup && typeof config.popup.format === 'function') {
-      formattedValue = config.popup.format(value);
+      formattedValue = config.popup.format(processedValue);
     } else {
-      formattedValue = value.toFixed(2) + (config.popup?.unit || '');
+      formattedValue = processedValue.toFixed(2) + (config.popup?.unit || '');
     }
   } else {
     formattedValue = 'N/A';

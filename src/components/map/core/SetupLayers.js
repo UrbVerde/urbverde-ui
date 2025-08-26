@@ -69,7 +69,21 @@ export async function fetchRasterValue(lng, lat, controller, currentLayer, curre
   let url;
 
   if (currentLayer === 'ndvi') {
-    url = `https://urbverde.iau.usp.br/geoserver/urbverde/wms?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=urbverde:NDVI-10m-${currentYear}&bbox=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}&width=101&height=101&srs=EPSG:4326&format=application/json&_ts=${ts}`;
+    url = 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?' +
+      'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&' +
+      `LAYERS=urbverde:NDVI-10m-${currentYear}&` +
+      `QUERY_LAYERS=urbverde:NDVI-10m-${currentYear}&` +
+      'INFO_FORMAT=application/json&FEATURE_COUNT=1&X=50&Y=50&' +
+      `SRS=EPSG:4326&WIDTH=101&HEIGHT=101&_ts=${ts}&` +
+      `BBOX=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}`;
+  } else if (currentLayer === 'cvp') {
+    url = 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?' +
+      'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&' +
+      `LAYERS=urbverde:PCV-30m-8bits-${currentYear}&` +
+      `QUERY_LAYERS=urbverde:PCV-30m-8bits-${currentYear}&` +
+      'INFO_FORMAT=application/json&FEATURE_COUNT=1&X=50&Y=50&' +
+      `SRS=EPSG:4326&WIDTH=101&HEIGHT=101&_ts=${ts}&` +
+      `BBOX=${lng - bboxSize},${lat - bboxSize},${lng + bboxSize},${lat + bboxSize}`;
   } else {
     url = 'https://urbverde.iau.usp.br/geoserver/urbverde/wms?' +
       'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&' +
@@ -86,6 +100,13 @@ export async function fetchRasterValue(lng, lat, controller, currentLayer, curre
 
     if (!contentType.includes('application/json')) {
       console.error('Expected JSON but got:', contentType);
+      console.error('URL:', url);
+
+      // Se receber XML, tentar ler o conteúdo para debug
+      if (contentType.includes('xml')) {
+        const text = await response.text();
+        console.error('XML Response:', text);
+      }
 
       return null;
     }
@@ -93,8 +114,28 @@ export async function fetchRasterValue(lng, lat, controller, currentLayer, curre
     const data = await response.json();
 
     if (currentLayer === 'ndvi') {
-      if (data?.features?.[0]?.properties?.NDVI !== undefined) {
-        const val = data.features[0].properties.NDVI;
+      // Debug: log das propriedades para NDVI
+      console.log('NDVI data:', data);
+      if (data?.features?.[0]?.properties) {
+        console.log('NDVI properties:', data.features[0].properties);
+      }
+
+      // Tentar diferentes propriedades possíveis para NDVI
+      const properties = data?.features?.[0]?.properties;
+      if (properties) {
+        if (properties.NDVI !== undefined) {
+          return properties.NDVI !== null ? Number(properties.NDVI) : null;
+        } else if (properties.ndvi !== undefined) {
+          return properties.ndvi !== null ? Number(properties.ndvi) : null;
+        } else if (properties.GRAY_INDEX !== undefined) {
+          return properties.GRAY_INDEX !== null ? Number(properties.GRAY_INDEX) : null;
+        } else if (properties.gray_index !== undefined) {
+          return properties.gray_index !== null ? Number(properties.gray_index) : null;
+        }
+      }
+    } else if (currentLayer === 'cvp') {
+      if (data?.features?.[0]?.properties?.GRAY_INDEX !== undefined) {
+        const val = data.features[0].properties.GRAY_INDEX;
 
         return val !== null ? Number(val) : null;
       }
@@ -157,16 +198,15 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
       console.log('[SetupLayers] Camada definida como principal:', currentLayer);
 
       // Adicionar interações adicionais se necessário
-      if (currentScale === 'intraurbana' && currentCode) {
-        if (config.type === 'raster') {
-          setupRasterInteractions(map, config, (lng, lat, controller) =>
-            fetchRasterValue(lng, lat, controller, currentLayer, currentYear)
-          );
-        } else {
-          // setupSetoresLayer(map, locationStore);
-          // setupSetoresInteractions(map, hoveredSetorId);
-          // setupVectorInteractions(map, config);
-        }
+      if (config.type === 'raster') {
+        // Configurar popups raster para todas as escalas
+        setupRasterInteractions(map, config, (lng, lat, controller) =>
+          fetchRasterValue(lng, lat, controller, currentLayer, currentYear)
+        );
+      } else if (currentScale === 'intraurbana' && currentCode) {
+        // setupSetoresLayer(map, locationStore);
+        // setupSetoresInteractions(map, hoveredSetorId);
+        // setupVectorInteractions(map, config);
       }
     } else {
       console.error('[SetupLayers] Falha ao adicionar camada principal usando MountLayers:', currentLayer);

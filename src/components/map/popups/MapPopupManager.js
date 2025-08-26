@@ -184,21 +184,24 @@ export function setupRasterPopupHandlers(map, config, fetchRasterValue) {
   let globalLastRasterValue = null;
 
   const onRasterMouseMove = (e) => {
-    const layerOpacity = map.getPaintProperty('dynamic-layer', 'raster-opacity') || 0;
-    if (layerOpacity <= 0) {
-      if (rasterPopup) {
-        rasterPopup.remove();
-      }
+    // Verificar se a camada raster está ativa e visível
+    const dynamicLayer = map.getLayer('dynamic-layer');
+    if (!dynamicLayer || dynamicLayer.type !== 'raster') {
+      rasterPopup.remove();
       map.getCanvas().style.cursor = '';
 
       return;
     }
 
-    const features = map.queryRenderedFeatures(e.point, { layers: ['municipalities-base'] });
-    const isMouseWithinMunicipality = features.length > 0;
-    if (!isMouseWithinMunicipality) {
+    const layerOpacity = map.getPaintProperty('dynamic-layer', 'raster-opacity') || 0;
+    if (layerOpacity <= 0) {
+      rasterPopup.remove();
+      map.getCanvas().style.cursor = '';
+
       return;
     }
+
+    // Removida verificação de município para permitir popups em qualquer lugar
 
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
@@ -212,10 +215,16 @@ export function setupRasterPopupHandlers(map, config, fetchRasterValue) {
       fetchRasterValue(e.lngLat.lng, e.lngLat.lat, controller)
         .then((value) => {
           if (value !== null) {
+            // Aplicar multiplier se configurado
+            let processedValue = value;
+            if (config.popup && config.popup.multiplier) {
+              processedValue = Number(value) * config.popup.multiplier;
+            }
+
             if (config.popup && typeof config.popup.format === 'function') {
-              globalLastRasterValue = config.popup.format(value);
+              globalLastRasterValue = config.popup.format(processedValue);
             } else {
-              globalLastRasterValue = value.toFixed(2) + (config.popup?.unit || '');
+              globalLastRasterValue = processedValue.toFixed(2) + (config.popup?.unit || '');
             }
           }
           rasterPopup
