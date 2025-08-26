@@ -107,6 +107,71 @@ export function reorderLayerSetup(map, activeLayers) {
 }
 
 /**
+ * Move todas as camadas do tipo 'symbol' para o fundo da pilha de camadas do mapa
+ * @param {Object} map - Instância do mapa
+ * @returns {boolean} Sucesso da operação
+ */
+export function moveSymbolLayersToTop(map) {
+  console.log('\n[ReorderLayers] ===== MOVENDO CAMADAS SYMBOL PARA O FUNDO =====');
+
+  if (!map) {
+    console.error('[ReorderLayers] Referência do mapa não fornecida');
+
+    return false;
+  }
+
+  try {
+    // Obter todas as camadas do mapa
+    const style = map.getStyle();
+    if (!style || !style.layers) {
+      console.error('[ReorderLayers] Não foi possível obter as camadas do mapa');
+
+      return false;
+    }
+
+    // Filtrar apenas as camadas do tipo 'symbol'
+    const symbolLayers = style.layers.filter(layer => layer.type === 'symbol');
+
+    if (symbolLayers.length === 0) {
+      console.log('[ReorderLayers] Nenhuma camada do tipo symbol encontrada');
+
+      return true;
+    }
+
+    console.log(`[ReorderLayers] Encontradas ${symbolLayers.length} camadas symbol:`,
+      symbolLayers.map(layer => layer.id));
+
+    // Mover cada camada symbol para o fundo (sem especificar beforeId = move para o final)
+    symbolLayers.forEach((symbolLayer) => {
+      const layerId = symbolLayer.id;
+
+      // Verificar se a camada ainda existe no mapa
+      if (!map.getLayer(layerId)) {
+        console.warn(`[ReorderLayers] Camada symbol ${layerId} não encontrada no mapa`);
+
+        return;
+      }
+
+      // Mover a camada para o fundo (sem beforeId = move para o final da pilha)
+      map.moveLayer(layerId);
+      console.log(`[ReorderLayers] Camada symbol ${layerId} movida para o fundo`);
+    });
+
+    console.log('[ReorderLayers] ===== FIM DA MOVIMENTAÇÃO DAS CAMADAS SYMBOL =====\n');
+
+    // Log da nova ordem das camadas
+    const allLayers = map.getStyle().layers.map((l, i) => `${i}: ${l.id} (${l.type})`);
+    console.log(`[MapLibre] Ordem completa das camadas após movimentação das symbol:\n${allLayers.join('\n')}`);
+
+    return true;
+  } catch (error) {
+    console.error('[ReorderLayers] Erro ao mover camadas symbol para o fundo:', error);
+
+    return false;
+  }
+}
+
+/**
  * Função completa que combina reordenação no store e no mapa
  * @param {Array} activeLayers - Array de camadas ativas
  * @param {string} layerId - ID da camada a ser movida

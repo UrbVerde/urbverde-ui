@@ -6,6 +6,7 @@ import {
   setupRasterInteractions
 } from '@/components/map/layers/MapLayerInteractionManager.js';
 import { updateMunicipalityFilters } from '@/components/map/core/MunicipalityFilter.js';
+import { moveSymbolLayersToTop } from '@/components/map/layers/ReorderLayers.js';
 
 /**
  * Função para adicionar camada de parques
@@ -174,6 +175,13 @@ export function setupLayers(map, currentLayer, currentYear, currentScale, curren
     if (currentCode) {
       console.log('[SetupLayers] Atualizando filtros de município após setup das camadas');
       updateMunicipalityFilters(map, currentCode);
+    }
+
+    const success2 = moveSymbolLayersToTop(map);
+    if (success2) {
+      console.log('Camadas symbol movidas para o topo com sucesso!');
+    } else {
+      console.error('Erro ao mover camadas symbol');
     }
   } catch (error) {
     console.error('Erro ao configurar layers:', error);

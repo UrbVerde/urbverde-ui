@@ -85,6 +85,7 @@ import draggable from 'vuedraggable';
 import { createMountLayers } from '@/components/map/layers/MountLayers';
 import { createUnmountLayers } from '@/components/map/layers/UnmountLayers';
 import { reorderLayer } from '@/components/map/layers/ReorderLayers';
+import { updateMunicipalityFilters } from '@/components/map/core/MunicipalityFilter.js';
 
 const refModal = ref(null);
 const locationStore = useLocationStore();
@@ -141,7 +142,14 @@ const toggleLayer = (layer) => {
     unmountLayers.unmountLayer(`${layer.id}`);
   } else {
     // Monta a camada (adiciona ao store e ao mapa)
-    mountLayers.mountLayer(layer.id);
+    const success = mountLayers.mountLayer(layer.id);
+
+    // Se a camada foi montada com sucesso e estamos na escala intraurbana,
+    // aplica o filtro de município
+    if (success && locationStore.scale === 'intraurbana' && locationStore.cd_mun) {
+      console.log(`[modalCompareLayers] Aplicando filtro de município para camada: ${layer.id}`);
+      updateMunicipalityFilters(layersStore.mapRef, locationStore.cd_mun);
+    }
   }
 };
 
@@ -151,9 +159,22 @@ const handleDragEnd = (evt) => {
 
 const removeLayer = (layerId) => {
   unmountLayers.unmountLayer(layerId);
+
+  // Após remover a camada, atualiza os filtros de município
+  // para garantir que as camadas restantes tenham o filtro correto
+  if (locationStore.scale === 'intraurbana' && locationStore.cd_mun) {
+    console.log(`[modalCompareLayers] Atualizando filtros após remoção da camada: ${layerId}`);
+    updateMunicipalityFilters(layersStore.mapRef, locationStore.cd_mun);
+  }
 };
 
 const handleClose = () => {
+  // Aplica filtros de município em todas as camadas ativas antes de fechar
+  if (locationStore.scale === 'intraurbana' && locationStore.cd_mun) {
+    console.log('[modalCompareLayers] Aplicando filtros finais antes de fechar o modal');
+    updateMunicipalityFilters(layersStore.mapRef, locationStore.cd_mun);
+  }
+
   if (activeLayersWithNames.value.length > 0) {
     const layersList = activeLayersWithNames.value
       .map((layer, index) => `${index + 1}. ${layer.name} (${layer.category})`)
