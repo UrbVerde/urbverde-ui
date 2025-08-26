@@ -9,12 +9,12 @@
     @end="onDragEnd"
     @change="onChange"
     class="draggable-container"
+    :disabled="false"
   >
     <template #item="{ element }">
       <div class="layer-card-wrapper">
         <div v-if="element.id === 'parks' && props.scale === 'intraurbana'">
           <LegendCard
-
             :showMenu="false"
             :showOpacity="true"
             :showColorScale="false"
@@ -100,9 +100,52 @@ const localLayers = computed({
   }
 });
 
+// Função para verificar se o elemento clicado é um elemento que deve impedir o drag
+const shouldPreventDrag = (event) => {
+  // Verifica se o elemento clicado ou algum de seus pais é o ícone de drag ou controle de opacidade
+  let element = event.target;
+
+  while (element && element !== event.currentTarget) {
+    // Verifica se é o ícone de drag (CardLayerSwitch)
+    if (element.classList.contains('wrapper-grip') ||
+        element.classList.contains('grip-icon') ||
+        element.closest('.wrapper-grip')) {
+      console.log('[DraggableLayerList] Drag impedido: clique no ícone de drag');
+
+      return true;
+    }
+
+    // Verifica se é o controle de opacidade (OpacityControl)
+    if (element.classList.contains('controls-section') ||
+        element.classList.contains('visibility-controls') ||
+        element.classList.contains('eye-container') ||
+        element.classList.contains('input-wrapper') ||
+        element.classList.contains('slider-wrapper') ||
+        element.classList.contains('opacity-slider') ||
+        element.closest('.controls-section')) {
+      console.log('[DraggableLayerList] Drag impedido: clique no controle de opacidade');
+
+      return true;
+    }
+
+    element = element.parentElement;
+  }
+
+  return false;
+};
+
 // Handlers de eventos do draggable
 const onDragStart = (evt) => {
   console.log('[DraggableLayerList] Drag started', evt);
+
+  // Verifica se deve impedir o drag
+  if (shouldPreventDrag(evt.originalEvent)) {
+    // Cancela o drag
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    return false;
+  }
 };
 
 const onDragEnd = (evt) => {

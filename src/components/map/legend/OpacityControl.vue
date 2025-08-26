@@ -2,7 +2,9 @@
 <template>
   <div class="controls-section"
        @click="handleControlsClick"
-       @mouseleave="handleMouseLeave">
+       @mouseleave="handleMouseLeave"
+       @click.stop
+       @mousedown.stop>
     <div class="visibility-controls">
       <button class="eye-container" @click.stop="toggleVisibility">
         <div class="eye-wrapper">
@@ -112,12 +114,20 @@ onUnmounted(() => {
 });
 
 // Methods
-const toggleVisibility = () => {
+const toggleVisibility = (event) => {
+  // Impede que o evento de drag seja iniciado
+  event.stopPropagation();
+  event.preventDefault();
+
   const newValue = props.modelValue > 0 ? 0 : 100;
   updateOpacity(newValue);
 };
 
-const handleControlsClick = () => {
+const handleControlsClick = (event) => {
+  // Impede que o evento de drag seja iniciado
+  event.stopPropagation();
+  event.preventDefault();
+
   if (!showSlider.value) {
     showSlider.value = true;
     // Resetar o estado de arrasto quando abrir
@@ -125,7 +135,11 @@ const handleControlsClick = () => {
   }
 };
 
-const toggleSlider = () => {
+const toggleSlider = (event) => {
+  // Impede que o evento de drag seja iniciado
+  event.stopPropagation();
+  event.preventDefault();
+
   showSlider.value = !showSlider.value;
   if (showSlider.value === false) {
     // Resetar o estado de arrasto quando fechar
@@ -180,7 +194,11 @@ const validateAndUpdate = () => {
   updateOpacity(num);
 };
 
-const handleMouseDown = () => {
+const handleMouseDown = (event) => {
+  // Impede que o evento de drag seja iniciado
+  event.stopPropagation();
+  event.preventDefault();
+
   isDragging.value = true;
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('mouseup', handleMouseUp);

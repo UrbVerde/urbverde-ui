@@ -6,6 +6,8 @@
     @mousedown="startGrabbing"
     @mouseup="stopGrabbing"
     @mouseleave="stopGrabbing"
+    @click.stop
+    @mousedown.stop
   >
     <i class="bi-grip-vertical grip-icon"></i>
   </div>
@@ -16,7 +18,10 @@ import { ref } from 'vue';
 
 const isGrabbing = ref(false);
 
-const startGrabbing = () => {
+const startGrabbing = (event) => {
+  // Impede que o evento de drag seja iniciado
+  event.stopPropagation();
+  event.preventDefault();
   isGrabbing.value = true;
 };
 
